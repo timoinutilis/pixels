@@ -53,3 +53,15 @@
 @interface Operator1Node : Node
 @property Node *expression;
 @end
+
+@interface NumberNode : Node
+@property float number;
+@end
+
+@interface StringNode : Node
+@property NSString *string;
+@end
+
+@interface IdentifierNode : Node
+@property NSString *identifier;
+@end

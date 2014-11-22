@@ -58,32 +58,32 @@
         }
         else
         {
-            [self acceptCommandLineOptional:NO];
+            [self acceptCommandLine];
         }
     }
 }
 
-- (BOOL)acceptCommandLinesOptional:(BOOL)optional
+- (void)acceptCommandLines
 {
-    BOOL accepted = YES;
-    while (self.currentTokenIndex < self.tokens.count && accepted)
+    while (self.currentTokenIndex < self.tokens.count && ([self isCommand] || self.token.type == TTypeSymEol))
     {
-        accepted = [self acceptCommandLineOptional:optional];
+        [self acceptCommandLine];
     }
-    return accepted;
 }
 
-- (BOOL)acceptCommandLineOptional:(BOOL)optional
+- (void)acceptCommandLine
 {
-    if (self.token.type == TTypeSymEol)
+    if (self.token.type == TTypeSymEol) // empty line
     {
         [self accept:TTypeSymEol];
-        return YES;
     }
-    return [self acceptCommandOptional:optional];
+    else
+    {
+        [self acceptCommand];
+    }
 }
 
-- (BOOL)acceptCommandOptional:(BOOL)optional
+- (void)acceptCommand
 {
     switch (self.token.type)
     {
@@ -120,15 +120,33 @@
         case TTypeSymExit:
             [self acceptExit];
             break;
+        default: {
+            NSException *exception = [CompilerException exceptionWithName:@"ExpectedCommand" reason:@"Expected command" userInfo:@{@"token": self.token}];
+            @throw exception;
+        }
+    }
+}
+
+- (BOOL)isCommand
+{
+    switch (self.token.type)
+    {
+        case TTypeSymIf:
+        case TTypeSymGoto:
+        case TTypeSymGosub:
+        case TTypeSymReturn:
+        case TTypeSymPrint:
+        case TTypeSymFor:
+        case TTypeSymLet:
+        case TTypeSymWhile:
+        case TTypeSymRepeat:
+        case TTypeSymDo:
+        case TTypeSymExit:
+            return YES;
         default:
-            if (!optional)
-            {
-                NSException *exception = [CompilerException exceptionWithName:@"ExpectedCommand" reason:@"Expected command" userInfo:@{@"token": self.token}];
-                @throw exception;
-            }
             return NO;
     }
-    return YES;
+    return NO;
 }
 
 - (void)acceptLabel
@@ -179,7 +197,7 @@
     [self accept:TTypeSymIf];
     [self acceptCondition];
     [self accept:TTypeSymThen];
-    [self acceptCommandOptional:NO]; // includes EOL
+    [self acceptCommand]; // includes EOL
 }
 
 - (void)acceptForNext
@@ -192,7 +210,7 @@
     [self acceptExpression];
     [self acceptEol];
     
-    [self acceptCommandLinesOptional:YES];
+    [self acceptCommandLines];
     
     [self accept:TTypeSymNext];
     if (self.token.type == TTypeIdentifier)
@@ -208,7 +226,7 @@
     [self acceptCondition];
     [self acceptEol];
 
-    [self acceptCommandLinesOptional:YES];
+    [self acceptCommandLines];
     
     [self accept:TTypeSymWend];
     [self acceptEol];
@@ -219,7 +237,7 @@
     [self accept:TTypeSymRepeat];
     [self acceptEol];
     
-    [self acceptCommandLinesOptional:YES];
+    [self acceptCommandLines];
     
     [self accept:TTypeSymUntil];
     [self acceptCondition];
@@ -231,7 +249,7 @@
     [self accept:TTypeSymDo];
     [self acceptEol];
     
-    [self acceptCommandLinesOptional:YES];
+    [self acceptCommandLines];
     
     [self accept:TTypeSymLoop];
     [self acceptEol];
@@ -254,8 +272,7 @@
 - (void)acceptExpression
 {
     [self acceptExpression1];
-    while (   self.token.type == TTypeSymOpEq // (Un)equal
-           || self.token.type == TTypeSymOpUneq)
+    while (self.token.type == TTypeSymOpOr) // OR
     {
         [self accept:self.token.type];
         [self acceptExpression1];
@@ -265,21 +282,18 @@
 - (void)acceptExpression1
 {
     [self acceptExpression2];
-    while (   self.token.type == TTypeSymOpGr // Compare
-           || self.token.type == TTypeSymOpLe
-           || self.token.type == TTypeSymOpGrEq
-           || self.token.type == TTypeSymOpLeEq)
+    while (self.token.type == TTypeSymOpAnd) // AND
     {
         [self accept:self.token.type];
-        [self acceptExpression2];
+        [self acceptExpression1];
     }
 }
 
 - (void)acceptExpression2
 {
     [self acceptExpression3];
-    while (   self.token.type == TTypeSymOpPlus // Add, Sub
-           || self.token.type == TTypeSymOpMinus)
+    while (   self.token.type == TTypeSymOpEq // (Un)equal
+           || self.token.type == TTypeSymOpUneq)
     {
         [self accept:self.token.type];
         [self acceptExpression3];
@@ -287,6 +301,30 @@
 }
 
 - (void)acceptExpression3
+{
+    [self acceptExpression4];
+    while (   self.token.type == TTypeSymOpGr // Compare
+           || self.token.type == TTypeSymOpLe
+           || self.token.type == TTypeSymOpGrEq
+           || self.token.type == TTypeSymOpLeEq)
+    {
+        [self accept:self.token.type];
+        [self acceptExpression4];
+    }
+}
+
+- (void)acceptExpression4
+{
+    [self acceptExpression5];
+    while (   self.token.type == TTypeSymOpPlus // Add, Sub
+           || self.token.type == TTypeSymOpMinus)
+    {
+        [self accept:self.token.type];
+        [self acceptExpression5];
+    }
+}
+
+- (void)acceptExpression5
 {
     [self acceptUExpression];
     while (   self.token.type == TTypeSymOpMul // Mul, Div, Mod
