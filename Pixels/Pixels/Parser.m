@@ -8,6 +8,7 @@
 
 #import "Parser.h"
 #import "Token.h"
+#import "Node.h"
 #import "CompilerException.h"
 
 @interface Parser ()
@@ -20,14 +21,16 @@
 
 @implementation Parser
 
-- (void)parseTokens:(NSArray *)tokens
+- (NSArray *)parseTokens:(NSArray *)tokens
 {
     self.tokens = tokens;
     self.currentTokenIndex = 0;
     self.token = self.tokens[0];
     
-    [self acceptProgram];
+    return [self acceptProgram];
 }
+
+#pragma mark - Basics
 
 - (void)accept:(TType)tokenType
 {
@@ -48,83 +51,110 @@
     }
 }
 
-- (void)acceptProgram
+- (void)acceptEol
 {
+    if (self.currentTokenIndex < self.tokens.count)
+    {
+        [self accept:TTypeSymEol];
+    }
+}
+
+#pragma mark - Lines
+
+- (NSArray *)acceptProgram
+{
+    NSMutableArray *nodes = [NSMutableArray array];
     while (self.currentTokenIndex < self.tokens.count)
     {
+        Node *node;
         if (self.token.type == TTypeIdentifier)
         {
-            [self acceptLabel];
+            node = [self acceptLabel];
         }
         else
         {
-            [self acceptCommandLine];
+            node = [self acceptCommandLine];
+        }
+        if (node)
+        {
+            [nodes addObject:node];
         }
     }
+    return nodes;
 }
 
-- (void)acceptCommandLines
+- (NSArray *)acceptCommandLines
 {
+    NSMutableArray *nodes = [NSMutableArray array];
     while (self.currentTokenIndex < self.tokens.count && ([self isCommand] || self.token.type == TTypeSymEol))
     {
-        [self acceptCommandLine];
+        Node *node = [self acceptCommandLine];
+        if (node)
+        {
+            [nodes addObject:node];
+        }
     }
+    return nodes;
 }
 
-- (void)acceptCommandLine
+- (Node *)acceptCommandLine
 {
+    Node *node = nil;
     if (self.token.type == TTypeSymEol) // empty line
     {
         [self accept:TTypeSymEol];
     }
     else
     {
-        [self acceptCommand];
+        node = [self acceptCommand];
     }
+    return node;
 }
 
-- (void)acceptCommand
+- (Node *)acceptCommand
 {
+    Node *node;
     switch (self.token.type)
     {
         case TTypeSymIf:
-            [self acceptIf];
+            node = [self acceptIf];
             break;
         case TTypeSymGoto:
-            [self acceptGoto];
+            node = [self acceptGoto];
             break;
         case TTypeSymGosub:
-            [self acceptGosub];
+            node = [self acceptGosub];
             break;
         case TTypeSymReturn:
-            [self acceptReturn];
+            node = [self acceptReturn];
             break;
         case TTypeSymPrint:
-            [self acceptPrint];
+            node = [self acceptPrint];
             break;
         case TTypeSymFor:
-            [self acceptForNext];
+            node = [self acceptForNext];
             break;
         case TTypeSymLet:
-            [self acceptLet];
+            node = [self acceptLet];
             break;
         case TTypeSymWhile:
-            [self acceptWhileWend];
+            node = [self acceptWhileWend];
             break;
         case TTypeSymRepeat:
-            [self acceptRepeatUntil];
+            node = [self acceptRepeatUntil];
             break;
         case TTypeSymDo:
-            [self acceptDoLoop];
+            node = [self acceptDoLoop];
             break;
         case TTypeSymExit:
-            [self acceptExit];
+            node = [self acceptExit];
             break;
         default: {
             NSException *exception = [CompilerException exceptionWithName:@"ExpectedCommand" reason:@"Expected command" userInfo:@{@"token": self.token}];
             @throw exception;
         }
     }
+    return node;
 }
 
 - (BOOL)isCommand
@@ -149,68 +179,90 @@
     return NO;
 }
 
-- (void)acceptLabel
+- (Node *)acceptLabel
 {
+    LabelNode *node = [[LabelNode alloc] init];
+    node.identifier = self.token.attrString;
     [self accept:TTypeIdentifier];
     [self accept:TTypeSymColon];
     [self acceptEol];
+    return node;
 }
 
-- (void)acceptPrint
+#pragma mark - Commands
+
+- (Node *)acceptPrint
 {
+    PrintNode *node = [[PrintNode alloc] init];
     [self accept:TTypeSymPrint];
-    [self acceptExpression];
+    node.expression = [self acceptExpression];
     [self acceptEol];
+    return node;
 }
 
-- (void)acceptGoto
+- (Node *)acceptGoto
 {
+    GotoNode *node = [[GotoNode alloc] init];
     [self accept:TTypeSymGoto];
+    node.label = self.token.attrString;
     [self accept:TTypeIdentifier];
     [self acceptEol];
+    return node;
 }
 
-- (void)acceptGosub
+- (Node *)acceptGosub
 {
+    GosubNode *node = [[GosubNode alloc] init];
     [self accept:TTypeSymGosub];
+    node.label = self.token.attrString;
     [self accept:TTypeIdentifier];
     [self acceptEol];
+    return node;
 }
 
-- (void)acceptReturn
+- (Node *)acceptReturn
 {
+    ReturnNode *node = [[ReturnNode alloc] init];
     [self accept:TTypeSymReturn];
     [self acceptEol];
+    return node;
 }
 
-- (void)acceptLet
+- (Node *)acceptLet
 {
+    LetNode *node = [[LetNode alloc] init];
     [self accept:TTypeSymLet];
+    node.identifier = self.token.attrString;
     [self accept:TTypeIdentifier];
     [self accept:TTypeSymOpEq];
-    [self acceptExpression];
+    node.expression = [self acceptExpression];
     [self acceptEol];
+    return node;
 }
 
-- (void)acceptIf
+- (Node *)acceptIf
 {
+    IfNode *node = [[IfNode alloc] init];
     [self accept:TTypeSymIf];
-    [self acceptCondition];
+    node.condition = [self acceptExpression];
     [self accept:TTypeSymThen];
-    [self acceptCommand]; // includes EOL
+    node.command = [self acceptCommand]; // includes EOL
+    return node;
 }
 
-- (void)acceptForNext
+- (Node *)acceptForNext
 {
+    ForNextNode *node = [[ForNextNode alloc] init];
     [self accept:TTypeSymFor];
+    node.variable = self.token.attrString;
     [self accept:TTypeIdentifier];
     [self accept:TTypeSymOpEq];
-    [self acceptExpression];
+    node.startExpression = [self acceptExpression];
     [self accept:TTypeSymTo];
-    [self acceptExpression];
+    node.endExpression = [self acceptExpression];
     [self acceptEol];
     
-    [self acceptCommandLines];
+    node.commands = [self acceptCommandLines];
     
     [self accept:TTypeSymNext];
     if (self.token.type == TTypeIdentifier)
@@ -218,186 +270,148 @@
         [self accept:TTypeIdentifier];
     }
     [self acceptEol];
+    return node;
 }
 
-- (void)acceptWhileWend
+- (Node *)acceptWhileWend
 {
+    WhileWendNode *node = [[WhileWendNode alloc] init];
     [self accept:TTypeSymWhile];
-    [self acceptCondition];
+    node.condition = [self acceptExpression];
     [self acceptEol];
 
-    [self acceptCommandLines];
+    node.commands = [self acceptCommandLines];
     
     [self accept:TTypeSymWend];
     [self acceptEol];
+    return node;
 }
 
-- (void)acceptRepeatUntil
+- (Node *)acceptRepeatUntil
 {
+    RepeatUntilNode *node = [[RepeatUntilNode alloc] init];
     [self accept:TTypeSymRepeat];
     [self acceptEol];
     
-    [self acceptCommandLines];
+    node.commands = [self acceptCommandLines];
     
     [self accept:TTypeSymUntil];
-    [self acceptCondition];
+    node.condition = [self acceptExpression];
     [self acceptEol];
+    return node;
 }
 
-- (void)acceptDoLoop
+- (Node *)acceptDoLoop
 {
+    DoLoopNode *node = [[DoLoopNode alloc] init];
     [self accept:TTypeSymDo];
     [self acceptEol];
     
-    [self acceptCommandLines];
+    node.commands = [self acceptCommandLines];
     
     [self accept:TTypeSymLoop];
     [self acceptEol];
+    return node;
 }
 
-- (void)acceptExit
+- (Node *)acceptExit
 {
+    ExitNode *node = [[ExitNode alloc] init];
     [self accept:TTypeSymExit];
     [self acceptEol];
+    return node;
 }
 
-- (void)acceptEol
+#pragma mark - Expressions
+
+- (Node *)acceptExpression
 {
-    if (self.currentTokenIndex < self.tokens.count)
+    return [self acceptExpressionLevel:0];
+}
+
+- (Node *)acceptExpressionLevel:(int)level
+{
+    static NSArray *operatorLevels = nil;
+    if (!operatorLevels)
     {
-        [self accept:TTypeSymEol];
+        operatorLevels = @[
+                           @[@(TTypeSymOpOr)],
+                           @[@(TTypeSymOpAnd)],
+                           @[@(TTypeSymOpEq), @(TTypeSymOpUneq)],
+                           @[@(TTypeSymOpGr), @(TTypeSymOpLe), @(TTypeSymOpGrEq), @(TTypeSymOpLeEq)],
+                           @[@(TTypeSymOpPlus), @(TTypeSymOpMinus)],
+                           @[@(TTypeSymOpMul), @(TTypeSymOpDiv), @(TTypeSymOpMod)]
+                           ];
     }
-}
-
-- (void)acceptExpression
-{
-    [self acceptExpression1];
-    while (self.token.type == TTypeSymOpOr) // OR
+    
+    if (level == operatorLevels.count)
     {
+        return [self acceptUExpression];
+    }
+    
+    NSArray *operators = operatorLevels[level];
+    Node *node = [self acceptExpressionLevel:level + 1];
+    while ([operators indexOfObject:@(self.token.type)] != NSNotFound)
+    {
+        Operator2Node *newNode = [[Operator2Node alloc] init];
+        newNode.leftExpression = node;
+        newNode.type = self.token.type;
         [self accept:self.token.type];
-        [self acceptExpression1];
+        newNode.rightExpression = [self acceptExpressionLevel:level + 1];
+        node = newNode;
     }
+    return node;
 }
 
-- (void)acceptExpression1
-{
-    [self acceptExpression2];
-    while (self.token.type == TTypeSymOpAnd) // AND
-    {
-        [self accept:self.token.type];
-        [self acceptExpression1];
-    }
-}
-
-- (void)acceptExpression2
-{
-    [self acceptExpression3];
-    while (   self.token.type == TTypeSymOpEq // (Un)equal
-           || self.token.type == TTypeSymOpUneq)
-    {
-        [self accept:self.token.type];
-        [self acceptExpression3];
-    }
-}
-
-- (void)acceptExpression3
-{
-    [self acceptExpression4];
-    while (   self.token.type == TTypeSymOpGr // Compare
-           || self.token.type == TTypeSymOpLe
-           || self.token.type == TTypeSymOpGrEq
-           || self.token.type == TTypeSymOpLeEq)
-    {
-        [self accept:self.token.type];
-        [self acceptExpression4];
-    }
-}
-
-- (void)acceptExpression4
-{
-    [self acceptExpression5];
-    while (   self.token.type == TTypeSymOpPlus // Add, Sub
-           || self.token.type == TTypeSymOpMinus)
-    {
-        [self accept:self.token.type];
-        [self acceptExpression5];
-    }
-}
-
-- (void)acceptExpression5
-{
-    [self acceptUExpression];
-    while (   self.token.type == TTypeSymOpMul // Mul, Div, Mod
-           || self.token.type == TTypeSymOpDiv
-           || self.token.type == TTypeSymOpMod)
-    {
-        [self accept:self.token.type];
-        [self acceptUExpression];
-    }
-}
-
-- (void)acceptUExpression
+- (Node *)acceptUExpression
 {
     if (   self.token.type == TTypeSymOpPlus // Positive, Negative, Not
         || self.token.type == TTypeSymOpMinus
         || self.token.type == TTypeSymOpNot)
     {
+        Operator1Node *node = [[Operator1Node alloc] init];
+        node.type = self.token.type;
         [self accept:self.token.type];
-        [self acceptUExpression];
+        node.expression = [self acceptUExpression];
+        return node;
     }
-    else
-    {
-        [self acceptPExpression];
-    }
+    return [self acceptPExpression];
 }
 
-- (void)acceptPExpression
+- (Node *)acceptPExpression
 {
     switch (self.token.type)
     {
-        case TTypeIdentifier:
+        case TTypeIdentifier: {
+            VariableNode *node = [[VariableNode alloc] init];
+            node.identifier = self.token.attrString;
             [self accept:TTypeIdentifier];
-            break;
-        case TTypeNumber:
+            return node;
+        }
+        case TTypeNumber: {
+            NumberNode *node = [[NumberNode alloc] init];
+            node.value = self.token.attrNumber;
             [self accept:TTypeNumber];
-            break;
-        case TTypeSymBracketOpen:
-            [self acceptExpressionBlock];
-            break;
+            return node;
+        }
+        case TTypeSymBracketOpen: {
+            return [self acceptExpressionBlock];
+        }
         default: {
             NSException *exception = [CompilerException exceptionWithName:@"ExpectedExpression" reason:@"Expected expression" userInfo:@{@"token": self.token}];
             @throw exception;
         }
     }
+    return nil;
 }
 
-- (void)acceptExpressionBlock
+- (Node *)acceptExpressionBlock
 {
+    Node *node;
     [self accept:TTypeSymBracketOpen];
-    [self acceptExpression];
+    node = [self acceptExpression];
     [self accept:TTypeSymBracketClose];
-}
-
-- (void)acceptCondition
-{
-    [self acceptExpression];
-}
-
-- (BOOL)isConditionType
-{
-    switch (self.token.type)
-    {
-        case TTypeSymOpEq:
-        case TTypeSymOpUneq:
-        case TTypeSymOpGr:
-        case TTypeSymOpLe:
-        case TTypeSymOpGrEq:
-        case TTypeSymOpLeEq:
-            return YES;
-        default:
-            break;
-    }
-    return NO;
+    return node;
 }
 
 @end

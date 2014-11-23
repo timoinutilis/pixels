@@ -44,7 +44,7 @@
         }
         
         Parser *parser = [[Parser alloc] init];
-        [parser parseTokens:tokens];
+        NSArray *nodes = [parser parseTokens:tokens];
     }
     @catch (CompilerException *exception)
     {

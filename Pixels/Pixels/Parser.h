@@ -10,6 +10,6 @@
 
 @interface Parser : NSObject
 
-- (void)parseTokens:(NSArray *)tokens;
+- (NSArray *)parseTokens:(NSArray *)tokens;
 
 @end

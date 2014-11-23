@@ -10,24 +10,37 @@
 #import "Token.h"
 
 @interface Node : NSObject
-@property TType type;
 @end
 
 @interface IfNode : Node
 @property Node *condition;
-@property NSArray *commands;
+@property Node *command;
 @end
 
 @interface GotoNode : Node
-@property Node *label;
+@property NSString *label;
 @end
 
 @interface GosubNode : Node
-@property Node *label;
+@property NSString *label;
+@end
+
+@interface ReturnNode : Node
+@end
+
+@interface PrintNode : Node
+@property Node *expression;
+@end
+
+@interface ForNextNode : Node
+@property NSString *variable;
+@property Node *startExpression;
+@property Node *endExpression;
+@property NSArray *commands;
 @end
 
 @interface LetNode : Node
-@property Node *identifier;
+@property NSString *identifier;
 @property Node *expression;
 @end
 
@@ -45,23 +58,32 @@
 @property NSArray *commands;
 @end
 
+@interface ExitNode : Node
+@end
+
 @interface Operator2Node : Node
+@property TType type;
 @property Node *leftExpression;
 @property Node *rightExpression;
 @end
 
 @interface Operator1Node : Node
+@property TType type;
 @property Node *expression;
 @end
 
 @interface NumberNode : Node
-@property float number;
+@property float value;
 @end
 
 @interface StringNode : Node
-@property NSString *string;
+@property NSString *value;
 @end
 
-@interface IdentifierNode : Node
+@interface VariableNode : Node
+@property NSString *identifier;
+@end
+
+@interface LabelNode : Node
 @property NSString *identifier;
 @end
