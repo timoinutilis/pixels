@@ -11,6 +11,7 @@
 #import "Parser.h"
 #import "Token.h"
 #import "CompilerException.h"
+#import "Runner.h"
 
 @interface ViewController ()
 
@@ -45,6 +46,12 @@
         
         Parser *parser = [[Parser alloc] init];
         NSArray *nodes = [parser parseTokens:tokens];
+        
+        Runner *runner = [[Runner alloc] initWithNodes:nodes];
+        while (!runner.isFinished)
+        {
+            [runner runCommand];
+        }
     }
     @catch (CompilerException *exception)
     {

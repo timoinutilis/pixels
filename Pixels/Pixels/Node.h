@@ -9,7 +9,11 @@
 #import <Foundation/Foundation.h>
 #import "Token.h"
 
+@class Runner;
+
 @interface Node : NSObject
+- (id)evaluateWithRunner:(Runner *)runner;
+- (void)endOfLoopWithRunner:(Runner *)runner;
 @end
 
 @interface IfNode : Node

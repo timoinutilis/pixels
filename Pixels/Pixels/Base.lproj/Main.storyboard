@@ -21,10 +21,11 @@
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SjB-QF-tvR">
                                 <rect key="frame" x="16" y="58" width="651" height="690"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <string key="text">FOR I=1 TO 10
-PRINT I
+                                <string key="text">PRINT "HALLO"
+FOR A=1 TO 10
+PRINT A
 NEXT
-PRINT 121212</string>
+PRINT "ENDE"</string>
                                 <fontDescription key="fontDescription" name="CourierNewPSMT" family="Courier New" pointSize="20"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters" autocorrectionType="no" spellCheckingType="no"/>
                             </textView>

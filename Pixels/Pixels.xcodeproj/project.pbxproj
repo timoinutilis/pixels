@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		924CC0FE1A220B3C00D2AF68 /* Runner.m in Sources */ = {isa = PBXBuildFile; fileRef = 924CC0FD1A220B3C00D2AF68 /* Runner.m */; };
 		925A01A91A1E67F900A321E6 /* Parser.m in Sources */ = {isa = PBXBuildFile; fileRef = 925A01A81A1E67F900A321E6 /* Parser.m */; };
 		9272C1491A1DE2D000E97957 /* Token.m in Sources */ = {isa = PBXBuildFile; fileRef = 9272C1481A1DE2D000E97957 /* Token.m */; };
 		9276F38F1A1D289C0060E909 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9276F38E1A1D289C0060E909 /* main.m */; };
@@ -32,6 +33,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		924CC0FC1A220B3C00D2AF68 /* Runner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Runner.h; sourceTree = "<group>"; };
+		924CC0FD1A220B3C00D2AF68 /* Runner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Runner.m; sourceTree = "<group>"; };
 		925A01A71A1E67F900A321E6 /* Parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Parser.h; sourceTree = "<group>"; };
 		925A01A81A1E67F900A321E6 /* Parser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Parser.m; sourceTree = "<group>"; };
 		9272C1471A1DE2D000E97957 /* Token.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Token.h; sourceTree = "<group>"; };
@@ -148,6 +151,8 @@
 				925A01A81A1E67F900A321E6 /* Parser.m */,
 				92C98F3D1A20CFD900215AE9 /* CompilerException.h */,
 				92C98F3E1A20CFD900215AE9 /* CompilerException.m */,
+				924CC0FC1A220B3C00D2AF68 /* Runner.h */,
+				924CC0FD1A220B3C00D2AF68 /* Runner.m */,
 			);
 			name = Compiler;
 			sourceTree = "<group>";
@@ -259,6 +264,7 @@
 				925A01A91A1E67F900A321E6 /* Parser.m in Sources */,
 				92C98F3F1A20CFD900215AE9 /* CompilerException.m in Sources */,
 				9276F38F1A1D289C0060E909 /* main.m in Sources */,
+				924CC0FE1A220B3C00D2AF68 /* Runner.m in Sources */,
 				92C98F421A20F2F000215AE9 /* Node.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -83,7 +83,7 @@
     return nodes;
 }
 
-- (NSArray *)acceptCommandLines
+- (NSMutableArray *)acceptCommandLines
 {
     NSMutableArray *nodes = [NSMutableArray array];
     while (self.currentTokenIndex < self.tokens.count && ([self isCommand] || self.token.type == TTypeSymEol))
@@ -346,7 +346,7 @@
     
     if (level == operatorLevels.count)
     {
-        return [self acceptUExpression];
+        return [self acceptUnaryExpression];
     }
     
     NSArray *operators = operatorLevels[level];
@@ -363,22 +363,22 @@
     return node;
 }
 
-- (Node *)acceptUExpression
+- (Node *)acceptUnaryExpression
 {
-    if (   self.token.type == TTypeSymOpPlus // Positive, Negative, Not
+    if (   self.token.type == TTypeSymOpPlus
         || self.token.type == TTypeSymOpMinus
         || self.token.type == TTypeSymOpNot)
     {
         Operator1Node *node = [[Operator1Node alloc] init];
         node.type = self.token.type;
         [self accept:self.token.type];
-        node.expression = [self acceptUExpression];
+        node.expression = [self acceptUnaryExpression];
         return node;
     }
-    return [self acceptPExpression];
+    return [self acceptPrimaryExpression];
 }
 
-- (Node *)acceptPExpression
+- (Node *)acceptPrimaryExpression
 {
     switch (self.token.type)
     {
@@ -392,6 +392,12 @@
             NumberNode *node = [[NumberNode alloc] init];
             node.value = self.token.attrNumber;
             [self accept:TTypeNumber];
+            return node;
+        }
+        case TTypeString: {
+            StringNode *node = [[StringNode alloc] init];
+            node.value = self.token.attrString;
+            [self accept:TTypeString];
             return node;
         }
         case TTypeSymBracketOpen: {
