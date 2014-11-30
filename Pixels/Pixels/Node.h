@@ -65,6 +65,10 @@
 @interface ExitNode : Node
 @end
 
+@interface WaitNode : Node
+@property Node *time;
+@end
+
 @interface Operator2Node : Node
 @property TType type;
 @property Node *leftExpression;

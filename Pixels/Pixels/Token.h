@@ -29,6 +29,7 @@ typedef NS_ENUM(NSInteger, TType) {
     TTypeSymDo,
     TTypeSymLoop,
     TTypeSymExit,
+    TTypeSymWait,
     TTypeSymOpEq,
     TTypeSymOpGrEq,
     TTypeSymOpLeEq,

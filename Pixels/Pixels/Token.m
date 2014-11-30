@@ -34,6 +34,7 @@
         case TTypeSymDo: return @"DO";
         case TTypeSymLoop: return @"LOOP";
         case TTypeSymExit: return @"EXIT";
+        case TTypeSymWait: return @"WAIT";
         case TTypeSymOpEq: return @"=";
         case TTypeSymOpGrEq: return @">=";
         case TTypeSymOpLeEq: return @"<=";

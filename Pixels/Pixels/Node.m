@@ -192,6 +192,19 @@
 
 @end
 
+@implementation WaitNode
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    NSNumber *value = [self.time evaluateWithRunner:runner];
+    NSTimeInterval timeInterval = value.floatValue;
+    [NSThread sleepForTimeInterval:timeInterval];
+    [runner next];
+    return nil;
+}
+
+@end
+
 @implementation Operator2Node
 
 - (id)evaluateWithRunner:(Runner *)runner

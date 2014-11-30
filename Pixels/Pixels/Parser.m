@@ -149,6 +149,9 @@
         case TTypeSymExit:
             node = [self acceptExit];
             break;
+        case TTypeSymWait:
+            node = [self acceptWait];
+            break;
         default: {
             NSException *exception = [CompilerException exceptionWithName:@"ExpectedCommand" reason:@"Expected command" userInfo:@{@"token": self.token}];
             @throw exception;
@@ -172,6 +175,7 @@
         case TTypeSymRepeat:
         case TTypeSymDo:
         case TTypeSymExit:
+        case TTypeSymWait:
             return YES;
         default:
             return NO;
@@ -318,6 +322,15 @@
 {
     ExitNode *node = [[ExitNode alloc] init];
     [self accept:TTypeSymExit];
+    [self acceptEol];
+    return node;
+}
+
+- (Node *)acceptWait
+{
+    WaitNode *node = [[WaitNode alloc] init];
+    [self accept:TTypeSymWait];
+    node.time = [self acceptExpression];
     [self acceptEol];
     return node;
 }

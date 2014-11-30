@@ -13,6 +13,8 @@
 
 @property (weak, nonatomic) IBOutlet UITextView *logTextView;
 
+@property BOOL isRunning;
+
 @end
 
 @implementation RunnerViewController
@@ -31,13 +33,29 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    [self run];
+}
 
-    Runner *runner = [[Runner alloc] initWithNodes:self.nodes];
-    runner.delegate = self;
-    while (!runner.isFinished)
-    {
-        [runner runCommand];
-    }
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    self.isRunning = NO;
+}
+
+- (void)run
+{
+    self.isRunning = YES;
+    
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    
+    dispatch_async(queue, ^{
+        Runner *runner = [[Runner alloc] initWithNodes:self.nodes];
+        runner.delegate = self;
+        while (!runner.isFinished && self.isRunning)
+        {
+            [runner runCommand];
+        }
+    });
 }
 
 - (IBAction)onExitTapped:(id)sender
@@ -47,7 +65,9 @@
 
 - (void)runnerLog:(NSString *)message
 {
-    self.logTextView.text = [NSString stringWithFormat:@"%@%@\n", self.logTextView.text, message];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.logTextView.text = [NSString stringWithFormat:@"%@%@\n", self.logTextView.text, message];
+    });
 }
 
 @end
