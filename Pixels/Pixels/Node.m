@@ -54,7 +54,10 @@
 - (id)evaluateWithRunner:(Runner *)runner
 {
     id value = [self.expression evaluateWithRunner:runner];
-    NSLog(@"%@", value);
+    if (runner.delegate)
+    {
+        [runner.delegate runnerLog:[NSString stringWithFormat:@"%@", value]];
+    }
     [runner next];
     return nil;
 }

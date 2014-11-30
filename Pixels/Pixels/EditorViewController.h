@@ -8,8 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+@class Project;
 
+@interface EditorViewController : UIViewController
+
+@property Project *project;
 
 @end
 

@@ -7,10 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "RunnerDelegate.h"
 
 @class Node;
 
 @interface Runner : NSObject
+
+@property (weak) id<RunnerDelegate> delegate;
 
 - (instancetype)initWithNodes:(NSArray *)nodes;
 - (BOOL)isFinished;
