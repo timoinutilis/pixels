@@ -9,11 +9,12 @@
 #import <Foundation/Foundation.h>
 #import "RunnerDelegate.h"
 
-@class Node;
+@class Node, Renderer;
 
 @interface Runner : NSObject
 
 @property (weak) id<RunnerDelegate> delegate;
+@property Renderer *renderer;
 
 - (instancetype)initWithNodes:(NSArray *)nodes;
 - (BOOL)isFinished;

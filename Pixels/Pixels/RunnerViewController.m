@@ -8,10 +8,12 @@
 
 #import "RunnerViewController.h"
 #import "Runner.h"
+#import "RendererView.h"
 
 @interface RunnerViewController ()
 
 @property (weak, nonatomic) IBOutlet UITextView *logTextView;
+@property (weak, nonatomic) IBOutlet RendererView *rendererView;
 
 @property BOOL isRunning;
 
@@ -51,10 +53,12 @@
     dispatch_async(queue, ^{
         Runner *runner = [[Runner alloc] initWithNodes:self.nodes];
         runner.delegate = self;
+        self.rendererView.renderer = runner.renderer;
         while (!runner.isFinished && self.isRunning)
         {
             [runner runCommand];
         }
+        [self updateRendererView];
     });
 }
 
@@ -67,6 +71,13 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         self.logTextView.text = [NSString stringWithFormat:@"%@%@\n", self.logTextView.text, message];
+    });
+}
+
+- (void)updateRendererView
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.rendererView setNeedsDisplay];
     });
 }
 

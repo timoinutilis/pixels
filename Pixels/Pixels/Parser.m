@@ -152,6 +152,21 @@
         case TTypeSymWait:
             node = [self acceptWait];
             break;
+        case TTypeSymColor:
+            node = [self acceptColor];
+            break;
+        case TTypeSymClear:
+            node = [self acceptClear];
+            break;
+        case TTypeSymPlot:
+            node = [self acceptPlot];
+            break;
+        case TTypeSymLine:
+            node = [self acceptLine];
+            break;
+        case TTypeSymBox:
+            node = [self acceptBox];
+            break;
         default: {
             NSException *exception = [CompilerException exceptionWithName:@"ExpectedCommand" reason:@"Expected command" userInfo:@{@"token": self.token}];
             @throw exception;
@@ -176,6 +191,11 @@
         case TTypeSymDo:
         case TTypeSymExit:
         case TTypeSymWait:
+        case TTypeSymColor:
+        case TTypeSymClear:
+        case TTypeSymPlot:
+        case TTypeSymLine:
+        case TTypeSymBox:
             return YES;
         default:
             return NO;
@@ -331,6 +351,64 @@
     WaitNode *node = [[WaitNode alloc] init];
     [self accept:TTypeSymWait];
     node.time = [self acceptExpression];
+    [self acceptEol];
+    return node;
+}
+
+- (Node *)acceptColor
+{
+    ColorNode *node = [[ColorNode alloc] init];
+    [self accept:TTypeSymColor];
+    node.color = [self acceptExpression];
+    [self acceptEol];
+    return node;
+}
+
+- (Node *)acceptClear
+{
+    ClearNode *node = [[ClearNode alloc] init];
+    [self accept:TTypeSymClear];
+    [self acceptEol];
+    return node;
+}
+
+- (Node *)acceptPlot
+{
+    PlotNode *node = [[PlotNode alloc] init];
+    [self accept:TTypeSymPlot];
+    node.xExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.yExpression = [self acceptExpression];
+    [self acceptEol];
+    return node;
+}
+
+- (Node *)acceptLine
+{
+    LineNode *node = [[LineNode alloc] init];
+    [self accept:TTypeSymLine];
+    node.fromXExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.fromYExpression = [self acceptExpression];
+    [self accept:TTypeSymTo];
+    node.toXExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.toYExpression = [self acceptExpression];
+    [self acceptEol];
+    return node;
+}
+
+- (Node *)acceptBox
+{
+    BoxNode *node = [[BoxNode alloc] init];
+    [self accept:TTypeSymBox];
+    node.fromXExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.fromYExpression = [self acceptExpression];
+    [self accept:TTypeSymTo];
+    node.toXExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.toYExpression = [self acceptExpression];
     [self acceptEol];
     return node;
 }

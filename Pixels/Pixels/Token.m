@@ -35,6 +35,11 @@
         case TTypeSymLoop: return @"LOOP";
         case TTypeSymExit: return @"EXIT";
         case TTypeSymWait: return @"WAIT";
+        case TTypeSymColor: return @"COLOR";
+        case TTypeSymClear: return @"CLEAR";
+        case TTypeSymPlot: return @"PLOT";
+        case TTypeSymLine: return @"LINE";
+        case TTypeSymBox: return @"BOX";
         case TTypeSymOpEq: return @"=";
         case TTypeSymOpGrEq: return @">=";
         case TTypeSymOpLeEq: return @"<=";
@@ -53,6 +58,7 @@
         case TTypeSymOpAnd: return @"AND";
         case TTypeSymOpNot: return @"NOT";
         case TTypeSymColon: return @":";
+        case TTypeSymComma: return @",";
         case TTypeSymEol: return printable ? @"end of line" : @"\n";
         case TType_count: return nil;
     }

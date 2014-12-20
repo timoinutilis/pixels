@@ -11,5 +11,6 @@
 @protocol RunnerDelegate <NSObject>
 
 - (void)runnerLog:(NSString *)message;
+- (void)updateRendererView;
 
 @end

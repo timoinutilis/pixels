@@ -69,6 +69,32 @@
 @property Node *time;
 @end
 
+@interface ColorNode : Node
+@property Node *color;
+@end
+
+@interface ClearNode : Node
+@end
+
+@interface PlotNode : Node
+@property Node *xExpression;
+@property Node *yExpression;
+@end
+
+@interface LineNode : Node
+@property Node *fromXExpression;
+@property Node *fromYExpression;
+@property Node *toXExpression;
+@property Node *toYExpression;
+@end
+
+@interface BoxNode : Node
+@property Node *fromXExpression;
+@property Node *fromYExpression;
+@property Node *toXExpression;
+@property Node *toYExpression;
+@end
+
 @interface Operator2Node : Node
 @property TType type;
 @property Node *leftExpression;

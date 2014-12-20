@@ -8,6 +8,7 @@
 
 #import "Runner.h"
 #import "Node.h"
+#import "Renderer.h"
 
 @interface Runner ()
 @property NSMutableArray *sequencesStack;
@@ -20,6 +21,7 @@
 {
     if (self = [self init])
     {
+        self.renderer = [[Renderer alloc] init];
         self.variables = [NSMutableDictionary dictionary];
         self.sequencesStack = [NSMutableArray array];
         [self addSequenceWithNodes:nodes isLoop:NO parent:nil];

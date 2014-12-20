@@ -8,6 +8,7 @@
 
 #import "Node.h"
 #import "Runner.h"
+#import "Renderer.h"
 
 @implementation Node
 
@@ -196,9 +197,77 @@
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
+    [runner.delegate updateRendererView];
+    
     NSNumber *value = [self.time evaluateWithRunner:runner];
     NSTimeInterval timeInterval = value.floatValue;
     [NSThread sleepForTimeInterval:timeInterval];
+    [runner next];
+    return nil;
+}
+
+@end
+
+@implementation ColorNode
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    NSNumber *value = [self.color evaluateWithRunner:runner];
+    runner.renderer.colorIndex = value.intValue;
+    [runner next];
+    return nil;
+}
+
+@end
+
+@implementation ClearNode
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    [runner.renderer clear];
+    [runner next];
+    return nil;
+}
+
+@end
+
+@implementation PlotNode
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    NSNumber *x = [self.xExpression evaluateWithRunner:runner];
+    NSNumber *y = [self.yExpression evaluateWithRunner:runner];
+    [runner.renderer plotX:x.intValue Y:y.intValue];
+    [runner next];
+    return nil;
+}
+
+@end
+
+@implementation LineNode
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    NSNumber *fromX = [self.fromXExpression evaluateWithRunner:runner];
+    NSNumber *fromY = [self.fromYExpression evaluateWithRunner:runner];
+    NSNumber *toX = [self.toXExpression evaluateWithRunner:runner];
+    NSNumber *toY = [self.toYExpression evaluateWithRunner:runner];
+    [runner.renderer drawFromX:fromX.intValue Y:fromY.intValue toX:toX.intValue Y:toY.intValue];
+    [runner next];
+    return nil;
+}
+
+@end
+
+@implementation BoxNode
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    NSNumber *fromX = [self.fromXExpression evaluateWithRunner:runner];
+    NSNumber *fromY = [self.fromYExpression evaluateWithRunner:runner];
+    NSNumber *toX = [self.toXExpression evaluateWithRunner:runner];
+    NSNumber *toY = [self.toYExpression evaluateWithRunner:runner];
+    [runner.renderer drawBoxFromX:fromX.intValue Y:fromY.intValue toX:toX.intValue Y:toY.intValue];
     [runner next];
     return nil;
 }

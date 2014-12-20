@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9231159F1A444A6B00624201 /* RendererView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9231159E1A444A6B00624201 /* RendererView.m */; };
+		923115A21A444AA800624201 /* Renderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 923115A11A444AA800624201 /* Renderer.m */; };
 		924CC0FE1A220B3C00D2AF68 /* Runner.m in Sources */ = {isa = PBXBuildFile; fileRef = 924CC0FD1A220B3C00D2AF68 /* Runner.m */; };
 		92509CCA1A28F99D0086E7E3 /* ExplorerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92509CC91A28F99D0086E7E3 /* ExplorerViewController.m */; };
 		925A01A91A1E67F900A321E6 /* Parser.m in Sources */ = {isa = PBXBuildFile; fileRef = 925A01A81A1E67F900A321E6 /* Parser.m */; };
@@ -40,6 +42,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9231159D1A444A6B00624201 /* RendererView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RendererView.h; sourceTree = "<group>"; };
+		9231159E1A444A6B00624201 /* RendererView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RendererView.m; sourceTree = "<group>"; };
+		923115A01A444AA800624201 /* Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
+		923115A11A444AA800624201 /* Renderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Renderer.m; sourceTree = "<group>"; };
 		924CC0FC1A220B3C00D2AF68 /* Runner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Runner.h; sourceTree = "<group>"; };
 		924CC0FD1A220B3C00D2AF68 /* Runner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Runner.m; sourceTree = "<group>"; };
 		92509CC81A28F99D0086E7E3 /* ExplorerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExplorerViewController.h; sourceTree = "<group>"; };
@@ -98,6 +104,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9231159C1A444A4100624201 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				9231159D1A444A6B00624201 /* RendererView.h */,
+				9231159E1A444A6B00624201 /* RendererView.m */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		923115A31A444AC000624201 /* Runtime */ = {
+			isa = PBXGroup;
+			children = (
+				924CC0FC1A220B3C00D2AF68 /* Runner.h */,
+				924CC0FD1A220B3C00D2AF68 /* Runner.m */,
+				926C72C81A2B5C9100448EAB /* RunnerDelegate.h */,
+				923115A01A444AA800624201 /* Renderer.h */,
+				923115A11A444AA800624201 /* Renderer.m */,
+			);
+			name = Runtime;
+			sourceTree = "<group>";
+		};
 		927333F01A2A3E4600C89AF0 /* Core Data */ = {
 			isa = PBXGroup;
 			children = (
@@ -168,8 +195,10 @@
 				9276F39B1A1D289C0060E909 /* LaunchScreen.xib */,
 				9276F3901A1D289C0060E909 /* AppDelegate.h */,
 				9276F3911A1D289C0060E909 /* AppDelegate.m */,
+				9231159C1A444A4100624201 /* Views */,
 				927333F11A2A3EDD00C89AF0 /* View Controllers */,
 				9276F3B51A1D29D30060E909 /* Compiler */,
+				923115A31A444AC000624201 /* Runtime */,
 				927333F01A2A3E4600C89AF0 /* Core Data */,
 				9276F38C1A1D289C0060E909 /* Supporting Files */,
 			);
@@ -215,9 +244,6 @@
 				925A01A81A1E67F900A321E6 /* Parser.m */,
 				92C98F3D1A20CFD900215AE9 /* CompilerException.h */,
 				92C98F3E1A20CFD900215AE9 /* CompilerException.m */,
-				924CC0FC1A220B3C00D2AF68 /* Runner.h */,
-				924CC0FD1A220B3C00D2AF68 /* Runner.m */,
-				926C72C81A2B5C9100448EAB /* RunnerDelegate.h */,
 			);
 			name = Compiler;
 			sourceTree = "<group>";
@@ -323,6 +349,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				923115A21A444AA800624201 /* Renderer.m in Sources */,
 				9276F3951A1D289C0060E909 /* EditorViewController.m in Sources */,
 				9272C1491A1DE2D000E97957 /* Token.m in Sources */,
 				9276F3921A1D289C0060E909 /* AppDelegate.m in Sources */,
@@ -334,6 +361,7 @@
 				927334A01A2A499B00C89AF0 /* ModelManager.m in Sources */,
 				9273349D1A2A478700C89AF0 /* HelpTableViewController.m in Sources */,
 				924CC0FE1A220B3C00D2AF68 /* Runner.m in Sources */,
+				9231159F1A444A6B00624201 /* RendererView.m in Sources */,
 				92C98F421A20F2F000215AE9 /* Node.m in Sources */,
 				927333EC1A2A3DB100C89AF0 /* Model.xcdatamodeld in Sources */,
 				926C72C71A2B579E00448EAB /* RunnerViewController.m in Sources */,

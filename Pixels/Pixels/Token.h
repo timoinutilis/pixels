@@ -30,6 +30,11 @@ typedef NS_ENUM(NSInteger, TType) {
     TTypeSymLoop,
     TTypeSymExit,
     TTypeSymWait,
+    TTypeSymColor,
+    TTypeSymClear,
+    TTypeSymPlot,
+    TTypeSymLine,
+    TTypeSymBox,
     TTypeSymOpEq,
     TTypeSymOpGrEq,
     TTypeSymOpLeEq,
@@ -48,6 +53,7 @@ typedef NS_ENUM(NSInteger, TType) {
     TTypeSymOpAnd,
     TTypeSymOpNot,
     TTypeSymColon,
+    TTypeSymComma,
     TTypeSymEol,
     
     TType_count
