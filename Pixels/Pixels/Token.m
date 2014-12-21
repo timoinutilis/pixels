@@ -41,12 +41,18 @@
         case TTypeSymPlot: return @"PLOT";
         case TTypeSymLine: return @"LINE";
         case TTypeSymBox: return @"BOX";
+        case TTypeSymEnd: return @"END";
         
         case TTypeSymUp: return @"UP";
         case TTypeSymDown: return @"DOWN";
         case TTypeSymLeft: return @"LEFT";
         case TTypeSymRight: return @"RIGHT";
         case TTypeSymButton: return @"BUTTON";
+        case TTypeSymPoint: return @"POINT";
+        case TTypeSymRnd: return @"RND";
+        
+        case TTypeSymTrue: return @"TRUE";
+        case TTypeSymFalse: return @"FALSE";
         
         case TTypeSymOpEq: return @"=";
         case TTypeSymOpGrEq: return @">=";

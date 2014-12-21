@@ -305,7 +305,7 @@
                         </variation>
                     </view>
                     <navigationItem key="navigationItem" title="Projects" id="qaN-Hc-taS">
-                        <barButtonItem key="leftBarButtonItem" title="Help" style="plain" id="qf6-fB-X4G">
+                        <barButtonItem key="leftBarButtonItem" title="Help" id="qf6-fB-X4G">
                             <connections>
                                 <action selector="onHelpTapped:" destination="Xni-Pq-CRZ" id="ARl-q1-3S0"/>
                             </connections>

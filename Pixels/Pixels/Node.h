@@ -18,7 +18,7 @@
 
 @interface IfNode : Node
 @property Node *condition;
-@property Node *command;
+@property NSArray *commands;
 @end
 
 @interface GotoNode : Node
@@ -98,6 +98,20 @@
 @interface JoystickNode : Node
 @property TType type;
 @property Node *portExpression;
+@end
+
+@interface PointNode : Node
+@property Node *xExpression;
+@property Node *yExpression;
+@end
+
+@interface Maths0Node : Node
+@property TType type;
+@end
+
+@interface Maths1Node : Node
+@property TType type;
+@property Node *xExpression;
 @end
 
 @interface Operator2Node : Node

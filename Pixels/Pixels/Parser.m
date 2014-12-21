@@ -270,7 +270,19 @@
     [self accept:TTypeSymIf];
     node.condition = [self acceptExpression];
     [self accept:TTypeSymThen];
-    node.command = [self acceptCommand]; // includes EOL
+    if (self.token.type == TTypeSymEol)
+    {
+        // if ... end-if block
+        node.commands = [self acceptCommandLines];
+        [self accept:TTypeSymEnd];
+        [self accept:TTypeSymIf];
+        [self accept:TTypeSymEol];
+    }
+    else
+    {
+        // single line
+        node.commands = @[[self acceptCommand]]; // includes EOL
+    }
     return node;
 }
 
@@ -500,6 +512,18 @@
         case TTypeSymBracketOpen: {
             return [self acceptExpressionBlock];
         }
+        case TTypeSymTrue: {
+            NumberNode *node = [[NumberNode alloc] init];
+            node.value = -1;
+            [self accept:TTypeSymTrue];
+            return node;
+        }
+        case TTypeSymFalse: {
+            NumberNode *node = [[NumberNode alloc] init];
+            node.value = 0;
+            [self accept:TTypeSymFalse];
+            return node;
+        }
         default: {
             NSException *exception = [CompilerException exceptionWithName:@"ExpectedExpression" reason:@"Expected expression" userInfo:@{@"token": self.token}];
             @throw exception;
@@ -532,6 +556,22 @@
             [self accept:TTypeSymBracketOpen];
             node.portExpression = [self acceptExpression];
             [self accept:TTypeSymBracketClose];
+            return node;
+        }
+        case TTypeSymPoint: {
+            PointNode *node = [[PointNode alloc] init];
+            [self accept:TTypeSymPoint];
+            [self accept:TTypeSymBracketOpen];
+            node.xExpression = [self acceptExpression];
+            [self accept:TTypeSymComma];
+            node.yExpression = [self acceptExpression];
+            [self accept:TTypeSymBracketClose];
+            return node;
+        }
+        case TTypeSymRnd: {
+            Maths0Node *node = [[Maths0Node alloc] init];
+            node.type = self.token.type;
+            [self accept:self.token.type];
             return node;
         }
         default:

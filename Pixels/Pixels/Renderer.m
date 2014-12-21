@@ -83,7 +83,7 @@ int const RendererSize = 32;
         {
             int x = fromX + i;
             int y = (diffX != 0) ? fromY + roundf(diffY * i / (float)diffX) : fromY;
-            _pixelBuffer[y][x] = _colorIndex;
+            [self plotX:x Y:y];
         }
     }
     else
@@ -101,7 +101,7 @@ int const RendererSize = 32;
         {
             int x = (diffY != 0) ? fromX + roundf(diffX * i / (float)diffY) : fromX;
             int y = fromY + i;
-            _pixelBuffer[y][x] = _colorIndex;
+            [self plotX:x Y:y];
         }
     }
 }
@@ -118,13 +118,13 @@ int const RendererSize = 32;
     }
     for (int x = fromX; x <= toX; x++)
     {
-        _pixelBuffer[fromY][x] = _colorIndex;
-        _pixelBuffer[toY][x] = _colorIndex;
+        [self plotX:x Y:fromY];
+        [self plotX:x Y:toY];
     }
     for (int y = fromY; y <= toY; y++)
     {
-        _pixelBuffer[y][fromX] = _colorIndex;
-        _pixelBuffer[y][toX] = _colorIndex;
+        [self plotX:fromX Y:y];
+        [self plotX:toX Y:y];
     }
 }
 

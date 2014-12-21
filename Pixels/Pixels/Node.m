@@ -34,7 +34,7 @@
     }
     else
     {
-        [runner addSequenceWithNodes:@[self.command] isLoop:NO parent:self];
+        [runner addSequenceWithNodes:self.commands isLoop:NO parent:self];
     }
     return nil;
 }
@@ -305,6 +305,45 @@
 
 @end
 
+@implementation PointNode
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    NSNumber *x = [self.xExpression evaluateWithRunner:runner];
+    NSNumber *y = [self.yExpression evaluateWithRunner:runner];
+    return @([runner.renderer colorAtX:x.intValue Y:y.intValue]);
+}
+
+@end
+
+@implementation Maths0Node
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    float result = 0;
+    switch (self.type)
+    {
+        case TTypeSymRnd:
+            result = arc4random() / (float)UINT32_MAX;
+            break;
+        default:
+            break;
+    }
+    return @(result);
+}
+
+@end
+
+@implementation Maths1Node
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    NSNumber *x = [self.xExpression evaluateWithRunner:runner];
+    return x; //TODO
+}
+
+@end
+
 @implementation Operator2Node
 
 - (id)evaluateWithRunner:(Runner *)runner
@@ -392,6 +431,29 @@
 @end
 
 @implementation Operator1Node
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    NSNumber *value = [self.expression evaluateWithRunner:runner];
+    switch (self.type)
+    {
+        case TTypeSymOpPlus:
+            return value;
+        case TTypeSymOpMinus:
+            return @(-value.floatValue);
+        case TTypeSymOpNot:
+            if (value.intValue == 0)
+            {
+                return @(-1);
+            }
+            return @(0);
+        default: {
+            // invalid
+        }
+    }
+    return value;
+}
+
 @end
 
 @implementation NumberNode
