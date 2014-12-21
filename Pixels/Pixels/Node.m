@@ -274,6 +274,37 @@
 
 @end
 
+@implementation JoystickNode
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+//    NSNumber *port = [self.portExpression evaluateWithRunner:runner];
+    BOOL result = NO;
+    switch (self.type)
+    {
+        case TTypeSymUp:
+            result = [runner.delegate isButtonDown:ButtonTypeUp];
+            break;
+        case TTypeSymDown:
+            result = [runner.delegate isButtonDown:ButtonTypeDown];
+            break;
+        case TTypeSymLeft:
+            result = [runner.delegate isButtonDown:ButtonTypeLeft];
+            break;
+        case TTypeSymRight:
+            result = [runner.delegate isButtonDown:ButtonTypeRight];
+            break;
+        case TTypeSymButton:
+            result = [runner.delegate isButtonDown:ButtonTypeA];
+            break;
+        default:
+            break;
+    }
+    return @(result ? -1 : 0);
+}
+
+@end
+
 @implementation Operator2Node
 
 - (id)evaluateWithRunner:(Runner *)runner

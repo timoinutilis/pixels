@@ -8,9 +8,18 @@
 
 #import <Foundation/Foundation.h>
 
+typedef NS_ENUM(NSInteger, ButtonType) {
+    ButtonTypeUp,
+    ButtonTypeDown,
+    ButtonTypeLeft,
+    ButtonTypeRight,
+    ButtonTypeA
+};
+
 @protocol RunnerDelegate <NSObject>
 
 - (void)runnerLog:(NSString *)message;
 - (void)updateRendererView;
+- (BOOL)isButtonDown:(ButtonType)type;
 
 @end

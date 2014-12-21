@@ -14,6 +14,11 @@
 
 @property (weak, nonatomic) IBOutlet UITextView *logTextView;
 @property (weak, nonatomic) IBOutlet RendererView *rendererView;
+@property (weak, nonatomic) IBOutlet UIButton *fireButton;
+@property (weak, nonatomic) IBOutlet UIButton *upButton;
+@property (weak, nonatomic) IBOutlet UIButton *downButton;
+@property (weak, nonatomic) IBOutlet UIButton *leftButton;
+@property (weak, nonatomic) IBOutlet UIButton *rightButton;
 
 @property BOOL isRunning;
 
@@ -79,6 +84,18 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.rendererView setNeedsDisplay];
     });
+}
+
+- (BOOL)isButtonDown:(ButtonType)type
+{
+    switch (type)
+    {
+        case ButtonTypeUp: return self.upButton.isHighlighted;
+        case ButtonTypeDown: return self.downButton.isHighlighted;
+        case ButtonTypeLeft: return self.leftButton.isHighlighted;
+        case ButtonTypeRight: return self.rightButton.isHighlighted;
+        case ButtonTypeA: return self.fireButton.isHighlighted;
+    }
 }
 
 @end

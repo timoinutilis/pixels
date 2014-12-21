@@ -17,6 +17,7 @@
         case TTypeString: return printable ? @"string" : nil;
         case TTypeNumber: return printable ? @"number" : nil;
         case TTypeIdentifier: return printable ? @"identifier" : nil;
+        
         case TTypeSymIf: return @"IF";
         case TTypeSymThen: return @"THEN";
         case TTypeSymGoto: return @"GOTO";
@@ -40,6 +41,13 @@
         case TTypeSymPlot: return @"PLOT";
         case TTypeSymLine: return @"LINE";
         case TTypeSymBox: return @"BOX";
+        
+        case TTypeSymUp: return @"UP";
+        case TTypeSymDown: return @"DOWN";
+        case TTypeSymLeft: return @"LEFT";
+        case TTypeSymRight: return @"RIGHT";
+        case TTypeSymButton: return @"BUTTON";
+        
         case TTypeSymOpEq: return @"=";
         case TTypeSymOpGrEq: return @">=";
         case TTypeSymOpLeEq: return @"<=";

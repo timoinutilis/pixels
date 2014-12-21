@@ -471,6 +471,12 @@
 
 - (Node *)acceptPrimaryExpression
 {
+    Node *functionNode = [self acceptFunction];
+    if (functionNode)
+    {
+        return functionNode;
+    }
+    
     switch (self.token.type)
     {
         case TTypeIdentifier: {
@@ -509,6 +515,30 @@
     node = [self acceptExpression];
     [self accept:TTypeSymBracketClose];
     return node;
+}
+
+- (Node *)acceptFunction
+{
+    switch (self.token.type)
+    {
+        case TTypeSymUp:
+        case TTypeSymDown:
+        case TTypeSymLeft:
+        case TTypeSymRight:
+        case TTypeSymButton: {
+            JoystickNode *node = [[JoystickNode alloc] init];
+            node.type = self.token.type;
+            [self accept:self.token.type];
+            [self accept:TTypeSymBracketOpen];
+            node.portExpression = [self acceptExpression];
+            [self accept:TTypeSymBracketClose];
+            return node;
+        }
+        default:
+            // ignore
+            break;
+    }
+    return nil;
 }
 
 @end
