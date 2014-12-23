@@ -167,6 +167,9 @@
         case TTypeSymBox:
             node = [self acceptBox];
             break;
+        case TTypeSymText:
+            node = [self acceptText];
+            break;
         default: {
             NSException *exception = [CompilerException exceptionWithName:@"ExpectedCommand" reason:@"Expected command" userInfo:@{@"token": self.token}];
             @throw exception;
@@ -196,6 +199,7 @@
         case TTypeSymPlot:
         case TTypeSymLine:
         case TTypeSymBox:
+        case TTypeSymText:
             return YES;
         default:
             return NO;
@@ -421,6 +425,19 @@
     node.toXExpression = [self acceptExpression];
     [self accept:TTypeSymComma];
     node.toYExpression = [self acceptExpression];
+    [self acceptEol];
+    return node;
+}
+
+- (Node *)acceptText
+{
+    TextNode *node = [[TextNode alloc] init];
+    [self accept:TTypeSymText];
+    node.xExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.yExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.valueExpression = [self acceptExpression];
     [self acceptEol];
     return node;
 }

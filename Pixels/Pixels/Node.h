@@ -95,6 +95,12 @@
 @property Node *toYExpression;
 @end
 
+@interface TextNode : Node
+@property Node *valueExpression;
+@property Node *xExpression;
+@property Node *yExpression;
+@end
+
 @interface JoystickNode : Node
 @property TType type;
 @property Node *portExpression;

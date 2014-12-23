@@ -274,6 +274,20 @@
 
 @end
 
+@implementation TextNode
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    id value = [self.valueExpression evaluateWithRunner:runner];
+    NSNumber *x = [self.xExpression evaluateWithRunner:runner];
+    NSNumber *y = [self.yExpression evaluateWithRunner:runner];
+    [runner.renderer drawText:[value description] x:x.intValue y:y.intValue];
+    [runner next];
+    return nil;
+}
+
+@end
+
 @implementation JoystickNode
 
 - (id)evaluateWithRunner:(Runner *)runner
