@@ -9,6 +9,7 @@
 #import "RunnerViewController.h"
 #import "Runner.h"
 #import "RendererView.h"
+#import "Project.h"
 
 @interface RunnerViewController ()
 
@@ -29,6 +30,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     self.logTextView.text = @"";
 }
 
@@ -52,6 +54,7 @@
 - (void)run
 {
     self.isRunning = YES;
+    self.rendererView.shouldMakeThumbnail = YES;
     
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     
@@ -64,6 +67,13 @@
             [runner runCommand];
         }
         [self updateRendererView];
+        
+        // thumbnail
+        UIImage *thumb = [self.rendererView imageFromBestSnapshot];
+        if (thumb)
+        {
+            self.project.iconData = UIImagePNGRepresentation(thumb);
+        }
     });
 }
 

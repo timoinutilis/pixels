@@ -224,7 +224,8 @@
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    [runner.renderer clear];
+    NSNumber *color = [self.color evaluateWithRunner:runner];
+    [runner.renderer clearWithColorIndex:color.intValue];
     [runner next];
     return nil;
 }
@@ -281,7 +282,23 @@
     id value = [self.valueExpression evaluateWithRunner:runner];
     NSNumber *x = [self.xExpression evaluateWithRunner:runner];
     NSNumber *y = [self.yExpression evaluateWithRunner:runner];
-    [runner.renderer drawText:[value description] x:x.intValue y:y.intValue];
+    NSNumber *align = [self.alignExpression evaluateWithRunner:runner];
+    int alignInt = align.intValue;
+    int xPos = x.intValue;
+    NSString *text = [value description];
+    if (alignInt > 0)
+    {
+        int width = [runner.renderer widthForText:text] - 2;
+        if (alignInt == 1)
+        {
+            xPos -= width / 2;
+        }
+        else if (alignInt == 2)
+        {
+            xPos -= width;
+        }
+    }
+    [runner.renderer drawText:text x:xPos y:y.intValue];
     [runner next];
     return nil;
 }

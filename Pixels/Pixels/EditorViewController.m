@@ -18,6 +18,7 @@
 @interface EditorViewController ()
 
 @property (weak, nonatomic) IBOutlet UITextView *sourceCodeTextView;
+@property (weak, nonatomic) IBOutlet UIToolbar *toolbarView;
 
 @end
 
@@ -29,12 +30,44 @@
     
     self.navigationItem.title = self.project.name;
     self.sourceCodeTextView.text = self.project.sourceCode ? self.project.sourceCode : @"";
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    // set scrolling insets
+    [self keyboardWillHide:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     [self saveProject];
+}
+
+- (void)keyboardWillShow:(NSNotification *)notification
+{
+    CGSize kbSize = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
+    UIEdgeInsets insets = UIEdgeInsetsMake(CGRectGetMaxY(self.navigationController.navigationBar.frame), 0, kbSize.height, 0);
+    self.sourceCodeTextView.contentInset = insets;
+    self.sourceCodeTextView.scrollIndicatorInsets = insets;
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification
+{
+    UIEdgeInsets insets = UIEdgeInsetsMake(CGRectGetMaxY(self.navigationController.navigationBar.frame), 0, self.toolbarView.frame.size.height, 0);
+    self.sourceCodeTextView.contentInset = insets;
+    self.sourceCodeTextView.scrollIndicatorInsets = insets;
 }
 
 - (void)saveProject
@@ -141,6 +174,7 @@
 - (void)runWithNodes:(NSArray *)nodes
 {
     RunnerViewController *vc = (RunnerViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"Runner"];
+    vc.project = self.project;
     vc.nodes = nodes;
     [self presentViewController:vc animated:YES completion:nil];
 }

@@ -74,6 +74,7 @@
 @end
 
 @interface ClearNode : Node
+@property Node *color;
 @end
 
 @interface PlotNode : Node
@@ -99,6 +100,7 @@
 @property Node *valueExpression;
 @property Node *xExpression;
 @property Node *yExpression;
+@property Node *alignExpression;
 @end
 
 @interface JoystickNode : Node

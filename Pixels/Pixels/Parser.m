@@ -384,6 +384,7 @@
 {
     ClearNode *node = [[ClearNode alloc] init];
     [self accept:TTypeSymClear];
+    node.color = [self acceptExpression];
     [self acceptEol];
     return node;
 }
@@ -438,6 +439,11 @@
     node.yExpression = [self acceptExpression];
     [self accept:TTypeSymComma];
     node.valueExpression = [self acceptExpression];
+    if (self.token.type == TTypeSymComma)
+    {
+        [self accept:TTypeSymComma];
+        node.alignExpression = [self acceptExpression];
+    }
     [self acceptEol];
     return node;
 }

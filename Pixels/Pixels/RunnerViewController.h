@@ -9,8 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "RunnerDelegate.h"
 
+@class Project;
+
 @interface RunnerViewController : UIViewController <RunnerDelegate>
 
+@property Project *project;
 @property NSArray *nodes;
 
 @end

@@ -158,6 +158,15 @@
 - (void)update
 {
     self.nameLabel.text = self.project.name;
+    if (self.project.iconData)
+    {
+        UIImage *image = [UIImage imageWithData:self.project.iconData];
+        self.previewImageView.image = image;
+    }
+    else
+    {
+        self.previewImageView.image = [UIImage imageNamed:@"dummy_project_icon"];
+    }
 }
 
 @end

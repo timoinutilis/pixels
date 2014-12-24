@@ -13,5 +13,8 @@
 @interface RendererView : UIView
 
 @property Renderer *renderer;
+@property BOOL shouldMakeThumbnail;
+
+- (UIImage *)imageFromBestSnapshot;
 
 @end
