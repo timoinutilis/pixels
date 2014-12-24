@@ -155,8 +155,8 @@
         case TTypeSymColor:
             node = [self acceptColor];
             break;
-        case TTypeSymClear:
-            node = [self acceptClear];
+        case TTypeSymCls:
+            node = [self acceptCls];
             break;
         case TTypeSymPlot:
             node = [self acceptPlot];
@@ -195,7 +195,7 @@
         case TTypeSymExit:
         case TTypeSymWait:
         case TTypeSymColor:
-        case TTypeSymClear:
+        case TTypeSymCls:
         case TTypeSymPlot:
         case TTypeSymLine:
         case TTypeSymBox:
@@ -380,10 +380,10 @@
     return node;
 }
 
-- (Node *)acceptClear
+- (Node *)acceptCls
 {
-    ClearNode *node = [[ClearNode alloc] init];
-    [self accept:TTypeSymClear];
+    ClsNode *node = [[ClsNode alloc] init];
+    [self accept:TTypeSymCls];
     node.color = [self acceptExpression];
     [self acceptEol];
     return node;

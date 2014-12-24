@@ -220,7 +220,7 @@
 
 @end
 
-@implementation ClearNode
+@implementation ClsNode
 
 - (id)evaluateWithRunner:(Runner *)runner
 {

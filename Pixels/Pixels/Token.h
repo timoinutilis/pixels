@@ -33,7 +33,7 @@ typedef NS_ENUM(NSInteger, TType) {
     TTypeSymExit,
     TTypeSymWait,
     TTypeSymColor,
-    TTypeSymClear,
+    TTypeSymCls,
     TTypeSymPlot,
     TTypeSymLine,
     TTypeSymBox,

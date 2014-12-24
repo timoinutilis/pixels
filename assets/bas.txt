@@ -1,0 +1,107 @@
+let x=0
+let y=0
+do
+	for dir=1 to 4
+		for i=1 to 31
+			cls 0
+			color 4
+			line y,x to x,y
+			color 2
+			line 31-y,31-x to x,y
+			color 3
+			line y,x to 31-y,31-x
+			wait 0.05
+			if dir=1 then let x=x+1
+			if dir=2 then let y=y+1
+			if dir=3 then let x=x-1
+			if dir=4 then let y=y-1
+		next i
+	next dir
+loop
+
+--------------------------
+
+let x=32
+color 4
+do
+	cls 0
+	let x=x-1
+	text x,13,"inutilis software"
+	wait 0.05
+	if x<-70 then let x=32
+loop
+
+--------------------------
+
+let x=16
+let y=16
+let col=1
+do
+	if up(0) and y>0 then let y=y-1
+	if down(0) and y<31 then let y=y+1
+	if left(0) and x>0 then let x=x-1
+	if right(0) and x<31 then let x=x+1
+	if button(0) then let col=col+1
+	if col>4 then let col=1
+	color col
+	plot x,y
+	if point(1,1)=1 then cls 0
+	wait 0.1
+loop
+
+--------------------------
+
+let carX=16
+let carY=26
+let streetY=0
+let blockX=15
+let blockY=0
+let score=0
+let blockIsBad=false
+do
+	if left(0) and carX>9 then let carX=carX-1
+	if right(0) and carX<22 then let carX=carX+1
+
+	if blockY>31 then let blockY=0
+	if blockY=0 then
+		let blockX=9+rnd*14
+		let blockIsBad=false
+		if rnd<0.3 then let blockIsBad=true
+	end if
+	
+	cls 0
+	
+	color 2
+	line 7,0 to 7,31
+	line 24,0 to 24,31
+	color 1
+	for i=0 to 7
+		plot 7,streetY+i*4
+		plot 24,streetY+i*4
+	next
+	let streetY=streetY+1
+	if streetY=4 then let streetY=0
+	
+	color 3
+	if blockIsBad then color 2
+	let blockY=blockY+2
+	box blockX-1,blockY to blockX+1,blockY+1
+	
+	let checkleft=point(carX-1,carY-1)
+	let checkright=point(carX+1,carY-1)
+	if checkleft=2 or checkleft=3 or checkright=2 or checkright=3 then
+		let blockY=0
+		if not blockIsBad then let score=score+1
+		if blockIsBad then let score=0
+	end if
+
+	color 4
+	line carX,carY to carX,carY+2
+	box carX-1,carY to carX+1,carY+3
+	
+	color 1
+	text 16,1,score,1
+	if score=20 then exit
+
+	wait 0.1
+loop

@@ -73,7 +73,7 @@
 @property Node *color;
 @end
 
-@interface ClearNode : Node
+@interface ClsNode : Node
 @property Node *color;
 @end
 

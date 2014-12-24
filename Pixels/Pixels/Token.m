@@ -37,7 +37,7 @@
         case TTypeSymExit: return @"EXIT";
         case TTypeSymWait: return @"WAIT";
         case TTypeSymColor: return @"COLOR";
-        case TTypeSymClear: return @"CLEAR";
+        case TTypeSymCls: return @"CLS";
         case TTypeSymPlot: return @"PLOT";
         case TTypeSymLine: return @"LINE";
         case TTypeSymBox: return @"BOX";
