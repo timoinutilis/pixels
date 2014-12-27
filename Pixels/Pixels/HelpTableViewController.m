@@ -7,27 +7,33 @@
 //
 
 #import "HelpTableViewController.h"
+#import "HelpTextViewController.h"
+#import "HelpContent.h"
 
 @interface HelpTableViewController ()
-
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *doneButton;
+@property HelpTextViewController *textViewController;
+@property HelpContent *helpContent;
 @end
 
 @implementation HelpTableViewController
 
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    [super viewDidLoad];    
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    UINavigationController *nav = (UINavigationController *)self.presentingViewController;
+    self.textViewController = (HelpTextViewController *)(nav.topViewController);
+    self.helpContent = self.textViewController.helpContent;
 }
 
 - (IBAction)onDoneTapped:(id)sender
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - Table view data source
@@ -41,29 +47,38 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return 0;
+    return self.helpContent.chapters.count;
 }
 
-/*
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
+    HelpChapter *chapter = self.helpContent.chapters[indexPath.row];
+    NSString *cellIdentifier;
+    if (chapter.level == 0)
+    {
+        cellIdentifier = @"ChapterCell";
+    }
+    else if (chapter.level == 1)
+    {
+        cellIdentifier = @"SubchapterCell";
+    }
+    else
+    {
+        cellIdentifier = @"CommandCell";
+    }
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
     
-    // Configure the cell...
+    cell.textLabel.text = chapter.title;
+    cell.indentationLevel = chapter.level;
     
     return cell;
 }
-*/
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    HelpChapter *chapter = self.helpContent.chapters[indexPath.row];
+    self.textViewController.chapter = chapter.htmlChapter;
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
-*/
 
 @end

@@ -73,13 +73,7 @@
                             </mask>
                         </variation>
                     </view>
-                    <navigationItem key="navigationItem" title="(Project Name)" id="pmw-uN-wb5">
-                        <barButtonItem key="rightBarButtonItem" systemItem="play" id="wHf-8V-JmH">
-                            <connections>
-                                <action selector="runTapped:" destination="BYZ-38-t0r" id="Dxt-qq-EZK"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="(Project Name)" id="pmw-uN-wb5"/>
                     <connections>
                         <outlet property="sourceCodeTextView" destination="SjB-QF-tvR" id="adj-Wv-Tev"/>
                         <outlet property="toolbarView" destination="l9J-Fd-pzR" id="cgo-6m-k9h"/>
@@ -242,12 +236,12 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="(Project Name)" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="Y0e-d8-avy">
-                                                    <rect key="frame" x="8" y="104" width="124" height="36"/>
+                                                    <rect key="frame" x="8" y="98" width="124" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="dummy_project_icon" translatesAutoresizingMaskIntoConstraints="NO" id="KyM-fJ-oxW">
-                                                    <rect key="frame" x="22" y="8" width="96" height="96"/>
+                                                    <rect key="frame" x="22" y="0.0" width="96" height="96"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="96" id="O8p-mV-w9U"/>
                                                         <constraint firstAttribute="height" constant="96" id="XEI-vC-UAh"/>
@@ -258,10 +252,9 @@
                                         </view>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="Y0e-d8-avy" secondAttribute="trailing" constant="8" id="1dL-Gb-n2V"/>
-                                            <constraint firstAttribute="bottom" secondItem="Y0e-d8-avy" secondAttribute="bottom" id="4o7-Lt-3Rl"/>
                                             <constraint firstItem="Y0e-d8-avy" firstAttribute="leading" secondItem="4E0-sW-TxH" secondAttribute="leading" constant="8" id="MX0-w1-pYk"/>
-                                            <constraint firstItem="KyM-fJ-oxW" firstAttribute="top" secondItem="4E0-sW-TxH" secondAttribute="top" constant="8" id="hiE-g6-4xK"/>
-                                            <constraint firstItem="Y0e-d8-avy" firstAttribute="top" secondItem="KyM-fJ-oxW" secondAttribute="bottom" id="pth-cL-JpO"/>
+                                            <constraint firstItem="KyM-fJ-oxW" firstAttribute="top" secondItem="4E0-sW-TxH" secondAttribute="top" id="hiE-g6-4xK"/>
+                                            <constraint firstItem="Y0e-d8-avy" firstAttribute="top" secondItem="KyM-fJ-oxW" secondAttribute="bottom" constant="2" id="pth-cL-JpO"/>
                                             <constraint firstAttribute="centerX" secondItem="KyM-fJ-oxW" secondAttribute="centerX" id="sX8-hW-Egw"/>
                                         </constraints>
                                         <connections>

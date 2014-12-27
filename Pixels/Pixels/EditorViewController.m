@@ -29,6 +29,11 @@
     [super viewDidLoad];
     
     self.navigationItem.title = self.project.name;
+    
+    UIBarButtonItem *runButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(onRunTapped:)];
+    UIBarButtonItem *helpButton = [[UIBarButtonItem alloc] initWithTitle:@"Help" style:UIBarButtonItemStylePlain target:self action:@selector(onHelpTapped:)];
+    self.navigationItem.rightBarButtonItems = @[runButton, helpButton];
+    
     self.sourceCodeTextView.text = self.project.sourceCode ? self.project.sourceCode : @"";
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
@@ -78,7 +83,7 @@
     }
 }
 
-- (IBAction)runTapped:(id)sender
+- (void)onRunTapped:(id)sender
 {
     [self saveProject];
     [self compileText:self.sourceCodeTextView.text];
@@ -137,6 +142,13 @@
 
 - (IBAction)onActionTapped:(id)sender
 {
+}
+
+- (void)onHelpTapped:(id)sender
+{
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Help" bundle:nil];
+    UIViewController *vc = (UIViewController *)[storyboard instantiateInitialViewController];
+    [self presentViewController:vc animated:YES completion:nil];
 }
 
 - (void)compileText:(NSString *)text
