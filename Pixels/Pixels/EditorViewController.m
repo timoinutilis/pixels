@@ -20,6 +20,8 @@
 @property (weak, nonatomic) IBOutlet UITextView *sourceCodeTextView;
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbarView;
 
+@property UIToolbar *keyboardToolbar;
+
 @end
 
 @implementation EditorViewController
@@ -35,6 +37,7 @@
     self.navigationItem.rightBarButtonItems = @[runButton, helpButton];
     
     self.sourceCodeTextView.text = self.project.sourceCode ? self.project.sourceCode : @"";
+    [self initKeyboardToolbar];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -44,6 +47,29 @@
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (void)initKeyboardToolbar
+{
+    self.keyboardToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 44)];
+    self.keyboardToolbar.translucent = YES;
+    
+    NSArray *keys = @[@"=", @"+", @"-", @"*", @"/", @"(", @")", @"\"", @"$"];
+    NSMutableArray *buttons = [NSMutableArray array];
+    for (NSString *key in keys)
+    {
+        UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithTitle:key style:UIBarButtonItemStylePlain target:self action:@selector(onSpecialKeyTapped:)];
+        [buttons addObject:button];
+    }
+    
+    UIBarButtonItem *space = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    [buttons addObject:space];
+    
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onKeyboardDoneTapped:)];
+    [buttons addObject:doneButton];
+    
+    self.keyboardToolbar.items = buttons;
+    self.sourceCodeTextView.inputAccessoryView = self.keyboardToolbar;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -81,6 +107,16 @@
     {
         self.project.sourceCode = self.sourceCodeTextView.text;
     }
+}
+
+- (void)onSpecialKeyTapped:(UIBarButtonItem *)button
+{
+    [self.sourceCodeTextView insertText:button.title];
+}
+
+- (void)onKeyboardDoneTapped:(UIBarButtonItem *)button
+{
+    [self.sourceCodeTextView resignFirstResponder];
 }
 
 - (void)onRunTapped:(id)sender
