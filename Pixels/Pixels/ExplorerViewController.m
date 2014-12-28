@@ -55,6 +55,7 @@
 {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Help" bundle:nil];
     UIViewController *vc = (UIViewController *)[storyboard instantiateInitialViewController];
+    vc.modalPresentationStyle = UIModalPresentationPageSheet;
     [self presentViewController:vc animated:YES completion:nil];
 }
 

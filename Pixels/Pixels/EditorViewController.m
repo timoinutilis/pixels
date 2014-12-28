@@ -54,7 +54,7 @@
     self.keyboardToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 44)];
     self.keyboardToolbar.translucent = YES;
     
-    NSArray *keys = @[@"=", @"+", @"-", @"*", @"/", @"(", @")", @"\"", @"$"];
+    NSArray *keys = @[@"=", @"<", @">", @"+", @"-", @"*", @"/", @"(", @")", @"\"", @"$"];
     NSMutableArray *buttons = [NSMutableArray array];
     for (NSString *key in keys)
     {
@@ -184,6 +184,7 @@
 {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Help" bundle:nil];
     UIViewController *vc = (UIViewController *)[storyboard instantiateInitialViewController];
+    vc.modalPresentationStyle = UIModalPresentationPageSheet;
     [self presentViewController:vc animated:YES completion:nil];
 }
 
@@ -224,6 +225,7 @@
     RunnerViewController *vc = (RunnerViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"Runner"];
     vc.project = self.project;
     vc.nodes = nodes;
+    vc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     [self presentViewController:vc animated:YES completion:nil];
 }
 
