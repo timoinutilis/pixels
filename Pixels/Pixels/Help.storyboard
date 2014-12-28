@@ -62,7 +62,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Contents" id="fxm-u0-rG6">
-                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="xrp-8A-zv1">
+                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="xrp-8A-zv1">
                             <connections>
                                 <action selector="onDoneTapped:" destination="VCq-ww-h8L" id="mGz-oW-8WM"/>
                             </connections>
@@ -104,12 +104,10 @@
                     <navigationItem key="navigationItem" title="Help" id="f6y-xG-fkW">
                         <barButtonItem key="leftBarButtonItem" title="Contents" id="dcf-ac-6zN">
                             <connections>
-                                <segue destination="a40-4h-tm3" kind="popoverPresentation" popoverAnchorBarButtonItem="dcf-ac-6zN" id="8ES-1C-jiU">
-                                    <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
-                                </segue>
+                                <action selector="onContentsTapped:" destination="WHi-Jx-MzX" id="fk5-wT-9Zl"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="0ji-16-1CH">
+                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="0ji-16-1CH">
                             <connections>
                                 <action selector="onDoneTapped:" destination="WHi-Jx-MzX" id="v4F-qs-3XT"/>
                             </connections>
@@ -142,7 +140,7 @@
         <!--Navigation Controller-->
         <scene sceneID="KdV-MH-j2G">
             <objects>
-                <navigationController id="a40-4h-tm3" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="Contents" id="a40-4h-tm3" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="LGn-Hv-V0x">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>

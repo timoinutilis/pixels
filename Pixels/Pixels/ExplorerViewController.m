@@ -9,6 +9,7 @@
 #import "ExplorerViewController.h"
 #import "ModelManager.h"
 #import "EditorViewController.h"
+#import "HelpTextViewController.h"
 
 @interface ExplorerViewController ()
 
@@ -53,10 +54,7 @@
 
 - (IBAction)onHelpTapped:(id)sender
 {
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Help" bundle:nil];
-    UIViewController *vc = (UIViewController *)[storyboard instantiateInitialViewController];
-    vc.modalPresentationStyle = UIModalPresentationPageSheet;
-    [self presentViewController:vc animated:YES completion:nil];
+    [HelpTextViewController showHelpWithParent:self];
 }
 
 - (IBAction)onAddTapped:(id)sender

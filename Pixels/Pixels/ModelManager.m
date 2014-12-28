@@ -8,6 +8,8 @@
 
 #import "ModelManager.h"
 
+NSString *const ModelManagerWillSaveDataNotification = @"ModelManagerWillSaveDataNotification";
+
 @interface ModelManager ()
 
 
@@ -103,6 +105,8 @@
 
 - (void)saveContext
 {
+    [[NSNotificationCenter defaultCenter] postNotificationName:ModelManagerWillSaveDataNotification object:self];
+    
     NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
     if (managedObjectContext != nil)
     {

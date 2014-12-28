@@ -14,9 +14,24 @@
 
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
 
+@property UIViewController *contentsViewController;
+
 @end
 
 @implementation HelpTextViewController
+
++ (void)showHelpWithParent:(UIViewController *)parent
+{
+    static UIViewController *helpViewController = nil;
+    
+    if (!helpViewController)
+    {
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Help" bundle:nil];
+        helpViewController = (UIViewController *)[storyboard instantiateInitialViewController];
+        helpViewController.modalPresentationStyle = UIModalPresentationPageSheet;
+    }
+    [parent presentViewController:helpViewController animated:YES completion:nil];
+}
 
 - (void)viewDidLoad
 {
@@ -28,6 +43,17 @@
     _helpContent = [[HelpContent alloc] initWithURL:url];
     
     [self.webView loadHTMLString:self.helpContent.manualHtml baseURL:url];
+}
+
+- (IBAction)onContentsTapped:(id)sender
+{
+    if (!self.contentsViewController)
+    {
+        self.contentsViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"Contents"];
+        self.contentsViewController.modalPresentationStyle = UIModalPresentationPopover;
+    }
+    self.contentsViewController.popoverPresentationController.barButtonItem = sender;
+    [self presentViewController:self.contentsViewController animated:YES completion:nil];
 }
 
 - (IBAction)onDoneTapped:(id)sender

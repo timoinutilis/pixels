@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "Project.h"
 
+extern NSString *const ModelManagerWillSaveDataNotification;
+
 @interface ModelManager : NSObject
 
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;

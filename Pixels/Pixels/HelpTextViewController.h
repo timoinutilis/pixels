@@ -15,4 +15,6 @@
 @property (readonly) HelpContent *helpContent;
 @property (nonatomic) NSString *chapter;
 
++ (void)showHelpWithParent:(UIViewController *)parent;
+
 @end

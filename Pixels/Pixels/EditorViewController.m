@@ -14,6 +14,7 @@
 #import "Runner.h"
 #import "ModelManager.h"
 #import "RunnerViewController.h"
+#import "HelpTextViewController.h"
 
 @interface EditorViewController ()
 
@@ -41,12 +42,14 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willSaveData:) name:ModelManagerWillSaveDataNotification object:nil];
 }
 
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:ModelManagerWillSaveDataNotification object:nil];
 }
 
 - (void)initKeyboardToolbar
@@ -99,6 +102,11 @@
     UIEdgeInsets insets = UIEdgeInsetsMake(CGRectGetMaxY(self.navigationController.navigationBar.frame), 0, self.toolbarView.frame.size.height, 0);
     self.sourceCodeTextView.contentInset = insets;
     self.sourceCodeTextView.scrollIndicatorInsets = insets;
+}
+
+- (void)willSaveData:(NSNotification *)notification
+{
+    [self saveProject];
 }
 
 - (void)saveProject
@@ -182,10 +190,7 @@
 
 - (void)onHelpTapped:(id)sender
 {
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Help" bundle:nil];
-    UIViewController *vc = (UIViewController *)[storyboard instantiateInitialViewController];
-    vc.modalPresentationStyle = UIModalPresentationPageSheet;
-    [self presentViewController:vc animated:YES completion:nil];
+    [HelpTextViewController showHelpWithParent:self];
 }
 
 - (void)compileText:(NSString *)text
