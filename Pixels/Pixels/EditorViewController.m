@@ -15,6 +15,7 @@
 #import "ModelManager.h"
 #import "RunnerViewController.h"
 #import "HelpTextViewController.h"
+#import "PublishActivity.h"
 
 @interface EditorViewController ()
 
@@ -186,6 +187,12 @@
 
 - (IBAction)onActionTapped:(id)sender
 {
+    id item = self.sourceCodeTextView.text;
+    PublishActivity *publishActivity = [[PublishActivity alloc] init];
+    
+    UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:@[item] applicationActivities:@[publishActivity]];
+    activityVC.popoverPresentationController.barButtonItem = sender;
+    [self presentViewController:activityVC animated:YES completion:nil];
 }
 
 - (void)onHelpTapped:(id)sender
