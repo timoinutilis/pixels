@@ -238,7 +238,7 @@
 {
     NSNumber *x = [self.xExpression evaluateWithRunner:runner];
     NSNumber *y = [self.yExpression evaluateWithRunner:runner];
-    [runner.renderer plotX:x.intValue Y:y.intValue];
+    [runner.renderer plotX:roundf(x.floatValue) Y:roundf(y.intValue)];
     [runner next];
     return nil;
 }
@@ -253,7 +253,7 @@
     NSNumber *fromY = [self.fromYExpression evaluateWithRunner:runner];
     NSNumber *toX = [self.toXExpression evaluateWithRunner:runner];
     NSNumber *toY = [self.toYExpression evaluateWithRunner:runner];
-    [runner.renderer drawFromX:fromX.intValue Y:fromY.intValue toX:toX.intValue Y:toY.intValue];
+    [runner.renderer drawFromX:roundf(fromX.floatValue) Y:roundf(fromY.floatValue) toX:roundf(toX.floatValue) Y:roundf(toY.floatValue)];
     [runner next];
     return nil;
 }
@@ -268,7 +268,7 @@
     NSNumber *fromY = [self.fromYExpression evaluateWithRunner:runner];
     NSNumber *toX = [self.toXExpression evaluateWithRunner:runner];
     NSNumber *toY = [self.toYExpression evaluateWithRunner:runner];
-    [runner.renderer drawBoxFromX:fromX.intValue Y:fromY.intValue toX:toX.intValue Y:toY.intValue];
+    [runner.renderer drawBoxFromX:roundf(fromX.floatValue) Y:roundf(fromY.floatValue) toX:roundf(toX.floatValue) Y:roundf(toY.floatValue)];
     [runner next];
     return nil;
 }
@@ -284,11 +284,11 @@
     NSNumber *y = [self.yExpression evaluateWithRunner:runner];
     NSNumber *align = [self.alignExpression evaluateWithRunner:runner];
     int alignInt = align.intValue;
-    int xPos = x.intValue;
+    float xPos = x.floatValue;
     NSString *text = [value description];
     if (alignInt > 0)
     {
-        int width = [runner.renderer widthForText:text] - 2;
+        float width = [runner.renderer widthForText:text] - 2;
         if (alignInt == 1)
         {
             xPos -= width / 2;
@@ -298,7 +298,7 @@
             xPos -= width;
         }
     }
-    [runner.renderer drawText:text x:xPos y:y.intValue];
+    [runner.renderer drawText:text x:roundf(xPos) y:roundf(y.floatValue)];
     [runner next];
     return nil;
 }

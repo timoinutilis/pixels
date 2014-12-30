@@ -13,7 +13,6 @@
 
 @interface RunnerViewController ()
 
-@property (weak, nonatomic) IBOutlet UITextView *logTextView;
 @property (weak, nonatomic) IBOutlet RendererView *rendererView;
 @property (weak, nonatomic) IBOutlet UIButton *fireButton;
 @property (weak, nonatomic) IBOutlet UIButton *upButton;
@@ -30,13 +29,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    self.logTextView.text = @"";
 }
 
-- (BOOL)prefersStatusBarHidden
+- (UIStatusBarStyle)preferredStatusBarStyle
 {
-    return YES;
+    return UIStatusBarStyleLightContent;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -84,9 +81,7 @@
 
 - (void)runnerLog:(NSString *)message
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        self.logTextView.text = [NSString stringWithFormat:@"%@%@\n", self.logTextView.text, message];
-    });
+    NSLog(@"%@", message);
 }
 
 - (void)updateRendererView

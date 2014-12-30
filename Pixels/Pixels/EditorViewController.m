@@ -64,10 +64,11 @@
     {
         UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithTitle:key style:UIBarButtonItemStylePlain target:self action:@selector(onSpecialKeyTapped:)];
         [buttons addObject:button];
+
+        UIBarButtonItem *space = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+        [buttons addObject:space];
     }
     
-    UIBarButtonItem *space = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-    [buttons addObject:space];
     
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onKeyboardDoneTapped:)];
     [buttons addObject:doneButton];
@@ -130,7 +131,6 @@
 
 - (void)onRunTapped:(id)sender
 {
-    [self saveProject];
     [self compileText:self.sourceCodeTextView.text];
 }
 
@@ -187,10 +187,16 @@
 
 - (IBAction)onActionTapped:(id)sender
 {
-    id item = self.sourceCodeTextView.text;
+    NSMutableArray *items = [NSMutableArray array];
+    if (self.project.iconData)
+    {
+        [items addObject:self.project.iconData];
+    }
+    [items addObject:self.sourceCodeTextView.text];
+    
     PublishActivity *publishActivity = [[PublishActivity alloc] init];
     
-    UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:@[item] applicationActivities:@[publishActivity]];
+    UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:items applicationActivities:@[publishActivity]];
     activityVC.popoverPresentationController.barButtonItem = sender;
     [self presentViewController:activityVC animated:YES completion:nil];
 }
@@ -207,10 +213,16 @@
         Scanner *scanner = [[Scanner alloc] init];
         NSArray *tokens = [scanner tokenizeText:text.uppercaseString];
         
-        Parser *parser = [[Parser alloc] init];
-        NSArray *nodes = [parser parseTokens:tokens];
-        
-        [self runWithNodes:nodes];
+        if (tokens.count > 0)
+        {
+            Parser *parser = [[Parser alloc] init];
+            NSArray *nodes = [parser parseTokens:tokens];
+            
+            if (nodes.count > 0)
+            {
+                [self runWithNodes:nodes];
+            }
+        }
     }
     @catch (CompilerException *exception)
     {

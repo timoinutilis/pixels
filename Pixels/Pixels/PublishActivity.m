@@ -22,7 +22,7 @@
 
 - (NSString *)activityTitle
 {
-    return @"Publish";
+    return @"Pixels Community";
 }
 
 - (UIImage *)activityImage
