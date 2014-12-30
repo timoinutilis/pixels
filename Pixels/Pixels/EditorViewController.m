@@ -15,6 +15,7 @@
 #import "ModelManager.h"
 #import "RunnerViewController.h"
 #import "HelpTextViewController.h"
+#import "ActivityItemSource.h"
 #import "PublishActivity.h"
 
 @interface EditorViewController ()
@@ -187,16 +188,15 @@
 
 - (IBAction)onActionTapped:(id)sender
 {
-    NSMutableArray *items = [NSMutableArray array];
-    if (self.project.iconData)
-    {
-        [items addObject:self.project.iconData];
-    }
-    [items addObject:self.sourceCodeTextView.text];
+    [self saveProject];
+    
+    ActivityItemSource *item = [[ActivityItemSource alloc] init];
+    item.project = self.project;
     
     PublishActivity *publishActivity = [[PublishActivity alloc] init];
     
-    UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:items applicationActivities:@[publishActivity]];
+    UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:@[item] applicationActivities:@[publishActivity]];
+    
     activityVC.popoverPresentationController.barButtonItem = sender;
     [self presentViewController:activityVC animated:YES completion:nil];
 }

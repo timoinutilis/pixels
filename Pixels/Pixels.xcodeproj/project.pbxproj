@@ -33,6 +33,7 @@
 		929797FD1A50956900DB5D70 /* PublishActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 929797FC1A50956900DB5D70 /* PublishActivity.m */; };
 		92C98F3F1A20CFD900215AE9 /* CompilerException.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C98F3E1A20CFD900215AE9 /* CompilerException.m */; };
 		92C98F421A20F2F000215AE9 /* Node.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C98F411A20F2F000215AE9 /* Node.m */; };
+		92E2B8AA1A52F08D00D0DF29 /* ActivityItemSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E2B8A91A52F08D00D0DF29 /* ActivityItemSource.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,6 +96,8 @@
 		92C98F3E1A20CFD900215AE9 /* CompilerException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompilerException.m; sourceTree = "<group>"; };
 		92C98F401A20F2F000215AE9 /* Node.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Node.h; sourceTree = "<group>"; };
 		92C98F411A20F2F000215AE9 /* Node.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Node.m; sourceTree = "<group>"; };
+		92E2B8A81A52F08D00D0DF29 /* ActivityItemSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityItemSource.h; sourceTree = "<group>"; };
+		92E2B8A91A52F08D00D0DF29 /* ActivityItemSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityItemSource.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -170,6 +173,7 @@
 		927334991A2A457A00C89AF0 /* Main */ = {
 			isa = PBXGroup;
 			children = (
+				92E2B8AB1A52F4CA00D0DF29 /* Share */,
 				9276F3961A1D289C0060E909 /* Main.storyboard */,
 				92509CC81A28F99D0086E7E3 /* ExplorerViewController.h */,
 				92509CC91A28F99D0086E7E3 /* ExplorerViewController.m */,
@@ -177,8 +181,6 @@
 				9276F3941A1D289C0060E909 /* EditorViewController.m */,
 				926C72C51A2B579E00448EAB /* RunnerViewController.h */,
 				926C72C61A2B579E00448EAB /* RunnerViewController.m */,
-				929797FB1A50956900DB5D70 /* PublishActivity.h */,
-				929797FC1A50956900DB5D70 /* PublishActivity.m */,
 			);
 			name = Main;
 			sourceTree = "<group>";
@@ -272,6 +274,17 @@
 				92C98F3E1A20CFD900215AE9 /* CompilerException.m */,
 			);
 			name = Compiler;
+			sourceTree = "<group>";
+		};
+		92E2B8AB1A52F4CA00D0DF29 /* Share */ = {
+			isa = PBXGroup;
+			children = (
+				929797FB1A50956900DB5D70 /* PublishActivity.h */,
+				929797FC1A50956900DB5D70 /* PublishActivity.m */,
+				92E2B8A81A52F08D00D0DF29 /* ActivityItemSource.h */,
+				92E2B8A91A52F08D00D0DF29 /* ActivityItemSource.m */,
+			);
+			name = Share;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -379,6 +392,7 @@
 				923115A21A444AA800624201 /* Renderer.m in Sources */,
 				9276F3951A1D289C0060E909 /* EditorViewController.m in Sources */,
 				9272C1491A1DE2D000E97957 /* Token.m in Sources */,
+				92E2B8AA1A52F08D00D0DF29 /* ActivityItemSource.m in Sources */,
 				9276F3921A1D289C0060E909 /* AppDelegate.m in Sources */,
 				9276F3B41A1D29BF0060E909 /* Scanner.m in Sources */,
 				925A01A91A1E67F900A321E6 /* Parser.m in Sources */,

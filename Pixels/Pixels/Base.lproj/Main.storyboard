@@ -92,11 +92,11 @@
                         <viewControllerLayoutGuide type="bottom" id="vm8-Vn-fOJ"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="7pe-HW-2Cc">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="B6C-lp-NaC" customClass="RendererView">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <rect key="frame" x="0.0" y="124" width="320" height="320"/>
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="B6C-lp-NaC" secondAttribute="height" multiplier="1:1" id="3Qp-9x-gls"/>
@@ -116,67 +116,66 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AlQ-pI-Hpd">
-                                <rect key="frame" x="0.0" y="476" width="179" height="124"/>
+                                <rect key="frame" x="0.0" y="418" width="179" height="150"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hww-Ln-SSB">
-                                        <rect key="frame" x="67" y="66" width="44" height="44"/>
+                                        <rect key="frame" x="64" y="75" width="50" height="60"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="44" id="ER6-Jy-cEr"/>
-                                            <constraint firstAttribute="width" constant="44" id="hSd-66-T6r"/>
+                                            <constraint firstAttribute="height" constant="60" id="ER6-Jy-cEr"/>
+                                            <constraint firstAttribute="width" constant="50" id="hSd-66-T6r"/>
                                         </constraints>
                                         <state key="normal" title="D">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="19A-vP-gS5">
-                                        <rect key="frame" x="15" y="40" width="44" height="44"/>
+                                        <rect key="frame" x="14" y="45" width="50" height="60"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="44" id="2Go-dE-0EC"/>
-                                            <constraint firstAttribute="width" constant="44" id="ubx-LR-Wx1"/>
+                                            <constraint firstAttribute="height" constant="60" id="2Go-dE-0EC"/>
+                                            <constraint firstAttribute="width" constant="50" id="ubx-LR-Wx1"/>
                                         </constraints>
                                         <state key="normal" title="L">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qPL-fI-dw6">
-                                        <rect key="frame" x="119" y="40" width="44" height="44"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="44" id="Gp2-Dx-wMw"/>
-                                            <constraint firstAttribute="width" constant="44" id="RMW-nj-YEE"/>
-                                        </constraints>
-                                        <state key="normal" title="R">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NUG-9a-gKu">
-                                        <rect key="frame" x="67" y="14" width="44" height="44"/>
+                                        <rect key="frame" x="64" y="15" width="50" height="60"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="44" id="QtF-5v-qXZ"/>
-                                            <constraint firstAttribute="height" constant="44" id="l5l-YW-Hy0"/>
+                                            <constraint firstAttribute="width" constant="50" id="QtF-5v-qXZ"/>
+                                            <constraint firstAttribute="height" constant="60" id="l5l-YW-Hy0"/>
                                         </constraints>
                                         <state key="normal" title="U">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qPL-fI-dw6">
+                                        <rect key="frame" x="114" y="45" width="50" height="60"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="60" id="Gp2-Dx-wMw"/>
+                                            <constraint firstAttribute="width" constant="50" id="RMW-nj-YEE"/>
+                                        </constraints>
+                                        <state key="normal" title="R">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                    </button>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="centerY" secondItem="NUG-9a-gKu" secondAttribute="centerY" constant="26" id="6YS-kb-96P"/>
+                                    <constraint firstAttribute="centerY" secondItem="NUG-9a-gKu" secondAttribute="centerY" constant="30" id="6YS-kb-96P"/>
                                     <constraint firstAttribute="centerX" secondItem="NUG-9a-gKu" secondAttribute="centerX" id="7nd-p4-sMz"/>
                                     <constraint firstAttribute="width" constant="179" id="8Pt-En-T6q"/>
                                     <constraint firstAttribute="centerY" secondItem="qPL-fI-dw6" secondAttribute="centerY" id="Ubt-gN-H5W"/>
-                                    <constraint firstAttribute="centerY" secondItem="hww-Ln-SSB" secondAttribute="centerY" constant="-26" id="cea-NJ-WO9"/>
+                                    <constraint firstAttribute="centerY" secondItem="hww-Ln-SSB" secondAttribute="centerY" constant="-30" id="cea-NJ-WO9"/>
                                     <constraint firstAttribute="centerY" secondItem="19A-vP-gS5" secondAttribute="centerY" id="f3e-FC-FOX"/>
-                                    <constraint firstItem="qPL-fI-dw6" firstAttribute="leading" secondItem="NUG-9a-gKu" secondAttribute="trailing" constant="8" id="fT8-1K-bhh"/>
+                                    <constraint firstItem="qPL-fI-dw6" firstAttribute="leading" secondItem="NUG-9a-gKu" secondAttribute="trailing" id="fT8-1K-bhh"/>
                                     <constraint firstAttribute="centerX" secondItem="hww-Ln-SSB" secondAttribute="centerX" id="gN4-9J-sIk"/>
-                                    <constraint firstItem="hww-Ln-SSB" firstAttribute="top" secondItem="NUG-9a-gKu" secondAttribute="bottom" constant="8" id="ihu-t6-NDF"/>
-                                    <constraint firstAttribute="height" constant="124" id="r6o-oo-WyP"/>
-                                    <constraint firstItem="NUG-9a-gKu" firstAttribute="leading" secondItem="19A-vP-gS5" secondAttribute="trailing" constant="8" id="zpb-VL-Avc"/>
+                                    <constraint firstAttribute="height" constant="150" id="r6o-oo-WyP"/>
+                                    <constraint firstItem="NUG-9a-gKu" firstAttribute="leading" secondItem="19A-vP-gS5" secondAttribute="trailing" id="zpb-VL-Avc"/>
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gGg-rj-ecJ">
-                                <rect key="frame" x="538" y="540" width="46" height="44"/>
+                                <rect key="frame" x="258" y="502" width="46" height="50"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="44" id="4hM-8A-oMH"/>
+                                    <constraint firstAttribute="height" constant="50" id="4hM-8A-oMH"/>
                                 </constraints>
                                 <state key="normal" title="Button">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -198,6 +197,7 @@
                         </constraints>
                     </view>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="downButton" destination="hww-Ln-SSB" id="pRB-Jm-ICv"/>
                         <outlet property="fireButton" destination="gGg-rj-ecJ" id="pem-sC-A8D"/>
