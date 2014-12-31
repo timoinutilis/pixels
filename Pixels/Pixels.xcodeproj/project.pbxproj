@@ -34,6 +34,7 @@
 		92C98F3F1A20CFD900215AE9 /* CompilerException.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C98F3E1A20CFD900215AE9 /* CompilerException.m */; };
 		92C98F421A20F2F000215AE9 /* Node.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C98F411A20F2F000215AE9 /* Node.m */; };
 		92E2B8AA1A52F08D00D0DF29 /* ActivityItemSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E2B8A91A52F08D00D0DF29 /* ActivityItemSource.m */; };
+		92EDC4421A54701D007824A5 /* Joypad.m in Sources */ = {isa = PBXBuildFile; fileRef = 92EDC4411A54701D007824A5 /* Joypad.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -98,6 +99,8 @@
 		92C98F411A20F2F000215AE9 /* Node.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Node.m; sourceTree = "<group>"; };
 		92E2B8A81A52F08D00D0DF29 /* ActivityItemSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityItemSource.h; sourceTree = "<group>"; };
 		92E2B8A91A52F08D00D0DF29 /* ActivityItemSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityItemSource.m; sourceTree = "<group>"; };
+		92EDC4401A54701D007824A5 /* Joypad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Joypad.h; sourceTree = "<group>"; };
+		92EDC4411A54701D007824A5 /* Joypad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Joypad.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,6 +136,8 @@
 			children = (
 				9231159D1A444A6B00624201 /* RendererView.h */,
 				9231159E1A444A6B00624201 /* RendererView.m */,
+				92EDC4401A54701D007824A5 /* Joypad.h */,
+				92EDC4411A54701D007824A5 /* Joypad.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -395,6 +400,7 @@
 				92E2B8AA1A52F08D00D0DF29 /* ActivityItemSource.m in Sources */,
 				9276F3921A1D289C0060E909 /* AppDelegate.m in Sources */,
 				9276F3B41A1D29BF0060E909 /* Scanner.m in Sources */,
+				92EDC4421A54701D007824A5 /* Joypad.m in Sources */,
 				925A01A91A1E67F900A321E6 /* Parser.m in Sources */,
 				926C72C41A2B511400448EAB /* Project.m in Sources */,
 				9204EF681A4C397300B8C29C /* HelpTextViewController.m in Sources */,

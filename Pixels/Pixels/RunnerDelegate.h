@@ -13,7 +13,8 @@ typedef NS_ENUM(NSInteger, ButtonType) {
     ButtonTypeDown,
     ButtonTypeLeft,
     ButtonTypeRight,
-    ButtonTypeA
+    ButtonTypeA,
+    ButtonTypeB
 };
 
 @protocol RunnerDelegate <NSObject>

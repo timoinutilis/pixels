@@ -10,15 +10,14 @@
 #import "Runner.h"
 #import "RendererView.h"
 #import "Project.h"
+#import "Joypad.h"
 
 @interface RunnerViewController ()
 
 @property (weak, nonatomic) IBOutlet RendererView *rendererView;
-@property (weak, nonatomic) IBOutlet UIButton *fireButton;
-@property (weak, nonatomic) IBOutlet UIButton *upButton;
-@property (weak, nonatomic) IBOutlet UIButton *downButton;
-@property (weak, nonatomic) IBOutlet UIButton *leftButton;
-@property (weak, nonatomic) IBOutlet UIButton *rightButton;
+@property (weak, nonatomic) IBOutlet UIButton *buttonA;
+@property (weak, nonatomic) IBOutlet UIButton *buttonB;
+@property (weak, nonatomic) IBOutlet Joypad *joypad;
 
 @property BOOL isRunning;
 
@@ -100,11 +99,12 @@
 {
     switch (type)
     {
-        case ButtonTypeUp: return self.upButton.isHighlighted;
-        case ButtonTypeDown: return self.downButton.isHighlighted;
-        case ButtonTypeLeft: return self.leftButton.isHighlighted;
-        case ButtonTypeRight: return self.rightButton.isHighlighted;
-        case ButtonTypeA: return self.fireButton.isHighlighted;
+        case ButtonTypeUp: return self.joypad.isDirUp;
+        case ButtonTypeDown: return self.joypad.isDirDown;
+        case ButtonTypeLeft: return self.joypad.isDirLeft;
+        case ButtonTypeRight: return self.joypad.isDirRight;
+        case ButtonTypeA: return self.buttonA.isHighlighted;
+        case ButtonTypeB: return self.buttonB.isHighlighted;
     }
 }
 
