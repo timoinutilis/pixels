@@ -37,6 +37,7 @@ typedef NS_ENUM(NSInteger, TType) {
     TTypeSymPlot,
     TTypeSymLine,
     TTypeSymBox,
+    TTypeSymBar,
     TTypeSymText,
     TTypeSymEnd,
     

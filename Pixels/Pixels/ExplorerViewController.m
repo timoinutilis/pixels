@@ -25,6 +25,10 @@
 {
     [super viewDidLoad];
     
+    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(onAddTapped:)];
+    UIBarButtonItem *helpButton = [[UIBarButtonItem alloc] initWithTitle:@"Help" style:UIBarButtonItemStylePlain target:self action:@selector(onHelpTapped:)];
+    self.navigationItem.rightBarButtonItems = @[addButton, helpButton];
+    
     self.collectionView.dataSource = self;
     self.collectionView.delegate = self;
     
@@ -52,12 +56,12 @@
     [self.collectionView reloadData];
 }
 
-- (IBAction)onHelpTapped:(id)sender
+- (void)onHelpTapped:(id)sender
 {
     [HelpTextViewController showHelpWithParent:self];
 }
 
-- (IBAction)onAddTapped:(id)sender
+- (void)onAddTapped:(id)sender
 {
     Project *project = [[ModelManager sharedManager] createNewProject];
     

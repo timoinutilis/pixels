@@ -41,6 +41,7 @@
         case TTypeSymPlot: return @"PLOT";
         case TTypeSymLine: return @"LINE";
         case TTypeSymBox: return @"BOX";
+        case TTypeSymBar: return @"BAR";
         case TTypeSymText: return @"TEXT";
         case TTypeSymEnd: return @"END";
         

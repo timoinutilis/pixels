@@ -94,6 +94,7 @@
 @property Node *fromYExpression;
 @property Node *toXExpression;
 @property Node *toYExpression;
+@property BOOL fill;
 @end
 
 @interface TextNode : Node

@@ -165,6 +165,7 @@
             node = [self acceptLine];
             break;
         case TTypeSymBox:
+        case TTypeSymBar:
             node = [self acceptBox];
             break;
         case TTypeSymText:
@@ -199,6 +200,7 @@
         case TTypeSymPlot:
         case TTypeSymLine:
         case TTypeSymBox:
+        case TTypeSymBar:
         case TTypeSymText:
             return YES;
         default:
@@ -418,7 +420,8 @@
 - (Node *)acceptBox
 {
     BoxNode *node = [[BoxNode alloc] init];
-    [self accept:TTypeSymBox];
+    node.fill = (self.token.type == TTypeSymBar);
+    [self accept:self.token.type]; // box or bar
     node.fromXExpression = [self acceptExpression];
     [self accept:TTypeSymComma];
     node.fromYExpression = [self acceptExpression];

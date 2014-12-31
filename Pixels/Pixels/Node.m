@@ -268,7 +268,14 @@
     NSNumber *fromY = [self.fromYExpression evaluateWithRunner:runner];
     NSNumber *toX = [self.toXExpression evaluateWithRunner:runner];
     NSNumber *toY = [self.toYExpression evaluateWithRunner:runner];
-    [runner.renderer drawBoxFromX:roundf(fromX.floatValue) Y:roundf(fromY.floatValue) toX:roundf(toX.floatValue) Y:roundf(toY.floatValue)];
+    if (self.fill)
+    {
+        [runner.renderer fillBoxFromX:roundf(fromX.floatValue) Y:roundf(fromY.floatValue) toX:roundf(toX.floatValue) Y:roundf(toY.floatValue)];
+    }
+    else
+    {
+        [runner.renderer drawBoxFromX:roundf(fromX.floatValue) Y:roundf(fromY.floatValue) toX:roundf(toX.floatValue) Y:roundf(toY.floatValue)];
+    }
     [runner next];
     return nil;
 }
