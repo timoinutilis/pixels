@@ -94,72 +94,88 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="B6C-lp-NaC" customClass="RendererView">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wgn-Os-cIh">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <subviews>
-                                    <button opaque="NO" alpha="0.5" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gGg-rj-ecJ" userLabel="Button A">
-                                        <rect key="frame" x="376" y="444" width="68" height="68"/>
-                                        <state key="normal" image="button_a">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                    </button>
-                                    <button opaque="NO" alpha="0.5" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WUP-DK-URn" userLabel="Button B">
-                                        <rect key="frame" x="444" y="382" width="68" height="68"/>
-                                        <state key="normal" image="button_b">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                    </button>
-                                    <button opaque="NO" alpha="0.5" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DSM-fA-zCj" userLabel="Joypad" customClass="Joypad">
-                                        <rect key="frame" x="88" y="382" width="130" height="130"/>
-                                        <state key="normal" image="joypad">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                    </button>
+                                    <view contentMode="scaleToFill" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="B6C-lp-NaC" customClass="RendererView">
+                                        <rect key="frame" x="50" y="50" width="500" height="500"/>
+                                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                        <gestureRecognizers/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="500" id="A1Z-Ca-qSy"/>
+                                            <constraint firstAttribute="height" constant="500" id="xDi-Pn-o1Z"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
-                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.099565972222222215" alpha="1" colorSpace="calibratedWhite"/>
+                                <gestureRecognizers/>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="WUP-DK-URn" secondAttribute="trailing" constant="88" id="9VK-r8-kdz"/>
-                                    <constraint firstAttribute="bottom" secondItem="DSM-fA-zCj" secondAttribute="bottom" constant="88" id="Hc2-jH-rRq"/>
-                                    <constraint firstItem="DSM-fA-zCj" firstAttribute="leading" secondItem="B6C-lp-NaC" secondAttribute="leading" constant="88" id="S1K-fx-1Iy"/>
-                                    <constraint firstAttribute="bottom" secondItem="gGg-rj-ecJ" secondAttribute="bottom" constant="88" id="SsN-O8-1ue"/>
-                                    <constraint firstItem="WUP-DK-URn" firstAttribute="leading" secondItem="gGg-rj-ecJ" secondAttribute="trailing" id="bdI-ae-Rda"/>
-                                    <constraint firstAttribute="bottom" secondItem="WUP-DK-URn" secondAttribute="bottom" constant="150" id="mfo-8h-Qag"/>
+                                    <constraint firstAttribute="centerX" secondItem="B6C-lp-NaC" secondAttribute="centerX" id="4fd-N0-Rnv"/>
+                                    <constraint firstAttribute="centerY" secondItem="B6C-lp-NaC" secondAttribute="centerY" priority="750" id="WEu-I7-abo"/>
+                                    <constraint firstItem="B6C-lp-NaC" firstAttribute="top" secondItem="wgn-Os-cIh" secondAttribute="top" id="iA9-PT-qhk"/>
                                 </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="iA9-PT-qhk"/>
+                                    </mask>
+                                </variation>
+                                <variation key="widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="iA9-PT-qhk"/>
+                                    </mask>
+                                </variation>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U9l-B1-gng">
-                                <rect key="frame" x="8" y="20" width="44" height="44"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="G3W-X6-Rza"/>
-                                    <constraint firstAttribute="height" constant="44" id="W3s-Zd-TkK"/>
-                                </constraints>
-                                <state key="normal" title="Exit">
+                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U9l-B1-gng" userLabel="Exit Button">
+                                <rect key="frame" x="8" y="8" width="36" height="36"/>
+                                <state key="normal" image="exit">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
                                     <action selector="onExitTapped:" destination="glc-Eb-QOK" eventType="touchUpInside" id="1hg-hv-tee"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" alpha="0.5" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DSM-fA-zCj" userLabel="Joypad" customClass="Joypad">
+                                <rect key="frame" x="88" y="382" width="130" height="130"/>
+                                <state key="normal" image="joypad">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" alpha="0.5" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gGg-rj-ecJ" userLabel="Button A">
+                                <rect key="frame" x="376" y="444" width="68" height="68"/>
+                                <state key="normal" image="button_a">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" alpha="0.5" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WUP-DK-URn" userLabel="Button B">
+                                <rect key="frame" x="444" y="382" width="68" height="68"/>
+                                <state key="normal" image="button_b">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
                         </subviews>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="U9l-B1-gng" firstAttribute="top" secondItem="wa8-Dp-ejA" secondAttribute="bottom" id="GA4-7Z-A5V"/>
-                            <constraint firstItem="vm8-Vn-fOJ" firstAttribute="top" secondItem="B6C-lp-NaC" secondAttribute="bottom" id="HgW-cc-ZnD"/>
-                            <constraint firstItem="B6C-lp-NaC" firstAttribute="height" relation="lessThanOrEqual" secondItem="7pe-HW-2Cc" secondAttribute="height" id="InJ-Pk-mCo"/>
-                            <constraint firstItem="B6C-lp-NaC" firstAttribute="leading" secondItem="7pe-HW-2Cc" secondAttribute="leading" id="Iu2-JV-EOP"/>
-                            <constraint firstAttribute="trailing" secondItem="B6C-lp-NaC" secondAttribute="trailing" id="Y6q-T8-guO"/>
+                            <constraint firstItem="WUP-DK-URn" firstAttribute="leading" secondItem="gGg-rj-ecJ" secondAttribute="trailing" id="1nO-se-RY7"/>
+                            <constraint firstItem="wgn-Os-cIh" firstAttribute="top" secondItem="7pe-HW-2Cc" secondAttribute="top" id="5cK-O7-fVw"/>
+                            <constraint firstAttribute="bottom" secondItem="wgn-Os-cIh" secondAttribute="bottom" id="KXT-Er-Hxj"/>
+                            <constraint firstItem="wgn-Os-cIh" firstAttribute="leading" secondItem="7pe-HW-2Cc" secondAttribute="leading" id="PqW-SW-bRW"/>
+                            <constraint firstItem="U9l-B1-gng" firstAttribute="top" secondItem="7pe-HW-2Cc" secondAttribute="top" constant="8" id="aUb-1W-ipI"/>
                             <constraint firstItem="U9l-B1-gng" firstAttribute="leading" secondItem="7pe-HW-2Cc" secondAttribute="leading" constant="8" id="gHu-Cg-qnB"/>
-                            <constraint firstItem="B6C-lp-NaC" firstAttribute="top" secondItem="7pe-HW-2Cc" secondAttribute="top" id="qP4-KQ-FJ8"/>
+                            <constraint firstAttribute="trailing" secondItem="wgn-Os-cIh" secondAttribute="trailing" id="gZl-g8-tmR"/>
+                            <constraint firstItem="DSM-fA-zCj" firstAttribute="leading" secondItem="7pe-HW-2Cc" secondAttribute="leading" constant="88" id="ie4-m0-UXh"/>
+                            <constraint firstAttribute="trailing" secondItem="WUP-DK-URn" secondAttribute="trailing" constant="88" id="lML-pE-zo0"/>
+                            <constraint firstItem="vm8-Vn-fOJ" firstAttribute="top" secondItem="DSM-fA-zCj" secondAttribute="bottom" constant="88" id="n6N-y2-jry"/>
+                            <constraint firstItem="vm8-Vn-fOJ" firstAttribute="top" secondItem="gGg-rj-ecJ" secondAttribute="bottom" constant="88" id="oc7-0l-h6D"/>
+                            <constraint firstItem="vm8-Vn-fOJ" firstAttribute="top" secondItem="WUP-DK-URn" secondAttribute="bottom" constant="150" id="qcH-kT-O3Z"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="InJ-Pk-mCo"/>
-                            </mask>
-                        </variation>
                     </view>
-                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
+                    <nil key="simulatedStatusBarMetrics"/>
                     <connections>
                         <outlet property="buttonA" destination="gGg-rj-ecJ" id="Lj8-wl-JCJ"/>
                         <outlet property="buttonB" destination="WUP-DK-URn" id="fTd-nZ-6E5"/>
+                        <outlet property="constraintHeight" destination="xDi-Pn-o1Z" id="MFn-Ny-47I"/>
+                        <outlet property="constraintWidth" destination="A1Z-Ca-qSy" id="N2o-XF-UHg"/>
+                        <outlet property="containerView" destination="wgn-Os-cIh" id="Urd-Fb-b8e"/>
                         <outlet property="joypad" destination="DSM-fA-zCj" id="Oet-AY-6OU"/>
                         <outlet property="rendererView" destination="B6C-lp-NaC" id="d1n-8y-Uwo"/>
                     </connections>
@@ -320,6 +336,7 @@
         <image name="button_a" width="68" height="68"/>
         <image name="button_b" width="68" height="68"/>
         <image name="dummy_project_icon" width="95" height="95"/>
+        <image name="exit" width="36" height="36"/>
         <image name="joypad" width="130" height="130"/>
     </resources>
 </document>

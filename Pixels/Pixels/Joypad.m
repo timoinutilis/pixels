@@ -10,6 +10,13 @@
 
 @implementation Joypad
 
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
+{
+    int errorMargin = 30;
+    CGRect largerFrame = CGRectMake(-errorMargin, -errorMargin, self.frame.size.width + 2 * errorMargin, self.frame.size.height + 2 * errorMargin);
+    return CGRectContainsPoint(largerFrame, point) ? self : nil;
+}
+
 - (BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
 {
     BOOL begin = [super beginTrackingWithTouch:touch withEvent:event];

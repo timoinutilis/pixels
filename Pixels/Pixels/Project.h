@@ -16,5 +16,6 @@
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSString * sourceCode;
 @property (nonatomic, retain) NSDate * createdAt;
+@property (nonatomic, retain) NSNumber * scale;
 
 @end

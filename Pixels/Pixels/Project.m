@@ -15,5 +15,6 @@
 @dynamic name;
 @dynamic sourceCode;
 @dynamic createdAt;
+@dynamic scale;
 
 @end

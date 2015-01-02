@@ -14,12 +14,18 @@
 
 @interface RunnerViewController ()
 
+@property (weak, nonatomic) IBOutlet UIView *containerView;
 @property (weak, nonatomic) IBOutlet RendererView *rendererView;
 @property (weak, nonatomic) IBOutlet UIButton *buttonA;
 @property (weak, nonatomic) IBOutlet UIButton *buttonB;
 @property (weak, nonatomic) IBOutlet Joypad *joypad;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintWidth;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintHeight;
+
+@property UIPinchGestureRecognizer *pinchRecognizer;
 
 @property BOOL isRunning;
+@property CGFloat scale;
 
 @end
 
@@ -28,13 +34,19 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.scale = self.project.scale.floatValue;
+    
+    self.pinchRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(onPinchGesture:)];
+    [self.containerView addGestureRecognizer:self.pinchRecognizer];
 }
+
 /*
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
 }
 */
+
 - (BOOL)prefersStatusBarHidden
 {
     return YES;
@@ -49,7 +61,51 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    self.project.scale = @(self.scale);
     self.isRunning = NO;
+}
+
+- (void)viewWillLayoutSubviews
+{
+    [self updateRendererScale];
+}
+
+- (void)onPinchGesture:(UIPinchGestureRecognizer *)gestureRecognizer
+{
+    if (gestureRecognizer.state == UIGestureRecognizerStateBegan)
+    {
+        gestureRecognizer.scale = self.scale;
+    }
+    else if (gestureRecognizer.state == UIGestureRecognizerStateChanged)
+    {
+        self.scale = MAX(0.25, MIN(1.0, gestureRecognizer.scale));
+        [self updateRendererScale];
+    }
+}
+
+- (void)updateRendererScale
+{
+    UIWindow* window = [UIApplication sharedApplication].keyWindow;
+    BOOL panorama = (window.bounds.size.width > window.bounds.size.height);
+    CGFloat longSide = panorama ? window.bounds.size.width : window.bounds.size.height;
+    CGFloat shortSide = panorama ? window.bounds.size.height : window.bounds.size.width;
+    
+    longSide *= self.scale;
+    if (shortSide > longSide)
+    {
+        shortSide = longSide;
+    }
+    
+    if (panorama)
+    {
+        self.constraintWidth.constant = longSide;
+        self.constraintHeight.constant = shortSide;
+    }
+    else
+    {
+        self.constraintWidth.constant = shortSide;
+        self.constraintHeight.constant = longSide;
+    }
 }
 
 - (void)run
