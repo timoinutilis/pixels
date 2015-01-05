@@ -7,10 +7,10 @@
 //
 
 #import "PublishActivity.h"
-#import "AFNetworking.h"
 #import "Project.h"
+#import "ShareViewController.h"
 
-@interface PublishActivity ()
+@interface PublishActivity () <ShareViewControllerDelegate>
 @property Project *project;
 @end
 
@@ -46,24 +46,14 @@
     self.project = activityItems[0];
 }
 
-- (void)performActivity
+- (UIViewController *)activityViewController
 {
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSDictionary *parameters = @{@"secret": @"916486295",
-                                 @"author": @"Author",
-                                 @"title": self.project.name,
-                                 @"description": @"Description",
-                                 @"source_code": self.project.sourceCode};
-    
-    [manager POST:@"http://apps.timokloss.com/tools/pixelsshare.php" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
-        [self activityDidFinish:YES];
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
-        [self activityDidFinish:NO];
-        
-    }];
+    return [ShareViewController createShareWithDelegate:self project:self.project];
+}
+
+- (void)onClosedWithSuccess:(BOOL)success
+{
+    [self activityDidFinish:success];
 }
 
 @end

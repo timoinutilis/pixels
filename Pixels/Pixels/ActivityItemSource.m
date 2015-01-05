@@ -27,13 +27,13 @@
     return self.project.sourceCode;
 }
 
-// if activity supports a Subject field. iOS 7.0
+// if activity supports a Subject field
 - (NSString *)activityViewController:(UIActivityViewController *)activityViewController subjectForActivityType:(NSString *)activityType
 {
     return self.project.name;
 }
 
-// if activity supports preview image. iOS 7.0
+// if activity supports preview image
 - (UIImage *)activityViewController:(UIActivityViewController *)activityViewController thumbnailImageForActivityType:(NSString *)activityType suggestedSize:(CGSize)size;
 {
     if (self.project.iconData)
