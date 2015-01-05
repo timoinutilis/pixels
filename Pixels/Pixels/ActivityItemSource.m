@@ -20,6 +20,10 @@
 // called to fetch data after an activity is selected. you can return nil.
 - (id)activityViewController:(UIActivityViewController *)activityViewController itemForActivityType:(NSString *)activityType
 {
+    if ([activityType isEqualToString:@"PixelsShare"])
+    {
+        return self.project;
+    }
     return self.project.sourceCode;
 }
 

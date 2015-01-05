@@ -7,6 +7,12 @@
 //
 
 #import "PublishActivity.h"
+#import "AFNetworking.h"
+#import "Project.h"
+
+@interface PublishActivity ()
+@property Project *project;
+@end
 
 @implementation PublishActivity
 
@@ -17,7 +23,7 @@
 
 - (NSString *)activityType
 {
-    return @"PublishInutilis";
+    return @"PixelsShare";
 }
 
 - (NSString *)activityTitle
@@ -37,12 +43,27 @@
 
 - (void)prepareWithActivityItems:(NSArray *)activityItems
 {
+    self.project = activityItems[0];
 }
 
 - (void)performActivity
 {
-    // perform in main thread
-    [self activityDidFinish:YES];
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    NSDictionary *parameters = @{@"secret": @"916486295",
+                                 @"author": @"Author",
+                                 @"title": self.project.name,
+                                 @"description": @"Description",
+                                 @"source_code": self.project.sourceCode};
+    
+    [manager POST:@"http://apps.timokloss.com/tools/pixelsshare.php" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        [self activityDidFinish:YES];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+        [self activityDidFinish:NO];
+        
+    }];
 }
 
 @end
