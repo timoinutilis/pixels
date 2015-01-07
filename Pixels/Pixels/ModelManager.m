@@ -30,6 +30,7 @@ NSString *const ModelManagerWillSaveDataNotification = @"ModelManagerWillSaveDat
 #pragma mark - Core Data stack
 
 @synthesize managedObjectContext = _managedObjectContext;
+@synthesize temporaryContext = _temporaryContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
@@ -99,6 +100,26 @@ NSString *const ModelManagerWillSaveDataNotification = @"ModelManagerWillSaveDat
     return _managedObjectContext;
 }
 
+- (NSManagedObjectContext *)temporaryContext
+{
+    if (!_temporaryContext)
+    {
+        NSError *error = nil;
+        NSPersistentStoreCoordinator *coordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
+        [_persistentStoreCoordinator addPersistentStoreWithType:NSInMemoryStoreType configuration:nil URL:nil options:nil error:&error];
+        if (error)
+        {
+            NSLog(@"Core Data temporaryContext error: %@", error);
+        }
+        else
+        {
+            _temporaryContext = [[NSManagedObjectContext alloc] init];
+            [_temporaryContext setPersistentStoreCoordinator:coordinator];
+        }
+    }
+    return _temporaryContext;
+}
+
 #pragma mark - Core Data Saving support
 
 - (void)saveContext
@@ -117,6 +138,27 @@ NSString *const ModelManagerWillSaveDataNotification = @"ModelManagerWillSaveDat
 }
 
 #pragma mark - stuff
+
+- (void)createDefaultProjects
+{
+    NSError *error;
+    NSURL *url = [[NSBundle mainBundle] URLForResource:@"DefaultProjects" withExtension:@"json"];
+    NSData *jsonData = [NSData dataWithContentsOfURL:url];
+    NSArray *jsonProjects = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
+    
+    for (NSDictionary *jsonProject in jsonProjects)
+    {
+        Project *project = [NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:self.temporaryContext];
+        project.isDefault = @YES;
+        project.name = jsonProject[@"name"];
+        project.createdAt = [NSDate date];
+        project.sourceCode = jsonProject[@"sourceCode"];
+        
+        NSString *iconName = jsonProject[@"icon"];
+        NSURL *iconUrl = [[NSBundle mainBundle] URLForResource:iconName withExtension:@"png"];
+        project.iconData = [NSData dataWithContentsOfURL:iconUrl];
+    }
+}
 
 - (Project *)createNewProject
 {

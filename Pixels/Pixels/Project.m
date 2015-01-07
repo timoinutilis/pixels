@@ -16,5 +16,6 @@
 @dynamic sourceCode;
 @dynamic createdAt;
 @dynamic scale;
+@dynamic isDefault;
 
 @end

@@ -32,17 +32,11 @@
     self.collectionView.dataSource = self;
     self.collectionView.delegate = self;
     
-//    [self loadProjects];
+    [[ModelManager sharedManager] createDefaultProjects];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
-/*    NSArray *indexPaths = self.collectionView.indexPathsForSelectedItems;
-    if (indexPaths.count > 0)
-    {
-        ExplorerProjectCell *cell = (ExplorerProjectCell *)[self.collectionView cellForItemAtIndexPath:indexPaths[0]];
-        [cell update];
-    }*/
     [self loadProjects];
 }
 
@@ -51,8 +45,15 @@
     NSError *error;
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Project"];
     request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"createdAt" ascending:YES]];
-    NSArray *projects = [[ModelManager sharedManager].managedObjectContext executeFetchRequest:request error:&error];
-    self.projects = [NSMutableArray arrayWithArray:projects];
+    
+    // default projects
+    NSArray *defaultProjects = [[ModelManager sharedManager].temporaryContext executeFetchRequest:request error:&error];
+    self.projects = [NSMutableArray arrayWithArray:defaultProjects];
+    
+    // user projects
+    NSArray *userProjects = [[ModelManager sharedManager].managedObjectContext executeFetchRequest:request error:&error];
+    [self.projects addObjectsFromArray:userProjects];
+    
     [self.collectionView reloadData];
 }
 

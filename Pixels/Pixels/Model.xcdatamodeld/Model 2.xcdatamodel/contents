@@ -3,11 +3,12 @@
     <entity name="Project" representedClassName="Project" syncable="YES">
         <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="iconData" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="isDefault" transient="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="scale" optional="YES" attributeType="Float" defaultValueString="1" syncable="YES"/>
         <attribute name="sourceCode" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Project" positionX="-63" positionY="-18" width="128" height="120"/>
+        <element name="Project" positionX="-63" positionY="-18" width="128" height="135"/>
     </elements>
 </model>

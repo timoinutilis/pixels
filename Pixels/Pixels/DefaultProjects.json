@@ -1,0 +1,12 @@
+[
+ {
+    "name": "Racing",
+    "sourceCode": "CLS 0",
+    "icon": "racing_icon"
+ },
+ {
+    "name": "Tennis",
+    "sourceCode": "CLS 0",
+    "icon": "tennis_icon"
+ }
+]

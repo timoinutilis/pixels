@@ -40,6 +40,14 @@
     self.navigationItem.rightBarButtonItems = @[runButton, helpButton];
     
     self.sourceCodeTextView.text = self.project.sourceCode ? self.project.sourceCode : @"";
+    if (self.project.isDefault.boolValue)
+    {
+        self.sourceCodeTextView.editable = NO;
+        self.sourceCodeTextView.selectable = NO;
+        
+        UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSourceCodeTapped:)];
+        [self.sourceCodeTextView addGestureRecognizer:recognizer];
+    }
     [self initKeyboardToolbar];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
@@ -120,6 +128,20 @@
     }
 }
 
+- (void)onSourceCodeTapped:(id)sender
+{
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Example projects cannot be edited" message:@"Do you want to make an editable copy of this project?" preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:@"Duplicate" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        [[ModelManager sharedManager] duplicateProject:self.project];
+        [self.navigationController popViewControllerAnimated:YES];
+    }]];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
 - (void)onSpecialKeyTapped:(UIBarButtonItem *)button
 {
     [self.sourceCodeTextView insertText:button.title];
@@ -137,17 +159,26 @@
 
 - (IBAction)onDeleteTapped:(id)sender
 {
-    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Do you really want to delete this project?" message:nil preferredStyle:UIAlertControllerStyleAlert];
-    
-    [alert addAction:[UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
-        [[ModelManager sharedManager] deleteProject:self.project];
-        self.project = nil;
-        [self.navigationController popViewControllerAnimated:YES];
-    }]];
-    
-    [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
-    
-    [self presentViewController:alert animated:YES completion:nil];
+    if (self.project.isDefault.boolValue)
+    {
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Example projects cannot be deleted." message:nil preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+        [self presentViewController:alert animated:YES completion:nil];
+    }
+    else
+    {
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Do you really want to delete this project?" message:nil preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alert addAction:[UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
+            [[ModelManager sharedManager] deleteProject:self.project];
+            self.project = nil;
+            [self.navigationController popViewControllerAnimated:YES];
+        }]];
+        
+        [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+    }
 }
 
 - (IBAction)onDuplicateTapped:(id)sender
@@ -167,23 +198,32 @@
 
 - (IBAction)onRenameTapped:(id)sender
 {
-    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Enter new project name" message:nil preferredStyle:UIAlertControllerStyleAlert];
+    if (self.project.isDefault.boolValue)
+    {
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Example projects cannot renamed." message:nil preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+        [self presentViewController:alert animated:YES completion:nil];
+    }
+    else
+    {
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Enter new project name" message:nil preferredStyle:UIAlertControllerStyleAlert];
 
-    [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
-        textField.text = self.project.name;
-        textField.clearButtonMode = UITextFieldViewModeAlways;
-        textField.autocapitalizationType = UITextAutocapitalizationTypeWords;
-    }];
-    
-    [alert addAction:[UIAlertAction actionWithTitle:@"Rename" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-        self.project.name = ((UITextField *)alert.textFields[0]).text;
-        self.navigationItem.title = self.project.name;
-        [self saveProject];
-    }]];
-    
-    [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
-    
-    [self presentViewController:alert animated:YES completion:nil];
+        [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+            textField.text = self.project.name;
+            textField.clearButtonMode = UITextFieldViewModeAlways;
+            textField.autocapitalizationType = UITextAutocapitalizationTypeWords;
+        }];
+        
+        [alert addAction:[UIAlertAction actionWithTitle:@"Rename" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+            self.project.name = ((UITextField *)alert.textFields[0]).text;
+            self.navigationItem.title = self.project.name;
+            [self saveProject];
+        }]];
+        
+        [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+    }
 }
 
 - (IBAction)onActionTapped:(id)sender
