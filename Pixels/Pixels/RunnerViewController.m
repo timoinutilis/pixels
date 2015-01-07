@@ -146,6 +146,7 @@
 
 - (void)updateRendererView
 {
+    [self.rendererView updateSnapshots];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.rendererView setNeedsDisplay];
     });

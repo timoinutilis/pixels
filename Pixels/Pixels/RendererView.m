@@ -19,7 +19,7 @@
 
 @implementation RendererView
 
-- (void)drawRect:(CGRect)rect
+- (void)updateSnapshots
 {
     if (self.shouldMakeThumbnail && CFAbsoluteTimeGetCurrent() - self.lastSnapshotTime >= 1)
     {
@@ -30,7 +30,10 @@
             self.shouldMakeThumbnail = NO;
         }
     }
-    
+}
+
+- (void)drawRect:(CGRect)rect
+{
     [self renderWithSize:self.bounds.size data:nil];
 }
 

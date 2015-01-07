@@ -15,6 +15,7 @@
 @property Renderer *renderer;
 @property BOOL shouldMakeThumbnail;
 
+- (void)updateSnapshots;
 - (UIImage *)imageFromBestSnapshot;
 
 @end
