@@ -228,17 +228,26 @@
 
 - (IBAction)onActionTapped:(id)sender
 {
-    [self saveProject];
-    
-    ActivityItemSource *item = [[ActivityItemSource alloc] init];
-    item.project = self.project;
-    
-    PublishActivity *publishActivity = [[PublishActivity alloc] init];
-    
-    UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:@[item] applicationActivities:@[publishActivity]];
-    
-    activityVC.popoverPresentationController.barButtonItem = sender;
-    [self presentViewController:activityVC animated:YES completion:nil];
+    if (self.sourceCodeTextView.text.length == 0)
+    {
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"This program is empty. Write something!" message:nil preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+        [self presentViewController:alert animated:YES completion:nil];
+    }
+    else
+    {
+        [self saveProject];
+        
+        ActivityItemSource *item = [[ActivityItemSource alloc] init];
+        item.project = self.project;
+        
+        PublishActivity *publishActivity = [[PublishActivity alloc] init];
+        
+        UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:@[item] applicationActivities:@[publishActivity]];
+        
+        activityVC.popoverPresentationController.barButtonItem = sender;
+        [self presentViewController:activityVC animated:YES completion:nil];
+    }
 }
 
 - (void)onHelpTapped:(id)sender

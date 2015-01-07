@@ -41,6 +41,7 @@
 		9293CFCF1A5D4B0B0099C847 /* DefaultProjects.json in Resources */ = {isa = PBXBuildFile; fileRef = 9293CFCE1A5D4B0B0099C847 /* DefaultProjects.json */; };
 		9293CFD21A5D55CA0099C847 /* racing_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 9293CFD01A5D55CA0099C847 /* racing_icon.png */; };
 		9293CFD31A5D55CA0099C847 /* tennis_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 9293CFD11A5D55CA0099C847 /* tennis_icon.png */; };
+		928FB8991A5C804200EA377F /* GORSeparatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 928FB8981A5C804200EA377F /* GORSeparatorView.m */; };
 		929797FD1A50956900DB5D70 /* PublishActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 929797FC1A50956900DB5D70 /* PublishActivity.m */; };
 		92A0EC0D1A56DA1F0051D74C /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 92A0EC0B1A56DA1F0051D74C /* Model.xcdatamodeld */; };
 		92C98F3F1A20CFD900215AE9 /* CompilerException.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C98F3E1A20CFD900215AE9 /* CompilerException.m */; };
@@ -129,6 +130,8 @@
 		9293CFCE1A5D4B0B0099C847 /* DefaultProjects.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = DefaultProjects.json; sourceTree = "<group>"; };
 		9293CFD01A5D55CA0099C847 /* racing_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = racing_icon.png; sourceTree = "<group>"; };
 		9293CFD11A5D55CA0099C847 /* tennis_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tennis_icon.png; sourceTree = "<group>"; };
+		928FB8971A5C804200EA377F /* GORSeparatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GORSeparatorView.h; sourceTree = "<group>"; };
+		928FB8981A5C804200EA377F /* GORSeparatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GORSeparatorView.m; sourceTree = "<group>"; };
 		929797FB1A50956900DB5D70 /* PublishActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublishActivity.h; sourceTree = "<group>"; };
 		929797FC1A50956900DB5D70 /* PublishActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublishActivity.m; sourceTree = "<group>"; };
 		92A0EC0C1A56DA1F0051D74C /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
@@ -394,6 +397,8 @@
 				92E53DF11A5B3A1D00FE9F91 /* GORTableViewController.m */,
 				92E53DF21A5B3A1D00FE9F91 /* GORTextView.h */,
 				92E53DF31A5B3A1D00FE9F91 /* GORTextView.m */,
+				928FB8971A5C804200EA377F /* GORSeparatorView.h */,
+				928FB8981A5C804200EA377F /* GORSeparatorView.m */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -528,6 +533,7 @@
 				9276F38F1A1D289C0060E909 /* main.m in Sources */,
 				9267E8801A5AF61B00D08C42 /* AFHTTPRequestOperationManager.m in Sources */,
 				9267E8851A5AF61B00D08C42 /* AFURLRequestSerialization.m in Sources */,
+				928FB8991A5C804200EA377F /* GORSeparatorView.m in Sources */,
 				927334A01A2A499B00C89AF0 /* ModelManager.m in Sources */,
 				9273349D1A2A478700C89AF0 /* HelpTableViewController.m in Sources */,
 				929797FD1A50956900DB5D70 /* PublishActivity.m in Sources */,

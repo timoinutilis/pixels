@@ -8,7 +8,7 @@
 
 #import "GORMenuTableViewController.h"
 
-@class Project;
+@class Project, GORSeparatorView;
 
 @protocol ShareViewControllerDelegate <NSObject>
 
@@ -25,8 +25,16 @@
 
 @end
 
+@interface ShareHeaderCell : UITableViewCell
+
+@property (weak, nonatomic) IBOutlet UIImageView *iconImageView;
+@property (weak, nonatomic) IBOutlet UILabel *headerLabel;
+
+@end
+
 @interface TextFieldCell : UITableViewCell
 
+@property (weak, nonatomic) IBOutlet GORSeparatorView *separatorView;
 @property (weak, nonatomic) IBOutlet UILabel *label;
 @property (weak, nonatomic) IBOutlet UITextField *textField;
 
