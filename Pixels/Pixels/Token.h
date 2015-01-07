@@ -16,6 +16,7 @@ typedef NS_ENUM(NSInteger, TType) {
     // Commands
     TTypeSymIf,
     TTypeSymThen,
+    TTypeSymElse,
     TTypeSymGoto,
     TTypeSymGosub,
     TTypeSymReturn,

@@ -20,6 +20,7 @@
         
         case TTypeSymIf: return @"IF";
         case TTypeSymThen: return @"THEN";
+        case TTypeSymElse: return @"ELSE";
         case TTypeSymGoto: return @"GOTO";
         case TTypeSymGosub: return @"GOSUB";
         case TTypeSymReturn: return @"RETURN";

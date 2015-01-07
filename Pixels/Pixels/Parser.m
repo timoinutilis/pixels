@@ -107,6 +107,7 @@
     else
     {
         node = [self acceptCommand];
+        [self acceptEol];
     }
     return node;
 }
@@ -226,7 +227,6 @@
     PrintNode *node = [[PrintNode alloc] init];
     [self accept:TTypeSymPrint];
     node.expression = [self acceptExpression];
-    [self acceptEol];
     return node;
 }
 
@@ -236,7 +236,6 @@
     [self accept:TTypeSymGoto];
     node.label = self.token.attrString;
     [self accept:TTypeIdentifier];
-    [self acceptEol];
     return node;
 }
 
@@ -246,7 +245,6 @@
     [self accept:TTypeSymGosub];
     node.label = self.token.attrString;
     [self accept:TTypeIdentifier];
-    [self acceptEol];
     return node;
 }
 
@@ -254,7 +252,6 @@
 {
     ReturnNode *node = [[ReturnNode alloc] init];
     [self accept:TTypeSymReturn];
-    [self acceptEol];
     return node;
 }
 
@@ -266,7 +263,6 @@
     [self accept:TTypeIdentifier];
     [self accept:TTypeSymOpEq];
     node.expression = [self acceptExpression];
-    [self acceptEol];
     return node;
 }
 
@@ -279,15 +275,38 @@
     if (self.token.type == TTypeSymEol)
     {
         // if ... end-if block
+        [self acceptEol];
         node.commands = [self acceptCommandLines];
-        [self accept:TTypeSymEnd];
-        [self accept:TTypeSymIf];
-        [self accept:TTypeSymEol];
+        BOOL blockClosed = NO;
+        if (self.token.type == TTypeSymElse)
+        {
+            [self accept:TTypeSymElse];
+            if (self.token.type == TTypeSymIf)
+            {
+                node.elseCommands = @[[self acceptIf]];
+                blockClosed = YES;
+            }
+            else
+            {
+                [self acceptEol];
+                node.elseCommands = [self acceptCommandLines];
+            }
+        }
+        if (!blockClosed)
+        {
+            [self accept:TTypeSymEnd];
+            [self accept:TTypeSymIf];
+        }
     }
     else
     {
         // single line
-        node.commands = @[[self acceptCommand]]; // includes EOL
+        node.commands = @[[self acceptCommand]];
+        if (self.token.type == TTypeSymElse)
+        {
+            [self accept:TTypeSymElse];
+            node.elseCommands = @[[self acceptCommand]];
+        }
     }
     return node;
 }
@@ -311,7 +330,6 @@
     {
         [self accept:TTypeIdentifier];
     }
-    [self acceptEol];
     return node;
 }
 
@@ -325,7 +343,6 @@
     node.commands = [self acceptCommandLines];
     
     [self accept:TTypeSymWend];
-    [self acceptEol];
     return node;
 }
 
@@ -339,7 +356,6 @@
     
     [self accept:TTypeSymUntil];
     node.condition = [self acceptExpression];
-    [self acceptEol];
     return node;
 }
 
@@ -352,7 +368,6 @@
     node.commands = [self acceptCommandLines];
     
     [self accept:TTypeSymLoop];
-    [self acceptEol];
     return node;
 }
 
@@ -360,7 +375,6 @@
 {
     ExitNode *node = [[ExitNode alloc] init];
     [self accept:TTypeSymExit];
-    [self acceptEol];
     return node;
 }
 
@@ -369,7 +383,6 @@
     WaitNode *node = [[WaitNode alloc] init];
     [self accept:TTypeSymWait];
     node.time = [self acceptExpression];
-    [self acceptEol];
     return node;
 }
 
@@ -378,7 +391,6 @@
     ColorNode *node = [[ColorNode alloc] init];
     [self accept:TTypeSymColor];
     node.color = [self acceptExpression];
-    [self acceptEol];
     return node;
 }
 
@@ -387,7 +399,6 @@
     ClsNode *node = [[ClsNode alloc] init];
     [self accept:TTypeSymCls];
     node.color = [self acceptExpression];
-    [self acceptEol];
     return node;
 }
 
@@ -398,7 +409,6 @@
     node.xExpression = [self acceptExpression];
     [self accept:TTypeSymComma];
     node.yExpression = [self acceptExpression];
-    [self acceptEol];
     return node;
 }
 
@@ -413,7 +423,6 @@
     node.toXExpression = [self acceptExpression];
     [self accept:TTypeSymComma];
     node.toYExpression = [self acceptExpression];
-    [self acceptEol];
     return node;
 }
 
@@ -429,7 +438,6 @@
     node.toXExpression = [self acceptExpression];
     [self accept:TTypeSymComma];
     node.toYExpression = [self acceptExpression];
-    [self acceptEol];
     return node;
 }
 
@@ -447,7 +455,6 @@
         [self accept:TTypeSymComma];
         node.alignExpression = [self acceptExpression];
     }
-    [self acceptEol];
     return node;
 }
 

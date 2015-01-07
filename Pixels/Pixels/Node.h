@@ -19,6 +19,7 @@
 @interface IfNode : Node
 @property Node *condition;
 @property NSArray *commands;
+@property NSArray *elseCommands;
 @end
 
 @interface GotoNode : Node

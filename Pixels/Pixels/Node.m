@@ -30,7 +30,14 @@
     NSNumber *value = [self.condition evaluateWithRunner:runner];
     if (value.intValue == 0)
     {
-        [runner next];
+        if (self.elseCommands)
+        {
+            [runner addSequenceWithNodes:self.elseCommands isLoop:NO parent:self];
+        }
+        else
+        {
+            [runner next];
+        }
     }
     else
     {
@@ -424,6 +431,10 @@
         }
         case TTypeSymOpDiv: {
             float result = ((NSNumber *)leftValue).floatValue / ((NSNumber *)rightValue).floatValue;
+            return @(result);
+        }
+        case TTypeSymOpMod: {
+            int result = ((NSNumber *)leftValue).intValue % ((NSNumber *)rightValue).intValue;
             return @(result);
         }
         case TTypeSymOpEq:
