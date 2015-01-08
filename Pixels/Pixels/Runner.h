@@ -9,14 +9,14 @@
 #import <Foundation/Foundation.h>
 #import "RunnerDelegate.h"
 
-@class Node, Renderer;
+@class Node, Renderer, Runnable;
 
 @interface Runner : NSObject
 
 @property (weak) id<RunnerDelegate> delegate;
 @property Renderer *renderer;
 
-- (instancetype)initWithNodes:(NSArray *)nodes;
+- (instancetype)initWithRunnable:(Runnable *)runnable;
 - (BOOL)isFinished;
 - (void)runCommand;
 - (void)next;

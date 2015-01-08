@@ -9,22 +9,25 @@
 #import "Runner.h"
 #import "Node.h"
 #import "Renderer.h"
+#import "Runnable.h"
 
 @interface Runner ()
+@property Runnable *runnable;
 @property NSMutableArray *sequencesStack;
 @property NSMutableDictionary *variables;
 @end
 
 @implementation Runner
 
-- (instancetype)initWithNodes:(NSArray *)nodes
+- (instancetype)initWithRunnable:(Runnable *)runnable
 {
     if (self = [self init])
     {
+        self.runnable = runnable;
         self.renderer = [[Renderer alloc] init];
         self.variables = [NSMutableDictionary dictionary];
         self.sequencesStack = [NSMutableArray array];
-        [self addSequenceWithNodes:nodes isLoop:NO parent:nil];
+        [self addSequenceWithNodes:runnable.nodes isLoop:NO parent:nil];
     }
     return self;
 }

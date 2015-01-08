@@ -8,10 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import "Token.h"
+#import "Runnable.h"
 
 @class Runner;
 
 @interface Node : NSObject
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass;
 - (id)evaluateWithRunner:(Runner *)runner;
 - (void)endOfLoopWithRunner:(Runner *)runner;
 @end

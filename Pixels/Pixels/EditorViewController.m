@@ -10,6 +10,7 @@
 #import "Scanner.h"
 #import "Parser.h"
 #import "Token.h"
+#import "Runnable.h"
 #import "CompilerException.h"
 #import "Runner.h"
 #import "ModelManager.h"
@@ -269,7 +270,10 @@
             
             if (nodes.count > 0)
             {
-                [self runWithNodes:nodes];
+                Runnable *runnable = [[Runnable alloc] initWithNodes:nodes];
+                [runnable prepare];
+                
+                [self run:runnable];
             }
         }
     }
@@ -293,11 +297,11 @@
     }
 }
 
-- (void)runWithNodes:(NSArray *)nodes
+- (void)run:(Runnable *)runnable
 {
     RunnerViewController *vc = (RunnerViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"Runner"];
     vc.project = self.project;
-    vc.nodes = nodes;
+    vc.runnable = runnable;
     vc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     [self presentViewController:vc animated:YES completion:nil];
 }

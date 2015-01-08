@@ -9,8 +9,13 @@
 #import "Node.h"
 #import "Runner.h"
 #import "Renderer.h"
+#import "CompilerException.h"
 
 @implementation Node
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+}
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
@@ -24,6 +29,12 @@
 @end
 
 @implementation IfNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [runnable prepareNodes:self.commands pass:pass];
+    [runnable prepareNodes:self.elseCommands pass:pass];
+}
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
@@ -49,6 +60,28 @@
 @end
 
 @implementation GotoNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    if (pass == PrePassCheckSemantic)
+    {
+        if (!runnable.labels[self.label])
+        {
+            NSException *exception = [CompilerException exceptionWithName:@"UndefinedLabel"
+                                                                   reason:[NSString stringWithFormat:@"Undefined label %@", self.label]
+                                                                 userInfo:@{@"node": self}];
+            @throw exception;
+        }
+    }
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    //TODO
+    [runner next];
+    return nil;
+}
+
 @end
 
 @implementation GosubNode
@@ -73,6 +106,11 @@
 @end
 
 @implementation ForNextNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [runnable prepareNodes:self.commands pass:pass];
+}
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
@@ -123,6 +161,11 @@
 
 @implementation RepeatUntilNode
 
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [runnable prepareNodes:self.commands pass:pass];
+}
+
 - (id)evaluateWithRunner:(Runner *)runner
 {
     [runner addSequenceWithNodes:self.commands isLoop:YES parent:self];
@@ -145,6 +188,11 @@
 @end
 
 @implementation WhileWendNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [runnable prepareNodes:self.commands pass:pass];
+}
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
@@ -176,6 +224,11 @@
 @end
 
 @implementation DoLoopNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [runnable prepareNodes:self.commands pass:pass];
+}
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
@@ -534,9 +587,18 @@
 
 @implementation LabelNode
 
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    if (pass == PrePassInit)
+    {
+        runnable.labels[self.identifier] = self;
+    }
+}
+
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    return self.identifier;
+    [runner next];
+    return nil;
 }
 
 @end
