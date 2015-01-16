@@ -200,19 +200,79 @@
             </objects>
             <point key="canvasLocation" x="350" y="1152"/>
         </scene>
-        <!--View Controller-->
+        <!--About View Controller-->
         <scene sceneID="38Z-KN-cE6">
             <objects>
-                <viewController id="aBn-xO-8O0" sceneMemberID="viewController">
+                <viewController id="aBn-xO-8O0" customClass="AboutViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="YLU-fX-RO5"/>
                         <viewControllerLayoutGuide type="bottom" id="r2o-ya-e3K"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="jAQ-A2-jdf">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mpf-ZV-pfP">
+                                <rect key="frame" x="142" y="530" width="37" height="30"/>
+                                <state key="normal" title="Done">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="onDoneTapped:" destination="aBn-xO-8O0" eventType="touchUpInside" id="rRx-h5-psd"/>
+                                </connections>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="dummy_project_icon" translatesAutoresizingMaskIntoConstraints="NO" id="rhu-yn-FNg">
+                                <rect key="frame" x="113" y="52" width="95" height="95"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LowRes Coder" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eUn-rR-zmA">
+                                <rect key="frame" x="103" y="155" width="114" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(Version 1.0)" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qeW-Zx-vyh">
+                                <rect key="frame" x="123" y="184" width="74" height="16"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wnb-hR-4aV">
+                                <rect key="frame" x="16" y="208" width="288" height="314"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <string key="text">Program your own retro games and demos directly on your iPad or iPhone!
+
+Get news about LowRes Coder and more example programs at lowres.inutilis.com.
+
+This app was designed and developed by Timo Kloss. An Inutilis Software production from 2015.
+
+Find more Inutilis stuff at www.inutilis.com!
+</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <dataDetectorType key="dataDetectorTypes" link="YES"/>
+                            </textView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="centerX" secondItem="mpf-ZV-pfP" secondAttribute="centerX" id="1GK-Sn-gud"/>
+                            <constraint firstItem="Wnb-hR-4aV" firstAttribute="trailing" secondItem="jAQ-A2-jdf" secondAttribute="trailingMargin" id="3Sl-IP-OdN"/>
+                            <constraint firstItem="mpf-ZV-pfP" firstAttribute="top" secondItem="Wnb-hR-4aV" secondAttribute="bottom" constant="8" id="3mr-0O-Man"/>
+                            <constraint firstAttribute="centerX" secondItem="rhu-yn-FNg" secondAttribute="centerX" id="7nk-i0-gjN"/>
+                            <constraint firstItem="Wnb-hR-4aV" firstAttribute="top" secondItem="qeW-Zx-vyh" secondAttribute="bottom" constant="8" id="BED-ZE-pDP"/>
+                            <constraint firstItem="rhu-yn-FNg" firstAttribute="top" secondItem="YLU-fX-RO5" secondAttribute="bottom" constant="32" id="LjL-eB-yJs"/>
+                            <constraint firstItem="qeW-Zx-vyh" firstAttribute="top" secondItem="eUn-rR-zmA" secondAttribute="bottom" constant="8" id="MZB-GP-9UM"/>
+                            <constraint firstItem="r2o-ya-e3K" firstAttribute="top" secondItem="mpf-ZV-pfP" secondAttribute="bottom" constant="8" id="WKx-0D-2eg"/>
+                            <constraint firstAttribute="centerX" secondItem="eUn-rR-zmA" secondAttribute="centerX" id="adJ-yI-zyK"/>
+                            <constraint firstAttribute="centerX" secondItem="qeW-Zx-vyh" secondAttribute="centerX" id="d7h-iW-dVI"/>
+                            <constraint firstItem="eUn-rR-zmA" firstAttribute="top" secondItem="rhu-yn-FNg" secondAttribute="bottom" constant="8" id="saB-AM-G0L"/>
+                            <constraint firstItem="Wnb-hR-4aV" firstAttribute="leading" secondItem="jAQ-A2-jdf" secondAttribute="leadingMargin" id="y3J-MQ-Ko6"/>
+                        </constraints>
                     </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <connections>
+                        <outlet property="textView" destination="Wnb-hR-4aV" id="KYH-uv-t6V"/>
+                        <outlet property="versionLabel" destination="qeW-Zx-vyh" id="g5R-ak-lOC"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XSB-uC-uev" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

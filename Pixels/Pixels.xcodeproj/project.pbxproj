@@ -47,6 +47,7 @@
 		92A0EC0D1A56DA1F0051D74C /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 92A0EC0B1A56DA1F0051D74C /* Model.xcdatamodeld */; };
 		92C98F3F1A20CFD900215AE9 /* CompilerException.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C98F3E1A20CFD900215AE9 /* CompilerException.m */; };
 		92C98F421A20F2F000215AE9 /* Node.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C98F411A20F2F000215AE9 /* Node.m */; };
+		92D518B91A6975C10000F917 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D518B81A6975C10000F917 /* AboutViewController.m */; };
 		92E2B8AA1A52F08D00D0DF29 /* ActivityItemSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E2B8A91A52F08D00D0DF29 /* ActivityItemSource.m */; };
 		92E53DF41A5B3A1D00FE9F91 /* GORMenuTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E53DED1A5B3A1D00FE9F91 /* GORMenuTableViewController.m */; };
 		92E53DF51A5B3A1D00FE9F91 /* GORScrollViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E53DEF1A5B3A1D00FE9F91 /* GORScrollViewDelegate.m */; };
@@ -115,7 +116,7 @@
 		9273349C1A2A478700C89AF0 /* HelpTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpTableViewController.m; sourceTree = "<group>"; };
 		9273349E1A2A499B00C89AF0 /* ModelManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModelManager.h; sourceTree = "<group>"; };
 		9273349F1A2A499B00C89AF0 /* ModelManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModelManager.m; sourceTree = "<group>"; };
-		9276F3891A1D289C0060E909 /* Pixels.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pixels.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9276F3891A1D289C0060E909 /* Pixels.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = Pixels.app; path = "LowRes Coder.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9276F38D1A1D289C0060E909 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9276F38E1A1D289C0060E909 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		9276F3901A1D289C0060E909 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -125,7 +126,7 @@
 		9276F3971A1D289C0060E909 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		9276F3991A1D289C0060E909 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		9276F39C1A1D289C0060E909 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		9276F3A21A1D289C0060E909 /* PixelsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PixelsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9276F3A21A1D289C0060E909 /* PixelsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = PixelsTests.xctest; path = "LowRes Coder Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9276F3A71A1D289C0060E909 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9276F3A81A1D289C0060E909 /* PixelsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PixelsTests.m; sourceTree = "<group>"; };
 		9276F3B21A1D29BF0060E909 /* Scanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scanner.h; sourceTree = "<group>"; };
@@ -143,6 +144,8 @@
 		92C98F3E1A20CFD900215AE9 /* CompilerException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompilerException.m; sourceTree = "<group>"; };
 		92C98F401A20F2F000215AE9 /* Node.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Node.h; sourceTree = "<group>"; };
 		92C98F411A20F2F000215AE9 /* Node.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Node.m; sourceTree = "<group>"; };
+		92D518B71A6975C10000F917 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
+		92D518B81A6975C10000F917 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
 		92E2B8A81A52F08D00D0DF29 /* ActivityItemSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityItemSource.h; sourceTree = "<group>"; };
 		92E2B8A91A52F08D00D0DF29 /* ActivityItemSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityItemSource.m; sourceTree = "<group>"; };
 		92E53DEC1A5B3A1D00FE9F91 /* GORMenuTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GORMenuTableViewController.h; sourceTree = "<group>"; };
@@ -273,6 +276,8 @@
 				926C72C61A2B579E00448EAB /* RunnerViewController.m */,
 				92E53DF81A5B3AC200FE9F91 /* ShareViewController.h */,
 				92E53DF91A5B3AC200FE9F91 /* ShareViewController.m */,
+				92D518B71A6975C10000F917 /* AboutViewController.h */,
+				92D518B81A6975C10000F917 /* AboutViewController.m */,
 			);
 			name = Main;
 			sourceTree = "<group>";
@@ -537,6 +542,7 @@
 				9267E8821A5AF61B00D08C42 /* AFNetworkReachabilityManager.m in Sources */,
 				9276F38F1A1D289C0060E909 /* main.m in Sources */,
 				9267E8801A5AF61B00D08C42 /* AFHTTPRequestOperationManager.m in Sources */,
+				92D518B91A6975C10000F917 /* AboutViewController.m in Sources */,
 				9267E8851A5AF61B00D08C42 /* AFURLRequestSerialization.m in Sources */,
 				928FB8991A5C804200EA377F /* GORSeparatorView.m in Sources */,
 				927334A01A2A499B00C89AF0 /* ModelManager.m in Sources */,
