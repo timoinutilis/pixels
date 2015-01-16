@@ -32,6 +32,15 @@
 
 #pragma mark - Basics
 
+- (Token *)nextToken
+{
+    if (self.currentTokenIndex + 1 < self.tokens.count)
+    {
+        return self.tokens[self.currentTokenIndex + 1];
+    }
+    return nil;
+}
+
 - (void)accept:(TType)tokenType
 {
     if (self.token.type == tokenType)
@@ -66,15 +75,7 @@
     NSMutableArray *nodes = [NSMutableArray array];
     while (self.currentTokenIndex < self.tokens.count)
     {
-        Node *node;
-        if (self.token.type == TTypeIdentifier)
-        {
-            node = [self acceptLabel];
-        }
-        else
-        {
-            node = [self acceptCommandLine];
-        }
+        Node *node = [self acceptCommandLine];
         if (node)
         {
             [nodes addObject:node];
@@ -86,7 +87,7 @@
 - (NSMutableArray *)acceptCommandLines
 {
     NSMutableArray *nodes = [NSMutableArray array];
-    while (self.currentTokenIndex < self.tokens.count && ([self isCommand] || self.token.type == TTypeSymEol))
+    while (self.currentTokenIndex < self.tokens.count && ([self isCommand] || [self isLabel] || self.token.type == TTypeSymEol))
     {
         Node *node = [self acceptCommandLine];
         if (node)
@@ -103,6 +104,10 @@
     if (self.token.type == TTypeSymEol) // empty line
     {
         [self accept:TTypeSymEol];
+    }
+    else if ([self isLabel])
+    {
+        node = [self acceptLabel];
     }
     else
     {
@@ -218,6 +223,11 @@
     [self accept:TTypeSymColon];
     [self acceptEol];
     return node;
+}
+
+- (BOOL)isLabel
+{
+    return (self.token.type == TTypeIdentifier && [self nextToken].type == TTypeSymColon);
 }
 
 #pragma mark - Commands

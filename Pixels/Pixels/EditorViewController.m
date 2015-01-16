@@ -68,7 +68,7 @@
     self.keyboardToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 44)];
     self.keyboardToolbar.translucent = YES;
     
-    NSArray *keys = @[@"=", @"<", @">", @"+", @"-", @"*", @"/", @"(", @")", @"\"", @"$"];
+    NSArray *keys = @[@"=", @"<", @">", @"+", @"-", @"*", @"/", @"(", @")", @"\"", @"$", @":"];
     NSMutableArray *buttons = [NSMutableArray array];
     for (NSString *key in keys)
     {

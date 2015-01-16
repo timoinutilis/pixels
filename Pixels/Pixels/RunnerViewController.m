@@ -11,6 +11,7 @@
 #import "RendererView.h"
 #import "Project.h"
 #import "Joypad.h"
+#import "CompilerException.h"
 
 @interface RunnerViewController ()
 
@@ -119,9 +120,23 @@
         Runner *runner = [[Runner alloc] initWithRunnable:self.runnable];
         runner.delegate = self;
         self.rendererView.renderer = runner.renderer;
-        while (!runner.isFinished && self.isRunning)
+
+        @try
         {
-            [runner runCommand];
+            while (!runner.isFinished && self.isRunning)
+            {
+                [runner runCommand];
+            }
+        }
+        @catch (CompilerException *exception)
+        {
+            // runtime error!
+            UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Error" message:exception.reason preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+            }]];
+            [self presentViewController:alert animated:YES completion:nil];
+
         }
         [self updateRendererView];
         
@@ -136,7 +151,7 @@
 
 - (IBAction)onExitTapped:(id)sender
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)runnerLog:(NSString *)message

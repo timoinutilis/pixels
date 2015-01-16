@@ -85,6 +85,26 @@
     sequence.index = 0;
 }
 
+- (BOOL)gotoLabel:(NSString *)label
+{
+    Node *node = self.runnable.labels[label];
+    Sequence *sequence = self.sequencesStack.lastObject;
+    while (sequence)
+    {
+        for (NSUInteger i = 0; i < sequence.nodes.count; i++)
+        {
+            if (sequence.nodes[i] == node)
+            {
+                sequence.index = i;
+                return YES;
+            }
+        }
+        [self.sequencesStack removeLastObject];
+        sequence = self.sequencesStack.lastObject;
+    }
+    return NO;
+}
+
 - (void)addSequenceWithNodes:(NSArray *)nodes isLoop:(BOOL)isLoop parent:(Node *)parent
 {
     Sequence *sequence = [[Sequence alloc] init];

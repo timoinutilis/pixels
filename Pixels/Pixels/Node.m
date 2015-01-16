@@ -77,8 +77,14 @@
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    //TODO
-    [runner next];
+    BOOL success = [runner gotoLabel:self.label];
+    if (!success)
+    {
+        NSException *exception = [CompilerException exceptionWithName:@"UnaccessibleLabel"
+                                                               reason:[NSString stringWithFormat:@"Unaccessible label %@", self.label]
+                                                             userInfo:@{@"node": self}];
+        @throw exception;
+    }
     return nil;
 }
 

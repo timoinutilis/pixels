@@ -22,6 +22,7 @@
 - (void)next;
 - (void)exitLoop;
 - (void)resetSequence;
+- (BOOL)gotoLabel:(NSString *)label;
 - (void)addSequenceWithNodes:(NSArray *)nodes isLoop:(BOOL)isLoop parent:(Node *)parent;
 
 - (void)setValue:(id)value forVariable:(NSString *)identifier;
