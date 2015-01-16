@@ -36,7 +36,7 @@ NSString *const ModelManagerWillSaveDataNotification = @"ModelManagerWillSaveDat
 
 - (NSURL *)applicationDocumentsDirectory
 {
-    // The directory the application uses to store the Core Data store file. This code uses a directory named "com.inutilis.ios.Pixels" in the application's documents directory.
+    // The directory the application uses to store the Core Data store file. This code uses a directory named "LowRes-Coder" in the application's documents directory.
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
 
@@ -63,7 +63,7 @@ NSString *const ModelManagerWillSaveDataNotification = @"ModelManagerWillSaveDat
     // Create the coordinator and store
     
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"Pixels.sqlite"];
+    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"LowRes-Coder.sqlite"];
     NSError *error = nil;
     NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption:@YES, NSInferMappingModelAutomaticallyOption:@YES};
     if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error])
@@ -163,7 +163,7 @@ NSString *const ModelManagerWillSaveDataNotification = @"ModelManagerWillSaveDat
 - (Project *)createNewProject
 {
     Project *project = [NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:self.managedObjectContext];
-    project.name = @"Unnamed Project";
+    project.name = @"Unnamed Program";
     project.createdAt = [NSDate date];
     return project;
 }

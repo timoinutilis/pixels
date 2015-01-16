@@ -411,9 +411,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		9276F3881A1D289C0060E909 /* Pixels */ = {
+		9276F3881A1D289C0060E909 /* LowRes Coder */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 9276F3AC1A1D289C0060E909 /* Build configuration list for PBXNativeTarget "Pixels" */;
+			buildConfigurationList = 9276F3AC1A1D289C0060E909 /* Build configuration list for PBXNativeTarget "LowRes Coder" */;
 			buildPhases = (
 				9276F3851A1D289C0060E909 /* Sources */,
 				9276F3861A1D289C0060E909 /* Frameworks */,
@@ -423,14 +423,14 @@
 			);
 			dependencies = (
 			);
-			name = Pixels;
+			name = "LowRes Coder";
 			productName = Pixels;
 			productReference = 9276F3891A1D289C0060E909 /* Pixels.app */;
 			productType = "com.apple.product-type.application";
 		};
-		9276F3A11A1D289C0060E909 /* PixelsTests */ = {
+		9276F3A11A1D289C0060E909 /* LowRes Coder Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 9276F3AF1A1D289C0060E909 /* Build configuration list for PBXNativeTarget "PixelsTests" */;
+			buildConfigurationList = 9276F3AF1A1D289C0060E909 /* Build configuration list for PBXNativeTarget "LowRes Coder Tests" */;
 			buildPhases = (
 				9276F39E1A1D289C0060E909 /* Sources */,
 				9276F39F1A1D289C0060E909 /* Frameworks */,
@@ -441,7 +441,7 @@
 			dependencies = (
 				9276F3A41A1D289C0060E909 /* PBXTargetDependency */,
 			);
-			name = PixelsTests;
+			name = "LowRes Coder Tests";
 			productName = PixelsTests;
 			productReference = 9276F3A21A1D289C0060E909 /* PixelsTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -477,8 +477,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				9276F3881A1D289C0060E909 /* Pixels */,
-				9276F3A11A1D289C0060E909 /* PixelsTests */,
+				9276F3881A1D289C0060E909 /* LowRes Coder */,
+				9276F3A11A1D289C0060E909 /* LowRes Coder Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -567,7 +567,7 @@
 /* Begin PBXTargetDependency section */
 		9276F3A41A1D289C0060E909 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 9276F3881A1D289C0060E909 /* Pixels */;
+			target = 9276F3881A1D289C0060E909 /* LowRes Coder */;
 			targetProxy = 9276F3A31A1D289C0060E909 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -740,7 +740,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		9276F3AC1A1D289C0060E909 /* Build configuration list for PBXNativeTarget "Pixels" */ = {
+		9276F3AC1A1D289C0060E909 /* Build configuration list for PBXNativeTarget "LowRes Coder" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9276F3AD1A1D289C0060E909 /* Debug */,
@@ -749,7 +749,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		9276F3AF1A1D289C0060E909 /* Build configuration list for PBXNativeTarget "PixelsTests" */ = {
+		9276F3AF1A1D289C0060E909 /* Build configuration list for PBXNativeTarget "LowRes Coder Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9276F3B01A1D289C0060E909 /* Debug */,

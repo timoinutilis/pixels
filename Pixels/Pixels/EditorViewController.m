@@ -131,7 +131,7 @@
 
 - (void)onSourceCodeTapped:(id)sender
 {
-    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Example projects cannot be edited" message:@"Do you want to make an editable copy of this project?" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Example programs cannot be edited" message:@"Do you want to make an editable copy of this program?" preferredStyle:UIAlertControllerStyleAlert];
     
     [alert addAction:[UIAlertAction actionWithTitle:@"Duplicate" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
         [[ModelManager sharedManager] duplicateProject:self.project];
@@ -162,13 +162,13 @@
 {
     if (self.project.isDefault.boolValue)
     {
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Example projects cannot be deleted." message:nil preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Example programs cannot be deleted." message:nil preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
         [self presentViewController:alert animated:YES completion:nil];
     }
     else
     {
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Do you really want to delete this project?" message:nil preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Do you really want to delete this program?" message:nil preferredStyle:UIAlertControllerStyleAlert];
         
         [alert addAction:[UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
             [[ModelManager sharedManager] deleteProject:self.project];
@@ -184,7 +184,7 @@
 
 - (IBAction)onDuplicateTapped:(id)sender
 {
-    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Do you want to make a copy of this project?" message:nil preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Do you want to make a copy of this program?" message:nil preferredStyle:UIAlertControllerStyleAlert];
     
     [alert addAction:[UIAlertAction actionWithTitle:@"Duplicate" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
         [self saveProject];
@@ -201,13 +201,13 @@
 {
     if (self.project.isDefault.boolValue)
     {
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Example projects cannot renamed." message:nil preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Example programs cannot renamed." message:nil preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
         [self presentViewController:alert animated:YES completion:nil];
     }
     else
     {
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Enter new project name" message:nil preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Enter new program name" message:nil preferredStyle:UIAlertControllerStyleAlert];
 
         [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
             textField.text = self.project.name;

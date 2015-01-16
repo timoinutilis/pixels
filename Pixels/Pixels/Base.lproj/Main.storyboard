@@ -5,7 +5,7 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--(Project Name)-->
+        <!--(Program Name)-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="EditorViewController" sceneMemberID="viewController">
@@ -72,7 +72,7 @@
                             </mask>
                         </variation>
                     </view>
-                    <navigationItem key="navigationItem" title="(Project Name)" id="pmw-uN-wb5"/>
+                    <navigationItem key="navigationItem" title="(Program Name)" id="pmw-uN-wb5"/>
                     <connections>
                         <outlet property="sourceCodeTextView" destination="SjB-QF-tvR" id="adj-Wv-Tev"/>
                         <outlet property="toolbarView" destination="l9J-Fd-pzR" id="cgo-6m-k9h"/>
@@ -218,7 +218,7 @@
             </objects>
             <point key="canvasLocation" x="1058" y="1896"/>
         </scene>
-        <!--Pixels Community-->
+        <!--LowRes Coder Web-->
         <scene sceneID="bmj-RF-7ax">
             <objects>
                 <tableViewController id="u7G-9d-dgL" customClass="ShareViewController" sceneMemberID="viewController">
@@ -276,7 +276,7 @@
                                                 <constraint firstAttribute="width" constant="80" id="oeE-xe-fv3"/>
                                             </constraints>
                                         </imageView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Send your program to inutilis and we will review it and publish it to the official Pixels website!" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gnl-rd-zYM">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Send your program to inutilis and we will review it and publish it to the official LowRes Coder website!" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gnl-rd-zYM">
                                             <rect key="frame" x="96" y="8" width="496" height="41"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -349,7 +349,7 @@
                             <outlet property="delegate" destination="u7G-9d-dgL" id="igC-KT-ofg"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Pixels Community" id="ble-yo-hgv">
+                    <navigationItem key="navigationItem" title="LowRes Coder Web" id="ble-yo-hgv">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Pjk-qX-0wW">
                             <connections>
                                 <action selector="onCancelTapped:" destination="u7G-9d-dgL" id="JKe-1Q-LVm"/>
@@ -371,7 +371,7 @@
             </objects>
             <point key="canvasLocation" x="2522" y="1894"/>
         </scene>
-        <!--Projects-->
+        <!--Programs-->
         <scene sceneID="3mJ-o1-cJC">
             <objects>
                 <viewController id="Xni-Pq-CRZ" customClass="ExplorerViewController" sceneMemberID="viewController">
@@ -400,8 +400,8 @@
                                             <rect key="frame" x="0.0" y="0.0" width="140" height="140"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="(Project Name)" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="Y0e-d8-avy">
-                                                    <rect key="frame" x="8" y="98" width="124" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="(Program Name)" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="Y0e-d8-avy">
+                                                    <rect key="frame" x="8" y="98" width="124" height="41"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -467,7 +467,7 @@
                             </mask>
                         </variation>
                     </view>
-                    <navigationItem key="navigationItem" title="Projects" id="qaN-Hc-taS">
+                    <navigationItem key="navigationItem" title="Programs" id="qaN-Hc-taS">
                         <barButtonItem key="leftBarButtonItem" title="About" id="For-YS-mw8">
                             <connections>
                                 <segue destination="aBn-xO-8O0" kind="popoverPresentation" popoverAnchorBarButtonItem="For-YS-mw8" id="rNW-OS-uos">

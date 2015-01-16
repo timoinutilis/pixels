@@ -23,12 +23,12 @@
 
 - (NSString *)activityType
 {
-    return @"PixelsShare";
+    return @"LowResCoderShare";
 }
 
 - (NSString *)activityTitle
 {
-    return @"Pixels Community";
+    return @"LowRes Coder Web";
 }
 
 - (UIImage *)activityImage
