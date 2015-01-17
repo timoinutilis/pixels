@@ -66,15 +66,15 @@
         
         CGFloat pixelWidth = size.width / rendererSize;
         CGFloat pixelHeight = size.height / rendererSize;
-        myRect.size.width = pixelWidth * 0.99;
-        myRect.size.height = pixelHeight * 0.99;
+        myRect.size.width = ceilf(pixelWidth);// * 0.99;
+        myRect.size.height = ceilf(pixelHeight);// * 0.99;
         
         for (int y = 0; y < rendererSize; y++)
         {
-            myRect.origin.y = y * pixelHeight;
+            myRect.origin.y = floorf(y * pixelHeight);
             for (int x = 0; x < rendererSize; x++)
             {
-                myRect.origin.x = x * pixelWidth;
+                myRect.origin.x = floorf(x * pixelWidth);
                 uint32_t color = dataPixels != nil ? dataPixels[y * rendererSize + x] : [self.renderer screenColorAtX:x Y:y];
                 
                 components[0] = ((color >> 16) & 0xFF) / 255.0;

@@ -8,7 +8,7 @@
 
 #import "Renderer.h"
 
-int const RendererSize = 32;
+int const RendererSize = 64;
 
 uint32_t const ColorPalette[16] = {0x000000, 0xffffff, 0x8b8b8b, 0x404040, 0xfe0000, 0x943908, 0xfe7f00, 0xfedc00, 0x00df00, 0x00a000, 0x006e00, 0x00c7fe, 0x007ffe, 0x0042cf, 0xff00ff, 0xb100b7};
 
@@ -136,11 +136,19 @@ uint8_t FontWidth[256] = {2, 2, 2, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 
     {
         int value = toY; toY = fromY; fromY = value;
     }
-    for (int y = fromY; y <= toY; y++)
+    if (fromX < RendererSize && fromY < RendererSize && toX >= 0 && toY >= 0)
     {
-        for (int x = fromX; x <= toX; x++)
+        if (fromX < 0) fromX = 0;
+        if (fromY < 0) fromY = 0;
+        if (toX >= RendererSize) toX = RendererSize - 1;
+        if (toY >= RendererSize) toY = RendererSize - 1;
+        
+        for (int y = fromY; y <= toY; y++)
         {
-            [self plotX:x Y:y];
+            for (int x = fromX; x <= toX; x++)
+            {
+                _pixelBuffer[y][x] = _colorIndex;
+            }
         }
     }
 }
@@ -172,7 +180,7 @@ uint8_t FontWidth[256] = {2, 2, 2, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 
             
             for (int charX = 0; charX < charWidth; charX++)
             {
-                if (x >= 0 && x < 32)
+                if (x >= 0 && x < RendererSize)
                 {
                     uint8_t rowBits = FontData[charLeftX + charX];
                     for (int charY = 0; charY < 8; charY++)

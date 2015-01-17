@@ -308,7 +308,7 @@
     [runner.delegate updateRendererView];
     
     NSNumber *value = [self.time evaluateWithRunner:runner];
-    NSTimeInterval timeInterval = value.floatValue;
+    NSTimeInterval timeInterval = MAX(value.floatValue, 0.05);
     [NSThread sleepForTimeInterval:timeInterval];
     [runner next];
     return nil;
