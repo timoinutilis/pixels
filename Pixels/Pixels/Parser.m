@@ -158,6 +158,9 @@
         case TTypeSymWait:
             node = [self acceptWait];
             break;
+        case TTypeSymEnd:
+            node = [self acceptEnd];
+            break;
         case TTypeSymColor:
             node = [self acceptColor];
             break;
@@ -209,6 +212,12 @@
         case TTypeSymBar:
         case TTypeSymText:
             return YES;
+            
+        case TTypeSymEnd: {
+            Token *next = [self nextToken];
+            return (!next || next.type != TTypeSymIf);
+        }
+            
         default:
             return NO;
     }
@@ -393,6 +402,13 @@
     WaitNode *node = [[WaitNode alloc] init];
     [self accept:TTypeSymWait];
     node.time = [self acceptExpression];
+    return node;
+}
+
+- (Node *)acceptEnd
+{
+    EndNode *node = [[EndNode alloc] init];
+    [self accept:TTypeSymEnd];
     return node;
 }
 

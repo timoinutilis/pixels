@@ -15,6 +15,7 @@
 @property Runnable *runnable;
 @property NSMutableArray *sequencesStack;
 @property NSMutableDictionary *variables;
+@property NSMutableArray *gosubStack;
 @end
 
 @implementation Runner
@@ -27,6 +28,8 @@
         self.renderer = [[Renderer alloc] init];
         self.variables = [NSMutableDictionary dictionary];
         self.sequencesStack = [NSMutableArray array];
+        self.gosubStack = [NSMutableArray array];
+        
         [self addSequenceWithNodes:runnable.nodes isLoop:NO parent:nil];
     }
     return self;
@@ -42,6 +45,11 @@
     Sequence *sequence = self.sequencesStack.lastObject;
     Node *node = sequence.nodes[sequence.index];
     [node evaluateWithRunner:self];
+}
+
+- (void)end
+{
+    [self.sequencesStack removeAllObjects];
 }
 
 - (void)next
@@ -85,8 +93,15 @@
     sequence.index = 0;
 }
 
-- (BOOL)gotoLabel:(NSString *)label
+- (BOOL)gotoLabel:(NSString *)label isGosub:(BOOL)isGosub
 {
+    if (isGosub)
+    {
+        // remember current position
+        SequenceTreeSnapshot *snapshot = [[SequenceTreeSnapshot alloc] initWithSequencesStack:self.sequencesStack];
+        [self.gosubStack addObject:snapshot];
+    }
+    
     Node *node = self.runnable.labels[label];
     Sequence *sequence = self.sequencesStack.lastObject;
     while (sequence)
@@ -101,6 +116,24 @@
         }
         [self.sequencesStack removeLastObject];
         sequence = self.sequencesStack.lastObject;
+    }
+    return NO;
+}
+
+- (BOOL)returnFromGosub
+{
+    SequenceTreeSnapshot *snapshot = self.gosubStack.lastObject;
+    if (snapshot)
+    {
+        [self.gosubStack removeLastObject];
+        self.sequencesStack = snapshot.sequencesStack;
+        for (NSUInteger i = 0; i < snapshot.indexes.count; i++)
+        {
+            Sequence *sequence = self.sequencesStack[i];
+            sequence.index = [snapshot.indexes[i] integerValue];
+        }
+        [self next];
+        return YES;
     }
     return NO;
 }
@@ -134,5 +167,25 @@
 
 
 @implementation Sequence
+
+@end
+
+
+@implementation SequenceTreeSnapshot
+
+- (instancetype)initWithSequencesStack:(NSMutableArray *)stack
+{
+    if (self = [super init])
+    {
+        _sequencesStack = [NSMutableArray arrayWithArray:stack];
+        _indexes = [NSMutableArray array];
+        for (NSUInteger i = 0; i < stack.count; i++)
+        {
+            Sequence *sequence = stack[i];
+            [_indexes addObject:@(sequence.index)];
+        }
+    }
+    return self;
+}
 
 @end

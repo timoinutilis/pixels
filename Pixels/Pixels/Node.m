@@ -77,7 +77,7 @@
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    BOOL success = [runner gotoLabel:self.label];
+    BOOL success = [runner gotoLabel:self.label isGosub:NO];
     if (!success)
     {
         NSException *exception = [CompilerException exceptionWithName:@"UnaccessibleLabel"
@@ -91,9 +91,51 @@
 @end
 
 @implementation GosubNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    if (pass == PrePassCheckSemantic)
+    {
+        if (!runnable.labels[self.label])
+        {
+            NSException *exception = [CompilerException exceptionWithName:@"UndefinedLabel"
+                                                                   reason:[NSString stringWithFormat:@"Undefined label %@", self.label]
+                                                                 userInfo:@{@"node": self}];
+            @throw exception;
+        }
+    }
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    BOOL success = [runner gotoLabel:self.label isGosub:YES];
+    if (!success)
+    {
+        NSException *exception = [CompilerException exceptionWithName:@"UnaccessibleLabel"
+                                                               reason:[NSString stringWithFormat:@"Unaccessible label %@", self.label]
+                                                             userInfo:@{@"node": self}];
+        @throw exception;
+    }
+    return nil;
+}
+
 @end
 
 @implementation ReturnNode
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    BOOL success = [runner returnFromGosub];
+    if (!success)
+    {
+        NSException *exception = [CompilerException exceptionWithName:@"ReturnWithoutGosub"
+                                                               reason:[NSString stringWithFormat:@"RETURN without GOSUB"]
+                                                             userInfo:@{@"node": self}];
+        @throw exception;
+    }
+    return nil;
+}
+
 @end
 
 @implementation PrintNode
@@ -269,6 +311,16 @@
     NSTimeInterval timeInterval = value.floatValue;
     [NSThread sleepForTimeInterval:timeInterval];
     [runner next];
+    return nil;
+}
+
+@end
+
+@implementation EndNode
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    [runner end];
     return nil;
 }
 

@@ -72,6 +72,9 @@
 @property Node *time;
 @end
 
+@interface EndNode : Node
+@end
+
 @interface ColorNode : Node
 @property Node *color;
 @end
