@@ -27,7 +27,7 @@ uint8_t FontWidth[256] = {2, 2, 2, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 
 {
     if (self = [super init])
     {
-        self.colorIndex = 0;
+        self.colorIndex = 1;
         [self clearWithColorIndex:0];
     }
     return self;

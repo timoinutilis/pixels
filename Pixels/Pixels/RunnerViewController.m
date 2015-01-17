@@ -11,7 +11,7 @@
 #import "RendererView.h"
 #import "Project.h"
 #import "Joypad.h"
-#import "CompilerException.h"
+#import "ProgramException.h"
 
 @interface RunnerViewController ()
 
@@ -128,7 +128,7 @@
                 [runner runCommand];
             }
         }
-        @catch (CompilerException *exception)
+        @catch (ProgramException *exception)
         {
             // runtime error!
             UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Error" message:exception.reason preferredStyle:UIAlertControllerStyleAlert];

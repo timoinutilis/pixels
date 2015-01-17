@@ -16,6 +16,24 @@
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass;
 - (id)evaluateWithRunner:(Runner *)runner;
 - (void)endOfLoopWithRunner:(Runner *)runner;
+- (BOOL)returnsString;
+@end
+
+@interface NumberNode : Node
+@property float value;
+@end
+
+@interface StringNode : Node
+@property NSString *value;
+@end
+
+@interface VariableNode : Node
+@property NSString *identifier;
+@property BOOL isString;
+@end
+
+@interface LabelNode : Node
+@property NSString *identifier;
 @end
 
 @interface IfNode : Node
@@ -40,14 +58,14 @@
 @end
 
 @interface ForNextNode : Node
-@property NSString *variable;
+@property VariableNode *variable;
 @property Node *startExpression;
 @property Node *endExpression;
 @property NSArray *commands;
 @end
 
 @interface LetNode : Node
-@property NSString *identifier;
+@property VariableNode *variable;
 @property Node *expression;
 @end
 
@@ -138,20 +156,4 @@
 @interface Operator1Node : Node
 @property TType type;
 @property Node *expression;
-@end
-
-@interface NumberNode : Node
-@property float value;
-@end
-
-@interface StringNode : Node
-@property NSString *value;
-@end
-
-@interface VariableNode : Node
-@property NSString *identifier;
-@end
-
-@interface LabelNode : Node
-@property NSString *identifier;
 @end

@@ -8,6 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-@interface CompilerException : NSException
+@class Node;
+
+@interface ProgramException : NSException
+
++ (ProgramException *)typeMismatchExceptionWithNode:(Node *)node;
 
 @end

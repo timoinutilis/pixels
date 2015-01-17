@@ -8,7 +8,7 @@
 
 #import "Scanner.h"
 #import "Token.h"
-#import "CompilerException.h"
+#import "ProgramException.h"
 
 @interface Scanner ()
 @property NSMutableDictionary *symbols;
@@ -48,7 +48,7 @@
     }];
     
     self.charSetNumbers = [NSCharacterSet characterSetWithCharactersInString:@"0123456789"];
-    self.charSetLetters = [NSCharacterSet characterSetWithCharactersInString:@"ABCDEFGHIJKLMNOPQRSTUVWXYZ"];
+    self.charSetLetters = [NSCharacterSet characterSetWithCharactersInString:@"ABCDEFGHIJKLMNOPQRSTUVWXYZ_"];
 }
 
 - (NSArray *)tokenizeText:(NSString *)text
@@ -83,7 +83,7 @@
                     }
                     else if (textCharacter == '\n')
                     {
-                        NSException *exception = [CompilerException exceptionWithName:@"ExpectedEndOfString" reason:@"Expected end of string" userInfo:@{@"line":@(line)}];
+                        NSException *exception = [ProgramException exceptionWithName:@"ExpectedEndOfString" reason:@"Expected end of string" userInfo:@{@"line":@(line)}];
                         @throw exception;
                     }
                 }
@@ -197,7 +197,7 @@
                 while (textPos < len)
                 {
                     textCharacter = [text characterAtIndex:textPos];
-                    if ([self.charSetLetters characterIsMember:textCharacter])
+                    if ([self.charSetLetters characterIsMember:textCharacter] || [self.charSetNumbers characterIsMember:textCharacter])
                     {
                         textPos++;
                     }
@@ -234,7 +234,7 @@
         if (!found)
         {
             unichar textCharacter = [text characterAtIndex:textPos];
-            NSException *exception = [CompilerException exceptionWithName:@"UnexpectedCharacter" reason:[NSString stringWithFormat:@"Unexpected character '%c'", textCharacter] userInfo:@{@"line":@(line)}];
+            NSException *exception = [ProgramException exceptionWithName:@"UnexpectedCharacter" reason:[NSString stringWithFormat:@"Unexpected character '%c'", textCharacter] userInfo:@{@"line":@(line)}];
             @throw exception;
         }
         

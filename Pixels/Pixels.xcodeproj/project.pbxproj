@@ -45,7 +45,7 @@
 		9293CFD31A5D55CA0099C847 /* tennis_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 9293CFD11A5D55CA0099C847 /* tennis_icon.png */; };
 		929797FD1A50956900DB5D70 /* PublishActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 929797FC1A50956900DB5D70 /* PublishActivity.m */; };
 		92A0EC0D1A56DA1F0051D74C /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 92A0EC0B1A56DA1F0051D74C /* Model.xcdatamodeld */; };
-		92C98F3F1A20CFD900215AE9 /* CompilerException.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C98F3E1A20CFD900215AE9 /* CompilerException.m */; };
+		92C98F3F1A20CFD900215AE9 /* ProgramException.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C98F3E1A20CFD900215AE9 /* ProgramException.m */; };
 		92C98F421A20F2F000215AE9 /* Node.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C98F411A20F2F000215AE9 /* Node.m */; };
 		92D518B91A6975C10000F917 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D518B81A6975C10000F917 /* AboutViewController.m */; };
 		92E2B8AA1A52F08D00D0DF29 /* ActivityItemSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E2B8A91A52F08D00D0DF29 /* ActivityItemSource.m */; };
@@ -140,8 +140,8 @@
 		929797FC1A50956900DB5D70 /* PublishActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublishActivity.m; sourceTree = "<group>"; };
 		92A0EC0C1A56DA1F0051D74C /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		92A0EC0E1A56DA630051D74C /* Model 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 2.xcdatamodel"; sourceTree = "<group>"; };
-		92C98F3D1A20CFD900215AE9 /* CompilerException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompilerException.h; sourceTree = "<group>"; };
-		92C98F3E1A20CFD900215AE9 /* CompilerException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompilerException.m; sourceTree = "<group>"; };
+		92C98F3D1A20CFD900215AE9 /* ProgramException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgramException.h; sourceTree = "<group>"; };
+		92C98F3E1A20CFD900215AE9 /* ProgramException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProgramException.m; sourceTree = "<group>"; };
 		92C98F401A20F2F000215AE9 /* Node.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Node.h; sourceTree = "<group>"; };
 		92C98F411A20F2F000215AE9 /* Node.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Node.m; sourceTree = "<group>"; };
 		92D518B71A6975C10000F917 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
@@ -371,8 +371,8 @@
 				925A01A81A1E67F900A321E6 /* Parser.m */,
 				926086301A5E8560006C5523 /* Runnable.h */,
 				926086311A5E8560006C5523 /* Runnable.m */,
-				92C98F3D1A20CFD900215AE9 /* CompilerException.h */,
-				92C98F3E1A20CFD900215AE9 /* CompilerException.m */,
+				92C98F3D1A20CFD900215AE9 /* ProgramException.h */,
+				92C98F3E1A20CFD900215AE9 /* ProgramException.m */,
 			);
 			name = Compiler;
 			sourceTree = "<group>";
@@ -538,7 +538,7 @@
 				92A0EC0D1A56DA1F0051D74C /* Model.xcdatamodeld in Sources */,
 				9204EF681A4C397300B8C29C /* HelpTextViewController.m in Sources */,
 				9267E8811A5AF61B00D08C42 /* AFHTTPSessionManager.m in Sources */,
-				92C98F3F1A20CFD900215AE9 /* CompilerException.m in Sources */,
+				92C98F3F1A20CFD900215AE9 /* ProgramException.m in Sources */,
 				9267E8821A5AF61B00D08C42 /* AFNetworkReachabilityManager.m in Sources */,
 				9276F38F1A1D289C0060E909 /* main.m in Sources */,
 				9267E8801A5AF61B00D08C42 /* AFHTTPRequestOperationManager.m in Sources */,

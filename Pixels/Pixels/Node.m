@@ -9,12 +9,21 @@
 #import "Node.h"
 #import "Runner.h"
 #import "Renderer.h"
-#import "CompilerException.h"
+#import "ProgramException.h"
 
 @implementation Node
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
 {
+}
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass canBeString:(BOOL)canBeString
+{
+    if (pass == PrePassCheckSemantic && !canBeString && self.returnsString)
+    {
+        @throw [ProgramException typeMismatchExceptionWithNode:self];
+    }
+    [self prepareWithRunnable:runnable pass:pass];
 }
 
 - (id)evaluateWithRunner:(Runner *)runner
@@ -26,12 +35,87 @@
 {
 }
 
+- (BOOL)returnsString
+{
+    return NO;
+}
+
 @end
+
+
+
+// Variables/Constants
+
+@implementation NumberNode
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    return @(self.value);
+}
+
+@end
+
+
+
+@implementation StringNode
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    return self.value;
+}
+
+- (BOOL)returnsString
+{
+    return YES;
+}
+
+@end
+
+
+
+@implementation VariableNode
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    return [runner valueOfVariable:self];
+}
+
+- (BOOL)returnsString
+{
+    return self.isString;
+}
+
+@end
+
+
+
+@implementation LabelNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    if (pass == PrePassInit)
+    {
+        runnable.labels[self.identifier] = self;
+    }
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
+// Commands
 
 @implementation IfNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
 {
+    [self.condition prepareWithRunnable:runnable pass:pass canBeString:NO];
     [runnable prepareNodes:self.commands pass:pass];
     [runnable prepareNodes:self.elseCommands pass:pass];
 }
@@ -59,6 +143,8 @@
 
 @end
 
+
+
 @implementation GotoNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
@@ -67,7 +153,7 @@
     {
         if (!runnable.labels[self.label])
         {
-            NSException *exception = [CompilerException exceptionWithName:@"UndefinedLabel"
+            NSException *exception = [ProgramException exceptionWithName:@"UndefinedLabel"
                                                                    reason:[NSString stringWithFormat:@"Undefined label %@", self.label]
                                                                  userInfo:@{@"node": self}];
             @throw exception;
@@ -80,7 +166,7 @@
     BOOL success = [runner gotoLabel:self.label isGosub:NO];
     if (!success)
     {
-        NSException *exception = [CompilerException exceptionWithName:@"UnaccessibleLabel"
+        NSException *exception = [ProgramException exceptionWithName:@"UnaccessibleLabel"
                                                                reason:[NSString stringWithFormat:@"Unaccessible label %@", self.label]
                                                              userInfo:@{@"node": self}];
         @throw exception;
@@ -90,6 +176,8 @@
 
 @end
 
+
+
 @implementation GosubNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
@@ -98,7 +186,7 @@
     {
         if (!runnable.labels[self.label])
         {
-            NSException *exception = [CompilerException exceptionWithName:@"UndefinedLabel"
+            NSException *exception = [ProgramException exceptionWithName:@"UndefinedLabel"
                                                                    reason:[NSString stringWithFormat:@"Undefined label %@", self.label]
                                                                  userInfo:@{@"node": self}];
             @throw exception;
@@ -111,7 +199,7 @@
     BOOL success = [runner gotoLabel:self.label isGosub:YES];
     if (!success)
     {
-        NSException *exception = [CompilerException exceptionWithName:@"UnaccessibleLabel"
+        NSException *exception = [ProgramException exceptionWithName:@"UnaccessibleLabel"
                                                                reason:[NSString stringWithFormat:@"Unaccessible label %@", self.label]
                                                              userInfo:@{@"node": self}];
         @throw exception;
@@ -121,6 +209,8 @@
 
 @end
 
+
+
 @implementation ReturnNode
 
 - (id)evaluateWithRunner:(Runner *)runner
@@ -128,7 +218,7 @@
     BOOL success = [runner returnFromGosub];
     if (!success)
     {
-        NSException *exception = [CompilerException exceptionWithName:@"ReturnWithoutGosub"
+        NSException *exception = [ProgramException exceptionWithName:@"ReturnWithoutGosub"
                                                                reason:[NSString stringWithFormat:@"RETURN without GOSUB"]
                                                              userInfo:@{@"node": self}];
         @throw exception;
@@ -138,7 +228,14 @@
 
 @end
 
+
+
 @implementation PrintNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.expression prepareWithRunnable:runnable pass:pass canBeString:YES];
+}
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
@@ -153,10 +250,16 @@
 
 @end
 
+
+
 @implementation ForNextNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
 {
+    [self.variable prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.startExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.endExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    
     [runnable prepareNodes:self.commands pass:pass];
 }
 
@@ -195,22 +298,41 @@
 
 @end
 
+
+
 @implementation LetNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.variable prepareWithRunnable:runnable pass:pass];
+    [self.expression prepareWithRunnable:runnable pass:pass];
+
+    if (pass == PrePassCheckSemantic)
+    {
+        if (self.variable.isString != self.expression.returnsString)
+        {
+            @throw [ProgramException typeMismatchExceptionWithNode:self];
+        }
+    }
+}
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
     id value = [self.expression evaluateWithRunner:runner];
-    [runner setValue:value forVariable:self.identifier];
+    [runner setValue:value forVariable:self.variable];
     [runner next];
     return nil;
 }
 
 @end
 
+
+
 @implementation RepeatUntilNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
 {
+    [self.condition prepareWithRunnable:runnable pass:pass canBeString:NO];
     [runnable prepareNodes:self.commands pass:pass];
 }
 
@@ -235,10 +357,13 @@
 
 @end
 
+
+
 @implementation WhileWendNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
 {
+    [self.condition prepareWithRunnable:runnable pass:pass canBeString:NO];
     [runnable prepareNodes:self.commands pass:pass];
 }
 
@@ -271,6 +396,8 @@
 
 @end
 
+
+
 @implementation DoLoopNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
@@ -291,6 +418,8 @@
 
 @end
 
+
+
 @implementation ExitNode
 
 - (id)evaluateWithRunner:(Runner *)runner
@@ -301,20 +430,29 @@
 
 @end
 
+
+
 @implementation WaitNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.time prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
     [runner.delegate updateRendererView];
     
     NSNumber *value = [self.time evaluateWithRunner:runner];
-    NSTimeInterval timeInterval = MAX(value.floatValue, 0.05);
+    NSTimeInterval timeInterval = MAX(value.floatValue, 0.04);
     [NSThread sleepForTimeInterval:timeInterval];
     [runner next];
     return nil;
 }
 
 @end
+
+
 
 @implementation EndNode
 
@@ -326,7 +464,14 @@
 
 @end
 
+
+
 @implementation ColorNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.color prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
@@ -338,7 +483,14 @@
 
 @end
 
+
+
 @implementation ClsNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.color prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
@@ -350,20 +502,38 @@
 
 @end
 
+
+
 @implementation PlotNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.xExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.yExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
     NSNumber *x = [self.xExpression evaluateWithRunner:runner];
     NSNumber *y = [self.yExpression evaluateWithRunner:runner];
-    [runner.renderer plotX:roundf(x.floatValue) Y:roundf(y.intValue)];
+    [runner.renderer plotX:x.intValue Y:y.intValue];
     [runner next];
     return nil;
 }
 
 @end
 
+
+
 @implementation LineNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.fromXExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.fromYExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.toXExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.toYExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
@@ -371,14 +541,24 @@
     NSNumber *fromY = [self.fromYExpression evaluateWithRunner:runner];
     NSNumber *toX = [self.toXExpression evaluateWithRunner:runner];
     NSNumber *toY = [self.toYExpression evaluateWithRunner:runner];
-    [runner.renderer drawFromX:roundf(fromX.floatValue) Y:roundf(fromY.floatValue) toX:roundf(toX.floatValue) Y:roundf(toY.floatValue)];
+    [runner.renderer drawFromX:fromX.intValue Y:fromY.intValue toX:toX.intValue Y:toY.intValue];
     [runner next];
     return nil;
 }
 
 @end
 
+
+
 @implementation BoxNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.fromXExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.fromYExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.toXExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.toYExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
@@ -388,11 +568,11 @@
     NSNumber *toY = [self.toYExpression evaluateWithRunner:runner];
     if (self.fill)
     {
-        [runner.renderer fillBoxFromX:roundf(fromX.floatValue) Y:roundf(fromY.floatValue) toX:roundf(toX.floatValue) Y:roundf(toY.floatValue)];
+        [runner.renderer fillBoxFromX:fromX.intValue Y:fromY.intValue toX:toX.intValue Y:toY.intValue];
     }
     else
     {
-        [runner.renderer drawBoxFromX:roundf(fromX.floatValue) Y:roundf(fromY.floatValue) toX:roundf(toX.floatValue) Y:roundf(toY.floatValue)];
+        [runner.renderer drawBoxFromX:fromX.intValue Y:fromY.intValue toX:toX.intValue Y:toY.intValue];
     }
     [runner next];
     return nil;
@@ -400,7 +580,17 @@
 
 @end
 
+
+
 @implementation TextNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.valueExpression prepareWithRunnable:runnable pass:pass canBeString:YES];
+    [self.xExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.yExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.alignExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
@@ -430,7 +620,14 @@
 
 @end
 
+
+
 @implementation JoystickNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.portExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
@@ -461,7 +658,15 @@
 
 @end
 
+
+
 @implementation PointNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.xExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.yExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
@@ -472,6 +677,8 @@
 
 @end
 
+
+
 @implementation Maths0Node
 
 - (id)evaluateWithRunner:(Runner *)runner
@@ -480,7 +687,7 @@
     switch (self.type)
     {
         case TTypeSymRnd:
-            result = arc4random() / (float)UINT32_MAX;
+            result = arc4random() / ((float)UINT32_MAX + 1.0);
             break;
         default:
             break;
@@ -489,6 +696,8 @@
 }
 
 @end
+
+
 
 @implementation Maths1Node
 
@@ -500,7 +709,40 @@
 
 @end
 
+
+
 @implementation Operator2Node
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.leftExpression prepareWithRunnable:runnable pass:pass];
+    [self.rightExpression prepareWithRunnable:runnable pass:pass];
+
+    if (pass == PrePassCheckSemantic)
+    {
+        BOOL leftReturnsString = self.leftExpression.returnsString;
+        BOOL rightReturnsString = self.rightExpression.returnsString;
+        switch (self.type)
+        {
+            case TTypeSymOpPlus:
+                break;
+                
+            case TTypeSymOpEq:
+            case TTypeSymOpUneq:
+                if (leftReturnsString != rightReturnsString)
+                {
+                    @throw [ProgramException typeMismatchExceptionWithNode:self];
+                }
+                break;
+
+            default:
+                if (leftReturnsString || rightReturnsString)
+                {
+                    @throw [ProgramException typeMismatchExceptionWithNode:self];
+                }
+        }
+    }
+}
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
@@ -588,9 +830,25 @@
     return @(0);
 }
 
+- (BOOL)returnsString
+{
+    if (self.type == TTypeSymOpPlus)
+    {
+        return self.leftExpression.returnsString || self.rightExpression.returnsString;
+    }
+    return NO;
+}
+
 @end
 
+
+
 @implementation Operator1Node
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.expression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
@@ -612,51 +870,6 @@
         }
     }
     return value;
-}
-
-@end
-
-@implementation NumberNode
-
-- (id)evaluateWithRunner:(Runner *)runner
-{
-    return @(self.value);
-}
-
-@end
-
-@implementation StringNode
-
-- (id)evaluateWithRunner:(Runner *)runner
-{
-    return self.value;
-}
-
-@end
-
-@implementation VariableNode
-
-- (id)evaluateWithRunner:(Runner *)runner
-{
-    return [runner valueOfVariable:self.identifier];
-}
-
-@end
-
-@implementation LabelNode
-
-- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
-{
-    if (pass == PrePassInit)
-    {
-        runnable.labels[self.identifier] = self;
-    }
-}
-
-- (id)evaluateWithRunner:(Runner *)runner
-{
-    [runner next];
-    return nil;
 }
 
 @end

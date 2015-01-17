@@ -9,7 +9,7 @@
 #import "Parser.h"
 #import "Token.h"
 #import "Node.h"
-#import "CompilerException.h"
+#import "ProgramException.h"
 
 @interface Parser ()
 
@@ -53,7 +53,7 @@
     }
     else
     {
-        NSException *exception = [CompilerException exceptionWithName:@"UnexpectedToken"
+        NSException *exception = [ProgramException exceptionWithName:@"UnexpectedToken"
                                                          reason:[NSString stringWithFormat:@"Expected %@", [Token stringForType:tokenType printable:YES]]
                                                        userInfo:@{@"token": self.token}];
         @throw exception;
@@ -181,7 +181,7 @@
             node = [self acceptText];
             break;
         default: {
-            NSException *exception = [CompilerException exceptionWithName:@"ExpectedCommand" reason:@"Expected command" userInfo:@{@"token": self.token}];
+            NSException *exception = [ProgramException exceptionWithName:@"ExpectedCommand" reason:@"Expected command" userInfo:@{@"token": self.token}];
             @throw exception;
         }
     }
@@ -278,8 +278,7 @@
 {
     LetNode *node = [[LetNode alloc] init];
     [self accept:TTypeSymLet];
-    node.identifier = self.token.attrString;
-    [self accept:TTypeIdentifier];
+    node.variable = [self acceptVariable];
     [self accept:TTypeSymOpEq];
     node.expression = [self acceptExpression];
     return node;
@@ -334,8 +333,7 @@
 {
     ForNextNode *node = [[ForNextNode alloc] init];
     [self accept:TTypeSymFor];
-    node.variable = self.token.attrString;
-    [self accept:TTypeIdentifier];
+    node.variable = [self acceptVariable];
     [self accept:TTypeSymOpEq];
     node.startExpression = [self acceptExpression];
     [self accept:TTypeSymTo];
@@ -347,7 +345,7 @@
     [self accept:TTypeSymNext];
     if (self.token.type == TTypeIdentifier)
     {
-        [self accept:TTypeIdentifier];
+        [self acceptVariable];
     }
     return node;
 }
@@ -551,10 +549,7 @@
     switch (self.token.type)
     {
         case TTypeIdentifier: {
-            VariableNode *node = [[VariableNode alloc] init];
-            node.identifier = self.token.attrString;
-            [self accept:TTypeIdentifier];
-            return node;
+            return [self acceptVariable];
         }
         case TTypeNumber: {
             NumberNode *node = [[NumberNode alloc] init];
@@ -584,7 +579,7 @@
             return node;
         }
         default: {
-            NSException *exception = [CompilerException exceptionWithName:@"ExpectedExpression" reason:@"Expected expression" userInfo:@{@"token": self.token}];
+            NSException *exception = [ProgramException exceptionWithName:@"ExpectedExpression" reason:@"Expected expression" userInfo:@{@"token": self.token}];
             @throw exception;
         }
     }
@@ -638,6 +633,20 @@
             break;
     }
     return nil;
+}
+
+- (VariableNode *)acceptVariable
+{
+    VariableNode *node = [[VariableNode alloc] init];
+    node.identifier = self.token.attrString;
+    [self accept:TTypeIdentifier];
+    if (self.token.type == TTypeSymDollar)
+    {
+        [self accept:TTypeSymDollar];
+        node.isString = YES;
+    }
+    return node;
+
 }
 
 @end

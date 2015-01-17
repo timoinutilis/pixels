@@ -14,7 +14,8 @@
 @interface Runner ()
 @property Runnable *runnable;
 @property NSMutableArray *sequencesStack;
-@property NSMutableDictionary *variables;
+@property NSMutableDictionary *numberVariables;
+@property NSMutableDictionary *stringVariables;
 @property NSMutableArray *gosubStack;
 @end
 
@@ -26,7 +27,8 @@
     {
         self.runnable = runnable;
         self.renderer = [[Renderer alloc] init];
-        self.variables = [NSMutableDictionary dictionary];
+        self.numberVariables = [NSMutableDictionary dictionary];
+        self.stringVariables = [NSMutableDictionary dictionary];
         self.sequencesStack = [NSMutableArray array];
         self.gosubStack = [NSMutableArray array];
         
@@ -43,8 +45,15 @@
 - (void)runCommand
 {
     Sequence *sequence = self.sequencesStack.lastObject;
-    Node *node = sequence.nodes[sequence.index];
-    [node evaluateWithRunner:self];
+    if (sequence.nodes.count > 0)
+    {
+        Node *node = sequence.nodes[sequence.index];
+        [node evaluateWithRunner:self];
+    }
+    else
+    {
+        [self next];
+    }
 }
 
 - (void)end
@@ -148,14 +157,31 @@
     [self.sequencesStack addObject:sequence];
 }
 
-- (void)setValue:(id)value forVariable:(NSString *)identifier
+- (void)setValue:(id)value forVariable:(VariableNode *)variable
 {
-    self.variables[identifier] = value;
+    if (variable.isString)
+    {
+        self.stringVariables[variable.identifier] = value;
+    }
+    else
+    {
+        self.numberVariables[variable.identifier] = value;
+    }
 }
 
-- (id)valueOfVariable:(NSString *)identifier
+- (id)valueOfVariable:(VariableNode *)variable
 {
-    id value = self.variables[identifier];
+    if (variable.isString)
+    {
+        NSString *value = self.stringVariables[variable.identifier];
+        if (value)
+        {
+            return value;
+        }
+        return @"";
+    }
+    
+    NSNumber *value = self.numberVariables[variable.identifier];
     if (value)
     {
         return value;

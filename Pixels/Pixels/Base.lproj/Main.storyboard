@@ -225,19 +225,19 @@
                                 <rect key="frame" x="113" y="52" width="95" height="95"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LowRes Coder" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eUn-rR-zmA">
-                                <rect key="frame" x="102" y="155" width="117" height="21"/>
+                                <rect key="frame" x="102" y="163" width="117" height="21"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(Version 1.0)" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qeW-Zx-vyh">
-                                <rect key="frame" x="123" y="184" width="74" height="16"/>
+                                <rect key="frame" x="123" y="192" width="74" height="16"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wnb-hR-4aV">
-                                <rect key="frame" x="16" y="208" width="288" height="314"/>
+                                <rect key="frame" x="16" y="216" width="288" height="306"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <string key="text">Program your own retro games and demos directly on your iPad or iPhone!
 
@@ -264,7 +264,7 @@ Find more Inutilis stuff at www.inutilis.com!
                             <constraint firstItem="r2o-ya-e3K" firstAttribute="top" secondItem="mpf-ZV-pfP" secondAttribute="bottom" constant="8" id="WKx-0D-2eg"/>
                             <constraint firstAttribute="centerX" secondItem="eUn-rR-zmA" secondAttribute="centerX" id="adJ-yI-zyK"/>
                             <constraint firstAttribute="centerX" secondItem="qeW-Zx-vyh" secondAttribute="centerX" id="d7h-iW-dVI"/>
-                            <constraint firstItem="eUn-rR-zmA" firstAttribute="top" secondItem="rhu-yn-FNg" secondAttribute="bottom" constant="8" id="saB-AM-G0L"/>
+                            <constraint firstItem="eUn-rR-zmA" firstAttribute="top" secondItem="rhu-yn-FNg" secondAttribute="bottom" constant="16" id="saB-AM-G0L"/>
                             <constraint firstItem="Wnb-hR-4aV" firstAttribute="leading" secondItem="jAQ-A2-jdf" secondAttribute="leadingMargin" id="y3J-MQ-Ko6"/>
                         </constraints>
                     </view>
@@ -375,8 +375,8 @@ Find more Inutilis stuff at www.inutilis.com!
                                             <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0xU-An-Aft">
-                                            <rect key="frame" x="58" y="0.0" width="532" height="43"/>
+                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0xU-An-Aft">
+                                            <rect key="frame" x="58" y="0.0" width="532" height="44"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="43" id="MQc-fE-HBb"/>
                                             </constraints>

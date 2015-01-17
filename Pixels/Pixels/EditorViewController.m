@@ -11,7 +11,7 @@
 #import "Parser.h"
 #import "Token.h"
 #import "Runnable.h"
-#import "CompilerException.h"
+#import "ProgramException.h"
 #import "Runner.h"
 #import "ModelManager.h"
 #import "RunnerViewController.h"
@@ -277,7 +277,7 @@
             }
         }
     }
-    @catch (CompilerException *exception)
+    @catch (ProgramException *exception)
     {
         NSUInteger line = 0;
         if (exception.userInfo[@"line"])

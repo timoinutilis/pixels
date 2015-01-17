@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "RunnerDelegate.h"
 
-@class Node, Renderer, Runnable;
+@class Node, Renderer, Runnable, VariableNode;
 
 @interface Runner : NSObject
 
@@ -27,8 +27,8 @@
 - (BOOL)returnFromGosub;
 - (void)addSequenceWithNodes:(NSArray *)nodes isLoop:(BOOL)isLoop parent:(Node *)parent;
 
-- (void)setValue:(id)value forVariable:(NSString *)identifier;
-- (id)valueOfVariable:(NSString *)identifier;
+- (void)setValue:(id)value forVariable:(VariableNode *)variable;
+- (id)valueOfVariable:(VariableNode *)variable;
 
 @end
 
