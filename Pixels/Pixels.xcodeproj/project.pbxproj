@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9204C1F21A6B458200A0123C /* NSString+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9204C1F11A6B458200A0123C /* NSString+Utils.m */; };
 		9204EF681A4C397300B8C29C /* HelpTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9204EF671A4C397300B8C29C /* HelpTextViewController.m */; };
 		9204EF6A1A4C430300B8C29C /* manual.html in Resources */ = {isa = PBXBuildFile; fileRef = 9204EF691A4C430300B8C29C /* manual.html */; };
 		920822031A4DABB8005B7862 /* HelpContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 920822021A4DABB8005B7862 /* HelpContent.m */; };
@@ -68,6 +69,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9204C1F01A6B458200A0123C /* NSString+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Utils.h"; path = "Class Utils/NSString+Utils.h"; sourceTree = "<group>"; };
+		9204C1F11A6B458200A0123C /* NSString+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Utils.m"; path = "Class Utils/NSString+Utils.m"; sourceTree = "<group>"; };
 		9204EF661A4C397300B8C29C /* HelpTextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpTextViewController.h; sourceTree = "<group>"; };
 		9204EF671A4C397300B8C29C /* HelpTextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpTextViewController.m; sourceTree = "<group>"; };
 		9204EF691A4C430300B8C29C /* manual.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = manual.html; sourceTree = "<group>"; };
@@ -180,6 +183,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9204C1EF1A6B454E00A0123C /* Class Utils */ = {
+			isa = PBXGroup;
+			children = (
+				9204C1F01A6B458200A0123C /* NSString+Utils.h */,
+				9204C1F11A6B458200A0123C /* NSString+Utils.m */,
+			);
+			name = "Class Utils";
+			sourceTree = "<group>";
+		};
 		9204EF6B1A4C431400B8C29C /* Assets */ = {
 			isa = PBXGroup;
 			children = (
@@ -391,6 +403,7 @@
 		92E53DEA1A5B3A1D00FE9F91 /* Gor Lib */ = {
 			isa = PBXGroup;
 			children = (
+				9204C1EF1A6B454E00A0123C /* Class Utils */,
 				92E53DEB1A5B3A1D00FE9F91 /* UI */,
 			);
 			path = "Gor Lib";
@@ -525,6 +538,7 @@
 				9267E87F1A5AF61B00D08C42 /* AFHTTPRequestOperation.m in Sources */,
 				9267E8861A5AF61B00D08C42 /* AFURLResponseSerialization.m in Sources */,
 				9272C1491A1DE2D000E97957 /* Token.m in Sources */,
+				9204C1F21A6B458200A0123C /* NSString+Utils.m in Sources */,
 				92E2B8AA1A52F08D00D0DF29 /* ActivityItemSource.m in Sources */,
 				92E53DF51A5B3A1D00FE9F91 /* GORScrollViewDelegate.m in Sources */,
 				92E53DF71A5B3A1D00FE9F91 /* GORTextView.m in Sources */,

@@ -57,10 +57,12 @@
     
     NSUInteger textPos = 0;
     NSUInteger len = text.length;
-    NSUInteger line = 1;
+    NSUInteger tokenPosition = 0;
     while (textPos < len)
     {
         BOOL found = NO;
+        
+        tokenPosition = textPos;
         
         if (!found)
         {
@@ -83,7 +85,7 @@
                     }
                     else if (textCharacter == '\n')
                     {
-                        NSException *exception = [ProgramException exceptionWithName:@"ExpectedEndOfString" reason:@"Expected end of string" userInfo:@{@"line":@(line)}];
+                        NSException *exception = [ProgramException exceptionWithName:@"ExpectedEndOfString" reason:@"Expected end of string" position:textPos + stringPos];
                         @throw exception;
                     }
                 }
@@ -92,7 +94,7 @@
                     Token *token = [[Token alloc] init];
                     token.type = TTypeString;
                     token.attrString = foundString;
-                    token.line = line;
+                    token.position = tokenPosition;
                     [tokens addObject:token];
                     found = YES;
                 }
@@ -139,7 +141,7 @@
                 Token *token = [[Token alloc] init];
                 token.type = TTypeNumber;
                 token.attrNumber = number;
-                token.line = line;
+                token.position = tokenPosition;
                 [tokens addObject:token];
                 found = YES;
             }
@@ -180,7 +182,7 @@
             {
                 Token *token = [[Token alloc] init];
                 token.type = [self.symbols[foundSymbol] intValue];
-                token.line = line;
+                token.position = tokenPosition;
                 [tokens addObject:token];
                 found = YES;
             }
@@ -213,7 +215,7 @@
                 Token *token = [[Token alloc] init];
                 token.type = TTypeIdentifier;
                 token.attrString = [text substringWithRange:range];
-                token.line = line;
+                token.position = tokenPosition;
                 [tokens addObject:token];
                 found = YES;
             }
@@ -234,13 +236,10 @@
         if (!found)
         {
             unichar textCharacter = [text characterAtIndex:textPos];
-            NSException *exception = [ProgramException exceptionWithName:@"UnexpectedCharacter" reason:[NSString stringWithFormat:@"Unexpected character '%c'", textCharacter] userInfo:@{@"line":@(line)}];
+            NSException *exception = [ProgramException exceptionWithName:@"UnexpectedCharacter"
+                                                                  reason:[NSString stringWithFormat:@"Unexpected character '%c'", textCharacter]
+                                                                position:textPos];
             @throw exception;
-        }
-        
-        if (textPos < len && [text characterAtIndex:textPos] == '\n')
-        {
-            line++;
         }
     }
     

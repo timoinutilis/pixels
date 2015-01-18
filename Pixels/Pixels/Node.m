@@ -154,8 +154,8 @@
         if (!runnable.labels[self.label])
         {
             NSException *exception = [ProgramException exceptionWithName:@"UndefinedLabel"
-                                                                   reason:[NSString stringWithFormat:@"Undefined label %@", self.label]
-                                                                 userInfo:@{@"node": self}];
+                                                                  reason:[NSString stringWithFormat:@"Undefined label %@", self.label]
+                                                                   token:self.token];
             @throw exception;
         }
     }
@@ -167,8 +167,8 @@
     if (!success)
     {
         NSException *exception = [ProgramException exceptionWithName:@"UnaccessibleLabel"
-                                                               reason:[NSString stringWithFormat:@"Unaccessible label %@", self.label]
-                                                             userInfo:@{@"node": self}];
+                                                              reason:[NSString stringWithFormat:@"Unaccessible label %@", self.label]
+                                                               token:self.token];
         @throw exception;
     }
     return nil;
@@ -187,8 +187,8 @@
         if (!runnable.labels[self.label])
         {
             NSException *exception = [ProgramException exceptionWithName:@"UndefinedLabel"
-                                                                   reason:[NSString stringWithFormat:@"Undefined label %@", self.label]
-                                                                 userInfo:@{@"node": self}];
+                                                                  reason:[NSString stringWithFormat:@"Undefined label %@", self.label]
+                                                                   token:self.token];
             @throw exception;
         }
     }
@@ -200,8 +200,8 @@
     if (!success)
     {
         NSException *exception = [ProgramException exceptionWithName:@"UnaccessibleLabel"
-                                                               reason:[NSString stringWithFormat:@"Unaccessible label %@", self.label]
-                                                             userInfo:@{@"node": self}];
+                                                              reason:[NSString stringWithFormat:@"Unaccessible label %@", self.label]
+                                                               token:self.token];
         @throw exception;
     }
     return nil;
@@ -219,8 +219,8 @@
     if (!success)
     {
         NSException *exception = [ProgramException exceptionWithName:@"ReturnWithoutGosub"
-                                                               reason:[NSString stringWithFormat:@"RETURN without GOSUB"]
-                                                             userInfo:@{@"node": self}];
+                                                              reason:[NSString stringWithFormat:@"RETURN without GOSUB"]
+                                                               token:self.token];
         @throw exception;
     }
     return nil;

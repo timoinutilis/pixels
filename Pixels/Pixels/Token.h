@@ -89,6 +89,6 @@ typedef NS_ENUM(NSInteger, TType) {
 @property TType type;
 @property NSString *attrString;
 @property float attrNumber;
-@property NSUInteger line;
+@property NSUInteger position;
 
 @end

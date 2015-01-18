@@ -18,6 +18,7 @@
 #import "HelpTextViewController.h"
 #import "ActivityItemSource.h"
 #import "PublishActivity.h"
+#import "NSString+Utils.h"
 
 @interface EditorViewController ()
 
@@ -279,20 +280,16 @@
     }
     @catch (ProgramException *exception)
     {
-        NSUInteger line = 0;
-        if (exception.userInfo[@"line"])
-        {
-            line = [exception.userInfo[@"line"] intValue];
-        }
-        else if (exception.userInfo[@"token"])
-        {
-            Token *token = exception.userInfo[@"token"];
-            line = token.line;
-        }
-        NSString *message = [NSString stringWithFormat:@"Error in line %lu: %@", (unsigned long)line, exception.reason];
+        NSUInteger errorPosition = exception.position;
+        NSString *line = [text substringWithLineAtIndex:errorPosition];
         
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Error" message:message preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:exception.reason message:line preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+        [alert addAction:[UIAlertAction actionWithTitle:@"Go to Error" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            NSRange range = {errorPosition, 0};
+            self.sourceCodeTextView.selectedRange = range;
+            [self.sourceCodeTextView becomeFirstResponder];
+        }]];
         [self presentViewController:alert animated:YES completion:nil];
     }
 }

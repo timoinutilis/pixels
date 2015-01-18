@@ -12,6 +12,7 @@
 #import "Project.h"
 #import "Joypad.h"
 #import "ProgramException.h"
+#import "NSString+Utils.h"
 
 @interface RunnerViewController ()
 
@@ -131,7 +132,8 @@
         @catch (ProgramException *exception)
         {
             // runtime error!
-            UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Error" message:exception.reason preferredStyle:UIAlertControllerStyleAlert];
+            NSString *line = [self.project.sourceCode substringWithLineAtIndex:exception.position];
+            UIAlertController* alert = [UIAlertController alertControllerWithTitle:exception.reason message:line preferredStyle:UIAlertControllerStyleAlert];
             [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                 [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
             }]];

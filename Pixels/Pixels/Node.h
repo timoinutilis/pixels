@@ -13,10 +13,14 @@
 @class Runner;
 
 @interface Node : NSObject
+
+@property Token *token;
+
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass;
 - (id)evaluateWithRunner:(Runner *)runner;
 - (void)endOfLoopWithRunner:(Runner *)runner;
 - (BOOL)returnsString;
+
 @end
 
 @interface NumberNode : Node
