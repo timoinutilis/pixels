@@ -135,19 +135,19 @@
                                 </connections>
                             </button>
                             <button opaque="NO" alpha="0.5" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DSM-fA-zCj" userLabel="Joypad" customClass="Joypad">
-                                <rect key="frame" x="88" y="382" width="130" height="130"/>
+                                <rect key="frame" x="44" y="382" width="130" height="130"/>
                                 <state key="normal" image="joypad">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
                             <button opaque="NO" alpha="0.5" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gGg-rj-ecJ" userLabel="Button A">
-                                <rect key="frame" x="376" y="444" width="68" height="68"/>
+                                <rect key="frame" x="420" y="444" width="68" height="68"/>
                                 <state key="normal" image="button_a">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
                             <button opaque="NO" alpha="0.5" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WUP-DK-URn" userLabel="Button B">
-                                <rect key="frame" x="444" y="382" width="68" height="68"/>
+                                <rect key="frame" x="488" y="382" width="68" height="68"/>
                                 <state key="normal" image="button_b">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -162,12 +162,29 @@
                             <constraint firstItem="U9l-B1-gng" firstAttribute="top" secondItem="7pe-HW-2Cc" secondAttribute="top" constant="8" id="aUb-1W-ipI"/>
                             <constraint firstItem="U9l-B1-gng" firstAttribute="leading" secondItem="7pe-HW-2Cc" secondAttribute="leading" constant="8" id="gHu-Cg-qnB"/>
                             <constraint firstAttribute="trailing" secondItem="wgn-Os-cIh" secondAttribute="trailing" id="gZl-g8-tmR"/>
-                            <constraint firstItem="DSM-fA-zCj" firstAttribute="leading" secondItem="7pe-HW-2Cc" secondAttribute="leading" constant="88" id="ie4-m0-UXh"/>
-                            <constraint firstAttribute="trailing" secondItem="WUP-DK-URn" secondAttribute="trailing" constant="88" id="lML-pE-zo0"/>
-                            <constraint firstItem="vm8-Vn-fOJ" firstAttribute="top" secondItem="DSM-fA-zCj" secondAttribute="bottom" constant="88" id="n6N-y2-jry"/>
-                            <constraint firstItem="vm8-Vn-fOJ" firstAttribute="top" secondItem="gGg-rj-ecJ" secondAttribute="bottom" constant="88" id="oc7-0l-h6D"/>
-                            <constraint firstItem="vm8-Vn-fOJ" firstAttribute="top" secondItem="WUP-DK-URn" secondAttribute="bottom" constant="150" id="qcH-kT-O3Z"/>
+                            <constraint firstItem="DSM-fA-zCj" firstAttribute="leading" secondItem="7pe-HW-2Cc" secondAttribute="leading" constant="44" id="ie4-m0-UXh">
+                                <variation key="heightClass=compact" constant="11"/>
+                                <variation key="widthClass=compact" constant="11"/>
+                            </constraint>
+                            <constraint firstAttribute="trailing" secondItem="WUP-DK-URn" secondAttribute="trailing" constant="44" id="lML-pE-zo0">
+                                <variation key="heightClass=compact" constant="11"/>
+                                <variation key="widthClass=compact" constant="11"/>
+                            </constraint>
+                            <constraint firstItem="vm8-Vn-fOJ" firstAttribute="top" secondItem="DSM-fA-zCj" secondAttribute="bottom" constant="88" id="n6N-y2-jry">
+                                <variation key="heightClass=compact" constant="11"/>
+                                <variation key="widthClass=compact" constant="11"/>
+                            </constraint>
+                            <constraint firstItem="vm8-Vn-fOJ" firstAttribute="top" secondItem="gGg-rj-ecJ" secondAttribute="bottom" constant="88" id="oc7-0l-h6D">
+                                <variation key="heightClass=compact" constant="11"/>
+                                <variation key="widthClass=compact" constant="11"/>
+                            </constraint>
+                            <constraint firstItem="vm8-Vn-fOJ" firstAttribute="top" secondItem="WUP-DK-URn" secondAttribute="bottom" constant="150" id="qcH-kT-O3Z">
+                                <variation key="heightClass=compact" constant="66"/>
+                                <variation key="widthClass=compact" constant="66"/>
+                            </constraint>
                         </constraints>
+                        <variation key="heightClass=compact"/>
+                        <variation key="widthClass=compact"/>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>
