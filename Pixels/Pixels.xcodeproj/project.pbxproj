@@ -475,6 +475,7 @@
 				TargetAttributes = {
 					9276F3881A1D289C0060E909 = {
 						CreatedOnToolsVersion = 6.1;
+						DevelopmentTeam = BZ4VC623NH;
 					};
 					9276F3A11A1D289C0060E909 = {
 						CreatedOnToolsVersion = 6.1;
@@ -729,7 +730,7 @@
 				INFOPLIST_FILE = PixelsTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pixels.app/Pixels";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LowRes Coder.app/LowRes Coder";
 			};
 			name = Debug;
 		};
@@ -744,7 +745,7 @@
 				INFOPLIST_FILE = PixelsTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pixels.app/Pixels";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LowRes Coder.app/LowRes Coder";
 			};
 			name = Release;
 		};

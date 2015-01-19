@@ -342,11 +342,22 @@ Find more Inutilis stuff at www.inutilis.com!
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xW0-b5-PDA">
+                                            <rect key="frame" x="96" y="49" width="98" height="30"/>
+                                            <state key="normal" title="Go to Website">
+                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="onWebsiteTapped:" destination="u7G-9d-dgL" eventType="touchUpInside" id="GBo-xo-8MA"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstItem="xW0-b5-PDA" firstAttribute="top" secondItem="gnl-rd-zYM" secondAttribute="bottom" id="1Na-9W-FVE"/>
                                         <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="bHI-XD-ggP" secondAttribute="bottom" id="Bhd-U5-E8k"/>
                                         <constraint firstItem="gnl-rd-zYM" firstAttribute="trailing" secondItem="AQT-b1-zre" secondAttribute="trailingMargin" id="DhX-Q4-R5n"/>
-                                        <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="gnl-rd-zYM" secondAttribute="bottom" id="HyU-SV-FG8"/>
+                                        <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="xW0-b5-PDA" secondAttribute="bottom" id="O1j-kW-8fK"/>
+                                        <constraint firstItem="xW0-b5-PDA" firstAttribute="leading" secondItem="bHI-XD-ggP" secondAttribute="trailing" constant="8" id="RUz-aq-YXT"/>
                                         <constraint firstItem="gnl-rd-zYM" firstAttribute="top" secondItem="AQT-b1-zre" secondAttribute="topMargin" id="cGP-kf-c0G"/>
                                         <constraint firstItem="bHI-XD-ggP" firstAttribute="leading" secondItem="AQT-b1-zre" secondAttribute="leadingMargin" id="gtv-gT-zPs"/>
                                         <constraint firstItem="gnl-rd-zYM" firstAttribute="leading" secondItem="bHI-XD-ggP" secondAttribute="trailing" constant="8" id="mr1-0q-LbJ"/>
@@ -422,8 +433,10 @@ Find more Inutilis stuff at www.inutilis.com!
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="cancelItem" destination="Pjk-qX-0wW" id="Zvn-Lw-sHp"/>
                         <outlet property="descriptionPlaceholderLabel" destination="jzM-NH-C7P" id="uz3-cf-XIe"/>
                         <outlet property="descriptionTextView" destination="Pbc-p6-EDI" id="0Yr-z9-YVb"/>
+                        <outlet property="sendItem" destination="O3a-N9-0XI" id="h8h-uj-TGx"/>
                         <outlet property="separator2View" destination="oTo-ap-szN" id="RPF-Rf-qi9"/>
                     </connections>
                 </tableViewController>

@@ -7,6 +7,7 @@
 //
 
 #import "ActivityItemSource.h"
+#import "PublishActivity.h"
 #import "Project.h"
 
 @implementation ActivityItemSource
@@ -20,7 +21,7 @@
 // called to fetch data after an activity is selected. you can return nil.
 - (id)activityViewController:(UIActivityViewController *)activityViewController itemForActivityType:(NSString *)activityType
 {
-    if ([activityType isEqualToString:@"PixelsShare"])
+    if ([activityType isEqualToString:LowResCoderShare])
     {
         return self.project;
     }

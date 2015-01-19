@@ -10,6 +10,8 @@
 #import "Project.h"
 #import "ShareViewController.h"
 
+NSString *const LowResCoderShare = @"LowResCoderShare";
+
 @interface PublishActivity () <ShareViewControllerDelegate>
 @property Project *project;
 @end

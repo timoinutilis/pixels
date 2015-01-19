@@ -16,6 +16,9 @@
 @property ShareHeaderCell *headerCell;
 @property TextFieldCell *titleCell;
 @property TextFieldCell *authorCell;
+@property TextFieldCell *mailCell;
+@property (nonatomic) IBOutlet UIBarButtonItem *sendItem;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *cancelItem;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionPlaceholderLabel;
 @property (weak, nonatomic) IBOutlet GORTextView *descriptionTextView;
 @property (weak, nonatomic) IBOutlet GORSeparatorView *separator2View;
@@ -56,10 +59,18 @@
     self.authorCell.label.text = @"Author:";
     self.authorCell.textField.autocapitalizationType = UITextAutocapitalizationTypeWords;
     self.authorCell.separatorView.separatorColor = self.tableView.separatorColor;
+
+    self.mailCell = [self.tableView dequeueReusableCellWithIdentifier:@"TextFieldCell"];
+    self.mailCell.label.text = @"E-Mail:";
+    self.mailCell.textField.autocorrectionType = UITextAutocorrectionTypeNo;
+    self.mailCell.textField.keyboardType = UIKeyboardTypeEmailAddress;
+    self.mailCell.textField.placeholder = @"Optional, will not be published";
+    self.mailCell.separatorView.separatorColor = self.tableView.separatorColor;
     
     [self addCell:self.headerCell];
     [self addCell:self.titleCell];
     [self addCell:self.authorCell];
+    [self addCell:self.mailCell];
     
     self.descriptionTextView.placeholderView = self.descriptionPlaceholderLabel;
     self.descriptionTextView.hidePlaceholderWhenFirstResponder = YES;
@@ -79,7 +90,7 @@
     
     if (self.titleCell.textField.text.length == 0 || self.authorCell.textField.text.length == 0 || self.descriptionTextView.text.length == 0)
     {
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Please fill out all fields!" message:nil preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Please fill out all required fields!" message:nil preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
         [self presentViewController:alert animated:YES completion:nil];
     }
@@ -89,11 +100,18 @@
     }
 }
 
+- (IBAction)onWebsiteTapped:(id)sender
+{
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://lowres.inutilis.com"]];
+}
+
 - (void)send
 {
+    [self isBusy:YES];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSDictionary *parameters = @{@"secret": @"916486295",
                                  @"author": self.authorCell.textField.text,
+                                 @"mail": self.mailCell.textField.text,
                                  @"title": self.titleCell.textField.text,
                                  @"description": self.descriptionTextView.text,
                                  @"source_code": self.project.sourceCode};
@@ -103,6 +121,7 @@
         NSDictionary *response = responseObject;
         if (response[@"error"])
         {
+            [self isBusy:NO];
             UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Error" message:response[@"error"] preferredStyle:UIAlertControllerStyleAlert];
             [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
             [self presentViewController:alert animated:YES completion:nil];
@@ -114,6 +133,7 @@
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
+        [self isBusy:NO];
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Error" message:@"Could not send program. Please try later!" preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
         [self presentViewController:alert animated:YES completion:nil];
@@ -121,6 +141,22 @@
         NSLog(@"error: %@", error);
         
     }];
+}
+
+- (void)isBusy:(BOOL)isBusy
+{
+    self.cancelItem.enabled = !isBusy;
+    if (isBusy)
+    {
+        UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        activityView.frame = CGRectMake(0, 0, 44, 44);
+        [activityView startAnimating];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityView];
+    }
+    else
+    {
+        self.navigationItem.rightBarButtonItem = self.sendItem;
+    }
 }
 
 @end
