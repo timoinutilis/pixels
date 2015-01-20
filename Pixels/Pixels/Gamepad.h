@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface Joypad : UIButton
+@interface Gamepad : UIButton
 
 @property (readonly) BOOL isDirUp;
 @property (readonly) BOOL isDirDown;

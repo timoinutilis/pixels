@@ -45,6 +45,7 @@
         case TTypeSymBar: return @"BAR";
         case TTypeSymText: return @"TEXT";
         case TTypeSymEnd: return @"END";
+        case TTypeSymGamepad: return @"GAMEPAD";
         
         case TTypeSymUp: return @"UP";
         case TTypeSymDown: return @"DOWN";

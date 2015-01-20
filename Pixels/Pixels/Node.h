@@ -97,6 +97,10 @@
 @interface EndNode : Node
 @end
 
+@interface GamepadNode : Node
+@property Node *playersExpression;
+@end
+
 @interface ColorNode : Node
 @property Node *color;
 @end
@@ -132,9 +136,14 @@
 @property Node *alignExpression;
 @end
 
-@interface JoystickNode : Node
+@interface DirectionPadNode : Node
 @property TType type;
 @property Node *portExpression;
+@end
+
+@interface ButtonNode : Node
+@property Node *portExpression;
+@property Node *buttonExpression;
 @end
 
 @interface PointNode : Node

@@ -22,5 +22,6 @@ typedef NS_ENUM(NSInteger, ButtonType) {
 - (void)runnerLog:(NSString *)message;
 - (void)updateRendererView;
 - (BOOL)isButtonDown:(ButtonType)type;
+- (void)setGamepadModeWithPlayers:(int)players;
 
 @end

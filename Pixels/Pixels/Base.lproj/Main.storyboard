@@ -134,7 +134,7 @@
                                     <action selector="onExitTapped:" destination="glc-Eb-QOK" eventType="touchUpInside" id="1hg-hv-tee"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" alpha="0.5" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DSM-fA-zCj" userLabel="Joypad" customClass="Joypad">
+                            <button opaque="NO" alpha="0.5" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DSM-fA-zCj" userLabel="Joypad" customClass="Gamepad">
                                 <rect key="frame" x="44" y="382" width="130" height="130"/>
                                 <state key="normal" image="joypad">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -183,8 +183,6 @@
                                 <variation key="widthClass=compact" constant="66"/>
                             </constraint>
                         </constraints>
-                        <variation key="heightClass=compact"/>
-                        <variation key="widthClass=compact"/>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>
@@ -193,7 +191,8 @@
                         <outlet property="constraintHeight" destination="xDi-Pn-o1Z" id="MFn-Ny-47I"/>
                         <outlet property="constraintWidth" destination="A1Z-Ca-qSy" id="N2o-XF-UHg"/>
                         <outlet property="containerView" destination="wgn-Os-cIh" id="Urd-Fb-b8e"/>
-                        <outlet property="joypad" destination="DSM-fA-zCj" id="Oet-AY-6OU"/>
+                        <outlet property="exitButton" destination="U9l-B1-gng" id="T69-ZT-cvs"/>
+                        <outlet property="gamepad" destination="DSM-fA-zCj" id="z1T-VM-B4R"/>
                         <outlet property="rendererView" destination="B6C-lp-NaC" id="d1n-8y-Uwo"/>
                     </connections>
                 </viewController>

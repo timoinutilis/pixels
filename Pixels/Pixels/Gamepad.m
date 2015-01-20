@@ -6,15 +6,19 @@
 //  Copyright (c) 2014 Inutilis Software. All rights reserved.
 //
 
-#import "Joypad.h"
+#import "Gamepad.h"
 
-@implementation Joypad
+@implementation Gamepad
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
-    int errorMargin = 30;
-    CGRect largerFrame = CGRectMake(-errorMargin, -errorMargin, self.frame.size.width + 2 * errorMargin, self.frame.size.height + 2 * errorMargin);
-    return CGRectContainsPoint(largerFrame, point) ? self : nil;
+    if (!self.hidden && self.userInteractionEnabled)
+    {
+        int errorMargin = 30;
+        CGRect largerFrame = CGRectMake(-errorMargin, -errorMargin, self.frame.size.width + 2 * errorMargin, self.frame.size.height + 2 * errorMargin);
+        return CGRectContainsPoint(largerFrame, point) ? self : nil;
+    }
+    return nil;
 }
 
 - (BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event

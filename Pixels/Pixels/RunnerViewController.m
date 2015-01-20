@@ -10,21 +10,23 @@
 #import "Runner.h"
 #import "RendererView.h"
 #import "Project.h"
-#import "Joypad.h"
+#import "Gamepad.h"
 #import "ProgramException.h"
 #import "NSString+Utils.h"
 
 @interface RunnerViewController ()
 
 @property (weak, nonatomic) IBOutlet UIView *containerView;
+@property (weak, nonatomic) IBOutlet UIButton *exitButton;
 @property (weak, nonatomic) IBOutlet RendererView *rendererView;
 @property (weak, nonatomic) IBOutlet UIButton *buttonA;
 @property (weak, nonatomic) IBOutlet UIButton *buttonB;
-@property (weak, nonatomic) IBOutlet Joypad *joypad;
+@property (weak, nonatomic) IBOutlet Gamepad *gamepad;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintWidth;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintHeight;
 
 @property UIPinchGestureRecognizer *pinchRecognizer;
+@property UITapGestureRecognizer *tapRecognizer;
 
 @property BOOL isRunning;
 @property CGFloat scale;
@@ -40,14 +42,12 @@
     
     self.pinchRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(onPinchGesture:)];
     [self.containerView addGestureRecognizer:self.pinchRecognizer];
+    
+    self.tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapGesture:)];
+    [self.containerView addGestureRecognizer:self.tapRecognizer];
+    
+    [self setGamepadModeWithPlayers:0];
 }
-
-/*
-- (UIStatusBarStyle)preferredStatusBarStyle
-{
-    return UIStatusBarStyleLightContent;
-}
-*/
 
 - (BOOL)prefersStatusBarHidden
 {
@@ -58,6 +58,8 @@
 {
     [super viewDidAppear:animated];
     [self run];
+    
+    [self hideExitButtonAfterDelay];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -83,6 +85,34 @@
         self.scale = MAX(0.25, MIN(1.0, gestureRecognizer.scale));
         [self updateRendererScale];
     }
+}
+
+- (void)onTapGesture:(UITapGestureRecognizer *)gestureRecognizer
+{
+    if (gestureRecognizer.state == UIGestureRecognizerStateRecognized)
+    {
+        [self showExitButtonWithHiding:YES];
+    }
+}
+
+- (void)showExitButtonWithHiding:(BOOL)hides
+{
+    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionAllowUserInteraction animations:^{
+        self.exitButton.alpha = 0.5;
+    } completion:^(BOOL finished) {
+        if (hides)
+        {
+            [self hideExitButtonAfterDelay];
+        }
+    }];
+}
+
+- (void)hideExitButtonAfterDelay
+{
+    [UIView animateWithDuration:3 delay:3 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionAllowUserInteraction animations:^{
+        self.exitButton.alpha = 0.1;
+    } completion:^(BOOL finished) {
+    }];
 }
 
 - (void)updateRendererScale
@@ -148,6 +178,11 @@
         {
             self.project.iconData = UIImagePNGRepresentation(thumb);
         }
+        
+        // exit button
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self showExitButtonWithHiding:NO];
+        });
     });
 }
 
@@ -173,13 +208,31 @@
 {
     switch (type)
     {
-        case ButtonTypeUp: return self.joypad.isDirUp;
-        case ButtonTypeDown: return self.joypad.isDirDown;
-        case ButtonTypeLeft: return self.joypad.isDirLeft;
-        case ButtonTypeRight: return self.joypad.isDirRight;
+        case ButtonTypeUp: return self.gamepad.isDirUp;
+        case ButtonTypeDown: return self.gamepad.isDirDown;
+        case ButtonTypeLeft: return self.gamepad.isDirLeft;
+        case ButtonTypeRight: return self.gamepad.isDirRight;
         case ButtonTypeA: return self.buttonA.isHighlighted;
         case ButtonTypeB: return self.buttonB.isHighlighted;
     }
+}
+
+- (void)setGamepadModeWithPlayers:(int)players
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (players >= 1)
+        {
+            self.gamepad.hidden = NO;
+            self.buttonA.hidden = NO;
+            self.buttonB.hidden = NO;
+        }
+        else
+        {
+            self.gamepad.hidden = YES;
+            self.buttonA.hidden = YES;
+            self.buttonB.hidden = YES;
+        }
+    });
 }
 
 @end

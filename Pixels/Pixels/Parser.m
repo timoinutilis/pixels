@@ -162,6 +162,9 @@
         case TTypeSymEnd:
             node = [self acceptEnd];
             break;
+        case TTypeSymGamepad:
+            node = [self acceptGamepad];
+            break;
         case TTypeSymColor:
             node = [self acceptColor];
             break;
@@ -213,6 +216,7 @@
         case TTypeSymBox:
         case TTypeSymBar:
         case TTypeSymText:
+        case TTypeSymGamepad:
             return YES;
             
         case TTypeSymEnd: {
@@ -410,6 +414,14 @@
 {
     EndNode *node = [[EndNode alloc] init];
     [self accept:TTypeSymEnd];
+    return node;
+}
+
+- (Node *)acceptGamepad
+{
+    GamepadNode *node = [[GamepadNode alloc] init];
+    [self accept:TTypeSymGamepad];
+    node.playersExpression = [self acceptExpression];
     return node;
 }
 
@@ -613,13 +625,31 @@
         case TTypeSymUp:
         case TTypeSymDown:
         case TTypeSymLeft:
-        case TTypeSymRight:
-        case TTypeSymButton: {
-            JoystickNode *node = [[JoystickNode alloc] init];
+        case TTypeSymRight: {
+            DirectionPadNode *node = [[DirectionPadNode alloc] init];
             node.type = self.token.type;
             [self accept:self.token.type];
             [self accept:TTypeSymBracketOpen];
             node.portExpression = [self acceptExpression];
+            [self accept:TTypeSymBracketClose];
+            return node;
+        }
+        case TTypeSymButton: {
+            ButtonNode *node = [[ButtonNode alloc] init];
+            [self accept:TTypeSymButton];
+            [self accept:TTypeSymBracketOpen];
+            node.portExpression = [self acceptExpression];
+            if (self.token.type == TTypeSymComma)
+            {
+                [self accept:TTypeSymComma];
+                node.buttonExpression = [self acceptExpression];
+            }
+            else
+            {
+                NumberNode *numberNode = [[NumberNode alloc] init];
+                numberNode.value = 0;
+                node.buttonExpression = numberNode;
+            }
             [self accept:TTypeSymBracketClose];
             return node;
         }

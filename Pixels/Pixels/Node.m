@@ -465,6 +465,18 @@
 @end
 
 
+@implementation GamepadNode
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    NSNumber *players = [self.playersExpression evaluateWithRunner:runner];
+    [runner.delegate setGamepadModeWithPlayers:players.intValue];
+    [runner next];
+    return nil;
+}
+
+@end
+
 
 @implementation ColorNode
 
@@ -622,7 +634,7 @@
 
 
 
-@implementation JoystickNode
+@implementation DirectionPadNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
 {
@@ -658,6 +670,38 @@
 
 @end
 
+
+@implementation ButtonNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.portExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.buttonExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    //    NSNumber *port = [self.portExpression evaluateWithRunner:runner];
+    NSNumber *button = [self.buttonExpression evaluateWithRunner:runner];
+    BOOL result = NO;
+    switch (button.intValue)
+    {
+        case 0:
+            result = [runner.delegate isButtonDown:ButtonTypeA] || [runner.delegate isButtonDown:ButtonTypeB];
+            break;
+            
+        case 1:
+            result = [runner.delegate isButtonDown:ButtonTypeA];
+            break;
+            
+        case 2:
+            result = [runner.delegate isButtonDown:ButtonTypeB];
+            break;
+    }
+    return @(result ? -1 : 0);
+}
+
+@end
 
 
 @implementation PointNode

@@ -41,6 +41,7 @@ typedef NS_ENUM(NSInteger, TType) {
     TTypeSymBar,
     TTypeSymText,
     TTypeSymEnd,
+    TTypeSymGamepad,
     
     // Functions
     TTypeSymUp,
