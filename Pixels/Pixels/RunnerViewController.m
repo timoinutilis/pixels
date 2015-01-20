@@ -110,7 +110,7 @@
 - (void)hideExitButtonAfterDelay
 {
     [UIView animateWithDuration:3 delay:3 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionAllowUserInteraction animations:^{
-        self.exitButton.alpha = 0.1;
+        self.exitButton.alpha = 0.05;
     } completion:^(BOOL finished) {
     }];
 }

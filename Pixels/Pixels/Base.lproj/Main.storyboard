@@ -126,7 +126,11 @@
                                 </variation>
                             </view>
                             <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U9l-B1-gng" userLabel="Exit Button">
-                                <rect key="frame" x="8" y="8" width="36" height="36"/>
+                                <rect key="frame" x="0.0" y="0.0" width="55" height="55"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="55" id="SJg-3h-Gmq"/>
+                                    <constraint firstAttribute="height" constant="55" id="ocj-hU-8qp"/>
+                                </constraints>
                                 <state key="normal" image="exit">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -159,8 +163,8 @@
                             <constraint firstItem="wgn-Os-cIh" firstAttribute="top" secondItem="7pe-HW-2Cc" secondAttribute="top" id="5cK-O7-fVw"/>
                             <constraint firstAttribute="bottom" secondItem="wgn-Os-cIh" secondAttribute="bottom" id="KXT-Er-Hxj"/>
                             <constraint firstItem="wgn-Os-cIh" firstAttribute="leading" secondItem="7pe-HW-2Cc" secondAttribute="leading" id="PqW-SW-bRW"/>
-                            <constraint firstItem="U9l-B1-gng" firstAttribute="top" secondItem="7pe-HW-2Cc" secondAttribute="top" constant="8" id="aUb-1W-ipI"/>
-                            <constraint firstItem="U9l-B1-gng" firstAttribute="leading" secondItem="7pe-HW-2Cc" secondAttribute="leading" constant="8" id="gHu-Cg-qnB"/>
+                            <constraint firstItem="U9l-B1-gng" firstAttribute="top" secondItem="7pe-HW-2Cc" secondAttribute="top" id="aUb-1W-ipI"/>
+                            <constraint firstItem="U9l-B1-gng" firstAttribute="leading" secondItem="7pe-HW-2Cc" secondAttribute="leading" id="gHu-Cg-qnB"/>
                             <constraint firstAttribute="trailing" secondItem="wgn-Os-cIh" secondAttribute="trailing" id="gZl-g8-tmR"/>
                             <constraint firstItem="DSM-fA-zCj" firstAttribute="leading" secondItem="7pe-HW-2Cc" secondAttribute="leading" constant="44" id="ie4-m0-UXh">
                                 <variation key="heightClass=compact" constant="11"/>
