@@ -18,15 +18,16 @@
         case TTypeNumber: return printable ? @"number" : nil;
         case TTypeIdentifier: return printable ? @"identifier" : nil;
         
+        case TTypeSymRem: return @"REM";
         case TTypeSymIf: return @"IF";
         case TTypeSymThen: return @"THEN";
         case TTypeSymElse: return @"ELSE";
         case TTypeSymGoto: return @"GOTO";
         case TTypeSymGosub: return @"GOSUB";
         case TTypeSymReturn: return @"RETURN";
-        case TTypeSymPrint: return @"PRINT";
         case TTypeSymFor: return @"FOR";
         case TTypeSymTo: return @"TO";
+        case TTypeSymStep: return @"STEP";
         case TTypeSymNext: return @"NEXT";
         case TTypeSymLet: return @"LET";
         case TTypeSymRepeat: return @"REPEAT";
@@ -46,6 +47,17 @@
         case TTypeSymText: return @"TEXT";
         case TTypeSymEnd: return @"END";
         case TTypeSymGamepad: return @"GAMEPAD";
+        case TTypeSymPrint: return @"PRINT";
+        case TTypeSymInput: return @"INPUT";
+        case TTypeSymData: return @"DATA";
+        case TTypeSymRead: return @"READ";
+        case TTypeSymRestore: return @"RESTORE";
+        case TTypeSymDim: return @"DIM";
+        case TTypeSymPaint: return @"PAINT";
+        case TTypeSymCircle: return @"CIRCLE";
+        case TTypeSymSprite: return @"SPRITE";
+        case TTypeSymPalette: return @"PALETTE";
+        case TTypeSymScroll: return @"SCROLL";
         
         case TTypeSymUp: return @"UP";
         case TTypeSymDown: return @"DOWN";
@@ -53,10 +65,31 @@
         case TTypeSymRight: return @"RIGHT";
         case TTypeSymButton: return @"BUTTON";
         case TTypeSymPoint: return @"POINT";
+        case TTypeSymLeftS: return @"LEFT$";
+        case TTypeSymRightS: return @"RIGHT$";
+        case TTypeSymMid: return @"MID$";
+        case TTypeSymInstr: return @"INSTR";
+        case TTypeSymChr: return @"CHR$";
+        case TTypeSymAsc: return @"ASC";
+        case TTypeSymLen: return @"LEN";
+        case TTypeSymVal: return @"VAL";
+        case TTypeSymStr: return @"STR$";
+        case TTypeSymHex: return @"HEX$";
+        case TTypeSymAbs: return @"ABS";
+        case TTypeSymAtn: return @"ATN";
+        case TTypeSymCos: return @"COS";
+        case TTypeSymExp: return @"EXP";
+        case TTypeSymInt: return @"INT";
+        case TTypeSymLog: return @"LOG";
         case TTypeSymRnd: return @"RND";
+        case TTypeSymSgn: return @"SGN";
+        case TTypeSymSin: return @"SIN";
+        case TTypeSymSqr: return @"SQR";
+        case TTypeSymTan: return @"TAN";
         
         case TTypeSymTrue: return @"TRUE";
         case TTypeSymFalse: return @"FALSE";
+        case TTypeSymPi: return @"PI";
         
         case TTypeSymOpEq: return @"=";
         case TTypeSymOpGrEq: return @">=";
@@ -72,8 +105,9 @@
         case TTypeSymOpDiv: return @"/";
         case TTypeSymOpMod: return @"MOD";
         case TTypeSymOpPow: return @"^";
-        case TTypeSymOpOr: return @"OR";
         case TTypeSymOpAnd: return @"AND";
+        case TTypeSymOpOr: return @"OR";
+        case TTypeSymOpXor: return @"XOR";
         case TTypeSymOpNot: return @"NOT";
         case TTypeSymColon: return @":";
         case TTypeSymComma: return @",";

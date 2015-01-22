@@ -18,18 +18,23 @@ body {
 
 <h2>Variables</h2>
 
-<h3>LET</h3>
-<pre>LET c=v</pre>
-
 <h3>Numbers</h3>
 
 <h3>Strings</h3>
 
 <h2>Arrays</h2>
 
+<p>Coming soon.</p>
+
 <h2>Constants</h2>
 
 <h2>Arithmetic operations</h2>
+
+<!--
+^ + - * / MOD
+= <> < > <= >=
+NOT AND OR XOR
+-->
 
 <h2>String operations</h2>
 
@@ -38,6 +43,36 @@ body {
 <h2>Labels</h2>
 
 <h1 id="4">String functions</h1>
+
+<h3>=LEFT$</h3>
+<pre>s$=LEFT$(string$,number)</pre>
+
+<h3>=RIGHT$</h3>
+<pre>s$=RIGHT$(string$,number)</pre>
+
+<h3>=MID$</h3>
+<pre>s$=MID$(string$,position,number)</pre>
+
+<h3>=INSTR</h3>
+<pre>v=INSTR(string$,search$[,position])</pre>
+
+<h3>=CHR$</h3>
+<pre>s$=CHR$(asc)</pre>
+
+<h3>=ASC</h3>
+<pre>v=ASC(string$)</pre>
+
+<h3>=LEN</h3>
+<pre>v=LEN(string$)</pre>
+
+<h3>=VAL</h3>
+<pre>v=VAL(string$)</pre>
+
+<h3>=STR$</h3>
+<pre>s$=STR$(number)</pre>
+
+<h3>=HEX$</h3>
+<pre>s$=HEX$(number)</pre>
 
 <h1 id="5">Graphics and text</h1>
 <h3>COLOR</h3>
@@ -48,17 +83,17 @@ body {
 <tr><td>2</td><td>light gray</td></tr>
 <tr><td>3</td><td>dark gray</td></tr>
 <tr><td>4</td><td>red</td></tr>
-<tr><td>5</td><td>brown</td></tr>
-<tr><td>6</td><td>orange</td></tr>
-<tr><td>7</td><td>yellow</td></tr>
-<tr><td>8</td><td>light green</td></tr>
+<tr><td>5</td><td>dark red</td></tr>
+<tr><td>6</td><td>brown</td></tr>
+<tr><td>7</td><td>orange</td></tr>
+<tr><td>8</td><td>yellow</td></tr>
 <tr><td>9</td><td>green</td></tr>
 <tr><td>10</td><td>dark green</td></tr>
 <tr><td>11</td><td>cyan</td></tr>
-<tr><td>12</td><td>cyan blue</td></tr>
-<tr><td>13</td><td>blue</td></tr>
+<tr><td>12</td><td>blue</td></tr>
+<tr><td>13</td><td>dark blue</td></tr>
 <tr><td>14</td><td>magenta</td></tr>
-<tr><td>15</td><td>violet</td></tr>
+<tr><td>15</td><td>purple</td></tr>
 </table>
 
 <h3>CLS</h3>
@@ -76,15 +111,20 @@ body {
 <h3>TEXT</h3>
 <pre>TEXT x,y,text$[,align]</pre>
 
+<h3>SCROLL</h3>
+<pre>SCROLL x1,y1 TO x2,y2,dx,dy</pre>
+
 <h3>=POINT</h3>
 <pre>v=POINT(x,y)</pre>
 
 <h1 id="6">Control structures</h1>
-<h3>IF ... THEN</h3>
-<pre>IF condition THEN command</pre>
+<h3>IF ... THEN ... ELSE</h3>
+<pre>IF condition THEN command [ELSE command]</pre>
 <pre>
 IF condition THEN
 commands
+[ELSE
+commands]
 END IF
 </pre>
 
@@ -99,9 +139,9 @@ END IF
 
 <h3>FOR ... NEXT</h3>
 <pre>
-FOR index=first TO last
+FOR index=first TO last [STEP step]
 commands
-NEXT index
+NEXT [index]
 </pre>
 
 <h3>REPEAT ... UNTIL</h3>
@@ -129,10 +169,46 @@ LOOP
 <pre>EXIT</pre>
 
 <h1 id="7">Maths commands</h1>
+
+<h3>=ABS</h3>
+<pre>v=ABS(x)</pre>
+
+<h3>=ATN</h3>
+<pre>v=ATN(x)</pre>
+
+<h3>=COS</h3>
+<pre>v=COS(x)</pre>
+
+<h3>=EXP</h3>
+<pre>v=EXP(x)</pre>
+
+<h3>=INT</h3>
+<pre>v=INT(x)</pre>
+
+<h3>=LOG</h3>
+<pre>v=LOG(x)</pre>
+
 <h3>=RND</h3>
 <pre>v=RND</pre>
 
+<h3>=SGN</h3>
+<pre>v=SGN(x)</pre>
+
+<h3>=SIN</h3>
+<pre>v=SIN(x)</pre>
+
+<h3>=SQR</h3>
+<pre>v=SQR(x)</pre>
+
+<h3>=TAN</h3>
+<pre>v=TAN(x)</pre>
+
+<h3>=PI</h3>
+<pre>v=PI</pre>
+
 <h1 id="8">Sprites</h1>
+
+<p>Coming soon.</p>
 
 <h1 id="9">User input</h1>
 
@@ -156,16 +232,24 @@ LOOP
 
 <h1 id="10">Sound</h1>
 
+<p>Coming soon.</p>
+
 <h1 id="11">Other commands</h1>
 
 <h3>PRINT</h3>
-<pre>PRINT value</pre>
+<p>Not supported.</p>
+
+<h3>INPUT</h3>
+<p>Not supported.</p>
 
 <h3>WAIT</h3>
 <pre>WAIT seconds</pre>
 
 <h3>END</h3>
 <pre>END</pre>
+
+<h3>REM</h3>
+<pre>REM comment</pre>
 
 <h3>=TRUE</h3>
 <pre>v=TRUE</pre>
