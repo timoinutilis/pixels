@@ -121,7 +121,12 @@
 {
     Token *firstToken = self.token;
     Node *node;
-    switch (self.token.type)
+    
+    if (self.token.type == TTypeIdentifier && ![self isLabel])
+    {
+        node = [self acceptLet];
+    }
+    else switch (self.token.type)
     {
         case TTypeSymIf:
             node = [self acceptIf];
@@ -284,7 +289,10 @@
 - (Node *)acceptLet
 {
     LetNode *node = [[LetNode alloc] init];
-    [self accept:TTypeSymLet];
+    if (self.token.type == TTypeSymLet)
+    {
+        [self accept:TTypeSymLet];
+    }
     node.variable = [self acceptVariable];
     [self accept:TTypeSymOpEq];
     node.expression = [self acceptExpression];

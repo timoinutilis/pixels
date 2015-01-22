@@ -180,10 +180,27 @@
             }
             if (foundSymbol)
             {
-                Token *token = [[Token alloc] init];
-                token.type = [self.symbols[foundSymbol] intValue];
-                token.position = tokenPosition;
-                [tokens addObject:token];
+                TType type = [self.symbols[foundSymbol] intValue];
+                if (type == TTypeSymRem)
+                {
+                    // REM comment, skip until end of line
+                    while (textPos < len)
+                    {
+                        unichar textCharacter = [text characterAtIndex:textPos];
+                        textPos++;
+                        if (textCharacter == '\n')
+                        {
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    Token *token = [[Token alloc] init];
+                    token.type = type;
+                    token.position = tokenPosition;
+                    [tokens addObject:token];
+                }
                 found = YES;
             }
         }
