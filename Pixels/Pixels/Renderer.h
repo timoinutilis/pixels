@@ -19,6 +19,7 @@
 - (void)drawFromX:(int)fromX Y:(int)fromY toX:(int)toX Y:(int)toY;
 - (void)drawBoxFromX:(int)fromX Y:(int)fromY toX:(int)toX Y:(int)toY;
 - (void)fillBoxFromX:(int)fromX Y:(int)fromY toX:(int)toX Y:(int)toY;
+- (void)scrollFromX:(int)fromX Y:(int)fromY toX:(int)toX Y:(int)toY deltaX:(int)deltaX Y:(int)deltaY;
 - (void)drawCircleX:(int)x Y:(int)y radiusX:(int)radiusX radiusY:(int)radiusY;
 - (void)fillCircleX:(int)x Y:(int)y radiusX:(int)radiusX radiusY:(int)radiusY;
 - (void)drawText:(NSString *)text x:(int)x y:(int)y;

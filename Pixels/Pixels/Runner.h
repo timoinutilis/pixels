@@ -15,6 +15,7 @@
 
 @property (weak) id<RunnerDelegate> delegate;
 @property Renderer *renderer;
+@property int printLine;
 
 - (instancetype)initWithRunnable:(Runnable *)runnable;
 - (BOOL)isFinished;

@@ -153,6 +153,40 @@ uint8_t FontWidth[256] = {2, 2, 2, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 
     }
 }
 
+- (void)scrollFromX:(int)fromX Y:(int)fromY toX:(int)toX Y:(int)toY deltaX:(int)deltaX Y:(int)deltaY
+{
+    if (fromX > toX)
+    {
+        int value = toX; toX = fromX; fromX = value;
+    }
+    if (fromY > toY)
+    {
+        int value = toY; toY = fromY; fromY = value;
+    }
+    if (fromX < RendererSize && fromY < RendererSize && toX >= 0 && toY >= 0)
+    {
+        if (fromX < 0) fromX = 0;
+        if (fromY < 0) fromY = 0;
+        if (toX >= RendererSize) toX = RendererSize - 1;
+        if (toY >= RendererSize) toY = RendererSize - 1;
+        
+        int width = toX - fromX + 1;
+        int height = toY - fromY + 1;
+        
+        for (int oy = 0; oy < height; oy++)
+        {
+            for (int ox = 0; ox < width; ox++)
+            {
+                int x = (deltaX > 0) ? toX - ox : fromX + ox;
+                int y = (deltaY > 0) ? toY - oy : fromY + oy;
+                int getX = MAX(fromX, MIN(toX, x - deltaX));
+                int getY = MAX(fromY, MIN(toY, y - deltaY));
+                _pixelBuffer[y][x] = _pixelBuffer[getY][getX];
+            }
+        }
+    }
+}
+
 - (void)drawCircleX:(int)x Y:(int)y radiusX:(int)radiusX radiusY:(int)radiusY
 {
     

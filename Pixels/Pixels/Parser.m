@@ -122,7 +122,7 @@
     Token *firstToken = self.token;
     Node *node;
     
-    if (self.token.type == TTypeIdentifier && ![self isLabel])
+    if ([self isImplicitLet])
     {
         node = [self acceptLet];
     }
@@ -186,6 +186,9 @@
         case TTypeSymBar:
             node = [self acceptBox];
             break;
+        case TTypeSymScroll:
+            node = [self acceptScroll];
+            break;
         case TTypeSymText:
             node = [self acceptText];
             break;
@@ -200,6 +203,10 @@
 
 - (BOOL)isCommand
 {
+    if ([self isImplicitLet])
+    {
+        return YES;
+    }
     switch (self.token.type)
     {
         case TTypeSymIf:
@@ -220,6 +227,7 @@
         case TTypeSymLine:
         case TTypeSymBox:
         case TTypeSymBar:
+        case TTypeSymScroll:
         case TTypeSymText:
         case TTypeSymGamepad:
             return YES;
@@ -249,6 +257,11 @@
 - (BOOL)isLabel
 {
     return (self.token.type == TTypeIdentifier && [self nextToken].type == TTypeSymColon);
+}
+
+- (BOOL)isImplicitLet
+{
+    return (self.token.type == TTypeIdentifier && ![self isLabel]);
 }
 
 #pragma mark - Commands
@@ -497,6 +510,24 @@
     return node;
 }
 
+- (Node *)acceptScroll
+{
+    ScrollNode *node = [[ScrollNode alloc] init];
+    [self accept:TTypeSymScroll];
+    node.fromXExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.fromYExpression = [self acceptExpression];
+    [self accept:TTypeSymTo];
+    node.toXExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.toYExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.deltaXExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.deltaYExpression = [self acceptExpression];
+    return node;
+}
+
 - (Node *)acceptText
 {
     TextNode *node = [[TextNode alloc] init];
@@ -527,12 +558,12 @@
     if (!operatorLevels)
     {
         operatorLevels = @[
-                           @[@(TTypeSymOpOr)],
+                           @[@(TTypeSymOpOr),@(TTypeSymOpXor)],
                            @[@(TTypeSymOpAnd)],
                            @[@(TTypeSymOpEq), @(TTypeSymOpUneq)],
                            @[@(TTypeSymOpGr), @(TTypeSymOpLe), @(TTypeSymOpGrEq), @(TTypeSymOpLeEq)],
                            @[@(TTypeSymOpPlus), @(TTypeSymOpMinus)],
-                           @[@(TTypeSymOpMul), @(TTypeSymOpDiv), @(TTypeSymOpMod)]
+                           @[@(TTypeSymOpMul), @(TTypeSymOpDiv), @(TTypeSymOpMod), @(TTypeSymOpPow)]
                            ];
     }
     
@@ -607,7 +638,7 @@
             }
             case TTypeSymFalse: {
                 primaryNode = [[NumberNode alloc] initWithValue:0];
-                [self accept:TTypeSymTrue];
+                [self accept:TTypeSymFalse];
                 break;
             }
             case TTypeSymPi: {

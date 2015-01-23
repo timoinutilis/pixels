@@ -251,7 +251,17 @@
     id value = [self.expression evaluateWithRunner:runner];
     if (runner.delegate)
     {
-        [runner.delegate runnerLog:[NSString stringWithFormat:@"%@", value]];
+        NSString *text = [NSString stringWithFormat:@"%@", value];
+        int fontHeight = 6;
+        int screenSize = runner.renderer.size;
+        int maxLines = screenSize / fontHeight - 1;
+        [runner.renderer drawText:text x:0 y:runner.printLine * fontHeight];
+        runner.printLine++;
+        if (runner.printLine > maxLines)
+        {
+            [runner.renderer scrollFromX:0 Y:0 toX:screenSize Y:screenSize deltaX:0 Y:-fontHeight];
+            runner.printLine = maxLines;
+        }
     }
     [runner next];
     return nil;
@@ -526,6 +536,7 @@
 {
     NSNumber *color = [self.color evaluateWithRunner:runner];
     [runner.renderer clearWithColorIndex:color.intValue];
+    runner.printLine = 0;
     [runner next];
     return nil;
 }
@@ -604,6 +615,35 @@
     {
         [runner.renderer drawBoxFromX:fromX.intValue Y:fromY.intValue toX:toX.intValue Y:toY.intValue];
     }
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
+@implementation ScrollNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.fromXExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.fromYExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.toXExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.toYExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.deltaXExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.deltaYExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    NSNumber *fromX = [self.fromXExpression evaluateWithRunner:runner];
+    NSNumber *fromY = [self.fromYExpression evaluateWithRunner:runner];
+    NSNumber *toX = [self.toXExpression evaluateWithRunner:runner];
+    NSNumber *toY = [self.toYExpression evaluateWithRunner:runner];
+    NSNumber *deltaX = [self.deltaXExpression evaluateWithRunner:runner];
+    NSNumber *deltaY = [self.deltaYExpression evaluateWithRunner:runner];
+    [runner.renderer scrollFromX:fromX.intValue Y:fromY.intValue toX:toX.intValue Y:toY.intValue deltaX:deltaX.intValue Y:deltaY.intValue];
     [runner next];
     return nil;
 }
@@ -1134,6 +1174,11 @@
             int rightInt = ((NSNumber *)rightValue).intValue;
             return @(leftInt | rightInt);
         }
+        case TTypeSymOpXor: {
+            int leftInt = ((NSNumber *)leftValue).intValue;
+            int rightInt = ((NSNumber *)rightValue).intValue;
+            return @(leftInt ^ rightInt);
+        }
         case TTypeSymOpAnd: {
             int leftInt = ((NSNumber *)leftValue).intValue;
             int rightInt = ((NSNumber *)rightValue).intValue;
@@ -1164,6 +1209,10 @@
         }
         case TTypeSymOpMod: {
             int result = ((NSNumber *)leftValue).intValue % ((NSNumber *)rightValue).intValue;
+            return @(result);
+        }
+        case TTypeSymOpPow: {
+            int result = powf(((NSNumber *)leftValue).floatValue, ((NSNumber *)rightValue).floatValue);
             return @(result);
         }
         case TTypeSymOpEq:
@@ -1236,11 +1285,7 @@
         case TTypeSymOpMinus:
             return @(-value.floatValue);
         case TTypeSymOpNot:
-            if (value.intValue == 0)
-            {
-                return @(-1);
-            }
-            return @(0);
+            return @(~value.intValue);
         default: {
             // invalid
         }

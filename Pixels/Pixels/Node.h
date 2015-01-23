@@ -131,6 +131,15 @@
 @property BOOL fill;
 @end
 
+@interface ScrollNode : Node
+@property Node *fromXExpression;
+@property Node *fromYExpression;
+@property Node *toXExpression;
+@property Node *toYExpression;
+@property Node *deltaXExpression;
+@property Node *deltaYExpression;
+@end
+
 @interface TextNode : Node
 @property Node *valueExpression;
 @property Node *xExpression;
