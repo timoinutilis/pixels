@@ -353,6 +353,15 @@
     node.startExpression = [self acceptExpression];
     [self accept:TTypeSymTo];
     node.endExpression = [self acceptExpression];
+    if (self.token.type == TTypeSymStep)
+    {
+        [self accept:TTypeSymStep];
+        node.stepExpression = [self acceptExpression];
+    }
+    else
+    {
+        node.stepExpression = [[NumberNode alloc] initWithValue:1.0];
+    }
     [self acceptEol];
     
     node.commands = [self acceptCommandLines];
@@ -576,10 +585,8 @@
                 break;
             }
             case TTypeNumber: {
-                NumberNode *node = [[NumberNode alloc] init];
-                node.value = self.token.attrNumber;
+                primaryNode = [[NumberNode alloc] initWithValue:self.token.attrNumber];
                 [self accept:TTypeNumber];
-                primaryNode = node;
                 break;
             }
             case TTypeString: {
@@ -594,17 +601,18 @@
                 break;
             }
             case TTypeSymTrue: {
-                NumberNode *node = [[NumberNode alloc] init];
-                node.value = -1;
+                primaryNode = [[NumberNode alloc] initWithValue:-1];
                 [self accept:TTypeSymTrue];
-                primaryNode = node;
                 break;
             }
             case TTypeSymFalse: {
-                NumberNode *node = [[NumberNode alloc] init];
-                node.value = 0;
-                [self accept:TTypeSymFalse];
-                primaryNode = node;
+                primaryNode = [[NumberNode alloc] initWithValue:0];
+                [self accept:TTypeSymTrue];
+                break;
+            }
+            case TTypeSymPi: {
+                primaryNode = [[NumberNode alloc] initWithValue:M_PI];
+                [self accept:TTypeSymPi];
                 break;
             }
             default: {
@@ -654,9 +662,7 @@
             }
             else
             {
-                NumberNode *numberNode = [[NumberNode alloc] init];
-                numberNode.value = 0;
-                node.buttonExpression = numberNode;
+                node.buttonExpression = [[NumberNode alloc] initWithValue:0];
             }
             [self accept:TTypeSymBracketClose];
             return node;
@@ -675,6 +681,124 @@
             Maths0Node *node = [[Maths0Node alloc] init];
             node.type = self.token.type;
             [self accept:self.token.type];
+            return node;
+        }
+        case TTypeSymAbs:
+        case TTypeSymAtn:
+        case TTypeSymCos:
+        case TTypeSymExp:
+        case TTypeSymInt:
+        case TTypeSymLog:
+        case TTypeSymSgn:
+        case TTypeSymSin:
+        case TTypeSymSqr:
+        case TTypeSymTan: {
+            Maths1Node *node = [[Maths1Node alloc] init];
+            node.type = self.token.type;
+            [self accept:self.token.type];
+            [self accept:TTypeSymBracketOpen];
+            node.xExpression = [self acceptExpression];
+            [self accept:TTypeSymBracketClose];
+            return node;
+        }
+
+        case TTypeSymLeftS: {
+            LeftSNode *node = [[LeftSNode alloc] init];
+            [self accept:TTypeSymLeftS];
+            [self accept:TTypeSymBracketOpen];
+            node.stringExpression = [self acceptExpression];
+            [self accept:TTypeSymComma];
+            node.numberExpression = [self acceptExpression];
+            [self accept:TTypeSymBracketClose];
+            return node;
+        }
+        case TTypeSymRightS: {
+            RightSNode *node = [[RightSNode alloc] init];
+            [self accept:TTypeSymRightS];
+            [self accept:TTypeSymBracketOpen];
+            node.stringExpression = [self acceptExpression];
+            [self accept:TTypeSymComma];
+            node.numberExpression = [self acceptExpression];
+            [self accept:TTypeSymBracketClose];
+            return node;
+        }
+        case TTypeSymMid: {
+            MidNode *node = [[MidNode alloc] init];
+            [self accept:TTypeSymMid];
+            [self accept:TTypeSymBracketOpen];
+            node.stringExpression = [self acceptExpression];
+            [self accept:TTypeSymComma];
+            node.positionExpression = [self acceptExpression];
+            [self accept:TTypeSymComma];
+            node.numberExpression = [self acceptExpression];
+            [self accept:TTypeSymBracketClose];
+            return node;
+        }
+        case TTypeSymInstr: {
+            InstrNode *node = [[InstrNode alloc] init];
+            [self accept:TTypeSymInstr];
+            [self accept:TTypeSymBracketOpen];
+            node.stringExpression = [self acceptExpression];
+            [self accept:TTypeSymComma];
+            node.searchExpression = [self acceptExpression];
+            if (self.token.type == TTypeSymComma)
+            {
+                [self accept:TTypeSymComma];
+                node.positionExpression = [self acceptExpression];
+            }
+            else
+            {
+                node.positionExpression = [[NumberNode alloc] initWithValue:1.0];
+            }
+            [self accept:TTypeSymBracketClose];
+            return node;
+        }
+        case TTypeSymChr: {
+            ChrNode *node = [[ChrNode alloc] init];
+            [self accept:TTypeSymChr];
+            [self accept:TTypeSymBracketOpen];
+            node.asciiExpression = [self acceptExpression];
+            [self accept:TTypeSymBracketClose];
+            return node;
+        }
+        case TTypeSymAsc: {
+            AscNode *node = [[AscNode alloc] init];
+            [self accept:TTypeSymAsc];
+            [self accept:TTypeSymBracketOpen];
+            node.stringExpression = [self acceptExpression];
+            [self accept:TTypeSymBracketClose];
+            return node;
+        }
+        case TTypeSymLen: {
+            LenNode *node = [[LenNode alloc] init];
+            [self accept:TTypeSymLen];
+            [self accept:TTypeSymBracketOpen];
+            node.stringExpression = [self acceptExpression];
+            [self accept:TTypeSymBracketClose];
+            return node;
+        }
+        case TTypeSymVal: {
+            ValNode *node = [[ValNode alloc] init];
+            [self accept:TTypeSymVal];
+            [self accept:TTypeSymBracketOpen];
+            node.stringExpression = [self acceptExpression];
+            [self accept:TTypeSymBracketClose];
+            return node;
+        }
+        case TTypeSymStr: {
+            StrNode *node = [[StrNode alloc] init];
+            [self accept:TTypeSymStr];
+            [self accept:TTypeSymBracketOpen];
+            node.numberExpression = [self acceptExpression];
+            [self accept:TTypeSymBracketClose];
+            return node;
+        }
+        case TTypeSymHex: {
+            HexNode *node = [[HexNode alloc] init];
+            [self accept:TTypeSymHex];
+            [self accept:TTypeSymBracketOpen];
+            node.numberExpression = [self acceptExpression];
+            [self accept:TTypeSymBracketClose];
             return node;
         }
         default:

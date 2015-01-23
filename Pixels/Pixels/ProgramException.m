@@ -27,6 +27,11 @@
     return [[ProgramException alloc] initWithName:@"TypeMismatch" reason:@"Type mismatch" userInfo:@{@"token": node.token}];
 }
 
++ (ProgramException *)invalidParameterExceptionWithNode:(Node *)node
+{
+    return [[ProgramException alloc] initWithName:@"InvalidParameter" reason:@"Invalid parameter" userInfo:@{@"token": node.token}];
+}
+
 - (NSUInteger)position
 {
     if (self.userInfo[@"position"])

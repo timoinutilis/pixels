@@ -10,14 +10,6 @@ GOSUB
 RETURN
 IF THEN ELSE (END IF)
 FOR (STEP) NEXT
-              LET own1 = limit
-              LET own2 = increment
-              LET v = initial-value
-       line1  IF (v-own1) * SGN (own2) > 0 THEN line2
-              (block)
-              LET v = v + own2
-              GOTO line1
-       line2  REM continued in sequence
 PRINT *
 INPUT *
 READ *

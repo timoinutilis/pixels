@@ -25,6 +25,7 @@
 
 @interface NumberNode : Node
 @property float value;
+- (instancetype)initWithValue:(float)value;
 @end
 
 @interface StringNode : Node
@@ -65,6 +66,7 @@
 @property VariableNode *variable;
 @property Node *startExpression;
 @property Node *endExpression;
+@property Node *stepExpression;
 @property NSArray *commands;
 @end
 
@@ -158,6 +160,52 @@
 @interface Maths1Node : Node
 @property TType type;
 @property Node *xExpression;
+@end
+
+@interface LeftSNode : Node
+@property Node *stringExpression;
+@property Node *numberExpression;
+@end
+
+@interface RightSNode : Node
+@property Node *stringExpression;
+@property Node *numberExpression;
+@end
+
+@interface MidNode : Node
+@property Node *stringExpression;
+@property Node *positionExpression;
+@property Node *numberExpression;
+@end
+
+@interface InstrNode : Node
+@property Node *stringExpression;
+@property Node *searchExpression;
+@property Node *positionExpression;
+@end
+
+@interface ChrNode : Node
+@property Node *asciiExpression;
+@end
+
+@interface AscNode : Node
+@property Node *stringExpression;
+@end
+
+@interface LenNode : Node
+@property Node *stringExpression;
+@end
+
+@interface ValNode : Node
+@property Node *stringExpression;
+@end
+
+@interface StrNode : Node
+@property Node *numberExpression;
+@end
+
+@interface HexNode : Node
+@property Node *numberExpression;
 @end
 
 @interface Operator2Node : Node

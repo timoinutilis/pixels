@@ -17,5 +17,6 @@
 + (ProgramException *)exceptionWithName:(NSString *)name reason:(NSString *)reason position:(NSUInteger)position;
 + (ProgramException *)exceptionWithName:(NSString *)name reason:(NSString *)reason token:(Token *)token;
 + (ProgramException *)typeMismatchExceptionWithNode:(Node *)node;
++ (ProgramException *)invalidParameterExceptionWithNode:(Node *)node;
 
 @end

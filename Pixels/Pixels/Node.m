@@ -48,6 +48,15 @@
 
 @implementation NumberNode
 
+- (instancetype)initWithValue:(float)value
+{
+    if (self = [super init])
+    {
+        self.value = value;
+    }
+    return self;
+}
+
 - (id)evaluateWithRunner:(Runner *)runner
 {
     return @(self.value);
@@ -252,6 +261,11 @@
 
 
 
+@interface ForNextNode ()
+@property float limit;
+@property float increment;
+@end
+
 @implementation ForNextNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
@@ -259,6 +273,7 @@
     [self.variable prepareWithRunnable:runnable pass:pass canBeString:NO];
     [self.startExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
     [self.endExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.stepExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
     
     [runnable prepareNodes:self.commands pass:pass];
 }
@@ -267,9 +282,13 @@
 {
     NSNumber *startValue = [self.startExpression evaluateWithRunner:runner];
     NSNumber *endValue = [self.endExpression evaluateWithRunner:runner];
+    NSNumber *stepValue = [self.stepExpression evaluateWithRunner:runner];
     
     [runner setValue:startValue forVariable:self.variable];
-    if (startValue.floatValue <= endValue.floatValue)
+    self.limit = endValue.floatValue;
+    self.increment = stepValue.floatValue;
+    
+    if ((self.increment > 0 && startValue.floatValue <= self.limit) || (self.increment < 0 && startValue.floatValue >= self.limit))
     {
         [runner addSequenceWithNodes:self.commands isLoop:YES parent:self];
     }
@@ -283,10 +302,9 @@
 - (void)endOfLoopWithRunner:(Runner *)runner
 {
     NSNumber *oldValue = [runner valueOfVariable:self.variable];
-    NSNumber *value = @(oldValue.floatValue + 1);
-    NSNumber *endValue = [self.endExpression evaluateWithRunner:runner];
+    NSNumber *value = @(oldValue.floatValue + self.increment);
     [runner setValue:value forVariable:self.variable];
-    if (value.floatValue > endValue.floatValue)
+    if ((self.increment > 0 && value.floatValue > self.limit) || (self.increment < 0 && value.floatValue < self.limit))
     {
         [runner exitLoop];
     }
@@ -731,7 +749,7 @@
     switch (self.type)
     {
         case TTypeSymRnd:
-            result = arc4random() / ((float)UINT32_MAX + 1.0);
+            result = arc4random() / ((float)UINT32_MAX + 1.0); rand();
             break;
         default:
             break;
@@ -745,10 +763,324 @@
 
 @implementation Maths1Node
 
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.xExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
 - (id)evaluateWithRunner:(Runner *)runner
 {
     NSNumber *x = [self.xExpression evaluateWithRunner:runner];
-    return x; //TODO
+    float value = x.floatValue;
+    float result = 0;
+    switch (self.type)
+    {
+        case TTypeSymAbs:
+            result = fabsf(value);
+            break;
+        case TTypeSymAtn:
+            result = atanf(value);
+            break;
+        case TTypeSymCos:
+            result = cosf(value);
+            break;
+        case TTypeSymExp:
+            result = expf(value);
+            break;
+        case TTypeSymInt:
+            result = floorf(value);
+            break;
+        case TTypeSymLog:
+            if (value <= 0)
+            {
+                @throw [ProgramException invalidParameterExceptionWithNode:self];
+            }
+            result = logf(value);
+            break;
+        case TTypeSymSgn:
+            result = (value > 0) ? 1 : (value < 0) ? -1 : 0;
+            break;
+        case TTypeSymSin:
+            result = sinf(value);
+            break;
+        case TTypeSymSqr:
+            if (value < 0)
+            {
+                @throw [ProgramException invalidParameterExceptionWithNode:self];
+            }
+            result = sqrtf(value);
+            break;
+        case TTypeSymTan:
+            result = tanf(value);
+            break;
+        default:
+            break;
+    }
+    return @(result);
+}
+
+@end
+
+
+
+@implementation LeftSNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.stringExpression prepareWithRunnable:runnable pass:pass canBeString:YES];
+    [self.numberExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    NSString *string = [self.stringExpression evaluateWithRunner:runner];
+    NSNumber *number = [self.numberExpression evaluateWithRunner:runner];
+    if (number.intValue < 0)
+    {
+        @throw [ProgramException invalidParameterExceptionWithNode:self];
+    }
+    if (number.intValue >= string.length)
+    {
+        return string;
+    }
+    return [string substringToIndex:number.intValue];
+}
+
+- (BOOL)returnsString
+{
+    return YES;
+}
+
+@end
+
+
+
+@implementation RightSNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.stringExpression prepareWithRunnable:runnable pass:pass canBeString:YES];
+    [self.numberExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    NSString *string = [self.stringExpression evaluateWithRunner:runner];
+    NSNumber *number = [self.numberExpression evaluateWithRunner:runner];
+    NSUInteger len = string.length;
+    if (number.intValue < 0)
+    {
+        @throw [ProgramException invalidParameterExceptionWithNode:self];
+    }
+    if (number.intValue >= len)
+    {
+        return string;
+    }
+    return [string substringFromIndex:len - number.intValue];
+}
+
+- (BOOL)returnsString
+{
+    return YES;
+}
+
+@end
+
+
+
+@implementation MidNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.stringExpression prepareWithRunnable:runnable pass:pass canBeString:YES];
+    [self.positionExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.numberExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    NSString *string = [self.stringExpression evaluateWithRunner:runner];
+    NSNumber *position = [self.positionExpression evaluateWithRunner:runner];
+    NSNumber *number = [self.numberExpression evaluateWithRunner:runner];
+    NSUInteger len = string.length;
+    if (position.intValue < 1 || number.intValue < 1)
+    {
+        @throw [ProgramException invalidParameterExceptionWithNode:self];
+    }
+    if (position.intValue - 1 + number.intValue > len)
+    {
+        return [string substringFromIndex:position.intValue - 1];
+    }
+    return [string substringWithRange:NSMakeRange(position.intValue - 1, number.intValue)];
+}
+
+- (BOOL)returnsString
+{
+    return YES;
+}
+
+@end
+
+
+
+@implementation InstrNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.stringExpression prepareWithRunnable:runnable pass:pass canBeString:YES];
+    [self.searchExpression prepareWithRunnable:runnable pass:pass canBeString:YES];
+    [self.positionExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    NSString *string = [self.stringExpression evaluateWithRunner:runner];
+    NSString *search = [self.searchExpression evaluateWithRunner:runner];
+    NSNumber *position = [self.positionExpression evaluateWithRunner:runner];
+    NSUInteger len = string.length;
+    
+    if (position.intValue < 1)
+    {
+        @throw [ProgramException invalidParameterExceptionWithNode:self];
+    }
+    if (position.intValue > len)
+    {
+        return @(0);
+    }
+    
+    NSRange range = [string rangeOfString:search options:0 range:NSMakeRange(position.intValue - 1, len - position.intValue + 1)];
+    if (range.location == NSNotFound)
+    {
+        return @(0);
+    }
+    return @(range.location + 1);
+}
+
+@end
+
+
+
+@implementation ChrNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.asciiExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    NSNumber *ascii = [self.asciiExpression evaluateWithRunner:runner];
+    if (ascii.intValue < 0 || ascii.intValue > 127)
+    {
+        @throw [ProgramException invalidParameterExceptionWithNode:self];
+    }
+    const unichar character = (const unichar)ascii.intValue;
+    return [NSString stringWithCharacters:&character length:1];
+}
+
+- (BOOL)returnsString
+{
+    return YES;
+}
+
+@end
+
+
+
+@implementation AscNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.stringExpression prepareWithRunnable:runnable pass:pass canBeString:YES];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    NSString *string = [self.stringExpression evaluateWithRunner:runner];
+    if (string.length < 1)
+    {
+        @throw [ProgramException invalidParameterExceptionWithNode:self];
+    }
+    unichar character = [string characterAtIndex:0];
+    return @((int)character);
+}
+
+@end
+
+
+
+@implementation LenNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.stringExpression prepareWithRunnable:runnable pass:pass canBeString:YES];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    NSString *string = [self.stringExpression evaluateWithRunner:runner];
+    return @(string.length);
+}
+
+@end
+
+
+
+@implementation ValNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.stringExpression prepareWithRunnable:runnable pass:pass canBeString:YES];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    NSString *string = [self.stringExpression evaluateWithRunner:runner];
+    return @(string.floatValue);
+}
+
+@end
+
+
+
+@implementation StrNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.numberExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    NSNumber *number = [self.numberExpression evaluateWithRunner:runner];
+    return number.stringValue;
+}
+
+- (BOOL)returnsString
+{
+    return YES;
+}
+
+@end
+
+
+
+@implementation HexNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.numberExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    NSNumber *number = [self.numberExpression evaluateWithRunner:runner];
+    return [NSString stringWithFormat:@"%X", number.intValue];
+}
+
+- (BOOL)returnsString
+{
+    return YES;
 }
 
 @end
