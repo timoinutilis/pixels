@@ -126,14 +126,14 @@
 		9276F3911A1D289C0060E909 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		9276F3931A1D289C0060E909 /* EditorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EditorViewController.h; sourceTree = "<group>"; };
 		9276F3941A1D289C0060E909 /* EditorViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EditorViewController.m; sourceTree = "<group>"; };
-		9276F3971A1D289C0060E909 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		9276F3991A1D289C0060E909 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		9276F39C1A1D289C0060E909 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		9276F3A21A1D289C0060E909 /* LowRes Coder Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "LowRes Coder Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9276F3A71A1D289C0060E909 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9276F3A81A1D289C0060E909 /* PixelsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PixelsTests.m; sourceTree = "<group>"; };
 		9276F3B21A1D29BF0060E909 /* Scanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scanner.h; sourceTree = "<group>"; };
 		9276F3B31A1D29BF0060E909 /* Scanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Scanner.m; sourceTree = "<group>"; };
+		927E2FC81A72586E006C9B9C /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		927E2FC91A72586E006C9B9C /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Main.storyboard; sourceTree = "<group>"; };
 		928FB8971A5C804200EA377F /* GORSeparatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GORSeparatorView.h; sourceTree = "<group>"; };
 		928FB8981A5C804200EA377F /* GORSeparatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GORSeparatorView.m; sourceTree = "<group>"; };
 		9293CFCE1A5D4B0B0099C847 /* DefaultProjects.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = DefaultProjects.json; sourceTree = "<group>"; };
@@ -489,7 +489,6 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
-				Base,
 			);
 			mainGroup = 9276F3801A1D289C0060E909;
 			productRefGroup = 9276F38A1A1D289C0060E909 /* Products */;
@@ -597,7 +596,7 @@
 		9276F3961A1D289C0060E909 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				9276F3971A1D289C0060E909 /* Base */,
+				927E2FC91A72586E006C9B9C /* en */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -605,7 +604,7 @@
 		9276F39B1A1D289C0060E909 /* LaunchScreen.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				9276F39C1A1D289C0060E909 /* Base */,
+				927E2FC81A72586E006C9B9C /* en */,
 			);
 			name = LaunchScreen.xib;
 			sourceTree = "<group>";
