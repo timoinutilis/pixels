@@ -151,6 +151,9 @@
 - (void)awakeFromNib
 {
     self.nameLabel.text = @"Project Name";
+    CALayer *imageLayer = self.previewImageView.layer;
+    imageLayer.cornerRadius = 4;
+    imageLayer.masksToBounds = YES;
 }
 
 - (void)setProject:(Project *)project
@@ -169,7 +172,7 @@
     }
     else
     {
-        self.previewImageView.image = [UIImage imageNamed:@"dummy_project_icon"];
+        self.previewImageView.image = [UIImage imageNamed:@"icon_project"];
     }
 }
 

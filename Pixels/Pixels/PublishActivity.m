@@ -35,7 +35,7 @@ NSString *const LowResCoderShare = @"LowResCoderShare";
 
 - (UIImage *)activityImage
 {
-    return [UIImage imageNamed:@"dummy_project_icon"];
+    return [UIImage imageNamed:@"icon_share"];
 }
 
 - (BOOL)canPerformWithActivityItems:(NSArray *)activityItems

@@ -84,6 +84,8 @@
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onKeyboardDoneTapped:)];
     [buttons addObject:doneButton];
     
+    self.keyboardToolbar.tintColor = self.view.tintColor;
+    
     self.keyboardToolbar.items = buttons;
     self.sourceCodeTextView.inputAccessoryView = self.keyboardToolbar;
 }
@@ -141,6 +143,7 @@
     
     [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
     
+    alert.view.tintColor = self.view.tintColor;
     [self presentViewController:alert animated:YES completion:nil];
 }
 
@@ -165,6 +168,7 @@
     {
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Example programs cannot be deleted." message:nil preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+        alert.view.tintColor = self.view.tintColor;
         [self presentViewController:alert animated:YES completion:nil];
     }
     else
@@ -179,6 +183,7 @@
         
         [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
         
+        alert.view.tintColor = self.view.tintColor;
         [self presentViewController:alert animated:YES completion:nil];
     }
 }
@@ -195,6 +200,7 @@
     
     [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
     
+    alert.view.tintColor = self.view.tintColor;
     [self presentViewController:alert animated:YES completion:nil];
 }
 
@@ -204,6 +210,7 @@
     {
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Example programs cannot renamed." message:nil preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+        alert.view.tintColor = self.view.tintColor;
         [self presentViewController:alert animated:YES completion:nil];
     }
     else
@@ -224,6 +231,7 @@
         
         [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
         
+        alert.view.tintColor = self.view.tintColor;
         [self presentViewController:alert animated:YES completion:nil];
     }
 }
@@ -234,6 +242,7 @@
     {
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"This program is empty. Write something!" message:nil preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+        alert.view.tintColor = self.view.tintColor;
         [self presentViewController:alert animated:YES completion:nil];
     }
     else
@@ -290,6 +299,7 @@
             self.sourceCodeTextView.selectedRange = range;
             [self.sourceCodeTextView becomeFirstResponder];
         }]];
+        alert.view.tintColor = self.view.tintColor;
         [self presentViewController:alert animated:YES completion:nil];
     }
 }

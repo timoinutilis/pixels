@@ -167,6 +167,7 @@
             [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                 [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
             }]];
+            alert.view.tintColor = self.view.tintColor;
             [self presentViewController:alert animated:YES completion:nil];
 
         }

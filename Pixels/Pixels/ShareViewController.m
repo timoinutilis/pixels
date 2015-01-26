@@ -92,6 +92,7 @@
     {
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Please fill out all required fields!" message:nil preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+        alert.view.tintColor = self.view.tintColor;
         [self presentViewController:alert animated:YES completion:nil];
     }
     else
@@ -124,6 +125,7 @@
             [self isBusy:NO];
             UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Error" message:response[@"error"] preferredStyle:UIAlertControllerStyleAlert];
             [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+            alert.view.tintColor = self.view.tintColor;
             [self presentViewController:alert animated:YES completion:nil];
         }
         else
@@ -136,6 +138,7 @@
         [self isBusy:NO];
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Error" message:@"Could not send program. Please try later!" preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+        alert.view.tintColor = self.view.tintColor;
         [self presentViewController:alert animated:YES completion:nil];
         
         NSLog(@"error: %@", error);
