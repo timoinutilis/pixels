@@ -152,7 +152,7 @@
 {
     self.nameLabel.text = @"Project Name";
     CALayer *imageLayer = self.previewImageView.layer;
-    imageLayer.cornerRadius = 4;
+    imageLayer.cornerRadius = 20;
     imageLayer.masksToBounds = YES;
 }
 

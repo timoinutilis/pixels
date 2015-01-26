@@ -13,25 +13,25 @@ code {
 </head>
 
 <body>
-<h1 id="1">Introduction</h1>
+<h1 id="Introduction">Introduction</h1>
 
-<h1 id="2">Getting started</h1>
+<h1 id="Getting-started">Getting started</h1>
 
-<h1 id="3">Basic principles</h1>
+<h1 id="BASIC-principles">BASIC principles</h1>
 
-<h2>Variables</h2>
+<h2 id="_Variables">Variables</h2>
 
-<h3>Numbers</h3>
+<h3 id="_Numbers">Numbers</h3>
 
-<h3>Strings</h3>
+<h3 id="_Strings">Strings</h3>
 
-<h2>Arrays</h2>
+<h2 id="_Arrays">Arrays</h2>
 
 <p>Coming soon.</p>
 
-<h2>Constants</h2>
+<h2 id="_Constants">Constants</h2>
 
-<h2>Arithmetic operations</h2>
+<h2 id="_Arithmetic-operations">Arithmetic operations</h2>
 
 <table>
 <tr><td>^</td><td>Power</td></tr>
@@ -43,15 +43,15 @@ code {
 <tr><td>XOR</td><td>Logical XOR (exclusive OR)</td></tr>
 </table>
 
-<h2>String operations</h2>
+<h2 id="_String-operations">String operations</h2>
 
-<h2>Parameters</h2>
+<h2 id="_Parameters">Parameters</h2>
 
-<h2>Labels</h2>
+<h2 id="_Labels">Labels</h2>
 
-<h1 id="4">String functions</h1>
+<h1 id="String-functions">String functions</h1>
 
-<h3>=LEFT$</h3>
+<h3 id="_LEFTS">=LEFT$</h3>
 <pre>s$=LEFT$(string$,number)</pre>
 <p>LEFT$ returns a new string with the first <i>number</i> characters of <i>string$</i>.</p>
 <pre>
@@ -59,7 +59,7 @@ code {
 LOW
 </pre>
 
-<h3>=RIGHT$</h3>
+<h3 id="_RIGHTS">=RIGHT$</h3>
 <pre>s$=RIGHT$(string$,number)</pre>
 <p>RIGHT$ returns a new string with the last <i>number</i> characters of <i>string$</i>.</p>
 <pre>
@@ -67,7 +67,7 @@ LOW
 CODER
 </pre>
 
-<h3>=MID$</h3>
+<h3 id="_MID">=MID$</h3>
 <pre>s$=MID$(string$,position,number)</pre>
 <p>MID$ returns a new string with <i>number</i> characters of <i>string$</i>, starting at character <i>position</i>. The first character has the position 1.</p>
 <pre>
@@ -75,7 +75,7 @@ CODER
 RES
 </pre>
 
-<h3>=INSTR</h3>
+<h3 id="_INSTR">=INSTR</h3>
 <pre>v=INSTR(string$,search$[,position])</pre>
 <p>INSTR searches the first occurrence of <i>search$</i> inside of <i>string$</i> and returns the position. If it's not found the function returns 0.<p>
 <pre>
@@ -88,7 +88,7 @@ RES
 11
 </pre>
 
-<h3>=CHR$</h3>
+<h3 id="_CHR">=CHR$</h3>
 <pre>s$=CHR$(ascii)</pre>
 <p>CHR$ returns a string containing one character with ASCII code <i>ascii</i>. Note that LowRes Coder's font has only a limited range of characters (english capital letters, numbers and some symbols).</p>
 <pre>
@@ -97,7 +97,7 @@ RES
 NEXT I</code>
 </pre>
 
-<h3>=ASC</h3>
+<h3 id="_ASC">=ASC</h3>
 <pre>v=ASC(string$)</pre>
 <p>ASC supplies you with the ASCII code of the first character of <i>string$</i>.</p>
 <pre>
@@ -105,7 +105,7 @@ NEXT I</code>
 76
 </pre>
 
-<h3>=LEN</h3>
+<h3 id="_LEN">=LEN</h3>
 <pre>v=LEN(string$)</pre>
 <p>LEN returns the number of characters in <i>string$</i>.</p>
 <pre>
@@ -113,7 +113,7 @@ NEXT I</code>
 12
 </pre>
 
-<h3>=VAL</h3>
+<h3 id="_VAL">=VAL</h3>
 <pre>v=VAL(string$)</pre>
 <p>VAL converts a number written in <i>string$</i> into a numeric value.</p>
 <pre>
@@ -123,7 +123,7 @@ PRINT X</code>
 124.5
 </pre>
 
-<h3>=STR$</h3>
+<h3 id="_STR">=STR$</h3>
 <pre>s$=STR$(number)</pre>
 <p>STR$ converts a number value into a string. Usually this function is not neccessary, because numbers are converted automatically to strings where needed.</p>
 <pre>
@@ -131,7 +131,7 @@ PRINT X</code>
 255
 </pre>
 
-<h3>=HEX$</h3>
+<h3 id="_HEX">=HEX$</h3>
 <pre>s$=HEX$(number)</pre>
 <p>HEX$ converts a number value into a hexadecimal string.</p>
 <pre>
@@ -139,8 +139,9 @@ PRINT X</code>
 FF
 </pre>
 
-<h1 id="5">Graphics</h1>
-<h3>COLOR</h3>
+<h1 id="Graphics">Graphics</h1>
+
+<h3 id="_COLOR">COLOR</h3>
 <pre>COLOR index</pre>
 <p>COLOR sets the current drawing color, where <i>index</i> can have the following values:</p>
 <table>
@@ -168,7 +169,7 @@ FF
 NEXT I</code>
 </pre>
 
-<h3>CLS</h3>
+<h3 id="_CLS">CLS</h3>
 <pre>CLS color</pre>
 <p>CLS clears the whole screen with <i>color</i>. Check the color table of the COLOR command.</p>
 <pre>
@@ -178,7 +179,7 @@ NEXT I</code>
 NEXT I</code>
 </pre>
 
-<h3>PLOT</h3>
+<h3 id="_PLOT">PLOT</h3>
 <pre>PLOT x,y</pre>
 <p>PLOT draws a pixel at the coordinates <i>x,y</i>.</p>
 <pre>
@@ -189,7 +190,7 @@ NEXT I</code>
 LOOP</code>
 </pre>
 
-<h3>LINE</h3>
+<h3 id="_LINE">LINE</h3>
 <pre>LINE x1,y1 TO x2,y2</pre>
 <p>LINE draws a line from the coordinates <i>x1,y1</i> to the coordinates <i>x2,y2</i>.</p>
 <pre>
@@ -200,21 +201,21 @@ LOOP</code>
 LOOP</code>
 </pre>
 
-<h3>BOX</h3>
+<h3 id="_BOX">BOX</h3>
 <pre>BOX x1,y1 TO x2,y2</pre>
 <p>BOX draws a rectangle with the corners at the coordinates <i>x1,y1</i> and <i>x2,y2</i>.</p>
 <pre>
 <code>BOX 0,0 TO 63,63</code>
 </pre>
 
-<h3>BAR</h3>
+<h3 id="_BAR">BAR</h3>
 <pre>BAR x1,y1 TO x2,y2</pre>
 <p>BAR paints a filled rectangle with the corners at the coordinates <i>x1,y1</i> and <i>x2,y2</i>.</p>
 <pre>
 <code>BAR 2,20 TO 61,43</code>
 </pre>
 
-<h3>TEXT</h3>
+<h3 id="_TEXT">TEXT</h3>
 <pre>TEXT x,y,text$[,align]</pre>
 <p>TEXT draws the string <i>text$</i> at the coordinates <i>x,y</i>. Note that <i>text$</i> can also be a number, it will be converted automatically into a string.</p>
 <pre><code>TEXT 0,0,"HELLO"</code></pre>
@@ -226,7 +227,7 @@ LOOP</code>
 </table>
 <pre><code>TEXT 32,0,"CENTERED TEXT",1</code></pre>
 
-<h3>SCROLL</h3>
+<h3 id="_SCROLL">SCROLL</h3>
 <pre>SCROLL x1,y1 TO x2,y2,dx,dy</pre>
 <p>SCROLL moves the rectangular screen area between <i>x1,y1</i> and <i>x2,y2</i> horizontally by <i>dx</i> and vertically by <i>dy</i> pixels.</p>
 <pre>
@@ -237,8 +238,7 @@ LOOP</code>
 LOOP</code>
 </pre>
 
-
-<h3>=POINT</h3>
+<h3 id="_POINT">=POINT</h3>
 <pre>v=POINT(x,y)</pre>
 POINT returns the color index at the coordinates <i>x,y</i>.</p>
 <pre>
@@ -250,8 +250,8 @@ PRINT POINT(63,1)</code>
 0
 </pre>
 
-<h1 id="6">Control structures</h1>
-<h3>IF ... THEN ... ELSE</h3>
+<h1 id="Control-structures">Control structures</h1>
+<h3 id="_IF">IF ... THEN ... ELSE</h3>
 <pre>IF condition THEN command [ELSE command]</pre>
 <pre>
 IF condition THEN
@@ -280,9 +280,10 @@ ELSE
   PRINT "A IS WHAT?"
 END IF</code>
 </pre>
-<h3>GOTO</h3>
+
+<h3 id="_GOTO">GOTO</h3>
 <pre>GOTO label</pre>
-<p>GOTO makes the program continue its execution on the place marked with <i>label</i>. While it's possible to jump out of a loop (WHILE/WEND, DO/LOOP,...) or out of an IF block, it's an error to jump from outside to inside.</p>
+<p>GOTO makes the program continue in the line marked with <i>label</i>. While it's possible to jump out of a loop (WHILE/WEND, DO/LOOP,...) or out of an IF block, it's an error to jump from outside to inside.</p>
 <pre>
 <code>PRINT "START"
 GOTO GAMELEVEL
@@ -294,9 +295,9 @@ PRINT "PLAYING"
 GOTO GAMEOVER</code>
 </pre>
 
-<h3>GOSUB</h3>
+<h3 id="_GOSUB">GOSUB</h3>
 <pre>GOSUB label</pre>
-<p>GOSUB is similar to GOTO, but it remembers the current execution position. When RETURN is called, the program jumps back to the position where GOSUB was called.</p>
+<p>GOSUB is similar to GOTO, but it remembers the current execution position. When RETURN is called, the program jumps back to the line where GOSUB was called.</p>
 <pre>
 <code>FOR I=1 TO 5
   GOSUB SHOWNUMBER
@@ -307,11 +308,11 @@ PRINT "NUMBER "+I
 RETURN</code>
 </pre>
 
-<h3>RETURN</h3>
+<h3 id="_RETURN">RETURN</h3>
 <pre>RETURN</pre>
 <p>The execution of the program returns to the last GOSUB call.</p>
 
-<h3>FOR ... NEXT</h3>
+<h3 id="_FOR">FOR ... NEXT</h3>
 <pre>
 FOR index=first TO last [STEP increment]
 commands
@@ -340,7 +341,7 @@ NEXT I</code>
 NEXT X</code>
 </pre>
 
-<h3>REPEAT ... UNTIL</h3>
+<h3 id="_REPEAT">REPEAT ... UNTIL</h3>
 <pre>
 REPEAT
 commands
@@ -354,7 +355,7 @@ UNTIL condition
 UNTIL A=0</code>
 </pre>
 
-<h3>WHILE ... WEND</h3>
+<h3 id="_WHILE">WHILE ... WEND</h3>
 <pre>
 WHILE condition
 commands
@@ -368,7 +369,7 @@ WEND
 WEND</code>
 </pre>
 
-<h3>DO ... LOOP</h3>
+<h3 id="_DO">DO ... LOOP</h3>
 <pre>
 DO
 commands
@@ -382,7 +383,7 @@ LOOP
 LOOP</code>
 </pre>
 
-<h3>EXIT</h3>
+<h3 id="_EXIT">EXIT</h3>
 <pre>EXIT</pre>
 <p>EXIT makes the program jump out of the current loop (WHILE/WEND, DO/LOOP,...).</p>
 <pre>
@@ -395,94 +396,143 @@ LOOP
 PRINT "DONE"</code>
 </pre>
 
-<h1 id="7">Maths commands</h1>
+<h1 id="Maths-functions">Maths functions</h1>
 
-<h3>=ABS</h3>
+<h3 id="_ABS">=ABS</h3>
 <pre>v=ABS(x)</pre>
+<p>The absolute value of <i>x</i>.</p>
 
-<h3>=ATN</h3>
+<h3 id="_ATN">=ATN</h3>
 <pre>v=ATN(x)</pre>
+<p>The arctangent of <i>x</i> in radians, i.e. the angle whose tangent is <i>x</i>. The range of the function is -(PI/2) &lt; ATN(X) &lt; (PI/2).</p>
 
-<h3>=COS</h3>
+<h3 id="_COS">=COS</h3>
 <pre>v=COS(x)</pre>
+<p>The cosine of <i>x</i>, where <i>x</i> is in radians.</p>
 
-<h3>=EXP</h3>
+<h3 id="_EXP">=EXP</h3>
 <pre>v=EXP(x)</pre>
+<p>The exponential of <i>x</i>, i.e. the value of the base of natural logarithms (e = 2,71828...) raised to the power <i>x</i>.</p>
 
-<h3>=INT</h3>
+<h3 id="_INT">=INT</h3>
 <pre>v=INT(x)</pre>
+<p>The largest integer not greater than <i>x</i>; e.g. INT(1.3) = 1 and INT(-1.3) = -2.</p>
 
-<h3>=LOG</h3>
+<h3 id="_LOG">=LOG</h3>
 <pre>v=LOG(x)</pre>
+<p>The natural logarithm of <i>x</i>; <i>x</i> must be greater than zero.</p>
 
-<h3>=RND</h3>
+<h3 id="_RND">=RND</h3>
 <pre>v=RND</pre>
+<p>The next number in a sequence of random numbers uniformly distributed in the range 0 &lt;= RND &lt; 1. A typical use for integer numbers looks like this:</p>
+<pre>
+<code>V=INT(RND*16)</code>
+</pre>
+<p>This will return an integer number from 0 to 15 (INT rounds down and RND is always less than 1.0).</p>
 
-<h3>=SGN</h3>
+<h3 id="_SGN">=SGN</h3>
 <pre>v=SGN(x)</pre>
+<p>The sign of <i>x</i>: -1 if <i>x</i> &lt; 0, 0 if <i>x</i> = 0 and +1 if <i>x</i> &gt; 0.</p>
 
-<h3>=SIN</h3>
+<h3 id="_SIN">=SIN</h3>
 <pre>v=SIN(x)</pre>
+<p>The sine of <i>x</i>, where <i>x</i> is in radians.</p>
 
-<h3>=SQR</h3>
+<h3 id="_SQR">=SQR</h3>
 <pre>v=SQR(x)</pre>
+<p>The nonnegative square root of <i>x</i>; <i>x</i> must be nonnegative.</p>
 
-<h3>=TAN</h3>
+<h3 id="_TAN">=TAN</h3>
 <pre>v=TAN(x)</pre>
+<p>The tangent of <i>x</i>, where <i>x</i> is in radians.</p>
 
-<h3>=PI</h3>
+<h3 id="_PI">=PI</h3>
 <pre>v=PI</pre>
+<p>PI is the ratio of the circumference of a circle to its diameter: 3.1415926535...</p>
 
-<h1 id="8">Sprites</h1>
+<h1 id="Sprites">Sprites</h1>
 
 <p>Coming soon.</p>
 
-<h1 id="9">User input</h1>
+<h1 id="User-input">User input</h1>
 
-<h3>GAMEPAD</h3>
+<h3 id="_GAMEPAD">GAMEPAD</h3>
 <pre>GAMEPAD players</pre>
+<p>GAMEPAD shows game controls (a direction pad and two buttons) for the given number of players. Currently only one player is supported. If <i>players</i> is 0, the controls will be hidden.</p>
 
-<h3>=UP</h3>
-<pre>v=UP(port)</pre>
+<h3 id="_UP">=UP</h3>
+<pre>v=UP(player)</pre>
+<p>Returns TRUE if up is currently pressed on the direction pad of the given player. <i>player</i> starts with 0 for the first one.</p>
 
-<h3>=DOWN</h3>
-<pre>v=DOWN(port)</pre>
+<h3 id="_DOWN">=DOWN</h3>
+<pre>v=DOWN(player)</pre>
+<p>Returns TRUE if down is currently pressed on the direction pad of the given player. <i>player</i> starts with 0 for the first one.</p>
 
-<h3>=LEFT</h3>
-<pre>v=LEFT(port)</pre>
+<h3 id="_LEFT">=LEFT</h3>
+<pre>v=LEFT(player)</pre>
+<p>Returns TRUE if left is currently pressed on the direction pad of the given player. <i>player</i> starts with 0 for the first one.</p>
 
-<h3>=RIGHT</h3>
-<pre>v=RIGHT(port)</pre>
+<h3 id="_RIGHT">=RIGHT</h3>
+<pre>v=RIGHT(player)</pre>
+<p>Returns TRUE if right is currently pressed on the direction pad of the given player. <i>player</i> starts with 0 for the first one.</p>
 
-<h3>=BUTTON</h3>
-<pre>v=BUTTON(port[,button])</pre>
+<h3 id="_BUTTON">=BUTTON</h3>
+<pre>v=BUTTON(player[,button])</pre>
+<p>Returns TRUE if the A or B button of the given player is currently pressed. <i>player</i> starts with 0 for the first one. If <i>button</i> is omitted or 0 any button (A and B) is checked. 1 checks only the A button, 2 checks only the B button.</p>
 
-<h1 id="10">Sound</h1>
+<h1 id="Sound">Sound</h1>
 
 <p>Coming soon.</p>
 
-<h1 id="11">Other commands</h1>
+<h1 id="Other commands">Other commands</h1>
 
-<h3>PRINT</h3>
+<h3 id="_PRINT">PRINT</h3>
 <pre>PRINT value</pre>
+<p>PRINT writes <i>value</i> on the screen, where <i>value</i> can be also a string or any expression. This is a simplified version of PRINT in the classic BASIC language and exists basically for testing. In a normal graphics based program you should prefer the TEXT command.</p>
 
-<h3>INPUT</h3>
-<p>Not supported.</p>
+<h3 id="_INPUT">INPUT</h3>
+<p>In the classic BASIC language, this command is the main way of getting user input by the keyboard. As LowRes Coder doesn't support keyboard, this command does not exist here.</p>
 
-<h3>WAIT</h3>
+<h3 id="_WAIT">WAIT</h3>
 <pre>WAIT seconds</pre>
+<p>WAIT pauses the execution of the program for the given time. <i>seconds</i> can be less then 1, but the shortes wait time is 0.04 seconds. This command has an important side effect: It updates the screen. If you draw something in a loop, you always have to call WAIT to actually see it on the screen.</p>
+<pre>
+<code>FOR X=0 TO 63
+  PLOT X,31
+  WAIT 0.1
+NEXT X</code>
+</pre>
 
-<h3>END</h3>
+<h3 id="_END">END</h3>
 <pre>END</pre>
+<p>Stops the execution of the program. This can be called in any place of your program.</p>
 
-<h3>REM</h3>
+<h3 id="_REM">REM</h3>
 <pre>REM comment</pre>
+<p>If a line starts with REM (remark) it's completely ignored by the program, so you can write comments into your code.</p>
+<pre>
+<code>REM THIS IS A TEST PROGRAM
+REM WRITTEN BY TIMO KLOSS
+PRINT "HELLO"
+REM SHOW MORE TEXT...
+PRINT "BYE"</code>
+</pre>
 
-<h3>=TRUE</h3>
+<h3 id="_TRUE">=TRUE</h3>
 <pre>v=TRUE</pre>
+<p>TRUE is equal to -1. It's useful for assigning it to a variable.</p>
+<pre>
+<code>ISRUNNING=TRUE
+IF ISRUNNING THEN X=X+1</code>
+</pre>
 
-<h3>=FALSE</h3>
+<h3 id="_FALSE">=FALSE</h3>
 <pre>v=FALSE</pre>
+<p>FALSE is equal to 0.</p>
+<pre>
+<code>SHOWTEXT=FALSE
+IF SHOWTEXT THEN PRINT "NOT SHOWN"</code>
+</pre>
 
 </body>
 </html>
