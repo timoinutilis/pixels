@@ -558,12 +558,14 @@
     if (!operatorLevels)
     {
         operatorLevels = @[
-                           @[@(TTypeSymOpOr),@(TTypeSymOpXor)],
+                           @[@(TTypeSymOpXor)],
+                           @[@(TTypeSymOpOr)],
                            @[@(TTypeSymOpAnd)],
-                           @[@(TTypeSymOpEq), @(TTypeSymOpUneq)],
-                           @[@(TTypeSymOpGr), @(TTypeSymOpLe), @(TTypeSymOpGrEq), @(TTypeSymOpLeEq)],
+                           @[@(TTypeSymOpEq), @(TTypeSymOpUneq), @(TTypeSymOpGr), @(TTypeSymOpLe), @(TTypeSymOpGrEq), @(TTypeSymOpLeEq)],
                            @[@(TTypeSymOpPlus), @(TTypeSymOpMinus)],
-                           @[@(TTypeSymOpMul), @(TTypeSymOpDiv), @(TTypeSymOpMod), @(TTypeSymOpPow)]
+                           @[@(TTypeSymOpMod)],
+                           @[@(TTypeSymOpMul), @(TTypeSymOpDiv)],
+                           @[@(TTypeSymOpPow)]
                            ];
     }
     

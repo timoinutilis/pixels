@@ -6,6 +6,9 @@
 body {
 	font-family: sans-serif;
 }
+code {
+	font-weight: bold;
+}
 </style>
 </head>
 
@@ -30,11 +33,15 @@ body {
 
 <h2>Arithmetic operations</h2>
 
-<!--
-^ + - * / MOD
-= <> < > <= >=
-NOT AND OR XOR
--->
+<table>
+<tr><td>^</td><td>Power</td></tr>
+<tr><td>/ and *</td><td>Divide and multiply</td></tr>
+<tr><td>MOD</td><td>Modulo (remainder of a devision)</td></tr>
+<tr><td>+ and -</td><td>Plus and minus</td></tr>
+<tr><td>AND</td><td>Logical AND</td></tr>
+<tr><td>OR</td><td>Logical OR</td></tr>
+<tr><td>XOR</td><td>Logical XOR (exclusive OR)</td></tr>
+</table>
 
 <h2>String operations</h2>
 
@@ -46,37 +53,96 @@ NOT AND OR XOR
 
 <h3>=LEFT$</h3>
 <pre>s$=LEFT$(string$,number)</pre>
+<p>LEFT$ returns a new string with the first <i>number</i> characters of <i>string$</i>.</p>
+<pre>
+<code>PRINT LEFT$("LOWRES CODER",3)</code>
+LOW
+</pre>
 
 <h3>=RIGHT$</h3>
 <pre>s$=RIGHT$(string$,number)</pre>
+<p>RIGHT$ returns a new string with the last <i>number</i> characters of <i>string$</i>.</p>
+<pre>
+<code>PRINT RIGHT$("LOWRES CODER",5)</code>
+CODER
+</pre>
 
 <h3>=MID$</h3>
 <pre>s$=MID$(string$,position,number)</pre>
+<p>MID$ returns a new string with <i>number</i> characters of <i>string$</i>, starting at character <i>position</i>. The first character has the position 1.</p>
+<pre>
+<code>PRINT MID$("LOWRES CODER",4,3)</code>
+RES
+</pre>
 
 <h3>=INSTR</h3>
 <pre>v=INSTR(string$,search$[,position])</pre>
+<p>INSTR searches the first occurrence of <i>search$</i> inside of <i>string$</i> and returns the position. If it's not found the function returns 0.<p>
+<pre>
+<code>PRINT INSTR("LOWRES CODER","RES")</code>
+4
+</pre>
+<p>Usually the function starts searching at the beginning of the string. Optionally it can start at <i>position</i>.</p>
+<pre>
+<code>PRINT INSTR("LOWRES CODER","E",6)</code>
+11
+</pre>
 
 <h3>=CHR$</h3>
 <pre>s$=CHR$(ascii)</pre>
+<p>CHR$ returns a string containing one character with ASCII code <i>ascii</i>. Note that LowRes Coder's font has only a limited range of characters (english capital letters, numbers and some symbols).</p>
+<pre>
+<code>FOR I=32 TO 90
+  PRINT CHR$(I)
+NEXT I</code>
+</pre>
 
 <h3>=ASC</h3>
 <pre>v=ASC(string$)</pre>
+<p>ASC supplies you with the ASCII code of the first character of <i>string$</i>.</p>
+<pre>
+<code>PRINT ASC("L")</code>
+76
+</pre>
 
 <h3>=LEN</h3>
 <pre>v=LEN(string$)</pre>
+<p>LEN returns the number of characters in <i>string$</i>.</p>
+<pre>
+<code>PRINT LEN("LOWRES CODER")</code>
+12
+</pre>
 
 <h3>=VAL</h3>
 <pre>v=VAL(string$)</pre>
+<p>VAL converts a number written in <i>string$</i> into a numeric value.</p>
+<pre>
+<code>X=VAL("123.5")
+X=X+1
+PRINT X</code>
+124.5
+</pre>
 
 <h3>=STR$</h3>
 <pre>s$=STR$(number)</pre>
+<p>STR$ converts a number value into a string. Usually this function is not neccessary, because numbers are converted automatically to strings where needed.</p>
+<pre>
+<code>PRINT STR$(255)</code>
+255
+</pre>
 
 <h3>=HEX$</h3>
 <pre>s$=HEX$(number)</pre>
+<p>HEX$ converts a number value into a hexadecimal string.</p>
+<pre>
+<code>PRINT HEX$(255)</code>
+FF
+</pre>
 
-<h1 id="5">Graphics and text</h1>
+<h1 id="5">Graphics</h1>
 <h3>COLOR</h3>
 <pre>COLOR index</pre>
+<p>COLOR sets the current drawing color, where <i>index</i> can have the following values:</p>
 <table>
 <tr><td>0</td><td>black</td></tr>
 <tr><td>1</td><td>white</td></tr>
@@ -95,27 +161,94 @@ NOT AND OR XOR
 <tr><td>14</td><td>magenta</td></tr>
 <tr><td>15</td><td>purple</td></tr>
 </table>
+<pre>
+<code>FOR I=1 TO 15
+  COLOR I
+  PRINT "COLOR "+I
+NEXT I</code>
+</pre>
 
 <h3>CLS</h3>
 <pre>CLS color</pre>
+<p>CLS clears the whole screen with <i>color</i>. Check the color table of the COLOR command.</p>
+<pre>
+<code>FOR I=0 TO 15
+  CLS I
+  WAIT 0.1
+NEXT I</code>
+</pre>
 
 <h3>PLOT</h3>
 <pre>PLOT x,y</pre>
+<p>PLOT draws a pixel at the coordinates <i>x,y</i>.</p>
+<pre>
+<code>DO
+  COLOR RND*16
+  PLOT RND*64,RND*64
+  WAIT 0.1
+LOOP</code>
+</pre>
 
 <h3>LINE</h3>
 <pre>LINE x1,y1 TO x2,y2</pre>
+<p>LINE draws a line from the coordinates <i>x1,y1</i> to the coordinates <i>x2,y2</i>.</p>
+<pre>
+<code>DO
+  COLOR RND*16
+  LINE RND*64,RND*64 TO RND*64,RND*64
+  WAIT 0.1
+LOOP</code>
+</pre>
 
 <h3>BOX</h3>
 <pre>BOX x1,y1 TO x2,y2</pre>
+<p>BOX draws a rectangle with the corners at the coordinates <i>x1,y1</i> and <i>x2,y2</i>.</p>
+<pre>
+<code>BOX 0,0 TO 63,63</code>
+</pre>
+
+<h3>BAR</h3>
+<pre>BAR x1,y1 TO x2,y2</pre>
+<p>BAR paints a filled rectangle with the corners at the coordinates <i>x1,y1</i> and <i>x2,y2</i>.</p>
+<pre>
+<code>BAR 2,20 TO 61,43</code>
+</pre>
 
 <h3>TEXT</h3>
 <pre>TEXT x,y,text$[,align]</pre>
+<p>TEXT draws the string <i>text$</i> at the coordinates <i>x,y</i>. Note that <i>text$</i> can also be a number, it will be converted automatically into a string.</p>
+<pre><code>TEXT 0,0,"HELLO"</code></pre>
+<p>With the optional parameter <i>align</i> the text can be drawn in different ways:</p>
+<table>
+<tr><td>0</td><td>Left aligned (default)</td></tr>
+<tr><td>1</td><td>Centered</td></tr>
+<tr><td>2</td><td>Right aligned</td></tr>
+</table>
+<pre><code>TEXT 32,0,"CENTERED TEXT",1</code></pre>
 
 <h3>SCROLL</h3>
 <pre>SCROLL x1,y1 TO x2,y2,dx,dy</pre>
+<p>SCROLL moves the rectangular screen area between <i>x1,y1</i> and <i>x2,y2</i> horizontally by <i>dx</i> and vertically by <i>dy</i> pixels.</p>
+<pre>
+<code>DO
+  PLOT RND*63,1+RND*63
+  SCROLL 0,0 TO 63,63,-2,1
+  WAIT 0.04
+LOOP</code>
+</pre>
+
 
 <h3>=POINT</h3>
 <pre>v=POINT(x,y)</pre>
+POINT returns the color index at the coordinates <i>x,y</i>.</p>
+<pre>
+<code>COLOR 11
+PLOT 63,0
+PRINT POINT(63,0)
+PRINT POINT(63,1)</code>
+11
+0
+</pre>
 
 <h1 id="6">Control structures</h1>
 <h3>IF ... THEN ... ELSE</h3>
@@ -127,21 +260,84 @@ commands
 commands]
 END IF
 </pre>
-
+<p>The IF command allows you to make decisions in a program. Depending on the result different commands are executed. The <i>condition</i> can be any list of tests including AND and OR. There is the single line version, which allows only one command after THEN and optionally one command after ELSE:</p>
+<pre>
+<code>FOR I=1 TO 4
+  IF I&lt;3 THEN PRINT "SMALL" ELSE PRINT "BIG"
+  IF I=4 THEN PRINT "END"
+NEXT I</code>
+</pre>
+<p>If you need to execute more than one command, an IF ... END IF block can be used. ELSE blocks are optional.</p>
+<pre>
+<code>A=1
+IF A=0 THEN
+  PRINT "A IS ZERO"
+  PRINT "NO?"
+ELSE IF A=1 THEN
+  PRINT "A IS ONE"
+  PRINT "NO?"
+ELSE
+  PRINT "A IS WHAT?"
+END IF</code>
+</pre>
 <h3>GOTO</h3>
 <pre>GOTO label</pre>
+<p>GOTO makes the program continue its execution on the place marked with <i>label</i>. While it's possible to jump out of a loop (WHILE/WEND, DO/LOOP,...) or out of an IF block, it's an error to jump from outside to inside.</p>
+<pre>
+<code>PRINT "START"
+GOTO GAMELEVEL
+GAMEOVER:
+PRINT "GAME OVER"
+END
+GAMELEVEL:
+PRINT "PLAYING"
+GOTO GAMEOVER</code>
+</pre>
 
 <h3>GOSUB</h3>
 <pre>GOSUB label</pre>
+<p>GOSUB is similar to GOTO, but it remembers the current execution position. When RETURN is called, the program jumps back to the position where GOSUB was called.</p>
+<pre>
+<code>FOR I=1 TO 5
+  GOSUB SHOWNUMBER
+NEXT I
+END
+SHOWNUMBER:
+PRINT "NUMBER "+I
+RETURN</code>
+</pre>
 
 <h3>RETURN</h3>
 <pre>RETURN</pre>
+<p>The execution of the program returns to the last GOSUB call.</p>
 
 <h3>FOR ... NEXT</h3>
 <pre>
-FOR index=first TO last [STEP step]
+FOR index=first TO last [STEP increment]
 commands
 NEXT [index]
+</pre>
+<p>A FOR/NEXT command repeats a list of commands a specific number of times. <i>index</i> is a counter variable that will be incremented after each loop. At the start of the loop, this counter will be set to <i>first</i>. Now all commands until NEXT are performed. <i>increment</i> will be added to the counter every time NEXT is reached. If STEP is omitted, the increment will be 1. The loop repeats as long as the counter is not greater than <i>last</i>.</p>
+<pre>
+<code>FOR I=1 TO 10 STEP 2
+  PRINT I
+NEXT I</code>
+</pre>
+<p>Note that <i>increment</i> can be negative to count backwards. In this case the loop will be finished when the counter is less than <i>last</i>.</p>
+<pre>
+<code>FOR I=5 TO 1 STEP -1
+  PRINT I
+NEXT I</code>
+</pre>
+<p>As all other loops, FOR/NEXT loops can be placed inside of others.</p>
+<pre>
+<code>FOR X=0 TO 5
+  FOR Y=0 TO 5
+    CLS 0
+    PLOT X,Y
+    WAIT 0.1
+  NEXT Y
+NEXT X</code>
 </pre>
 
 <h3>REPEAT ... UNTIL</h3>
@@ -150,12 +346,26 @@ REPEAT
 commands
 UNTIL condition
 </pre>
+<p>A REPEAT/UNTIL command repeats a list of commands until <i>condition</i> is true.</p>
+<pre>
+<code>REPEAT
+  A=INT(RND*10)
+  PRINT A
+UNTIL A=0</code>
+</pre>
 
 <h3>WHILE ... WEND</h3>
 <pre>
 WHILE condition
 commands
 WEND
+</pre>
+<p>A WHILE/WEND command repeats a list of commands as long as <i>condition</i> is true.</p>
+<pre>
+<code>WHILE A&lt;10
+  PRINT A
+  A=A+1
+WEND</code>
 </pre>
 
 <h3>DO ... LOOP</h3>
@@ -164,9 +374,26 @@ DO
 commands
 LOOP
 </pre>
+<p>A DO/LOOP command repeats a list of commands forever. You can still exit from the loop by calling EXIT.</p>
+<pre>
+<code>DO
+  COLOR RND*16
+  PRINT "FOREVER"
+LOOP</code>
+</pre>
 
 <h3>EXIT</h3>
 <pre>EXIT</pre>
+<p>EXIT makes the program jump out of the current loop (WHILE/WEND, DO/LOOP,...).</p>
+<pre>
+<code>DO
+  C=INT(RND*16)
+  COLOR C
+  PRINT "LOOPING"
+  IF C=15 THEN EXIT
+LOOP
+PRINT "DONE"</code>
+</pre>
 
 <h1 id="7">Maths commands</h1>
 

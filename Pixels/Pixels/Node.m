@@ -262,6 +262,8 @@
             [runner.renderer scrollFromX:0 Y:0 toX:screenSize Y:screenSize deltaX:0 Y:-fontHeight];
             runner.printLine = maxLines;
         }
+        [runner.delegate updateRendererView];
+        [NSThread sleepForTimeInterval:0.1];
     }
     [runner next];
     return nil;

@@ -178,11 +178,6 @@
         {
             self.project.iconData = UIImagePNGRepresentation(thumb);
         }
-        
-        // exit button
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self showExitButtonWithHiding:NO];
-        });
     });
 }
 
