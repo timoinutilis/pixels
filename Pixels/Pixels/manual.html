@@ -9,6 +9,9 @@ body {
 code {
 	font-weight: bold;
 }
+td {
+    padding-right: 1em;
+}
 </style>
 </head>
 
@@ -226,6 +229,19 @@ LOOP</code>
 <tr><td>2</td><td>Right aligned</td></tr>
 </table>
 <pre><code>TEXT 32,0,"CENTERED TEXT",1</code></pre>
+
+<h3 id="_TEXT-WIDTH">=TEXT WIDTH</h3>
+<pre>=TEXT WIDTH(text$)</pre>
+<p>TEXT WIDTH returns the width of <i>text$</i> in pixels as it would be drawn with the TEXT command.</p>
+<pre>
+<code>T$="HELLO"
+W=TEXT WIDTH(T$)
+WHILE X&lt;63
+  COLOR 1+RND*15
+  TEXT X,0,T$
+  X=X+W
+WEND</code>
+</pre>
 
 <h3 id="_SCROLL">SCROLL</h3>
 <pre>SCROLL x1,y1 TO x2,y2,dx,dy</pre>

@@ -783,6 +783,23 @@
 
 
 
+@implementation TextWidthNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.valueExpression prepareWithRunnable:runnable pass:pass canBeString:YES];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    id value = [self.valueExpression evaluateWithRunner:runner];
+    NSString *string = ([value isKindOfClass:[NSString class]]) ? (NSString *)value : [NSString stringWithFormat:@"%@", value];
+    int width = [runner.renderer widthForText:string];
+    return @(width);
+}
+
+@end
+
 @implementation Maths0Node
 
 - (id)evaluateWithRunner:(Runner *)runner

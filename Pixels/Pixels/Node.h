@@ -162,6 +162,10 @@
 @property Node *yExpression;
 @end
 
+@interface TextWidthNode : Node
+@property Node *valueExpression;
+@end
+
 @interface Maths0Node : Node
 @property TType type;
 @end

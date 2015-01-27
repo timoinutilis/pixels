@@ -710,6 +710,15 @@
             [self accept:TTypeSymBracketClose];
             return node;
         }
+        case TTypeSymText: {
+            TextWidthNode *node = [[TextWidthNode alloc] init];
+            [self accept:TTypeSymText];
+            [self accept:TTypeSymWidth];
+            [self accept:TTypeSymBracketOpen];
+            node.valueExpression = [self acceptExpression];
+            [self accept:TTypeSymBracketClose];
+            return node;
+        }
         case TTypeSymRnd: {
             Maths0Node *node = [[Maths0Node alloc] init];
             node.type = self.token.type;

@@ -65,6 +65,7 @@
         case TTypeSymRight: return @"RIGHT";
         case TTypeSymButton: return @"BUTTON";
         case TTypeSymPoint: return @"POINT";
+        case TTypeSymWidth: return @"WIDTH";
         case TTypeSymLeftS: return @"LEFT$";
         case TTypeSymRightS: return @"RIGHT$";
         case TTypeSymMid: return @"MID$";

@@ -62,6 +62,7 @@ typedef NS_ENUM(NSInteger, TType) {
     TTypeSymRight,
     TTypeSymButton,
     TTypeSymPoint,
+    TTypeSymWidth,
     TTypeSymLeftS,
     TTypeSymRightS,
     TTypeSymMid,
