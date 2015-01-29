@@ -17,25 +17,47 @@ td {
 
 <body>
 <h1 id="Introduction">Introduction</h1>
+<p>Program your own retro games or demos directly on your iPad or iPhone!</p>
+<ul>
+<li>Run your programs on a virtual screen with 64x64 pixels and 16 predefined colors!</li>
+<li>Take control with the on-screen gamepad!</li>
+<li>Write in a dialect of the classic, easy to learn BASIC programming language!</li>
+<li>Play the included games "LowRes Racing", "LowRes Tennis" and "LowRes Snake"! Check how they are made and improve them with your own ideas!</li>
+<li>Send the source code of your programs to friends and publish them on the LowRes Coder website!</li>
+<li>Try games and demos made by the community!</li>
+</ul>
 
 <h1 id="Getting-started">Getting started</h1>
 
-<h1 id="BASIC-principles">BASIC principles</h1>
+<h1 id="BASIC-principles">Basic principles</h1>
 
 <h2 id="_Variables">Variables</h2>
+<p>Variables are the names used to refer to values stored in the memory of a computer. They are used to hold the results of calculations in a program.<br/>
+You can choose any variable names in your programs, with the following restrictions: They must begin with a letter and cannot start with an existing LowRes Coder command or function name. Allowed characters are the letters A to Z, the numbers 0 to 9 and the underscore "_", but no spaces.<br/>
+In LowRes Coder you don't have to declare variables. They start to exist automatically when they appear the first time in your program.</p>
 
 <h3 id="_Numbers">Numbers</h3>
+<p>Without any special sign, variables store numbers, like 10, -2 or 3.5. Examples of number variables:</p>
+<code>A, B2, X, Y, MY_SCORE, LIVES</code>
+<p>To assign a number to a variable, you write for example:</p>
+<code>A=10</code>
 
 <h3 id="_Strings">Strings</h3>
+<p>String variables contain text rather than numbers. They are distinguished from number variables by the $ character at the end. The $ is part of the variable name, so the variables A and A$ access different values. Examples of string variables:</p>
+<code>A$, B2$, MY_NAME$, TXT$</code>
+<p>You assign a text to a string variable like this:</p>
+<code>A$="HELLO"</code>
 
 <h2 id="_Arrays">Arrays</h2>
 
 <p>Coming soon.</p>
 
 <h2 id="_Constants">Constants</h2>
+<p>Constants are simply numbers or strings which can be assigned to variables or used as values for commands. They don't change when your program is running. Examples of constants are:</p>
+<code>1, 42, 3.1415, "HELLO", PI, TRUE</code>
 
 <h2 id="_Arithmetic-operations">Arithmetic operations</h2>
-
+<p>The following arithmetic operations can be used in a numeric expression:</p>
 <table>
 <tr><td>^</td><td>Power</td></tr>
 <tr><td>/ and *</td><td>Divide and multiply</td></tr>
@@ -45,12 +67,40 @@ td {
 <tr><td>OR</td><td>Logical OR</td></tr>
 <tr><td>XOR</td><td>Logical XOR (exclusive OR)</td></tr>
 </table>
+<p>They are listed in the order of their priority how they are evaluated. Here is an example:</p>
+<code>PRINT 10+2*5-8/4+5^2</code>
+<p>This evaluates in the following order: 5^2, 2*5, 8/4 and then sums up the results to 43. If you want to change the order, you can enclose parts in round brackets:</p>
+<code>PRINT (10+2)*(5-8/4+5)^2</code>
 
 <h2 id="_String-operations">String operations</h2>
+<p>You can add strings together with the plus operation.</p>
+<pre>
+<code>A$="LOW"+"RES"+" CODER"
+PRINT A$</code>
+LOWRES CODER</pre>
+<p>If you add together string and number variables or constants, the numbers get converted to strings automatically.</p>
+<pre>
+<code>L=2
+A$="LIVES: "+L
+PRINT A$</code>
+LIVES: 2
+</pre>
 
 <h2 id="_Parameters">Parameters</h2>
+<p>The values you enter into a LowRes Coder command are known as parameters, for example:</p>
+<pre>
+<code>COLOR 2
+TEXT X,Y,"HI"</code>
+</pre>
+<p>The parameters in the above commands are 2, X, Y and "HI".</p>
 
 <h2 id="_Labels">Labels</h2>
+<p>Labels are a way of marking lines in your programs. They can have any names with the same restrictions as variable names have, and are followed by the ":" (colon) character.</p>
+<pre>
+<code>TESTLABEL:
+PRINT "HELLO"
+GOTO TESTLABEL</code>
+</pre>
 
 <h1 id="String-functions">String functions</h1>
 
