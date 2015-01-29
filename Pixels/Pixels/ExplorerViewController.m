@@ -67,7 +67,9 @@
     Project *project = [[ModelManager sharedManager] createNewProject];
     
     [self.projects addObject:project];
-    [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:self.projects.count - 1 inSection:0]]];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:self.projects.count - 1 inSection:0];
+    [self.collectionView insertItemsAtIndexPaths:@[indexPath]];
+    [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionBottom animated:YES];
 }
 
 #pragma mark - Navigation
@@ -144,6 +146,7 @@
 @interface ExplorerProjectCell ()
 @property (weak, nonatomic) IBOutlet UIImageView *previewImageView;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *starImageView;
 @end
 
 @implementation ExplorerProjectCell
@@ -165,6 +168,7 @@
 - (void)update
 {
     self.nameLabel.text = self.project.name;
+    self.starImageView.hidden = !self.project.isDefault.boolValue;
     if (self.project.iconData)
     {
         UIImage *image = [UIImage imageWithData:self.project.iconData];

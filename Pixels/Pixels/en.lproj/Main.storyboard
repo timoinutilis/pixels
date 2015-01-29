@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vjV-e6-4vN">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vjV-e6-4vN">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -505,19 +505,25 @@ An Inutilis Software production from 2015. Find more at www.inutilis.com!</strin
                                                         <constraint firstAttribute="height" constant="96" id="XEI-vC-UAh"/>
                                                     </constraints>
                                                 </imageView>
+                                                <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star" translatesAutoresizingMaskIntoConstraints="NO" id="liv-zd-RbV">
+                                                    <rect key="frame" x="8" y="0.0" width="28" height="28"/>
+                                                </imageView>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="Y0e-d8-avy" secondAttribute="trailing" constant="8" id="1dL-Gb-n2V"/>
                                             <constraint firstItem="Y0e-d8-avy" firstAttribute="leading" secondItem="4E0-sW-TxH" secondAttribute="leading" constant="8" id="MX0-w1-pYk"/>
+                                            <constraint firstItem="KyM-fJ-oxW" firstAttribute="leading" secondItem="liv-zd-RbV" secondAttribute="leading" constant="14" id="O5s-gW-TZS"/>
                                             <constraint firstItem="KyM-fJ-oxW" firstAttribute="top" secondItem="4E0-sW-TxH" secondAttribute="top" id="hiE-g6-4xK"/>
+                                            <constraint firstItem="liv-zd-RbV" firstAttribute="top" secondItem="4E0-sW-TxH" secondAttribute="top" id="jgu-sm-YDu"/>
                                             <constraint firstItem="Y0e-d8-avy" firstAttribute="top" secondItem="KyM-fJ-oxW" secondAttribute="bottom" constant="6" id="pth-cL-JpO"/>
                                             <constraint firstAttribute="centerX" secondItem="KyM-fJ-oxW" secondAttribute="centerX" id="sX8-hW-Egw"/>
                                         </constraints>
                                         <connections>
                                             <outlet property="nameLabel" destination="Y0e-d8-avy" id="DV4-XD-0Y3"/>
                                             <outlet property="previewImageView" destination="KyM-fJ-oxW" id="yOO-e5-ign"/>
+                                            <outlet property="starImageView" destination="liv-zd-RbV" id="XHh-qG-Lat"/>
                                             <segue destination="BYZ-38-t0r" kind="show" identifier="Editor" id="yw1-hR-hBn"/>
                                         </connections>
                                     </collectionViewCell>
@@ -603,6 +609,7 @@ An Inutilis Software production from 2015. Find more at www.inutilis.com!</strin
         <image name="icon_about" width="100" height="100"/>
         <image name="icon_project" width="96" height="96"/>
         <image name="joypad" width="130" height="130"/>
+        <image name="star" width="28" height="28"/>
     </resources>
     <color key="tintColor" red="0.66666666666666663" green="0.33333333333333331" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
 </document>

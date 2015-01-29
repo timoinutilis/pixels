@@ -171,14 +171,16 @@
         alert.view.tintColor = self.view.tintColor;
         [self presentViewController:alert animated:YES completion:nil];
     }
+    else if (self.sourceCodeTextView.text.length == 0)
+    {
+        [self deleteProject];
+    }
     else
     {
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Do you really want to delete this program?" message:nil preferredStyle:UIAlertControllerStyleAlert];
         
         [alert addAction:[UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
-            [[ModelManager sharedManager] deleteProject:self.project];
-            self.project = nil;
-            [self.navigationController popViewControllerAnimated:YES];
+            [self deleteProject];
         }]];
         
         [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
@@ -186,6 +188,13 @@
         alert.view.tintColor = self.view.tintColor;
         [self presentViewController:alert animated:YES completion:nil];
     }
+}
+
+- (void)deleteProject
+{
+    [[ModelManager sharedManager] deleteProject:self.project];
+    self.project = nil;
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction)onDuplicateTapped:(id)sender
