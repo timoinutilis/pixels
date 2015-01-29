@@ -29,6 +29,27 @@ td {
 
 <h1 id="Getting-started">Getting started</h1>
 
+<h2 id="_Tutorial">Tutorial</h2>
+<p>The first thing you will see when you enter LowRes Coder is an overview of all your programs. You can see already some included programs (marked with a little star). Let's try one! Tap on the icon of "LowRes Racing"!</p>
+<p>This will open the editor view, where you can see the source code of the selected program. Now tap on the Play button (in the top right corner) to run the program! The game will appear and you can control it with the on-screen game pad. Sometimes you may want to make the game screen smaller. Just pinch it with two fingers!</p>
+<p>When you played enough, tap on the Close button in the top left corner! If you don't see it, don't worry. It fades out after some seconds, but you can still tap it.</p>
+<p>Let's create your first own program! Go back to the overview of all programs and tap the Plus button in the top right corner. A new icon will appear at the end of the program list, called "Unnamed Program". Tap on it!</p>
+<p>You will see now an empty text editor. Write the following lines, but replace MY NAME with your own name (keep the quotation marks):</p>
+<pre>
+<code>DO
+COLOR RND*16
+TEXT 31,29,"MY NAME",1
+WAIT 0.1
+LOOP</code>
+</pre>
+<p>Now tap on the Play button and you should see your name flashing in random colors! If you see an error message instead, check if you wrote something wrong. When you looked enough on your name, tap the Exit button (or the top left corner).</p>
+<p>We should give a name to this program. Tap on the "Rename" button (in the bottom tool bar) and change the name to "My Name" or whatever you like.</p>
+<p>How about sending your first program to a friend? Tap on the Share button (in the bottom left corner) and select Mail. Choose an address and tap the Send button. You may want to send it also to yourself to have a back-up.</p>
+<p>You are ready now! Well, maybe you don't know programming yet, so you should read the other chapters, too! Also try all the other included programs and learn from them! You can duplicate them and experiment with the copies.</p>
+
+<h2 id="_Publish">Publish your work!</h2>
+<p>When you created something and you are happy with it, you should share it with the LowRes Coder community! The Share menu offers you a "LowRes Coder Web" action. Use it to send your program to us. We will review it and publish it on the official <a href="http://lowres.inutilis.com">LowRes Coder website</a>.</p>
+
 <h1 id="BASIC-principles">Basic principles</h1>
 
 <h2 id="_Variables">Variables</h2>
@@ -102,97 +123,9 @@ PRINT "HELLO"
 GOTO TESTLABEL</code>
 </pre>
 
-<h1 id="String-functions">String functions</h1>
-
-<h3 id="_LEFTS">=LEFT$</h3>
-<pre>s$=LEFT$(string$,number)</pre>
-<p>LEFT$ returns a new string with the first <i>number</i> characters of <i>string$</i>.</p>
-<pre>
-<code>PRINT LEFT$("LOWRES CODER",3)</code>
-LOW
-</pre>
-
-<h3 id="_RIGHTS">=RIGHT$</h3>
-<pre>s$=RIGHT$(string$,number)</pre>
-<p>RIGHT$ returns a new string with the last <i>number</i> characters of <i>string$</i>.</p>
-<pre>
-<code>PRINT RIGHT$("LOWRES CODER",5)</code>
-CODER
-</pre>
-
-<h3 id="_MID">=MID$</h3>
-<pre>s$=MID$(string$,position,number)</pre>
-<p>MID$ returns a new string with <i>number</i> characters of <i>string$</i>, starting at character <i>position</i>. The first character has the position 1.</p>
-<pre>
-<code>PRINT MID$("LOWRES CODER",4,3)</code>
-RES
-</pre>
-
-<h3 id="_INSTR">=INSTR</h3>
-<pre>v=INSTR(string$,search$[,position])</pre>
-<p>INSTR searches the first occurrence of <i>search$</i> inside of <i>string$</i> and returns the position. If it's not found the function returns 0.<p>
-<pre>
-<code>PRINT INSTR("LOWRES CODER","RES")</code>
-4
-</pre>
-<p>Usually the function starts searching at the beginning of the string. Optionally it can start at <i>position</i>.</p>
-<pre>
-<code>PRINT INSTR("LOWRES CODER","E",6)</code>
-11
-</pre>
-
-<h3 id="_CHR">=CHR$</h3>
-<pre>s$=CHR$(ascii)</pre>
-<p>CHR$ returns a string containing one character with ASCII code <i>ascii</i>. Note that LowRes Coder's font has only a limited range of characters (english capital letters, numbers and some symbols).</p>
-<pre>
-<code>FOR I=32 TO 90
-  PRINT CHR$(I)
-NEXT I</code>
-</pre>
-
-<h3 id="_ASC">=ASC</h3>
-<pre>v=ASC(string$)</pre>
-<p>ASC supplies you with the ASCII code of the first character of <i>string$</i>.</p>
-<pre>
-<code>PRINT ASC("L")</code>
-76
-</pre>
-
-<h3 id="_LEN">=LEN</h3>
-<pre>v=LEN(string$)</pre>
-<p>LEN returns the number of characters in <i>string$</i>.</p>
-<pre>
-<code>PRINT LEN("LOWRES CODER")</code>
-12
-</pre>
-
-<h3 id="_VAL">=VAL</h3>
-<pre>v=VAL(string$)</pre>
-<p>VAL converts a number written in <i>string$</i> into a numeric value.</p>
-<pre>
-<code>X=VAL("123.5")
-X=X+1
-PRINT X</code>
-124.5
-</pre>
-
-<h3 id="_STR">=STR$</h3>
-<pre>s$=STR$(number)</pre>
-<p>STR$ converts a number value into a string. Usually this function is not neccessary, because numbers are converted automatically to strings where needed.</p>
-<pre>
-<code>PRINT STR$(255)</code>
-255
-</pre>
-
-<h3 id="_HEX">=HEX$</h3>
-<pre>s$=HEX$(number)</pre>
-<p>HEX$ converts a number value into a hexadecimal string.</p>
-<pre>
-<code>PRINT HEX$(255)</code>
-FF
-</pre>
-
 <h1 id="Graphics">Graphics</h1>
+
+<p>LowRes Coder runs your programs on a virtual screen with 64x64 pixels and 16 colors. With the following commands you can draw on this screen.</p>
 
 <h3 id="_COLOR">COLOR</h3>
 <pre>COLOR index</pre>
@@ -317,6 +250,9 @@ PRINT POINT(63,1)</code>
 </pre>
 
 <h1 id="Control-structures">Control structures</h1>
+
+<p>LowRes Coder offers several commands to control the execution of your programs. You can repeat sequences of code, execute different code depending on decisions and jump between program parts.</P>
+
 <h3 id="_IF">IF ... THEN ... ELSE</h3>
 <pre>IF condition THEN command [ELSE command]</pre>
 <pre>
@@ -462,7 +398,137 @@ LOOP
 PRINT "DONE"</code>
 </pre>
 
+<h1 id="User-input">User input</h1>
+
+<p>LowRes Coder can show a virtual game pad on the screen. Use these commands to handle the user input.</p>
+
+<h3 id="_GAMEPAD">GAMEPAD</h3>
+<pre>GAMEPAD players</pre>
+<p>GAMEPAD shows game controls (a direction pad and two buttons) for the given number of players. Currently only one player is supported. If <i>players</i> is 0, the controls will be hidden.</p>
+
+<h3 id="_UP">=UP</h3>
+<pre>v=UP(player)</pre>
+<p>Returns TRUE if up is currently pressed on the direction pad of the given player. <i>player</i> starts with 0 for the first one.</p>
+
+<h3 id="_DOWN">=DOWN</h3>
+<pre>v=DOWN(player)</pre>
+<p>Returns TRUE if down is currently pressed on the direction pad of the given player. <i>player</i> starts with 0 for the first one.</p>
+
+<h3 id="_LEFT">=LEFT</h3>
+<pre>v=LEFT(player)</pre>
+<p>Returns TRUE if left is currently pressed on the direction pad of the given player. <i>player</i> starts with 0 for the first one.</p>
+
+<h3 id="_RIGHT">=RIGHT</h3>
+<pre>v=RIGHT(player)</pre>
+<p>Returns TRUE if right is currently pressed on the direction pad of the given player. <i>player</i> starts with 0 for the first one.</p>
+
+<h3 id="_BUTTON">=BUTTON</h3>
+<pre>v=BUTTON(player[,button])</pre>
+<p>Returns TRUE if the A or B button of the given player is currently pressed. <i>player</i> starts with 0 for the first one. If <i>button</i> is omitted or 0, any button (A and B) is checked. 1 checks only the A button, 2 checks only the B button.</p>
+
+<h1 id="Sound">Sound</h1>
+
+<p>Coming soon.</p>
+
+<h1 id="Sprites">Sprites</h1>
+
+<p>Coming soon.</p>
+
+<h1 id="String-functions">String functions</h1>
+
+<p>The following functions allow you to modify and analyze strings.</p>
+
+<h3 id="_LEFTS">=LEFT$</h3>
+<pre>s$=LEFT$(string$,number)</pre>
+<p>LEFT$ returns a new string with the first <i>number</i> characters of <i>string$</i>.</p>
+<pre>
+<code>PRINT LEFT$("LOWRES CODER",3)</code>
+LOW
+</pre>
+
+<h3 id="_RIGHTS">=RIGHT$</h3>
+<pre>s$=RIGHT$(string$,number)</pre>
+<p>RIGHT$ returns a new string with the last <i>number</i> characters of <i>string$</i>.</p>
+<pre>
+<code>PRINT RIGHT$("LOWRES CODER",5)</code>
+CODER
+</pre>
+
+<h3 id="_MID">=MID$</h3>
+<pre>s$=MID$(string$,position,number)</pre>
+<p>MID$ returns a new string with <i>number</i> characters of <i>string$</i>, starting at character <i>position</i>. The first character has the position 1.</p>
+<pre>
+<code>PRINT MID$("LOWRES CODER",4,3)</code>
+RES
+</pre>
+
+<h3 id="_INSTR">=INSTR</h3>
+<pre>v=INSTR(string$,search$[,position])</pre>
+<p>INSTR searches the first occurrence of <i>search$</i> inside of <i>string$</i> and returns the position. If it's not found, the function returns 0.<p>
+<pre>
+<code>PRINT INSTR("LOWRES CODER","RES")</code>
+4
+</pre>
+<p>Usually the function starts searching at the beginning of the string. Optionally it can start at <i>position</i>.</p>
+<pre>
+<code>PRINT INSTR("LOWRES CODER","E",6)</code>
+11
+</pre>
+
+<h3 id="_CHR">=CHR$</h3>
+<pre>s$=CHR$(ascii)</pre>
+<p>CHR$ returns a string containing one character with ASCII code <i>ascii</i>. Note that LowRes Coder's font has only a limited range of characters (english capital letters, numbers and some symbols).</p>
+<pre>
+<code>FOR I=32 TO 90
+  PRINT CHR$(I)
+NEXT I</code>
+</pre>
+
+<h3 id="_ASC">=ASC</h3>
+<pre>v=ASC(string$)</pre>
+<p>ASC supplies you with the ASCII code of the first character of <i>string$</i>.</p>
+<pre>
+<code>PRINT ASC("L")</code>
+76
+</pre>
+
+<h3 id="_LEN">=LEN</h3>
+<pre>v=LEN(string$)</pre>
+<p>LEN returns the number of characters in <i>string$</i>.</p>
+<pre>
+<code>PRINT LEN("LOWRES CODER")</code>
+12
+</pre>
+
+<h3 id="_VAL">=VAL</h3>
+<pre>v=VAL(string$)</pre>
+<p>VAL converts a number written in <i>string$</i> into a numeric value.</p>
+<pre>
+<code>X=VAL("123.5")
+X=X+1
+PRINT X</code>
+124.5
+</pre>
+
+<h3 id="_STR">=STR$</h3>
+<pre>s$=STR$(number)</pre>
+<p>STR$ converts a number value into a string. Usually this function is not neccessary, because numbers are converted automatically to strings where needed.</p>
+<pre>
+<code>PRINT STR$(255)</code>
+255
+</pre>
+
+<h3 id="_HEX">=HEX$</h3>
+<pre>s$=HEX$(number)</pre>
+<p>HEX$ converts a number value into a hexadecimal string.</p>
+<pre>
+<code>PRINT HEX$(255)</code>
+FF
+</pre>
+
 <h1 id="Maths-functions">Maths functions</h1>
+
+<p>LowRes Coder has all maths functions of the classic BASIC programming language.</p>
 
 <h3 id="_ABS">=ABS</h3>
 <pre>v=ABS(x)</pre>
@@ -516,40 +582,6 @@ PRINT "DONE"</code>
 <pre>v=PI</pre>
 <p>PI is the ratio of the circumference of a circle to its diameter: 3.1415926535...</p>
 
-<h1 id="Sprites">Sprites</h1>
-
-<p>Coming soon.</p>
-
-<h1 id="User-input">User input</h1>
-
-<h3 id="_GAMEPAD">GAMEPAD</h3>
-<pre>GAMEPAD players</pre>
-<p>GAMEPAD shows game controls (a direction pad and two buttons) for the given number of players. Currently only one player is supported. If <i>players</i> is 0, the controls will be hidden.</p>
-
-<h3 id="_UP">=UP</h3>
-<pre>v=UP(player)</pre>
-<p>Returns TRUE if up is currently pressed on the direction pad of the given player. <i>player</i> starts with 0 for the first one.</p>
-
-<h3 id="_DOWN">=DOWN</h3>
-<pre>v=DOWN(player)</pre>
-<p>Returns TRUE if down is currently pressed on the direction pad of the given player. <i>player</i> starts with 0 for the first one.</p>
-
-<h3 id="_LEFT">=LEFT</h3>
-<pre>v=LEFT(player)</pre>
-<p>Returns TRUE if left is currently pressed on the direction pad of the given player. <i>player</i> starts with 0 for the first one.</p>
-
-<h3 id="_RIGHT">=RIGHT</h3>
-<pre>v=RIGHT(player)</pre>
-<p>Returns TRUE if right is currently pressed on the direction pad of the given player. <i>player</i> starts with 0 for the first one.</p>
-
-<h3 id="_BUTTON">=BUTTON</h3>
-<pre>v=BUTTON(player[,button])</pre>
-<p>Returns TRUE if the A or B button of the given player is currently pressed. <i>player</i> starts with 0 for the first one. If <i>button</i> is omitted or 0 any button (A and B) is checked. 1 checks only the A button, 2 checks only the B button.</p>
-
-<h1 id="Sound">Sound</h1>
-
-<p>Coming soon.</p>
-
 <h1 id="Other commands">Other commands</h1>
 
 <h3 id="_PRINT">PRINT</h3>
@@ -575,7 +607,7 @@ NEXT X</code>
 
 <h3 id="_REM">REM</h3>
 <pre>REM comment</pre>
-<p>If a line starts with REM (remark) it's completely ignored by the program, so you can write comments into your code.</p>
+<p>If a line starts with REM (remark), it's completely ignored by the program, so you can write comments into your code.</p>
 <pre>
 <code>REM THIS IS A TEST PROGRAM
 REM WRITTEN BY TIMO KLOSS
@@ -588,8 +620,8 @@ PRINT "BYE"</code>
 <pre>v=TRUE</pre>
 <p>TRUE is equal to -1. It's useful for assigning it to a variable.</p>
 <pre>
-<code>ISRUNNING=TRUE
-IF ISRUNNING THEN X=X+1</code>
+<code>RUNNING=TRUE
+IF RUNNING THEN X=X+1</code>
 </pre>
 
 <h3 id="_FALSE">=FALSE</h3>

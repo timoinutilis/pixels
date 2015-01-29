@@ -44,10 +44,7 @@
     [super viewDidLoad];
     
     self.headerCell = [self.tableView dequeueReusableCellWithIdentifier:@"HeaderCell"];
-    if (self.project.iconData)
-    {
-        self.headerCell.iconImageView.image = [UIImage imageWithData:self.project.iconData];
-    }
+    self.headerCell.iconImageView.image = (self.project.iconData) ? [UIImage imageWithData:self.project.iconData] : [UIImage imageNamed:@"icon_project"];
     
     self.titleCell = [self.tableView dequeueReusableCellWithIdentifier:@"TextFieldCell"];
     self.titleCell.label.text = @"Title:";
@@ -165,6 +162,14 @@
 @end
 
 @implementation ShareHeaderCell
+
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    CALayer *imageLayer = self.iconImageView.layer;
+    imageLayer.cornerRadius = 20;
+    imageLayer.masksToBounds = YES;
+}
 
 - (void)layoutSubviews
 {
