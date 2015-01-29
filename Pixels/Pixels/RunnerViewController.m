@@ -143,7 +143,7 @@
 - (void)run
 {
     self.isRunning = YES;
-    self.rendererView.shouldMakeThumbnail = YES;
+    self.rendererView.shouldMakeThumbnail = !self.project.isDefault.boolValue; // don't change thumbnails for example projects
     
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     

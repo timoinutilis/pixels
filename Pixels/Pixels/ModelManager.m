@@ -142,7 +142,7 @@ NSString *const ModelManagerWillSaveDataNotification = @"ModelManagerWillSaveDat
 - (void)createDefaultProjects
 {
     NSError *error;
-    NSURL *url = [[NSBundle mainBundle] URLForResource:@"DefaultProjects" withExtension:@"json"];
+    NSURL *url = [[NSBundle mainBundle] URLForResource:@"DefaultProjects" withExtension:@"json" subdirectory:@"Default Projects"];
     NSData *jsonData = [NSData dataWithContentsOfURL:url];
     NSArray *jsonProjects = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
     
@@ -155,7 +155,7 @@ NSString *const ModelManagerWillSaveDataNotification = @"ModelManagerWillSaveDat
         project.sourceCode = jsonProject[@"sourceCode"];
         
         NSString *iconName = jsonProject[@"icon"];
-        NSURL *iconUrl = [[NSBundle mainBundle] URLForResource:iconName withExtension:@"png"];
+        NSURL *iconUrl = [[NSBundle mainBundle] URLForResource:iconName withExtension:@"png" subdirectory:@"Default Projects"];
         project.iconData = [NSData dataWithContentsOfURL:iconUrl];
     }
 }

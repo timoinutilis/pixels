@@ -13,6 +13,7 @@
 		920822031A4DABB8005B7862 /* HelpContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 920822021A4DABB8005B7862 /* HelpContent.m */; };
 		9231159F1A444A6B00624201 /* RendererView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9231159E1A444A6B00624201 /* RendererView.m */; };
 		923115A21A444AA800624201 /* Renderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 923115A11A444AA800624201 /* Renderer.m */; };
+		9248A6B01A7A641D00FD5656 /* Default Projects in Resources */ = {isa = PBXBuildFile; fileRef = 9248A6AF1A7A641D00FD5656 /* Default Projects */; };
 		924CC0FE1A220B3C00D2AF68 /* Runner.m in Sources */ = {isa = PBXBuildFile; fileRef = 924CC0FD1A220B3C00D2AF68 /* Runner.m */; };
 		92509CCA1A28F99D0086E7E3 /* ExplorerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92509CC91A28F99D0086E7E3 /* ExplorerViewController.m */; };
 		925A01A91A1E67F900A321E6 /* Parser.m in Sources */ = {isa = PBXBuildFile; fileRef = 925A01A81A1E67F900A321E6 /* Parser.m */; };
@@ -41,9 +42,6 @@
 		9276F3A91A1D289C0060E909 /* PixelsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9276F3A81A1D289C0060E909 /* PixelsTests.m */; };
 		9276F3B41A1D29BF0060E909 /* Scanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 9276F3B31A1D29BF0060E909 /* Scanner.m */; };
 		928FB8991A5C804200EA377F /* GORSeparatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 928FB8981A5C804200EA377F /* GORSeparatorView.m */; };
-		9293CFCF1A5D4B0B0099C847 /* DefaultProjects.json in Resources */ = {isa = PBXBuildFile; fileRef = 9293CFCE1A5D4B0B0099C847 /* DefaultProjects.json */; };
-		9293CFD21A5D55CA0099C847 /* racing_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 9293CFD01A5D55CA0099C847 /* racing_icon.png */; };
-		9293CFD31A5D55CA0099C847 /* tennis_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 9293CFD11A5D55CA0099C847 /* tennis_icon.png */; };
 		929797FD1A50956900DB5D70 /* PublishActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 929797FC1A50956900DB5D70 /* PublishActivity.m */; };
 		92A0EC0D1A56DA1F0051D74C /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 92A0EC0B1A56DA1F0051D74C /* Model.xcdatamodeld */; };
 		92C98F3F1A20CFD900215AE9 /* ProgramException.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C98F3E1A20CFD900215AE9 /* ProgramException.m */; };
@@ -80,6 +78,7 @@
 		9231159E1A444A6B00624201 /* RendererView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RendererView.m; sourceTree = "<group>"; };
 		923115A01A444AA800624201 /* Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
 		923115A11A444AA800624201 /* Renderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Renderer.m; sourceTree = "<group>"; };
+		9248A6AF1A7A641D00FD5656 /* Default Projects */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Default Projects"; sourceTree = "<group>"; };
 		924CC0FC1A220B3C00D2AF68 /* Runner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Runner.h; sourceTree = "<group>"; };
 		924CC0FD1A220B3C00D2AF68 /* Runner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Runner.m; sourceTree = "<group>"; };
 		92509CC81A28F99D0086E7E3 /* ExplorerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExplorerViewController.h; sourceTree = "<group>"; };
@@ -136,9 +135,6 @@
 		927E2FC91A72586E006C9B9C /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Main.storyboard; sourceTree = "<group>"; };
 		928FB8971A5C804200EA377F /* GORSeparatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GORSeparatorView.h; sourceTree = "<group>"; };
 		928FB8981A5C804200EA377F /* GORSeparatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GORSeparatorView.m; sourceTree = "<group>"; };
-		9293CFCE1A5D4B0B0099C847 /* DefaultProjects.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = DefaultProjects.json; sourceTree = "<group>"; };
-		9293CFD01A5D55CA0099C847 /* racing_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = racing_icon.png; sourceTree = "<group>"; };
-		9293CFD11A5D55CA0099C847 /* tennis_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tennis_icon.png; sourceTree = "<group>"; };
 		929797FB1A50956900DB5D70 /* PublishActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublishActivity.h; sourceTree = "<group>"; };
 		929797FC1A50956900DB5D70 /* PublishActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublishActivity.m; sourceTree = "<group>"; };
 		92A0EC0C1A56DA1F0051D74C /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
@@ -195,12 +191,10 @@
 		9204EF6B1A4C431400B8C29C /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				9248A6AF1A7A641D00FD5656 /* Default Projects */,
 				9276F3991A1D289C0060E909 /* Images.xcassets */,
 				9276F39B1A1D289C0060E909 /* LaunchScreen.xib */,
 				9204EF691A4C430300B8C29C /* manual.html */,
-				9293CFCE1A5D4B0B0099C847 /* DefaultProjects.json */,
-				9293CFD01A5D55CA0099C847 /* racing_icon.png */,
-				9293CFD11A5D55CA0099C847 /* tennis_icon.png */,
 			);
 			name = Assets;
 			sourceTree = "<group>";
@@ -506,12 +500,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9293CFD21A5D55CA0099C847 /* racing_icon.png in Resources */,
 				9204EF6A1A4C430300B8C29C /* manual.html in Resources */,
-				9293CFCF1A5D4B0B0099C847 /* DefaultProjects.json in Resources */,
-				9293CFD31A5D55CA0099C847 /* tennis_icon.png in Resources */,
 				9276F3981A1D289C0060E909 /* Main.storyboard in Resources */,
 				9276F39D1A1D289C0060E909 /* LaunchScreen.xib in Resources */,
+				9248A6B01A7A641D00FD5656 /* Default Projects in Resources */,
 				9276F39A1A1D289C0060E909 /* Images.xcassets in Resources */,
 				927334981A2A456900C89AF0 /* Help.storyboard in Resources */,
 			);
