@@ -76,6 +76,17 @@
     [self.webView stringByEvaluatingJavaScriptFromString:script];
 }
 
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+    if (navigationType == UIWebViewNavigationTypeLinkClicked)
+    {
+        // open links in Safari
+        [[UIApplication sharedApplication] openURL:[request URL]];
+        return NO;
+    }
+    return YES;
+}
+
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
     
