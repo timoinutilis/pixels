@@ -14,6 +14,10 @@ td {
 }
 a {
     color: #AA5500;
+    text-decoration: none;
+}
+li {
+    margin-bottom: 0.5em;
 }
 </style>
 </head>
@@ -26,7 +30,7 @@ a {
 <li>Take control with the on-screen gamepad!</li>
 <li>Write in a dialect of the classic, easy to learn BASIC programming language!</li>
 <li>Play the included games "LowRes Racing", "LowRes Tennis" and "LowRes Snake"! Check how they are made and improve them with your own ideas!</li>
-<li>Send the source code of your programs to friends and publish them on the LowRes Coder website!</li>
+<li>Send the source code of your programs to friends and publish them on the <a href="http://lowres.inutilis.com">LowRes Coder website</a>!</li>
 <li>Try games and demos made by the community!</li>
 </ul>
 
@@ -56,18 +60,18 @@ LOOP</code>
 <h1 id="BASIC-principles">Basic principles</h1>
 
 <h2 id="_Variables">Variables</h2>
-<p>Variables are the names used to refer to values stored in the memory of a computer. They are used to hold the results of calculations in a program.<br/>
+<p>Variables are the names used to refer to values stored in the memory of a computer. They are used to hold the results of calculations in a program. The contents of a variable can be changed at any time.<br/>
 You can choose any variable names in your programs, with the following restrictions: They must begin with a letter and cannot start with an existing LowRes Coder command or function name. Allowed characters are the letters A to Z, the numbers 0 to 9 and the underscore "_", but no spaces.<br/>
 In LowRes Coder you don't have to declare variables. They start to exist automatically when they appear the first time in your program.</p>
 
 <h3 id="_Numbers">Numbers</h3>
-<p>Without any special sign, variables store numbers, like 10, -2 or 3.5. Examples of number variables:</p>
+<p>A variable without any special sign in its name can store numbers, like 10, -2 or 3.5. Examples of number variable names:</p>
 <code>A, B2, X, Y, MY_SCORE, LIVES</code>
 <p>To assign a number to a variable, you write for example:</p>
 <code>A=10</code>
 
 <h3 id="_Strings">Strings</h3>
-<p>String variables contain text rather than numbers. They are distinguished from number variables by the $ character at the end. The $ is part of the variable name, so the variables A and A$ access different values. Examples of string variables:</p>
+<p>String variables contain text rather than numbers. They are distinguished from number variables by the $ character at the end of their name. The $ is part of the variable name, so the variables A and A$ access different values. Examples of string variables:</p>
 <code>A$, B2$, MY_NAME$, TXT$</code>
 <p>You assign a text to a string variable like this:</p>
 <code>A$="HELLO"</code>
@@ -97,7 +101,7 @@ In LowRes Coder you don't have to declare variables. They start to exist automat
 <code>PRINT (10+2)*(5-8/4+5)^2</code>
 
 <h2 id="_String-operations">String operations</h2>
-<p>You can add strings together with the plus operation.</p>
+<p>You can concatenate strings with the plus operation.</p>
 <pre>
 <code>A$="LOW"+"RES"+" CODER"
 PRINT A$</code>
@@ -116,7 +120,7 @@ LIVES: 2
 <code>COLOR 2
 TEXT X,Y,"HI"</code>
 </pre>
-<p>The parameters in the above commands are 2, X, Y and "HI".</p>
+<p>The parameters in the first command is 2 and in the second X, Y and "HI".</p>
 
 <h2 id="_Labels">Labels</h2>
 <p>Labels are a way of marking lines in your programs. They can have any names with the same restrictions as variable names have, and are followed by the ":" (colon) character.</p>
@@ -160,7 +164,7 @@ NEXT I</code>
 
 <h3 id="_CLS">CLS</h3>
 <pre>CLS color</pre>
-<p>CLS clears the whole screen with <i>color</i>. Check the color table of the COLOR command.</p>
+<p>CLS clears and fills the whole screen with <i>color</i>. Check the color table of the COLOR command.</p>
 <pre>
 <code>FOR I=0 TO 15
   CLS I
@@ -192,14 +196,14 @@ LOOP</code>
 
 <h3 id="_BOX">BOX</h3>
 <pre>BOX x1,y1 TO x2,y2</pre>
-<p>BOX draws a rectangle with the corners at the coordinates <i>x1,y1</i> and <i>x2,y2</i>.</p>
+<p>BOX draws an unfilled rectangle with the diagonal corners at the coordinates <i>x1,y1</i> and <i>x2,y2</i>.</p>
 <pre>
 <code>BOX 0,0 TO 63,63</code>
 </pre>
 
 <h3 id="_BAR">BAR</h3>
 <pre>BAR x1,y1 TO x2,y2</pre>
-<p>BAR paints a filled rectangle with the corners at the coordinates <i>x1,y1</i> and <i>x2,y2</i>.</p>
+<p>BAR paints a filled rectangle with the diagonal corners at the coordinates <i>x1,y1</i> and <i>x2,y2</i>.</p>
 <pre>
 <code>BAR 2,20 TO 61,43</code>
 </pre>
@@ -467,12 +471,12 @@ RES
 
 <h3 id="_INSTR">=INSTR</h3>
 <pre>v=INSTR(string$,search$[,position])</pre>
-<p>INSTR searches the first occurrence of <i>search$</i> inside of <i>string$</i> and returns the position. If it's not found, the function returns 0.<p>
+<p>INSTR searches the first occurrence of <i>search$</i> inside of <i>string$</i> and returns its start position. If it's not found, the function returns 0.<p>
 <pre>
 <code>PRINT INSTR("LOWRES CODER","RES")</code>
 4
 </pre>
-<p>Usually the function starts searching at the beginning of the string. Optionally it can start at <i>position</i>.</p>
+<p>Usually the function starts searching at the beginning of the string. Optionally it can start searching at <i>position</i>.</p>
 <pre>
 <code>PRINT INSTR("LOWRES CODER","E",6)</code>
 11
