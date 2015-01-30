@@ -22,7 +22,7 @@
 - (void)runCommand;
 - (void)end;
 - (void)next;
-- (void)exitLoop;
+- (BOOL)exitLoop;
 - (void)resetSequence;
 - (BOOL)gotoLabel:(NSString *)label isGosub:(BOOL)isGosub;
 - (BOOL)returnFromGosub;

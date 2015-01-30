@@ -260,6 +260,14 @@
         }
     }
     
+    if (tokens.count > 0 && ((Token *)tokens.lastObject).type != TTypeSymEol)
+    {
+        Token *token = [[Token alloc] init];
+        token.type = TTypeSymEol;
+        token.position = len;
+        [tokens addObject:token];
+    }
+    
     return tokens;
 }
 

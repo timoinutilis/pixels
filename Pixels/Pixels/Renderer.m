@@ -40,7 +40,11 @@ uint8_t FontWidth[256] = {2, 2, 2, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 
 
 - (int)colorAtX:(int)x Y:(int)y
 {
-    return _pixelBuffer[y][x];
+    if (x >= 0 && x < RendererSize && y >= 0 && y < RendererSize)
+    {
+        return _pixelBuffer[y][x];
+    }
+    return -1;
 }
 
 - (void)clearWithColorIndex:(int)colorIndex

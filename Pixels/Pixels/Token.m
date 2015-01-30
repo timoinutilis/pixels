@@ -114,6 +114,7 @@
         case TTypeSymComma: return @",";
         case TTypeSymDollar: return @"$";
         case TTypeSymEol: return printable ? @"end of line" : @"\n";
+        
         case TType_count: return nil;
     }
     return nil;

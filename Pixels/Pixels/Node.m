@@ -287,6 +287,18 @@
     [self.endExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
     [self.stepExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
     
+    if (self.matchingVariable)
+    {
+        [self.matchingVariable prepareWithRunnable:runnable pass:pass canBeString:NO];
+        if (pass == PrePassCheckSemantic && ![self.variable.identifier isEqualToString:self.matchingVariable.identifier])
+        {
+            NSException *exception = [ProgramException exceptionWithName:@"UnmatchingNext"
+                                                                  reason:@"NEXT not matching with FOR"
+                                                                   token:self.token];
+            @throw exception;
+        }
+    }
+    
     [runnable prepareNodes:self.commands pass:pass];
 }
 
@@ -454,7 +466,14 @@
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    [runner exitLoop];
+    BOOL success = [runner exitLoop];
+    if (!success)
+    {
+        NSException *exception = [ProgramException exceptionWithName:@"ExitOutsideLoop"
+                                                              reason:@"EXIT outside of loop"
+                                                               token:self.token];
+        @throw exception;
+    }
     return nil;
 }
 
@@ -474,7 +493,11 @@
     [runner.delegate updateRendererView];
     
     NSNumber *value = [self.time evaluateWithRunner:runner];
-    NSTimeInterval timeInterval = MAX(value.floatValue, 0.04);
+    if (value.floatValue < 0.0)
+    {
+        @throw [ProgramException invalidParameterExceptionWithNode:self value:value.floatValue];
+    }
+    NSTimeInterval timeInterval = MIN(60.0, MAX(value.floatValue, 0.04));
     [NSThread sleepForTimeInterval:timeInterval];
     [runner next];
     return nil;
@@ -500,6 +523,10 @@
 - (id)evaluateWithRunner:(Runner *)runner
 {
     NSNumber *players = [self.playersExpression evaluateWithRunner:runner];
+    if (players.intValue < 0 || players.intValue > 1)
+    {
+        @throw [ProgramException invalidParameterExceptionWithNode:self value:players.intValue];
+    }
     [runner.delegate setGamepadModeWithPlayers:players.intValue];
     [runner next];
     return nil;
@@ -518,6 +545,10 @@
 - (id)evaluateWithRunner:(Runner *)runner
 {
     NSNumber *value = [self.color evaluateWithRunner:runner];
+    if (value.intValue < 0 || value.intValue > 15)
+    {
+        @throw [ProgramException invalidParameterExceptionWithNode:self value:value.intValue];
+    }
     runner.renderer.colorIndex = value.intValue;
     [runner next];
     return nil;
@@ -537,6 +568,10 @@
 - (id)evaluateWithRunner:(Runner *)runner
 {
     NSNumber *color = [self.color evaluateWithRunner:runner];
+    if (color.intValue < 0 || color.intValue > 15)
+    {
+        @throw [ProgramException invalidParameterExceptionWithNode:self value:color.intValue];
+    }
     [runner.renderer clearWithColorIndex:color.intValue];
     runner.printLine = 0;
     [runner next];
@@ -703,7 +738,11 @@
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-//    NSNumber *port = [self.portExpression evaluateWithRunner:runner];
+    NSNumber *port = [self.portExpression evaluateWithRunner:runner];
+    if (port.intValue < 0 || port.intValue > 0)
+    {
+        @throw [ProgramException invalidParameterExceptionWithNode:self value:port.intValue];
+    }
     BOOL result = NO;
     switch (self.type)
     {
@@ -741,8 +780,12 @@
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    //    NSNumber *port = [self.portExpression evaluateWithRunner:runner];
+    NSNumber *port = [self.portExpression evaluateWithRunner:runner];
     NSNumber *button = [self.buttonExpression evaluateWithRunner:runner];
+    if (port.intValue < 0 || port.intValue > 0)
+    {
+        @throw [ProgramException invalidParameterExceptionWithNode:self value:port.intValue];
+    }
     BOOL result = NO;
     switch (button.intValue)
     {
@@ -756,6 +799,10 @@
             
         case 2:
             result = [runner.delegate isButtonDown:ButtonTypeB];
+            break;
+            
+        default:
+            @throw [ProgramException invalidParameterExceptionWithNode:self value:button.intValue];
             break;
     }
     return @(result ? -1 : 0);
@@ -852,7 +899,7 @@
         case TTypeSymLog:
             if (value <= 0)
             {
-                @throw [ProgramException invalidParameterExceptionWithNode:self];
+                @throw [ProgramException invalidParameterExceptionWithNode:self value:value];
             }
             result = logf(value);
             break;
@@ -865,7 +912,7 @@
         case TTypeSymSqr:
             if (value < 0)
             {
-                @throw [ProgramException invalidParameterExceptionWithNode:self];
+                @throw [ProgramException invalidParameterExceptionWithNode:self value:value];
             }
             result = sqrtf(value);
             break;
@@ -896,7 +943,7 @@
     NSNumber *number = [self.numberExpression evaluateWithRunner:runner];
     if (number.intValue < 0)
     {
-        @throw [ProgramException invalidParameterExceptionWithNode:self];
+        @throw [ProgramException invalidParameterExceptionWithNode:self value:number.intValue];
     }
     if (number.intValue >= string.length)
     {
@@ -929,7 +976,7 @@
     NSUInteger len = string.length;
     if (number.intValue < 0)
     {
-        @throw [ProgramException invalidParameterExceptionWithNode:self];
+        @throw [ProgramException invalidParameterExceptionWithNode:self value:number.intValue];
     }
     if (number.intValue >= len)
     {
@@ -962,9 +1009,13 @@
     NSNumber *position = [self.positionExpression evaluateWithRunner:runner];
     NSNumber *number = [self.numberExpression evaluateWithRunner:runner];
     NSUInteger len = string.length;
-    if (position.intValue < 1 || number.intValue < 1)
+    if (position.intValue < 1)
     {
-        @throw [ProgramException invalidParameterExceptionWithNode:self];
+        @throw [ProgramException invalidParameterExceptionWithNode:self value:position.intValue];
+    }
+    if (number.intValue < 1)
+    {
+        @throw [ProgramException invalidParameterExceptionWithNode:self value:number.intValue];
     }
     if (position.intValue - 1 + number.intValue > len)
     {
@@ -1000,7 +1051,7 @@
     
     if (position.intValue < 1)
     {
-        @throw [ProgramException invalidParameterExceptionWithNode:self];
+        @throw [ProgramException invalidParameterExceptionWithNode:self value:position.intValue];
     }
     if (position.intValue > len)
     {
@@ -1031,7 +1082,7 @@
     NSNumber *ascii = [self.asciiExpression evaluateWithRunner:runner];
     if (ascii.intValue < 0 || ascii.intValue > 127)
     {
-        @throw [ProgramException invalidParameterExceptionWithNode:self];
+        @throw [ProgramException invalidParameterExceptionWithNode:self value:ascii.intValue];
     }
     const unichar character = (const unichar)ascii.intValue;
     return [NSString stringWithCharacters:&character length:1];
@@ -1058,7 +1109,7 @@
     NSString *string = [self.stringExpression evaluateWithRunner:runner];
     if (string.length < 1)
     {
-        @throw [ProgramException invalidParameterExceptionWithNode:self];
+        @throw [ProgramException invalidParameterExceptionWithNode:self value:0];
     }
     unichar character = [string characterAtIndex:0];
     return @((int)character);

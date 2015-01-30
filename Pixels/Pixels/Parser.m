@@ -382,7 +382,7 @@
     [self accept:TTypeSymNext];
     if (self.token.type == TTypeIdentifier)
     {
-        [self acceptVariable];
+        node.matchingVariable = [self acceptVariable];
     }
     return node;
 }

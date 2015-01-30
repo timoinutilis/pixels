@@ -27,9 +27,11 @@
     return [[ProgramException alloc] initWithName:@"TypeMismatch" reason:@"Type mismatch" userInfo:@{@"token": node.token}];
 }
 
-+ (ProgramException *)invalidParameterExceptionWithNode:(Node *)node
++ (ProgramException *)invalidParameterExceptionWithNode:(Node *)node value:(float)value
 {
-    return [[ProgramException alloc] initWithName:@"InvalidParameter" reason:@"Invalid parameter" userInfo:@{@"token": node.token}];
+    return [[ProgramException alloc] initWithName:@"InvalidParameter"
+                                           reason:[NSString stringWithFormat:@"Invalid parameter with value %.*f", ((int)value == value) ? 0 : 4, value]
+                                         userInfo:@{@"token": node.token}];
 }
 
 - (NSUInteger)position

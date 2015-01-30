@@ -64,6 +64,7 @@
 
 @interface ForNextNode : Node
 @property VariableNode *variable;
+@property VariableNode *matchingVariable;
 @property Node *startExpression;
 @property Node *endExpression;
 @property Node *stepExpression;

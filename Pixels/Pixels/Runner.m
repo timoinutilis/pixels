@@ -84,16 +84,21 @@
     }
 }
 
-- (void)exitLoop
+- (BOOL)exitLoop
 {
     Sequence *sequence = self.sequencesStack.lastObject;
     while (!sequence.isLoop)
     {
         [self.sequencesStack removeLastObject];
         sequence = self.sequencesStack.lastObject;
+        if (!sequence)
+        {
+            return NO;
+        }
     }
     [self.sequencesStack removeLastObject];
     [self next];
+    return YES;
 }
 
 - (void)resetSequence
