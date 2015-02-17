@@ -84,6 +84,14 @@
 
 @implementation VariableNode
 
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    for (Node *expression in self.indexExpressions)
+    {
+        [expression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    }
+}
+
 - (id)evaluateWithRunner:(Runner *)runner
 {
     return [runner valueOfVariable:self];
@@ -92,6 +100,21 @@
 - (BOOL)returnsString
 {
     return self.isString;
+}
+
+- (NSArray *)indexesWithRunner:(Runner *)runner add:(int)addValue
+{
+    NSMutableArray *indexes = [NSMutableArray array];
+    for (Node *expressionNode in self.indexExpressions)
+    {
+        NSNumber *indexNumber = [expressionNode evaluateWithRunner:runner];
+        if (addValue != 0)
+        {
+            indexNumber = @(indexNumber.intValue + addValue);
+        }
+        [indexes addObject:indexNumber];
+    }
+    return indexes;
 }
 
 @end
@@ -362,6 +385,30 @@
 {
     id value = [self.expression evaluateWithRunner:runner];
     [runner setValue:value forVariable:self.variable];
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
+@implementation DimNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    for (VariableNode *variableNode in self.variableNodes)
+    {
+        [variableNode prepareWithRunnable:runnable pass:pass];
+    }
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    for (VariableNode *variableNode in self.variableNodes)
+    {
+        [runner dimVariable:variableNode];
+    }
     [runner next];
     return nil;
 }

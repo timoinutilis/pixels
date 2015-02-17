@@ -149,6 +149,9 @@
         case TTypeSymLet:
             node = [self acceptLet];
             break;
+        case TTypeSymDim:
+            node = [self acceptDim];
+            break;
         case TTypeSymWhile:
             node = [self acceptWhileWend];
             break;
@@ -309,6 +312,27 @@
     node.variable = [self acceptVariable];
     [self accept:TTypeSymOpEq];
     node.expression = [self acceptExpression];
+    return node;
+}
+
+- (Node *)acceptDim
+{
+    DimNode *node = [[DimNode alloc] init];
+    [self accept:TTypeSymDim];
+    NSMutableArray *variableNodes = [NSMutableArray array];
+    BOOL more = NO;
+    do
+    {
+        VariableNode *variableNode = [self acceptVariable];
+        [variableNodes addObject:variableNode];
+        more = (self.token.type == TTypeSymComma);
+        if (more)
+        {
+            [self accept:TTypeSymComma];
+        }
+    } while (more);
+    node.variableNodes = variableNodes;
+    
     return node;
 }
 
@@ -858,11 +882,30 @@
     [self accept:TTypeIdentifier];
     if (self.token.type == TTypeSymDollar)
     {
+        // is string
         [self accept:TTypeSymDollar];
         node.isString = YES;
     }
+    if (self.token.type == TTypeSymBracketOpen)
+    {
+        // is array variable
+        [self accept:TTypeSymBracketOpen];
+        NSMutableArray *indexExpressions = [NSMutableArray array];
+        BOOL more = NO;
+        do
+        {
+            Node *indexExpression = [self acceptExpression];
+            [indexExpressions addObject:indexExpression];
+            more = (self.token.type == TTypeSymComma);
+            if (more)
+            {
+                [self accept:TTypeSymComma];
+            }
+        } while (more);
+        [self accept:TTypeSymBracketClose];
+        node.indexExpressions = indexExpressions;
+    }
     return node;
-
 }
 
 @end

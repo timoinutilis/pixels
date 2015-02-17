@@ -28,6 +28,7 @@
 - (BOOL)returnFromGosub;
 - (void)addSequenceWithNodes:(NSArray *)nodes isLoop:(BOOL)isLoop parent:(Node *)parent;
 
+- (void)dimVariable:(VariableNode *)variable;
 - (void)setValue:(id)value forVariable:(VariableNode *)variable;
 - (id)valueOfVariable:(VariableNode *)variable;
 
@@ -42,10 +43,14 @@
 @end
 
 @interface SequenceTreeSnapshot : NSObject
-
 @property (readonly) NSMutableArray *sequencesStack;
 @property (readonly) NSMutableArray *indexes;
-
 - (instancetype)initWithSequencesStack:(NSMutableArray *)stack;
+@end
 
+@interface ArrayVariable : NSObject
+@property (readonly) NSMutableArray *values;
+@property (readonly) NSArray *sizes;
+- (instancetype)initWithSizes:(NSArray *)sizes;
+- (NSUInteger)offsetForIndexes:(NSArray *)indexes;
 @end

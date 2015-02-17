@@ -35,6 +35,8 @@
 @interface VariableNode : Node
 @property NSString *identifier;
 @property BOOL isString;
+@property NSArray *indexExpressions;
+- (NSArray *)indexesWithRunner:(Runner *)runner add:(int)addValue;
 @end
 
 @interface LabelNode : Node
@@ -74,6 +76,10 @@
 @interface LetNode : Node
 @property VariableNode *variable;
 @property Node *expression;
+@end
+
+@interface DimNode : Node
+@property NSArray *variableNodes;
 @end
 
 @interface RepeatUntilNode : Node

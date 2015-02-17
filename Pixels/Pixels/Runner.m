@@ -162,36 +162,78 @@
     [self.sequencesStack addObject:sequence];
 }
 
-- (void)setValue:(id)value forVariable:(VariableNode *)variable
+- (void)dimVariable:(VariableNode *)variable
 {
+    NSArray *sizes = [variable indexesWithRunner:self add:1];
+    ArrayVariable *arrayVariable = [[ArrayVariable alloc] initWithSizes:sizes];
+    
     if (variable.isString)
     {
-        self.stringVariables[variable.identifier] = value;
+        self.stringVariables[variable.identifier] = arrayVariable;
     }
     else
     {
-        self.numberVariables[variable.identifier] = value;
+        self.numberVariables[variable.identifier] = arrayVariable;
+    }
+}
+
+- (void)setValue:(id)value forVariable:(VariableNode *)variable
+{
+    NSMutableDictionary *dict = variable.isString ? self.stringVariables : self.numberVariables;
+    
+    if (variable.indexExpressions)
+    {
+        // is array variable
+        if ([dict[variable.identifier] isKindOfClass:[ArrayVariable class]])
+        {
+            ArrayVariable *arrayVariable = dict[variable.identifier];
+            NSArray *indexes = [variable indexesWithRunner:self add:0];
+            NSUInteger offset = [arrayVariable offsetForIndexes:indexes];
+            arrayVariable.values[offset] = value;
+        }
+        else
+        {
+            //TODO error
+        }
+    }
+    else
+    {
+        // is simple variable
+        dict[variable.identifier] = value;
     }
 }
 
 - (id)valueOfVariable:(VariableNode *)variable
 {
-    if (variable.isString)
+    NSMutableDictionary *dict = variable.isString ? self.stringVariables : self.numberVariables;
+    id value = nil;
+    
+    if (variable.indexExpressions)
     {
-        NSString *value = self.stringVariables[variable.identifier];
-        if (value)
+        // is array variable
+        if ([dict[variable.identifier] isKindOfClass:[ArrayVariable class]])
         {
-            return value;
+            ArrayVariable *arrayVariable = dict[variable.identifier];
+            NSArray *indexes = [variable indexesWithRunner:self add:0];
+            NSUInteger offset = [arrayVariable offsetForIndexes:indexes];
+            value = arrayVariable.values[offset];
         }
-        return @"";
+        else
+        {
+            //TODO error
+        }
+    }
+    else
+    {
+        // is simple variable
+        value = dict[variable.identifier];
     }
     
-    NSNumber *value = self.numberVariables[variable.identifier];
-    if (value)
+    if (!value || value == [NSNull null])
     {
-        return value;
+        value = variable.isString ? @"" : @(0);
     }
-    return @(0);
+    return value;
 }
 
 @end
@@ -217,6 +259,41 @@
         }
     }
     return self;
+}
+
+@end
+
+
+@implementation ArrayVariable
+
+- (instancetype)initWithSizes:(NSArray *)sizes
+{
+    if (self = [super init])
+    {
+        _sizes = sizes;
+        NSUInteger capacity = [self offsetForIndexes:sizes];
+        _values = [NSMutableArray arrayWithCapacity:capacity];
+        for (NSUInteger i = 0; i < capacity; i++)
+        {
+            _values[i] = [NSNull null];
+        }
+    }
+    return self;
+}
+
+- (NSUInteger)offsetForIndexes:(NSArray *)indexes
+{
+    NSUInteger offset = 0;
+    int factor = 1;
+    for (int i = (int)self.sizes.count - 1; i >= 0; i--)
+    {
+        if (i < indexes.count)
+        {
+            offset += [indexes[i] intValue] * factor;
+        }
+        factor *= [self.sizes[i] intValue];
+    }
+    return offset;
 }
 
 @end
