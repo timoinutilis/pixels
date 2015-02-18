@@ -195,14 +195,7 @@
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    BOOL success = [runner gotoLabel:self.label isGosub:NO];
-    if (!success)
-    {
-        NSException *exception = [ProgramException exceptionWithName:@"UnaccessibleLabel"
-                                                              reason:[NSString stringWithFormat:@"Unaccessible label %@", self.label]
-                                                               token:self.token];
-        @throw exception;
-    }
+    [runner gotoLabel:self.label isGosub:NO atToken:self.token];
     return nil;
 }
 
@@ -228,14 +221,7 @@
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    BOOL success = [runner gotoLabel:self.label isGosub:YES];
-    if (!success)
-    {
-        NSException *exception = [ProgramException exceptionWithName:@"UnaccessibleLabel"
-                                                              reason:[NSString stringWithFormat:@"Unaccessible label %@", self.label]
-                                                               token:self.token];
-        @throw exception;
-    }
+    [runner gotoLabel:self.label isGosub:YES atToken:self.token];
     return nil;
 }
 
@@ -247,14 +233,7 @@
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    BOOL success = [runner returnFromGosub];
-    if (!success)
-    {
-        NSException *exception = [ProgramException exceptionWithName:@"ReturnWithoutGosub"
-                                                              reason:[NSString stringWithFormat:@"RETURN without GOSUB"]
-                                                               token:self.token];
-        @throw exception;
-    }
+    [runner returnFromGosubAtToken:self.token];
     return nil;
 }
 
@@ -353,7 +332,7 @@
     [runner setValue:value forVariable:self.variable];
     if ((self.increment > 0 && value.floatValue > self.limit) || (self.increment < 0 && value.floatValue < self.limit))
     {
-        [runner exitLoop];
+        [runner exitLoopAtToken:self.token];
     }
     else
     {
@@ -440,7 +419,7 @@
     }
     else
     {
-        [runner exitLoop];
+        [runner exitLoopAtToken:self.token];
     }
 }
 
@@ -475,7 +454,7 @@
     NSNumber *value = [self.condition evaluateWithRunner:runner];
     if (value.intValue == 0)
     {
-        [runner exitLoop];
+        [runner exitLoopAtToken:self.token];
     }
     else
     {
@@ -513,14 +492,7 @@
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    BOOL success = [runner exitLoop];
-    if (!success)
-    {
-        NSException *exception = [ProgramException exceptionWithName:@"ExitOutsideLoop"
-                                                              reason:@"EXIT outside of loop"
-                                                               token:self.token];
-        @throw exception;
-    }
+    [runner exitLoopAtToken:self.token];
     return nil;
 }
 

@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "RunnerDelegate.h"
 
-@class Node, Renderer, Runnable, VariableNode;
+@class Node, Renderer, Runnable, VariableNode, Token;
 
 @interface Runner : NSObject
 
@@ -22,10 +22,10 @@
 - (void)runCommand;
 - (void)end;
 - (void)next;
-- (BOOL)exitLoop;
+- (void)exitLoopAtToken:(Token *)token;
 - (void)resetSequence;
-- (BOOL)gotoLabel:(NSString *)label isGosub:(BOOL)isGosub;
-- (BOOL)returnFromGosub;
+- (void)gotoLabel:(NSString *)label isGosub:(BOOL)isGosub atToken:(Token *)token;
+- (void)returnFromGosubAtToken:(Token *)token;
 - (void)addSequenceWithNodes:(NSArray *)nodes isLoop:(BOOL)isLoop parent:(Node *)parent;
 
 - (void)dimVariable:(VariableNode *)variable;

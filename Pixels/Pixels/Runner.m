@@ -10,6 +10,7 @@
 #import "Node.h"
 #import "Renderer.h"
 #import "Runnable.h"
+#import "ProgramException.h"
 
 @interface Runner ()
 @property Runnable *runnable;
@@ -84,7 +85,7 @@
     }
 }
 
-- (BOOL)exitLoop
+- (void)exitLoopAtToken:(Token *)token
 {
     Sequence *sequence = self.sequencesStack.lastObject;
     while (!sequence.isLoop)
@@ -93,12 +94,14 @@
         sequence = self.sequencesStack.lastObject;
         if (!sequence)
         {
-            return NO;
+            NSException *exception = [ProgramException exceptionWithName:@"ExitOutsideLoop"
+                                                                  reason:@"EXIT outside of loop"
+                                                                   token:token];
+            @throw exception;
         }
     }
     [self.sequencesStack removeLastObject];
     [self next];
-    return YES;
 }
 
 - (void)resetSequence
@@ -107,7 +110,7 @@
     sequence.index = 0;
 }
 
-- (BOOL)gotoLabel:(NSString *)label isGosub:(BOOL)isGosub
+- (void)gotoLabel:(NSString *)label isGosub:(BOOL)isGosub atToken:(Token *)token
 {
     if (isGosub)
     {
@@ -125,16 +128,20 @@
             if (sequence.nodes[i] == node)
             {
                 sequence.index = i;
-                return YES;
+                return;
             }
         }
         [self.sequencesStack removeLastObject];
         sequence = self.sequencesStack.lastObject;
     }
-    return NO;
+    
+    NSException *exception = [ProgramException exceptionWithName:@"UnaccessibleLabel"
+                                                          reason:[NSString stringWithFormat:@"Unaccessible label %@", label]
+                                                           token:token];
+    @throw exception;
 }
 
-- (BOOL)returnFromGosub
+- (void)returnFromGosubAtToken:(Token *)token
 {
     SequenceTreeSnapshot *snapshot = self.gosubStack.lastObject;
     if (snapshot)
@@ -147,9 +154,13 @@
             sequence.index = [snapshot.indexes[i] integerValue];
         }
         [self next];
-        return YES;
+        return;
     }
-    return NO;
+    
+    NSException *exception = [ProgramException exceptionWithName:@"ReturnWithoutGosub"
+                                                          reason:@"RETURN without GOSUB"
+                                                           token:token];
+    @throw exception;
 }
 
 - (void)addSequenceWithNodes:(NSArray *)nodes isLoop:(BOOL)isLoop parent:(Node *)parent
@@ -165,75 +176,132 @@
 - (void)dimVariable:(VariableNode *)variable
 {
     NSArray *sizes = [variable indexesWithRunner:self add:1];
+    
+    // check bounds
+    for (NSUInteger i = 0; i < sizes.count; i++)
+    {
+        int size = [sizes[i] intValue];
+        if (size < 1)
+        {
+            NSException *exception = [ProgramException invalidParameterExceptionWithNode:variable value:size - 1];
+
+            @throw exception;
+        }
+    }
+    
     ArrayVariable *arrayVariable = [[ArrayVariable alloc] initWithSizes:sizes];
     
-    if (variable.isString)
+    if (!arrayVariable.values)
     {
-        self.stringVariables[variable.identifier] = arrayVariable;
+        NSException *exception = [ProgramException exceptionWithName:@"ArrayTooLarge"
+                                                              reason:@"Array too large"
+                                                               token:variable.token];
+        @throw exception;
     }
-    else
+    
+    NSMutableDictionary *dict = variable.isString ? self.stringVariables : self.numberVariables;
+    
+    if (dict[variable.identifier])
     {
-        self.numberVariables[variable.identifier] = arrayVariable;
+        NSException *exception = [ProgramException exceptionWithName:@"VariableAlreadyUsed"
+                                                              reason:[NSString stringWithFormat:@"Variable %@ already used", variable.identifier]
+                                                               token:variable.token];
+        @throw exception;
     }
+    
+    dict[variable.identifier] = arrayVariable;
 }
 
 - (void)setValue:(id)value forVariable:(VariableNode *)variable
 {
-    NSMutableDictionary *dict = variable.isString ? self.stringVariables : self.numberVariables;
-    
-    if (variable.indexExpressions)
-    {
-        // is array variable
-        if ([dict[variable.identifier] isKindOfClass:[ArrayVariable class]])
-        {
-            ArrayVariable *arrayVariable = dict[variable.identifier];
-            NSArray *indexes = [variable indexesWithRunner:self add:0];
-            NSUInteger offset = [arrayVariable offsetForIndexes:indexes];
-            arrayVariable.values[offset] = value;
-        }
-        else
-        {
-            //TODO error
-        }
-    }
-    else
-    {
-        // is simple variable
-        dict[variable.identifier] = value;
-    }
+    [self accessVariable:variable setValue:value];
 }
 
 - (id)valueOfVariable:(VariableNode *)variable
 {
-    NSMutableDictionary *dict = variable.isString ? self.stringVariables : self.numberVariables;
-    id value = nil;
-    
-    if (variable.indexExpressions)
-    {
-        // is array variable
-        if ([dict[variable.identifier] isKindOfClass:[ArrayVariable class]])
-        {
-            ArrayVariable *arrayVariable = dict[variable.identifier];
-            NSArray *indexes = [variable indexesWithRunner:self add:0];
-            NSUInteger offset = [arrayVariable offsetForIndexes:indexes];
-            value = arrayVariable.values[offset];
-        }
-        else
-        {
-            //TODO error
-        }
-    }
-    else
-    {
-        // is simple variable
-        value = dict[variable.identifier];
-    }
-    
+    id value = [self accessVariable:variable setValue:nil];
     if (!value || value == [NSNull null])
     {
         value = variable.isString ? @"" : @(0);
     }
     return value;
+}
+
+- (id)accessVariable:(VariableNode *)variable setValue:(id)setValue
+{
+    NSMutableDictionary *dict = variable.isString ? self.stringVariables : self.numberVariables;
+    BOOL isArrayVariable = [dict[variable.identifier] isKindOfClass:[ArrayVariable class]];
+    
+    id getValue = nil;
+    
+    if (variable.indexExpressions)
+    {
+        // accessing array variable
+        if (!isArrayVariable)
+        {
+            NSException *exception = [ProgramException exceptionWithName:@"VariableNotDimensionalized"
+                                                                  reason:[NSString stringWithFormat:@"Variable %@ not dimensionalized", variable.identifier]
+                                                                   token:variable.token];
+            @throw exception;
+        }
+        ArrayVariable *arrayVariable = dict[variable.identifier];
+        
+        // check dimensions
+        if (variable.indexExpressions.count != arrayVariable.sizes.count)
+        {
+            NSException *exception = [ProgramException exceptionWithName:@"IncorrectDimensions"
+                                                                  reason:@"Incorrect number of dimensions"
+                                                                   token:variable.token];
+            @throw exception;
+        }
+        
+        NSArray *indexes = [variable indexesWithRunner:self add:0];
+        
+        // check bounds
+        for (NSUInteger i = 0; i < indexes.count; i++)
+        {
+            int index = [indexes[i] intValue];
+            if (index < 0 || index >= [arrayVariable.sizes[i] intValue])
+            {
+                NSException *exception = [ProgramException exceptionWithName:@"IndexOutOfBounds"
+                                                                      reason:[NSString stringWithFormat:@"Index out of bounds (%d)", index]
+                                                                       token:variable.token];
+                @throw exception;
+            }
+        }
+        
+        NSUInteger offset = [arrayVariable offsetForIndexes:indexes];
+        if (setValue)
+        {
+            arrayVariable.values[offset] = setValue;
+        }
+        else
+        {
+            getValue = arrayVariable.values[offset];
+        }
+    }
+    else
+    {
+        // accessing simple variable
+        if (isArrayVariable)
+        {
+            NSException *exception = [ProgramException exceptionWithName:@"ArrayVariableWithoutIndex"
+                                                                  reason:[NSString stringWithFormat:@"Array variable %@ without index", variable.identifier]
+                                                                   token:variable.token];
+            @throw exception;
+        }
+        
+        if (setValue)
+        {
+            dict[variable.identifier] = setValue;
+        }
+        else
+        {
+            getValue = dict[variable.identifier];
+        }
+    }
+    
+    return getValue;
 }
 
 @end
@@ -271,14 +339,27 @@
     if (self = [super init])
     {
         _sizes = sizes;
-        NSUInteger capacity = [self offsetForIndexes:sizes];
-        _values = [NSMutableArray arrayWithCapacity:capacity];
-        for (NSUInteger i = 0; i < capacity; i++)
+        NSUInteger capacity = [self calcCapacity];
+        if (capacity <= 16384)
         {
-            _values[i] = [NSNull null];
+            _values = [NSMutableArray arrayWithCapacity:capacity];
+            for (NSUInteger i = 0; i < capacity; i++)
+            {
+                _values[i] = [NSNull null];
+            }
         }
     }
     return self;
+}
+
+- (NSUInteger)calcCapacity
+{
+    NSUInteger capacity = 1;
+    for (NSNumber *dimensionSize in _sizes)
+    {
+        capacity *= dimensionSize.intValue;
+    }
+    return capacity;
 }
 
 - (NSUInteger)offsetForIndexes:(NSArray *)indexes

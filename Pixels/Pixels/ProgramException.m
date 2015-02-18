@@ -30,7 +30,7 @@
 + (ProgramException *)invalidParameterExceptionWithNode:(Node *)node value:(float)value
 {
     return [[ProgramException alloc] initWithName:@"InvalidParameter"
-                                           reason:[NSString stringWithFormat:@"Invalid parameter with value %.*f", ((int)value == value) ? 0 : 4, value]
+                                           reason:[NSString stringWithFormat:@"Invalid parameter (%.*f)", ((int)value == value) ? 0 : 4, value]
                                          userInfo:@{@"token": node.token}];
 }
 
