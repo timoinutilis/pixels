@@ -16,6 +16,8 @@
 @property (weak) id<RunnerDelegate> delegate;
 @property Renderer *renderer;
 @property int printLine;
+@property NSUInteger dataNodeIndex;
+@property NSUInteger dataConstantIndex;
 
 - (instancetype)initWithRunnable:(Runnable *)runnable;
 - (BOOL)isFinished;
@@ -31,6 +33,9 @@
 - (void)dimVariable:(VariableNode *)variable;
 - (void)setValue:(id)value forVariable:(VariableNode *)variable;
 - (id)valueOfVariable:(VariableNode *)variable;
+
+- (void)restoreDataLabel:(NSString *)label atToken:(Token *)token;
+- (Node *)readDataAtToken:(Token *)token;
 
 @end
 

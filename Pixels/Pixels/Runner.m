@@ -304,6 +304,45 @@
     return getValue;
 }
 
+- (void)restoreDataLabel:(NSString *)label atToken:(Token *)token
+{
+    if (label)
+    {
+        Node *labelNode = self.runnable.labels[label];
+        self.dataNodeIndex = [self.runnable.dataNodes indexOfObject:labelNode];
+    }
+    else
+    {
+        self.dataNodeIndex = 0;
+    }
+    self.dataConstantIndex = 0;
+}
+
+- (Node *)readDataAtToken:(Token *)token
+{
+    while (self.dataNodeIndex < self.runnable.dataNodes.count)
+    {
+        Node *node = self.runnable.dataNodes[self.dataNodeIndex];
+        if ([node isKindOfClass:[DataNode class]])
+        {
+            DataNode *dataNode = (DataNode *)node;
+            if (self.dataConstantIndex < dataNode.constants.count)
+            {
+                Node *constant = dataNode.constants[self.dataConstantIndex];
+                self.dataConstantIndex++;
+                return constant;
+            }
+        }
+        self.dataNodeIndex++;
+        self.dataConstantIndex = 0;
+    }
+    
+    NSException *exception = [ProgramException exceptionWithName:@"OutOfData" reason:@"Out of data" token:token];
+    @throw exception;
+    
+    return nil;
+}
+
 @end
 
 

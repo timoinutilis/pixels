@@ -68,6 +68,15 @@
 
 @implementation StringNode
 
+- (instancetype)initWithValue:(NSString *)value
+{
+    if (self = [super init])
+    {
+        self.value = value;
+    }
+    return self;
+}
+
 - (id)evaluateWithRunner:(Runner *)runner
 {
     return self.value;
@@ -128,6 +137,9 @@
     if (pass == PrePassInit)
     {
         runnable.labels[self.identifier] = self;
+        
+        // labels are needed for data too!
+        [runnable.dataNodes addObject:self];
     }
 }
 
@@ -740,6 +752,85 @@
         }
     }
     [runner.renderer drawText:text x:roundf(xPos) y:roundf(y.floatValue)];
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
+@implementation DataNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    if (pass == PrePassInit)
+    {
+        [runnable.dataNodes addObject:self];
+    }
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
+@implementation ReadNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    for (VariableNode *variable in self.variables)
+    {
+        [variable prepareWithRunnable:runnable pass:pass];
+    }
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    for (VariableNode *variable in self.variables)
+    {
+        Node *constant = [runner readDataAtToken:variable.token];
+        
+        if (constant.returnsString != variable.isString)
+        {
+            @throw [ProgramException typeMismatchExceptionWithNode:variable];
+        }
+        
+        id value = [constant evaluateWithRunner:runner];
+        [runner setValue:value forVariable:variable];
+    }
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
+@implementation RestoreNode : Node
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    if (pass == PrePassCheckSemantic)
+    {
+        if (self.label && !runnable.labels[self.label])
+        {
+            NSException *exception = [ProgramException exceptionWithName:@"UndefinedLabel"
+                                                                  reason:[NSString stringWithFormat:@"Undefined label %@", self.label]
+                                                                   token:self.token];
+            @throw exception;
+        }
+    }
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    [runner restoreDataLabel:self.label atToken:self.token];
     [runner next];
     return nil;
 }

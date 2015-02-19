@@ -195,6 +195,15 @@
         case TTypeSymText:
             node = [self acceptText];
             break;
+        case TTypeSymData:
+            node = [self acceptData];
+            break;
+        case TTypeSymRead:
+            node = [self acceptRead];
+            break;
+        case TTypeSymRestore:
+            node = [self acceptRestore];
+            break;
         default: {
             NSException *exception = [ProgramException exceptionWithName:@"ExpectedCommand" reason:@"Expected command" token:self.token];
             @throw exception;
@@ -233,6 +242,9 @@
         case TTypeSymScroll:
         case TTypeSymText:
         case TTypeSymGamepad:
+        case TTypeSymData:
+        case TTypeSymRead:
+        case TTypeSymRestore:
             return YES;
             
         case TTypeSymEnd: {
@@ -319,20 +331,7 @@
 {
     DimNode *node = [[DimNode alloc] init];
     [self accept:TTypeSymDim];
-    NSMutableArray *variableNodes = [NSMutableArray array];
-    BOOL more = NO;
-    do
-    {
-        VariableNode *variableNode = [self acceptVariable];
-        [variableNodes addObject:variableNode];
-        more = (self.token.type == TTypeSymComma);
-        if (more)
-        {
-            [self accept:TTypeSymComma];
-        }
-    } while (more);
-    node.variableNodes = variableNodes;
-    
+    node.variableNodes = [self acceptVariableList];
     return node;
 }
 
@@ -569,6 +568,67 @@
     return node;
 }
 
+- (Node *)acceptData
+{
+    DataNode *node = [[DataNode alloc] init];
+    [self accept:TTypeSymData];
+    NSMutableArray *constants = [NSMutableArray array];
+    BOOL more = NO;
+    do
+    {
+        Node *constantNode;
+        switch (self.token.type)
+        {
+            case TTypeNumber: {
+                constantNode = [[NumberNode alloc] initWithValue:self.token.attrNumber];
+                [self accept:TTypeNumber];
+                break;
+            }
+            case TTypeString: {
+                constantNode = [[StringNode alloc] initWithValue:self.token.attrString];
+                [self accept:TTypeString];
+                break;
+            }
+            default: {
+                NSException *exception = [ProgramException exceptionWithName:@"ExpectedConstant" reason:@"Expected constant" token:self.token];
+                @throw exception;
+            }
+        }
+        
+        [constants addObject:constantNode];
+        
+        more = (self.token.type == TTypeSymComma);
+        if (more)
+        {
+            [self accept:TTypeSymComma];
+        }
+    } while (more);
+    
+    node.constants = constants;
+    
+    return node;
+}
+
+- (Node *)acceptRead
+{
+    ReadNode *node = [[ReadNode alloc] init];
+    [self accept:TTypeSymRead];
+    node.variables = [self acceptVariableList];
+    return node;
+}
+
+- (Node *)acceptRestore
+{
+    RestoreNode *node = [[RestoreNode alloc] init];
+    [self accept:TTypeSymRestore];
+    if (self.token.type == TTypeIdentifier)
+    {
+        node.label = self.token.attrString;
+        [self accept:TTypeIdentifier];
+    }
+    return node;
+}
+
 #pragma mark - Expressions
 
 - (Node *)acceptExpression
@@ -647,10 +707,8 @@
                 break;
             }
             case TTypeString: {
-                StringNode *node = [[StringNode alloc] init];
-                node.value = self.token.attrString;
+                primaryNode = [[StringNode alloc] initWithValue:self.token.attrString];
                 [self accept:TTypeString];
-                primaryNode = node;
                 break;
             }
             case TTypeSymBracketOpen: {
@@ -906,6 +964,23 @@
         node.indexExpressions = indexExpressions;
     }
     return node;
+}
+
+- (NSArray *)acceptVariableList
+{
+    NSMutableArray *variables = [NSMutableArray array];
+    BOOL more = NO;
+    do
+    {
+        VariableNode *variable = [self acceptVariable];
+        [variables addObject:variable];
+        more = (self.token.type == TTypeSymComma);
+        if (more)
+        {
+            [self accept:TTypeSymComma];
+        }
+    } while (more);
+    return variables;
 }
 
 @end

@@ -17,6 +17,7 @@
     {
         _nodes = nodes;
         _labels = [NSMutableDictionary dictionary];
+        _dataNodes = [NSMutableArray array];
     }
     return self;
 }

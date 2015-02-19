@@ -30,6 +30,7 @@
 
 @interface StringNode : Node
 @property NSString *value;
+- (instancetype)initWithValue:(NSString *)value;
 @end
 
 @interface VariableNode : Node
@@ -152,6 +153,18 @@
 @property Node *xExpression;
 @property Node *yExpression;
 @property Node *alignExpression;
+@end
+
+@interface DataNode : Node
+@property NSArray *constants;
+@end
+
+@interface ReadNode : Node
+@property NSArray *variables;
+@end
+
+@interface RestoreNode : Node
+@property NSString *label;
 @end
 
 @interface DirectionPadNode : Node
