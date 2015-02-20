@@ -37,7 +37,7 @@
     
     self.navigationItem.title = self.project.name;
     
-    UIBarButtonItem *runButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(onRunTapped:)];
+    UIBarButtonItem *runButton = [[UIBarButtonItem alloc] initWithTitle:@"Start" style:UIBarButtonItemStyleDone target:self action:@selector(onRunTapped:)];
     UIBarButtonItem *helpButton = [[UIBarButtonItem alloc] initWithTitle:@"Help" style:UIBarButtonItemStylePlain target:self action:@selector(onHelpTapped:)];
     self.navigationItem.rightBarButtonItems = @[runButton, helpButton];
     

@@ -204,6 +204,25 @@
         case TTypeSymRestore:
             node = [self acceptRestore];
             break;
+        case TTypeSymDef:
+            node = [self acceptDefSprite];
+            break;
+        case TTypeSymSprite: {
+            Token *next = [self nextToken];
+            if (next.type == TTypeSymPalette)
+            {
+                node = [self acceptSpritePalette];
+            }
+            else if (next.type == TTypeSymOff)
+            {
+                node = [self acceptSpriteOff];
+            }
+            else
+            {
+                node = [self acceptSprite];
+            }
+            break;
+        }
         default: {
             NSException *exception = [ProgramException exceptionWithName:@"ExpectedCommand" reason:@"Expected command" token:self.token];
             @throw exception;
@@ -245,13 +264,19 @@
         case TTypeSymData:
         case TTypeSymRead:
         case TTypeSymRestore:
+        case TTypeSymSprite:
             return YES;
-            
+        
         case TTypeSymEnd: {
             Token *next = [self nextToken];
             return (!next || next.type != TTypeSymIf);
         }
-            
+        
+        case TTypeSymDef: {
+            Token *next = [self nextToken];
+            return (next.type == TTypeSymSprite);
+        }
+        
         default:
             return NO;
     }
@@ -565,6 +590,55 @@
         [self accept:TTypeSymComma];
         node.alignExpression = [self acceptExpression];
     }
+    return node;
+}
+
+- (Node *)acceptDefSprite
+{
+    DefSpriteNode *node = [[DefSpriteNode alloc] init];
+    [self accept:TTypeSymDef];
+    [self accept:TTypeSymSprite];
+    node.imageExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.dataVariable = [self acceptVariable];
+    return node;
+}
+
+- (Node *)acceptSpritePalette
+{
+    SpritePaletteNode *node = [[SpritePaletteNode alloc] init];
+    [self accept:TTypeSymSprite];
+    [self accept:TTypeSymPalette];
+    node.nExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.color1Expression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.color2Expression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.color3Expression = [self acceptExpression];
+    return node;
+}
+
+- (Node *)acceptSprite
+{
+    SpriteNode *node = [[SpriteNode alloc] init];
+    [self accept:TTypeSymSprite];
+    node.nExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.xExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.yExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.imageExpression = [self acceptExpression];
+    return node;
+}
+
+- (Node *)acceptSpriteOff
+{
+    SpriteOffNode *node = [[SpriteOffNode alloc] init];
+    [self accept:TTypeSymSprite];
+    [self accept:TTypeSymOff];
+    node.nExpression = [self acceptExpression];
     return node;
 }
 

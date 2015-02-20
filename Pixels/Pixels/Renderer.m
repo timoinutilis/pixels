@@ -9,6 +9,9 @@
 #import "Renderer.h"
 
 int const RendererSize = 64;
+int const RendererNumSprites = 8;
+int const RendererNumSpriteDefs = 64;
+int const RendererSpriteSize = 8;
 
 uint32_t const ColorPalette[16] = {0x000000, 0xffffff, 0xaaaaaa, 0x555555, 0xff0000, 0x550000, 0xaa5500, 0xffaa00, 0xffff00, 0x00aa00, 0x005500, 0x00aaff, 0x0000ff, 0x0000aa, 0xff00ff, 0xaa00aa};
 
@@ -20,7 +23,9 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
 
 
 @implementation Renderer {
-    unsigned char _pixelBuffer[RendererSize][RendererSize];
+    uint8_t _pixelBuffer[RendererSize][RendererSize];
+    Sprite _sprites[RendererNumSprites];
+    SpriteDef _spriteDefs[RendererNumSpriteDefs];
 }
 
 - (instancetype)init
@@ -29,6 +34,14 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
     {
         self.colorIndex = 1;
         [self clearWithColorIndex:0];
+        
+        for (int i = 0; i < RendererNumSprites; i++)
+        {
+            Sprite *sprite = &_sprites[i];
+            sprite->colors[0] = 1;
+            sprite->colors[1] = 2;
+            sprite->colors[2] = 3;
+        }
     }
     return self;
 }
@@ -254,9 +267,37 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
     return width;
 }
 
+- (Sprite *)spriteAtIndex:(int)index
+{
+    return &_sprites[index];
+}
+
 - (uint32_t)screenColorAtX:(int)x Y:(int)y
 {
-    return ColorPalette[_pixelBuffer[y][x]];
+    uint8_t colorIndex = _pixelBuffer[y][x];
+    
+    // sprites
+    for (int i = 0; i < RendererNumSprites; i++)
+    {
+        Sprite *sprite = &_sprites[i];
+        if (sprite->visible)
+        {
+            int localX = x - sprite->x;
+            int localY = y - sprite->y;
+            if (localX >= 0 && localY >= 0 && localX < RendererSpriteSize && localY < RendererSpriteSize)
+            {
+//                SpriteDef *def = &_spriteDefs[sprite->image];
+                uint8_t color = 1; //TODO
+                if (color > 0)
+                {
+                    colorIndex = sprite->colors[color - 1];
+                    break;
+                }
+            }
+        }
+    }
+    
+    return ColorPalette[colorIndex];
 }
 
 @end

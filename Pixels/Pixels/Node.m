@@ -31,6 +31,16 @@
     return nil;
 }
 
+- (NSNumber *)evaluateNumberWithRunner:(Runner *)runner min:(int)min max:(int)max
+{
+    NSNumber *number = [self evaluateWithRunner:runner];
+    if (number.intValue < min || number.intValue > max)
+    {
+        @throw [ProgramException invalidParameterExceptionWithNode:self value:number.intValue];
+    }
+    return number;
+}
+
 - (void)endOfLoopWithRunner:(Runner *)runner
 {
 }
@@ -553,11 +563,7 @@
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *players = [self.playersExpression evaluateWithRunner:runner];
-    if (players.intValue < 0 || players.intValue > 1)
-    {
-        @throw [ProgramException invalidParameterExceptionWithNode:self value:players.intValue];
-    }
+    NSNumber *players = [self.playersExpression evaluateNumberWithRunner:runner min:0 max:1];
     [runner.delegate setGamepadModeWithPlayers:players.intValue];
     [runner next];
     return nil;
@@ -575,11 +581,7 @@
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *value = [self.color evaluateWithRunner:runner];
-    if (value.intValue < 0 || value.intValue > 15)
-    {
-        @throw [ProgramException invalidParameterExceptionWithNode:self value:value.intValue];
-    }
+    NSNumber *value = [self.color evaluateNumberWithRunner:runner min:0 max:15];
     runner.renderer.colorIndex = value.intValue;
     [runner next];
     return nil;
@@ -598,11 +600,7 @@
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *color = [self.color evaluateWithRunner:runner];
-    if (color.intValue < 0 || color.intValue > 15)
-    {
-        @throw [ProgramException invalidParameterExceptionWithNode:self value:color.intValue];
-    }
+    NSNumber *color = [self.color evaluateNumberWithRunner:runner min:0 max:15];
     [runner.renderer clearWithColorIndex:color.intValue];
     runner.printLine = 0;
     [runner next];
@@ -760,6 +758,109 @@
 
 
 
+@implementation DefSpriteNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.imageExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.dataVariable prepareWithRunnable:runnable pass:pass];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    NSNumber *image = [self.imageExpression evaluateNumberWithRunner:runner min:0 max:63];
+    //TODO
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
+@implementation SpritePaletteNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.nExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.color1Expression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.color2Expression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.color3Expression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    NSNumber *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:7];
+    NSNumber *color1 = [self.color1Expression evaluateNumberWithRunner:runner min:0 max:15];
+    NSNumber *color2 = [self.color2Expression evaluateNumberWithRunner:runner min:0 max:15];
+    NSNumber *color3 = [self.color3Expression evaluateNumberWithRunner:runner min:0 max:15];
+    
+    Sprite *sprite = [runner.renderer spriteAtIndex:n.intValue];
+    sprite->colors[0] = color1.intValue;
+    sprite->colors[1] = color2.intValue;
+    sprite->colors[2] = color3.intValue;
+    
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
+@implementation SpriteNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.nExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.xExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.yExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.imageExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    NSNumber *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:7];
+    NSNumber *x = [self.xExpression evaluateWithRunner:runner];
+    NSNumber *y = [self.yExpression evaluateWithRunner:runner];
+    NSNumber *image = [self.imageExpression evaluateNumberWithRunner:runner min:0 max:63];
+    
+    Sprite *sprite = [runner.renderer spriteAtIndex:n.intValue];
+    sprite->visible = YES;
+    sprite->x = x.intValue;
+    sprite->y = y.intValue;
+    sprite->image = image.intValue;
+    
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
+@implementation SpriteOffNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.nExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    NSNumber *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:7];
+    
+    Sprite *sprite = [runner.renderer spriteAtIndex:n.intValue];
+    sprite->visible = NO;
+    
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
 @implementation DataNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
@@ -848,11 +949,7 @@
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *port = [self.portExpression evaluateWithRunner:runner];
-    if (port.intValue < 0 || port.intValue > 0)
-    {
-        @throw [ProgramException invalidParameterExceptionWithNode:self value:port.intValue];
-    }
+    NSNumber *port = [self.portExpression evaluateNumberWithRunner:runner min:0 max:0];
     BOOL result = NO;
     switch (self.type)
     {
@@ -890,12 +987,8 @@
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *port = [self.portExpression evaluateWithRunner:runner];
+    NSNumber *port = [self.portExpression evaluateNumberWithRunner:runner min:0 max:0];
     NSNumber *button = [self.buttonExpression evaluateWithRunner:runner];
-    if (port.intValue < 0 || port.intValue > 0)
-    {
-        @throw [ProgramException invalidParameterExceptionWithNode:self value:port.intValue];
-    }
     BOOL result = NO;
     switch (button.intValue)
     {
@@ -1189,11 +1282,7 @@
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *ascii = [self.asciiExpression evaluateWithRunner:runner];
-    if (ascii.intValue < 0 || ascii.intValue > 127)
-    {
-        @throw [ProgramException invalidParameterExceptionWithNode:self value:ascii.intValue];
-    }
+    NSNumber *ascii = [self.asciiExpression evaluateNumberWithRunner:runner min:0 max:127];
     const unichar character = (const unichar)ascii.intValue;
     return [NSString stringWithCharacters:&character length:1];
 }

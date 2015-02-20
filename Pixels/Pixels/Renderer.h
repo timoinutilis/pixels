@@ -8,6 +8,18 @@
 
 #import <Foundation/Foundation.h>
 
+typedef struct Sprite {
+    BOOL visible;
+    int x;
+    int y;
+    int image;
+    uint8_t colors[3];
+} Sprite;
+
+typedef struct SpriteDef {
+} SpriteDef;
+
+
 @interface Renderer : NSObject
 
 @property (readonly) int size;
@@ -24,6 +36,7 @@
 - (void)fillCircleX:(int)x Y:(int)y radiusX:(int)radiusX radiusY:(int)radiusY;
 - (void)drawText:(NSString *)text x:(int)x y:(int)y;
 - (int)widthForText:(NSString *)text;
+- (Sprite *)spriteAtIndex:(int)index;
 
 - (uint32_t)screenColorAtX:(int)x Y:(int)y;
 

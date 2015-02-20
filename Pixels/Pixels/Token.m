@@ -58,6 +58,9 @@
         case TTypeSymSprite: return @"SPRITE";
         case TTypeSymPalette: return @"PALETTE";
         case TTypeSymScroll: return @"SCROLL";
+        case TTypeSymDef: return @"DEF";
+        case TTypeSymOff: return @"OFF";
+        case TTypeSymHit: return @"HIT";
         
         case TTypeSymUp: return @"UP";
         case TTypeSymDown: return @"DOWN";

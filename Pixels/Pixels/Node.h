@@ -155,6 +155,29 @@
 @property Node *alignExpression;
 @end
 
+@interface DefSpriteNode : Node
+@property Node *imageExpression;
+@property VariableNode *dataVariable;
+@end
+
+@interface SpritePaletteNode : Node
+@property Node *nExpression;
+@property Node *color1Expression;
+@property Node *color2Expression;
+@property Node *color3Expression;
+@end
+
+@interface SpriteNode : Node
+@property Node *nExpression;
+@property Node *xExpression;
+@property Node *yExpression;
+@property Node *imageExpression;
+@end
+
+@interface SpriteOffNode : Node
+@property Node *nExpression;
+@end
+
 @interface DataNode : Node
 @property NSArray *constants;
 @end
