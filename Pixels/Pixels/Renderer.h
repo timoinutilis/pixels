@@ -17,7 +17,12 @@ typedef struct Sprite {
 } Sprite;
 
 typedef struct SpriteDef {
+    uint16_t data[8];
 } SpriteDef;
+
+extern int const RendererNumSprites;
+extern int const RendererNumSpriteDefs;
+extern int const RendererSpriteSize;
 
 
 @interface Renderer : NSObject
@@ -37,6 +42,7 @@ typedef struct SpriteDef {
 - (void)drawText:(NSString *)text x:(int)x y:(int)y;
 - (int)widthForText:(NSString *)text;
 - (Sprite *)spriteAtIndex:(int)index;
+- (SpriteDef *)spriteDefAtIndex:(int)index;
 
 - (uint32_t)screenColorAtX:(int)x Y:(int)y;
 

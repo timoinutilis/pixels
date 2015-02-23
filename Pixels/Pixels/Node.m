@@ -763,13 +763,28 @@
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
 {
     [self.imageExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
-    [self.dataVariable prepareWithRunnable:runnable pass:pass];
+    [self.dataVariable prepareWithRunnable:runnable pass:pass canBeString:NO];
 }
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *image = [self.imageExpression evaluateNumberWithRunner:runner min:0 max:63];
-    //TODO
+    NSNumber *image = [self.imageExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSpriteDefs - 1];
+    ArrayVariable *arrayVariable = [runner arrayOfVariable:self.dataVariable];
+    
+    if (arrayVariable.sizes.count != 1 || ((NSNumber *)arrayVariable.sizes[0]).intValue != RendererSpriteSize * 2)
+    {
+        NSException *exception = [ProgramException exceptionWithName:@"IncorrectArraySize" reason:@"Incorrect array size" token:self.token];
+        @throw exception;
+    }
+    
+    SpriteDef *def = [runner.renderer spriteDefAtIndex:image.intValue];
+    for (int i = 0; i < RendererSpriteSize; i++)
+    {
+        int val1 = ((NSNumber *)arrayVariable.values[i << 1]).intValue & 0xFF;
+        int val2 = ((NSNumber *)arrayVariable.values[(i << 1) + 1]).intValue & 0xFF;
+        def->data[i] = (val1 << 8) | val2;
+    }
+    
     [runner next];
     return nil;
 }
@@ -790,7 +805,7 @@
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:7];
+    NSNumber *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSprites - 1];
     NSNumber *color1 = [self.color1Expression evaluateNumberWithRunner:runner min:0 max:15];
     NSNumber *color2 = [self.color2Expression evaluateNumberWithRunner:runner min:0 max:15];
     NSNumber *color3 = [self.color3Expression evaluateNumberWithRunner:runner min:0 max:15];
@@ -820,10 +835,10 @@
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:7];
+    NSNumber *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSprites - 1];
     NSNumber *x = [self.xExpression evaluateWithRunner:runner];
     NSNumber *y = [self.yExpression evaluateWithRunner:runner];
-    NSNumber *image = [self.imageExpression evaluateNumberWithRunner:runner min:0 max:63];
+    NSNumber *image = [self.imageExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSpriteDefs - 1];
     
     Sprite *sprite = [runner.renderer spriteAtIndex:n.intValue];
     sprite->visible = YES;
@@ -848,7 +863,7 @@
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:7];
+    NSNumber *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSprites - 1];
     
     Sprite *sprite = [runner.renderer spriteAtIndex:n.intValue];
     sprite->visible = NO;

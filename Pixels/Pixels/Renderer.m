@@ -272,6 +272,11 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
     return &_sprites[index];
 }
 
+- (SpriteDef *)spriteDefAtIndex:(int)index
+{
+    return &_spriteDefs[index];
+}
+
 - (uint32_t)screenColorAtX:(int)x Y:(int)y
 {
     uint8_t colorIndex = _pixelBuffer[y][x];
@@ -286,8 +291,8 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
             int localY = y - sprite->y;
             if (localX >= 0 && localY >= 0 && localX < RendererSpriteSize && localY < RendererSpriteSize)
             {
-//                SpriteDef *def = &_spriteDefs[sprite->image];
-                uint8_t color = 1; //TODO
+                SpriteDef *def = &_spriteDefs[sprite->image];
+                uint8_t color = (def->data[localY] >> (localX << 1)) & 0x03;
                 if (color > 0)
                 {
                     colorIndex = sprite->colors[color - 1];

@@ -227,6 +227,25 @@
     return value;
 }
 
+- (ArrayVariable *)arrayOfVariable:(VariableNode *)variable
+{
+    NSMutableDictionary *dict = variable.isString ? self.stringVariables : self.numberVariables;
+    BOOL isArrayVariable = [dict[variable.identifier] isKindOfClass:[ArrayVariable class]];
+    if (!isArrayVariable)
+    {
+        NSException *exception = [ProgramException exceptionWithName:@"VariableNotDimensionalized"
+                                                              reason:[NSString stringWithFormat:@"Variable %@ not dimensionalized", variable.identifier]
+                                                               token:variable.token];
+        @throw exception;
+    }
+    if (variable.indexExpressions)
+    {
+        NSException *exception = [ProgramException exceptionWithName:@"NoIndexAllowed" reason:@"No index allowed" token:variable.token];
+        @throw exception;
+    }
+    return dict[variable.identifier];
+}
+
 - (id)accessVariable:(VariableNode *)variable setValue:(id)setValue
 {
     NSMutableDictionary *dict = variable.isString ? self.stringVariables : self.numberVariables;
