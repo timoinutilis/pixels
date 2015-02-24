@@ -213,6 +213,11 @@
     }
 }
 
+- (int)currentGamepadFlags
+{
+    return self.gamepad.isDirUp | (self.gamepad.isDirDown << 1) | (self.gamepad.isDirLeft << 2) | (self.gamepad.isDirRight << 3) | (self.buttonA.isHighlighted << 4) | (self.buttonB.isHighlighted << 5);
+}
+
 - (void)setGamepadModeWithPlayers:(int)players
 {
     dispatch_async(dispatch_get_main_queue(), ^{

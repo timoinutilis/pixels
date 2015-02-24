@@ -102,6 +102,7 @@
 
 @interface WaitNode : Node
 @property Node *time;
+@property BOOL gamepad;
 @end
 
 @interface EndNode : Node

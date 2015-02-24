@@ -485,6 +485,11 @@
     WaitNode *node = [[WaitNode alloc] init];
     [self accept:TTypeSymWait];
     node.time = [self acceptExpression];
+    if (self.token.type == TTypeSymGamepad)
+    {
+        node.gamepad = YES;
+        [self accept:TTypeSymGamepad];
+    }
     return node;
 }
 

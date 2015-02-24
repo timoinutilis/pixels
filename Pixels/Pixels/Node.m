@@ -539,7 +539,25 @@
         @throw [ProgramException invalidParameterExceptionWithNode:self value:value.floatValue];
     }
     NSTimeInterval timeInterval = MIN(60.0, MAX(value.floatValue, 0.04));
-    [NSThread sleepForTimeInterval:timeInterval];
+    if (self.gamepad)
+    {
+        NSTimeInterval startTime = CFAbsoluteTimeGetCurrent();
+        int oldFlags = [runner.delegate currentGamepadFlags];
+        while (CFAbsoluteTimeGetCurrent() - startTime < timeInterval)
+        {
+            int flags = [runner.delegate currentGamepadFlags];
+            if (flags > oldFlags)
+            {
+                break;
+            }
+            oldFlags = flags;
+            [NSThread sleepForTimeInterval:0.04];
+        }
+    }
+    else
+    {
+        [NSThread sleepForTimeInterval:timeInterval];
+    }
     [runner next];
     return nil;
 }
