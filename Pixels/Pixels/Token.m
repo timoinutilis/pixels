@@ -60,7 +60,8 @@
         case TTypeSymScroll: return @"SCROLL";
         case TTypeSymDef: return @"DEF";
         case TTypeSymOff: return @"OFF";
-        case TTypeSymHit: return @"HIT";
+        case TTypeSymWrite: return @"WRITE";
+        case TTypeSymClear: return @"CLEAR";
         
         case TTypeSymUp: return @"UP";
         case TTypeSymDown: return @"DOWN";
@@ -69,6 +70,7 @@
         case TTypeSymButton: return @"BUTTON";
         case TTypeSymPoint: return @"POINT";
         case TTypeSymWidth: return @"WIDTH";
+        case TTypeSymHit: return @"HIT";
         case TTypeSymLeftS: return @"LEFT$";
         case TTypeSymRightS: return @"RIGHT$";
         case TTypeSymMid: return @"MID$";

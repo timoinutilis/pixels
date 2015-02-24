@@ -973,6 +973,50 @@
 
 
 
+@implementation WriteNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    for (Node *valueNode in self.valueExpressions)
+    {
+        [valueNode prepareWithRunnable:runnable pass:pass];
+    }
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    if (self.clear)
+    {
+        [runner.transferStrings removeAllObjects];
+    }
+    else
+    {
+        NSMutableArray *strings = [NSMutableArray array];
+        for (Node *valueNode in self.valueExpressions)
+        {
+            NSString *string;
+            id value = [valueNode evaluateWithRunner:runner];
+            if ([value isKindOfClass:[NSString class]])
+            {
+                string = [NSString stringWithFormat:@"\"%@\"", value];
+            }
+            else
+            {
+                string = [value stringValue];
+            }
+            [strings addObject:string];
+        }
+        NSString *dataString = [strings componentsJoinedByString:@","];
+        [runner.transferStrings addObject:[NSString stringWithFormat:@"DATA %@", dataString]];
+    }
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
 @implementation DirectionPadNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass

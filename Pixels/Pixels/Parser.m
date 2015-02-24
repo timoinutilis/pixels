@@ -204,6 +204,9 @@
         case TTypeSymRestore:
             node = [self acceptRestore];
             break;
+        case TTypeSymWrite:
+            node = [self acceptWrite];
+            break;
         case TTypeSymDef:
             node = [self acceptDefSprite];
             break;
@@ -264,6 +267,7 @@
         case TTypeSymData:
         case TTypeSymRead:
         case TTypeSymRestore:
+        case TTypeSymWrite:
         case TTypeSymSprite:
             return YES;
         
@@ -708,6 +712,22 @@
     return node;
 }
 
+- (Node *)acceptWrite
+{
+    WriteNode *node = [[WriteNode alloc] init];
+    [self accept:TTypeSymWrite];
+    if (self.token.type == TTypeSymClear)
+    {
+        [self accept:TTypeSymClear];
+        node.clear = YES;
+    }
+    else
+    {
+        node.valueExpressions = [self acceptExpressionList];
+    }
+    return node;
+}
+
 #pragma mark - Expressions
 
 - (Node *)acceptExpression
@@ -1060,6 +1080,23 @@
         }
     } while (more);
     return variables;
+}
+
+- (NSArray *)acceptExpressionList
+{
+    NSMutableArray *expressions = [NSMutableArray array];
+    BOOL more = NO;
+    do
+    {
+        Node *expression = [self acceptExpression];
+        [expressions addObject:expression];
+        more = (self.token.type == TTypeSymComma);
+        if (more)
+        {
+            [self accept:TTypeSymComma];
+        }
+    } while (more);
+    return expressions;
 }
 
 @end

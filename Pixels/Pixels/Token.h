@@ -56,7 +56,8 @@ typedef NS_ENUM(NSInteger, TType) {
     TTypeSymScroll,
     TTypeSymDef,
     TTypeSymOff,
-    TTypeSymHit,
+    TTypeSymWrite,
+    TTypeSymClear,
     
     // Functions
     TTypeSymUp,
@@ -66,6 +67,7 @@ typedef NS_ENUM(NSInteger, TType) {
     TTypeSymButton,
     TTypeSymPoint,
     TTypeSymWidth,
+    TTypeSymHit,
     TTypeSymLeftS,
     TTypeSymRightS,
     TTypeSymMid,

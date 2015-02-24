@@ -179,6 +179,14 @@
         {
             self.project.iconData = UIImagePNGRepresentation(thumb);
         }
+        
+        // transfer
+        if (runner.transferStrings.count > 0)
+        {
+            NSString *transfer = [runner.transferStrings componentsJoinedByString:@"\n"];
+            UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+            pasteboard.string = transfer;
+        }
     });
 }
 

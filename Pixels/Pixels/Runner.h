@@ -39,6 +39,7 @@
 @property int printLine;
 @property NSUInteger dataNodeIndex;
 @property NSUInteger dataConstantIndex;
+@property (readonly) NSMutableArray *transferStrings;
 
 - (instancetype)initWithRunnable:(Runnable *)runnable;
 - (BOOL)isFinished;

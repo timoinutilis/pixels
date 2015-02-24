@@ -28,10 +28,12 @@
     {
         self.runnable = runnable;
         self.renderer = [[Renderer alloc] init];
+        
         self.numberVariables = [NSMutableDictionary dictionary];
         self.stringVariables = [NSMutableDictionary dictionary];
         self.sequencesStack = [NSMutableArray array];
         self.gosubStack = [NSMutableArray array];
+        _transferStrings = [NSMutableArray array];
         
         [self addSequenceWithNodes:runnable.nodes isLoop:NO parent:nil];
     }

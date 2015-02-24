@@ -191,6 +191,11 @@
 @property NSString *label;
 @end
 
+@interface WriteNode : Node
+@property NSArray *valueExpressions;
+@property BOOL clear;
+@end
+
 @interface DirectionPadNode : Node
 @property TType type;
 @property Node *portExpression;
