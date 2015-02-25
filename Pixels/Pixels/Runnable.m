@@ -30,12 +30,9 @@
 
 - (void)prepareNodes:(NSArray *)nodes pass:(PrePass)pass
 {
-    if (nodes)
+    for (Node *node in nodes)
     {
-        for (Node *node in nodes)
-        {
-            [node prepareWithRunnable:self pass:pass];
-        }
+        [node prepareWithRunnable:self pass:pass];
     }
 }
 

@@ -57,6 +57,7 @@
 - (id)valueOfVariable:(VariableNode *)variable;
 - (ArrayVariable *)arrayOfVariable:(VariableNode *)variable;
 
+- (void)restoreDataTransfer;
 - (void)restoreDataLabel:(NSString *)label atToken:(Token *)token;
 - (Node *)readDataAtToken:(Token *)token;
 

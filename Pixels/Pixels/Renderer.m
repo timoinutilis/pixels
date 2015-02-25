@@ -292,7 +292,7 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
             if (localX >= 0 && localY >= 0 && localX < RendererSpriteSize && localY < RendererSpriteSize)
             {
                 SpriteDef *def = &_spriteDefs[sprite->image];
-                uint8_t color = (def->data[localY] >> (localX << 1)) & 0x03;
+                uint8_t color = (def->data[localY] >> ((RendererSpriteSize - localX - 1) << 1)) & 0x03;
                 if (color > 0)
                 {
                     colorIndex = sprite->colors[color - 1];

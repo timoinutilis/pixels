@@ -13,6 +13,7 @@
 #import "Gamepad.h"
 #import "ProgramException.h"
 #import "NSString+Utils.h"
+#import "EditorTextView.h"
 
 @interface RunnerViewController ()
 
@@ -184,8 +185,7 @@
         if (runner.transferStrings.count > 0)
         {
             NSString *transfer = [runner.transferStrings componentsJoinedByString:@"\n"];
-            UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-            pasteboard.string = transfer;
+            [EditorTextView setTransferText:transfer];
         }
     });
 }

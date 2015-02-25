@@ -19,10 +19,11 @@
 #import "ActivityItemSource.h"
 #import "PublishActivity.h"
 #import "NSString+Utils.h"
+#import "EditorTextView.h"
 
 @interface EditorViewController ()
 
-@property (weak, nonatomic) IBOutlet UITextView *sourceCodeTextView;
+@property (weak, nonatomic) IBOutlet EditorTextView *sourceCodeTextView;
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbarView;
 
 @property UIToolbar *keyboardToolbar;
@@ -160,7 +161,7 @@
 
 - (void)onRunTapped:(id)sender
 {
-    [self compileText:self.sourceCodeTextView.text];
+    [self runProgram];
 }
 
 - (IBAction)onDeleteTapped:(id)sender
@@ -276,42 +277,73 @@
     [HelpTextViewController showHelpWithParent:self];
 }
 
-- (void)compileText:(NSString *)text
+#pragma mark - Compile and run
+
+- (void)runProgram
 {
+    NSString *sourceCode = self.sourceCodeTextView.text;
+    NSString *transferSourceCode = [EditorTextView transferText];
+    
+    NSArray *transferDataNodes;
+    
+    if (transferSourceCode.length > 0)
+    {
+        @try
+        {
+            Runnable *runnable = [self compileSourceCode:transferSourceCode];
+            transferDataNodes = runnable.dataNodes;
+        }
+        @catch (NSException *exception)
+        {
+            // ignore
+        }
+    }
+    
     @try
     {
-        Scanner *scanner = [[Scanner alloc] init];
-        NSArray *tokens = [scanner tokenizeText:text.uppercaseString];
-        
-        if (tokens.count > 0)
+        Runnable *runnable = [self compileSourceCode:sourceCode];
+        if (runnable)
         {
-            Parser *parser = [[Parser alloc] init];
-            NSArray *nodes = [parser parseTokens:tokens];
-            
-            if (nodes.count > 0)
-            {
-                Runnable *runnable = [[Runnable alloc] initWithNodes:nodes];
-                [runnable prepare];
-                
-                [self run:runnable];
-            }
+            runnable.transferDataNodes = transferDataNodes;
+            [self run:runnable];
         }
     }
     @catch (ProgramException *exception)
     {
         NSUInteger errorPosition = exception.position;
-        NSString *line = [text substringWithLineAtIndex:errorPosition];
+        NSString *line = [sourceCode substringWithLineAtIndex:errorPosition];
         
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:exception.reason message:line preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
         [alert addAction:[UIAlertAction actionWithTitle:@"Go to Error" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            NSRange range = {errorPosition, 0};
+            NSRange range = NSMakeRange(errorPosition, 0);
             self.sourceCodeTextView.selectedRange = range;
             [self.sourceCodeTextView becomeFirstResponder];
         }]];
         alert.view.tintColor = self.view.tintColor;
         [self presentViewController:alert animated:YES completion:nil];
     }
+}
+
+- (Runnable *)compileSourceCode:(NSString *)sourceCode
+{
+    Scanner *scanner = [[Scanner alloc] init];
+    NSArray *tokens = [scanner tokenizeText:sourceCode.uppercaseString];
+    
+    if (tokens.count > 0)
+    {
+        Parser *parser = [[Parser alloc] init];
+        NSArray *nodes = [parser parseTokens:tokens];
+        
+        if (nodes.count > 0)
+        {
+            Runnable *runnable = [[Runnable alloc] initWithNodes:nodes];
+            [runnable prepare];
+            
+            return runnable;
+        }
+    }
+    return nil;
 }
 
 - (void)run:(Runnable *)runnable

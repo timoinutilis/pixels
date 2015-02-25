@@ -18,6 +18,7 @@ typedef NS_ENUM(NSInteger, PrePass) {
 @property (readonly) NSArray *nodes;
 @property (readonly) NSMutableDictionary *labels;
 @property (readonly) NSMutableArray *dataNodes;
+@property NSArray *transferDataNodes;
 
 - (instancetype)initWithNodes:(NSArray *)nodes;
 - (void)prepare;

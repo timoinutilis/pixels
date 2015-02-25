@@ -11,6 +11,8 @@
 #import "Renderer.h"
 #import "ProgramException.h"
 
+NSString *const TRANSFER = @"TRANSFER";
+
 @implementation Node
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
@@ -952,7 +954,7 @@
 {
     if (pass == PrePassCheckSemantic)
     {
-        if (self.label && !runnable.labels[self.label])
+        if (self.label && !runnable.labels[self.label] && ![self.label isEqualToString:TRANSFER])
         {
             NSException *exception = [ProgramException exceptionWithName:@"UndefinedLabel"
                                                                   reason:[NSString stringWithFormat:@"Undefined label %@", self.label]
@@ -964,7 +966,14 @@
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    [runner restoreDataLabel:self.label atToken:self.token];
+    if ([self.label isEqualToString:TRANSFER])
+    {
+        [runner restoreDataTransfer];
+    }
+    else
+    {
+        [runner restoreDataLabel:self.label atToken:self.token];
+    }
     [runner next];
     return nil;
 }

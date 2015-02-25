@@ -11,6 +11,7 @@
 		9204EF681A4C397300B8C29C /* HelpTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9204EF671A4C397300B8C29C /* HelpTextViewController.m */; };
 		9204EF6A1A4C430300B8C29C /* manual.html in Resources */ = {isa = PBXBuildFile; fileRef = 9204EF691A4C430300B8C29C /* manual.html */; };
 		920822031A4DABB8005B7862 /* HelpContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 920822021A4DABB8005B7862 /* HelpContent.m */; };
+		921B234C1A9E3DA800C45AFA /* EditorTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 921B234B1A9E3DA800C45AFA /* EditorTextView.m */; };
 		9231159F1A444A6B00624201 /* RendererView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9231159E1A444A6B00624201 /* RendererView.m */; };
 		923115A21A444AA800624201 /* Renderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 923115A11A444AA800624201 /* Renderer.m */; };
 		9248A6B01A7A641D00FD5656 /* Default Projects in Resources */ = {isa = PBXBuildFile; fileRef = 9248A6AF1A7A641D00FD5656 /* Default Projects */; };
@@ -74,6 +75,8 @@
 		9204EF691A4C430300B8C29C /* manual.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = manual.html; sourceTree = "<group>"; };
 		920822011A4DABB8005B7862 /* HelpContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpContent.h; sourceTree = "<group>"; };
 		920822021A4DABB8005B7862 /* HelpContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpContent.m; sourceTree = "<group>"; };
+		921B234A1A9E3DA800C45AFA /* EditorTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditorTextView.h; sourceTree = "<group>"; };
+		921B234B1A9E3DA800C45AFA /* EditorTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditorTextView.m; sourceTree = "<group>"; };
 		9231159D1A444A6B00624201 /* RendererView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RendererView.h; sourceTree = "<group>"; };
 		9231159E1A444A6B00624201 /* RendererView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RendererView.m; sourceTree = "<group>"; };
 		923115A01A444AA800624201 /* Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
@@ -206,6 +209,8 @@
 				9231159E1A444A6B00624201 /* RendererView.m */,
 				92EDC4401A54701D007824A5 /* Gamepad.h */,
 				92EDC4411A54701D007824A5 /* Gamepad.m */,
+				921B234A1A9E3DA800C45AFA /* EditorTextView.h */,
+				921B234B1A9E3DA800C45AFA /* EditorTextView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -558,6 +563,7 @@
 				926086321A5E8560006C5523 /* Runnable.m in Sources */,
 				924CC0FE1A220B3C00D2AF68 /* Runner.m in Sources */,
 				92E53DF41A5B3A1D00FE9F91 /* GORMenuTableViewController.m in Sources */,
+				921B234C1A9E3DA800C45AFA /* EditorTextView.m in Sources */,
 				9231159F1A444A6B00624201 /* RendererView.m in Sources */,
 				92C98F421A20F2F000215AE9 /* Node.m in Sources */,
 				926C72C71A2B579E00448EAB /* RunnerViewController.m in Sources */,

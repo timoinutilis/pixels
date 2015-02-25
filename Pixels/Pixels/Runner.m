@@ -18,6 +18,7 @@
 @property NSMutableDictionary *numberVariables;
 @property NSMutableDictionary *stringVariables;
 @property NSMutableArray *gosubStack;
+@property BOOL dataTransferEnabled;
 @end
 
 @implementation Runner
@@ -325,8 +326,16 @@
     return getValue;
 }
 
+- (void)restoreDataTransfer
+{
+    self.dataTransferEnabled = YES;
+    self.dataNodeIndex = 0;
+    self.dataConstantIndex = 0;
+}
+
 - (void)restoreDataLabel:(NSString *)label atToken:(Token *)token
 {
+    self.dataTransferEnabled = NO;
     if (label)
     {
         Node *labelNode = self.runnable.labels[label];
@@ -341,9 +350,10 @@
 
 - (Node *)readDataAtToken:(Token *)token
 {
-    while (self.dataNodeIndex < self.runnable.dataNodes.count)
+    NSArray *dataNodes = self.dataTransferEnabled ? self.runnable.transferDataNodes : self.runnable.dataNodes;
+    while (self.dataNodeIndex < dataNodes.count)
     {
-        Node *node = self.runnable.dataNodes[self.dataNodeIndex];
+        Node *node = dataNodes[self.dataNodeIndex];
         if ([node isKindOfClass:[DataNode class]])
         {
             DataNode *dataNode = (DataNode *)node;
