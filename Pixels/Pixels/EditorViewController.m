@@ -26,8 +26,6 @@
 @property (weak, nonatomic) IBOutlet EditorTextView *sourceCodeTextView;
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbarView;
 
-@property UIToolbar *keyboardToolbar;
-
 @end
 
 @implementation EditorViewController
@@ -51,7 +49,6 @@
         UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSourceCodeTapped:)];
         [self.sourceCodeTextView addGestureRecognizer:recognizer];
     }
-    [self initKeyboardToolbar];
     self.sourceCodeTextView.layoutManager.allowsNonContiguousLayout = NO;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
@@ -64,32 +61,6 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:ModelManagerWillSaveDataNotification object:nil];
-}
-
-- (void)initKeyboardToolbar
-{
-    self.keyboardToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 44)];
-    self.keyboardToolbar.translucent = YES;
-    
-    NSArray *keys = @[@"=", @"<", @">", @"+", @"-", @"*", @"/", @"(", @")", @"\"", @"$", @":"];
-    NSMutableArray *buttons = [NSMutableArray array];
-    for (NSString *key in keys)
-    {
-        UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithTitle:key style:UIBarButtonItemStylePlain target:self action:@selector(onSpecialKeyTapped:)];
-        [buttons addObject:button];
-
-        UIBarButtonItem *space = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-        [buttons addObject:space];
-    }
-    
-    
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onKeyboardDoneTapped:)];
-    [buttons addObject:doneButton];
-    
-    self.keyboardToolbar.tintColor = self.view.tintColor;
-    
-    self.keyboardToolbar.items = buttons;
-    self.sourceCodeTextView.inputAccessoryView = self.keyboardToolbar;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -147,16 +118,6 @@
     
     alert.view.tintColor = self.view.tintColor;
     [self presentViewController:alert animated:YES completion:nil];
-}
-
-- (void)onSpecialKeyTapped:(UIBarButtonItem *)button
-{
-    [self.sourceCodeTextView insertText:button.title];
-}
-
-- (void)onKeyboardDoneTapped:(UIBarButtonItem *)button
-{
-    [self.sourceCodeTextView resignFirstResponder];
 }
 
 - (void)onRunTapped:(id)sender

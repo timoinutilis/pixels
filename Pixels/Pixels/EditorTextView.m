@@ -10,6 +10,10 @@
 
 NSString *EditorTextView_transferText;
 
+@interface EditorTextView ()
+@property UIToolbar *keyboardToolbar;
+@end
+
 @implementation EditorTextView
 
 + (void)setTransferText:(NSString *)text
@@ -26,11 +30,49 @@ NSString *EditorTextView_transferText;
 {
     [super awakeFromNib];
     
+    [self initKeyboardToolbar];
+
     UIMenuController *menu = [UIMenuController sharedMenuController];
     menu.menuItems = @[
                        [[UIMenuItem alloc] initWithTitle:@"Copy to Transfer" action:@selector(transferCopy:)],
                        [[UIMenuItem alloc] initWithTitle:@"Paste from Transfer" action:@selector(transferPaste:)]
                        ];
+}
+
+- (void)initKeyboardToolbar
+{
+    self.keyboardToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
+    self.keyboardToolbar.translucent = YES;
+    
+    NSArray *keys = @[@"=", @"<", @">", @"+", @"-", @"*", @"/", @"(", @")", @"\"", @"$", @":"];
+    NSMutableArray *buttons = [NSMutableArray array];
+    for (NSString *key in keys)
+    {
+        UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithTitle:key style:UIBarButtonItemStylePlain target:self action:@selector(onSpecialKeyTapped:)];
+        [buttons addObject:button];
+        
+        UIBarButtonItem *space = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+        [buttons addObject:space];
+    }
+    
+    
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onKeyboardDoneTapped:)];
+    [buttons addObject:doneButton];
+    
+    self.keyboardToolbar.tintColor = self.tintColor;
+    
+    self.keyboardToolbar.items = buttons;
+    self.inputAccessoryView = self.keyboardToolbar;
+}
+
+- (void)onSpecialKeyTapped:(UIBarButtonItem *)button
+{
+    [self insertText:button.title];
+}
+
+- (void)onKeyboardDoneTapped:(UIBarButtonItem *)button
+{
+    [self resignFirstResponder];
 }
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender
