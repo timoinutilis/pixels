@@ -9,7 +9,7 @@
 #import "Renderer.h"
 
 int const RendererSize = 64;
-int const RendererNumSprites = 8;
+int const RendererNumSprites = 16;
 int const RendererNumSpriteDefs = 64;
 int const RendererSpriteSize = 8;
 
@@ -275,6 +275,22 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
 - (SpriteDef *)spriteDefAtIndex:(int)index
 {
     return &_spriteDefs[index];
+}
+
+- (BOOL)checkCollisionBetweenSprite:(int)index1 andSprite:(int)index2
+{
+    if (index1 != index2)
+    {
+        Sprite *sprite1 = &_sprites[index1];
+        Sprite *sprite2 = &_sprites[index2];
+        int diffX = sprite2->x - sprite1->x;
+        int diffY = sprite2->y - sprite1->y;
+        if (ABS(diffX) < RendererSpriteSize && ABS(diffY) < RendererSpriteSize)
+        {
+            return YES;
+        }
+    }
+    return NO;
 }
 
 - (uint32_t)screenColorAtX:(int)x Y:(int)y

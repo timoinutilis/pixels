@@ -68,6 +68,16 @@
     }
 }
 
+- (BOOL)acceptOptionalComma
+{
+    if (self.token.type == TTypeSymComma)
+    {
+        [self accept:TTypeSymComma];
+        return YES;
+    }
+    return NO;
+}
+
 #pragma mark - Lines
 
 - (NSArray *)acceptProgram
@@ -524,7 +534,7 @@
 {
     ClsNode *node = [[ClsNode alloc] init];
     [self accept:TTypeSymCls];
-    node.color = [self acceptExpression];
+    node.color = [self acceptOptionalExpression];
     return node;
 }
 
@@ -620,11 +630,15 @@
     [self accept:TTypeSymPalette];
     node.nExpression = [self acceptExpression];
     [self accept:TTypeSymComma];
-    node.color1Expression = [self acceptExpression];
-    [self accept:TTypeSymComma];
-    node.color2Expression = [self acceptExpression];
-    [self accept:TTypeSymComma];
-    node.color3Expression = [self acceptExpression];
+    node.color1Expression = [self acceptOptionalExpression];
+    if ([self acceptOptionalComma])
+    {
+        node.color2Expression = [self acceptOptionalExpression];
+        if ([self acceptOptionalComma])
+        {
+            node.color3Expression = [self acceptOptionalExpression];
+        }
+    }
     return node;
 }
 
@@ -633,12 +647,18 @@
     SpriteNode *node = [[SpriteNode alloc] init];
     [self accept:TTypeSymSprite];
     node.nExpression = [self acceptExpression];
-    [self accept:TTypeSymComma];
-    node.xExpression = [self acceptExpression];
-    [self accept:TTypeSymComma];
-    node.yExpression = [self acceptExpression];
-    [self accept:TTypeSymComma];
-    node.imageExpression = [self acceptExpression];
+    if ([self acceptOptionalComma])
+    {
+        node.xExpression = [self acceptOptionalExpression];
+        if ([self acceptOptionalComma])
+        {
+            node.yExpression = [self acceptOptionalExpression];
+            if ([self acceptOptionalComma])
+            {
+                node.imageExpression = [self acceptOptionalExpression];
+            }
+        }
+    }
     return node;
 }
 
@@ -733,6 +753,15 @@
 - (Node *)acceptExpression
 {
     return [self acceptExpressionLevel:0];
+}
+
+- (Node *)acceptOptionalExpression
+{
+    if (self.token.type == TTypeSymComma || self.token.type == TTypeSymEol || self.token.type == TTypeSymElse)
+    {
+        return nil;
+    }
+    return [self acceptExpression];
 }
 
 - (Node *)acceptExpressionLevel:(int)level
@@ -899,6 +928,47 @@
             node.valueExpression = [self acceptExpression];
             [self accept:TTypeSymBracketClose];
             return node;
+        }
+        case TTypeSymSprite: {
+            [self accept:TTypeSymSprite];
+            if (self.token.type == TTypeSymHit)
+            {
+                SpriteHitNode *node = [[SpriteHitNode alloc] init];
+                [self accept:TTypeSymHit];
+                [self accept:TTypeSymBracketOpen];
+                node.nExpression = [self acceptExpression];
+                if (self.token.type == TTypeSymComma)
+                {
+                    [self accept:TTypeSymComma];
+                    node.otherNExpression = [self acceptExpression];
+                    if (self.token.type == TTypeSymTo)
+                    {
+                        [self accept:TTypeSymTo];
+                        node.lastNExpression = [self acceptExpression];
+                    }
+                }
+                [self accept:TTypeSymBracketClose];
+                return node;
+            }
+            else
+            {
+                SpriteValueNode *node = [[SpriteValueNode alloc] init];
+                NSString *type = self.token.attrString;
+                [self accept:TTypeIdentifier];
+                node.type = [type characterAtIndex:0];
+                if (node.type != 'X' && node.type != 'Y' && node.type != 'I')
+                {
+                    NSException *exception = [ProgramException exceptionWithName:@"UnexpectedToken"
+                                                                          reason:[NSString stringWithFormat:@"Unexpected %@", type]
+                                                                           token:self.token];
+                    @throw exception;
+
+                }
+                [self accept:TTypeSymBracketOpen];
+                node.nExpression = [self acceptExpression];
+                [self accept:TTypeSymBracketClose];
+                return node;
+            }
         }
         case TTypeSymRnd: {
             Maths0Node *node = [[Maths0Node alloc] init];

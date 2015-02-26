@@ -215,6 +215,17 @@
 @property Node *valueExpression;
 @end
 
+@interface SpriteValueNode : Node
+@property unichar type;
+@property Node *nExpression;
+@end
+
+@interface SpriteHitNode : Node
+@property Node *nExpression;
+@property Node *otherNExpression;
+@property Node *lastNExpression;
+@end
+
 @interface Maths0Node : Node
 @property TType type;
 @end

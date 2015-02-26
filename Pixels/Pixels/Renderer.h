@@ -43,6 +43,7 @@ extern int const RendererSpriteSize;
 - (int)widthForText:(NSString *)text;
 - (Sprite *)spriteAtIndex:(int)index;
 - (SpriteDef *)spriteDefAtIndex:(int)index;
+- (BOOL)checkCollisionBetweenSprite:(int)index1 andSprite:(int)index2;
 
 - (uint32_t)screenColorAtX:(int)x Y:(int)y;
 

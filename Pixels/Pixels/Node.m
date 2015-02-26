@@ -620,8 +620,13 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *color = [self.color evaluateNumberWithRunner:runner min:0 max:15];
-    [runner.renderer clearWithColorIndex:color.intValue];
+    int c = 0;
+    if (self.color)
+    {
+        NSNumber *color = [self.color evaluateNumberWithRunner:runner min:0 max:15];
+        c = color.intValue;
+    }
+    [runner.renderer clearWithColorIndex:c];
     runner.printLine = 0;
     [runner next];
     return nil;
@@ -826,14 +831,23 @@ NSString *const TRANSFER = @"TRANSFER";
 - (id)evaluateWithRunner:(Runner *)runner
 {
     NSNumber *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSprites - 1];
-    NSNumber *color1 = [self.color1Expression evaluateNumberWithRunner:runner min:0 max:15];
-    NSNumber *color2 = [self.color2Expression evaluateNumberWithRunner:runner min:0 max:15];
-    NSNumber *color3 = [self.color3Expression evaluateNumberWithRunner:runner min:0 max:15];
     
     Sprite *sprite = [runner.renderer spriteAtIndex:n.intValue];
-    sprite->colors[0] = color1.intValue;
-    sprite->colors[1] = color2.intValue;
-    sprite->colors[2] = color3.intValue;
+    if (self.color1Expression)
+    {
+        NSNumber *color1 = [self.color1Expression evaluateNumberWithRunner:runner min:0 max:15];
+        sprite->colors[0] = color1.intValue;
+    }
+    if (self.color2Expression)
+    {
+        NSNumber *color2 = [self.color2Expression evaluateNumberWithRunner:runner min:0 max:15];
+        sprite->colors[1] = color2.intValue;
+    }
+    if (self.color3Expression)
+    {
+        NSNumber *color3 = [self.color3Expression evaluateNumberWithRunner:runner min:0 max:15];
+        sprite->colors[2] = color3.intValue;
+    }
     
     [runner next];
     return nil;
@@ -856,15 +870,24 @@ NSString *const TRANSFER = @"TRANSFER";
 - (id)evaluateWithRunner:(Runner *)runner
 {
     NSNumber *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSprites - 1];
-    NSNumber *x = [self.xExpression evaluateWithRunner:runner];
-    NSNumber *y = [self.yExpression evaluateWithRunner:runner];
-    NSNumber *image = [self.imageExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSpriteDefs - 1];
     
     Sprite *sprite = [runner.renderer spriteAtIndex:n.intValue];
     sprite->visible = YES;
-    sprite->x = x.intValue;
-    sprite->y = y.intValue;
-    sprite->image = image.intValue;
+    if (self.xExpression)
+    {
+        NSNumber *x = [self.xExpression evaluateWithRunner:runner];
+        sprite->x = x.intValue;
+    }
+    if (self.yExpression)
+    {
+        NSNumber *y = [self.yExpression evaluateWithRunner:runner];
+        sprite->y = y.intValue;
+    }
+    if (self.imageExpression)
+    {
+        NSNumber *image = [self.imageExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSpriteDefs - 1];
+        sprite->image = image.intValue;
+    }
     
     [runner next];
     return nil;
@@ -1100,6 +1123,7 @@ NSString *const TRANSFER = @"TRANSFER";
 @end
 
 
+
 @implementation PointNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
@@ -1135,6 +1159,85 @@ NSString *const TRANSFER = @"TRANSFER";
 }
 
 @end
+
+
+
+@implementation SpriteValueNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.nExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    NSNumber *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSprites - 1];
+    
+    int value = 0;
+    Sprite *sprite = [runner.renderer spriteAtIndex:n.intValue];
+    if (self.type == 'X')
+    {
+        value = sprite->x;
+    }
+    else if (self.type == 'Y')
+    {
+        value = sprite->y;
+    }
+    else if (self.type == 'I')
+    {
+        value = sprite->visible ? sprite->image : -1;
+    }
+    return @(value);
+}
+
+@end
+
+
+
+@implementation SpriteHitNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.nExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.otherNExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.lastNExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    NSNumber *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSprites - 1];
+    int first = 0;
+    int last = RendererNumSprites - 1;
+    
+    if (self.otherNExpression)
+    {
+        NSNumber *otherN = [self.otherNExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSprites - 1];
+        first = otherN.intValue;
+        if (self.lastNExpression)
+        {
+            NSNumber *lastN = [self.lastNExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSprites - 1];
+            last = lastN.intValue;
+        }
+        else
+        {
+            last = first;
+        }
+    }
+    
+    for (int i = first; i <= last; i++)
+    {
+        if ([runner.renderer checkCollisionBetweenSprite:n.intValue andSprite:i])
+        {
+            return @(-1);
+        }
+    }
+    
+    return @(0);
+}
+
+@end
+
+
 
 @implementation Maths0Node
 
