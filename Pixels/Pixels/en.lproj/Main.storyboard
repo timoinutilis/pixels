@@ -23,44 +23,15 @@
                                 <fontDescription key="fontDescription" name="CourierNewPSMT" family="Courier New" pointSize="20"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters" autocorrectionType="no" spellCheckingType="no"/>
                             </textView>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="l9J-Fd-pzR">
-                                <rect key="frame" x="0.0" y="556" width="600" height="44"/>
-                                <items>
-                                    <barButtonItem systemItem="action" id="cGO-bn-HFx">
-                                        <connections>
-                                            <action selector="onActionTapped:" destination="BYZ-38-t0r" id="VMC-7I-tVO"/>
-                                        </connections>
-                                    </barButtonItem>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="bqt-vh-wrD"/>
-                                    <barButtonItem title="Rename" id="CHm-qP-7NQ">
-                                        <connections>
-                                            <action selector="onRenameTapped:" destination="BYZ-38-t0r" id="XDg-os-SKx"/>
-                                        </connections>
-                                    </barButtonItem>
-                                    <barButtonItem title="Duplicate" id="TgO-6q-zTo">
-                                        <connections>
-                                            <action selector="onDuplicateTapped:" destination="BYZ-38-t0r" id="xsF-lh-vFH"/>
-                                        </connections>
-                                    </barButtonItem>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="Rqg-1b-j5U"/>
-                                    <barButtonItem systemItem="trash" id="Pne-GF-gIj">
-                                        <connections>
-                                            <action selector="onDeleteTapped:" destination="BYZ-38-t0r" id="0RJ-Xc-6kb"/>
-                                        </connections>
-                                    </barButtonItem>
-                                </items>
-                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="SjB-QF-tvR" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="05Z-fS-6XK"/>
+                            <constraint firstAttribute="bottom" secondItem="SjB-QF-tvR" secondAttribute="bottom" id="2D9-6d-QWv"/>
                             <constraint firstItem="SjB-QF-tvR" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="9De-6e-FEO"/>
-                            <constraint firstItem="l9J-Fd-pzR" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Apo-qM-T3J"/>
                             <constraint firstItem="SjB-QF-tvR" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-21" id="DPz-uK-6ut"/>
                             <constraint firstItem="SjB-QF-tvR" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="IJa-wO-jPb"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="SjB-QF-tvR" secondAttribute="bottom" id="T9U-RU-FSL"/>
-                            <constraint firstAttribute="trailing" secondItem="l9J-Fd-pzR" secondAttribute="trailing" id="TxN-lI-oKs"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="l9J-Fd-pzR" secondAttribute="bottom" id="eyf-L7-Sch"/>
                             <constraint firstAttribute="trailing" secondItem="SjB-QF-tvR" secondAttribute="trailing" id="qW4-ax-QWW"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="SjB-QF-tvR" secondAttribute="bottom" id="zuf-Xl-AQr"/>
                         </constraints>
@@ -68,14 +39,38 @@
                             <mask key="constraints">
                                 <exclude reference="05Z-fS-6XK"/>
                                 <exclude reference="DPz-uK-6ut"/>
+                                <exclude reference="T9U-RU-FSL"/>
                                 <exclude reference="zuf-Xl-AQr"/>
                             </mask>
                         </variation>
                     </view>
+                    <toolbarItems>
+                        <barButtonItem systemItem="action" id="cGO-bn-HFx">
+                            <connections>
+                                <action selector="onActionTapped:" destination="BYZ-38-t0r" id="VMC-7I-tVO"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="bqt-vh-wrD"/>
+                        <barButtonItem title="Rename" id="CHm-qP-7NQ">
+                            <connections>
+                                <action selector="onRenameTapped:" destination="BYZ-38-t0r" id="XDg-os-SKx"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem title="Duplicate" id="TgO-6q-zTo">
+                            <connections>
+                                <action selector="onDuplicateTapped:" destination="BYZ-38-t0r" id="xsF-lh-vFH"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="Rqg-1b-j5U"/>
+                        <barButtonItem systemItem="trash" id="Pne-GF-gIj">
+                            <connections>
+                                <action selector="onDeleteTapped:" destination="BYZ-38-t0r" id="0RJ-Xc-6kb"/>
+                            </connections>
+                        </barButtonItem>
+                    </toolbarItems>
                     <navigationItem key="navigationItem" title="(Program Name)" id="pmw-uN-wb5"/>
                     <connections>
                         <outlet property="sourceCodeTextView" destination="SjB-QF-tvR" id="adj-Wv-Tev"/>
-                        <outlet property="toolbarView" destination="l9J-Fd-pzR" id="cgo-6m-k9h"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -207,11 +202,15 @@
         <!--Navigation Controller-->
         <scene sceneID="RGF-gP-Rq2">
             <objects>
-                <navigationController id="vjV-e6-4vN" sceneMemberID="viewController">
+                <navigationController toolbarHidden="NO" id="vjV-e6-4vN" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="hqa-KN-Vct">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="cpb-BQ-cAU">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="0.66666666666666663" green="0.33333333333333331" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </toolbar>
                     <connections>
                         <segue destination="Xni-Pq-CRZ" kind="relationship" relationship="rootViewController" id="HxT-d4-ubA"/>
                     </connections>
@@ -296,7 +295,7 @@ An Inutilis Software production from 2015. Find more at www.inutilis.com!</strin
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XSB-uC-uev" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1058" y="1896"/>
+            <point key="canvasLocation" x="1642" y="476"/>
         </scene>
         <!--LowRes Coder Web-->
         <scene sceneID="bmj-RF-7ax">
@@ -547,6 +546,7 @@ An Inutilis Software production from 2015. Find more at www.inutilis.com!</strin
                             <constraint firstAttribute="trailing" secondItem="mgK-pS-p2l" secondAttribute="trailing" id="Xkz-Hc-gwP"/>
                             <constraint firstItem="mgK-pS-p2l" firstAttribute="top" secondItem="EsH-iL-o4a" secondAttribute="top" id="o3O-oZ-CY3"/>
                             <constraint firstAttribute="trailing" secondItem="mgK-pS-p2l" secondAttribute="trailing" id="pmf-4I-vRZ"/>
+                            <constraint firstAttribute="bottom" secondItem="mgK-pS-p2l" secondAttribute="bottom" id="suM-Tr-KsZ"/>
                             <constraint firstItem="ijW-NB-o4Z" firstAttribute="top" secondItem="mgK-pS-p2l" secondAttribute="bottom" id="xq7-V5-CR8"/>
                         </constraints>
                         <variation key="default">
@@ -560,12 +560,22 @@ An Inutilis Software production from 2015. Find more at www.inutilis.com!</strin
                                 <exclude reference="UfP-Dc-VTn"/>
                                 <exclude reference="o3O-oZ-CY3"/>
                                 <exclude reference="pmf-4I-vRZ"/>
+                                <exclude reference="66A-gj-twH"/>
                                 <exclude reference="95a-cy-oVU"/>
                                 <exclude reference="ORk-Rg-WYQ"/>
                                 <exclude reference="xq7-V5-CR8"/>
                             </mask>
                         </variation>
                     </view>
+                    <toolbarItems>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="2yy-HZ-kmz"/>
+                        <barButtonItem title="Get More" id="nKq-5T-IY6">
+                            <connections>
+                                <segue destination="CoB-d2-vQK" kind="presentation" modalPresentationStyle="pageSheet" id="9vX-4Z-REx"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="dM6-Im-bI0"/>
+                    </toolbarItems>
                     <navigationItem key="navigationItem" title="Programs" id="qaN-Hc-taS">
                         <barButtonItem key="leftBarButtonItem" title="About" id="For-YS-mw8">
                             <connections>
@@ -582,6 +592,88 @@ An Inutilis Software production from 2015. Find more at www.inutilis.com!</strin
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JJn-Ol-X1d" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1058" y="1152"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="dgH-hK-LDg">
+            <objects>
+                <navigationController toolbarHidden="NO" id="CoB-d2-vQK" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ZQj-jz-BbW">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="Age-ee-n7m">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="0.66666666666666663" green="0.33333333333333331" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </toolbar>
+                    <connections>
+                        <segue destination="iYf-6m-CT5" kind="relationship" relationship="rootViewController" id="uZM-bm-ZyK"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1f2-rc-ofO" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="395" y="1894"/>
+        </scene>
+        <!--lowres.inutilis.com-->
+        <scene sceneID="RdJ-oP-pRn">
+            <objects>
+                <viewController id="iYf-6m-CT5" customClass="WebViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="NSi-WR-1pk"/>
+                        <viewControllerLayoutGuide type="bottom" id="wWs-V6-rnF"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Tnq-2U-8rj">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <webView contentMode="scaleToFill" scalesPageToFit="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DkH-lW-Bwd">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <dataDetectorType key="dataDetectorTypes"/>
+                            </webView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="DkH-lW-Bwd" secondAttribute="trailing" id="1eB-Wt-e5d"/>
+                            <constraint firstAttribute="bottom" secondItem="DkH-lW-Bwd" secondAttribute="bottom" id="6fZ-mN-hlW"/>
+                            <constraint firstItem="DkH-lW-Bwd" firstAttribute="top" secondItem="Tnq-2U-8rj" secondAttribute="top" id="9Nd-9h-fE1"/>
+                            <constraint firstItem="DkH-lW-Bwd" firstAttribute="leading" secondItem="Tnq-2U-8rj" secondAttribute="leading" id="fHo-14-GSr"/>
+                        </constraints>
+                    </view>
+                    <toolbarItems>
+                        <barButtonItem title="Back" id="Pl4-L5-z30">
+                            <connections>
+                                <action selector="onBackTapped:" destination="iYf-6m-CT5" id="nal-KA-Plv"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem title="Forw." id="niB-8E-Q7c">
+                            <connections>
+                                <action selector="onForwardTapped:" destination="iYf-6m-CT5" id="QOu-QE-Yzl"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="WNM-SY-bQ9"/>
+                        <barButtonItem title="Get Program" id="O0J-yv-ClI">
+                            <connections>
+                                <action selector="onGetTapped:" destination="iYf-6m-CT5" id="L4t-kX-Rf8"/>
+                            </connections>
+                        </barButtonItem>
+                    </toolbarItems>
+                    <navigationItem key="navigationItem" title="lowres.inutilis.com" id="YQs-dK-PZO">
+                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="t0S-0k-DXH">
+                            <connections>
+                                <action selector="onDoneTapped:" destination="iYf-6m-CT5" id="mxt-Rh-dly"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="backItem" destination="Pl4-L5-z30" id="uMA-jD-gHi"/>
+                        <outlet property="forwardItem" destination="niB-8E-Q7c" id="w8C-z6-1OS"/>
+                        <outlet property="getItem" destination="O0J-yv-ClI" id="Cnt-Ow-XOq"/>
+                        <outlet property="webView" destination="DkH-lW-Bwd" id="Wv7-RB-c6m"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1T9-ab-dn4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1058" y="1894"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="lad-M1-adN">

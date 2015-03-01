@@ -11,11 +11,16 @@
 #import "EditorViewController.h"
 #import "HelpTextViewController.h"
 
+NSString *const ExplorerRefreshAddedProjectNotification = @"ExplorerRefreshAddedProjectNotification";
+
 @interface ExplorerViewController ()
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 
 @property NSMutableArray *projects;
+@property Project *addedProject;
+@property Project *lastSelectedProject;
+@property Project *lastSelectedIndexPath;
 
 @end
 
@@ -33,11 +38,40 @@
     self.collectionView.delegate = self;
     
     [[ModelManager sharedManager] createDefaultProjects];
+    [self loadProjects];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didAddProject:) name:ModelManagerDidAddProjectNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshAddedProject:) name:ExplorerRefreshAddedProjectNotification object:nil];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:ModelManagerDidAddProjectNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:ExplorerRefreshAddedProjectNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [self loadProjects];
+    [super viewWillAppear:animated];
+    if (self.lastSelectedProject)
+    {
+        if (self.lastSelectedProject.isDeleted)
+        {
+            [self loadProjects];
+        }
+        else
+        {
+            [self.collectionView reloadItemsAtIndexPaths:@[self.lastSelectedIndexPath]];
+        }
+        self.lastSelectedProject = nil;
+        self.lastSelectedIndexPath = nil;
+    }
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self showAddedProject];
 }
 
 - (void)loadProjects
@@ -57,6 +91,16 @@
     [self.collectionView reloadData];
 }
 
+- (void)didAddProject:(NSNotification *)notification
+{
+    self.addedProject = notification.userInfo[@"project"];
+}
+
+- (void)refreshAddedProject:(NSNotification *)notification
+{
+    [self showAddedProject];
+}
+
 - (void)onHelpTapped:(id)sender
 {
     [HelpTextViewController showHelpWithParent:self];
@@ -64,12 +108,21 @@
 
 - (void)onAddTapped:(id)sender
 {
-    Project *project = [[ModelManager sharedManager] createNewProject];
-    
-    [self.projects addObject:project];
-    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:self.projects.count - 1 inSection:0];
-    [self.collectionView insertItemsAtIndexPaths:@[indexPath]];
-    [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionBottom animated:YES];
+    [[ModelManager sharedManager] createNewProject];
+    [self showAddedProject];
+}
+
+- (void)showAddedProject
+{
+    if (self.addedProject)
+    {
+        [self.projects addObject:self.addedProject];
+        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:self.projects.count - 1 inSection:0];
+        [self.collectionView insertItemsAtIndexPaths:@[indexPath]];
+        [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionBottom animated:YES];
+        
+        self.addedProject = nil;
+    }
 }
 
 #pragma mark - Navigation
@@ -82,6 +135,9 @@
         NSArray *indexPaths = self.collectionView.indexPathsForSelectedItems;
         ExplorerProjectCell *cell = (ExplorerProjectCell *)[self.collectionView cellForItemAtIndexPath:indexPaths[0]];
         vc.project = cell.project;
+        
+        self.lastSelectedIndexPath = indexPaths[0];
+        self.lastSelectedProject = cell.project;
     }
 }
 

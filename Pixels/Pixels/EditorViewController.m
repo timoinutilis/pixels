@@ -24,7 +24,6 @@
 @interface EditorViewController ()
 
 @property (weak, nonatomic) IBOutlet EditorTextView *sourceCodeTextView;
-@property (weak, nonatomic) IBOutlet UIToolbar *toolbarView;
 
 @end
 
@@ -63,14 +62,6 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:ModelManagerWillSaveDataNotification object:nil];
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    
-    // set scrolling insets
-    [self keyboardWillHide:nil];
-}
-
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
@@ -87,7 +78,7 @@
 
 - (void)keyboardWillHide:(NSNotification *)notification
 {
-    UIEdgeInsets insets = UIEdgeInsetsMake(CGRectGetMaxY(self.navigationController.navigationBar.frame), 0, self.toolbarView.frame.size.height, 0);
+    UIEdgeInsets insets = UIEdgeInsetsMake(CGRectGetMaxY(self.navigationController.navigationBar.frame), 0, self.navigationController.toolbar.frame.size.height, 0);
     self.sourceCodeTextView.contentInset = insets;
     self.sourceCodeTextView.scrollIndicatorInsets = insets;
 }

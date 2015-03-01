@@ -10,6 +10,8 @@
 
 @class Project;
 
+extern NSString *const ExplorerRefreshAddedProjectNotification;
+
 @interface ExplorerViewController : UIViewController <UICollectionViewDelegate, UICollectionViewDataSource>
 
 @end

@@ -12,6 +12,8 @@
 		9204EF6A1A4C430300B8C29C /* manual.html in Resources */ = {isa = PBXBuildFile; fileRef = 9204EF691A4C430300B8C29C /* manual.html */; };
 		920822031A4DABB8005B7862 /* HelpContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 920822021A4DABB8005B7862 /* HelpContent.m */; };
 		921B234C1A9E3DA800C45AFA /* EditorTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 921B234B1A9E3DA800C45AFA /* EditorTextView.m */; };
+		921DA0E31AA1EE6700816B26 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 921DA0E21AA1EE6700816B26 /* WebViewController.m */; };
+		921DA0E51AA1F87700816B26 /* error.html in Resources */ = {isa = PBXBuildFile; fileRef = 921DA0E41AA1F87700816B26 /* error.html */; };
 		9231159F1A444A6B00624201 /* RendererView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9231159E1A444A6B00624201 /* RendererView.m */; };
 		923115A21A444AA800624201 /* Renderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 923115A11A444AA800624201 /* Renderer.m */; };
 		9248A6B01A7A641D00FD5656 /* Default Projects in Resources */ = {isa = PBXBuildFile; fileRef = 9248A6AF1A7A641D00FD5656 /* Default Projects */; };
@@ -77,6 +79,9 @@
 		920822021A4DABB8005B7862 /* HelpContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpContent.m; sourceTree = "<group>"; };
 		921B234A1A9E3DA800C45AFA /* EditorTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditorTextView.h; sourceTree = "<group>"; };
 		921B234B1A9E3DA800C45AFA /* EditorTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditorTextView.m; sourceTree = "<group>"; };
+		921DA0E11AA1EE6700816B26 /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
+		921DA0E21AA1EE6700816B26 /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
+		921DA0E41AA1F87700816B26 /* error.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = error.html; sourceTree = "<group>"; };
 		9231159D1A444A6B00624201 /* RendererView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RendererView.h; sourceTree = "<group>"; };
 		9231159E1A444A6B00624201 /* RendererView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RendererView.m; sourceTree = "<group>"; };
 		923115A01A444AA800624201 /* Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
@@ -198,6 +203,7 @@
 				9276F3991A1D289C0060E909 /* Images.xcassets */,
 				9276F39B1A1D289C0060E909 /* LaunchScreen.xib */,
 				9204EF691A4C430300B8C29C /* manual.html */,
+				921DA0E41AA1F87700816B26 /* error.html */,
 			);
 			name = Assets;
 			sourceTree = "<group>";
@@ -289,6 +295,8 @@
 				92E53DF91A5B3AC200FE9F91 /* ShareViewController.m */,
 				92D518B71A6975C10000F917 /* AboutViewController.h */,
 				92D518B81A6975C10000F917 /* AboutViewController.m */,
+				921DA0E11AA1EE6700816B26 /* WebViewController.h */,
+				921DA0E21AA1EE6700816B26 /* WebViewController.m */,
 			);
 			name = Main;
 			sourceTree = "<group>";
@@ -509,6 +517,7 @@
 				9276F3981A1D289C0060E909 /* Main.storyboard in Resources */,
 				9276F39D1A1D289C0060E909 /* LaunchScreen.xib in Resources */,
 				9248A6B01A7A641D00FD5656 /* Default Projects in Resources */,
+				921DA0E51AA1F87700816B26 /* error.html in Resources */,
 				9276F39A1A1D289C0060E909 /* Images.xcassets in Resources */,
 				927334981A2A456900C89AF0 /* Help.storyboard in Resources */,
 			);
@@ -529,6 +538,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				92E53DF61A5B3A1D00FE9F91 /* GORTableViewController.m in Sources */,
+				921DA0E31AA1EE6700816B26 /* WebViewController.m in Sources */,
 				9267E8841A5AF61B00D08C42 /* AFURLConnectionOperation.m in Sources */,
 				923115A21A444AA800624201 /* Renderer.m in Sources */,
 				9276F3951A1D289C0060E909 /* EditorViewController.m in Sources */,

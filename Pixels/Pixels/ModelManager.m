@@ -9,6 +9,7 @@
 #import "ModelManager.h"
 
 NSString *const ModelManagerWillSaveDataNotification = @"ModelManagerWillSaveDataNotification";
+NSString *const ModelManagerDidAddProjectNotification = @"ModelManagerDidAddProjectNotification";
 
 @interface ModelManager ()
 
@@ -165,6 +166,9 @@ NSString *const ModelManagerWillSaveDataNotification = @"ModelManagerWillSaveDat
     Project *project = [NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:self.managedObjectContext];
     project.name = @"Unnamed Program";
     project.createdAt = [NSDate date];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:ModelManagerDidAddProjectNotification object:self userInfo:@{@"project": project}];
+    
     return project;
 }
 
@@ -180,6 +184,9 @@ NSString *const ModelManagerWillSaveDataNotification = @"ModelManagerWillSaveDat
     newProject.iconData = project.iconData;
     newProject.sourceCode = project.sourceCode;
     newProject.createdAt = [NSDate date];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:ModelManagerDidAddProjectNotification object:self userInfo:@{@"project": newProject}];
+    
     return newProject;
 }
 

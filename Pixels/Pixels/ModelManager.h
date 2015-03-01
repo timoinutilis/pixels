@@ -10,6 +10,7 @@
 #import "Project.h"
 
 extern NSString *const ModelManagerWillSaveDataNotification;
+extern NSString *const ModelManagerDidAddProjectNotification;
 
 @interface ModelManager : NSObject
 
