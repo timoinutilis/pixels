@@ -196,6 +196,10 @@
 @property BOOL clear;
 @end
 
+@interface OnEndGotoNode : Node
+@property NSString *label;
+@end
+
 @interface DirectionPadNode : Node
 @property TType type;
 @property Node *portExpression;

@@ -34,6 +34,14 @@
                                          userInfo:@{@"token": node.token}];
 }
 
++ (ProgramException *)undefinedLabelExceptionWithNode:(Node *)node label:(NSString *)label
+{
+    return [[ProgramException alloc] initWithName:@"UndefinedLabel"
+                                           reason:[NSString stringWithFormat:@"Undefined label %@", label]
+                                         userInfo:@{@"token": node.token}];
+
+}
+
 - (NSUInteger)position
 {
     if (self.userInfo[@"position"])

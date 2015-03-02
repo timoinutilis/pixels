@@ -217,6 +217,9 @@
         case TTypeSymWrite:
             node = [self acceptWrite];
             break;
+        case TTypeSymOn:
+            node = [self acceptOnEndGoto];
+            break;
         case TTypeSymDef:
             node = [self acceptDefSprite];
             break;
@@ -289,6 +292,11 @@
         case TTypeSymDef: {
             Token *next = [self nextToken];
             return (next.type == TTypeSymSprite);
+        }
+            
+        case TTypeSymOn: {
+            Token *next = [self nextToken];
+            return (next.type == TTypeSymEnd);
         }
         
         default:
@@ -744,6 +752,20 @@
     else
     {
         node.valueExpressions = [self acceptExpressionList];
+    }
+    return node;
+}
+
+- (Node *)acceptOnEndGoto
+{
+    OnEndGotoNode *node = [[OnEndGotoNode alloc] init];
+    [self accept:TTypeSymOn];
+    [self accept:TTypeSymEnd];
+    if (self.token.type == TTypeSymGoto)
+    {
+        [self accept:TTypeSymGoto];
+        node.label = self.token.attrString;
+        [self accept:TTypeIdentifier];
     }
     return node;
 }

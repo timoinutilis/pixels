@@ -55,6 +55,7 @@ typedef NS_ENUM(NSInteger, TType) {
     TTypeSymPalette,
     TTypeSymScroll,
     TTypeSymDef,
+    TTypeSymOn,
     TTypeSymOff,
     TTypeSymWrite,
     TTypeSymClear,

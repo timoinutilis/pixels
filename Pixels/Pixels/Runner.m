@@ -19,6 +19,7 @@
 @property NSMutableDictionary *stringVariables;
 @property NSMutableArray *gosubStack;
 @property BOOL dataTransferEnabled;
+@property NSTimeInterval timeWhenOnEndStarted;
 @end
 
 @implementation Runner
@@ -48,15 +49,37 @@
 
 - (void)runCommand
 {
-    Sequence *sequence = self.sequencesStack.lastObject;
-    if (sequence.nodes.count > 0)
+    if (self.timeWhenOnEndStarted != 0 && CFAbsoluteTimeGetCurrent() - self.timeWhenOnEndStarted > 3)
     {
-        Node *node = sequence.nodes[sequence.index];
-        [node evaluateWithRunner:self];
+        NSException *exception = [ProgramException exceptionWithName:@"OnEndTimeout"
+                                                              reason:@"ON END timed out"
+                                                               token:self.currentOnEndGoto.token];
+        @throw exception;
+    }
+    else if (self.endRequested && self.timeWhenOnEndStarted == 0)
+    {
+        if (self.currentOnEndGoto)
+        {
+            self.timeWhenOnEndStarted = CFAbsoluteTimeGetCurrent();
+            [self gotoLabel:self.currentOnEndGoto.label isGosub:NO atToken:self.currentOnEndGoto.token];
+        }
+        else
+        {
+            [self end];
+        }
     }
     else
     {
-        [self next];
+        Sequence *sequence = self.sequencesStack.lastObject;
+        if (sequence.nodes.count > 0)
+        {
+            Node *node = sequence.nodes[sequence.index];
+            [node evaluateWithRunner:self];
+        }
+        else
+        {
+            [self next];
+        }
     }
 }
 

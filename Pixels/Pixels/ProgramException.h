@@ -18,5 +18,6 @@
 + (ProgramException *)exceptionWithName:(NSString *)name reason:(NSString *)reason token:(Token *)token;
 + (ProgramException *)typeMismatchExceptionWithNode:(Node *)node;
 + (ProgramException *)invalidParameterExceptionWithNode:(Node *)node value:(float)value;
++ (ProgramException *)undefinedLabelExceptionWithNode:(Node *)node label:(NSString *)label;
 
 @end

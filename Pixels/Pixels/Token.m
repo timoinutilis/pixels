@@ -59,6 +59,7 @@
         case TTypeSymPalette: return @"PALETTE";
         case TTypeSymScroll: return @"SCROLL";
         case TTypeSymDef: return @"DEF";
+        case TTypeSymOn: return @"ON";
         case TTypeSymOff: return @"OFF";
         case TTypeSymWrite: return @"WRITE";
         case TTypeSymClear: return @"CLEAR";

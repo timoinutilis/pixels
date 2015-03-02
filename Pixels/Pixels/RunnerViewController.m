@@ -29,8 +29,8 @@
 @property UIPinchGestureRecognizer *pinchRecognizer;
 @property UITapGestureRecognizer *tapRecognizer;
 
-@property BOOL isRunning;
 @property CGFloat scale;
+@property Runner *runner;
 
 @end
 
@@ -48,6 +48,10 @@
     [self.containerView addGestureRecognizer:self.tapRecognizer];
     
     [self setGamepadModeWithPlayers:0];
+    
+    self.runner = [[Runner alloc] initWithRunnable:self.runnable];
+    self.runner.delegate = self;
+    self.rendererView.renderer = self.runner.renderer;
 }
 
 - (BOOL)prefersStatusBarHidden
@@ -67,7 +71,6 @@
 {
     [super viewWillDisappear:animated];
     self.project.scale = @(self.scale);
-    self.isRunning = NO;
 }
 
 - (void)viewWillLayoutSubviews
@@ -143,19 +146,17 @@
 
 - (void)run
 {
-    self.isRunning = YES;
     self.rendererView.shouldMakeThumbnail = !self.project.isDefault.boolValue; // don't change thumbnails for example projects
     
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     
     dispatch_async(queue, ^{
-        Runner *runner = [[Runner alloc] initWithRunnable:self.runnable];
-        runner.delegate = self;
-        self.rendererView.renderer = runner.renderer;
+        
+        Runner *runner = self.runner;
 
         @try
         {
-            while (!runner.isFinished && self.isRunning)
+            while (!runner.isFinished)
             {
                 [runner runCommand];
             }
@@ -170,7 +171,8 @@
             }]];
             alert.view.tintColor = self.view.tintColor;
             [self presentViewController:alert animated:YES completion:nil];
-
+            
+            self.runner.endRequested = NO;
         }
         [self updateRendererView];
         
@@ -187,12 +189,28 @@
             NSString *transfer = [runner.transferStrings componentsJoinedByString:@"\n"];
             [EditorTextView setTransferText:transfer];
         }
+        
+        // dismiss view if user tapped exit button
+        if (self.runner.endRequested)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+            });
+        }
+        
     });
 }
 
 - (IBAction)onExitTapped:(id)sender
 {
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    if (self.runner.isFinished)
+    {
+        [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    }
+    else
+    {
+        self.runner.endRequested = YES;
+    }
 }
 
 - (void)runnerLog:(NSString *)message

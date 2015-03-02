@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "RunnerDelegate.h"
 
-@class Node, Renderer, Runnable, VariableNode, Token;
+@class Node, OnEndGotoNode, Renderer, Runnable, VariableNode, Token;
 
 @interface Sequence : NSObject
 @property NSArray *nodes;
@@ -40,6 +40,8 @@
 @property NSUInteger dataNodeIndex;
 @property NSUInteger dataConstantIndex;
 @property (readonly) NSMutableArray *transferStrings;
+@property OnEndGotoNode *currentOnEndGoto;
+@property BOOL endRequested;
 
 - (instancetype)initWithRunnable:(Runnable *)runnable;
 - (BOOL)isFinished;

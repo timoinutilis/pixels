@@ -209,10 +209,7 @@ NSString *const TRANSFER = @"TRANSFER";
     {
         if (!runnable.labels[self.label])
         {
-            NSException *exception = [ProgramException exceptionWithName:@"UndefinedLabel"
-                                                                  reason:[NSString stringWithFormat:@"Undefined label %@", self.label]
-                                                                   token:self.token];
-            @throw exception;
+            @throw [ProgramException undefinedLabelExceptionWithNode:self label:self.label];
         }
     }
 }
@@ -235,10 +232,7 @@ NSString *const TRANSFER = @"TRANSFER";
     {
         if (!runnable.labels[self.label])
         {
-            NSException *exception = [ProgramException exceptionWithName:@"UndefinedLabel"
-                                                                  reason:[NSString stringWithFormat:@"Undefined label %@", self.label]
-                                                                   token:self.token];
-            @throw exception;
+            @throw [ProgramException undefinedLabelExceptionWithNode:self label:self.label];
         }
     }
 }
@@ -1040,6 +1034,37 @@ NSString *const TRANSFER = @"TRANSFER";
         }
         NSString *dataString = [strings componentsJoinedByString:@","];
         [runner.transferStrings addObject:[NSString stringWithFormat:@"DATA %@", dataString]];
+    }
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
+@implementation OnEndGotoNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    if (pass == PrePassCheckSemantic)
+    {
+        if (self.label && !runnable.labels[self.label])
+        {
+            @throw [ProgramException undefinedLabelExceptionWithNode:self label:self.label];
+        }
+    }
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    if (self.label)
+    {
+        runner.currentOnEndGoto = self;
+    }
+    else
+    {
+        runner.currentOnEndGoto = nil;
     }
     [runner next];
     return nil;
