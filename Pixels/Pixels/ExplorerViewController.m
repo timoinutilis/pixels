@@ -20,7 +20,6 @@ NSString *const ExplorerRefreshAddedProjectNotification = @"ExplorerRefreshAdded
 @property NSMutableArray *projects;
 @property Project *addedProject;
 @property Project *lastSelectedProject;
-@property Project *lastSelectedIndexPath;
 
 @end
 
@@ -55,16 +54,15 @@ NSString *const ExplorerRefreshAddedProjectNotification = @"ExplorerRefreshAdded
     [super viewWillAppear:animated];
     if (self.lastSelectedProject)
     {
-        if (self.lastSelectedProject.isDeleted)
+        if (self.lastSelectedProject.isDeleted || !self.lastSelectedProject.managedObjectContext)
         {
             [self loadProjects];
         }
         else
         {
-            [self.collectionView reloadItemsAtIndexPaths:@[self.lastSelectedIndexPath]];
+            [self.collectionView reloadData];
         }
         self.lastSelectedProject = nil;
-        self.lastSelectedIndexPath = nil;
     }
 }
 
@@ -136,7 +134,6 @@ NSString *const ExplorerRefreshAddedProjectNotification = @"ExplorerRefreshAdded
         ExplorerProjectCell *cell = (ExplorerProjectCell *)[self.collectionView cellForItemAtIndexPath:indexPaths[0]];
         vc.project = cell.project;
         
-        self.lastSelectedIndexPath = indexPaths[0];
         self.lastSelectedProject = cell.project;
     }
 }
