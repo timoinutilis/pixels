@@ -171,7 +171,7 @@
 {
     if (self.project.isDefault.boolValue)
     {
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Example programs cannot renamed." message:nil preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Example programs cannot be renamed." message:nil preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
         alert.view.tintColor = self.view.tintColor;
         [self presentViewController:alert animated:YES completion:nil];
