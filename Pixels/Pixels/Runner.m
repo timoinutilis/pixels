@@ -397,6 +397,22 @@
     return nil;
 }
 
+- (void)wait:(NSTimeInterval)time stopBlock:(BOOL(^)())block
+{
+    NSTimeInterval endTime = CFAbsoluteTimeGetCurrent() + time;
+    NSTimeInterval maxSleep = block ? 0.02 : 0.2;
+    BOOL stop = NO;
+    do
+    {
+        [NSThread sleepForTimeInterval:MIN(time, maxSleep)];
+        time = endTime - CFAbsoluteTimeGetCurrent();
+        if (block)
+        {
+            stop = block();
+        }
+    } while (time > 0 && !self.endRequested && !stop);
+}
+
 @end
 
 

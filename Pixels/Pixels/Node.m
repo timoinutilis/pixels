@@ -283,7 +283,7 @@ NSString *const TRANSFER = @"TRANSFER";
             runner.printLine = maxLines;
         }
         [runner.delegate updateRendererView];
-        [NSThread sleepForTimeInterval:0.1];
+        [runner wait:0.1 stopBlock:nil];
     }
     [runner next];
     return nil;
@@ -534,25 +534,25 @@ NSString *const TRANSFER = @"TRANSFER";
     {
         @throw [ProgramException invalidParameterExceptionWithNode:self value:value.floatValue];
     }
-    NSTimeInterval timeInterval = MIN(60.0, MAX(value.floatValue, 0.04));
+    NSTimeInterval timeInterval = MAX(value.floatValue, 0.04);
     if (self.gamepad)
     {
-        NSTimeInterval startTime = CFAbsoluteTimeGetCurrent();
-        int oldFlags = [runner.delegate currentGamepadFlags];
-        while (CFAbsoluteTimeGetCurrent() - startTime < timeInterval)
-        {
+        __block int oldFlags = [runner.delegate currentGamepadFlags];
+        
+        [runner wait:timeInterval stopBlock:^BOOL{
             int flags = [runner.delegate currentGamepadFlags];
             if (flags > oldFlags)
             {
-                break;
+                return YES;
             }
             oldFlags = flags;
-            [NSThread sleepForTimeInterval:0.04];
-        }
+            return NO;
+        }];
+        
     }
     else
     {
-        [NSThread sleepForTimeInterval:timeInterval];
+        [runner wait:timeInterval stopBlock:nil];
     }
     [runner next];
     return nil;
@@ -973,10 +973,7 @@ NSString *const TRANSFER = @"TRANSFER";
     {
         if (self.label && !runnable.labels[self.label] && ![self.label isEqualToString:TRANSFER])
         {
-            NSException *exception = [ProgramException exceptionWithName:@"UndefinedLabel"
-                                                                  reason:[NSString stringWithFormat:@"Undefined label %@", self.label]
-                                                                   token:self.token];
-            @throw exception;
+            @throw [ProgramException undefinedLabelExceptionWithNode:self label:self.label];
         }
     }
 }

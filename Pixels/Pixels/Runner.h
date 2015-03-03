@@ -63,4 +63,6 @@
 - (void)restoreDataLabel:(NSString *)label atToken:(Token *)token;
 - (Node *)readDataAtToken:(Token *)token;
 
+- (void)wait:(NSTimeInterval)time stopBlock:(BOOL(^)())block;
+
 @end
