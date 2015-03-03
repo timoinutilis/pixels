@@ -13,11 +13,11 @@
 @interface WebViewController ()
 
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *backItem;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *forwardItem;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *getItem;
 
 @property UIActivityIndicatorView *activityView;
+@property UIBarButtonItem *backItem;
+@property UIBarButtonItem *forwardItem;
 
 @end
 
@@ -29,7 +29,15 @@
     
     self.activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     UIBarButtonItem *activityItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityView];
-    self.navigationItem.leftBarButtonItem = activityItem;
+    
+    NSMutableArray *toolbarItems = [NSMutableArray array];
+    [toolbarItems addObject:activityItem];
+    [toolbarItems addObjectsFromArray:self.toolbarItems];
+    self.toolbarItems = toolbarItems;
+    
+    self.backItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:self action:@selector(onBackTapped:)];
+    self.forwardItem = [[UIBarButtonItem alloc] initWithTitle:@"Forw." style:UIBarButtonItemStylePlain target:self action:@selector(onForwardTapped:)];
+    self.navigationItem.leftBarButtonItems = @[self.backItem, self.forwardItem];
     
     self.webView.delegate = self;
     
@@ -53,12 +61,12 @@
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (IBAction)onBackTapped:(id)sender
+- (void)onBackTapped:(id)sender
 {
     [self.webView goBack];
 }
 
-- (IBAction)onForwardTapped:(id)sender
+- (void)onForwardTapped:(id)sender
 {
     [self.webView goForward];
 }
@@ -67,8 +75,8 @@
 {
     
     Project *project = [[ModelManager sharedManager] createNewProject];
-    project.name = @"TODO";
-    project.sourceCode = @"TODO";
+    project.name = [self pageProgramTitle];
+    project.sourceCode = [self pageSourceCode];
     
     [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
         [[NSNotificationCenter defaultCenter] postNotificationName:ExplorerRefreshAddedProjectNotification object:self];
@@ -92,14 +100,14 @@
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
     [self.activityView startAnimating];
-//    self.getItem.enabled = NO;
+    self.getItem.enabled = NO;
     [self updateButtons];
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
     [self.activityView stopAnimating];
-    self.getItem.enabled = YES;
+    self.getItem.enabled = [self pageHasSourceCode];
     [self updateButtons];
 }
 
@@ -107,8 +115,26 @@
 {
     NSURL *url = [[NSBundle mainBundle] URLForResource:@"error" withExtension:@"html"];
     [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:url]];
-//    self.getItem.enabled = NO;
+    self.getItem.enabled = NO;
     [self updateButtons];
+}
+
+- (BOOL)pageHasSourceCode
+{
+    NSString *result = [self.webView stringByEvaluatingJavaScriptFromString:@"document.getElementsByName('sourcecode').length > 0"];
+    return [result isEqualToString:@"true"];
+}
+
+- (NSString *)pageSourceCode
+{
+    NSString *result = [self.webView stringByEvaluatingJavaScriptFromString:@"document.getElementsByName('sourcecode')[0].textContent"];
+    return result;
+}
+
+- (NSString *)pageProgramTitle
+{
+    NSString *result = [self.webView stringByEvaluatingJavaScriptFromString:@"document.getElementsByClassName('entry-title')[0].textContent"];
+    return result;
 }
 
 @end

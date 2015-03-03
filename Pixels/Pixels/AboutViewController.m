@@ -61,7 +61,7 @@
     else if (index.integerValue == 1)
     {
         // App Store
-        NSURL *url = [NSURL URLWithString:@"itms-apps://itunes.apple.com/us/app/apple-store/id899138813?mt=8"]; //TODO
+        NSURL *url = [NSURL URLWithString:@"itms-apps://itunes.apple.com/us/app/lowres-coder/id962117496"];
         [[UIApplication sharedApplication] openURL:url];
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
     }

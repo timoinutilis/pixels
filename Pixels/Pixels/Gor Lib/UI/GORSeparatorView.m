@@ -20,8 +20,10 @@
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
     
+    CGPoint point = CGContextConvertPointToUserSpace(context, CGPointMake(1, 1));
+    
     CGRect lineRect = rect;
-    lineRect.size.height = 0.5;
+    lineRect.size.height = point.y; // one screen pixel height
     CGContextSetFillColorWithColor(context, self.separatorColor.CGColor);
     CGContextFillRect(context, lineRect);
 }
