@@ -31,6 +31,9 @@
 		9267E8851A5AF61B00D08C42 /* AFURLRequestSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 9267E87A1A5AF61B00D08C42 /* AFURLRequestSerialization.m */; };
 		9267E8861A5AF61B00D08C42 /* AFURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 9267E87C1A5AF61B00D08C42 /* AFURLResponseSerialization.m */; };
 		9267E8871A5AF61B00D08C42 /* AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9267E87E1A5AF61B00D08C42 /* AFURLSessionManager.m */; };
+		926864211AA5E50900F305B9 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 926864201AA5E50900F305B9 /* StoreKit.framework */; };
+		926864241AA607A000F305B9 /* UpgradeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 926864231AA607A000F305B9 /* UpgradeViewController.m */; };
+		926864271AA6087300F305B9 /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 926864261AA6087300F305B9 /* AppController.m */; };
 		926C72C71A2B579E00448EAB /* RunnerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 926C72C61A2B579E00448EAB /* RunnerViewController.m */; };
 		9272C1491A1DE2D000E97957 /* Token.m in Sources */ = {isa = PBXBuildFile; fileRef = 9272C1481A1DE2D000E97957 /* Token.m */; };
 		927334981A2A456900C89AF0 /* Help.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 927334971A2A456900C89AF0 /* Help.storyboard */; };
@@ -116,6 +119,11 @@
 		9267E87C1A5AF61B00D08C42 /* AFURLResponseSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLResponseSerialization.m; sourceTree = "<group>"; };
 		9267E87D1A5AF61B00D08C42 /* AFURLSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLSessionManager.h; sourceTree = "<group>"; };
 		9267E87E1A5AF61B00D08C42 /* AFURLSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLSessionManager.m; sourceTree = "<group>"; };
+		926864201AA5E50900F305B9 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		926864221AA607A000F305B9 /* UpgradeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpgradeViewController.h; sourceTree = "<group>"; };
+		926864231AA607A000F305B9 /* UpgradeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpgradeViewController.m; sourceTree = "<group>"; };
+		926864251AA6087300F305B9 /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppController.h; sourceTree = "<group>"; };
+		926864261AA6087300F305B9 /* AppController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppController.m; sourceTree = "<group>"; };
 		926C72C51A2B579E00448EAB /* RunnerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RunnerViewController.h; sourceTree = "<group>"; };
 		926C72C61A2B579E00448EAB /* RunnerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RunnerViewController.m; sourceTree = "<group>"; };
 		926C72C81A2B5C9100448EAB /* RunnerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RunnerDelegate.h; sourceTree = "<group>"; };
@@ -174,6 +182,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				926864211AA5E50900F305B9 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -297,6 +306,8 @@
 				92D518B81A6975C10000F917 /* AboutViewController.m */,
 				921DA0E11AA1EE6700816B26 /* WebViewController.h */,
 				921DA0E21AA1EE6700816B26 /* WebViewController.m */,
+				926864221AA607A000F305B9 /* UpgradeViewController.h */,
+				926864231AA607A000F305B9 /* UpgradeViewController.m */,
 			);
 			name = Main;
 			sourceTree = "<group>";
@@ -318,6 +329,7 @@
 		9276F3801A1D289C0060E909 = {
 			isa = PBXGroup;
 			children = (
+				926864201AA5E50900F305B9 /* StoreKit.framework */,
 				9276F38B1A1D289C0060E909 /* Pixels */,
 				9276F3A51A1D289C0060E909 /* PixelsTests */,
 				9276F38A1A1D289C0060E909 /* Products */,
@@ -341,6 +353,8 @@
 				92E53DEA1A5B3A1D00FE9F91 /* Gor Lib */,
 				9276F3901A1D289C0060E909 /* AppDelegate.h */,
 				9276F3911A1D289C0060E909 /* AppDelegate.m */,
+				926864251AA6087300F305B9 /* AppController.h */,
+				926864261AA6087300F305B9 /* AppController.m */,
 				9231159C1A444A4100624201 /* Views */,
 				927333F11A2A3EDD00C89AF0 /* View Controllers */,
 				9276F3B51A1D29D30060E909 /* Compiler */,
@@ -483,6 +497,11 @@
 					9276F3881A1D289C0060E909 = {
 						CreatedOnToolsVersion = 6.1;
 						DevelopmentTeam = BZ4VC623NH;
+						SystemCapabilities = {
+							com.apple.InAppPurchase = {
+								enabled = 1;
+							};
+						};
 					};
 					9276F3A11A1D289C0060E909 = {
 						CreatedOnToolsVersion = 6.1;
@@ -560,6 +579,7 @@
 				9267E8811A5AF61B00D08C42 /* AFHTTPSessionManager.m in Sources */,
 				92C98F3F1A20CFD900215AE9 /* ProgramException.m in Sources */,
 				9267E8821A5AF61B00D08C42 /* AFNetworkReachabilityManager.m in Sources */,
+				926864271AA6087300F305B9 /* AppController.m in Sources */,
 				9276F38F1A1D289C0060E909 /* main.m in Sources */,
 				9267E8801A5AF61B00D08C42 /* AFHTTPRequestOperationManager.m in Sources */,
 				92D518B91A6975C10000F917 /* AboutViewController.m in Sources */,
@@ -578,6 +598,7 @@
 				92C98F421A20F2F000215AE9 /* Node.m in Sources */,
 				926C72C71A2B579E00448EAB /* RunnerViewController.m in Sources */,
 				92E53DFA1A5B3AC200FE9F91 /* ShareViewController.m in Sources */,
+				926864241AA607A000F305B9 /* UpgradeViewController.m in Sources */,
 				92509CCA1A28F99D0086E7E3 /* ExplorerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -708,7 +729,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "23b16cd4-64b6-4076-9778-255d5770978c";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -723,7 +744,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "23b16cd4-64b6-4076-9778-255d5770978c";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

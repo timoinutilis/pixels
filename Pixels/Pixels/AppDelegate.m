@@ -8,6 +8,8 @@
 
 #import "AppDelegate.h"
 #import "ModelManager.h"
+#import "AppController.h"
+#import <StoreKit/StoreKit.h>
 
 @interface AppDelegate ()
 @end
@@ -18,6 +20,9 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    
+    [[SKPaymentQueue defaultQueue] addTransactionObserver:[AppController sharedController]];
+    
     return YES;
 }
 

@@ -183,10 +183,10 @@ Inutilis Software, 2015</string>
             </objects>
             <point key="canvasLocation" x="1241" y="476"/>
         </scene>
-        <!--Upgrade-->
+        <!--Full Version-->
         <scene sceneID="RT0-8l-uXi">
             <objects>
-                <viewController id="cfP-MT-scX" sceneMemberID="viewController">
+                <viewController id="cfP-MT-scX" customClass="UpgradeViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="n5z-mA-wL7"/>
                         <viewControllerLayoutGuide type="bottom" id="uuo-gB-z3b"/>
@@ -194,9 +194,87 @@ Inutilis Software, 2015</string>
                     <view key="view" contentMode="scaleToFill" id="GIV-Ht-ft8">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_about" translatesAutoresizingMaskIntoConstraints="NO" id="iCN-wF-fZ1">
+                                <rect key="frame" x="110" y="80" width="100" height="100"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Upgrade to the full version without size limit for programs" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nq7-k6-o2g">
+                                <rect key="frame" x="16" y="196" width="288" height="41"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7qu-NE-hxH">
+                                <rect key="frame" x="16" y="253" width="288" height="102"/>
+                                <string key="text">The upgrade is valid for all your devices and without time limit. This is the only payment you will do for LowRes Coder and there are no hidden costs.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yqV-0v-CbY">
+                                <rect key="frame" x="49" y="387" width="222" height="30"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d5T-K3-Spc">
+                                        <rect key="frame" x="0.0" y="0.0" width="61" height="30"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <state key="normal" title="Upgrade">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="onUpgradeTapped:" destination="cfP-MT-scX" eventType="touchUpInside" id="7wI-QE-jAw"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jZ1-zl-x2q">
+                                        <rect key="frame" x="93" y="0.0" width="129" height="30"/>
+                                        <state key="normal" title="Restore Purchases">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="onRestoreTapped:" destination="cfP-MT-scX" eventType="touchUpInside" id="Ufr-MV-zR5"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="jZ1-zl-x2q" firstAttribute="leading" secondItem="d5T-K3-Spc" secondAttribute="trailing" constant="32" id="AWV-nl-t3v"/>
+                                    <constraint firstAttribute="bottom" secondItem="jZ1-zl-x2q" secondAttribute="bottom" id="BKm-mE-4Gu"/>
+                                    <constraint firstAttribute="trailing" secondItem="jZ1-zl-x2q" secondAttribute="trailing" id="Q2m-5A-bBD"/>
+                                    <constraint firstItem="d5T-K3-Spc" firstAttribute="top" secondItem="yqV-0v-CbY" secondAttribute="top" id="VSB-bm-m0n"/>
+                                    <constraint firstAttribute="bottom" secondItem="d5T-K3-Spc" secondAttribute="bottom" id="Wsj-f3-xRZ"/>
+                                    <constraint firstItem="d5T-K3-Spc" firstAttribute="leading" secondItem="yqV-0v-CbY" secondAttribute="leading" id="ot9-Qq-j6j"/>
+                                    <constraint firstItem="jZ1-zl-x2q" firstAttribute="top" secondItem="yqV-0v-CbY" secondAttribute="top" id="tKg-9u-QlX"/>
+                                </constraints>
+                            </view>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="0Cm-eG-Zxe">
+                                <rect key="frame" x="150" y="392" width="20" height="20"/>
+                            </activityIndicatorView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="nq7-k6-o2g" firstAttribute="trailing" secondItem="GIV-Ht-ft8" secondAttribute="trailingMargin" id="1MW-BH-CMr"/>
+                            <constraint firstAttribute="centerX" secondItem="iCN-wF-fZ1" secondAttribute="centerX" id="9HB-JD-Fbj"/>
+                            <constraint firstItem="7qu-NE-hxH" firstAttribute="leading" secondItem="GIV-Ht-ft8" secondAttribute="leadingMargin" id="9zg-HS-QuW"/>
+                            <constraint firstItem="yqV-0v-CbY" firstAttribute="top" secondItem="7qu-NE-hxH" secondAttribute="bottom" priority="750" constant="32" id="BDt-s7-qtC"/>
+                            <constraint firstAttribute="centerX" secondItem="yqV-0v-CbY" secondAttribute="centerX" id="GkS-av-F75"/>
+                            <constraint firstItem="0Cm-eG-Zxe" firstAttribute="centerY" secondItem="yqV-0v-CbY" secondAttribute="centerY" id="KOy-sR-KjM"/>
+                            <constraint firstItem="nq7-k6-o2g" firstAttribute="top" secondItem="iCN-wF-fZ1" secondAttribute="bottom" constant="16" id="NHr-3r-gCq"/>
+                            <constraint firstAttribute="centerX" secondItem="0Cm-eG-Zxe" secondAttribute="centerX" id="VJO-Nb-rSQ"/>
+                            <constraint firstItem="7qu-NE-hxH" firstAttribute="trailing" secondItem="GIV-Ht-ft8" secondAttribute="trailingMargin" id="Z41-rl-pgw"/>
+                            <constraint firstItem="7qu-NE-hxH" firstAttribute="top" secondItem="nq7-k6-o2g" secondAttribute="bottom" constant="16" id="h6T-bY-P1Z"/>
+                            <constraint firstItem="nq7-k6-o2g" firstAttribute="leading" secondItem="GIV-Ht-ft8" secondAttribute="leadingMargin" id="hou-9A-ZaQ"/>
+                            <constraint firstItem="iCN-wF-fZ1" firstAttribute="top" secondItem="n5z-mA-wL7" secondAttribute="bottom" constant="16" id="s2p-61-3iY"/>
+                            <constraint firstItem="uuo-gB-z3b" firstAttribute="top" relation="greaterThanOrEqual" secondItem="yqV-0v-CbY" secondAttribute="bottom" constant="16" id="sjN-s8-Jnx"/>
+                        </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Upgrade" id="wyE-ky-eaE"/>
+                    <navigationItem key="navigationItem" title="Full Version" id="wyE-ky-eaE"/>
+                    <connections>
+                        <outlet property="activityView" destination="0Cm-eG-Zxe" id="9mD-UG-8Ra"/>
+                        <outlet property="buttonsView" destination="yqV-0v-CbY" id="kKB-az-yDn"/>
+                        <outlet property="descriptionLabel" destination="7qu-NE-hxH" id="mGg-Le-c3W"/>
+                        <outlet property="restoreButton" destination="jZ1-zl-x2q" id="4gy-GP-un8"/>
+                        <outlet property="titleLabel" destination="nq7-k6-o2g" id="Dd8-zJ-xdZ"/>
+                        <outlet property="upgradeButton" destination="d5T-K3-Spc" id="A0g-7B-v1z"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="juk-L3-frz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

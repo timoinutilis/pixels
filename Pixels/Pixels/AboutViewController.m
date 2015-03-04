@@ -8,6 +8,7 @@
 
 #import "AboutViewController.h"
 #import "GORSeparatorView.h"
+#import "AppController.h"
 
 @interface AboutViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *versionLabel;
@@ -26,11 +27,19 @@
     self.versionLabel.text = [NSString stringWithFormat:@"Version %@", self.appVersion];
     
     self.menuTitles = @[
-                        @"Upgrade to full version",
+                        @"Full version",
                         @"Rate in App Store",
                         @"More from Inutilis",
                         @"Contact"];
-    self.menuIndices = @[@0, @1, @2, @3];
+    
+    if ([AppController sharedController].isFullVersion)
+    {
+        self.menuIndices = @[@1, @2, @3];
+    }
+    else
+    {
+        self.menuIndices = @[@0, @1, @2, @3];
+    }
 }
 
 - (IBAction)onDoneTapped:(id)sender
