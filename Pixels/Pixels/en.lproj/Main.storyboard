@@ -71,6 +71,7 @@
                     <navigationItem key="navigationItem" title="(Program Name)" id="pmw-uN-wb5"/>
                     <connections>
                         <outlet property="sourceCodeTextView" destination="SjB-QF-tvR" id="adj-Wv-Tev"/>
+                        <segue destination="gyc-hD-d0L" kind="presentation" identifier="Upgrade" modalPresentationStyle="formSheet" id="HMJ-f5-m8b"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -181,7 +182,7 @@ Inutilis Software, 2015</string>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="k3f-cT-uxQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1241" y="476"/>
+            <point key="canvasLocation" x="1922" y="384"/>
         </scene>
         <!--Full Version-->
         <scene sceneID="RT0-8l-uXi">
@@ -195,23 +196,23 @@ Inutilis Software, 2015</string>
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_about" translatesAutoresizingMaskIntoConstraints="NO" id="iCN-wF-fZ1">
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="icon_about" translatesAutoresizingMaskIntoConstraints="NO" id="iCN-wF-fZ1">
                                 <rect key="frame" x="110" y="80" width="100" height="100"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Upgrade to the full version without size limit for programs" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nq7-k6-o2g">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Upgrade to the full version without size limit for programs" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nq7-k6-o2g">
                                 <rect key="frame" x="16" y="196" width="288" height="41"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7qu-NE-hxH">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7qu-NE-hxH">
                                 <rect key="frame" x="16" y="253" width="288" height="102"/>
                                 <string key="text">The upgrade is valid for all your devices and without time limit. This is the only payment you will do for LowRes Coder and there are no hidden costs.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yqV-0v-CbY">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yqV-0v-CbY">
                                 <rect key="frame" x="49" y="387" width="222" height="30"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d5T-K3-Spc">
@@ -245,7 +246,7 @@ Inutilis Software, 2015</string>
                                     <constraint firstItem="jZ1-zl-x2q" firstAttribute="top" secondItem="yqV-0v-CbY" secondAttribute="top" id="tKg-9u-QlX"/>
                                 </constraints>
                             </view>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="0Cm-eG-Zxe">
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="0Cm-eG-Zxe">
                                 <rect key="frame" x="150" y="392" width="20" height="20"/>
                             </activityIndicatorView>
                         </subviews>
@@ -266,7 +267,13 @@ Inutilis Software, 2015</string>
                             <constraint firstItem="uuo-gB-z3b" firstAttribute="top" relation="greaterThanOrEqual" secondItem="yqV-0v-CbY" secondAttribute="bottom" constant="16" id="sjN-s8-Jnx"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Full Version" id="wyE-ky-eaE"/>
+                    <navigationItem key="navigationItem" title="Full Version" id="wyE-ky-eaE">
+                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="ujG-Ec-KLa">
+                            <connections>
+                                <action selector="onDoneTapped:" destination="cfP-MT-scX" id="qpF-Kj-rm6"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="activityView" destination="0Cm-eG-Zxe" id="9mD-UG-8Ra"/>
                         <outlet property="buttonsView" destination="yqV-0v-CbY" id="kKB-az-yDn"/>
@@ -278,7 +285,24 @@ Inutilis Software, 2015</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="juk-L3-frz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1661" y="476"/>
+            <point key="canvasLocation" x="2382" y="-226"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="VuW-xg-Nz9">
+            <objects>
+                <navigationController id="gyc-hD-d0L" sceneMemberID="viewController">
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ujA-bU-52q">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="cfP-MT-scX" kind="relationship" relationship="rootViewController" id="3Zj-t8-4PG"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lo1-hv-rUe" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2382" y="476"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="2IR-fi-xuT">
@@ -295,7 +319,7 @@ Inutilis Software, 2015</string>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Rpa-Qi-MJ5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="796" y="476"/>
+            <point key="canvasLocation" x="1517" y="384"/>
         </scene>
         <!--Runner View Controller-->
         <scene sceneID="Ask-Tf-Oxf">
@@ -417,7 +441,7 @@ Inutilis Software, 2015</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="y4k-k9-clM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2522" y="1152"/>
+            <point key="canvasLocation" x="2642" y="1152"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="RGF-gP-Rq2">
@@ -603,7 +627,7 @@ Inutilis Software, 2015</string>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="t6o-4l-jLO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2522" y="1894"/>
+            <point key="canvasLocation" x="2622" y="2140"/>
         </scene>
         <!--Programs-->
         <scene sceneID="3mJ-o1-cJC">
@@ -753,7 +777,7 @@ Inutilis Software, 2015</string>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1f2-rc-ofO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="395" y="1894"/>
+            <point key="canvasLocation" x="163" y="2140"/>
         </scene>
         <!--lowres.inutilis.com-->
         <scene sceneID="RdJ-oP-pRn">
@@ -804,7 +828,7 @@ Inutilis Software, 2015</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1T9-ab-dn4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1058" y="1894"/>
+            <point key="canvasLocation" x="826" y="2140"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="lad-M1-adN">
@@ -822,7 +846,7 @@ Inutilis Software, 2015</string>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AgB-4w-4it" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1782" y="1895"/>
+            <point key="canvasLocation" x="1882" y="2141"/>
         </scene>
     </scenes>
     <resources>
@@ -834,5 +858,8 @@ Inutilis Software, 2015</string>
         <image name="joypad" width="130" height="130"/>
         <image name="star" width="28" height="28"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="XJL-Hs-NKe"/>
+    </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.66666666666666663" green="0.33333333333333331" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
 </document>

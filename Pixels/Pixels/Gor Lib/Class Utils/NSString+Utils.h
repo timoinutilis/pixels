@@ -11,5 +11,6 @@
 @interface NSString (Utils)
 
 - (NSString *)substringWithLineAtIndex:(NSUInteger)index;
+- (NSUInteger)countLines;
 
 @end

@@ -41,22 +41,13 @@ NSString *const PurchaseStateNotification = @"PurchaseStateNotification";
 
 - (void)showAlertWithTitle:(NSString *)title message:(NSString *)message
 {
-    UIViewController *vc = [UIApplication sharedApplication].keyWindow.rootViewController.childViewControllers.lastObject;
+    UIViewController *vc = ((UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController).visibleViewController;
 
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
     alert.view.tintColor = vc.view.tintColor;
     
-    if (vc.presentedViewController)
-    {
-        [vc dismissViewControllerAnimated:YES completion:^{
-            [vc presentViewController:alert animated:YES completion:nil];
-        }];
-    }
-    else
-    {
-        [vc presentViewController:alert animated:YES completion:nil];
-    }
+    [vc presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)requestProducts

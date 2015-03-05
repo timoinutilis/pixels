@@ -21,6 +21,8 @@
 #import "NSString+Utils.h"
 #import "EditorTextView.h"
 
+int const EditorDemoMaxLines = 128;
+
 @interface EditorViewController ()
 
 @property (weak, nonatomic) IBOutlet EditorTextView *sourceCodeTextView;
@@ -235,6 +237,22 @@
 {
     NSString *sourceCode = self.sourceCodeTextView.text;
     NSString *transferSourceCode = [EditorTextView transferText];
+    
+    if (!self.project.isDefault.boolValue && sourceCode.countLines > EditorDemoMaxLines)
+    {
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Upgrade to full version"
+                                                                       message:[NSString stringWithFormat:@"The free version can only run programs with up to %d lines.", EditorDemoMaxLines]
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+        [alert addAction:[UIAlertAction actionWithTitle:@"More Info" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [self performSegueWithIdentifier:@"Upgrade" sender:self];
+        }]];
+        alert.view.tintColor = self.view.tintColor;
+        [self presentViewController:alert animated:YES completion:nil];
+
+        return;
+    }
     
     NSArray *transferDataNodes;
     

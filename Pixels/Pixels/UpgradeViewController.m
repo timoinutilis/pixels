@@ -74,7 +74,7 @@
         case PurchaseStateProductsReady:
             [self updatePriceButton];
             self.upgradeButton.enabled = product != nil;
-            self.restoreButton.enabled = YES;// product != nil;
+            self.restoreButton.enabled = product != nil;
             [self.activityView stopAnimating];
             self.buttonsView.hidden = NO;
             break;
@@ -103,6 +103,11 @@
         self.upgradeButton.titleLabel.text = title;
         [self.upgradeButton setTitle:title forState:UIControlStateNormal];
     }
+}
+
+- (IBAction)onDoneTapped:(id)sender
+{
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (IBAction)onUpgradeTapped:(id)sender
