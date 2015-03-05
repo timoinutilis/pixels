@@ -277,6 +277,11 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
     return &_spriteDefs[index];
 }
 
+uint8_t getSpritePixel(SpriteDef *def, int x, int y)
+{
+    return (def->data[y] >> ((RendererSpriteSize - x - 1) << 1)) & 0x03;
+}
+
 - (BOOL)checkCollisionBetweenSprite:(int)index1 andSprite:(int)index2
 {
     if (index1 != index2)
@@ -287,7 +292,23 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
         int diffY = sprite2->y - sprite1->y;
         if (ABS(diffX) < RendererSpriteSize && ABS(diffY) < RendererSpriteSize)
         {
-            return YES;
+            SpriteDef *def1 = &_spriteDefs[sprite1->image];
+            SpriteDef *def2 = &_spriteDefs[sprite2->image];
+            
+            int minX = MAX(0, diffX);
+            int minY = MAX(0, diffY);
+            int maxX = MIN(RendererSpriteSize, RendererSpriteSize + diffX);
+            int maxY = MIN(RendererSpriteSize, RendererSpriteSize + diffY);
+            for (int y = minY; y < maxY; y++)
+            {
+                for (int x = minX; x < maxX; x++)
+                {
+                    if (getSpritePixel(def1, x, y) > 0 && getSpritePixel(def2, x - diffX, y - diffY) > 0)
+                    {
+                        return YES;
+                    }
+                }
+            }
         }
     }
     return NO;
@@ -308,7 +329,7 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
             if (localX >= 0 && localY >= 0 && localX < RendererSpriteSize && localY < RendererSpriteSize)
             {
                 SpriteDef *def = &_spriteDefs[sprite->image];
-                uint8_t color = (def->data[localY] >> ((RendererSpriteSize - localX - 1) << 1)) & 0x03;
+                uint8_t color = getSpritePixel(def, localX, localY);
                 if (color > 0)
                 {
                     colorIndex = sprite->colors[color - 1];
