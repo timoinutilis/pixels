@@ -50,6 +50,7 @@
 		928FB8991A5C804200EA377F /* GORSeparatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 928FB8981A5C804200EA377F /* GORSeparatorView.m */; };
 		929797FD1A50956900DB5D70 /* PublishActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 929797FC1A50956900DB5D70 /* PublishActivity.m */; };
 		92A0EC0D1A56DA1F0051D74C /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 92A0EC0B1A56DA1F0051D74C /* Model.xcdatamodeld */; };
+		92B7A5331AA8C71000B6CA81 /* AudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 92B7A5321AA8C71000B6CA81 /* AudioPlayer.m */; };
 		92C98F3F1A20CFD900215AE9 /* ProgramException.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C98F3E1A20CFD900215AE9 /* ProgramException.m */; };
 		92C98F421A20F2F000215AE9 /* Node.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C98F411A20F2F000215AE9 /* Node.m */; };
 		92D518B91A6975C10000F917 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D518B81A6975C10000F917 /* AboutViewController.m */; };
@@ -155,6 +156,8 @@
 		929797FC1A50956900DB5D70 /* PublishActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublishActivity.m; sourceTree = "<group>"; };
 		92A0EC0C1A56DA1F0051D74C /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		92A0EC0E1A56DA630051D74C /* Model 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 2.xcdatamodel"; sourceTree = "<group>"; };
+		92B7A5311AA8C71000B6CA81 /* AudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioPlayer.h; sourceTree = "<group>"; };
+		92B7A5321AA8C71000B6CA81 /* AudioPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioPlayer.m; sourceTree = "<group>"; };
 		92C98F3D1A20CFD900215AE9 /* ProgramException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgramException.h; sourceTree = "<group>"; };
 		92C98F3E1A20CFD900215AE9 /* ProgramException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProgramException.m; sourceTree = "<group>"; };
 		92C98F401A20F2F000215AE9 /* Node.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Node.h; sourceTree = "<group>"; };
@@ -238,6 +241,8 @@
 				926C72C81A2B5C9100448EAB /* RunnerDelegate.h */,
 				923115A01A444AA800624201 /* Renderer.h */,
 				923115A11A444AA800624201 /* Renderer.m */,
+				92B7A5311AA8C71000B6CA81 /* AudioPlayer.h */,
+				92B7A5321AA8C71000B6CA81 /* AudioPlayer.m */,
 			);
 			name = Runtime;
 			sourceTree = "<group>";
@@ -593,6 +598,7 @@
 				922A77461AA46CCB004EE2CA /* Project.m in Sources */,
 				924CC0FE1A220B3C00D2AF68 /* Runner.m in Sources */,
 				92E53DF41A5B3A1D00FE9F91 /* GORMenuTableViewController.m in Sources */,
+				92B7A5331AA8C71000B6CA81 /* AudioPlayer.m in Sources */,
 				921B234C1A9E3DA800C45AFA /* EditorTextView.m in Sources */,
 				9231159F1A444A6B00624201 /* RendererView.m in Sources */,
 				92C98F421A20F2F000215AE9 /* Node.m in Sources */,

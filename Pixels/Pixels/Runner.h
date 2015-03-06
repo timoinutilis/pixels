@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "RunnerDelegate.h"
 
-@class Node, OnEndGotoNode, Renderer, Runnable, VariableNode, Token;
+@class Node, OnEndGotoNode, Renderer, AudioPlayer, Runnable, VariableNode, Token;
 
 @interface Sequence : NSObject
 @property NSArray *nodes;
@@ -36,6 +36,7 @@
 
 @property (weak) id<RunnerDelegate> delegate;
 @property Renderer *renderer;
+@property AudioPlayer *audioPlayer;
 @property int printLine;
 @property NSUInteger dataNodeIndex;
 @property NSUInteger dataConstantIndex;

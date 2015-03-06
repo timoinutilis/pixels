@@ -9,6 +9,7 @@
 #import "Runner.h"
 #import "Node.h"
 #import "Renderer.h"
+#import "AudioPlayer.h"
 #import "Runnable.h"
 #import "ProgramException.h"
 
@@ -30,6 +31,7 @@
     {
         self.runnable = runnable;
         self.renderer = [[Renderer alloc] init];
+        self.audioPlayer = [[AudioPlayer alloc] init];
         
         self.numberVariables = [NSMutableDictionary dictionary];
         self.stringVariables = [NSMutableDictionary dictionary];

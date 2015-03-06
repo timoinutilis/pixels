@@ -14,6 +14,7 @@
 #import "ProgramException.h"
 #import "NSString+Utils.h"
 #import "EditorTextView.h"
+#import "AudioPlayer.h"
 
 @interface RunnerViewController ()
 
@@ -62,6 +63,8 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
+    [self.runner.audioPlayer start];
     [self run];
     
     [self hideExitButtonAfterDelay];
@@ -70,6 +73,8 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+
+    [self.runner.audioPlayer stop];
     self.project.scale = @(self.scale);
 }
 
