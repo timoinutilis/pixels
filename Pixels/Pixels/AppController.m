@@ -8,7 +8,7 @@
 
 #import "AppController.h"
 
-NSString *const FullVersionProductID = @"com.inutilis.ios.LowRes-Coder.fullversion";
+NSString *const FullVersionProductID = @"fullversion";
 
 NSString *const PurchaseStateNotification = @"PurchaseStateNotification";
 
@@ -36,7 +36,7 @@ NSString *const PurchaseStateNotification = @"PurchaseStateNotification";
 - (BOOL)isFullVersion
 {
     NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
-    return [storage boolForKey:@"fullversion"];
+    return [storage boolForKey:FullVersionProductID];
 }
 
 - (void)showAlertWithTitle:(NSString *)title message:(NSString *)message
@@ -97,7 +97,7 @@ NSString *const PurchaseStateNotification = @"PurchaseStateNotification";
                 break;
             }
             case SKPaymentTransactionStateFailed: {
-                [self showAlertWithTitle:@"Purchase failed" message:transaction.error.localizedFailureReason];
+                [self showAlertWithTitle:@"Not upgraded" message:transaction.error.localizedDescription];
                 [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
                 self.purchaseState = PurchaseStateProductsReady;
                 break;
@@ -146,10 +146,8 @@ NSString *const PurchaseStateNotification = @"PurchaseStateNotification";
     if ([productID isEqualToString:FullVersionProductID])
     {
         NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
-        [storage setBool:YES forKey:@"fullversion"];
+        [storage setBool:YES forKey:FullVersionProductID];
         [storage synchronize];
-        
-        [self showAlertWithTitle:@"Upgraded to full version" message:@"You can now write programs without size limits. Thank you!"];
     }
 }
 

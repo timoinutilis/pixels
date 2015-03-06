@@ -20,6 +20,7 @@
 #import "PublishActivity.h"
 #import "NSString+Utils.h"
 #import "EditorTextView.h"
+#import "AppController.h"
 
 int const EditorDemoMaxLines = 128;
 
@@ -238,7 +239,9 @@ int const EditorDemoMaxLines = 128;
     NSString *sourceCode = self.sourceCodeTextView.text;
     NSString *transferSourceCode = [EditorTextView transferText];
     
-    if (!self.project.isDefault.boolValue && sourceCode.countLines > EditorDemoMaxLines)
+    if (   ![AppController sharedController].isFullVersion
+        && !self.project.isDefault.boolValue
+        && sourceCode.countLines > EditorDemoMaxLines)
     {
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Upgrade to full version"
                                                                        message:[NSString stringWithFormat:@"The free version can only run programs with up to %d lines.", EditorDemoMaxLines]

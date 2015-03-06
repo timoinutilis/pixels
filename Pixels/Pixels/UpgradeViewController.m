@@ -17,6 +17,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *restoreButton;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityView;
 @property (weak, nonatomic) IBOutlet UIView *buttonsView;
+@property (weak, nonatomic) IBOutlet UILabel *upgradedLabel;
 @end
 
 @implementation UpgradeViewController
@@ -43,47 +44,50 @@
 
 - (void)onPurchaseStateChange:(NSNotification *)notification
 {
-    if ([AppController sharedController].isFullVersion)
-    {
-        [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-    }
-    else
-    {
-        [self updateView];
-    }
+    [self updateView];
 }
 
 - (void)updateView
 {
-    SKProduct *product = [AppController sharedController].fullVersionProduct;
-    
-    switch ([AppController sharedController].purchaseState)
+    if ([AppController sharedController].isFullVersion)
     {
-        case PurchaseStateUninitialized:
-            self.upgradeButton.enabled = NO;
-            self.restoreButton.enabled = NO;
-            [self.activityView stopAnimating];
-            self.buttonsView.hidden = NO;
-            break;
-        case PurchaseStateLoadingProducts:
-            self.upgradeButton.enabled = NO;
-            self.restoreButton.enabled = NO;
-            [self.activityView startAnimating];
-            self.buttonsView.hidden = YES;
-            break;
-        case PurchaseStateProductsReady:
-            [self updatePriceButton];
-            self.upgradeButton.enabled = product != nil;
-            self.restoreButton.enabled = product != nil;
-            [self.activityView stopAnimating];
-            self.buttonsView.hidden = NO;
-            break;
-        case PurchaseStateBusy:
-            self.upgradeButton.enabled = NO;
-            self.restoreButton.enabled = NO;
-            [self.activityView startAnimating];
-            self.buttonsView.hidden = YES;
-            break;
+        self.upgradedLabel.hidden = NO;
+        [self.activityView stopAnimating];
+        self.buttonsView.hidden = YES;
+    }
+    else
+    {
+        SKProduct *product = [AppController sharedController].fullVersionProduct;
+        self.upgradedLabel.hidden = YES;
+        
+        switch ([AppController sharedController].purchaseState)
+        {
+            case PurchaseStateUninitialized:
+                self.upgradeButton.enabled = NO;
+                self.restoreButton.enabled = NO;
+                [self.activityView stopAnimating];
+                self.buttonsView.hidden = NO;
+                break;
+            case PurchaseStateLoadingProducts:
+                self.upgradeButton.enabled = NO;
+                self.restoreButton.enabled = NO;
+                [self.activityView startAnimating];
+                self.buttonsView.hidden = YES;
+                break;
+            case PurchaseStateProductsReady:
+                [self updatePriceButton];
+                self.upgradeButton.enabled = product != nil;
+                self.restoreButton.enabled = product != nil;
+                [self.activityView stopAnimating];
+                self.buttonsView.hidden = NO;
+                break;
+            case PurchaseStateBusy:
+                self.upgradeButton.enabled = NO;
+                self.restoreButton.enabled = NO;
+                [self.activityView startAnimating];
+                self.buttonsView.hidden = YES;
+                break;
+        }
     }
 }
 
