@@ -870,12 +870,12 @@ NSString *const TRANSFER = @"TRANSFER";
     if (self.xExpression)
     {
         NSNumber *x = [self.xExpression evaluateWithRunner:runner];
-        sprite->x = x.intValue;
+        sprite->x = x.floatValue;
     }
     if (self.yExpression)
     {
         NSNumber *y = [self.yExpression evaluateWithRunner:runner];
-        sprite->y = y.intValue;
+        sprite->y = y.floatValue;
     }
     if (self.imageExpression)
     {
@@ -1195,21 +1195,20 @@ NSString *const TRANSFER = @"TRANSFER";
 {
     NSNumber *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSprites - 1];
     
-    int value = 0;
     Sprite *sprite = [runner.renderer spriteAtIndex:n.intValue];
     if (self.type == 'X')
     {
-        value = sprite->x;
+        return @(sprite->x);
     }
-    else if (self.type == 'Y')
+    if (self.type == 'Y')
     {
-        value = sprite->y;
+        return @(sprite->y);
     }
-    else if (self.type == 'I')
+    if (self.type == 'I')
     {
-        value = sprite->visible ? sprite->image : -1;
+        return @(sprite->visible ? sprite->image : -1);
     }
-    return @(value);
+    return @(0);
 }
 
 @end

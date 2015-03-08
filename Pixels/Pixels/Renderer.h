@@ -10,8 +10,8 @@
 
 typedef struct Sprite {
     BOOL visible;
-    int x;
-    int y;
+    float x;
+    float y;
     int image;
     uint8_t colors[3];
 } Sprite;

@@ -288,8 +288,8 @@ uint8_t getSpritePixel(SpriteDef *def, int x, int y)
     {
         Sprite *sprite1 = &_sprites[index1];
         Sprite *sprite2 = &_sprites[index2];
-        int diffX = sprite2->x - sprite1->x;
-        int diffY = sprite2->y - sprite1->y;
+        int diffX = floorf(sprite2->x) - floorf(sprite1->x);
+        int diffY = floorf(sprite2->y) - floorf(sprite1->y);
         if (ABS(diffX) < RendererSpriteSize && ABS(diffY) < RendererSpriteSize)
         {
             SpriteDef *def1 = &_spriteDefs[sprite1->image];
@@ -324,8 +324,8 @@ uint8_t getSpritePixel(SpriteDef *def, int x, int y)
         Sprite *sprite = &_sprites[i];
         if (sprite->visible)
         {
-            int localX = x - sprite->x;
-            int localY = y - sprite->y;
+            int localX = x - (int)floorf(sprite->x);
+            int localY = y - (int)floorf(sprite->y);
             if (localX >= 0 && localY >= 0 && localX < RendererSpriteSize && localY < RendererSpriteSize)
             {
                 SpriteDef *def = &_spriteDefs[sprite->image];
