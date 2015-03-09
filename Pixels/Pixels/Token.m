@@ -63,6 +63,7 @@
         case TTypeSymOff: return @"OFF";
         case TTypeSymWrite: return @"WRITE";
         case TTypeSymClear: return @"CLEAR";
+        case TTypeSymSound: return @"SOUND";
         
         case TTypeSymUp: return @"UP";
         case TTypeSymDown: return @"DOWN";

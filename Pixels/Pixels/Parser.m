@@ -239,6 +239,9 @@
             }
             break;
         }
+        case TTypeSymSound:
+            node = [self acceptSound];
+            break;
         default: {
             NSException *exception = [ProgramException exceptionWithName:@"ExpectedCommand" reason:@"Expected command" token:self.token];
             @throw exception;
@@ -282,6 +285,7 @@
         case TTypeSymRestore:
         case TTypeSymWrite:
         case TTypeSymSprite:
+        case TTypeSymSound:
             return YES;
         
         case TTypeSymEnd: {
@@ -767,6 +771,22 @@
         node.label = self.token.attrString;
         [self accept:TTypeIdentifier];
     }
+    return node;
+}
+
+- (Node *)acceptSound
+{
+    SoundNode *node = [[SoundNode alloc] init];
+    [self accept:TTypeSymSound];
+    node.pitchExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.durationExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.volumeExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.voiceExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.waveExpression = [self acceptExpression];
     return node;
 }
 

@@ -9,6 +9,7 @@
 #import "Node.h"
 #import "Runner.h"
 #import "Renderer.h"
+#import "AudioPlayer.h"
 #import "ProgramException.h"
 
 NSString *const TRANSFER = @"TRANSFER";
@@ -1063,6 +1064,37 @@ NSString *const TRANSFER = @"TRANSFER";
     {
         runner.currentOnEndGoto = nil;
     }
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
+@implementation SoundNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.pitchExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.durationExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.waveExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.voiceExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.volumeExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    NSNumber *voiceNum = [self.voiceExpression evaluateNumberWithRunner:runner min:0 max:AudioNumVoices - 1];
+    NSNumber *pitch = [self.pitchExpression evaluateNumberWithRunner:runner min:1 max:96];
+//    NSNumber *duration = [self.durationExpression evaluateNumberWithRunner:runner min:0 max:127];
+    NSNumber *wave = [self.waveExpression evaluateNumberWithRunner:runner min:0 max:3];
+    NSNumber *volume = [self.volumeExpression evaluateNumberWithRunner:runner min:0 max:16];
+    
+    Voice *voice = [runner.audioPlayer voiceAtIndex:voiceNum.intValue];
+    voice->frequence = 440.0f * powf(2.0f, (pitch.floatValue - 58.0f) / 12.0f);
+    voice->wave = wave.intValue;
+    voice->volume = volume.intValue;
     [runner next];
     return nil;
 }

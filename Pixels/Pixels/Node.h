@@ -200,6 +200,14 @@
 @property NSString *label;
 @end
 
+@interface SoundNode : Node
+@property Node *pitchExpression;
+@property Node *durationExpression;
+@property Node *volumeExpression;
+@property Node *voiceExpression;
+@property Node *waveExpression;
+@end
+
 @interface DirectionPadNode : Node
 @property TType type;
 @property Node *portExpression;
