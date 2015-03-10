@@ -9,25 +9,38 @@
 #import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSInteger, WaveType) {
-    WaveTypePulse,
-    WaveTypeTriangle,
+    WaveTypeNone = -1,
+    WaveTypeTriangle = 0,
     WaveTypeSawtooth,
-    WaveTypeNoise
+    WaveTypeNoise,
+    WaveTypePulse50,
+    WaveTypePulse25,
+    WaveTypePulse12,
+    WaveTypePulse6,
+    WaveTypePulse3,
 };
 
-typedef struct Voice {
+typedef struct AudioVoice {
     WaveType wave;
-    float frequence;
+    float frequency;
     int volume;
     float x;
-} Voice;
+} AudioVoice;
 
+typedef struct AudioNote {
+    int pitch;
+    int duration;
+    int volume;
+    WaveType wave;
+} AudioNote;
+                    
 extern int const AudioNumVoices;
 
 @interface AudioPlayer : NSObject
 
 - (void)start;
 - (void)stop;
-- (Voice *)voiceAtIndex:(int)index;
+- (AudioVoice *)voiceAtIndex:(int)index;
+- (AudioNote *)nextNoteForVoice:(int)voice;
 
 @end

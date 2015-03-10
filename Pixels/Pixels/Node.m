@@ -1085,16 +1085,18 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *voiceNum = [self.voiceExpression evaluateNumberWithRunner:runner min:0 max:AudioNumVoices - 1];
+    NSNumber *voice = [self.voiceExpression evaluateNumberWithRunner:runner min:0 max:AudioNumVoices - 1];
     NSNumber *pitch = [self.pitchExpression evaluateNumberWithRunner:runner min:1 max:96];
-//    NSNumber *duration = [self.durationExpression evaluateNumberWithRunner:runner min:0 max:127];
-    NSNumber *wave = [self.waveExpression evaluateNumberWithRunner:runner min:0 max:3];
+    NSNumber *duration = [self.durationExpression evaluateNumberWithRunner:runner min:0 max:127];
+    NSNumber *wave = [self.waveExpression evaluateNumberWithRunner:runner min:0 max:7];
     NSNumber *volume = [self.volumeExpression evaluateNumberWithRunner:runner min:0 max:16];
     
-    Voice *voice = [runner.audioPlayer voiceAtIndex:voiceNum.intValue];
-    voice->frequence = 440.0f * powf(2.0f, (pitch.floatValue - 58.0f) / 12.0f);
-    voice->wave = wave.intValue;
-    voice->volume = volume.intValue;
+    AudioNote *note = [runner.audioPlayer nextNoteForVoice:voice.intValue];
+    note->pitch = pitch.intValue;
+    note->duration = duration.intValue;
+    note->volume = volume.intValue;
+    note->wave = wave.intValue;
+    
     [runner next];
     return nil;
 }
