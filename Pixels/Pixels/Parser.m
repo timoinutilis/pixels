@@ -220,9 +220,18 @@
         case TTypeSymOn:
             node = [self acceptOnEndGoto];
             break;
-        case TTypeSymDef:
-            node = [self acceptDefSprite];
+        case TTypeSymDef: {
+            Token *next = [self nextToken];
+            if (next.type == TTypeSymSound)
+            {
+                node = [self acceptDefSound];
+            }
+            else
+            {
+                node = [self acceptDefSprite];
+            }
             break;
+        }
         case TTypeSymSprite: {
             Token *next = [self nextToken];
             if (next.type == TTypeSymPalette)
@@ -295,7 +304,7 @@
         
         case TTypeSymDef: {
             Token *next = [self nextToken];
-            return (next.type == TTypeSymSprite);
+            return (next.type == TTypeSymSprite || next.type == TTypeSymSound);
         }
             
         case TTypeSymOn: {
@@ -774,19 +783,50 @@
     return node;
 }
 
+- (Node *)acceptDefSound
+{
+    DefSoundNode *node = [[DefSoundNode alloc] init];
+    [self accept:TTypeSymDef];
+    [self accept:TTypeSymSound];
+    node.nExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.waveExpression = [self acceptExpression];
+    if ([self acceptOptionalComma])
+    {
+        node.pulseWidthExpression = [self acceptOptionalExpression];
+        if ([self acceptOptionalComma])
+        {
+            node.bendTimeExpression = [self acceptOptionalExpression];
+            if ([self acceptOptionalComma])
+            {
+                node.pitchBendExpression = [self acceptOptionalExpression];
+                if ([self acceptOptionalComma])
+                {
+                    node.pulseBendExpression = [self acceptOptionalExpression];
+                }
+            }
+        }
+    }
+    return node;
+}
+
 - (Node *)acceptSound
 {
     SoundNode *node = [[SoundNode alloc] init];
     [self accept:TTypeSymSound];
+    node.voiceExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
     node.pitchExpression = [self acceptExpression];
     [self accept:TTypeSymComma];
     node.durationExpression = [self acceptExpression];
-    [self accept:TTypeSymComma];
-    node.volumeExpression = [self acceptExpression];
-    [self accept:TTypeSymComma];
-    node.voiceExpression = [self acceptExpression];
-    [self accept:TTypeSymComma];
-    node.waveExpression = [self acceptExpression];
+    if ([self acceptOptionalComma])
+    {
+        node.defExpression = [self acceptOptionalExpression];
+        if ([self acceptOptionalComma])
+        {
+            node.volumeExpression = [self acceptOptionalExpression];
+        }
+    }
     return node;
 }
 

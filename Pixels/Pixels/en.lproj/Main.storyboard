@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vjV-e6-4vN">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vjV-e6-4vN">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -346,7 +346,7 @@ Inutilis Software, 2015</string>
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="B6C-lp-NaC" customClass="RendererView">
-                                        <rect key="frame" x="50" y="50" width="500" height="500"/>
+                                        <rect key="frame" x="50" y="0.0" width="500" height="500"/>
                                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                         <gestureRecognizers/>
                                         <constraints>
@@ -359,19 +359,10 @@ Inutilis Software, 2015</string>
                                 <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstAttribute="centerX" secondItem="B6C-lp-NaC" secondAttribute="centerX" id="4fd-N0-Rnv"/>
-                                    <constraint firstAttribute="centerY" secondItem="B6C-lp-NaC" secondAttribute="centerY" priority="750" id="WEu-I7-abo"/>
-                                    <constraint firstItem="B6C-lp-NaC" firstAttribute="top" secondItem="wgn-Os-cIh" secondAttribute="top" id="iA9-PT-qhk"/>
+                                    <constraint firstAttribute="centerY" secondItem="B6C-lp-NaC" secondAttribute="centerY" priority="250" id="WEu-I7-abo"/>
+                                    <constraint firstItem="B6C-lp-NaC" firstAttribute="top" secondItem="wgn-Os-cIh" secondAttribute="top" priority="750" id="iA9-PT-qhk"/>
                                 </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="iA9-PT-qhk"/>
-                                    </mask>
-                                </variation>
-                                <variation key="widthClass=compact">
-                                    <mask key="constraints">
-                                        <include reference="iA9-PT-qhk"/>
-                                    </mask>
-                                </variation>
+                                <variation key="widthClass=compact"/>
                             </view>
                             <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U9l-B1-gng" userLabel="Exit Button">
                                 <rect key="frame" x="0.0" y="0.0" width="55" height="55"/>
@@ -441,6 +432,7 @@ Inutilis Software, 2015</string>
                         <outlet property="buttonA" destination="gGg-rj-ecJ" id="Lj8-wl-JCJ"/>
                         <outlet property="buttonB" destination="WUP-DK-URn" id="fTd-nZ-6E5"/>
                         <outlet property="constraintHeight" destination="xDi-Pn-o1Z" id="MFn-Ny-47I"/>
+                        <outlet property="constraintTop" destination="iA9-PT-qhk" id="MhU-kM-iUh"/>
                         <outlet property="constraintWidth" destination="A1Z-Ca-qSy" id="N2o-XF-UHg"/>
                         <outlet property="containerView" destination="wgn-Os-cIh" id="Urd-Fb-b8e"/>
                         <outlet property="exitButton" destination="U9l-B1-gng" id="T69-ZT-cvs"/>

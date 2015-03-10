@@ -11,18 +11,29 @@
 #import <AVFoundation/AVAudioSession.h>
 
 int const AudioNumVoices = 3;
+int const AudioNumSoundDefs = 16;
 int const AudioFilterBufSize = 7;
 
 typedef struct AudioSequence {
-    AudioNote notes[128];
+    SoundNote notes[128];
     int writeIndex;
     int readIndex;
     int ticks;
 } AudioSequence;
 
+typedef struct Voice {
+    int soundDef;
+    double frequency;
+    int volume;
+    BOOL gate;
+    double gateTime;
+    double x;
+} Voice;
+
 typedef struct PlayerSystem {
-    float sampleRate;
-    AudioVoice voices[AudioNumVoices];
+    double sampleRate;
+    SoundDef soundDefs[AudioNumSoundDefs];
+    Voice voices[AudioNumVoices];
     AudioSequence sequences[AudioNumVoices];
     int16_t noise[4096];
     int32_t filterBuffer[AudioFilterBufSize];
@@ -57,16 +68,27 @@ static void OutputBufferCallback(void *inUserData, AudioQueueRef inAQ, AudioQueu
         
         for (int i = 0; i < AudioNumVoices; i++)
         {
-            AudioVoice *voice = &_player.voices[i];
-            voice->wave = WaveTypeNone;
+            Voice *voice = &_player.voices[i];
+            voice->soundDef = 0;
             voice->frequency = 440;
             voice->x = 0;
             voice->volume = 16;
+            voice->gate = FALSE;
+            voice->gateTime = 0;
             
             AudioSequence *sequence = &_player.sequences[i];
             sequence->writeIndex = 0;
             sequence->readIndex = 0;
             sequence->ticks = 0;
+        }
+        
+        for (int i = 0; i < AudioNumSoundDefs; i++)
+        {
+            SoundDef *def = &_player.soundDefs[i];
+            def->wave = i % 4;
+            def->pulseWidth = 1.0;
+            def->bendTime = 1.0;
+            def->pitchBend = 0;
         }
         
         for (int i = 0; i < 4096; i++)
@@ -112,15 +134,15 @@ static void OutputBufferCallback(void *inUserData, AudioQueueRef inAQ, AudioQueu
     _queue = NULL;
 }
 
-- (AudioVoice *)voiceAtIndex:(int)index
+- (SoundDef *)soundDefAtIndex:(int)index
 {
-    return &_player.voices[index];
+    return &_player.soundDefs[index];
 }
 
-- (AudioNote *)nextNoteForVoice:(int)voice
+- (SoundNote *)nextNoteForVoice:(int)voice
 {
     AudioSequence *sequence = &_player.sequences[voice];
-    AudioNote *note = &sequence->notes[sequence->writeIndex];
+    SoundNote *note = &sequence->notes[sequence->writeIndex];
     sequence->writeIndex++;
     if (sequence->writeIndex == 128)
     {
@@ -137,9 +159,11 @@ static void RenderAudio(AudioQueueBufferRef buffer, PlayerSystem *player)
     int len = buffer->mAudioDataBytesCapacity >> 1;
     int16_t sumSample, voiceSample;
     int i, v, f;
-    AudioVoice *voice;
+    double bendFactor, finalFrequency, finalPulseWidth;
+    Voice *voice;
+    SoundDef *def;
     AudioSequence *sequence;
-    AudioNote *note;
+    SoundNote *note;
     
     // audio sequence
     for (v = 0; v < AudioNumVoices; v++)
@@ -152,9 +176,17 @@ static void RenderAudio(AudioQueueBufferRef buffer, PlayerSystem *player)
                 // start note
                 note = &sequence->notes[sequence->readIndex];
                 voice = &player->voices[v];
-                voice->frequency = 440.0f * powf(2.0f, (note->pitch - 58) / 12.0f);
-                voice->wave = note->wave;
-                voice->volume = note->volume;
+                voice->frequency = 440.0 * pow(2.0, (note->pitch - 58) / 12.0);
+                if (note->soundDef != -1)
+                {
+                    voice->soundDef = note->soundDef;
+                }
+                if (note->volume != -1)
+                {
+                    voice->volume = note->volume;
+                }
+                voice->gate = TRUE;
+                voice->gateTime = 0.0;
                 sequence->ticks = note->duration;
 
                 sequence->readIndex++;
@@ -171,7 +203,7 @@ static void RenderAudio(AudioQueueBufferRef buffer, PlayerSystem *player)
             {
                 //stop sound
                 voice = &player->voices[v];
-                voice->wave = WaveTypeNone;
+                voice->gate = FALSE;
             }
         }
     }
@@ -183,46 +215,46 @@ static void RenderAudio(AudioQueueBufferRef buffer, PlayerSystem *player)
         for (v = 0; v < AudioNumVoices; v++)
         {
             voice = &player->voices[v];
-            switch (voice->wave)
+            def = &player->soundDefs[voice->soundDef];
+
+            bendFactor = voice->gateTime / def->bendTime / player->sampleRate;
+            if (bendFactor > 1.0)
             {
-                case WaveTypeNone:
-                    voiceSample = 0;
-                    break;
-                case WaveTypeTriangle:
-                    voice->x = fmodf(voice->x, 1.0f);
-                    voiceSample = (voice->x < 0.5f ? voice->x * 4.0f - 1.0f : 1.0f - (voice->x - 0.5f) * 4.0f) * SHRT_MAX;
-                    break;
-                case WaveTypeSawtooth:
-                    voice->x = fmodf(voice->x, 1.0f);
-                    voiceSample = (voice->x * 2.0f - 1.0f) * SHRT_MAX;
-                    break;
-                case WaveTypeNoise:
-                    voice->x = fmodf(voice->x, 512.0f); // 4096.0f / 8.0f
-                    voiceSample = player->noise[(int)(voice->x * 8.0f)];
-                    break;
-                case WaveTypePulse50:
-                    voice->x = fmodf(voice->x, 1.0f);
-                    voiceSample = voice->x < 0.5f ? SHRT_MAX : SHRT_MIN;
-                    break;
-                case WaveTypePulse25:
-                    voice->x = fmodf(voice->x, 1.0f);
-                    voiceSample = voice->x < 0.25f ? SHRT_MAX : SHRT_MIN;
-                    break;
-                case WaveTypePulse12:
-                    voice->x = fmodf(voice->x, 1.0f);
-                    voiceSample = voice->x < 0.125f ? SHRT_MAX : SHRT_MIN;
-                    break;
-                case WaveTypePulse6:
-                    voice->x = fmodf(voice->x, 1.0f);
-                    voiceSample = voice->x < 0.0625f ? SHRT_MAX : SHRT_MIN;
-                    break;
-                case WaveTypePulse3:
-                    voice->x = fmodf(voice->x, 1.0f);
-                    voiceSample = voice->x < 0.03125f ? SHRT_MAX : SHRT_MIN;
-                    break;
+                bendFactor = 1.0;
             }
-            sumSample += (voiceSample * voice->volume) >> 6;
-            voice->x = voice->x + voice->frequency / player->sampleRate;
+            
+            if (voice->gate)
+            {
+                switch (def->wave)
+                {
+                    case WaveTypeSawtooth:
+                        voice->x = fmod(voice->x, 1.0);
+                        voiceSample = (voice->x * 2.0 - 1.0) * SHRT_MAX;
+                        break;
+                    case WaveTypeTriangle:
+                        voice->x = fmod(voice->x, 1.0);
+                        voiceSample = (voice->x < 0.5 ? voice->x * 4.0 - 1.0 : 1.0 - (voice->x - 0.5) * 4.0) * SHRT_MAX;
+                        break;
+                    case WaveTypePulse:
+                        voice->x = fmod(voice->x, 1.0);
+                        finalPulseWidth = def->pulseWidth * pow(2.0, def->pulseBend * bendFactor) * 0.5;
+                        if (finalPulseWidth > 0.5)
+                        {
+                            finalPulseWidth = 0.5;
+                        }
+                        voiceSample = voice->x < finalPulseWidth ? SHRT_MAX : SHRT_MIN;
+                        break;
+                    case WaveTypeNoise:
+                        voice->x = fmod(voice->x, 512.0); // 4096.0 / 8.0
+                        voiceSample = player->noise[(int)(voice->x * 8.0)];
+                        break;
+                }
+                sumSample += (voiceSample * voice->volume) >> 6; // 4+2
+            }
+            
+            finalFrequency = voice->frequency * pow(2.0, def->pitchBend * bendFactor / 12.0);
+            voice->x = voice->x + finalFrequency / player->sampleRate;
+            voice->gateTime += 1.0;
         }
         
         // filter and store to buffer
@@ -239,6 +271,7 @@ static void RenderAudio(AudioQueueBufferRef buffer, PlayerSystem *player)
                         + (player->filterBuffer[4] >> 1)
                         + (player->filterBuffer[5] >> 2)
                         + (player->filterBuffer[6] >> 3)) / 3;
+        
     }
 }
 

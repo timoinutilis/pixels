@@ -200,12 +200,21 @@
 @property NSString *label;
 @end
 
+@interface DefSoundNode : Node
+@property Node *nExpression;
+@property Node *waveExpression;
+@property Node *pulseWidthExpression;
+@property Node *bendTimeExpression;
+@property Node *pitchBendExpression;
+@property Node *pulseBendExpression;
+@end
+
 @interface SoundNode : Node
+@property Node *voiceExpression;
 @property Node *pitchExpression;
 @property Node *durationExpression;
+@property Node *defExpression;
 @property Node *volumeExpression;
-@property Node *voiceExpression;
-@property Node *waveExpression;
 @end
 
 @interface DirectionPadNode : Node

@@ -1072,14 +1072,55 @@ NSString *const TRANSFER = @"TRANSFER";
 
 
 
+@implementation DefSoundNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.nExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.waveExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.pulseWidthExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.bendTimeExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.pitchBendExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.pulseBendExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    NSNumber *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:AudioNumSoundDefs - 1];
+    NSNumber *wave = [self.waveExpression evaluateNumberWithRunner:runner min:0 max:3];
+    NSNumber *pulseWidth = [self.pulseWidthExpression evaluateWithRunner:runner];
+    NSNumber *bendTime = [self.bendTimeExpression evaluateWithRunner:runner];
+    NSNumber *pitchBend = [self.pitchBendExpression evaluateWithRunner:runner];
+    NSNumber *pulseBend = [self.pulseBendExpression evaluateWithRunner:runner];
+    
+    if (pulseWidth.doubleValue <= 0.0 || pulseWidth.doubleValue > 1.0)
+    {
+        @throw [ProgramException invalidParameterExceptionWithNode:self value:pulseWidth.floatValue];
+    }
+    
+    SoundDef *def = [runner.audioPlayer soundDefAtIndex:n.intValue];
+    def->wave = wave.intValue;
+    def->pulseWidth = pulseWidth.doubleValue;
+    def->bendTime = bendTime.doubleValue;
+    def->pitchBend = pitchBend.intValue;
+    def->pulseBend = pulseBend.doubleValue;
+    
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
 @implementation SoundNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
 {
+    [self.voiceExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
     [self.pitchExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
     [self.durationExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
-    [self.waveExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
-    [self.voiceExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.defExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
     [self.volumeExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
 }
 
@@ -1088,14 +1129,14 @@ NSString *const TRANSFER = @"TRANSFER";
     NSNumber *voice = [self.voiceExpression evaluateNumberWithRunner:runner min:0 max:AudioNumVoices - 1];
     NSNumber *pitch = [self.pitchExpression evaluateNumberWithRunner:runner min:1 max:96];
     NSNumber *duration = [self.durationExpression evaluateNumberWithRunner:runner min:0 max:127];
-    NSNumber *wave = [self.waveExpression evaluateNumberWithRunner:runner min:0 max:7];
+    NSNumber *soundDef = [self.defExpression evaluateNumberWithRunner:runner min:0 max:AudioNumSoundDefs - 1];
     NSNumber *volume = [self.volumeExpression evaluateNumberWithRunner:runner min:0 max:16];
     
-    AudioNote *note = [runner.audioPlayer nextNoteForVoice:voice.intValue];
+    SoundNote *note = [runner.audioPlayer nextNoteForVoice:voice.intValue];
     note->pitch = pitch.intValue;
     note->duration = duration.intValue;
-    note->volume = volume.intValue;
-    note->wave = wave.intValue;
+    note->soundDef = soundDef ? soundDef.intValue : -1;
+    note->volume = volume ? volume.intValue : -1;
     
     [runner next];
     return nil;

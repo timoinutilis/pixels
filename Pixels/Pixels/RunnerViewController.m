@@ -26,6 +26,7 @@
 @property (weak, nonatomic) IBOutlet Gamepad *gamepad;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintWidth;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintHeight;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTop;
 
 @property UIPinchGestureRecognizer *pinchRecognizer;
 @property UITapGestureRecognizer *tapRecognizer;
@@ -257,12 +258,14 @@
             self.gamepad.hidden = NO;
             self.buttonA.hidden = NO;
             self.buttonB.hidden = NO;
+            self.constraintTop.priority = UILayoutPriorityDefaultHigh;
         }
         else
         {
             self.gamepad.hidden = YES;
             self.buttonA.hidden = YES;
             self.buttonB.hidden = YES;
+            self.constraintTop.priority = UILayoutPriorityDefaultLow - 1;
         }
     });
 }
