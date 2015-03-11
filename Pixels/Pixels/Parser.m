@@ -822,10 +822,6 @@
     if ([self acceptOptionalComma])
     {
         node.defExpression = [self acceptOptionalExpression];
-        if ([self acceptOptionalComma])
-        {
-            node.volumeExpression = [self acceptOptionalExpression];
-        }
     }
     return node;
 }

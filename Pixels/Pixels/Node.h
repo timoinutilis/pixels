@@ -214,7 +214,6 @@
 @property Node *pitchExpression;
 @property Node *durationExpression;
 @property Node *defExpression;
-@property Node *volumeExpression;
 @end
 
 @interface DirectionPadNode : Node

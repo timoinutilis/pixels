@@ -24,7 +24,6 @@ typedef struct AudioSequence {
 typedef struct Voice {
     int soundDef;
     double frequency;
-    int volume;
     BOOL gate;
     double gateTime;
     double x;
@@ -35,6 +34,7 @@ typedef struct PlayerSystem {
     SoundDef soundDefs[AudioNumSoundDefs];
     Voice voices[AudioNumVoices];
     AudioSequence sequences[AudioNumVoices];
+    double frameCount;
     int16_t noise[4096];
     int32_t filterBuffer[AudioFilterBufSize];
 } PlayerSystem;
@@ -72,7 +72,6 @@ static void OutputBufferCallback(void *inUserData, AudioQueueRef inAQ, AudioQueu
             voice->soundDef = 0;
             voice->frequency = 440;
             voice->x = 0;
-            voice->volume = 16;
             voice->gate = FALSE;
             voice->gateTime = 0;
             
@@ -86,7 +85,7 @@ static void OutputBufferCallback(void *inUserData, AudioQueueRef inAQ, AudioQueu
         {
             SoundDef *def = &_player.soundDefs[i];
             def->wave = i % 4;
-            def->pulseWidth = 1.0;
+            def->pulseWidth = 0.5;
             def->bendTime = 1.0;
             def->pitchBend = 0;
         }
@@ -100,38 +99,53 @@ static void OutputBufferCallback(void *inUserData, AudioQueueRef inAQ, AudioQueu
         {
             _player.filterBuffer[i] = 0;
         }
+        
+        _player.frameCount = 0.0;
     }
     return self;
 }
 
 - (void)start
 {
-    OSStatus result;
-    
-    AVAudioSession* session = [AVAudioSession sharedInstance];
-    [session setPreferredSampleRate:_player.sampleRate error:nil];
-    _player.sampleRate = session.sampleRate;
-    _dataFormat.mSampleRate = session.sampleRate;
-    
-    result = AudioQueueNewOutput(&_dataFormat, OutputBufferCallback, &_player, NULL/*CFRunLoopGetCurrent()*/, kCFRunLoopCommonModes, 0, &_queue);
-    
-    AudioQueueBufferRef buffer;
-    for (int i = 0; i < 3; i++)
+    if (!_isActive)
     {
-        result = AudioQueueAllocateBuffer(_queue, 1024, &buffer);
-        buffer->mAudioDataByteSize = buffer->mAudioDataBytesCapacity;
-        RenderAudio(buffer, &_player);
-        result = AudioQueueEnqueueBuffer(_queue, buffer, 0, NULL);
+        _isActive = YES;
+        
+        OSStatus result;
+        
+        AVAudioSession* session = [AVAudioSession sharedInstance];
+        [session setCategory:AVAudioSessionCategoryAmbient error:nil];
+        [session setPreferredSampleRate:_player.sampleRate error:nil];
+        _player.sampleRate = session.sampleRate;
+        _dataFormat.mSampleRate = session.sampleRate;
+        
+        result = AudioQueueNewOutput(&_dataFormat, OutputBufferCallback, &_player, NULL, kCFRunLoopCommonModes, 0, &_queue);
+        
+        AudioQueueBufferRef buffer;
+        for (int i = 0; i < 3; i++)
+        {
+            result = AudioQueueAllocateBuffer(_queue, 1024, &buffer);
+            buffer->mAudioDataByteSize = buffer->mAudioDataBytesCapacity;
+            RenderAudio(buffer, &_player);
+            result = AudioQueueEnqueueBuffer(_queue, buffer, 0, NULL);
+        }
+        
+        result = AudioQueueStart(_queue, NULL);
     }
-    
-    result = AudioQueueStart(_queue, NULL);
 }
 
 - (void)stop
 {
-    AudioQueueStop(_queue, TRUE);
-    AudioQueueDispose(_queue, TRUE);
-    _queue = NULL;
+    if (_isActive)
+    {
+        _isActive = NO;
+
+        AudioQueueStop(_queue, TRUE);
+        AudioQueueDispose(_queue, TRUE);
+        _queue = NULL;
+        
+        [[AVAudioSession sharedInstance] setActive:NO error:nil];
+    }
 }
 
 - (SoundDef *)soundDefAtIndex:(int)index
@@ -153,6 +167,55 @@ static void OutputBufferCallback(void *inUserData, AudioQueueRef inAQ, AudioQueu
 
 @end
 
+static void UpdateNotes(PlayerSystem *player)
+{
+    int v;
+    AudioSequence *sequence;
+    SoundNote *note;
+    Voice *voice;
+    
+    // audio sequence
+    for (v = 0; v < AudioNumVoices; v++)
+    {
+        sequence = &player->sequences[v];
+        if (sequence->ticks > 0)
+        {
+            sequence->ticks--;
+        }
+        if (sequence->ticks == 0)
+        {
+            voice = &player->voices[v];
+            if (sequence->readIndex != sequence->writeIndex)
+            {
+                // start note
+                note = &sequence->notes[sequence->readIndex];
+                if (note->pitch != 0)
+                {
+                    voice->frequency = 440.0 * pow(2.0, (note->pitch - 58) / 12.0);
+                }
+                if (note->soundDef != -1)
+                {
+                    voice->soundDef = note->soundDef;
+                }
+                voice->gate = (note->pitch != 0);
+                voice->gateTime = 0.0;
+                sequence->ticks = note->duration;
+                
+                sequence->readIndex++;
+                if (sequence->readIndex == 128)
+                {
+                    sequence->readIndex = 0;
+                }
+            }
+            else
+            {
+                //stop sound
+                voice->gate = FALSE;
+            }
+        }
+    }
+}
+
 static void RenderAudio(AudioQueueBufferRef buffer, PlayerSystem *player)
 {
     int16_t *audioData = buffer->mAudioData;
@@ -162,55 +225,21 @@ static void RenderAudio(AudioQueueBufferRef buffer, PlayerSystem *player)
     double bendFactor, finalFrequency, finalPulseWidth;
     Voice *voice;
     SoundDef *def;
-    AudioSequence *sequence;
-    SoundNote *note;
-    
-    // audio sequence
-    for (v = 0; v < AudioNumVoices; v++)
-    {
-        sequence = &player->sequences[v];
-        if (sequence->ticks == 0)
-        {
-            if (sequence->readIndex != sequence->writeIndex)
-            {
-                // start note
-                note = &sequence->notes[sequence->readIndex];
-                voice = &player->voices[v];
-                voice->frequency = 440.0 * pow(2.0, (note->pitch - 58) / 12.0);
-                if (note->soundDef != -1)
-                {
-                    voice->soundDef = note->soundDef;
-                }
-                if (note->volume != -1)
-                {
-                    voice->volume = note->volume;
-                }
-                voice->gate = TRUE;
-                voice->gateTime = 0.0;
-                sequence->ticks = note->duration;
-
-                sequence->readIndex++;
-                if (sequence->readIndex == 128)
-                {
-                    sequence->readIndex = 0;
-                }
-            }
-        }
-        else
-        {
-            sequence->ticks--;
-            if (sequence->ticks == 0 && sequence->readIndex == sequence->writeIndex)
-            {
-                //stop sound
-                voice = &player->voices[v];
-                voice->gate = FALSE;
-            }
-        }
-    }
+    double frameToUpdate = ceil(player->sampleRate / 24);
     
     // wave form
     for (i = 0; i < len; i++)
     {
+        if (player->frameCount == 0.0)
+        {
+            UpdateNotes(player);
+        }
+        player->frameCount++;
+        if (player->frameCount == frameToUpdate)
+        {
+            player->frameCount = 0.0;
+        }
+        
         sumSample = 0;
         for (v = 0; v < AudioNumVoices; v++)
         {
@@ -237,10 +266,14 @@ static void RenderAudio(AudioQueueBufferRef buffer, PlayerSystem *player)
                         break;
                     case WaveTypePulse:
                         voice->x = fmod(voice->x, 1.0);
-                        finalPulseWidth = def->pulseWidth * pow(2.0, def->pulseBend * bendFactor) * 0.5;
-                        if (finalPulseWidth > 0.5)
+                        finalPulseWidth = def->pulseWidth * pow(2.0, def->pulseBend * bendFactor);
+                        if (finalPulseWidth > 0.9)
                         {
-                            finalPulseWidth = 0.5;
+                            finalPulseWidth = 0.9;
+                        }
+                        else if (finalPulseWidth < 0.1)
+                        {
+                            finalPulseWidth = 0.1;
                         }
                         voiceSample = voice->x < finalPulseWidth ? SHRT_MAX : SHRT_MIN;
                         break;
@@ -249,12 +282,12 @@ static void RenderAudio(AudioQueueBufferRef buffer, PlayerSystem *player)
                         voiceSample = player->noise[(int)(voice->x * 8.0)];
                         break;
                 }
-                sumSample += (voiceSample * voice->volume) >> 6; // 4+2
+                sumSample += voiceSample >> 2; // lower volume
             }
             
             finalFrequency = voice->frequency * pow(2.0, def->pitchBend * bendFactor / 12.0);
             voice->x = voice->x + finalFrequency / player->sampleRate;
-            voice->gateTime += 1.0;
+            voice->gateTime++;
         }
         
         // filter and store to buffer

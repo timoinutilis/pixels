@@ -26,7 +26,6 @@ typedef struct SoundDef {
 typedef struct SoundNote {
     int pitch;
     int duration;
-    int volume;
     int soundDef;
 } SoundNote;
                     
@@ -34,6 +33,8 @@ extern int const AudioNumVoices;
 extern int const AudioNumSoundDefs;
 
 @interface AudioPlayer : NSObject
+
+@property (readonly) BOOL isActive;
 
 - (void)start;
 - (void)stop;

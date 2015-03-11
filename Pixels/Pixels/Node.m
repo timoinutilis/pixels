@@ -1093,15 +1093,15 @@ NSString *const TRANSFER = @"TRANSFER";
     NSNumber *pitchBend = [self.pitchBendExpression evaluateWithRunner:runner];
     NSNumber *pulseBend = [self.pulseBendExpression evaluateWithRunner:runner];
     
-    if (pulseWidth.doubleValue <= 0.0 || pulseWidth.doubleValue > 1.0)
+    if (pulseWidth && (pulseWidth.doubleValue <= 0.0 || pulseWidth.doubleValue >= 1.0))
     {
         @throw [ProgramException invalidParameterExceptionWithNode:self value:pulseWidth.floatValue];
     }
     
     SoundDef *def = [runner.audioPlayer soundDefAtIndex:n.intValue];
     def->wave = wave.intValue;
-    def->pulseWidth = pulseWidth.doubleValue;
-    def->bendTime = bendTime.doubleValue;
+    def->pulseWidth = pulseWidth ? pulseWidth.doubleValue : 0.5;
+    def->bendTime = bendTime ? bendTime.doubleValue : 1.0;
     def->pitchBend = pitchBend.intValue;
     def->pulseBend = pulseBend.doubleValue;
     
@@ -1121,22 +1121,22 @@ NSString *const TRANSFER = @"TRANSFER";
     [self.pitchExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
     [self.durationExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
     [self.defExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
-    [self.volumeExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
 }
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
     NSNumber *voice = [self.voiceExpression evaluateNumberWithRunner:runner min:0 max:AudioNumVoices - 1];
-    NSNumber *pitch = [self.pitchExpression evaluateNumberWithRunner:runner min:1 max:96];
+    NSNumber *pitch = [self.pitchExpression evaluateNumberWithRunner:runner min:0 max:96];
     NSNumber *duration = [self.durationExpression evaluateNumberWithRunner:runner min:0 max:127];
     NSNumber *soundDef = [self.defExpression evaluateNumberWithRunner:runner min:0 max:AudioNumSoundDefs - 1];
-    NSNumber *volume = [self.volumeExpression evaluateNumberWithRunner:runner min:0 max:16];
+    
+    // audio system will start if not started before
+    [runner.audioPlayer start];
     
     SoundNote *note = [runner.audioPlayer nextNoteForVoice:voice.intValue];
     note->pitch = pitch.intValue;
     note->duration = duration.intValue;
     note->soundDef = soundDef ? soundDef.intValue : -1;
-    note->volume = volume ? volume.intValue : -1;
     
     [runner next];
     return nil;
