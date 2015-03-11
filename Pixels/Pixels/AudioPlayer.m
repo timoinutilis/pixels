@@ -165,6 +165,16 @@ static void OutputBufferCallback(void *inUserData, AudioQueueRef inAQ, AudioQueu
     return note;
 }
 
+- (void)resetVoice:(int)voice
+{
+    AudioSequence *sequence = &_player.sequences[voice];
+    sequence->writeIndex = 0;
+    sequence->readIndex = 0;
+    sequence->ticks = 0;
+    
+    _player.voices[voice].gate = FALSE;
+}
+
 @end
 
 static void UpdateNotes(PlayerSystem *player)
@@ -246,14 +256,19 @@ static void RenderAudio(AudioQueueBufferRef buffer, PlayerSystem *player)
             voice = &player->voices[v];
             def = &player->soundDefs[voice->soundDef];
 
-            bendFactor = voice->gateTime / def->bendTime / player->sampleRate;
-            if (bendFactor > 1.0)
+            bendFactor = 1.0 - voice->gateTime / def->bendTime / player->sampleRate;
+            if (bendFactor < 0.0)
             {
-                bendFactor = 1.0;
+                bendFactor = 0.0;
             }
             
             if (voice->gate)
             {
+                if (def->maxTime > 0 && voice->gateTime >= def->maxTime * player->sampleRate)
+                {
+                    voice->gate = FALSE;
+                }
+                
                 switch (def->wave)
                 {
                     case WaveTypeSawtooth:

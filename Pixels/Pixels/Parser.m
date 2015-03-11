@@ -248,9 +248,18 @@
             }
             break;
         }
-        case TTypeSymSound:
-            node = [self acceptSound];
+        case TTypeSymSound: {
+            Token *next = [self nextToken];
+            if (next.type == TTypeSymOff)
+            {
+                node = [self acceptSoundOff];
+            }
+            else
+            {
+                node = [self acceptSound];
+            }
             break;
+        }
         default: {
             NSException *exception = [ProgramException exceptionWithName:@"ExpectedCommand" reason:@"Expected command" token:self.token];
             @throw exception;
@@ -785,29 +794,38 @@
 
 - (Node *)acceptDefSound
 {
-    DefSoundNode *node = [[DefSoundNode alloc] init];
     [self accept:TTypeSymDef];
     [self accept:TTypeSymSound];
-    node.nExpression = [self acceptExpression];
-    [self accept:TTypeSymComma];
-    node.waveExpression = [self acceptExpression];
-    if ([self acceptOptionalComma])
+    if (self.token.type == TTypeSymLine)
     {
-        node.pulseWidthExpression = [self acceptOptionalExpression];
+        [self accept:TTypeSymLine];
+        DefSoundLineNode *node = [[DefSoundLineNode alloc] init];
+        node.nExpression = [self acceptExpression];
+        [self accept:TTypeSymComma];
+        node.bendTimeExpression = [self acceptExpression];
+        [self accept:TTypeSymComma];
+        node.pitchBendExpression = [self acceptExpression];
+        [self accept:TTypeSymComma];
+        node.pulseBendExpression = [self acceptExpression];
+        return node;
+    }
+    else
+    {
+        DefSoundNode *node = [[DefSoundNode alloc] init];
+        node.nExpression = [self acceptExpression];
+        [self accept:TTypeSymComma];
+        node.waveExpression = [self acceptExpression];
         if ([self acceptOptionalComma])
         {
-            node.bendTimeExpression = [self acceptOptionalExpression];
+            node.pulseWidthExpression = [self acceptExpression];
             if ([self acceptOptionalComma])
             {
-                node.pitchBendExpression = [self acceptOptionalExpression];
-                if ([self acceptOptionalComma])
-                {
-                    node.pulseBendExpression = [self acceptOptionalExpression];
-                }
+                node.maxTimeExpression = [self acceptExpression];
             }
         }
+        return node;
     }
-    return node;
+    return nil;
 }
 
 - (Node *)acceptSound
@@ -823,6 +841,15 @@
     {
         node.defExpression = [self acceptOptionalExpression];
     }
+    return node;
+}
+
+- (Node *)acceptSoundOff
+{
+    SoundOffNode *node = [[SoundOffNode alloc] init];
+    [self accept:TTypeSymSound];
+    [self accept:TTypeSymOff];
+    node.voiceExpression = [self acceptOptionalExpression];
     return node;
 }
 

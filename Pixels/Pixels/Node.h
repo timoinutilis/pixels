@@ -204,6 +204,11 @@
 @property Node *nExpression;
 @property Node *waveExpression;
 @property Node *pulseWidthExpression;
+@property Node *maxTimeExpression;
+@end
+
+@interface DefSoundLineNode : Node
+@property Node *nExpression;
 @property Node *bendTimeExpression;
 @property Node *pitchBendExpression;
 @property Node *pulseBendExpression;
@@ -214,6 +219,10 @@
 @property Node *pitchExpression;
 @property Node *durationExpression;
 @property Node *defExpression;
+@end
+
+@interface SoundOffNode : Node
+@property Node *voiceExpression;
 @end
 
 @interface DirectionPadNode : Node

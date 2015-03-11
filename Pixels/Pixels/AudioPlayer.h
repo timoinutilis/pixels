@@ -21,6 +21,7 @@ typedef struct SoundDef {
     double bendTime;
     int pitchBend;
     double pulseBend;
+    double maxTime;
 } SoundDef;
 
 typedef struct SoundNote {
@@ -40,5 +41,6 @@ extern int const AudioNumSoundDefs;
 - (void)stop;
 - (SoundDef *)soundDefAtIndex:(int)index;
 - (SoundNote *)nextNoteForVoice:(int)voice;
+- (void)resetVoice:(int)voice;
 
 @end
