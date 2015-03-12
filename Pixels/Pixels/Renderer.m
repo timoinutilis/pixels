@@ -288,24 +288,27 @@ uint8_t getSpritePixel(SpriteDef *def, int x, int y)
     {
         Sprite *sprite1 = &_sprites[index1];
         Sprite *sprite2 = &_sprites[index2];
-        int diffX = floorf(sprite2->x) - floorf(sprite1->x);
-        int diffY = floorf(sprite2->y) - floorf(sprite1->y);
-        if (ABS(diffX) < RendererSpriteSize && ABS(diffY) < RendererSpriteSize)
+        if (sprite1->visible && sprite2->visible)
         {
-            SpriteDef *def1 = &_spriteDefs[sprite1->image];
-            SpriteDef *def2 = &_spriteDefs[sprite2->image];
-            
-            int minX = MAX(0, diffX);
-            int minY = MAX(0, diffY);
-            int maxX = MIN(RendererSpriteSize, RendererSpriteSize + diffX);
-            int maxY = MIN(RendererSpriteSize, RendererSpriteSize + diffY);
-            for (int y = minY; y < maxY; y++)
+            int diffX = floorf(sprite2->x) - floorf(sprite1->x);
+            int diffY = floorf(sprite2->y) - floorf(sprite1->y);
+            if (ABS(diffX) < RendererSpriteSize && ABS(diffY) < RendererSpriteSize)
             {
-                for (int x = minX; x < maxX; x++)
+                SpriteDef *def1 = &_spriteDefs[sprite1->image];
+                SpriteDef *def2 = &_spriteDefs[sprite2->image];
+                
+                int minX = MAX(0, diffX);
+                int minY = MAX(0, diffY);
+                int maxX = MIN(RendererSpriteSize, RendererSpriteSize + diffX);
+                int maxY = MIN(RendererSpriteSize, RendererSpriteSize + diffY);
+                for (int y = minY; y < maxY; y++)
                 {
-                    if (getSpritePixel(def1, x, y) > 0 && getSpritePixel(def2, x - diffX, y - diffY) > 0)
+                    for (int x = minX; x < maxX; x++)
                     {
-                        return YES;
+                        if (getSpritePixel(def1, x, y) > 0 && getSpritePixel(def2, x - diffX, y - diffY) > 0)
+                        {
+                            return YES;
+                        }
                     }
                 }
             }

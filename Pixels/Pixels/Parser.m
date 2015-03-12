@@ -1075,6 +1075,7 @@
                 return node;
             }
         }
+        case TTypeSymHit:
         case TTypeSymRnd: {
             Maths0Node *node = [[Maths0Node alloc] init];
             node.type = self.token.type;

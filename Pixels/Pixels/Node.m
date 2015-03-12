@@ -1392,6 +1392,7 @@ NSString *const TRANSFER = @"TRANSFER";
     {
         if ([runner.renderer checkCollisionBetweenSprite:n.intValue andSprite:i])
         {
+            runner.lastSpriteHit = i;
             return @(-1);
         }
     }
@@ -1412,6 +1413,9 @@ NSString *const TRANSFER = @"TRANSFER";
     {
         case TTypeSymRnd:
             result = arc4random() / ((float)UINT32_MAX + 1.0); rand();
+            break;
+        case TTypeSymHit: // sprite collision, not maths at all
+            result = runner.lastSpriteHit;
             break;
         default:
             break;

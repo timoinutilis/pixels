@@ -43,6 +43,7 @@
 @property (readonly) NSMutableArray *transferStrings;
 @property OnEndGotoNode *currentOnEndGoto;
 @property BOOL endRequested;
+@property int lastSpriteHit;
 
 - (instancetype)initWithRunnable:(Runnable *)runnable;
 - (BOOL)isFinished;
