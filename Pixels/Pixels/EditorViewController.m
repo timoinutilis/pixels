@@ -22,11 +22,12 @@
 #import "EditorTextView.h"
 #import "AppController.h"
 
-int const EditorDemoMaxLines = 128;
+int const EditorDemoMaxLines = 24;
 
 @interface EditorViewController ()
 
 @property (weak, nonatomic) IBOutlet EditorTextView *sourceCodeTextView;
+@property BOOL examplesDontSaveWarningShowed;
 
 @end
 
@@ -43,15 +44,12 @@ int const EditorDemoMaxLines = 128;
     self.navigationItem.rightBarButtonItems = @[runButton, helpButton];
     
     self.sourceCodeTextView.text = self.project.sourceCode ? self.project.sourceCode : @"";
-    if (self.project.isDefault.boolValue)
+    if ([self isExample])
     {
-        self.sourceCodeTextView.editable = NO;
-        self.sourceCodeTextView.selectable = NO;
-        
-        UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSourceCodeTapped:)];
-        [self.sourceCodeTextView addGestureRecognizer:recognizer];
+        self.sourceCodeTextView.pastable = NO;
     }
     self.sourceCodeTextView.layoutManager.allowsNonContiguousLayout = NO;
+    self.sourceCodeTextView.delegate = self;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -93,25 +91,33 @@ int const EditorDemoMaxLines = 128;
 
 - (void)saveProject
 {
-    if (self.project)
+    if (self.project && ![self isExample])
     {
         self.project.sourceCode = self.sourceCodeTextView.text;
     }
 }
 
-- (void)onSourceCodeTapped:(id)sender
+- (BOOL)textViewShouldBeginEditing:(UITextView *)textView
 {
-    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Example programs cannot be edited" message:@"Do you want to make an editable copy of this program?" preferredStyle:UIAlertControllerStyleAlert];
-    
-    [alert addAction:[UIAlertAction actionWithTitle:@"Duplicate" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-        [[ModelManager sharedManager] duplicateProject:self.project];
-        [self.navigationController popViewControllerAnimated:YES];
-    }]];
-    
-    [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
-    
-    alert.view.tintColor = self.view.tintColor;
-    [self presentViewController:alert animated:YES completion:nil];
+    if ([self isExample] && !self.examplesDontSaveWarningShowed)
+    {
+        self.examplesDontSaveWarningShowed = YES;
+        
+        NSString *message = [AppController sharedController].isFullVersion
+        ? @"If you want to keep your changes, you can duplicate the program to have your own copy."
+        : @"Anyway you can still experiment with the program.";
+        
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Changes in example programs will not be saved"
+                                                                       message:message
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+        
+        alert.view.tintColor = self.view.tintColor;
+        [self presentViewController:alert animated:YES completion:nil];
+        return NO;
+    }
+    return YES;
 }
 
 - (void)onRunTapped:(id)sender
@@ -326,6 +332,11 @@ int const EditorDemoMaxLines = 128;
     vc.runnable = runnable;
     vc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     [self presentViewController:vc animated:YES completion:nil];
+}
+
+- (BOOL)isExample
+{
+    return self.project.isDefault.boolValue;
 }
 
 @end

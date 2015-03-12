@@ -10,6 +10,8 @@
 
 @interface EditorTextView : UITextView
 
+@property BOOL pastable;
+
 + (void)setTransferText:(NSString *)text;
 + (NSString *)transferText;
 

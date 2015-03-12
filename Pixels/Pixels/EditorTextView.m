@@ -30,6 +30,8 @@ NSString *EditorTextView_transferText;
 {
     [super awakeFromNib];
     
+    self.pastable = YES;
+    
     [self initKeyboardToolbar];
 
     UIMenuController *menu = [UIMenuController sharedMenuController];
@@ -83,10 +85,13 @@ NSString *EditorTextView_transferText;
     }
     else if (action == @selector(transferPaste:))
     {
-        return [EditorTextView transferText].length > 0;
+        return self.pastable && [EditorTextView transferText].length > 0;
+    }
+    else if (action == @selector(paste:))
+    {
+        return self.pastable && [super canPerformAction:action withSender:sender];
     }
     else if (   action == @selector(copy:)
-             || action == @selector(paste:)
              || action == @selector(cut:)
              || action == @selector(delete:)
              || action == @selector(select:)
