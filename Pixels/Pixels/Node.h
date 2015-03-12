@@ -225,6 +225,10 @@
 @property Node *voiceExpression;
 @end
 
+@interface LayerNode : Node
+@property Node *nExpression;
+@end
+
 @interface DirectionPadNode : Node
 @property TType type;
 @property Node *portExpression;

@@ -260,6 +260,9 @@
             }
             break;
         }
+        case TTypeSymLayer:
+            node = [self acceptLayer];
+            break;
         default: {
             NSException *exception = [ProgramException exceptionWithName:@"ExpectedCommand" reason:@"Expected command" token:self.token];
             @throw exception;
@@ -304,6 +307,7 @@
         case TTypeSymWrite:
         case TTypeSymSprite:
         case TTypeSymSound:
+        case TTypeSymLayer:
             return YES;
         
         case TTypeSymEnd: {
@@ -850,6 +854,14 @@
     [self accept:TTypeSymSound];
     [self accept:TTypeSymOff];
     node.voiceExpression = [self acceptOptionalExpression];
+    return node;
+}
+
+- (Node *)acceptLayer
+{
+    LayerNode *node = [[LayerNode alloc] init];
+    [self accept:TTypeSymLayer];
+    node.nExpression = [self acceptExpression];
     return node;
 }
 

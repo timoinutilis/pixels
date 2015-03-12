@@ -1214,6 +1214,27 @@ NSString *const TRANSFER = @"TRANSFER";
 
 
 
+@implementation LayerNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.nExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    NSNumber *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumLayers - 1];
+    
+    runner.renderer.layerIndex = n.intValue;
+    
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
 @implementation DirectionPadNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass

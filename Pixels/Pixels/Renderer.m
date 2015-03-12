@@ -9,6 +9,7 @@
 #import "Renderer.h"
 
 int const RendererSize = 64;
+int const RendererNumLayers = 2;
 int const RendererNumSprites = 16;
 int const RendererNumSpriteDefs = 64;
 int const RendererSpriteSize = 8;
@@ -23,7 +24,7 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
 
 
 @implementation Renderer {
-    uint8_t _pixelBuffer[RendererSize][RendererSize];
+    uint8_t _pixelBuffer[RendererNumLayers][RendererSize][RendererSize];
     Sprite _sprites[RendererNumSprites];
     SpriteDef _spriteDefs[RendererNumSpriteDefs];
 }
@@ -55,7 +56,7 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
 {
     if (x >= 0 && x < RendererSize && y >= 0 && y < RendererSize)
     {
-        return _pixelBuffer[y][x];
+        return _pixelBuffer[_layerIndex][y][x];
     }
     return -1;
 }
@@ -66,7 +67,7 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
     {
         for (int x = 0; x < RendererSize; x++)
         {
-            _pixelBuffer[y][x] = colorIndex;
+            _pixelBuffer[_layerIndex][y][x] = colorIndex;
         }
     }
 }
@@ -75,7 +76,7 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
 {
     if (x >= 0 && y >= 0 && x < RendererSize && y < RendererSize)
     {
-        _pixelBuffer[y][x] = _colorIndex;
+        _pixelBuffer[_layerIndex][y][x] = _colorIndex;
     }
 }
 
@@ -164,7 +165,7 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
         {
             for (int x = fromX; x <= toX; x++)
             {
-                _pixelBuffer[y][x] = _colorIndex;
+                _pixelBuffer[_layerIndex][y][x] = _colorIndex;
             }
         }
     }
@@ -198,7 +199,7 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
                 int y = (deltaY > 0) ? toY - oy : fromY + oy;
                 int getX = MAX(fromX, MIN(toX, x - deltaX));
                 int getY = MAX(fromY, MIN(toY, y - deltaY));
-                _pixelBuffer[y][x] = _pixelBuffer[getY][getX];
+                _pixelBuffer[_layerIndex][y][x] = _pixelBuffer[_layerIndex][getY][getX];
             }
         }
     }
@@ -319,24 +320,31 @@ uint8_t getSpritePixel(SpriteDef *def, int x, int y)
 
 - (uint32_t)screenColorAtX:(int)x Y:(int)y
 {
-    uint8_t colorIndex = _pixelBuffer[y][x];
+    uint8_t colorIndex = _pixelBuffer[1][y][x];
     
-    // sprites
-    for (int i = 0; i < RendererNumSprites; i++)
+    // layer 1 transparent?
+    if (colorIndex == 0)
     {
-        Sprite *sprite = &_sprites[i];
-        if (sprite->visible)
+        // layer 0
+        colorIndex = _pixelBuffer[0][y][x];
+    
+        // sprites
+        for (int i = 0; i < RendererNumSprites; i++)
         {
-            int localX = x - (int)floorf(sprite->x);
-            int localY = y - (int)floorf(sprite->y);
-            if (localX >= 0 && localY >= 0 && localX < RendererSpriteSize && localY < RendererSpriteSize)
+            Sprite *sprite = &_sprites[i];
+            if (sprite->visible)
             {
-                SpriteDef *def = &_spriteDefs[sprite->image];
-                uint8_t color = getSpritePixel(def, localX, localY);
-                if (color > 0)
+                int localX = x - (int)floorf(sprite->x);
+                int localY = y - (int)floorf(sprite->y);
+                if (localX >= 0 && localY >= 0 && localX < RendererSpriteSize && localY < RendererSpriteSize)
                 {
-                    colorIndex = sprite->colors[color - 1];
-                    break;
+                    SpriteDef *def = &_spriteDefs[sprite->image];
+                    uint8_t color = getSpritePixel(def, localX, localY);
+                    if (color > 0)
+                    {
+                        colorIndex = sprite->colors[color - 1];
+                        break;
+                    }
                 }
             }
         }

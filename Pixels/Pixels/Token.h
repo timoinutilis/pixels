@@ -60,6 +60,7 @@ typedef NS_ENUM(NSInteger, TType) {
     TTypeSymWrite,
     TTypeSymClear,
     TTypeSymSound,
+    TTypeSymLayer,
     
     // Functions
     TTypeSymUp,

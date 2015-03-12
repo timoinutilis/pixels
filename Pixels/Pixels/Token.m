@@ -64,7 +64,8 @@
         case TTypeSymWrite: return @"WRITE";
         case TTypeSymClear: return @"CLEAR";
         case TTypeSymSound: return @"SOUND";
-        
+        case TTypeSymLayer: return @"LAYER";
+            
         case TTypeSymUp: return @"UP";
         case TTypeSymDown: return @"DOWN";
         case TTypeSymLeft: return @"LEFT";
