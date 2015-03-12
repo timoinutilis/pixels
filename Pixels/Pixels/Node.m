@@ -37,7 +37,7 @@ NSString *const TRANSFER = @"TRANSFER";
 - (NSNumber *)evaluateNumberWithRunner:(Runner *)runner min:(int)min max:(int)max
 {
     NSNumber *number = [self evaluateWithRunner:runner];
-    if (number.intValue < min || number.intValue > max)
+    if (number && (number.intValue < min || number.intValue > max))
     {
         @throw [ProgramException invalidParameterExceptionWithNode:self value:number.intValue];
     }
@@ -1161,10 +1161,19 @@ NSString *const TRANSFER = @"TRANSFER";
     // audio system will start if not started before
     [runner.audioPlayer start];
     
-    SoundNote *note = [runner.audioPlayer nextNoteForVoice:voice.intValue];
-    note->pitch = pitch.intValue;
-    note->duration = duration.intValue;
-    note->soundDef = soundDef ? soundDef.intValue : -1;
+    if (duration.intValue == 0)
+    {
+        // set voice immediately
+        [runner.audioPlayer setVoice:voice.intValue pitch:pitch.intValue soundDef:(soundDef ? soundDef.intValue : -1)];
+    }
+    else
+    {
+        // add to queue
+        SoundNote *note = [runner.audioPlayer nextNoteForVoice:voice.intValue];
+        note->pitch = pitch.intValue;
+        note->duration = duration.intValue;
+        note->soundDef = soundDef ? soundDef.intValue : -1;
+    }
     
     [runner next];
     return nil;

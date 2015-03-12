@@ -41,6 +41,7 @@ typedef struct PlayerSystem {
 
 static void RenderAudio(AudioQueueBufferRef buffer, PlayerSystem *player);
 static void OutputBufferCallback(void *inUserData, AudioQueueRef inAQ, AudioQueueBufferRef inCompleteAQBuffer);
+static double PitchToFrequency(int pitch);
 
 
 @implementation AudioPlayer {
@@ -75,10 +76,7 @@ static void OutputBufferCallback(void *inUserData, AudioQueueRef inAQ, AudioQueu
             voice->gate = FALSE;
             voice->gateTime = 0;
             
-            AudioSequence *sequence = &_player.sequences[i];
-            sequence->writeIndex = 0;
-            sequence->readIndex = 0;
-            sequence->ticks = 0;
+            [self resetSequence:i];
         }
         
         for (int i = 0; i < AudioNumSoundDefs; i++)
@@ -165,17 +163,40 @@ static void OutputBufferCallback(void *inUserData, AudioQueueRef inAQ, AudioQueu
     return note;
 }
 
-- (void)resetVoice:(int)voice
+- (void)resetSequence:(int)voice
 {
     AudioSequence *sequence = &_player.sequences[voice];
     sequence->writeIndex = 0;
     sequence->readIndex = 0;
     sequence->ticks = 0;
-    
+}
+
+- (void)resetVoice:(int)voice
+{
+    [self resetSequence:voice];
     _player.voices[voice].gate = FALSE;
 }
 
+- (void)setVoice:(int)voiceIndex pitch:(int)pitch soundDef:(int)def
+{
+    [self resetSequence:voiceIndex];
+    
+    Voice *voice = &_player.voices[voiceIndex];
+    voice->frequency = PitchToFrequency(pitch);
+    if (def != -1)
+    {
+        voice->soundDef = def;
+    }
+    voice->gate = TRUE;
+    voice->gateTime = 0.0;
+}
+
 @end
+
+static double PitchToFrequency(int pitch)
+{
+    return 440.0 * pow(2.0, (pitch - 58) / 12.0);
+}
 
 static void UpdateNotes(PlayerSystem *player)
 {
@@ -188,20 +209,25 @@ static void UpdateNotes(PlayerSystem *player)
     for (v = 0; v < AudioNumVoices; v++)
     {
         sequence = &player->sequences[v];
+        voice = &player->voices[v];
         if (sequence->ticks > 0)
         {
             sequence->ticks--;
+            if (sequence->ticks == 0 && sequence->readIndex == sequence->writeIndex)
+            {
+                //stop sound
+                voice->gate = FALSE;
+            }
         }
         if (sequence->ticks == 0)
         {
-            voice = &player->voices[v];
             if (sequence->readIndex != sequence->writeIndex)
             {
                 // start note
                 note = &sequence->notes[sequence->readIndex];
                 if (note->pitch != 0)
                 {
-                    voice->frequency = 440.0 * pow(2.0, (note->pitch - 58) / 12.0);
+                    voice->frequency = PitchToFrequency(note->pitch);
                 }
                 if (note->soundDef != -1)
                 {
@@ -216,11 +242,6 @@ static void UpdateNotes(PlayerSystem *player)
                 {
                     sequence->readIndex = 0;
                 }
-            }
-            else
-            {
-                //stop sound
-                voice->gate = FALSE;
             }
         }
     }
