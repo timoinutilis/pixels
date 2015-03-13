@@ -72,14 +72,14 @@ int const EditorDemoMaxLines = 24;
 - (void)keyboardWillShow:(NSNotification *)notification
 {
     CGSize kbSize = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
-    UIEdgeInsets insets = UIEdgeInsetsMake(CGRectGetMaxY(self.navigationController.navigationBar.frame), 0, kbSize.height, 0);
+    UIEdgeInsets insets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height - self.navigationController.toolbar.frame.size.height, 0.0);
     self.sourceCodeTextView.contentInset = insets;
     self.sourceCodeTextView.scrollIndicatorInsets = insets;
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification
 {
-    UIEdgeInsets insets = UIEdgeInsetsMake(CGRectGetMaxY(self.navigationController.navigationBar.frame), 0, self.navigationController.toolbar.frame.size.height, 0);
+    UIEdgeInsets insets = UIEdgeInsetsZero;
     self.sourceCodeTextView.contentInset = insets;
     self.sourceCodeTextView.scrollIndicatorInsets = insets;
 }

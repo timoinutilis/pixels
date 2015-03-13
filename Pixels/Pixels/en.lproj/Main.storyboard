@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vjV-e6-4vN">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1510" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vjV-e6-4vN">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--(Program Name)-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="EditorViewController" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="BYZ-38-t0r" customClass="EditorViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -18,31 +18,19 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" text="PRINT &quot;HELLO&quot;" translatesAutoresizingMaskIntoConstraints="NO" id="SjB-QF-tvR" customClass="EditorTextView">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <rect key="frame" x="0.0" y="64" width="600" height="492"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" name="CourierNewPSMT" family="Courier New" pointSize="20"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters" autocorrectionType="no" spellCheckingType="no"/>
                             </textView>
                         </subviews>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="SjB-QF-tvR" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="05Z-fS-6XK"/>
-                            <constraint firstAttribute="bottom" secondItem="SjB-QF-tvR" secondAttribute="bottom" id="2D9-6d-QWv"/>
-                            <constraint firstItem="SjB-QF-tvR" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="9De-6e-FEO"/>
-                            <constraint firstItem="SjB-QF-tvR" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-21" id="DPz-uK-6ut"/>
-                            <constraint firstItem="SjB-QF-tvR" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="IJa-wO-jPb"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="SjB-QF-tvR" secondAttribute="bottom" id="T9U-RU-FSL"/>
-                            <constraint firstAttribute="trailing" secondItem="SjB-QF-tvR" secondAttribute="trailing" id="qW4-ax-QWW"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="SjB-QF-tvR" secondAttribute="bottom" id="zuf-Xl-AQr"/>
+                            <constraint firstItem="SjB-QF-tvR" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="8yG-53-ok8"/>
+                            <constraint firstItem="SjB-QF-tvR" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="HdZ-qd-903"/>
+                            <constraint firstAttribute="trailing" secondItem="SjB-QF-tvR" secondAttribute="trailing" id="MHR-FO-uGb"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="SjB-QF-tvR" secondAttribute="bottom" id="WsM-Ru-DcQ"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="05Z-fS-6XK"/>
-                                <exclude reference="DPz-uK-6ut"/>
-                                <exclude reference="T9U-RU-FSL"/>
-                                <exclude reference="zuf-Xl-AQr"/>
-                            </mask>
-                        </variation>
                     </view>
                     <toolbarItems>
                         <barButtonItem systemItem="action" id="cGO-bn-HFx">
@@ -96,13 +84,13 @@
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LowRes Coder" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZfG-TZ-kA5">
                                     <rect key="frame" x="102" y="132" width="117" height="21"/>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(Version x.x)" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6zC-PQ-jSm">
                                     <rect key="frame" x="124" y="161" width="73" height="16"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
@@ -154,7 +142,7 @@ Inutilis Software, 2015</string>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Icg-Ii-iMl">
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
@@ -202,14 +190,14 @@ Inutilis Software, 2015</string>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Upgrade to the full version without size limit for programs" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nq7-k6-o2g">
                                 <rect key="frame" x="16" y="196" width="288" height="41"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7qu-NE-hxH">
                                 <rect key="frame" x="16" y="253" width="288" height="102"/>
                                 <string key="text">The upgrade is valid for all your devices and without time limit. This is the only payment you will do for LowRes Coder and there are no hidden costs.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yqV-0v-CbY">
@@ -362,7 +350,6 @@ Inutilis Software, 2015</string>
                                     <constraint firstAttribute="centerY" secondItem="B6C-lp-NaC" secondAttribute="centerY" priority="250" id="WEu-I7-abo"/>
                                     <constraint firstItem="B6C-lp-NaC" firstAttribute="top" secondItem="wgn-Os-cIh" secondAttribute="top" priority="750" id="iA9-PT-qhk"/>
                                 </constraints>
-                                <variation key="widthClass=compact"/>
                             </view>
                             <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U9l-B1-gng" userLabel="Exit Button">
                                 <rect key="frame" x="0.0" y="0.0" width="55" height="55"/>
@@ -534,7 +521,7 @@ Inutilis Software, 2015</string>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Send your program to Inutilis and we will review it and publish it on the official LowRes Coder website!" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gnl-rd-zYM">
                                             <rect key="frame" x="96" y="8" width="496" height="41"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
