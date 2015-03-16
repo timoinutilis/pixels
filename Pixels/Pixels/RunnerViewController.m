@@ -15,6 +15,10 @@
 #import "NSString+Utils.h"
 #import "EditorTextView.h"
 #import "AudioPlayer.h"
+#import "AppController.h"
+#import "CoachMarkView.h"
+
+NSString *const CoachMarkIDScale = @"CoachMarkIDScale";
 
 @interface RunnerViewController ()
 
@@ -30,9 +34,12 @@
 
 @property UIPinchGestureRecognizer *pinchRecognizer;
 @property UITapGestureRecognizer *tapRecognizer;
+@property NSTimer *coachMarkTimer;
 
 @property CGFloat scale;
 @property Runner *runner;
+@property int numPlayers;
+@property BOOL isPaused;
 
 @end
 
@@ -67,19 +74,38 @@
     
     [self run];
     [self hideExitButtonAfterDelay];
+    
+    if ([[AppController sharedController] isUnshownInfoID:CoachMarkIDScale])
+    {
+        self.coachMarkTimer = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(showCoachMark:) userInfo:nil repeats:NO];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     
+    [self.coachMarkTimer invalidate];
     [self.runner.audioPlayer stop];
     self.project.scale = @(self.scale);
 }
 
 - (void)viewWillLayoutSubviews
 {
+    [self updateRendererConstraints];
     [self updateRendererScale];
+}
+
+- (void)showCoachMark:(id)sender
+{
+    if (self.numPlayers > 0)
+    {
+        self.isPaused = YES;
+        [[AppController sharedController] onShowInfoID:CoachMarkIDScale];
+        [[CoachMarkView create] showWithText:@"You can change the game screen size by pinching with two fingers" image:nil container:self.view complete:^{
+            self.isPaused = NO;
+        }];
+    }
 }
 
 - (void)onPinchGesture:(UIPinchGestureRecognizer *)gestureRecognizer
@@ -123,6 +149,19 @@
     }];
 }
 
+- (void)updateRendererConstraints
+{
+    CGSize viewSize = self.view.frame.size;
+    if (self.numPlayers >= 1 && viewSize.width < viewSize.height)
+    {
+        self.constraintTop.priority = UILayoutPriorityDefaultHigh;
+    }
+    else
+    {
+        self.constraintTop.priority = UILayoutPriorityDefaultLow - 1;
+    }
+}
+
 - (void)updateRendererScale
 {
     UIWindow* window = [UIApplication sharedApplication].keyWindow;
@@ -162,7 +201,14 @@
         {
             while (!runner.isFinished)
             {
-                [runner runCommand];
+                if (self.isPaused)
+                {
+                    [NSThread sleepForTimeInterval:0.1];
+                }
+                else
+                {
+                    [runner runCommand];
+                }
             }
         }
         @catch (ProgramException *exception)
@@ -192,6 +238,7 @@
         {
             NSString *transfer = [runner.transferStrings componentsJoinedByString:@"\n"];
             [EditorTextView setTransferText:transfer];
+            [AppController sharedController].shouldShowTransferAlert = YES;
         }
         
         // dismiss view if user tapped exit button
@@ -251,20 +298,20 @@
 - (void)setGamepadModeWithPlayers:(int)players
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        self.numPlayers = players;
         if (players >= 1)
         {
             self.gamepad.hidden = NO;
             self.buttonA.hidden = NO;
             self.buttonB.hidden = NO;
-            self.constraintTop.priority = UILayoutPriorityDefaultHigh;
         }
         else
         {
             self.gamepad.hidden = YES;
             self.buttonA.hidden = YES;
             self.buttonB.hidden = YES;
-            self.constraintTop.priority = UILayoutPriorityDefaultLow - 1;
         }
+        [self updateRendererConstraints];
     });
 }
 

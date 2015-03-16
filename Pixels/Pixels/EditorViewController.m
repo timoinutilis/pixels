@@ -21,8 +21,12 @@
 #import "NSString+Utils.h"
 #import "EditorTextView.h"
 #import "AppController.h"
+#import "CoachMarkView.h"
 
 int const EditorDemoMaxLines = 24;
+NSString *const CoachMarkIDStart = @"CoachMarkIDStart";
+NSString *const CoachMarkIDShare = @"CoachMarkIDShare";
+
 
 @interface EditorViewController ()
 
@@ -61,6 +65,39 @@ int const EditorDemoMaxLines = 24;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:ModelManagerWillSaveDataNotification object:nil];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    AppController *app = [AppController sharedController];
+    [super viewDidAppear:animated];
+    if (app.shouldShowTransferAlert)
+    {
+        app.shouldShowTransferAlert = NO;
+        
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"The program wrote data to the transfer memory."
+                                                                       message:@"Tap \"Paste from Transfer\" in the text edit menu to paste it into your source code."
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+        alert.view.tintColor = self.view.tintColor;
+        [self presentViewController:alert animated:YES completion:nil];
+    }
+    else if (self.project.isDefault.boolValue)
+    {
+        if ([app isUnshownInfoID:CoachMarkIDStart])
+        {
+            [app onShowInfoID:CoachMarkIDStart];
+            [[CoachMarkView create] showWithText:@"Tap the Start button to run this program!" image:nil container:self.navigationController.view complete:nil];
+        }
+    }
+    else if (!self.project.isDefault.boolValue && self.sourceCodeTextView.text.length >= 200)
+    {
+        if ([app isUnshownInfoID:CoachMarkIDShare])
+        {
+            [app onShowInfoID:CoachMarkIDShare];
+        [[CoachMarkView create] showWithText:@"Are you happy with your program? Share it on the LowRes Coder website!" image:nil container:self.navigationController.view complete:nil];
+        }
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -107,7 +144,7 @@ int const EditorDemoMaxLines = 24;
         ? @"If you want to keep your changes, you can duplicate the program to have your own copy."
         : @"Anyway you can still experiment with the program.";
         
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Changes in example programs will not be saved"
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Changes in example programs will not be saved."
                                                                        message:message
                                                                 preferredStyle:UIAlertControllerStyleAlert];
         
@@ -187,7 +224,7 @@ int const EditorDemoMaxLines = 24;
     }
     else
     {
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Enter new program name" message:nil preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Please enter new program name!" message:nil preferredStyle:UIAlertControllerStyleAlert];
 
         [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
             textField.text = self.project.name;
@@ -249,7 +286,7 @@ int const EditorDemoMaxLines = 24;
         && !self.project.isDefault.boolValue
         && sourceCode.countLines > EditorDemoMaxLines)
     {
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Upgrade to full version"
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Please upgrade to full version!"
                                                                        message:[NSString stringWithFormat:@"The free version can only run programs with up to %d lines.", EditorDemoMaxLines]
                                                                 preferredStyle:UIAlertControllerStyleAlert];
         

@@ -11,6 +11,8 @@
 		9204EF681A4C397300B8C29C /* HelpTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9204EF671A4C397300B8C29C /* HelpTextViewController.m */; };
 		9204EF6A1A4C430300B8C29C /* manual.html in Resources */ = {isa = PBXBuildFile; fileRef = 9204EF691A4C430300B8C29C /* manual.html */; };
 		920822031A4DABB8005B7862 /* HelpContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 920822021A4DABB8005B7862 /* HelpContent.m */; };
+		920E681D1AB731620038994A /* CoachMarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 920E681C1AB731620038994A /* CoachMarkView.m */; };
+		920E681F1AB7317E0038994A /* CoachMarkView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 920E681E1AB7317E0038994A /* CoachMarkView.xib */; };
 		921B234C1A9E3DA800C45AFA /* EditorTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 921B234B1A9E3DA800C45AFA /* EditorTextView.m */; };
 		921DA0E31AA1EE6700816B26 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 921DA0E21AA1EE6700816B26 /* WebViewController.m */; };
 		921DA0E51AA1F87700816B26 /* error.html in Resources */ = {isa = PBXBuildFile; fileRef = 921DA0E41AA1F87700816B26 /* error.html */; };
@@ -81,6 +83,9 @@
 		9204EF691A4C430300B8C29C /* manual.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = manual.html; sourceTree = "<group>"; };
 		920822011A4DABB8005B7862 /* HelpContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpContent.h; sourceTree = "<group>"; };
 		920822021A4DABB8005B7862 /* HelpContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpContent.m; sourceTree = "<group>"; };
+		920E681B1AB731620038994A /* CoachMarkView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoachMarkView.h; sourceTree = "<group>"; };
+		920E681C1AB731620038994A /* CoachMarkView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoachMarkView.m; sourceTree = "<group>"; };
+		920E681E1AB7317E0038994A /* CoachMarkView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CoachMarkView.xib; sourceTree = "<group>"; };
 		921B234A1A9E3DA800C45AFA /* EditorTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditorTextView.h; sourceTree = "<group>"; };
 		921B234B1A9E3DA800C45AFA /* EditorTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditorTextView.m; sourceTree = "<group>"; };
 		921DA0E11AA1EE6700816B26 /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
@@ -229,6 +234,9 @@
 				92EDC4411A54701D007824A5 /* Gamepad.m */,
 				921B234A1A9E3DA800C45AFA /* EditorTextView.h */,
 				921B234B1A9E3DA800C45AFA /* EditorTextView.m */,
+				920E681B1AB731620038994A /* CoachMarkView.h */,
+				920E681C1AB731620038994A /* CoachMarkView.m */,
+				920E681E1AB7317E0038994A /* CoachMarkView.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -540,6 +548,7 @@
 				9204EF6A1A4C430300B8C29C /* manual.html in Resources */,
 				9276F3981A1D289C0060E909 /* Main.storyboard in Resources */,
 				9276F39D1A1D289C0060E909 /* LaunchScreen.xib in Resources */,
+				920E681F1AB7317E0038994A /* CoachMarkView.xib in Resources */,
 				9248A6B01A7A641D00FD5656 /* Default Projects in Resources */,
 				921DA0E51AA1F87700816B26 /* error.html in Resources */,
 				9276F39A1A1D289C0060E909 /* Images.xcassets in Resources */,
@@ -596,6 +605,7 @@
 				920822031A4DABB8005B7862 /* HelpContent.m in Sources */,
 				926086321A5E8560006C5523 /* Runnable.m in Sources */,
 				922A77461AA46CCB004EE2CA /* Project.m in Sources */,
+				920E681D1AB731620038994A /* CoachMarkView.m in Sources */,
 				924CC0FE1A220B3C00D2AF68 /* Runner.m in Sources */,
 				92E53DF41A5B3A1D00FE9F91 /* GORMenuTableViewController.m in Sources */,
 				92B7A5331AA8C71000B6CA81 /* AudioPlayer.m in Sources */,

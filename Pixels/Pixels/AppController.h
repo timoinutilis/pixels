@@ -23,11 +23,15 @@ extern NSString *const PurchaseStateNotification;
 @property (readonly) PurchaseState purchaseState;
 @property (readonly) BOOL isFullVersion;
 @property (readonly) SKProduct *fullVersionProduct;
+@property BOOL shouldShowTransferAlert;
 
 + (AppController *)sharedController;
 
 - (void)requestProducts;
 - (void)purchaseProduct:(SKProduct *)product;
 - (void)restorePurchases;
+
+- (BOOL)isUnshownInfoID:(NSString *)infoId;
+- (void)onShowInfoID:(NSString *)infoId;
 
 @end

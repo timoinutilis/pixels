@@ -157,4 +157,17 @@ NSString *const PurchaseStateNotification = @"PurchaseStateNotification";
     [[NSNotificationCenter defaultCenter] postNotificationName:PurchaseStateNotification object:self];
 }
 
+- (BOOL)isUnshownInfoID:(NSString *)infoId
+{
+    NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
+    return ![storage boolForKey:infoId];
+}
+
+- (void)onShowInfoID:(NSString *)infoId
+{
+    NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
+    [storage setBool:YES forKey:infoId];
+    [storage synchronize];
+}
+
 @end
