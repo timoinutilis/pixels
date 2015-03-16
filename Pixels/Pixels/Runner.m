@@ -13,6 +13,8 @@
 #import "Runnable.h"
 #import "ProgramException.h"
 
+NSTimeInterval const RunnerOnEndTimeOut = 2;
+
 @interface Runner ()
 @property Runnable *runnable;
 @property NSMutableArray *sequencesStack;
@@ -51,7 +53,7 @@
 
 - (void)runCommand
 {
-    if (self.timeWhenOnEndStarted != 0 && CFAbsoluteTimeGetCurrent() - self.timeWhenOnEndStarted > 3)
+    if (self.timeWhenOnEndStarted != 0 && CFAbsoluteTimeGetCurrent() - self.timeWhenOnEndStarted > RunnerOnEndTimeOut)
     {
         NSException *exception = [ProgramException exceptionWithName:@"OnEndTimeout"
                                                               reason:@"ON END timed out"
@@ -403,6 +405,11 @@
 {
     NSTimeInterval endTime = CFAbsoluteTimeGetCurrent() + time;
     NSTimeInterval maxSleep = block ? 0.02 : 0.2;
+    if (self.timeWhenOnEndStarted > 0)
+    {
+        endTime = MIN(self.timeWhenOnEndStarted + RunnerOnEndTimeOut, endTime);
+    }
+    
     BOOL stop = NO;
     do
     {
@@ -412,7 +419,7 @@
         {
             stop = block();
         }
-    } while (time > 0 && !self.endRequested && !stop);
+    } while (time > 0 && (!self.endRequested || self.timeWhenOnEndStarted > 0) && !stop);
 }
 
 @end
