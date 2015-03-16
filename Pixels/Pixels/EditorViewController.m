@@ -32,6 +32,7 @@ NSString *const CoachMarkIDShare = @"CoachMarkIDShare";
 
 @property (weak, nonatomic) IBOutlet EditorTextView *sourceCodeTextView;
 @property BOOL examplesDontSaveWarningShowed;
+@property BOOL wasEdited;
 
 @end
 
@@ -90,7 +91,7 @@ NSString *const CoachMarkIDShare = @"CoachMarkIDShare";
             [[CoachMarkView create] showWithText:@"Tap the Start button to run this program!" image:nil container:self.navigationController.view complete:nil];
         }
     }
-    else if (!self.project.isDefault.boolValue && self.sourceCodeTextView.text.length >= 200)
+    else if (!self.project.isDefault.boolValue && self.wasEdited && self.sourceCodeTextView.text.length >= 200)
     {
         if ([app isUnshownInfoID:CoachMarkIDShare])
         {
@@ -155,6 +156,11 @@ NSString *const CoachMarkIDShare = @"CoachMarkIDShare";
         return NO;
     }
     return YES;
+}
+
+- (void)textViewDidBeginEditing:(UITextView *)textView
+{
+    self.wasEdited = YES;
 }
 
 - (void)onRunTapped:(id)sender

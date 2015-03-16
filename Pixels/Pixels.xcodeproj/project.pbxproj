@@ -13,6 +13,7 @@
 		920822031A4DABB8005B7862 /* HelpContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 920822021A4DABB8005B7862 /* HelpContent.m */; };
 		920E681D1AB731620038994A /* CoachMarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 920E681C1AB731620038994A /* CoachMarkView.m */; };
 		920E681F1AB7317E0038994A /* CoachMarkView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 920E681E1AB7317E0038994A /* CoachMarkView.xib */; };
+		920E68221AB74CDA0038994A /* SplashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 920E68211AB74CDA0038994A /* SplashViewController.m */; };
 		921B234C1A9E3DA800C45AFA /* EditorTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 921B234B1A9E3DA800C45AFA /* EditorTextView.m */; };
 		921DA0E31AA1EE6700816B26 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 921DA0E21AA1EE6700816B26 /* WebViewController.m */; };
 		921DA0E51AA1F87700816B26 /* error.html in Resources */ = {isa = PBXBuildFile; fileRef = 921DA0E41AA1F87700816B26 /* error.html */; };
@@ -86,6 +87,8 @@
 		920E681B1AB731620038994A /* CoachMarkView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoachMarkView.h; sourceTree = "<group>"; };
 		920E681C1AB731620038994A /* CoachMarkView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoachMarkView.m; sourceTree = "<group>"; };
 		920E681E1AB7317E0038994A /* CoachMarkView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CoachMarkView.xib; sourceTree = "<group>"; };
+		920E68201AB74CDA0038994A /* SplashViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplashViewController.h; sourceTree = "<group>"; };
+		920E68211AB74CDA0038994A /* SplashViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SplashViewController.m; sourceTree = "<group>"; };
 		921B234A1A9E3DA800C45AFA /* EditorTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditorTextView.h; sourceTree = "<group>"; };
 		921B234B1A9E3DA800C45AFA /* EditorTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditorTextView.m; sourceTree = "<group>"; };
 		921DA0E11AA1EE6700816B26 /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
@@ -307,6 +310,8 @@
 			children = (
 				92E2B8AB1A52F4CA00D0DF29 /* Share */,
 				9276F3961A1D289C0060E909 /* Main.storyboard */,
+				920E68201AB74CDA0038994A /* SplashViewController.h */,
+				920E68211AB74CDA0038994A /* SplashViewController.m */,
 				92509CC81A28F99D0086E7E3 /* ExplorerViewController.h */,
 				92509CC91A28F99D0086E7E3 /* ExplorerViewController.m */,
 				9276F3931A1D289C0060E909 /* EditorViewController.h */,
@@ -588,6 +593,7 @@
 				925A01A91A1E67F900A321E6 /* Parser.m in Sources */,
 				9267E8831A5AF61B00D08C42 /* AFSecurityPolicy.m in Sources */,
 				9267E8871A5AF61B00D08C42 /* AFURLSessionManager.m in Sources */,
+				920E68221AB74CDA0038994A /* SplashViewController.m in Sources */,
 				92A0EC0D1A56DA1F0051D74C /* Model.xcdatamodeld in Sources */,
 				9204EF681A4C397300B8C29C /* HelpTextViewController.m in Sources */,
 				9267E8811A5AF61B00D08C42 /* AFHTTPSessionManager.m in Sources */,
