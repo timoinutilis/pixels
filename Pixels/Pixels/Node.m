@@ -903,8 +903,19 @@ NSString *const TRANSFER = @"TRANSFER";
 {
     NSNumber *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSprites - 1];
     
-    Sprite *sprite = [runner.renderer spriteAtIndex:n.intValue];
-    sprite->visible = NO;
+    if (n)
+    {
+        Sprite *sprite = [runner.renderer spriteAtIndex:n.intValue];
+        sprite->visible = NO;
+    }
+    else
+    {
+        for (int i = 0; i < RendererNumSprites; i++)
+        {
+            Sprite *sprite = [runner.renderer spriteAtIndex:i];
+            sprite->visible = NO;
+        }
+    }
     
     [runner next];
     return nil;

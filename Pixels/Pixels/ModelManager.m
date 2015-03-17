@@ -131,9 +131,16 @@ NSString *const ModelManagerDidAddProjectNotification = @"ModelManagerDidAddProj
     if (managedObjectContext != nil)
     {
         NSError *error = nil;
-        if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error])
+        if ([managedObjectContext hasChanges])
         {
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            if ([managedObjectContext save:&error])
+            {
+                // saved!
+            }
+            else
+            {
+                NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            }
         }
     }
 }

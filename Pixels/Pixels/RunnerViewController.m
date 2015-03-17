@@ -87,7 +87,12 @@ NSString *const CoachMarkIDScale = @"CoachMarkIDScale";
     
     [self.coachMarkTimer invalidate];
     [self.runner.audioPlayer stop];
-    self.project.scale = @(self.scale);
+    
+    float scaleDiff = self.scale - self.project.scale.floatValue;
+    if (ABS(scaleDiff) >= 0.001f)
+    {
+        self.project.scale = @(self.scale);
+    }
 }
 
 - (void)viewWillLayoutSubviews
@@ -189,7 +194,8 @@ NSString *const CoachMarkIDScale = @"CoachMarkIDScale";
 
 - (void)run
 {
-    self.rendererView.shouldMakeThumbnail = !self.project.isDefault.boolValue; // don't change thumbnails for example projects
+    // don't change thumbnails for example projects
+    self.rendererView.shouldMakeThumbnail = !self.project.isDefault.boolValue && (self.project.iconData == nil || self.wasEditedSinceLastRun);
     
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     

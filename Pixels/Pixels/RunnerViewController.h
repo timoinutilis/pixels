@@ -15,5 +15,6 @@
 
 @property Project *project;
 @property Runnable *runnable;
+@property BOOL wasEditedSinceLastRun;
 
 @end

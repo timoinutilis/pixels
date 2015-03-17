@@ -32,7 +32,8 @@ NSString *const CoachMarkIDShare = @"CoachMarkIDShare";
 
 @property (weak, nonatomic) IBOutlet EditorTextView *sourceCodeTextView;
 @property BOOL examplesDontSaveWarningShowed;
-@property BOOL wasEdited;
+@property BOOL wasEditedSinceOpened;
+@property BOOL wasEditedSinceLastRun;
 
 @end
 
@@ -70,8 +71,9 @@ NSString *const CoachMarkIDShare = @"CoachMarkIDShare";
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    AppController *app = [AppController sharedController];
     [super viewDidAppear:animated];
+    
+    AppController *app = [AppController sharedController];
     if (app.shouldShowTransferAlert)
     {
         app.shouldShowTransferAlert = NO;
@@ -91,7 +93,7 @@ NSString *const CoachMarkIDShare = @"CoachMarkIDShare";
             [[CoachMarkView create] showWithText:@"Tap the Start button to run this program!" image:@"coach" container:self.navigationController.view complete:nil];
         }
     }
-    else if (!self.project.isDefault.boolValue && self.wasEdited && self.sourceCodeTextView.text.length >= 200)
+    else if (!self.project.isDefault.boolValue && self.wasEditedSinceOpened && self.sourceCodeTextView.text.length >= 200)
     {
         if ([app isUnshownInfoID:CoachMarkIDShare])
         {
@@ -122,14 +124,16 @@ NSString *const CoachMarkIDShare = @"CoachMarkIDShare";
     self.sourceCodeTextView.scrollIndicatorInsets = insets;
 }
 
-- (void)willSaveData:(NSNotification *)notification
-{
-    [self saveProject];
-}
-
 - (void)saveProject
 {
-    if (self.project && ![self isExample])
+    [[ModelManager sharedManager] saveContext];
+}
+
+- (void)willSaveData:(NSNotification *)notification
+{
+    if (   self.project
+        && ![self isExample]
+        && ![self.sourceCodeTextView.text isEqualToString:self.project.sourceCode])
     {
         self.project.sourceCode = self.sourceCodeTextView.text;
     }
@@ -160,7 +164,8 @@ NSString *const CoachMarkIDShare = @"CoachMarkIDShare";
 
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
-    self.wasEdited = YES;
+    self.wasEditedSinceOpened = YES;
+    self.wasEditedSinceLastRun = YES;
 }
 
 - (void)onRunTapped:(id)sender
@@ -373,8 +378,11 @@ NSString *const CoachMarkIDShare = @"CoachMarkIDShare";
     RunnerViewController *vc = (RunnerViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"Runner"];
     vc.project = self.project;
     vc.runnable = runnable;
+    vc.wasEditedSinceLastRun = self.wasEditedSinceLastRun;
     vc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     [self presentViewController:vc animated:YES completion:nil];
+    
+    self.wasEditedSinceLastRun = NO;
 }
 
 - (BOOL)isExample

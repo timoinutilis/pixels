@@ -701,7 +701,7 @@
     SpriteOffNode *node = [[SpriteOffNode alloc] init];
     [self accept:TTypeSymSprite];
     [self accept:TTypeSymOff];
-    node.nExpression = [self acceptExpression];
+    node.nExpression = [self acceptOptionalExpression];
     return node;
 }
 
