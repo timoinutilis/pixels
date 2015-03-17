@@ -77,7 +77,7 @@ NSString *const CoachMarkIDScale = @"CoachMarkIDScale";
     
     if ([[AppController sharedController] isUnshownInfoID:CoachMarkIDScale])
     {
-        self.coachMarkTimer = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(showCoachMark:) userInfo:nil repeats:NO];
+        self.coachMarkTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(showCoachMark:) userInfo:nil repeats:NO];
     }
 }
 
@@ -102,7 +102,7 @@ NSString *const CoachMarkIDScale = @"CoachMarkIDScale";
     {
         self.isPaused = YES;
         [[AppController sharedController] onShowInfoID:CoachMarkIDScale];
-        [[CoachMarkView create] showWithText:@"You can change the game screen size by pinching with two fingers" image:nil container:self.view complete:^{
+        [[CoachMarkView create] showWithText:@"You can change the game screen size by pinching with two fingers" image:@"coach" container:self.view complete:^{
             self.isPaused = NO;
         }];
     }

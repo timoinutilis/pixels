@@ -11,6 +11,7 @@
 @interface CoachMarkView ()
 
 @property (weak, nonatomic) IBOutlet UILabel *label;
+@property (weak, nonatomic) IBOutlet UIImageView *imageView;
 
 @property (strong) void (^block)();
 
@@ -30,8 +31,10 @@
 {
     self.block = block;
     
-    self.alpha = 0.0;
     self.label.text = text;
+    self.imageView.image = [UIImage imageNamed:imageName];
+
+    self.alpha = 0.0;
     [container addSubview:self];
     
     [self layoutIfNeeded];
