@@ -90,7 +90,7 @@ NSString *const CoachMarkIDShare = @"CoachMarkIDShare";
         if ([app isUnshownInfoID:CoachMarkIDStart])
         {
             [app onShowInfoID:CoachMarkIDStart];
-            [[CoachMarkView create] showWithText:@"Tap the Start button to run this program!" image:@"coach" container:self.navigationController.view complete:nil];
+            [[CoachMarkView create] showWithText:@"Tap the Start button to run this program!" image:@"coach_start" container:self.navigationController.view complete:nil];
         }
     }
     else if (!self.project.isDefault.boolValue && self.wasEditedSinceOpened && self.sourceCodeTextView.text.length >= 200)
@@ -98,7 +98,7 @@ NSString *const CoachMarkIDShare = @"CoachMarkIDShare";
         if ([app isUnshownInfoID:CoachMarkIDShare])
         {
             [app onShowInfoID:CoachMarkIDShare];
-        [[CoachMarkView create] showWithText:@"Are you happy with your program? Share it on the LowRes Coder website!" image:@"coach" container:self.navigationController.view complete:nil];
+        [[CoachMarkView create] showWithText:@"Are you happy with your program? Share it on the LowRes Coder website!" image:@"coach_share" container:self.navigationController.view complete:nil];
         }
     }
 }
