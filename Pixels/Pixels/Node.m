@@ -1113,6 +1113,11 @@ NSString *const TRANSFER = @"TRANSFER";
     def->wave = wave.intValue;
     def->pulseWidth = pulseWidth ? pulseWidth.doubleValue : 0.5;
     def->maxTime = maxTime.doubleValue;
+
+    // reset values from Def Sound Line
+    def->bendTime = 1.0;
+    def->pitchBend = 0;
+    def->pulseBend = 0;
     
     [runner next];
     return nil;

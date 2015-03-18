@@ -12,6 +12,10 @@ code {
 td {
     padding-right: 1em;
 }
+th {
+    text-align: left;
+    padding-right: 1em;
+}
 a {
     color: #AA5500;
     text-decoration: none;
@@ -23,17 +27,6 @@ li {
 </head>
 
 <body>
-<h1 id="Introduction">Introduction</h1>
-<p>Program your own retro games or demos directly on your iPad or iPhone!</p>
-<ul>
-<li>Run your programs on a virtual screen with 64x64 pixels and 16 predefined colors!</li>
-<li>Take control with the on-screen gamepad!</li>
-<li>Write in a dialect of the classic, easy to learn BASIC programming language!</li>
-<li>Play the included games "LowRes Racing", "LowRes Tennis" and "LowRes Snake"! Check how they are made and improve them with your own ideas!</li>
-<li>Send the source code of your programs to friends and publish them on the <a href="http://lowres.inutilis.com">LowRes Coder website</a>!</li>
-<li>Try games and demos made by the community!</li>
-</ul>
-
 <h1 id="Getting-started">Getting started</h1>
 
 <h2 id="_Tutorial">Tutorial</h2>
@@ -77,28 +70,77 @@ In LowRes Coder you don't have to declare variables. They start to exist automat
 <code>A$="HELLO"</code>
 
 <h2 id="_Arrays">Arrays</h2>
-
-<p>Coming soon.</p>
-
-<h2 id="_Constants">Constants</h2>
-<p>Constants are simply numbers or strings which can be assigned to variables or used as values for commands. They don't change when your program is running. Examples of constants are:</p>
-<code>1, 42, 3.1415, "HELLO", PI, TRUE</code>
+<p>An array is a group of values of the same type, referenced by a single variable name. The individual values in an array are called elements. Array elements are variables also. They can be used in any BASIC command or function that uses variables.</p>
+<h3 id="_DIM">DIM</h3>
+<pre>DIM var(x,y,z,...)</pre>
+<p>DIM defines a table of variables in your program. These tables may have as many dimensions as you want and you define for each dimension the highest element index.</p>
+<pre><code>DIM TXT$(10),A(10,5),B(5,5,2)</code></pre>
+<p>In order to access an element in the array you simply type the array name followed by the index numbers. These numbers are separated by commas and are enclosed between round brackets. Note that the element numbers of these arrays always start from zero.</p>
+<pre>
+<code>DIM ARR(10)
+ARR(0)=2
+ARR(10)=5
+PRINT ARR(10)
+PRINT ARR(0)</code>
+</pre>
 
 <h2 id="_Arithmetic-operations">Arithmetic operations</h2>
 <p>The following arithmetic operations can be used in a numeric expression:</p>
 <table>
-<tr><td>^</td><td>Power</td></tr>
-<tr><td>/ and *</td><td>Divide and multiply</td></tr>
-<tr><td>MOD</td><td>Modulo (remainder of a devision)</td></tr>
-<tr><td>+ and -</td><td>Plus and minus</td></tr>
-<tr><td>AND</td><td>Logical AND</td></tr>
-<tr><td>OR</td><td>Logical OR</td></tr>
-<tr><td>XOR</td><td>Logical XOR (exclusive OR)</td></tr>
+    <tr><th>Operator</th><th>Operation</th><th>Examples</th></tr>
+    <tr><td>-</td><td>Unary negation</td><td>-X</td></tr>
+    <tr><td>^</td><td>Power</td><td>X^Y</td></tr>
+    <tr><td>/ and *</td><td>Divide and multiply</td><td>X/Y, X*Y</td></tr>
+    <tr><td>MOD</td><td>Modulo (remainder of a devision)</td><td>X MOD Y</td></tr>
+    <tr><td>+ and -</td><td>Plus and minus</td><td>X+Y, X-Y</td></tr>
 </table>
 <p>They are listed in the order of their priority how they are evaluated. Here is an example:</p>
 <code>PRINT 10+2*5-8/4+5^2</code>
 <p>This evaluates in the following order: 5^2, 2*5, 8/4 and then sums up the results to 43. If you want to change the order, you can enclose parts in round brackets:</p>
 <code>PRINT (10+2)*(5-8/4+5)^2</code>
+
+<h2 id="_Relational-operations">Relational operations</h2>
+<p>Relational operators are used to compare two values. The result of the comparison is either "true" (-1) or "false" (0).</p>
+<table>
+    <tr><th>Operator</th><th>Relation tested</th><th>Expression</th></tr>
+    <tr><td>=</td><td>Equality</td><td>A=B</td></tr>
+    <tr><td>&lt;&gt;</td><td>Inequality</td><td>A&lt;&gt;B</td></tr>
+    <tr><td>&lt;</td><td>Less than</td><td>A&lt;B</td></tr>
+    <tr><td>&gt;</td><td>Greater than</td><td>A&gt;B</td></tr>
+    <tr><td>&lt;=</td><td>Less than or equal to</td><td>A&lt;=B</td></tr>
+    <tr><td>&gt;=</td><td>Greater than or equal to</td><td>A&gt;=B</td></tr>
+</table>
+
+<h2 id="_Logical-operations">Logical operations</h2>
+<p>The results of the following operations are binary (bit by bit).</p>
+<table>
+    <tr><th>Operator</th><th>Value</th><th>Value</th><th>Result</th></tr>
+    <tr><td>NOT</td><td>X</td><td>&nbsp;</td><td>NOT X</td></tr>
+    <tr><td>&nbsp;</td><td>true</td><td>&nbsp;</td><td>false</td></tr>
+    <tr><td>&nbsp;</td><td>false</td><td>&nbsp;</td><td>true</td></tr>
+    <tr><td>AND</td><td>X</td><td>Y</td><td>X AND Y</td></tr>
+    <tr><td>&nbsp;</td><td>true</td><td>true</td><td>true</td></tr>
+    <tr><td>&nbsp;</td><td>true</td><td>false</td><td>false</td></tr>
+    <tr><td>&nbsp;</td><td>false</td><td>true</td><td>false</td></tr>
+    <tr><td>&nbsp;</td><td>false</td><td>false</td><td>false</td></tr>
+    <tr><td>OR</td><td>X</td><td>Y</td><td>X OR Y</td></tr>
+    <tr><td>&nbsp;</td><td>true</td><td>true</td><td>true</td></tr>
+    <tr><td>&nbsp;</td><td>true</td><td>false</td><td>true</td></tr>
+    <tr><td>&nbsp;</td><td>false</td><td>true</td><td>true</td></tr>
+    <tr><td>&nbsp;</td><td>false</td><td>false</td><td>false</td></tr>
+    <tr><td>XOR</td><td>X</td><td>Y</td><td>X XOR Y</td></tr>
+    <tr><td>&nbsp;</td><td>true</td><td>true</td><td>false</td></tr>
+    <tr><td>&nbsp;</td><td>true</td><td>false</td><td>true</td></tr>
+    <tr><td>&nbsp;</td><td>false</td><td>true</td><td>true</td></tr>
+    <tr><td>&nbsp;</td><td>false</td><td>false</td><td>false</td></tr>
+</table>
+<p>As in BASIC "true" is -1 (all bits set) and "false" is 0 (no bit set), these operators can be used for logical expressions...</p>
+<pre><code>IF A=0 OR B=1 THEN PRINT "OK"</code></pre>
+<p>...and also for bit manipulations:</p>
+<pre><code>A=15 OR 256
+PRINT A</code>
+271
+</pre>
 
 <h2 id="_String-operations">String operations</h2>
 <p>You can concatenate strings with the plus operation.</p>
@@ -138,22 +180,14 @@ GOTO TESTLABEL</code>
 <pre>COLOR index</pre>
 <p>COLOR sets the current drawing color, where <i>index</i> can have the following values:</p>
 <table>
-<tr><td>0</td><td>black</td></tr>
-<tr><td>1</td><td>white</td></tr>
-<tr><td>2</td><td>light gray</td></tr>
-<tr><td>3</td><td>dark gray</td></tr>
-<tr><td>4</td><td>red</td></tr>
-<tr><td>5</td><td>dark red</td></tr>
-<tr><td>6</td><td>brown</td></tr>
-<tr><td>7</td><td>orange</td></tr>
-<tr><td>8</td><td>yellow</td></tr>
-<tr><td>9</td><td>green</td></tr>
-<tr><td>10</td><td>dark green</td></tr>
-<tr><td>11</td><td>cyan</td></tr>
-<tr><td>12</td><td>blue</td></tr>
-<tr><td>13</td><td>dark blue</td></tr>
-<tr><td>14</td><td>magenta</td></tr>
-<tr><td>15</td><td>purple</td></tr>
+<tr><td>0</td><td>black</td><td>8</td><td>yellow</td></tr>
+<tr><td>1</td><td>white</td><td>9</td><td>green</td></tr>
+<tr><td>2</td><td>light gray</td><td>10</td><td>dark green</td></tr>
+<tr><td>3</td><td>dark gray</td><td>11</td><td>cyan</td></tr>
+<tr><td>4</td><td>red</td><td>12</td><td>blue</td></tr>
+<tr><td>5</td><td>dark red</td><td>13</td><td>dark blue</td></tr>
+<tr><td>6</td><td>brown</td><td>14</td><td>magenta</td></tr>
+<tr><td>7</td><td>orange</td><td>15</td><td>purple</td></tr>
 </table>
 <pre>
 <code>FOR I=1 TO 15
@@ -163,7 +197,7 @@ NEXT I</code>
 </pre>
 
 <h3 id="_CLS">CLS</h3>
-<pre>CLS color</pre>
+<pre>CLS [color]</pre>
 <p>CLS clears and fills the whole screen with <i>color</i>. Check the color table of the COLOR command.</p>
 <pre>
 <code>FOR I=0 TO 15
@@ -241,6 +275,20 @@ WEND</code>
   PLOT RND*63,1+RND*63
   SCROLL 0,0 TO 63,63,-2,1
   WAIT 0.04
+LOOP</code>
+</pre>
+
+<h3 id="_LAYER">LAYER</h3>
+<pre>LAYER number</pre>
+<p>The screen of LowRes Coder has two layers. Layer 0 is in the background and usually the main layer. Layer 1 is in the foreground and it's transparent in all pixels with color 0. When you set the current layer with this command, all following drawing commands render on the selected layer.</p>
+<pre>
+<code>LAYER 1
+LINE 0,0 TO 63,63
+LAYER 0
+DO
+COLOR RND*16
+BAR 0,26 TO 63,36
+WAIT 0.1
 LOOP</code>
 </pre>
 
@@ -405,6 +453,11 @@ LOOP
 PRINT "DONE"</code>
 </pre>
 
+<h3 id="_ONENDGOTO">ON END GOTO</h3>
+<pre>ON END GOTO label</pre>
+<pre>ON END</pre>
+<p>This command adds special handling for the moment the user taps the exit button. Instead of just quitting the program, it will jump to the label. The program has 2 seconds then to do something before calling END. You can use this for example to transfer data with WRITE. ON END (without GOTO) clears the label and activates the normal behavior again.</p>
+
 <h1 id="User-input">User input</h1>
 
 <p>LowRes Coder can show a virtual game pad on the screen. Use these commands to handle the user input.</p>
@@ -434,12 +487,86 @@ PRINT "DONE"</code>
 <p>Returns TRUE if the A or B button of the given player is currently pressed. <i>player</i> starts with 0 for the first one. If <i>button</i> is omitted or 0, any button (A and B) is checked. 1 checks only the A button, 2 checks only the B button.</p>
 
 <h1 id="Sound">Sound</h1>
+<p>LowRes Coder has a programmable sound generator with three voices and different wave forms.</p>
 
-<p>Coming soon.</p>
+<h3 id="_SOUND">SOUND</h3>
+<pre>SOUND voice,pitch,duration[,instr]</pre>
+<p>Plays a sound. There are three independent voices which can play sounds at the same time. Choose one <i>voice</i> between 0 and 2. <i>pitch</i> sets the tone to play:</p>
+<table>
+    <tr><th>Note</th><th colspan="8">Pitch (with different octaves)</th></tr>
+    <tr><th>C</th><td>1</td><td>13</td><td>25</td><td>37</td><td>49</td><td>61</td><td>73</td><td>85</td></tr>
+    <tr><th>C#</th><td>2</td><td>14</td><td>26</td><td>38</td><td>50</td><td>62</td><td>74</td><td>86</td></tr>
+    <tr><th>D</th><td>3</td><td>15</td><td>27</td><td>39</td><td>51</td><td>63</td><td>75</td><td>87</td></tr>
+    <tr><th>D#</th><td>4</td><td>16</td><td>28</td><td>40</td><td>52</td><td>64</td><td>76</td><td>88</td></tr>
+    <tr><th>E</th><td>5</td><td>17</td><td>29</td><td>41</td><td>53</td><td>65</td><td>77</td><td>89</td></tr>
+    <tr><th>F</th><td>6</td><td>18</td><td>30</td><td>42</td><td>54</td><td>66</td><td>78</td><td>90</td></tr>
+    <tr><th>F#</th><td>7</td><td>19</td><td>31</td><td>43</td><td>55</td><td>67</td><td>79</td><td>91</td></tr>
+    <tr><th>G</th><td>8</td><td>20</td><td>32</td><td>44</td><td>56</td><td>68</td><td>80</td><td>92</td></tr>
+    <tr><th>G#</th><td>9</td><td>21</td><td>33</td><td>45</td><td>57</td><td>69</td><td>81</td><td>93</td></tr>
+    <tr><th>A</th><td>10</td><td>22</td><td>34</td><td>46</td><td>58</td><td>70</td><td>82</td><td>94</td></tr>
+    <tr><th>A#</th><td>11</td><td>23</td><td>35</td><td>47</td><td>59</td><td>71</td><td>83</td><td>95</td></tr>
+    <tr><th>B</th><td>12</td><td>24</td><td>36</td><td>48</td><td>60</td><td>72</td><td>84</td><td>96</td></tr>
+</table>
+<p>A sound with <i>pitch</i> 0 is silent and can be used as a pause. The <i>duration</i> of the note is set in 1/24 seconds. Each voice has an own queue, so sounds are played one after another without blocking the program. A maximum of 127 sounds can be queued in each voice. If <i>duration</i> is 0, the queue is cleared and the sound will start immediately and won't stop until the voice starts another sound or SOUND OFF is called. You can set an instrument with the <i>instr</i> parameter (see DEF SOUND), otherwise the last instrument of the voice will be kept. By default the instruments are already set up with different waveforms.</p>
+<pre>
+<code>SOUND 0,49,12,1
+SOUND 0,53,12
+SOUND 0,56,12
+SOUND 0,61,24,0</code>
+</pre>
+
+<h3 id="_SOUNDOFF">SOUND OFF</h3>
+<pre>SOUND OFF [voice]</pre>
+<p>Stops the sound of <i>voice</i> and clears its queue. If the <i>voice</i> parameter is omitted, all voices will be stopped.</p>
+
+<h3 id="_DEFSOUND">DEF SOUND</h3>
+<pre>DEF SOUND instr,wave[,pulse[,time]]</pre>
+<p>Defines one of up to 64 different instruments which can be used with SOUND. <i>instr</i> can be a value between 0 and 63. The base of an instrument is the waveform, which is set with the <i>wave</i> parameter:</p>
+<table>
+    <tr><td>0</td><td>sawtooth wave</td></tr>
+    <tr><td>1</td><td>triangle wave</td></tr>
+    <tr><td>2</td><td>pulse wave</td></tr>
+    <tr><td>3</td><td>noise</td></tr>
+</table>
+<p>If the waveform is "pulse wave" (2), you can set a pulse width between 0.0 and 1.0 with the <i>pulse</i> parameter. A value of 0.5 results in a square wave. For other waveforms this parameter is ignored. The <i>time</i> parameter defines the maximum duration of the sound in seconds. If a SOUND command sets a longer duration, the voice will play the maximum duration and then it will be silent until the next sound in the queue. Omit the parameter to play sounds always in full duration.</p>
+
+<h3 id="_DEFSOUNDLINE">DEF SOUND LINE</h3>
+<pre>DEF SOUND LINE instr,time,pitch,pulse</pre>
+<p>Sets additional values for the instrument number <i>instr</i>. Call this command (if needed) always after the DEF SOUND of the same instrument, otherwise the values will be reset. It makes sounds change over the given <i>time</i> (in seconds). The sound will start with <i>pitch</i> added to (if positive) or subtracted (if negative) from the note's value. The <i>pulse</i> value changes the start pulse width of the original sound (only if the waveform is "pulse"). It's value is the power of two, so 0 means no change, -1 means half, 1 means double, etc. Pitch and pulse width will return in the given time to its original values.</p>
+<pre>
+<code>DEF SOUND 0,2,0,0.2
+DEF SOUND LINE 0,0.1,12,0
+SOUND 0,30,12,0
+SOUND 0,42,12
+SOUND 0,54,12</code>
+</pre>
 
 <h1 id="Sprites">Sprites</h1>
 
 <p>Coming soon.</p>
+
+<h3 id="_DEFSPRITE">DEF SPRITE</h3>
+<pre>DEF SPRITE image,data</pre>
+
+<h3 id="_SPRITEPALETTE">SPRITE PALETTE</h3>
+<pre>SPRITE PALETTE number,[color1],[color2],[color3]</pre>
+
+<h3 id="_SPRITE">SPRITE</h3>
+<pre>SPRITE number,[x],[y],[image]</pre>
+
+<h3 id="_SPRITEOFF">SPRITE OFF</h3>
+<pre>SPRITE OFF [number]</pre>
+
+<h3 id="_SPRITEXYI">=SPRITE X/Y/I</h3>
+<pre>x=SPRITE X(number)</pre>
+<pre>y=SPRITE Y(number)</pre>
+<pre>i=SPRITE I(number)</pre>
+
+<h3 id="_SPRITEHIT">=SPRITE HIT</h3>
+<pre>v=SPRITE HIT(number[,other [TO last]])</pre>
+
+<h3 id="_HIT">=HIT</h3>
+<pre>v=HIT</pre>
 
 <h1 id="String-functions">String functions</h1>
 
@@ -589,7 +716,7 @@ FF
 <pre>v=PI</pre>
 <p>PI is the ratio of the circumference of a circle to its diameter: 3.1415926535...</p>
 
-<h1 id="Other commands">Other commands</h1>
+<h1 id="Other-commands">Other commands</h1>
 
 <h3 id="_PRINT">PRINT</h3>
 <pre>PRINT value</pre>
@@ -599,7 +726,7 @@ FF
 <p>In the classic BASIC language, this command is the main way of getting user input by the keyboard. As LowRes Coder doesn't support keyboard, this command does not exist here.</p>
 
 <h3 id="_WAIT">WAIT</h3>
-<pre>WAIT seconds</pre>
+<pre>WAIT seconds [GAMEPAD]</pre>
 <p>WAIT pauses the execution of the program for the given time. <i>seconds</i> can be less then 1, but the shortes wait time is 0.04 seconds. This command has an important side effect: It updates the screen. If you draw something in a loop, you always have to call WAIT to actually see it on the screen.</p>
 <pre>
 <code>FOR X=0 TO 63
@@ -638,6 +765,21 @@ IF RUNNING THEN X=X+1</code>
 <code>SHOWTEXT=FALSE
 IF SHOWTEXT THEN PRINT "NOT SHOWN"</code>
 </pre>
+
+<h1 id="Data">Data commands</h1>
+
+<h3 id="_DATA">DATA</h3>
+<pre>DATA list</pre>
+
+<h3 id="_READ">READ</h3>
+<pre>READ list</pre>
+
+<h3 id="_RESTORE">RESTORE</h3>
+<pre>RESTORE [label]</pre>
+<pre>RESTORE TRANSFER</pre>
+
+<h3 id="_WRITE">WRITE</h3>
+<pre>WRITE list</pre>
 
 </body>
 </html>
