@@ -6,15 +6,15 @@
 body {
 	font-family: sans-serif;
 }
-code {
+.exm {
 	font-weight: bold;
 }
-td {
+td, th {
     padding-right: 1em;
+    vertical-align: top;
 }
 th {
     text-align: left;
-    padding-right: 1em;
 }
 a {
     color: #AA5500;
@@ -35,12 +35,12 @@ li {
 <p>When you played enough, tap on the Close button in the top left corner! If you don't see it, don't worry. It fades out after some seconds, but you can still tap it.</p>
 <p>Let's create your first own program! Go back to the overview of all programs and tap the Plus button in the top right corner. A new icon will appear at the end of the program list, called "Unnamed Program". Tap on it!</p>
 <p>You will see now an empty text editor. Write the following lines, but replace MY NAME with your own name (keep the quotation marks):</p>
-<pre>
-<code>DO
+<pre class="exm">
+DO
 COLOR RND*16
 TEXT 31,29,"MY NAME",1
 WAIT 0.1
-LOOP</code>
+LOOP
 </pre>
 <p>Now tap on the Play button and you should see your name flashing in random colors! If you see an error message instead, check if you wrote something wrong. When you looked enough on your name, tap the Exit button (or the top left corner).</p>
 <p>We should give a name to this program. Tap on the "Rename" button (in the bottom tool bar) and change the name to "My Name" or whatever you like.</p>
@@ -59,29 +59,29 @@ In LowRes Coder you don't have to declare variables. They start to exist automat
 
 <h3 id="_Numbers">Numbers</h3>
 <p>A variable without any special sign in its name can store numbers, like 10, -2 or 3.5. Examples of number variable names:</p>
-<code>A, B2, X, Y, MY_SCORE, LIVES</code>
+A, B2, X, Y, MY_SCORE, LIVES
 <p>To assign a number to a variable, you write for example:</p>
-<code>A=10</code>
+<pre class="exm">A=10</pre>
 
 <h3 id="_Strings">Strings</h3>
 <p>String variables contain text rather than numbers. They are distinguished from number variables by the $ character at the end of their name. The $ is part of the variable name, so the variables A and A$ access different values. Examples of string variables:</p>
-<code>A$, B2$, MY_NAME$, TXT$</code>
+A$, B2$, MY_NAME$, TXT$
 <p>You assign a text to a string variable like this:</p>
-<code>A$="HELLO"</code>
+<pre class="exm">A$="HELLO"</pre>
 
 <h2 id="_Arrays">Arrays</h2>
 <p>An array is a group of values of the same type, referenced by a single variable name. The individual values in an array are called elements. Array elements are variables also. They can be used in any BASIC command or function that uses variables.</p>
 <h3 id="_DIM">DIM</h3>
 <pre>DIM var(x,y,z,...)</pre>
 <p>DIM defines a table of variables in your program. These tables may have as many dimensions as you want and you define for each dimension the highest element index.</p>
-<pre><code>DIM TXT$(10),A(10,5),B(5,5,2)</code></pre>
+<pre class="exm">DIM TXT$(10),A(10,5),B(5,5,2)</pre>
 <p>In order to access an element in the array you simply type the array name followed by the index numbers. These numbers are separated by commas and are enclosed between round brackets. Note that the element numbers of these arrays always start from zero.</p>
-<pre>
-<code>DIM ARR(10)
+<pre class="exm">
+DIM ARR(10)
 ARR(0)=2
 ARR(10)=5
 PRINT ARR(10)
-PRINT ARR(0)</code>
+PRINT ARR(0)
 </pre>
 
 <h2 id="_Arithmetic-operations">Arithmetic operations</h2>
@@ -95,9 +95,9 @@ PRINT ARR(0)</code>
     <tr><td>+ and -</td><td>Plus and minus</td><td>X+Y, X-Y</td></tr>
 </table>
 <p>They are listed in the order of their priority how they are evaluated. Here is an example:</p>
-<code>PRINT 10+2*5-8/4+5^2</code>
+PRINT 10+2*5-8/4+5^2
 <p>This evaluates in the following order: 5^2, 2*5, 8/4 and then sums up the results to 43. If you want to change the order, you can enclose parts in round brackets:</p>
-<code>PRINT (10+2)*(5-8/4+5)^2</code>
+PRINT (10+2)*(5-8/4+5)^2
 
 <h2 id="_Relational-operations">Relational operations</h2>
 <p>Relational operators are used to compare two values. The result of the comparison is either "true" (-1) or "false" (0).</p>
@@ -115,62 +115,107 @@ PRINT ARR(0)</code>
 <p>The results of the following operations are binary (bit by bit).</p>
 <table>
     <tr><th>Operator</th><th>Value</th><th>Value</th><th>Result</th></tr>
-    <tr><td>NOT</td><td>X</td><td>&nbsp;</td><td>NOT X</td></tr>
-    <tr><td>&nbsp;</td><td>true</td><td>&nbsp;</td><td>false</td></tr>
-    <tr><td>&nbsp;</td><td>false</td><td>&nbsp;</td><td>true</td></tr>
+    <tr><td>NOT</td><td>X</td><td></td><td>NOT X</td></tr>
+    <tr><td></td><td>true</td><td></td><td>false</td></tr>
+    <tr><td></td><td>false</td><td></td><td>true</td></tr>
     <tr><td>AND</td><td>X</td><td>Y</td><td>X AND Y</td></tr>
-    <tr><td>&nbsp;</td><td>true</td><td>true</td><td>true</td></tr>
-    <tr><td>&nbsp;</td><td>true</td><td>false</td><td>false</td></tr>
-    <tr><td>&nbsp;</td><td>false</td><td>true</td><td>false</td></tr>
-    <tr><td>&nbsp;</td><td>false</td><td>false</td><td>false</td></tr>
+    <tr><td></td><td>true</td><td>true</td><td>true</td></tr>
+    <tr><td></td><td>true</td><td>false</td><td>false</td></tr>
+    <tr><td></td><td>false</td><td>true</td><td>false</td></tr>
+    <tr><td></td><td>false</td><td>false</td><td>false</td></tr>
     <tr><td>OR</td><td>X</td><td>Y</td><td>X OR Y</td></tr>
-    <tr><td>&nbsp;</td><td>true</td><td>true</td><td>true</td></tr>
-    <tr><td>&nbsp;</td><td>true</td><td>false</td><td>true</td></tr>
-    <tr><td>&nbsp;</td><td>false</td><td>true</td><td>true</td></tr>
-    <tr><td>&nbsp;</td><td>false</td><td>false</td><td>false</td></tr>
+    <tr><td></td><td>true</td><td>true</td><td>true</td></tr>
+    <tr><td></td><td>true</td><td>false</td><td>true</td></tr>
+    <tr><td></td><td>false</td><td>true</td><td>true</td></tr>
+    <tr><td></td><td>false</td><td>false</td><td>false</td></tr>
     <tr><td>XOR</td><td>X</td><td>Y</td><td>X XOR Y</td></tr>
-    <tr><td>&nbsp;</td><td>true</td><td>true</td><td>false</td></tr>
-    <tr><td>&nbsp;</td><td>true</td><td>false</td><td>true</td></tr>
-    <tr><td>&nbsp;</td><td>false</td><td>true</td><td>true</td></tr>
-    <tr><td>&nbsp;</td><td>false</td><td>false</td><td>false</td></tr>
+    <tr><td></td><td>true</td><td>true</td><td>false</td></tr>
+    <tr><td></td><td>true</td><td>false</td><td>true</td></tr>
+    <tr><td></td><td>false</td><td>true</td><td>true</td></tr>
+    <tr><td></td><td>false</td><td>false</td><td>false</td></tr>
 </table>
 <p>As in BASIC "true" is -1 (all bits set) and "false" is 0 (no bit set), these operators can be used for logical expressions...</p>
-<pre><code>IF A=0 OR B=1 THEN PRINT "OK"</code></pre>
+<pre class="exm">IF A=0 OR B=1 THEN PRINT "OK"</pre>
 <p>...and also for bit manipulations:</p>
-<pre><code>A=15 OR 256
-PRINT A</code>
-271
+<pre class="exm">
+A=15 OR 256
+PRINT A
+REM >>271
 </pre>
 
 <h2 id="_String-operations">String operations</h2>
 <p>You can concatenate strings with the plus operation.</p>
-<pre>
-<code>A$="LOW"+"RES"+" CODER"
-PRINT A$</code>
-LOWRES CODER</pre>
+<pre class="exm">
+A$="LOW"+"RES"+" CODER"
+PRINT A$
+REM >>LOWRES CODER
+</pre>
 <p>If you add together string and number variables or constants, the numbers get converted to strings automatically.</p>
-<pre>
-<code>L=2
+<pre class="exm">
+L=2
 A$="LIVES: "+L
-PRINT A$</code>
-LIVES: 2
+PRINT A$
+REM >>LIVES: 2
 </pre>
 
 <h2 id="_Parameters">Parameters</h2>
 <p>The values you enter into a LowRes Coder command are known as parameters, for example:</p>
-<pre>
-<code>COLOR 2
-TEXT X,Y,"HI"</code>
+<pre class="exm">
+COLOR 2
+TEXT X,Y,"HI"
 </pre>
 <p>The parameters in the first command is 2 and in the second X, Y and "HI".</p>
 
 <h2 id="_Labels">Labels</h2>
 <p>Labels are a way of marking lines in your programs. They can have any names with the same restrictions as variable names have, and are followed by the ":" (colon) character.</p>
-<pre>
-<code>TESTLABEL:
+<pre class="exm">
+TESTLABEL:
 PRINT "HELLO"
-GOTO TESTLABEL</code>
+GOTO TESTLABEL
 </pre>
+
+<h1 id="Simple-commands">Simple commands</h1>
+
+<h3 id="_PRINT">PRINT</h3>
+<pre>PRINT value</pre>
+<p>PRINT writes <i>value</i> on the screen, where <i>value</i> can be also a string or any expression. This is a simplified version of PRINT in the classic BASIC language and exists basically for testing. In a normal graphics based program you should prefer the TEXT command.</p>
+
+<h3 id="_INPUT">INPUT</h3>
+<p>In the classic BASIC language, this command is the main way of getting user input by the keyboard. As LowRes Coder doesn't support keyboard, this command does not exist here.</p>
+
+<h3 id="_WAIT">WAIT</h3>
+<pre>WAIT seconds [GAMEPAD]</pre>
+<p>WAIT pauses the execution of the program for the time set by the <i>seconds</i> parameter. The shortes wait time is 0.04 seconds. If you add the GAMEPAD keyword, the waiting will be interrupted by any tap on a gamepad button.</p>
+<p>This command has an important side effect: It updates the screen. If you draw something in a loop, you always have to call WAIT to actually see it on the screen.</p>
+<pre class="exm">
+FOR X=0 TO 63
+  PLOT X,31
+  WAIT 0.1
+NEXT X
+</pre>
+
+<h3 id="_END">END</h3>
+<pre>END</pre>
+<p>Stops the execution of the program. This can be called in any place of your program.</p>
+
+<h3 id="_REM">REM</h3>
+<pre>REM comment</pre>
+<p>If a line starts with REM (remark), it's completely ignored by the program, so you can write comments into your code.</p>
+<pre class="exm">
+REM THIS IS A TEST PROGRAM
+REM WRITTEN BY TIMO KLOSS
+PRINT "HELLO"
+REM SHOW MORE TEXT...
+PRINT "BYE"
+</pre>
+
+<h3 id="_TRUE">=TRUE</h3>
+<pre>v=TRUE</pre>
+<p>TRUE is equal to -1. It's useful for assigning it to a variable.</p>
+
+<h3 id="_FALSE">=FALSE</h3>
+<pre>v=FALSE</pre>
+<p>FALSE is equal to 0.</p>
 
 <h1 id="Graphics">Graphics</h1>
 
@@ -189,119 +234,119 @@ GOTO TESTLABEL</code>
 <tr><td>6</td><td>brown</td><td>14</td><td>magenta</td></tr>
 <tr><td>7</td><td>orange</td><td>15</td><td>purple</td></tr>
 </table>
-<pre>
-<code>FOR I=1 TO 15
+<pre class="exm">
+FOR I=1 TO 15
   COLOR I
   PRINT "COLOR "+I
-NEXT I</code>
+NEXT I
 </pre>
 
 <h3 id="_CLS">CLS</h3>
 <pre>CLS [color]</pre>
 <p>CLS clears and fills the whole screen with <i>color</i>. Check the color table of the COLOR command.</p>
-<pre>
-<code>FOR I=0 TO 15
+<pre class="exm">
+FOR I=0 TO 15
   CLS I
   WAIT 0.1
-NEXT I</code>
+NEXT I
 </pre>
 
 <h3 id="_PLOT">PLOT</h3>
 <pre>PLOT x,y</pre>
 <p>PLOT draws a pixel at the coordinates <i>x,y</i>.</p>
-<pre>
-<code>DO
+<pre class="exm">
+DO
   COLOR RND*16
   PLOT RND*64,RND*64
   WAIT 0.1
-LOOP</code>
+LOOP
 </pre>
 
 <h3 id="_LINE">LINE</h3>
 <pre>LINE x1,y1 TO x2,y2</pre>
 <p>LINE draws a line from the coordinates <i>x1,y1</i> to the coordinates <i>x2,y2</i>.</p>
-<pre>
-<code>DO
+<pre class="exm">
+DO
   COLOR RND*16
   LINE RND*64,RND*64 TO RND*64,RND*64
   WAIT 0.1
-LOOP</code>
+LOOP
 </pre>
 
 <h3 id="_BOX">BOX</h3>
 <pre>BOX x1,y1 TO x2,y2</pre>
 <p>BOX draws an unfilled rectangle with the diagonal corners at the coordinates <i>x1,y1</i> and <i>x2,y2</i>.</p>
-<pre>
-<code>BOX 0,0 TO 63,63</code>
+<pre class="exm">
+BOX 0,0 TO 63,63
 </pre>
 
 <h3 id="_BAR">BAR</h3>
 <pre>BAR x1,y1 TO x2,y2</pre>
 <p>BAR paints a filled rectangle with the diagonal corners at the coordinates <i>x1,y1</i> and <i>x2,y2</i>.</p>
-<pre>
-<code>BAR 2,20 TO 61,43</code>
+<pre class="exm">
+BAR 2,20 TO 61,43
 </pre>
 
 <h3 id="_TEXT">TEXT</h3>
 <pre>TEXT x,y,text$[,align]</pre>
 <p>TEXT draws the string <i>text$</i> at the coordinates <i>x,y</i>. Note that <i>text$</i> can also be a number, it will be converted automatically into a string.</p>
-<pre><code>TEXT 0,0,"HELLO"</code></pre>
+<pre class="exm">TEXT 0,0,"HELLO"</pre>
 <p>With the optional parameter <i>align</i> the text can be drawn in different ways:</p>
 <table>
 <tr><td>0</td><td>Left aligned (default)</td></tr>
 <tr><td>1</td><td>Centered</td></tr>
 <tr><td>2</td><td>Right aligned</td></tr>
 </table>
-<pre><code>TEXT 32,0,"CENTERED TEXT",1</code></pre>
+<pre class="exm">TEXT 32,0,"CENTERED TEXT",1</pre>
 
 <h3 id="_TEXT-WIDTH">=TEXT WIDTH</h3>
 <pre>=TEXT WIDTH(text$)</pre>
 <p>TEXT WIDTH returns the width of <i>text$</i> in pixels as it would be drawn with the TEXT command.</p>
-<pre>
-<code>T$="HELLO"
+<pre class="exm">
+T$="HELLO"
 W=TEXT WIDTH(T$)
 WHILE X&lt;63
   COLOR 1+RND*15
   TEXT X,0,T$
   X=X+W
-WEND</code>
+WEND
 </pre>
 
 <h3 id="_SCROLL">SCROLL</h3>
 <pre>SCROLL x1,y1 TO x2,y2,dx,dy</pre>
 <p>SCROLL moves the rectangular screen area between <i>x1,y1</i> and <i>x2,y2</i> horizontally by <i>dx</i> and vertically by <i>dy</i> pixels.</p>
-<pre>
-<code>DO
+<pre class="exm">
+DO
   PLOT RND*63,1+RND*63
   SCROLL 0,0 TO 63,63,-2,1
   WAIT 0.04
-LOOP</code>
+LOOP
 </pre>
 
 <h3 id="_LAYER">LAYER</h3>
 <pre>LAYER number</pre>
 <p>The screen of LowRes Coder has two layers. Layer 0 is in the background and usually the main layer. Layer 1 is in the foreground and it's transparent in all pixels with color 0. When you set the current layer with this command, all following drawing commands render on the selected layer.</p>
-<pre>
-<code>LAYER 1
+<pre class="exm">
+LAYER 1
 LINE 0,0 TO 63,63
 LAYER 0
 DO
-COLOR RND*16
-BAR 0,26 TO 63,36
-WAIT 0.1
-LOOP</code>
+  COLOR RND*16
+  BAR 0,26 TO 63,36
+  WAIT 0.1
+LOOP
 </pre>
 
 <h3 id="_POINT">=POINT</h3>
 <pre>v=POINT(x,y)</pre>
 <p>POINT returns the color index at the coordinates <i>x,y</i>.</p>
-<pre>
-<code>COLOR 11
+<pre class="exm">
+COLOR 11
 PLOT 63,0
 PRINT POINT(63,0)
-PRINT POINT(63,1)</code>
-11
-0
+PRINT POINT(63,1)
+REM >>11
+REM >>0
 </pre>
 
 <h1 id="Control-structures">Control structures</h1>
@@ -318,15 +363,15 @@ commands]
 END IF
 </pre>
 <p>The IF command allows you to make decisions in a program. Depending on the result different commands are executed. The <i>condition</i> can be any list of tests including AND and OR. There is the single line version, which allows only one command after THEN and optionally one command after ELSE:</p>
-<pre>
-<code>FOR I=1 TO 4
+<pre class="exm">
+FOR I=1 TO 4
   IF I&lt;3 THEN PRINT "SMALL" ELSE PRINT "BIG"
   IF I=4 THEN PRINT "END"
-NEXT I</code>
+NEXT I
 </pre>
 <p>If you need to execute more than one command, an IF ... END IF block can be used. ELSE blocks are optional.</p>
-<pre>
-<code>A=1
+<pre class="exm">
+A=1
 IF A=0 THEN
   PRINT "A IS ZERO"
   PRINT "NO?"
@@ -335,34 +380,34 @@ ELSE IF A=1 THEN
   PRINT "NO?"
 ELSE
   PRINT "A IS WHAT?"
-END IF</code>
+END IF
 </pre>
 
 <h3 id="_GOTO">GOTO</h3>
 <pre>GOTO label</pre>
 <p>GOTO makes the program continue in the line marked with <i>label</i>. While it's possible to jump out of a loop (WHILE/WEND, DO/LOOP,...) or out of an IF block, it's an error to jump from outside to inside.</p>
-<pre>
-<code>PRINT "START"
+<pre class="exm">
+PRINT "START"
 GOTO GAMELEVEL
 GAMEOVER:
 PRINT "GAME OVER"
 END
 GAMELEVEL:
 PRINT "PLAYING"
-GOTO GAMEOVER</code>
+GOTO GAMEOVER
 </pre>
 
 <h3 id="_GOSUB">GOSUB</h3>
 <pre>GOSUB label</pre>
 <p>GOSUB is similar to GOTO, but it remembers the current execution position. When RETURN is called, the program jumps back to the line where GOSUB was called.</p>
-<pre>
-<code>FOR I=1 TO 5
+<pre class="exm">
+FOR I=1 TO 5
   GOSUB SHOWNUMBER
 NEXT I
 END
 SHOWNUMBER:
 PRINT "NUMBER "+I
-RETURN</code>
+RETURN
 </pre>
 
 <h3 id="_RETURN">RETURN</h3>
@@ -376,26 +421,26 @@ commands
 NEXT [index]
 </pre>
 <p>A FOR/NEXT command repeats a list of commands a specific number of times. <i>index</i> is a counter variable that will be incremented after each loop. At the start of the loop, this counter will be set to <i>first</i>. Now all commands until NEXT are performed. <i>increment</i> will be added to the counter every time NEXT is reached. If STEP is omitted, the increment will be 1. The loop repeats as long as the counter is not greater than <i>last</i>.</p>
-<pre>
-<code>FOR I=1 TO 10 STEP 2
+<pre class="exm">
+FOR I=1 TO 10 STEP 2
   PRINT I
-NEXT I</code>
+NEXT I
 </pre>
 <p>Note that <i>increment</i> can be negative to count backwards. In this case the loop will be finished when the counter is less than <i>last</i>.</p>
-<pre>
-<code>FOR I=5 TO 1 STEP -1
+<pre class="exm">
+FOR I=5 TO 1 STEP -1
   PRINT I
-NEXT I</code>
+NEXT I
 </pre>
 <p>As all other loops, FOR/NEXT loops can be placed inside of others.</p>
-<pre>
-<code>FOR X=0 TO 5
+<pre class="exm">
+FOR X=0 TO 5
   FOR Y=0 TO 5
     CLS 0
     PLOT X,Y
     WAIT 0.1
   NEXT Y
-NEXT X</code>
+NEXT X
 </pre>
 
 <h3 id="_REPEAT">REPEAT ... UNTIL</h3>
@@ -405,11 +450,11 @@ commands
 UNTIL condition
 </pre>
 <p>A REPEAT/UNTIL command repeats a list of commands until <i>condition</i> is true.</p>
-<pre>
-<code>REPEAT
+<pre class="exm">
+REPEAT
   A=INT(RND*10)
   PRINT A
-UNTIL A=0</code>
+UNTIL A=0
 </pre>
 
 <h3 id="_WHILE">WHILE ... WEND</h3>
@@ -419,11 +464,11 @@ commands
 WEND
 </pre>
 <p>A WHILE/WEND command repeats a list of commands as long as <i>condition</i> is true.</p>
-<pre>
-<code>WHILE A&lt;10
+<pre class="exm">
+WHILE A&lt;10
   PRINT A
   A=A+1
-WEND</code>
+WEND
 </pre>
 
 <h3 id="_DO">DO ... LOOP</h3>
@@ -433,30 +478,30 @@ commands
 LOOP
 </pre>
 <p>A DO/LOOP command repeats a list of commands forever. You can still exit from the loop by calling EXIT.</p>
-<pre>
-<code>DO
+<pre class="exm">
+DO
   COLOR RND*16
   PRINT "FOREVER"
-LOOP</code>
+LOOP
 </pre>
 
 <h3 id="_EXIT">EXIT</h3>
 <pre>EXIT</pre>
 <p>EXIT makes the program jump out of the current loop (WHILE/WEND, DO/LOOP,...).</p>
-<pre>
-<code>DO
+<pre class="exm">
+DO
   C=INT(RND*16)
   COLOR C
   PRINT "LOOPING"
   IF C=15 THEN EXIT
 LOOP
-PRINT "DONE"</code>
+PRINT "DONE"
 </pre>
 
 <h3 id="_ONENDGOTO">ON END GOTO</h3>
 <pre>ON END GOTO label</pre>
 <pre>ON END</pre>
-<p>This command adds special handling for the moment the user taps the exit button. Instead of just quitting the program, it will jump to the label. The program has 2 seconds then to do something before calling END. You can use this for example to transfer data with WRITE. ON END (without GOTO) clears the label and activates the normal behavior again.</p>
+<p>This command adds special handling for the moment the user taps the exit button. Instead of just quitting the program, it will jump to <i>label</i>. The program has 2 seconds then to do something before calling END. You can use this for example to transfer data with WRITE. ON END (without GOTO) clears the label and activates the normal behavior again.</p>
 
 <h1 id="User-input">User input</h1>
 
@@ -487,11 +532,11 @@ PRINT "DONE"</code>
 <p>Returns TRUE if the A or B button of the given player is currently pressed. <i>player</i> starts with 0 for the first one. If <i>button</i> is omitted or 0, any button (A and B) is checked. 1 checks only the A button, 2 checks only the B button.</p>
 
 <h1 id="Sound">Sound</h1>
-<p>LowRes Coder has a programmable sound generator with three voices and different wave forms.</p>
+<p>LowRes Coder has three independent sound generators, called voices. Each of them has a queue which can store and reproduce sound sequences without blocking the execution of the program.</p>
 
 <h3 id="_SOUND">SOUND</h3>
 <pre>SOUND voice,pitch,duration[,instr]</pre>
-<p>Plays a sound. There are three independent voices which can play sounds at the same time. Choose one <i>voice</i> between 0 and 2. <i>pitch</i> sets the tone to play:</p>
+<p>Plays a sound through the given <i>voice</i> (a value from 0 to 2). <i>pitch</i> sets the tone to play:</p>
 <table>
     <tr><th>Note</th><th colspan="8">Pitch (with different octaves)</th></tr>
     <tr><th>C</th><td>1</td><td>13</td><td>25</td><td>37</td><td>49</td><td>61</td><td>73</td><td>85</td></tr>
@@ -507,12 +552,14 @@ PRINT "DONE"</code>
     <tr><th>A#</th><td>11</td><td>23</td><td>35</td><td>47</td><td>59</td><td>71</td><td>83</td><td>95</td></tr>
     <tr><th>B</th><td>12</td><td>24</td><td>36</td><td>48</td><td>60</td><td>72</td><td>84</td><td>96</td></tr>
 </table>
-<p>A sound with <i>pitch</i> 0 is silent and can be used as a pause. The <i>duration</i> of the note is set in 1/24 seconds. Each voice has an own queue, so sounds are played one after another without blocking the program. A maximum of 127 sounds can be queued in each voice. If <i>duration</i> is 0, the queue is cleared and the sound will start immediately and won't stop until the voice starts another sound or SOUND OFF is called. You can set an instrument with the <i>instr</i> parameter (see DEF SOUND), otherwise the last instrument of the voice will be kept. By default the instruments are already set up with different waveforms.</p>
-<pre>
-<code>SOUND 0,49,12,1
+<p>A sound with <i>pitch</i> 0 is silent and can be used as a pause.</p>
+<p>The <i>duration</i> of the note is set in 1/24 seconds. Each voice has an own queue, so sounds are played one after another without blocking the program. A maximum of 127 sounds can be queued in each voice. If <i>duration</i> is 0, the queue is cleared and the sound will start immediately and won't stop until the voice starts another sound or SOUND OFF is called.</p>
+<p>You can set an instrument with the <i>instr</i> parameter (see DEF SOUND), otherwise the last instrument of the voice will be kept. By default the instruments are already set up with different waveforms.</p>
+<pre class="exm">
+SOUND 0,49,12,1
 SOUND 0,53,12
 SOUND 0,56,12
-SOUND 0,61,24,0</code>
+SOUND 0,61,24,0
 </pre>
 
 <h3 id="_SOUNDOFF">SOUND OFF</h3>
@@ -521,52 +568,105 @@ SOUND 0,61,24,0</code>
 
 <h3 id="_DEFSOUND">DEF SOUND</h3>
 <pre>DEF SOUND instr,wave[,pulse[,time]]</pre>
-<p>Defines one of up to 64 different instruments which can be used with SOUND. <i>instr</i> can be a value between 0 and 63. The base of an instrument is the waveform, which is set with the <i>wave</i> parameter:</p>
+<p>Defines one of up to 64 different instruments which can be used with SOUND, so <i>instr</i> can be a value from 0 to 63.</p>
+<p>The base of an instrument is the waveform, which is set with the <i>wave</i> parameter:</p>
 <table>
     <tr><td>0</td><td>sawtooth wave</td></tr>
     <tr><td>1</td><td>triangle wave</td></tr>
     <tr><td>2</td><td>pulse wave</td></tr>
     <tr><td>3</td><td>noise</td></tr>
 </table>
-<p>If the waveform is "pulse wave" (2), you can set a pulse width between 0.0 and 1.0 with the <i>pulse</i> parameter. A value of 0.5 results in a square wave. For other waveforms this parameter is ignored. The <i>time</i> parameter defines the maximum duration of the sound in seconds. If a SOUND command sets a longer duration, the voice will play the maximum duration and then it will be silent until the next sound in the queue. Omit the parameter to play sounds always in full duration.</p>
+<p>If the waveform is "pulse wave" (2), you can set a pulse width between 0.0 and 1.0 with the <i>pulse</i> parameter. A value of 0.5 results in a square wave. For other waveforms this parameter is ignored.</p>
+<p>The <i>time</i> parameter defines the maximum duration of the sound in seconds. If a SOUND command sets a longer duration, the voice will play the maximum duration and then it will be silent until the next sound in the queue. Omit the parameter to play sounds always in full duration.</p>
 
 <h3 id="_DEFSOUNDLINE">DEF SOUND LINE</h3>
 <pre>DEF SOUND LINE instr,time,pitch,pulse</pre>
-<p>Sets additional values for the instrument number <i>instr</i>. Call this command (if needed) always after the DEF SOUND of the same instrument, otherwise the values will be reset. It makes sounds change over the given <i>time</i> (in seconds). The sound will start with <i>pitch</i> added to (if positive) or subtracted (if negative) from the note's value. The <i>pulse</i> value changes the start pulse width of the original sound (only if the waveform is "pulse"). It's value is the power of two, so 0 means no change, -1 means half, 1 means double, etc. Pitch and pulse width will return in the given time to its original values.</p>
-<pre>
-<code>DEF SOUND 0,2,0,0.2
+<p>Sets additional values for the instrument number <i>instr</i>. It makes sounds change over the given <i>time</i> (in seconds). Call this command (if needed) always after the DEF SOUND of the same instrument, otherwise the values will be reset.</p>
+<p>The sound will start with <i>pitch</i> added to (if positive) or subtracted (if negative) from the note's value.</p>
+<p>The <i>pulse</i> parameter changes the start pulse width of the original sound (only if the waveform is "pulse"). Its value is the power of two, so 0 means no change, -1 means half, 1 means double, etc.</p>
+<p>Pitch and pulse width will return in the given time to its original values.</p>
+<pre class="exm">
+DEF SOUND 0,2,0,0.2
 DEF SOUND LINE 0,0.1,12,0
 SOUND 0,30,12,0
 SOUND 0,42,12
-SOUND 0,54,12</code>
+SOUND 0,54,12
 </pre>
 
 <h1 id="Sprites">Sprites</h1>
 
-<p>Coming soon.</p>
+<p>Sprites are graphical objects with 8x8 pixels and 3 colors (plus a transparent background color). They are shown on an own layer and don't affect the normal graphic layer used for drawing. They can be moved and animated very easily, that's why they are perfect for game objects. Sprites are not designed with the normal graphic commands, but they are defined by bitmaps. LowRes Coder can show up to 16 sprites at once.</p>
 
 <h3 id="_DEFSPRITE">DEF SPRITE</h3>
 <pre>DEF SPRITE image,data</pre>
-
-<h3 id="_SPRITEPALETTE">SPRITE PALETTE</h3>
-<pre>SPRITE PALETTE number,[color1],[color2],[color3]</pre>
+<p>Defines a sprite image and stores it as number <i>image</i>. Possible values range from 0 to 63. <i>data</i> is the name of an array (without index numbers) which has 16 elements and contains the bitmap data. Usually these arrays are loaded from DATA commands, like this:</p>
+<pre class="exm">
+DIM ARR(15)
+FOR I=0 TO 15
+  READ ARR(I)
+NEXT I
+DEF SPRITE 0,ARR
+SPRITE 0,10,10,0
+SPRITE 1,20,20,0
+SPRITE 2,30,30,0
+DATA 5,80,21,84,105,105,105,105,85,85,127,253,31,244,5,80
+</pre>
+<p>Don't be scared of the numbers, you can use the included program Sprite Designer to draw your images and transfer them to source code.</p>
+<p>Here is a little explanation of the format: The numbers in the data array are bytes. A sprite has 8x8 pixels and each pixel has two bits to define the color, that makes two bytes per line. Lines are stored from top to bottom, so in the end we have 16 bytes.</p>
 
 <h3 id="_SPRITE">SPRITE</h3>
 <pre>SPRITE number,[x],[y],[image]</pre>
+<p>Shows a sprite on the screen or changes the position or the image. <i>number</i> is the identification number of the sprite and can have a value from 0 to 15. The sprite will be shown at the screen coordinates <i>x,y</i> with the given <i>image</i>. See the example of DEF SPRITE.</p>
+<p>If a sprite is already on the screen, it is possible to change only specific parameters and keeping others. Just omit the parameters you don't want to change, but don't remove the commas!</p>
+<pre class="exm">
+REM SHOW SPRITE
+SPRITE 0,10,10,0
+REM CHANGE Y POSITION
+SPRITE 0,,15,
+REM CHANGE IMAGE
+SPRITE 0,,,1
+</pre>
 
 <h3 id="_SPRITEOFF">SPRITE OFF</h3>
 <pre>SPRITE OFF [number]</pre>
+<p>Removes the sprite with the given <i>number</i> from the screen. If the parameter is omitted, all sprites are removed.</p>
+
+<h3 id="_SPRITEPALETTE">SPRITE PALETTE</h3>
+<pre>SPRITE PALETTE number,[color1],[color2],[color3]</pre>
+<p>Sets the colors for a sprite. Although a sprite image can only have three colors, each sprite on the screen can have its own color palette. See the available color numbers of the COLOR command. Single color parameters can be omitted to keep the current values of the sprite.</p>
+<pre class="exm">
+REM ORANGE, WHITE, RED
+SPRITE PALETTE 0,7,1,4
+REM CHANGE ONLY COLOR 3
+SPRITE PALETTE 0,,,5
+</pre>
 
 <h3 id="_SPRITEXYI">=SPRITE X/Y/I</h3>
 <pre>x=SPRITE X(number)</pre>
 <pre>y=SPRITE Y(number)</pre>
 <pre>i=SPRITE I(number)</pre>
+<p>These functions return current values of the given sprite <i>number</i>. X and Y are the coordinates, I is the image. If the sprite is currently not visible, <i>SPRITE I</i> will return -1.</p>
 
 <h3 id="_SPRITEHIT">=SPRITE HIT</h3>
 <pre>v=SPRITE HIT(number[,other [TO last]])</pre>
+<p>Returns TRUE if sprite <i>number</i> collides with another sprite (which means that pixels overlap). If no more parameters are given, it will check with all other visible sprites. If the <i>other</i> parameter is added, it will check only with that sprite number. If all parameters are given, it will check with all sprites between number <i>other</i> and <i>last</i>.</p>
+<pre class="exm">
+REM COLL. SPRITE 0 WITH ANY
+IF SPRITE HIT(0) THEN PRINT "HIT"
+REM COLL. BETWEEN SPRITES 1 AND 10
+IF SPRITE HIT(1,10) THEN PRINT "HIT"
+REM COLL. 1 WITH ANY FROM 5 TO 10
+IF SPRITE HIT(1,5 TO 10) THEN PRINT "HIT"
+</pre>
 
 <h3 id="_HIT">=HIT</h3>
 <pre>v=HIT</pre>
+<p>Returns the number of the sprite which collided with the sprite of the last call of SPRITE HIT.</p>
+<pre class="exm">
+IF SPRITE HIT(0) THEN
+  PRINT "0 COLLIDED WITH "+HIT
+END IF
+</pre>
 
 <h1 id="String-functions">String functions</h1>
 
@@ -575,89 +675,89 @@ SOUND 0,54,12</code>
 <h3 id="_LEFTS">=LEFT$</h3>
 <pre>s$=LEFT$(string$,number)</pre>
 <p>LEFT$ returns a new string with the first <i>number</i> characters of <i>string$</i>.</p>
-<pre>
-<code>PRINT LEFT$("LOWRES CODER",3)</code>
-LOW
+<pre class="exm">
+PRINT LEFT$("LOWRES CODER",3)
+REM >>LOW
 </pre>
 
 <h3 id="_RIGHTS">=RIGHT$</h3>
 <pre>s$=RIGHT$(string$,number)</pre>
 <p>RIGHT$ returns a new string with the last <i>number</i> characters of <i>string$</i>.</p>
-<pre>
-<code>PRINT RIGHT$("LOWRES CODER",5)</code>
-CODER
+<pre class="exm">
+PRINT RIGHT$("LOWRES CODER",5)
+REM >>CODER
 </pre>
 
 <h3 id="_MID">=MID$</h3>
 <pre>s$=MID$(string$,position,number)</pre>
 <p>MID$ returns a new string with <i>number</i> characters of <i>string$</i>, starting at character <i>position</i>. The first character has the position 1.</p>
-<pre>
-<code>PRINT MID$("LOWRES CODER",4,3)</code>
-RES
+<pre class="exm">
+PRINT MID$("LOWRES CODER",4,3)
+REM >>RES
 </pre>
 
 <h3 id="_INSTR">=INSTR</h3>
 <pre>v=INSTR(string$,search$[,position])</pre>
 <p>INSTR searches the first occurrence of <i>search$</i> inside of <i>string$</i> and returns its start position. If it's not found, the function returns 0.<p>
-<pre>
-<code>PRINT INSTR("LOWRES CODER","RES")</code>
-4
+<pre class="exm">
+PRINT INSTR("LOWRES CODER","RES")
+REM >>4
 </pre>
 <p>Usually the function starts searching at the beginning of the string. Optionally it can start searching at <i>position</i>.</p>
-<pre>
-<code>PRINT INSTR("LOWRES CODER","E",6)</code>
-11
+<pre class="exm">
+PRINT INSTR("LOWRES CODER","E",6)
+REM >>11
 </pre>
 
 <h3 id="_CHR">=CHR$</h3>
 <pre>s$=CHR$(ascii)</pre>
 <p>CHR$ returns a string containing one character with ASCII code <i>ascii</i>. Note that LowRes Coder's font has only a limited range of characters (english capital letters, numbers and some symbols).</p>
-<pre>
-<code>FOR I=32 TO 90
+<pre class="exm">
+FOR I=32 TO 90
   PRINT CHR$(I)
-NEXT I</code>
+NEXT I
 </pre>
 
 <h3 id="_ASC">=ASC</h3>
 <pre>v=ASC(string$)</pre>
 <p>ASC supplies you with the ASCII code of the first character of <i>string$</i>.</p>
-<pre>
-<code>PRINT ASC("L")</code>
-76
+<pre class="exm">
+PRINT ASC("L")
+REM >>76
 </pre>
 
 <h3 id="_LEN">=LEN</h3>
 <pre>v=LEN(string$)</pre>
 <p>LEN returns the number of characters in <i>string$</i>.</p>
-<pre>
-<code>PRINT LEN("LOWRES CODER")</code>
-12
+<pre class="exm">
+PRINT LEN("LOWRES CODER")
+REM >>12
 </pre>
 
 <h3 id="_VAL">=VAL</h3>
 <pre>v=VAL(string$)</pre>
 <p>VAL converts a number written in <i>string$</i> into a numeric value.</p>
-<pre>
-<code>X=VAL("123.5")
+<pre class="exm">
+X=VAL("123.5")
 X=X+1
-PRINT X</code>
-124.5
+PRINT X
+REM >>124.5
 </pre>
 
 <h3 id="_STR">=STR$</h3>
 <pre>s$=STR$(number)</pre>
 <p>STR$ converts a number value into a string. Usually this function is not neccessary, because numbers are converted automatically to strings where needed.</p>
-<pre>
-<code>PRINT STR$(255)</code>
-255
+<pre class="exm">
+PRINT STR$(255)
+REM >>255
 </pre>
 
 <h3 id="_HEX">=HEX$</h3>
 <pre>s$=HEX$(number)</pre>
 <p>HEX$ converts a number value into a hexadecimal string.</p>
-<pre>
-<code>PRINT HEX$(255)</code>
-FF
+<pre class="exm">
+PRINT HEX$(255)
+REM >>FF
 </pre>
 
 <h1 id="Maths-functions">Maths functions</h1>
@@ -691,8 +791,8 @@ FF
 <h3 id="_RND">=RND</h3>
 <pre>v=RND</pre>
 <p>The next number in a sequence of random numbers uniformly distributed in the range 0 &lt;= RND &lt; 1. A typical use for integer numbers looks like this:</p>
-<pre>
-<code>V=INT(RND*16)</code>
+<pre class="exm">
+V=INT(RND*16)
 </pre>
 <p>This will return an integer number from 0 to 15 (INT rounds down and RND is always less than 1.0).</p>
 
@@ -716,57 +816,7 @@ FF
 <pre>v=PI</pre>
 <p>PI is the ratio of the circumference of a circle to its diameter: 3.1415926535...</p>
 
-<h1 id="Other-commands">Other commands</h1>
-
-<h3 id="_PRINT">PRINT</h3>
-<pre>PRINT value</pre>
-<p>PRINT writes <i>value</i> on the screen, where <i>value</i> can be also a string or any expression. This is a simplified version of PRINT in the classic BASIC language and exists basically for testing. In a normal graphics based program you should prefer the TEXT command.</p>
-
-<h3 id="_INPUT">INPUT</h3>
-<p>In the classic BASIC language, this command is the main way of getting user input by the keyboard. As LowRes Coder doesn't support keyboard, this command does not exist here.</p>
-
-<h3 id="_WAIT">WAIT</h3>
-<pre>WAIT seconds [GAMEPAD]</pre>
-<p>WAIT pauses the execution of the program for the given time. <i>seconds</i> can be less then 1, but the shortes wait time is 0.04 seconds. This command has an important side effect: It updates the screen. If you draw something in a loop, you always have to call WAIT to actually see it on the screen.</p>
-<pre>
-<code>FOR X=0 TO 63
-  PLOT X,31
-  WAIT 0.1
-NEXT X</code>
-</pre>
-
-<h3 id="_END">END</h3>
-<pre>END</pre>
-<p>Stops the execution of the program. This can be called in any place of your program.</p>
-
-<h3 id="_REM">REM</h3>
-<pre>REM comment</pre>
-<p>If a line starts with REM (remark), it's completely ignored by the program, so you can write comments into your code.</p>
-<pre>
-<code>REM THIS IS A TEST PROGRAM
-REM WRITTEN BY TIMO KLOSS
-PRINT "HELLO"
-REM SHOW MORE TEXT...
-PRINT "BYE"</code>
-</pre>
-
-<h3 id="_TRUE">=TRUE</h3>
-<pre>v=TRUE</pre>
-<p>TRUE is equal to -1. It's useful for assigning it to a variable.</p>
-<pre>
-<code>RUNNING=TRUE
-IF RUNNING THEN X=X+1</code>
-</pre>
-
-<h3 id="_FALSE">=FALSE</h3>
-<pre>v=FALSE</pre>
-<p>FALSE is equal to 0.</p>
-<pre>
-<code>SHOWTEXT=FALSE
-IF SHOWTEXT THEN PRINT "NOT SHOWN"</code>
-</pre>
-
-<h1 id="Data">Data commands</h1>
+<h1 id="Data">Data and transfer</h1>
 
 <h3 id="_DATA">DATA</h3>
 <pre>DATA list</pre>
