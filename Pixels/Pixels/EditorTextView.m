@@ -44,7 +44,6 @@ NSString *EditorTextView_transferText;
 - (void)initKeyboardToolbar
 {
     self.keyboardToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
-    self.keyboardToolbar.translucent = YES;
     
     NSArray *keys = @[@"=", @"<", @">", @"+", @"-", @"*", @"/", @"(", @")", @"\"", @"$", @":"];
     NSMutableArray *buttons = [NSMutableArray array];

@@ -21,6 +21,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.navigationController.popoverPresentationController.backgroundColor = self.navigationController.navigationBar.barTintColor;
 }
 
 - (void)viewWillAppear:(BOOL)animated

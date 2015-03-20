@@ -57,6 +57,11 @@ NSString *const CoachMarkIDShare = @"CoachMarkIDShare";
     self.sourceCodeTextView.layoutManager.allowsNonContiguousLayout = NO;
     self.sourceCodeTextView.delegate = self;
     
+    self.sourceCodeTextView.keyboardAppearance = UIKeyboardAppearanceDark;
+    self.sourceCodeTextView.keyboardToolbar.translucent = YES;
+    self.sourceCodeTextView.keyboardToolbar.tintColor = self.view.tintColor;
+    self.sourceCodeTextView.keyboardToolbar.barTintColor = self.navigationController.toolbar.barTintColor;
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willSaveData:) name:ModelManagerWillSaveDataNotification object:nil];

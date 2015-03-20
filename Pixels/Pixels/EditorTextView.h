@@ -11,6 +11,7 @@
 @interface EditorTextView : UITextView
 
 @property BOOL pastable;
+@property (readonly) UIToolbar *keyboardToolbar;
 
 + (void)setTransferText:(NSString *)text;
 + (NSString *)transferText;

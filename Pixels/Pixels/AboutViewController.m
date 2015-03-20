@@ -23,6 +23,8 @@
 {
     [super viewDidLoad];
     
+    self.navigationController.popoverPresentationController.backgroundColor = self.navigationController.navigationBar.barTintColor;
+    
     self.separatorView.separatorColor = self.tableView.separatorColor;
     self.versionLabel.text = [NSString stringWithFormat:@"Version %@", self.appVersion];
     
