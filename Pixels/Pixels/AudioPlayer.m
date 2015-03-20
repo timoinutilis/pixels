@@ -302,7 +302,7 @@ static void RenderAudio(AudioQueueBufferRef buffer, PlayerSystem *player)
                         break;
                     case WaveTypePulse:
                         voice->x = fmod(voice->x, 1.0);
-                        finalPulseWidth = def->pulseWidth * pow(2.0, def->pulseBend * bendFactor);
+                        finalPulseWidth = def->pulseWidth + def->pulseBend * bendFactor;
                         if (finalPulseWidth > 0.9)
                         {
                             finalPulseWidth = 0.9;

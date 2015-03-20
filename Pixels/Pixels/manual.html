@@ -23,6 +23,10 @@ a {
 li {
     margin-bottom: 0.5em;
 }
+h1 {
+    color: #FFF;
+    background-color: #000;
+}
 </style>
 </head>
 
@@ -593,8 +597,7 @@ SOUND 0,61,24,0
 <h3 id="_DEFSOUNDLINE">DEF SOUND LINE</h3>
 <pre>DEF SOUND LINE instr,time,pitch,pulse</pre>
 <p>Sets additional values for the instrument number <i>instr</i>. It makes sounds change over the given <i>time</i> (in seconds). Call this command (if needed) always after the DEF SOUND of the same instrument, otherwise the values will be reset.</p>
-<p>The sound will start with <i>pitch</i> added to (if positive) or subtracted (if negative) from the note's value.</p>
-<p>The <i>pulse</i> parameter changes the start pulse width of the original sound (only if the waveform is "pulse"). Its value is the power of two, so 0 means no change, -1 means half, 1 means double, etc.</p>
+<p>The sound will start with <i>pitch</i> added to the note's original value (or subtracted if <i>pitch</i> is negative). The <i>pulse</i> value is added to pulse width of the original sound (only if the waveform is "pulse").</p>
 <p>Pitch and pulse width will return in the given time to its original values.</p>
 <pre class="exm">
 DEF SOUND 0,2,0,0.2

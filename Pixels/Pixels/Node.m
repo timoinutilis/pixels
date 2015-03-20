@@ -1144,8 +1144,13 @@ NSString *const TRANSFER = @"TRANSFER";
     NSNumber *pitchBend = [self.pitchBendExpression evaluateWithRunner:runner];
     NSNumber *pulseBend = [self.pulseBendExpression evaluateWithRunner:runner];
     
+    if (pulseBend && (pulseBend.doubleValue < -1.0 || pulseBend.doubleValue > 1.0))
+    {
+        @throw [ProgramException invalidParameterExceptionWithNode:self value:pulseBend.floatValue];
+    }
+    
     SoundDef *def = [runner.audioPlayer soundDefAtIndex:n.intValue];
-    def->bendTime = bendTime ? bendTime.doubleValue : 1.0;
+    def->bendTime = bendTime.doubleValue;
     def->pitchBend = pitchBend.intValue;
     def->pulseBend = pulseBend.doubleValue;
     
