@@ -95,9 +95,9 @@ PRINT ARR(0)
     <tr><td>+ and -</td><td>Plus and minus</td><td>X+Y, X-Y</td></tr>
 </table>
 <p>They are listed in the order of their priority how they are evaluated. Here is an example:</p>
-PRINT 10+2*5-8/4+5^2
+<pre class="exm">PRINT 10+2*5-8/4+5^2</pre>
 <p>This evaluates in the following order: 5^2, 2*5, 8/4 and then sums up the results to 43. If you want to change the order, you can enclose parts in round brackets:</p>
-PRINT (10+2)*(5-8/4+5)^2
+<pre class="exm">PRINT (10+2)*(5-8/4+5)^2</pre>
 
 <h2 id="_Relational-operations">Relational operations</h2>
 <p>Relational operators are used to compare two values. The result of the comparison is either "true" (-1) or "false" (0).</p>
@@ -501,7 +501,18 @@ PRINT "DONE"
 <h3 id="_ONENDGOTO">ON END GOTO</h3>
 <pre>ON END GOTO label</pre>
 <pre>ON END</pre>
-<p>This command adds special handling for the moment the user taps the exit button. Instead of just quitting the program, it will jump to <i>label</i>. The program has 2 seconds then to do something before calling END. You can use this for example to transfer data with WRITE. ON END (without GOTO) clears the label and activates the normal behavior again.</p>
+<p>This command adds special handling for the moment the user taps the exit button. Instead of just quitting the program, it will jump to <i>label</i>. The program has 2 seconds then to do something before calling END. You can use this for example to transfer data with WRITE.</p>
+<pre class="exm">
+ON END GOTO FIN
+DO
+  PRINT "EXIT PROGRAM!"
+  WAIT 1
+LOOP
+FIN:
+PRINT "BYE!"
+WAIT 2
+</pre>
+<p>ON END (without GOTO) clears the label and activates the normal behavior again.</p>
 
 <h1 id="User-input">User input</h1>
 
@@ -817,19 +828,59 @@ V=INT(RND*16)
 <p>PI is the ratio of the circumference of a circle to its diameter: 3.1415926535...</p>
 
 <h1 id="Data">Data and transfer</h1>
+<p>LowRes Coder cannot load data from files, everything a program needs must be included in its source code. With the following commands you can write big lists of data and assign them easily to variables and arrays.</p>
+<p>This system also allows you to transfer data between a program and the source code editor. In addition to the "Copy" and "Paste" actions in the text edit menu, there is "Copy to Transfer" and "Paste from Transfer". By selecting lines of DATA and copying them to the transfer memory, a program can read their values. And the other way around a program can write values to the transfer memory, which can be pasted as DATA commands into your source code.</p>
 
 <h3 id="_DATA">DATA</h3>
 <pre>DATA list</pre>
+<p>Stores numeric and string constants (values, but no variables or expressions) that are accessed by the READ command. DATA commands are not executed and may be placed anywhere in the program. <i>list</i> can contain any number of constants, separated by commas.</p>
+<p>READ commands access DATA in order, from the top of a program until the bottom. All constants of all DATA commands are read as one continuous list of items.</p>
+<pre class="exm">DATA 10,20,30,40,50</pre>
+...is exactly the same as:
+<pre class="exm">
+DATA 10,20,30
+DATA 40,50
+</pre>
 
 <h3 id="_READ">READ</h3>
 <pre>READ list</pre>
+<p>Reads values from DATA commands and assigns them to the variables in <i>list</i>. The program has an internal pointer to the current DATA value. With each value read, the pointer will move to the next DATA value.</p>
+<pre class="exm">
+FOR I=1 TO 3
+  READ A,B$
+  PRINT A+" "+B$
+NEXT I 
+DATA 10,"A",20
+DATA "B",30,"C"
+</pre>
 
 <h3 id="_RESTORE">RESTORE</h3>
 <pre>RESTORE [label]</pre>
 <pre>RESTORE TRANSFER</pre>
+<p>Changes the internal read pointer to another position. This allows to reread data or to select specific data. If the <i>label</i> parameter is omitted, READ will start again from the top of the program. Otherwise the pointer will be set to the jump label.</p>
+<pre class="exm">
+RESTORE SECOND
+READ A$
+PRINT A$
+FIRST:
+DATA "ONE","TWO"
+DATA "THREE"
+SECOND:
+DATA "FOUR","FIVE"
+DATA "SIX"
+</pre>
+<p>RESTORE TRANSFER has a special meaning: It sets the read pointer to the beginning of the transfer memory. This is the text you can copy from your source code with the "Copy to Transfer" action in the edit menu.</p>
+
 
 <h3 id="_WRITE">WRITE</h3>
 <pre>WRITE list</pre>
+<p>Writes values to the transfer memory, which can be pasted into your source code. <i>list</i> can be any number of values or expressions, separated by commas. Each call to WRITE will add one DATA command with all its values to the transfer memory.</p>
+<pre class="exm">
+FOR A=1 TO 5
+  WRITE A,"HI",A*5
+NEXT A
+</pre>
+<p>After running this example program, the transfer memory will contain 5 DATA commands each with three constants.</p>
 
 </body>
 </html>
