@@ -8,7 +8,74 @@
 
 #import "Gamepad.h"
 
+typedef NS_ENUM(NSInteger, GamepadImage) {
+    GamepadImageNormal,
+    GamepadImageUp,
+    GamepadImageUpRight,
+    GamepadImageRight,
+    GamepadImageDownRight,
+    GamepadImageDown,
+    GamepadImageDownLeft,
+    GamepadImageLeft,
+    GamepadImageUpLeft
+};
+
+@interface Gamepad ()
+
+@property UIImageView *imageView;
+@property NSArray *images;
+
+@end
+
 @implementation Gamepad
+
++ (BOOL)requiresConstraintBasedLayout
+{
+    return YES;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super initWithCoder:aDecoder])
+    {
+        [self setUpView];
+    }
+    return self;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    if (self = [super initWithFrame:frame])
+    {
+        [self setUpView];
+    }
+    return self;
+}
+
+- (void)setUpView
+{
+    self.backgroundColor = [UIColor clearColor];
+    
+    self.images = @[[UIImage imageNamed:@"joypad"],
+                    [UIImage imageNamed:@"joypad_pressed_u"],
+                    [UIImage imageNamed:@"joypad_pressed_ur"],
+                    [UIImage imageNamed:@"joypad_pressed_r"],
+                    [UIImage imageNamed:@"joypad_pressed_dr"],
+                    [UIImage imageNamed:@"joypad_pressed_d"],
+                    [UIImage imageNamed:@"joypad_pressed_dl"],
+                    [UIImage imageNamed:@"joypad_pressed_l"],
+                    [UIImage imageNamed:@"joypad_pressed_ul"]];
+    
+    self.imageView = [[UIImageView alloc] initWithImage:self.images[GamepadImageNormal]];
+    self.imageView.alpha = 0.5;
+    [self addSubview:self.imageView];
+}
+
+- (CGSize)intrinsicContentSize
+{
+    UIImage *image = self.images[0];
+    return image.size;
+}
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
@@ -62,6 +129,7 @@
     _isDirDown = (point.y > 20.0);
     _isDirLeft = (point.x < -20.0);
     _isDirRight = (point.x > 20.0);
+    [self updateImage];
 }
 
 - (void)resetDirections
@@ -70,6 +138,52 @@
     _isDirDown = NO;
     _isDirLeft = NO;
     _isDirRight = NO;
+    [self updateImage];
+}
+
+- (void)updateImage
+{
+    GamepadImage gi = GamepadImageNormal;
+    if (_isDirUp)
+    {
+        if (_isDirLeft)
+        {
+            gi = GamepadImageUpLeft;
+        }
+        else if (_isDirRight)
+        {
+            gi = GamepadImageUpRight;
+        }
+        else
+        {
+            gi = GamepadImageUp;
+        }
+    }
+    else if (_isDirDown)
+    {
+        if (_isDirLeft)
+        {
+            gi = GamepadImageDownLeft;
+        }
+        else if (_isDirRight)
+        {
+            gi = GamepadImageDownRight;
+        }
+        else
+        {
+            gi = GamepadImageDown;
+        }
+    }
+    else if (_isDirLeft)
+    {
+        gi = GamepadImageLeft;
+    }
+    else if (_isDirRight)
+    {
+        gi = GamepadImageRight;
+    }
+    
+    self.imageView.image = self.images[gi];
 }
 
 @end

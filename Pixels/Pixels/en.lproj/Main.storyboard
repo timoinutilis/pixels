@@ -374,23 +374,27 @@ Inutilis Software, 2015</string>
                                     <action selector="onExitTapped:" destination="glc-Eb-QOK" eventType="touchUpInside" id="1hg-hv-tee"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" alpha="0.5" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DSM-fA-zCj" userLabel="Joypad" customClass="Gamepad">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ceS-Jn-ChI" customClass="Gamepad">
                                 <rect key="frame" x="44" y="382" width="130" height="130"/>
-                                <state key="normal" image="joypad">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="130" placeholder="YES" id="CJ4-zs-YMN"/>
+                                    <constraint firstAttribute="width" constant="130" placeholder="YES" id="I1z-XH-Kcj"/>
+                                </constraints>
+                            </view>
                             <button opaque="NO" alpha="0.5" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gGg-rj-ecJ" userLabel="Button A">
                                 <rect key="frame" x="420" y="444" width="68" height="68"/>
                                 <state key="normal" image="button_a">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <state key="highlighted" image="button_a_pressed"/>
                             </button>
                             <button opaque="NO" alpha="0.5" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WUP-DK-URn" userLabel="Button B">
                                 <rect key="frame" x="488" y="382" width="68" height="68"/>
                                 <state key="normal" image="button_b">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <state key="highlighted" image="button_b_pressed"/>
                             </button>
                         </subviews>
                         <gestureRecognizers/>
@@ -398,19 +402,19 @@ Inutilis Software, 2015</string>
                             <constraint firstItem="WUP-DK-URn" firstAttribute="leading" secondItem="gGg-rj-ecJ" secondAttribute="trailing" id="1nO-se-RY7"/>
                             <constraint firstItem="wgn-Os-cIh" firstAttribute="top" secondItem="7pe-HW-2Cc" secondAttribute="top" id="5cK-O7-fVw"/>
                             <constraint firstAttribute="bottom" secondItem="wgn-Os-cIh" secondAttribute="bottom" id="KXT-Er-Hxj"/>
+                            <constraint firstItem="ceS-Jn-ChI" firstAttribute="leading" secondItem="7pe-HW-2Cc" secondAttribute="leading" constant="44" id="OsW-tt-HSN">
+                                <variation key="heightClass=compact" constant="11"/>
+                                <variation key="widthClass=compact" constant="11"/>
+                            </constraint>
                             <constraint firstItem="wgn-Os-cIh" firstAttribute="leading" secondItem="7pe-HW-2Cc" secondAttribute="leading" id="PqW-SW-bRW"/>
                             <constraint firstItem="U9l-B1-gng" firstAttribute="top" secondItem="7pe-HW-2Cc" secondAttribute="top" id="aUb-1W-ipI"/>
                             <constraint firstItem="U9l-B1-gng" firstAttribute="leading" secondItem="7pe-HW-2Cc" secondAttribute="leading" id="gHu-Cg-qnB"/>
                             <constraint firstAttribute="trailing" secondItem="wgn-Os-cIh" secondAttribute="trailing" id="gZl-g8-tmR"/>
-                            <constraint firstItem="DSM-fA-zCj" firstAttribute="leading" secondItem="7pe-HW-2Cc" secondAttribute="leading" constant="44" id="ie4-m0-UXh">
+                            <constraint firstItem="vm8-Vn-fOJ" firstAttribute="top" secondItem="ceS-Jn-ChI" secondAttribute="bottom" constant="88" id="i2v-NB-2DY">
                                 <variation key="heightClass=compact" constant="11"/>
                                 <variation key="widthClass=compact" constant="11"/>
                             </constraint>
                             <constraint firstAttribute="trailing" secondItem="WUP-DK-URn" secondAttribute="trailing" constant="44" id="lML-pE-zo0">
-                                <variation key="heightClass=compact" constant="11"/>
-                                <variation key="widthClass=compact" constant="11"/>
-                            </constraint>
-                            <constraint firstItem="vm8-Vn-fOJ" firstAttribute="top" secondItem="DSM-fA-zCj" secondAttribute="bottom" constant="88" id="n6N-y2-jry">
                                 <variation key="heightClass=compact" constant="11"/>
                                 <variation key="widthClass=compact" constant="11"/>
                             </constraint>
@@ -433,7 +437,7 @@ Inutilis Software, 2015</string>
                         <outlet property="constraintWidth" destination="A1Z-Ca-qSy" id="N2o-XF-UHg"/>
                         <outlet property="containerView" destination="wgn-Os-cIh" id="Urd-Fb-b8e"/>
                         <outlet property="exitButton" destination="U9l-B1-gng" id="T69-ZT-cvs"/>
-                        <outlet property="gamepad" destination="DSM-fA-zCj" id="z1T-VM-B4R"/>
+                        <outlet property="gamepad" destination="ceS-Jn-ChI" id="zue-Ro-PGK"/>
                         <outlet property="rendererView" destination="B6C-lp-NaC" id="d1n-8y-Uwo"/>
                     </connections>
                 </viewController>
@@ -893,11 +897,12 @@ Inutilis Software, 2015</string>
     </scenes>
     <resources>
         <image name="button_a" width="68" height="68"/>
+        <image name="button_a_pressed" width="68" height="68"/>
         <image name="button_b" width="68" height="68"/>
+        <image name="button_b_pressed" width="68" height="68"/>
         <image name="exit" width="36" height="36"/>
         <image name="icon_about" width="100" height="100"/>
         <image name="icon_project" width="96" height="96"/>
-        <image name="joypad" width="130" height="130"/>
         <image name="star" width="28" height="28"/>
     </resources>
     <inferredMetricsTieBreakers>
