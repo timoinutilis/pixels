@@ -125,10 +125,10 @@ typedef NS_ENUM(NSInteger, GamepadImage) {
     CGPoint point = [touch locationInView:self];
     point.x -= self.bounds.size.width * 0.5;
     point.y -= self.bounds.size.height * 0.5;
-    _isDirUp = (point.y < -20.0);
-    _isDirDown = (point.y > 20.0);
-    _isDirLeft = (point.x < -20.0);
-    _isDirRight = (point.x > 20.0);
+    _isDirUp = (point.y < -20.0) && ABS(point.x / point.y) < 1.8;
+    _isDirDown = (point.y > 20.0) && ABS(point.x / point.y) < 1.8;
+    _isDirLeft = (point.x < -20.0) && ABS(point.y / point.x) < 1.8;
+    _isDirRight = (point.x > 20.0) && ABS(point.y / point.x) < 1.8;
     [self updateImage];
 }
 

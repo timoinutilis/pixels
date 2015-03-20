@@ -783,7 +783,7 @@ Inutilis Software, 2015</string>
                     <navigationItem key="navigationItem" title="Programs" id="qaN-Hc-taS">
                         <barButtonItem key="leftBarButtonItem" title="About" id="For-YS-mw8">
                             <connections>
-                                <segue destination="i5J-w0-OfA" kind="popoverPresentation" popoverAnchorBarButtonItem="For-YS-mw8" id="F2D-s9-jih">
+                                <segue destination="i5J-w0-OfA" kind="popoverPresentation" identifier="About" popoverAnchorBarButtonItem="For-YS-mw8" id="F2D-s9-jih">
                                     <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
                                 </segue>
                             </connections>

@@ -136,6 +136,11 @@ NSString *const ExplorerRefreshAddedProjectNotification = @"ExplorerRefreshAdded
         
         self.lastSelectedProject = cell.project;
     }
+    else if ([segue.identifier isEqualToString:@"About"])
+    {
+        UIViewController *vc = segue.destinationViewController;
+        vc.popoverPresentationController.backgroundColor = self.navigationController.navigationBar.barTintColor;
+    }
 }
 
 #pragma mark <UICollectionViewDataSource>

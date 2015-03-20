@@ -53,6 +53,8 @@
         self.contentsViewController.modalPresentationStyle = UIModalPresentationPopover;
     }
     self.contentsViewController.popoverPresentationController.barButtonItem = sender;
+    self.contentsViewController.popoverPresentationController.backgroundColor = self.navigationController.navigationBar.barTintColor;
+
     [self presentViewController:self.contentsViewController animated:YES completion:nil];
 }
 
