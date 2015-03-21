@@ -25,7 +25,7 @@
     {
         [self makeSnapshot];
         self.lastSnapshotTime = CFAbsoluteTimeGetCurrent();
-        if (self.snapshots.count >= 10)
+        if (self.snapshots.count >= 120)
         {
             self.shouldMakeThumbnail = NO;
         }
@@ -121,8 +121,11 @@
         // find best snapshot
         NSData *best;
         int bestQuality = -1;
-        for (NSData *snapshot in self.snapshots)
+        NSUInteger first = self.snapshots.count * 0.3;
+        NSUInteger last = MAX(1.0, self.snapshots.count * 0.7);
+        for (NSUInteger i = first; i < last; i++)
         {
+            NSData *snapshot = self.snapshots[i];
             int quality = [self qualityOfSnapshot:snapshot];
             if (quality > bestQuality)
             {

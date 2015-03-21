@@ -59,8 +59,7 @@ NSString *const CoachMarkIDShare = @"CoachMarkIDShare";
     
     self.sourceCodeTextView.keyboardAppearance = UIKeyboardAppearanceDark;
     self.sourceCodeTextView.keyboardToolbar.translucent = YES;
-    self.sourceCodeTextView.keyboardToolbar.tintColor = self.view.tintColor;
-    self.sourceCodeTextView.keyboardToolbar.barTintColor = self.navigationController.toolbar.barTintColor;
+    self.sourceCodeTextView.keyboardToolbar.barStyle = UIBarStyleBlack;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -158,7 +157,9 @@ NSString *const CoachMarkIDShare = @"CoachMarkIDShare";
                                                                        message:message
                                                                 preferredStyle:UIAlertControllerStyleAlert];
         
-        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [self.sourceCodeTextView becomeFirstResponder];
+        }]];
         
         alert.view.tintColor = self.view.tintColor;
         [self presentViewController:alert animated:YES completion:nil];

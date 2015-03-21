@@ -500,7 +500,7 @@ Inutilis Software, 2015</string>
             </objects>
             <point key="canvasLocation" x="350" y="1152"/>
         </scene>
-        <!--LowRes Coder Web-->
+        <!--Publish-->
         <scene sceneID="bmj-RF-7ax">
             <objects>
                 <tableViewController id="u7G-9d-dgL" customClass="ShareViewController" sceneMemberID="viewController">
@@ -545,7 +545,7 @@ Inutilis Software, 2015</string>
                             </constraints>
                         </view>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="HeaderCell" rowHeight="100" id="xvF-Tr-YGB" customClass="ShareHeaderCell">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="HeaderCell" rowHeight="140" id="xvF-Tr-YGB" customClass="ShareHeaderCell">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xvF-Tr-YGB" id="AQT-b1-zre">
@@ -559,7 +559,7 @@ Inutilis Software, 2015</string>
                                             </constraints>
                                         </imageView>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xW0-b5-PDA">
-                                            <rect key="frame" x="96" y="49" width="98" height="30"/>
+                                            <rect key="frame" x="96" y="90" width="98" height="30"/>
                                             <state key="normal" title="Go to Website">
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
@@ -567,8 +567,10 @@ Inutilis Software, 2015</string>
                                                 <action selector="onWebsiteTapped:" destination="u7G-9d-dgL" eventType="touchUpInside" id="GBo-xo-8MA"/>
                                             </connections>
                                         </button>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Send your program to Inutilis and we will review it and publish it on the official LowRes Coder website!" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gnl-rd-zYM">
-                                            <rect key="frame" x="96" y="8" width="496" height="41"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gnl-rd-zYM">
+                                            <rect key="frame" x="96" y="8" width="496" height="82"/>
+                                            <string key="text">Send your program to Inutilis! If we like it, we will publish it on the official LowRes Coder website!
+It doesn't have to be something big, but it should be more than some changed texts in example programs ;)</string>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
@@ -642,7 +644,7 @@ Inutilis Software, 2015</string>
                             <outlet property="delegate" destination="u7G-9d-dgL" id="igC-KT-ofg"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="LowRes Coder Web" id="ble-yo-hgv">
+                    <navigationItem key="navigationItem" title="Publish" id="ble-yo-hgv">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Pjk-qX-0wW">
                             <connections>
                                 <action selector="onCancelTapped:" destination="u7G-9d-dgL" id="JKe-1Q-LVm"/>
