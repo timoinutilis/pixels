@@ -568,7 +568,7 @@ WAIT 2
     <tr><th>B</th><td>12</td><td>24</td><td>36</td><td>48</td><td>60</td><td>72</td><td>84</td><td>96</td></tr>
 </table>
 <p>A sound with <i>pitch</i> 0 is silent and can be used as a pause.</p>
-<p>The <i>duration</i> of the note is set in 1/24 seconds. Each voice has an own queue, so sounds are played one after another without blocking the program. A maximum of 127 sounds can be queued in each voice. If <i>duration</i> is 0, the queue is cleared and the sound will start immediately and won't stop until the voice starts another sound or SOUND OFF is called.</p>
+<p>The <i>duration</i> of the note is set in 1/24 seconds. Each voice has an own queue, so sounds are played one after another without blocking the program. A maximum of 1023 sounds can be queued in each voice. If <i>duration</i> is 0, the queue is cleared and the sound will start immediately and won't stop until the voice starts another sound or SOUND OFF is called.</p>
 <p>You can set an instrument with the <i>instr</i> parameter (see DEF SOUND), otherwise the last instrument of the voice will be kept. By default the instruments are already set up with different waveforms.</p>
 <pre class="exm">
 SOUND 0,49,12,1
