@@ -716,6 +716,18 @@
         Node *constantNode;
         switch (self.token.type)
         {
+            case TTypeSymOpMinus: {
+                [self accept:TTypeSymOpMinus];
+                constantNode = [[NumberNode alloc] initWithValue:-self.token.attrNumber];
+                [self accept:TTypeNumber];
+                break;
+            }
+            case TTypeSymOpPlus: {
+                [self accept:TTypeSymOpPlus];
+                constantNode = [[NumberNode alloc] initWithValue:self.token.attrNumber];
+                [self accept:TTypeNumber];
+                break;
+            }
             case TTypeNumber: {
                 constantNode = [[NumberNode alloc] initWithValue:self.token.attrNumber];
                 [self accept:TTypeNumber];

@@ -13,9 +13,10 @@
 int const AudioNumVoices = 3;
 int const AudioNumSoundDefs = 16;
 int const AudioFilterBufSize = 7;
+int const AudioSequenceBufSize = 1024;
 
 typedef struct AudioSequence {
-    SoundNote notes[128];
+    SoundNote notes[AudioSequenceBufSize];
     int writeIndex;
     int readIndex;
     int ticks;
@@ -156,7 +157,7 @@ static double PitchToFrequency(int pitch);
     AudioSequence *sequence = &_player.sequences[voice];
     SoundNote *note = &sequence->notes[sequence->writeIndex];
     sequence->writeIndex++;
-    if (sequence->writeIndex == 128)
+    if (sequence->writeIndex == AudioSequenceBufSize)
     {
         sequence->writeIndex = 0;
     }
@@ -238,7 +239,7 @@ static void UpdateNotes(PlayerSystem *player)
                 sequence->ticks = note->duration;
                 
                 sequence->readIndex++;
-                if (sequence->readIndex == 128)
+                if (sequence->readIndex == AudioSequenceBufSize)
                 {
                     sequence->readIndex = 0;
                 }
