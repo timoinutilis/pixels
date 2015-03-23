@@ -34,10 +34,7 @@ h1 {
 <h1 id="Getting-started">Getting started</h1>
 
 <h2 id="_Tutorial">Tutorial</h2>
-<p>The first thing you will see when you enter LowRes Coder is an overview of all your programs. You can see already some included programs (marked with a little star). Let's try one! Tap on the icon of "LowRes Racing"!</p>
-<p>This will open the editor view, where you can see the source code of the selected program. Now tap on the Play button (in the top right corner) to run the program! The game will appear and you can control it with the on-screen game pad. Sometimes you may want to make the game screen smaller. Just pinch it with two fingers!</p>
-<p>When you played enough, tap on the Close button in the top left corner! If you don't see it, don't worry. It fades out after some seconds, but you can still tap it.</p>
-<p>Let's create your first own program! Go back to the overview of all programs and tap the Plus button in the top right corner. A new icon will appear at the end of the program list, called "Unnamed Program". Tap on it!</p>
+<p>Let's create your first own program! If you didn't create a new program yet, go to the overview of all programs and tap the Plus button in the top right corner. A new icon will appear at the end of the program list, called "Unnamed Program". Tap on it!</p>
 <p>You will see now an empty text editor. Write the following lines, but replace MY NAME with your own name (keep the quotation marks):</p>
 <pre class="exm">
 DO
@@ -168,7 +165,7 @@ REM >>LIVES: 2
 COLOR 2
 TEXT X,Y,"HI"
 </pre>
-<p>The parameters in the first command is 2 and in the second X, Y and "HI".</p>
+<p>The parameters in these commands are 2, X, Y and "HI".</p>
 
 <h2 id="_Labels">Labels</h2>
 <p>Labels are a way of marking lines in your programs. They can have any names with the same restrictions as variable names have, and are followed by the ":" (colon) character.</p>
@@ -183,6 +180,11 @@ GOTO TESTLABEL
 <h3 id="_PRINT">PRINT</h3>
 <pre>PRINT value</pre>
 <p>PRINT writes <i>value</i> on the screen, where <i>value</i> can be also a string or any expression. This is a simplified version of PRINT in the classic BASIC language and exists basically for testing. In a normal graphics based program you should prefer the TEXT command.</p>
+<pre class="exm">
+PRINT "HELLO"
+PRINT 2+2
+</pre>
+
 
 <h3 id="_INPUT">INPUT</h3>
 <p>In the classic BASIC language, this command is the main way of getting user input by the keyboard. As LowRes Coder doesn't support keyboard, this command does not exist here.</p>

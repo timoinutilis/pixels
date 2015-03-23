@@ -10,8 +10,12 @@
 #import "ModelManager.h"
 #import "EditorViewController.h"
 #import "HelpTextViewController.h"
+#import "AppController.h"
+#import "CoachMarkView.h"
 
 NSString *const ExplorerRefreshAddedProjectNotification = @"ExplorerRefreshAddedProjectNotification";
+
+NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 
 @interface ExplorerViewController ()
 
@@ -70,6 +74,16 @@ NSString *const ExplorerRefreshAddedProjectNotification = @"ExplorerRefreshAdded
 {
     [super viewDidAppear:animated];
     [self showAddedProject];
+    
+    AppController *app = [AppController sharedController];
+    if (app.numProgramsOpened >= 3)
+    {
+        if ([app isUnshownInfoID:CoachMarkIDAdd])
+        {
+            [app onShowInfoID:CoachMarkIDAdd];
+            [[CoachMarkView create] showWithText:@"Tap the Plus button to create your first own program!" image:@"coach_add" container:self.navigationController.view complete:nil];
+        }
+    }
 }
 
 - (void)loadProjects
@@ -106,6 +120,8 @@ NSString *const ExplorerRefreshAddedProjectNotification = @"ExplorerRefreshAdded
 
 - (void)onAddTapped:(id)sender
 {
+    [[AppController sharedController] onShowInfoID:CoachMarkIDAdd];
+    
     [[ModelManager sharedManager] createNewProject];
     [self showAddedProject];
 }
@@ -135,6 +151,8 @@ NSString *const ExplorerRefreshAddedProjectNotification = @"ExplorerRefreshAdded
         vc.project = cell.project;
         
         self.lastSelectedProject = cell.project;
+        
+        [[AppController sharedController] onProgramOpened];
     }
     else if ([segue.identifier isEqualToString:@"About"])
     {

@@ -10,6 +10,8 @@
 
 NSString *const FullVersionProductID = @"fullversion";
 
+NSString *const NumProgramsOpenedKey = @"NumProgramsOpened";
+
 NSString *const PurchaseStateNotification = @"PurchaseStateNotification";
 
 @implementation AppController
@@ -167,6 +169,19 @@ NSString *const PurchaseStateNotification = @"PurchaseStateNotification";
 {
     NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
     [storage setBool:YES forKey:infoId];
+    [storage synchronize];
+}
+
+- (NSInteger)numProgramsOpened
+{
+    NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
+    return [storage integerForKey:NumProgramsOpenedKey];
+}
+
+- (void)onProgramOpened
+{
+    NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
+    [storage setInteger:([storage integerForKey:NumProgramsOpenedKey] + 1) forKey:NumProgramsOpenedKey];
     [storage synchronize];
 }
 

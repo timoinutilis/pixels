@@ -23,6 +23,7 @@ extern NSString *const PurchaseStateNotification;
 @property (readonly) PurchaseState purchaseState;
 @property (readonly) BOOL isFullVersion;
 @property (readonly) SKProduct *fullVersionProduct;
+@property (readonly) NSInteger numProgramsOpened;
 @property BOOL shouldShowTransferAlert;
 
 + (AppController *)sharedController;
@@ -33,5 +34,7 @@ extern NSString *const PurchaseStateNotification;
 
 - (BOOL)isUnshownInfoID:(NSString *)infoId;
 - (void)onShowInfoID:(NSString *)infoId;
+
+- (void)onProgramOpened;
 
 @end

@@ -26,6 +26,7 @@
 int const EditorDemoMaxLines = 24;
 NSString *const CoachMarkIDStart = @"CoachMarkIDStart";
 NSString *const CoachMarkIDShare = @"CoachMarkIDShare";
+NSString *const CoachMarkIDHelp = @"CoachMarkIDHelp";
 
 
 @interface EditorViewController ()
@@ -103,6 +104,14 @@ NSString *const CoachMarkIDShare = @"CoachMarkIDShare";
         {
             [app onShowInfoID:CoachMarkIDShare];
         [[CoachMarkView create] showWithText:@"Are you happy with your program? Share it on the LowRes Coder website!" image:@"coach_share" container:self.navigationController.view complete:nil];
+        }
+    }
+    else if ([self.sourceCodeTextView.text isEqualToString:@""])
+    {
+        if ([app isUnshownInfoID:CoachMarkIDHelp])
+        {
+            [app onShowInfoID:CoachMarkIDHelp];
+            [[CoachMarkView create] showWithText:@"Tap the Help button to learn how to create your own programs!" image:@"coach_help" container:self.navigationController.view complete:nil];
         }
     }
 }
