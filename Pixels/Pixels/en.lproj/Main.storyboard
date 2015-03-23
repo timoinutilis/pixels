@@ -383,19 +383,19 @@ The upgrade is valid for all your devices and without time limit.</string>
                                     <constraint firstAttribute="width" constant="130" placeholder="YES" id="I1z-XH-Kcj"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" alpha="0.5" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gGg-rj-ecJ" userLabel="Button A">
-                                <rect key="frame" x="420" y="444" width="68" height="68"/>
-                                <state key="normal" image="button_a">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <state key="highlighted" image="button_a_pressed"/>
-                            </button>
-                            <button opaque="NO" alpha="0.5" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WUP-DK-URn" userLabel="Button B">
-                                <rect key="frame" x="488" y="382" width="68" height="68"/>
+                            <button opaque="NO" alpha="0.5" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WUP-DK-URn" userLabel="Button B" customClass="GameButton">
+                                <rect key="frame" x="494" y="382" width="68" height="68"/>
                                 <state key="normal" image="button_b">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <state key="highlighted" image="button_b_pressed"/>
+                            </button>
+                            <button opaque="NO" alpha="0.5" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gGg-rj-ecJ" userLabel="Button A" customClass="GameButton">
+                                <rect key="frame" x="426" y="444" width="68" height="68"/>
+                                <state key="normal" image="button_a">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted" image="button_a_pressed"/>
                             </button>
                         </subviews>
                         <gestureRecognizers/>
@@ -415,9 +415,9 @@ The upgrade is valid for all your devices and without time limit.</string>
                                 <variation key="heightClass=compact" constant="11"/>
                                 <variation key="widthClass=compact" constant="11"/>
                             </constraint>
-                            <constraint firstAttribute="trailing" secondItem="WUP-DK-URn" secondAttribute="trailing" constant="44" id="lML-pE-zo0">
-                                <variation key="heightClass=compact" constant="11"/>
-                                <variation key="widthClass=compact" constant="11"/>
+                            <constraint firstAttribute="trailing" secondItem="WUP-DK-URn" secondAttribute="trailing" constant="38" id="lML-pE-zo0">
+                                <variation key="heightClass=compact" constant="5"/>
+                                <variation key="widthClass=compact" constant="5"/>
                             </constraint>
                             <constraint firstItem="vm8-Vn-fOJ" firstAttribute="top" secondItem="gGg-rj-ecJ" secondAttribute="bottom" constant="88" id="oc7-0l-h6D">
                                 <variation key="heightClass=compact" constant="11"/>

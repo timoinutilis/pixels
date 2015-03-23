@@ -53,6 +53,7 @@
 		928FB8991A5C804200EA377F /* GORSeparatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 928FB8981A5C804200EA377F /* GORSeparatorView.m */; };
 		929797FD1A50956900DB5D70 /* PublishActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 929797FC1A50956900DB5D70 /* PublishActivity.m */; };
 		92A0EC0D1A56DA1F0051D74C /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 92A0EC0B1A56DA1F0051D74C /* Model.xcdatamodeld */; };
+		92B60FE31AC024250011233B /* GameButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 92B60FE21AC024250011233B /* GameButton.m */; };
 		92B7A5331AA8C71000B6CA81 /* AudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 92B7A5321AA8C71000B6CA81 /* AudioPlayer.m */; };
 		92C98F3F1A20CFD900215AE9 /* ProgramException.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C98F3E1A20CFD900215AE9 /* ProgramException.m */; };
 		92C98F421A20F2F000215AE9 /* Node.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C98F411A20F2F000215AE9 /* Node.m */; };
@@ -164,6 +165,8 @@
 		929797FC1A50956900DB5D70 /* PublishActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublishActivity.m; sourceTree = "<group>"; };
 		92A0EC0C1A56DA1F0051D74C /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		92A0EC0E1A56DA630051D74C /* Model 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 2.xcdatamodel"; sourceTree = "<group>"; };
+		92B60FE11AC024250011233B /* GameButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameButton.h; sourceTree = "<group>"; };
+		92B60FE21AC024250011233B /* GameButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameButton.m; sourceTree = "<group>"; };
 		92B7A5311AA8C71000B6CA81 /* AudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioPlayer.h; sourceTree = "<group>"; };
 		92B7A5321AA8C71000B6CA81 /* AudioPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioPlayer.m; sourceTree = "<group>"; };
 		92C98F3D1A20CFD900215AE9 /* ProgramException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgramException.h; sourceTree = "<group>"; };
@@ -235,6 +238,8 @@
 				9231159E1A444A6B00624201 /* RendererView.m */,
 				92EDC4401A54701D007824A5 /* Gamepad.h */,
 				92EDC4411A54701D007824A5 /* Gamepad.m */,
+				92B60FE11AC024250011233B /* GameButton.h */,
+				92B60FE21AC024250011233B /* GameButton.m */,
 				921B234A1A9E3DA800C45AFA /* EditorTextView.h */,
 				921B234B1A9E3DA800C45AFA /* EditorTextView.m */,
 				920E681B1AB731620038994A /* CoachMarkView.h */,
@@ -588,6 +593,7 @@
 				92E53DF51A5B3A1D00FE9F91 /* GORScrollViewDelegate.m in Sources */,
 				92E53DF71A5B3A1D00FE9F91 /* GORTextView.m in Sources */,
 				9276F3921A1D289C0060E909 /* AppDelegate.m in Sources */,
+				92B60FE31AC024250011233B /* GameButton.m in Sources */,
 				9276F3B41A1D29BF0060E909 /* Scanner.m in Sources */,
 				92EDC4421A54701D007824A5 /* Gamepad.m in Sources */,
 				925A01A91A1E67F900A321E6 /* Parser.m in Sources */,
