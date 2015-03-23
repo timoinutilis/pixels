@@ -17,11 +17,11 @@ if (   empty($_REQUEST['secret'])
 else
 {
 	$secret = $_REQUEST['secret'];
-	$author = urldecode($_REQUEST['author']);
-	$mail = filter_var(urldecode($_REQUEST['mail']), FILTER_SANITIZE_EMAIL);
-	$title = urldecode($_REQUEST['title']);
-	$description = urldecode($_REQUEST['description']);
-	$source_code = urldecode($_REQUEST['source_code']);
+	$author = $_REQUEST['author'];
+	$mail = filter_var($_REQUEST['mail'], FILTER_SANITIZE_EMAIL);
+	$title = $_REQUEST['title'];
+	$description = $_REQUEST['description'];
+	$source_code = $_REQUEST['source_code'];
 
 	if ($secret != "916486295")
 	{
