@@ -46,7 +46,7 @@
 
 - (void)goHome
 {
-    NSURL *url = [[NSURL alloc] initWithString:@"http://lowres.inutilis.com"];
+    NSURL *url = [[NSURL alloc] initWithString:@"http://lowres.inutilis.com/news-and-programs"];
     [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:url]];
 }
 
