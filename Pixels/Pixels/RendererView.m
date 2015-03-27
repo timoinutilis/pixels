@@ -59,6 +59,8 @@
     {
         int rendererSize = self.renderer.size;
         uint32_t *dataPixels = nil;
+        uint32_t lastColor = 0;
+        int changeX;
         if (data)
         {
             dataPixels = (uint32_t *)data.bytes;
@@ -66,22 +68,34 @@
         
         CGFloat pixelWidth = size.width / rendererSize;
         CGFloat pixelHeight = size.height / rendererSize;
-        myRect.size.width = ceilf(pixelWidth);// * 0.99;
-        myRect.size.height = ceilf(pixelHeight);// * 0.99;
+        myRect.size.height = ceilf(pixelHeight);
         
         for (int y = 0; y < rendererSize; y++)
         {
+            myRect.origin.x = 0.0;
             myRect.origin.y = floorf(y * pixelHeight);
-            for (int x = 0; x < rendererSize; x++)
+            changeX = 0;
+            for (int x = 0; x <= rendererSize; x++)
             {
-                myRect.origin.x = floorf(x * pixelWidth);
-                uint32_t color = dataPixels != nil ? dataPixels[y * rendererSize + x] : [self.renderer screenColorAtX:x Y:y];
-                
-                components[0] = ((color >> 16) & 0xFF) / 255.0;
-                components[1] = ((color >> 8) & 0xFF) / 255.0;
-                components[2] = (color & 0xFF) / 255.0;
-                CGContextSetFillColor(context, components);
-                CGContextFillRect(context, myRect);
+                uint32_t color = 0;
+                if (x < rendererSize)
+                {
+                    color = dataPixels != nil ? dataPixels[y * rendererSize + x] : [self.renderer screenColorAtX:x Y:y];
+                }
+                if ((x > 0 && color != lastColor) || x == rendererSize)
+                {
+                    myRect.size.width = ceilf(pixelWidth * (x - changeX));
+                    
+                    components[0] = ((lastColor >> 16) & 0xFF) / 255.0;
+                    components[1] = ((lastColor >> 8) & 0xFF) / 255.0;
+                    components[2] = (lastColor & 0xFF) / 255.0;
+                    CGContextSetFillColor(context, components);
+                    CGContextFillRect(context, myRect);
+                    
+                    changeX = x;
+                    myRect.origin.x = floorf((x) * pixelWidth);
+                }
+                lastColor = color;
             }
         }
     }
