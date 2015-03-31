@@ -51,7 +51,7 @@ NSString *const CoachMarkIDHelp = @"CoachMarkIDHelp";
     self.navigationItem.rightBarButtonItems = @[runButton, helpButton];
     
     self.sourceCodeTextView.text = self.project.sourceCode ? self.project.sourceCode : @"";
-    if ([self isExample])
+    if ([self isExample] && ![AppController sharedController].isFullVersion)
     {
         self.sourceCodeTextView.pastable = NO;
     }

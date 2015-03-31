@@ -136,7 +136,7 @@
         NSData *best;
         int bestQuality = -1;
         NSUInteger first = self.snapshots.count * 0.3;
-        NSUInteger last = MAX(1.0, self.snapshots.count * 0.7);
+        NSUInteger last = MAX(1.0, ceil(self.snapshots.count * 0.7));
         for (NSUInteger i = first; i < last; i++)
         {
             NSData *snapshot = self.snapshots[i];
