@@ -192,7 +192,7 @@ PRINT 2+2
 <h3 id="_WAIT">WAIT</h3>
 <pre>WAIT seconds [GAMEPAD]</pre>
 <p>WAIT pauses the execution of the program for the time set by the <i>seconds</i> parameter. The shortes wait time is 0.04 seconds. If you add the GAMEPAD keyword, the waiting will be interrupted by any tap on a gamepad button.</p>
-<p>This command has an important side effect: It updates the screen. If you draw something in a loop, you always have to call WAIT to actually see it on the screen.</p>
+<p>This command has an important side effect: It updates the screen. If you draw something in a loop, you won't see it on screen until you call WAIT (or the program ends).</p>
 <pre class="exm">
 FOR X=0 TO 63
   PLOT X,31

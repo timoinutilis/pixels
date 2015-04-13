@@ -263,6 +263,9 @@
         case TTypeSymLayer:
             node = [self acceptLayer];
             break;
+        case TTypeSymPaint:
+            node = [self acceptPaint];
+            break;
         default: {
             NSException *exception = [ProgramException exceptionWithName:@"ExpectedCommand" reason:@"Expected command" token:self.token];
             @throw exception;
@@ -308,6 +311,7 @@
         case TTypeSymSprite:
         case TTypeSymSound:
         case TTypeSymLayer:
+        case TTypeSymPaint:
             return YES;
         
         case TTypeSymEnd: {
@@ -874,6 +878,16 @@
     LayerNode *node = [[LayerNode alloc] init];
     [self accept:TTypeSymLayer];
     node.nExpression = [self acceptExpression];
+    return node;
+}
+
+- (Node *)acceptPaint
+{
+    PaintNode *node = [[PaintNode alloc] init];
+    [self accept:TTypeSymPaint];
+    node.xExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.yExpression = [self acceptExpression];
     return node;
 }
 

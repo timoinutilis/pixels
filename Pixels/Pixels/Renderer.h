@@ -41,6 +41,7 @@ extern int const RendererSpriteSize;
 - (void)scrollFromX:(int)fromX Y:(int)fromY toX:(int)toX Y:(int)toY deltaX:(int)deltaX Y:(int)deltaY;
 - (void)drawCircleX:(int)x Y:(int)y radiusX:(int)radiusX radiusY:(int)radiusY;
 - (void)fillCircleX:(int)x Y:(int)y radiusX:(int)radiusX radiusY:(int)radiusY;
+- (void)floodFillX:(int)x Y:(int)y;
 - (void)drawText:(NSString *)text x:(int)x y:(int)y;
 - (int)widthForText:(NSString *)text;
 - (Sprite *)spriteAtIndex:(int)index;
@@ -49,4 +50,11 @@ extern int const RendererSpriteSize;
 
 - (uint32_t)screenColorAtX:(int)x Y:(int)y;
 
+@end
+
+
+@interface RendererPoint : NSObject
+@property int x;
+@property int y;
++ (RendererPoint *)pointWithX:(int)x Y:(int)y;
 @end

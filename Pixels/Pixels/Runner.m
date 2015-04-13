@@ -495,4 +495,14 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
     return offset;
 }
 
+- (int)intAtOffset:(NSUInteger)offset;
+{
+    NSNumber *number = _values[offset];
+    if (number && (id)number != [NSNull null])
+    {
+        return number.intValue;
+    }
+    return 0;
+}
+
 @end

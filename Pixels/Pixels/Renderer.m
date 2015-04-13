@@ -215,6 +215,62 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
     
 }
 
+- (void)floodFillX:(int)x Y:(int)y
+{
+    int oldColor = [self colorAtX:x Y:y];
+    int newColor = _colorIndex;
+    int h = RendererSize;
+    int w = RendererSize;
+    
+    if (oldColor == newColor || oldColor == -1) return;
+    
+    NSMutableArray *stack = [NSMutableArray array];
+    
+    int y1;
+    bool spanLeft, spanRight;
+    
+    [stack addObject:[RendererPoint pointWithX:x Y:y]];
+    
+    RendererPoint *point;
+    while ((point = stack.lastObject))
+    {
+        [stack removeLastObject];
+        x = point.x;
+        y = point.y;
+        
+        y1 = y;
+        while (y1 >= 0 && _pixelBuffer[_layerIndex][y1][x] == oldColor)
+        {
+            y1--;
+        }
+        y1++;
+        spanLeft = spanRight = 0;
+        while (y1 < h && _pixelBuffer[_layerIndex][y1][x] == oldColor)
+        {
+            _pixelBuffer[_layerIndex][y1][x] = newColor;
+            if (!spanLeft && x > 0 && _pixelBuffer[_layerIndex][y1][x - 1] == oldColor)
+            {
+                [stack addObject:[RendererPoint pointWithX:x - 1 Y:y1]];
+                spanLeft = 1;
+            }
+            else if (spanLeft && x > 0 && _pixelBuffer[_layerIndex][y1][x - 1] != oldColor)
+            {
+                spanLeft = 0;
+            }
+            if (!spanRight && x < w - 1 && _pixelBuffer[_layerIndex][y1][x + 1] == oldColor)
+            {
+                [stack addObject:[RendererPoint pointWithX:x + 1 Y:y1]];
+                spanRight = 1;
+            }
+            else if (spanRight && x < w - 1 && _pixelBuffer[_layerIndex][y1][x + 1] != oldColor)
+            {
+                spanRight = 0;
+            }
+            y1++;
+        }
+    }
+}
+
 - (void)drawText:(NSString *)text x:(int)x y:(int)y
 {
     for (NSUInteger index = 0; index < text.length; index++)
@@ -351,6 +407,19 @@ uint8_t getSpritePixel(SpriteDef *def, int x, int y)
     }
     
     return ColorPalette[colorIndex];
+}
+
+@end
+
+
+@implementation RendererPoint
+
++ (RendererPoint *)pointWithX:(int)x Y:(int)y
+{
+    RendererPoint *point = [[RendererPoint alloc] init];
+    point.x = x;
+    point.y = y;
+    return point;
 }
 
 @end

@@ -29,6 +29,7 @@
 @property (readonly) NSArray *sizes;
 - (instancetype)initWithSizes:(NSArray *)sizes;
 - (NSUInteger)offsetForIndexes:(NSArray *)indexes;
+- (int)intAtOffset:(NSUInteger)offset;
 @end
 
 

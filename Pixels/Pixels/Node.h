@@ -156,6 +156,11 @@
 @property Node *alignExpression;
 @end
 
+@interface PaintNode : Node
+@property Node *xExpression;
+@property Node *yExpression;
+@end
+
 @interface DefSpriteNode : Node
 @property Node *imageExpression;
 @property VariableNode *dataVariable;

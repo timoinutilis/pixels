@@ -755,11 +755,11 @@ NSString *const TRANSFER = @"TRANSFER";
     NSNumber *y = [self.yExpression evaluateWithRunner:runner];
     NSNumber *align = [self.alignExpression evaluateWithRunner:runner];
     int alignInt = align.intValue;
-    float xPos = x.floatValue;
+    int xPos = x.intValue;
     NSString *text = [value description];
     if (alignInt > 0)
     {
-        float width = [runner.renderer widthForText:text] - 2;
+        int width = [runner.renderer widthForText:text] - 2;
         if (alignInt == 1)
         {
             xPos -= width / 2;
@@ -769,7 +769,28 @@ NSString *const TRANSFER = @"TRANSFER";
             xPos -= width;
         }
     }
-    [runner.renderer drawText:text x:roundf(xPos) y:roundf(y.floatValue)];
+    [runner.renderer drawText:text x:xPos y:y.intValue];
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
+@implementation PaintNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.xExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.yExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    NSNumber *x = [self.xExpression evaluateWithRunner:runner];
+    NSNumber *y = [self.yExpression evaluateWithRunner:runner];
+    [runner.renderer floodFillX:x.intValue Y:y.intValue];
     [runner next];
     return nil;
 }
@@ -800,8 +821,8 @@ NSString *const TRANSFER = @"TRANSFER";
     SpriteDef *def = [runner.renderer spriteDefAtIndex:image.intValue];
     for (int i = 0; i < RendererSpriteSize; i++)
     {
-        int val1 = ((NSNumber *)arrayVariable.values[i << 1]).intValue & 0xFF;
-        int val2 = ((NSNumber *)arrayVariable.values[(i << 1) + 1]).intValue & 0xFF;
+        int val1 = [arrayVariable intAtOffset:(i << 1)] & 0xFF;
+        int val2 = [arrayVariable intAtOffset:(i << 1) + 1] & 0xFF;
         def->data[i] = (val1 << 8) | val2;
     }
     
