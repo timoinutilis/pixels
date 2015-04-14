@@ -11,6 +11,7 @@
 #import "AFNetworking.h"
 #import "GORTextView.h"
 #import "GORSeparatorView.h"
+#import "AppStyle.h"
 
 @interface ShareViewController ()
 @property ShareHeaderCell *headerCell;
@@ -43,26 +44,37 @@
 {
     [super viewDidLoad];
     
+    [AppStyle styleNavigationController:self.navigationController];
+    self.view.backgroundColor = [AppStyle brightColor];
+    self.descriptionTextView.textColor = [AppStyle darkColor];
+    self.tableView.separatorColor = [AppStyle barColor];
+    
+    self.tableView.estimatedRowHeight = 44.0;
+    
     self.headerCell = [self.tableView dequeueReusableCellWithIdentifier:@"HeaderCell"];
     self.headerCell.iconImageView.image = (self.project.iconData) ? [UIImage imageWithData:self.project.iconData] : [UIImage imageNamed:@"icon_project"];
+    self.headerCell.backgroundColor = [UIColor clearColor];
     
     self.titleCell = [self.tableView dequeueReusableCellWithIdentifier:@"TextFieldCell"];
     self.titleCell.label.text = @"Title:";
     self.titleCell.textField.text = self.project.name;
     self.titleCell.textField.autocapitalizationType = UITextAutocapitalizationTypeWords;
     self.titleCell.separatorView.separatorColor = self.tableView.separatorColor;
+    self.titleCell.backgroundColor = [UIColor clearColor];
     
     self.authorCell = [self.tableView dequeueReusableCellWithIdentifier:@"TextFieldCell"];
     self.authorCell.label.text = @"Author:";
     self.authorCell.textField.autocapitalizationType = UITextAutocapitalizationTypeWords;
     self.authorCell.separatorView.separatorColor = self.tableView.separatorColor;
-
+    self.authorCell.backgroundColor = [UIColor clearColor];
+    
     self.mailCell = [self.tableView dequeueReusableCellWithIdentifier:@"TextFieldCell"];
     self.mailCell.label.text = @"E-Mail:";
     self.mailCell.textField.autocorrectionType = UITextAutocorrectionTypeNo;
     self.mailCell.textField.keyboardType = UIKeyboardTypeEmailAddress;
     self.mailCell.textField.placeholder = @"Optional, will not be published";
     self.mailCell.separatorView.separatorColor = self.tableView.separatorColor;
+    self.mailCell.backgroundColor = [UIColor clearColor];
     
     [self addCell:self.headerCell];
     [self addCell:self.titleCell];
@@ -71,6 +83,7 @@
     
     self.descriptionTextView.placeholderView = self.descriptionPlaceholderLabel;
     self.descriptionTextView.hidePlaceholderWhenFirstResponder = YES;
+    self.descriptionPlaceholderLabel.textColor = [AppStyle barColor];
     
     self.separator2View.separatorColor = self.tableView.separatorColor;
 }
@@ -89,7 +102,7 @@
     {
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Please fill out all required fields!" message:nil preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-        alert.view.tintColor = self.view.tintColor;
+        alert.view.tintColor = [AppStyle alertTintColor];
         [self presentViewController:alert animated:YES completion:nil];
     }
     else
@@ -122,7 +135,7 @@
             [self isBusy:NO];
             UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Error" message:response[@"error"] preferredStyle:UIAlertControllerStyleAlert];
             [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-            alert.view.tintColor = self.view.tintColor;
+            alert.view.tintColor = [AppStyle alertTintColor];
             [self presentViewController:alert animated:YES completion:nil];
         }
         else
@@ -135,7 +148,7 @@
         [self isBusy:NO];
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Error" message:@"Could not send program. Please try later!" preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-        alert.view.tintColor = self.view.tintColor;
+        alert.view.tintColor = [AppStyle alertTintColor];
         [self presentViewController:alert animated:YES completion:nil];
         
         NSLog(@"error: %@", error);
@@ -148,7 +161,7 @@
     self.cancelItem.enabled = !isBusy;
     if (isBusy)
     {
-        UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
         activityView.frame = CGRectMake(0, 0, 44, 44);
         [activityView startAnimating];
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityView];
@@ -166,20 +179,22 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
+    self.headerLabel.textColor = [AppStyle darkColor];
+    self.headerLabel.text = @"Send your program to Inutilis! If we like it, we will publish it on the official LowRes Coder website!";
     CALayer *imageLayer = self.iconImageView.layer;
     imageLayer.cornerRadius = 20;
     imageLayer.masksToBounds = YES;
 }
 
-- (void)layoutSubviews
-{
-    CGFloat availableLabelWidth = self.frame.size.width - 80 - 30; //HACK
-    self.headerLabel.preferredMaxLayoutWidth = availableLabelWidth;
-    [super layoutSubviews];
-}
-
 @end
 
 @implementation TextFieldCell
+
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    self.label.textColor = [AppStyle barColor];
+    self.textField.textColor = [AppStyle darkColor];
+}
 
 @end

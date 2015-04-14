@@ -9,6 +9,7 @@
 #import "WebViewController.h"
 #import "ModelManager.h"
 #import "ExplorerViewController.h"
+#import "AppStyle.h"
 
 @interface WebViewController ()
 
@@ -27,7 +28,9 @@
 {
     [super viewDidLoad];
     
-    self.activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    [AppStyle styleNavigationController:self.navigationController];
+    
+    self.activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     UIBarButtonItem *activityItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityView];
     
     NSMutableArray *toolbarItems = [NSMutableArray array];

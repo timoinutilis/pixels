@@ -59,6 +59,9 @@
 		92C98F421A20F2F000215AE9 /* Node.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C98F411A20F2F000215AE9 /* Node.m */; };
 		92D518B91A6975C10000F917 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D518B81A6975C10000F917 /* AboutViewController.m */; };
 		92E2B8AA1A52F08D00D0DF29 /* ActivityItemSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E2B8A91A52F08D00D0DF29 /* ActivityItemSource.m */; };
+		92E36D191ADD294E00C16CBE /* UIColor+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E36D181ADD294E00C16CBE /* UIColor+Utils.m */; };
+		92E36D1C1ADD2D4300C16CBE /* AppStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E36D1B1ADD2D4200C16CBE /* AppStyle.m */; };
+		92E36D1F1ADD679D00C16CBE /* GORLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E36D1E1ADD679D00C16CBE /* GORLabel.m */; };
 		92E53DF41A5B3A1D00FE9F91 /* GORMenuTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E53DED1A5B3A1D00FE9F91 /* GORMenuTableViewController.m */; };
 		92E53DF51A5B3A1D00FE9F91 /* GORScrollViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E53DEF1A5B3A1D00FE9F91 /* GORScrollViewDelegate.m */; };
 		92E53DF61A5B3A1D00FE9F91 /* GORTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E53DF11A5B3A1D00FE9F91 /* GORTableViewController.m */; };
@@ -177,6 +180,12 @@
 		92D518B81A6975C10000F917 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
 		92E2B8A81A52F08D00D0DF29 /* ActivityItemSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityItemSource.h; sourceTree = "<group>"; };
 		92E2B8A91A52F08D00D0DF29 /* ActivityItemSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityItemSource.m; sourceTree = "<group>"; };
+		92E36D171ADD294E00C16CBE /* UIColor+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+Utils.h"; path = "Class Utils/UIColor+Utils.h"; sourceTree = "<group>"; };
+		92E36D181ADD294E00C16CBE /* UIColor+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+Utils.m"; path = "Class Utils/UIColor+Utils.m"; sourceTree = "<group>"; };
+		92E36D1A1ADD2D4200C16CBE /* AppStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppStyle.h; sourceTree = "<group>"; };
+		92E36D1B1ADD2D4200C16CBE /* AppStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppStyle.m; sourceTree = "<group>"; };
+		92E36D1D1ADD679D00C16CBE /* GORLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GORLabel.h; sourceTree = "<group>"; };
+		92E36D1E1ADD679D00C16CBE /* GORLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GORLabel.m; sourceTree = "<group>"; };
 		92E53DEC1A5B3A1D00FE9F91 /* GORMenuTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GORMenuTableViewController.h; sourceTree = "<group>"; };
 		92E53DED1A5B3A1D00FE9F91 /* GORMenuTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GORMenuTableViewController.m; sourceTree = "<group>"; };
 		92E53DEE1A5B3A1D00FE9F91 /* GORScrollViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GORScrollViewDelegate.h; sourceTree = "<group>"; };
@@ -215,6 +224,8 @@
 			children = (
 				9204C1F01A6B458200A0123C /* NSString+Utils.h */,
 				9204C1F11A6B458200A0123C /* NSString+Utils.m */,
+				92E36D171ADD294E00C16CBE /* UIColor+Utils.h */,
+				92E36D181ADD294E00C16CBE /* UIColor+Utils.m */,
 			);
 			name = "Class Utils";
 			sourceTree = "<group>";
@@ -378,6 +389,8 @@
 				9276F3911A1D289C0060E909 /* AppDelegate.m */,
 				926864251AA6087300F305B9 /* AppController.h */,
 				926864261AA6087300F305B9 /* AppController.m */,
+				92E36D1A1ADD2D4200C16CBE /* AppStyle.h */,
+				92E36D1B1ADD2D4200C16CBE /* AppStyle.m */,
 				9231159C1A444A4100624201 /* Views */,
 				927333F11A2A3EDD00C89AF0 /* View Controllers */,
 				9276F3B51A1D29D30060E909 /* Compiler */,
@@ -466,6 +479,8 @@
 				92E53DF31A5B3A1D00FE9F91 /* GORTextView.m */,
 				928FB8971A5C804200EA377F /* GORSeparatorView.h */,
 				928FB8981A5C804200EA377F /* GORSeparatorView.m */,
+				92E36D1D1ADD679D00C16CBE /* GORLabel.h */,
+				92E36D1E1ADD679D00C16CBE /* GORLabel.m */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -587,6 +602,7 @@
 				9276F3951A1D289C0060E909 /* EditorViewController.m in Sources */,
 				9267E87F1A5AF61B00D08C42 /* AFHTTPRequestOperation.m in Sources */,
 				9267E8861A5AF61B00D08C42 /* AFURLResponseSerialization.m in Sources */,
+				92E36D191ADD294E00C16CBE /* UIColor+Utils.m in Sources */,
 				9272C1491A1DE2D000E97957 /* Token.m in Sources */,
 				9204C1F21A6B458200A0123C /* NSString+Utils.m in Sources */,
 				92E2B8AA1A52F08D00D0DF29 /* ActivityItemSource.m in Sources */,
@@ -596,6 +612,7 @@
 				92B60FE31AC024250011233B /* GameButton.m in Sources */,
 				9276F3B41A1D29BF0060E909 /* Scanner.m in Sources */,
 				92EDC4421A54701D007824A5 /* Gamepad.m in Sources */,
+				92E36D1C1ADD2D4300C16CBE /* AppStyle.m in Sources */,
 				925A01A91A1E67F900A321E6 /* Parser.m in Sources */,
 				9267E8831A5AF61B00D08C42 /* AFSecurityPolicy.m in Sources */,
 				9267E8871A5AF61B00D08C42 /* AFURLSessionManager.m in Sources */,
@@ -606,6 +623,7 @@
 				92C98F3F1A20CFD900215AE9 /* ProgramException.m in Sources */,
 				9267E8821A5AF61B00D08C42 /* AFNetworkReachabilityManager.m in Sources */,
 				926864271AA6087300F305B9 /* AppController.m in Sources */,
+				92E36D1F1ADD679D00C16CBE /* GORLabel.m in Sources */,
 				9276F38F1A1D289C0060E909 /* main.m in Sources */,
 				9267E8801A5AF61B00D08C42 /* AFHTTPRequestOperationManager.m in Sources */,
 				92D518B91A6975C10000F917 /* AboutViewController.m in Sources */,

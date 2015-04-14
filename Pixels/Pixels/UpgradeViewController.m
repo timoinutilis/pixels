@@ -8,6 +8,7 @@
 
 #import "UpgradeViewController.h"
 #import "AppController.h"
+#import "AppStyle.h"
 #import <StoreKit/StoreKit.h>
 
 @interface UpgradeViewController ()
@@ -25,6 +26,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [AppStyle styleNavigationController:self.navigationController];
+    self.view.backgroundColor = [AppStyle brightColor];
+    self.titleLabel.textColor = [AppStyle darkColor];
+    self.descriptionLabel.textColor = [AppStyle darkColor];
     
     if ([SKPaymentQueue canMakePayments] && [AppController sharedController].purchaseState == PurchaseStateUninitialized)
     {

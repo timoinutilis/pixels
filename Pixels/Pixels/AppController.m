@@ -7,6 +7,7 @@
 //
 
 #import "AppController.h"
+#import "AppStyle.h"
 
 NSString *const FullVersionProductID = @"fullversion";
 
@@ -47,7 +48,7 @@ NSString *const PurchaseStateNotification = @"PurchaseStateNotification";
 
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-    alert.view.tintColor = vc.view.tintColor;
+    alert.view.tintColor = [AppStyle alertTintColor];
     
     [vc presentViewController:alert animated:YES completion:nil];
 }

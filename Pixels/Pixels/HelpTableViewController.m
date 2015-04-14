@@ -9,6 +9,7 @@
 #import "HelpTableViewController.h"
 #import "HelpTextViewController.h"
 #import "HelpContent.h"
+#import "AppStyle.h"
 
 @interface HelpTableViewController ()
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *doneButton;
@@ -21,6 +22,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [AppStyle styleNavigationController:self.navigationController];
+    self.view.backgroundColor = [AppStyle brightColor];
+    self.tableView.separatorColor = [AppStyle barColor];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -70,6 +75,8 @@
     
     cell.textLabel.text = chapter.title;
     cell.indentationLevel = chapter.level;
+    cell.backgroundColor = [AppStyle brightColor];
+    cell.textLabel.textColor = [AppStyle darkColor];
     
     return cell;
 }

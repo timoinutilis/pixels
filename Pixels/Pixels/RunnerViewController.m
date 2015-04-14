@@ -17,6 +17,7 @@
 #import "AudioPlayer.h"
 #import "AppController.h"
 #import "CoachMarkView.h"
+#import "AppStyle.h"
 
 NSString *const CoachMarkIDScale = @"CoachMarkIDScale";
 
@@ -225,7 +226,7 @@ NSString *const CoachMarkIDScale = @"CoachMarkIDScale";
             [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                 [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
             }]];
-            alert.view.tintColor = self.view.tintColor;
+            alert.view.tintColor = [AppStyle alertTintColor];
             [self presentViewController:alert animated:YES completion:nil];
             
             self.runner.endRequested = NO;
