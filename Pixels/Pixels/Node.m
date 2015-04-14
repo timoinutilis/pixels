@@ -536,7 +536,7 @@ NSString *const TRANSFER = @"TRANSFER";
         @throw [ProgramException invalidParameterExceptionWithNode:self value:value.floatValue];
     }
     NSTimeInterval timeInterval = MAX(value.floatValue, 0.04);
-    if (self.gamepad)
+    if (self.tap)
     {
         __block int oldFlags = [runner.delegate currentGamepadFlags];
         
@@ -1330,17 +1330,40 @@ NSString *const TRANSFER = @"TRANSFER";
     switch (button.intValue)
     {
         case 0:
-            result = [runner.delegate isButtonDown:ButtonTypeA] || [runner.delegate isButtonDown:ButtonTypeB];
+        {
+            BOOL downA = [runner.delegate isButtonDown:ButtonTypeA];
+            BOOL downB = [runner.delegate isButtonDown:ButtonTypeB];
+            result = downA || downB;
+            if (self.tap && result && (runner.buttonATapped || runner.buttonBTapped))
+            {
+                result = NO;
+            }
+            runner.buttonATapped = downA;
+            runner.buttonBTapped = downB;
             break;
-            
+        }
         case 1:
-            result = [runner.delegate isButtonDown:ButtonTypeA];
+        {
+            BOOL down = [runner.delegate isButtonDown:ButtonTypeA];
+            result = down;
+            if (self.tap && result && runner.buttonATapped)
+            {
+                result = NO;
+            }
+            runner.buttonATapped = down;
             break;
-            
+        }
         case 2:
-            result = [runner.delegate isButtonDown:ButtonTypeB];
+        {
+            BOOL down = [runner.delegate isButtonDown:ButtonTypeB];
+            result = down;
+            if (self.tap && result && runner.buttonBTapped)
+            {
+                result = NO;
+            }
+            runner.buttonBTapped = down;
             break;
-            
+        }
         default:
             @throw [ProgramException invalidParameterExceptionWithNode:self value:button.intValue];
             break;

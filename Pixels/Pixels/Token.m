@@ -95,6 +95,7 @@
         case TTypeSymSin: return @"SIN";
         case TTypeSymSqr: return @"SQR";
         case TTypeSymTan: return @"TAN";
+        case TTypeSymTap: return @"TAP";
         
         case TTypeSymTrue: return @"TRUE";
         case TTypeSymFalse: return @"FALSE";

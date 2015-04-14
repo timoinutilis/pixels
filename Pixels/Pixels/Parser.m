@@ -537,10 +537,10 @@
     WaitNode *node = [[WaitNode alloc] init];
     [self accept:TTypeSymWait];
     node.time = [self acceptExpression];
-    if (self.token.type == TTypeSymGamepad)
+    if (self.token.type == TTypeSymTap)
     {
-        node.gamepad = YES;
-        [self accept:TTypeSymGamepad];
+        node.tap = YES;
+        [self accept:TTypeSymTap];
     }
     return node;
 }
@@ -1039,6 +1039,11 @@
         case TTypeSymButton: {
             ButtonNode *node = [[ButtonNode alloc] init];
             [self accept:TTypeSymButton];
+            if (self.token.type == TTypeSymTap)
+            {
+                [self accept:TTypeSymTap];
+                node.tap = YES;
+            }
             [self accept:TTypeSymBracketOpen];
             node.portExpression = [self acceptExpression];
             if (self.token.type == TTypeSymComma)

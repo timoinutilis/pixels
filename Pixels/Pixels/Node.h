@@ -102,7 +102,7 @@
 
 @interface WaitNode : Node
 @property Node *time;
-@property BOOL gamepad;
+@property BOOL tap;
 @end
 
 @interface EndNode : Node
@@ -242,6 +242,7 @@
 @interface ButtonNode : Node
 @property Node *portExpression;
 @property Node *buttonExpression;
+@property BOOL tap;
 @end
 
 @interface PointNode : Node

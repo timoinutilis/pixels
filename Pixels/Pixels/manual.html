@@ -188,8 +188,8 @@ PRINT 2+2
 <p>In the classic BASIC language, this command is the main way of getting user input by the keyboard. As LowRes Coder doesn't support keyboard, this command does not exist here.</p>
 
 <h3 id="_WAIT">WAIT</h3>
-<pre>WAIT seconds [GAMEPAD]</pre>
-<p>WAIT pauses the execution of the program for the time set by the <i>seconds</i> parameter. The shortes wait time is 0.04 seconds. If you add the GAMEPAD keyword, the waiting will be interrupted by any tap on a gamepad button.</p>
+<pre>WAIT seconds [TAP]</pre>
+<p>WAIT pauses the execution of the program for the time set by the <i>seconds</i> parameter. The shortes wait time is 0.04 seconds. If you add the TAP keyword, the waiting will be interrupted by any tap on a gamepad button.</p>
 <p>This command has an important side effect: It updates the screen. If you draw something in a loop, you won't see it on screen until you call WAIT (or the program ends).</p>
 <pre class="exm">
 FOR X=0 TO 63
@@ -543,8 +543,9 @@ WAIT 2
 <p>Returns TRUE if right is currently pressed on the direction pad of the given player. <i>player</i> starts with 0 for the first one.</p>
 
 <h3 id="_BUTTON">=BUTTON</h3>
-<pre>v=BUTTON(player[,button])</pre>
+<pre>v=BUTTON [TAP](player[,button])</pre>
 <p>Returns TRUE if the A or B button of the given player is currently pressed. <i>player</i> starts with 0 for the first one. If <i>button</i> is omitted or 0, any button (A and B) is checked. 1 checks only the A button, 2 checks only the B button.</p>
+<p>With the optional TAP keyword the function returns TRUE only once for one tap on the button, and not as long as the button is pressed.</p>
 
 <h1 id="Sound">Sound</h1>
 <p>LowRes Coder has three independent sound generators, called voices. Each of them has a queue which can store and reproduce sound sequences without blocking the execution of the program.</p>

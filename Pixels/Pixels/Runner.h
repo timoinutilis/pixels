@@ -45,6 +45,8 @@
 @property OnEndGotoNode *currentOnEndGoto;
 @property BOOL endRequested;
 @property int lastSpriteHit;
+@property BOOL buttonATapped;
+@property BOOL buttonBTapped;
 
 - (instancetype)initWithRunnable:(Runnable *)runnable;
 - (BOOL)isFinished;
