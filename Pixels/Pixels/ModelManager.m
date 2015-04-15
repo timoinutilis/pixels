@@ -184,12 +184,12 @@ NSString *const ModelManagerDidAddProjectNotification = @"ModelManagerDidAddProj
     [self.managedObjectContext deleteObject:project];
 }
 
-- (Project *)duplicateProject:(Project *)project
+- (Project *)duplicateProject:(Project *)project sourceCode:(NSString *)sourceCode
 {
     Project *newProject = [NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:self.managedObjectContext];
     newProject.name = [NSString stringWithFormat:@"Copy of %@", project.name];
     newProject.iconData = project.iconData;
-    newProject.sourceCode = project.sourceCode;
+    newProject.sourceCode = sourceCode ? sourceCode : project.sourceCode;
     newProject.createdAt = [NSDate date];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:ModelManagerDidAddProjectNotification object:self userInfo:@{@"project": newProject}];

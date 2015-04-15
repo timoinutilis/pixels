@@ -14,11 +14,11 @@
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="64" width="480" height="212"/>
+                        <rect key="frame" x="0.0" y="0.0" width="480" height="320"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" text="PRINT &quot;HELLO&quot;" translatesAutoresizingMaskIntoConstraints="NO" id="SjB-QF-tvR" customClass="EditorTextView">
-                                <rect key="frame" x="0.0" y="0.0" width="480" height="212"/>
+                                <rect key="frame" x="0.0" y="64" width="480" height="212"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <color key="tintColor" red="0.96470588239999999" green="0.96470588239999999" blue="0.96470588239999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" name="Menlo-Regular" family="Menlo" pointSize="18"/>
@@ -27,10 +27,10 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="SjB-QF-tvR" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="8yG-53-ok8"/>
+                            <constraint firstItem="SjB-QF-tvR" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="9ya-yg-o1v"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="SjB-QF-tvR" secondAttribute="bottom" id="E73-rc-dsw"/>
                             <constraint firstItem="SjB-QF-tvR" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="HdZ-qd-903"/>
                             <constraint firstAttribute="trailing" secondItem="SjB-QF-tvR" secondAttribute="trailing" id="MHR-FO-uGb"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="SjB-QF-tvR" secondAttribute="bottom" id="WsM-Ru-DcQ"/>
                         </constraints>
                     </view>
                     <toolbarItems>
@@ -473,11 +473,11 @@ The upgrade is valid for all your devices and without time limit.</string>
         <scene sceneID="RGF-gP-Rq2">
             <objects>
                 <navigationController storyboardIdentifier="AppStart" toolbarHidden="NO" id="vjV-e6-4vN" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="hqa-KN-Vct">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="hqa-KN-Vct">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
-                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translucent="NO" id="cpb-BQ-cAU">
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="cpb-BQ-cAU">
                         <autoresizingMask key="autoresizingMask"/>
                     </toolbar>
                     <connections>
@@ -655,17 +655,17 @@ The upgrade is valid for all your devices and without time limit.</string>
         <!--Programs-->
         <scene sceneID="3mJ-o1-cJC">
             <objects>
-                <viewController automaticallyAdjustsScrollViewInsets="NO" id="Xni-Pq-CRZ" customClass="ExplorerViewController" sceneMemberID="viewController">
+                <viewController id="Xni-Pq-CRZ" customClass="ExplorerViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="63p-SP-37V"/>
                         <viewControllerLayoutGuide type="bottom" id="ijW-NB-o4Z"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="EsH-iL-o4a">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="492"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="mgK-pS-p2l">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="492"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="0.0" id="Ad7-yA-rdq">
                                     <size key="itemSize" width="140" height="140"/>
@@ -720,41 +720,11 @@ The upgrade is valid for all your devices and without time limit.</string>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="mgK-pS-p2l" firstAttribute="leading" secondItem="EsH-iL-o4a" secondAttribute="leading" id="0P2-fo-mqc"/>
-                            <constraint firstAttribute="trailing" secondItem="mgK-pS-p2l" secondAttribute="trailing" id="5Tc-k6-Wfy"/>
-                            <constraint firstItem="ijW-NB-o4Z" firstAttribute="top" secondItem="mgK-pS-p2l" secondAttribute="bottom" id="66A-gj-twH"/>
-                            <constraint firstItem="mgK-pS-p2l" firstAttribute="top" secondItem="63p-SP-37V" secondAttribute="bottom" id="6hO-Cm-02o"/>
-                            <constraint firstAttribute="trailing" secondItem="mgK-pS-p2l" secondAttribute="trailing" id="8z0-MX-zbN"/>
-                            <constraint firstItem="ijW-NB-o4Z" firstAttribute="top" secondItem="mgK-pS-p2l" secondAttribute="bottom" id="95a-cy-oVU"/>
-                            <constraint firstItem="mgK-pS-p2l" firstAttribute="leading" secondItem="EsH-iL-o4a" secondAttribute="leading" id="Eqq-HI-Gh0"/>
                             <constraint firstItem="mgK-pS-p2l" firstAttribute="leading" secondItem="EsH-iL-o4a" secondAttribute="leading" id="FUe-gW-3JO"/>
                             <constraint firstItem="mgK-pS-p2l" firstAttribute="top" secondItem="EsH-iL-o4a" secondAttribute="top" id="K49-VT-C2N"/>
-                            <constraint firstItem="ijW-NB-o4Z" firstAttribute="top" secondItem="mgK-pS-p2l" secondAttribute="bottom" id="ORk-Rg-WYQ"/>
-                            <constraint firstItem="mgK-pS-p2l" firstAttribute="leading" secondItem="EsH-iL-o4a" secondAttribute="leading" id="UPL-Z3-Zt2"/>
-                            <constraint firstItem="mgK-pS-p2l" firstAttribute="top" secondItem="63p-SP-37V" secondAttribute="bottom" id="UfP-Dc-VTn"/>
                             <constraint firstAttribute="trailing" secondItem="mgK-pS-p2l" secondAttribute="trailing" id="Xkz-Hc-gwP"/>
-                            <constraint firstItem="mgK-pS-p2l" firstAttribute="top" secondItem="EsH-iL-o4a" secondAttribute="top" id="o3O-oZ-CY3"/>
-                            <constraint firstAttribute="trailing" secondItem="mgK-pS-p2l" secondAttribute="trailing" id="pmf-4I-vRZ"/>
-                            <constraint firstAttribute="bottom" secondItem="mgK-pS-p2l" secondAttribute="bottom" id="suM-Tr-KsZ"/>
-                            <constraint firstItem="ijW-NB-o4Z" firstAttribute="top" secondItem="mgK-pS-p2l" secondAttribute="bottom" id="xq7-V5-CR8"/>
+                            <constraint firstAttribute="bottom" secondItem="mgK-pS-p2l" secondAttribute="bottom" id="skS-Md-d4t"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="0P2-fo-mqc"/>
-                                <exclude reference="5Tc-k6-Wfy"/>
-                                <exclude reference="6hO-Cm-02o"/>
-                                <exclude reference="8z0-MX-zbN"/>
-                                <exclude reference="Eqq-HI-Gh0"/>
-                                <exclude reference="UPL-Z3-Zt2"/>
-                                <exclude reference="UfP-Dc-VTn"/>
-                                <exclude reference="o3O-oZ-CY3"/>
-                                <exclude reference="pmf-4I-vRZ"/>
-                                <exclude reference="66A-gj-twH"/>
-                                <exclude reference="95a-cy-oVU"/>
-                                <exclude reference="ORk-Rg-WYQ"/>
-                                <exclude reference="xq7-V5-CR8"/>
-                            </mask>
-                        </variation>
                     </view>
                     <toolbarItems>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="2yy-HZ-kmz"/>

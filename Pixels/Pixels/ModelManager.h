@@ -27,6 +27,6 @@ extern NSString *const ModelManagerDidAddProjectNotification;
 - (void)createDefaultProjects;
 - (Project *)createNewProject;
 - (void)deleteProject:(Project *)project;
-- (Project *)duplicateProject:(Project *)project;
+- (Project *)duplicateProject:(Project *)project sourceCode:(NSString *)sourceCode;
 
 @end

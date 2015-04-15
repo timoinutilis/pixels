@@ -48,6 +48,8 @@ NSString *const CoachMarkIDHelp = @"CoachMarkIDHelp";
     self.sourceCodeTextView.backgroundColor = [AppStyle darkColor];
     self.sourceCodeTextView.textColor = [AppStyle tintColor];
     self.sourceCodeTextView.tintColor = [AppStyle brightColor];
+    self.sourceCodeTextView.indicatorStyle = UIScrollViewIndicatorStyleWhite;
+    self.view.backgroundColor = [AppStyle darkColor];
     
     self.navigationItem.title = self.project.name;
     
@@ -233,8 +235,8 @@ NSString *const CoachMarkIDHelp = @"CoachMarkIDHelp";
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Do you want to make a copy of this program?" message:nil preferredStyle:UIAlertControllerStyleAlert];
     
     [alert addAction:[UIAlertAction actionWithTitle:@"Duplicate" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-        [self saveProject];
-        [[ModelManager sharedManager] duplicateProject:self.project];
+        [[ModelManager sharedManager] duplicateProject:self.project sourceCode:self.sourceCodeTextView.text];
+        [[ModelManager sharedManager] saveContext];
         [self.navigationController popViewControllerAnimated:YES];
     }]];
     
