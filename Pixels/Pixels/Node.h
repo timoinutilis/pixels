@@ -234,6 +234,22 @@
 @property Node *nExpression;
 @end
 
+@interface GetNode : Node
+@property Node *fromXExpression;
+@property Node *fromYExpression;
+@property Node *toXExpression;
+@property Node *toYExpression;
+@end
+
+@interface PutNode : Node
+@property Node *xExpression;
+@property Node *yExpression;
+@property Node *srcXExpression;
+@property Node *srcYExpression;
+@property Node *srcWidthExpression;
+@property Node *srcHeightExpression;
+@end
+
 @interface DirectionPadNode : Node
 @property TType type;
 @property Node *portExpression;

@@ -42,6 +42,8 @@ extern int const RendererSpriteSize;
 - (void)drawCircleX:(int)x Y:(int)y radiusX:(int)radiusX radiusY:(int)radiusY;
 - (void)fillCircleX:(int)x Y:(int)y radiusX:(int)radiusX radiusY:(int)radiusY;
 - (void)floodFillX:(int)x Y:(int)y;
+- (void)getScreenFromX:(int)fromX Y:(int)fromY toX:(int)toX Y:(int)toY;
+- (void)putScreenX:(int)x Y:(int)y srcX:(int)srcX srcY:(int)srcY srcWidth:(int)srcWidth srcHeight:(int)srcHeight;
 - (void)drawText:(NSString *)text x:(int)x y:(int)y;
 - (int)widthForText:(NSString *)text;
 - (Sprite *)spriteAtIndex:(int)index;

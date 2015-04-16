@@ -1277,6 +1277,72 @@ NSString *const TRANSFER = @"TRANSFER";
 
 
 
+@implementation GetNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.fromXExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.fromYExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.toXExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.toYExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    int maxPixel = runner.renderer.size - 1;
+    
+    NSNumber *fromX = [self.fromXExpression evaluateNumberWithRunner:runner min:0 max:maxPixel];
+    NSNumber *fromY = [self.fromYExpression evaluateNumberWithRunner:runner min:0 max:maxPixel];
+    NSNumber *toX = [self.toXExpression evaluateNumberWithRunner:runner min:0 max:maxPixel];
+    NSNumber *toY = [self.toYExpression evaluateNumberWithRunner:runner min:0 max:maxPixel];
+    
+    [runner.renderer getScreenFromX:fromX.intValue Y:fromY.intValue toX:toX.intValue Y:toY.intValue];
+    
+    [runner next];
+    return nil;
+}
+
+@end
+
+@implementation PutNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.xExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.yExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.srcXExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.srcYExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.srcWidthExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.srcHeightExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    NSNumber *x = [self.xExpression evaluateWithRunner:runner];
+    NSNumber *y = [self.yExpression evaluateWithRunner:runner];
+    
+    if (self.srcXExpression)
+    {
+        int maxSize = runner.renderer.size;
+        NSNumber *srcX = [self.srcXExpression evaluateNumberWithRunner:runner min:0 max:maxSize - 1];
+        NSNumber *srcY = [self.srcYExpression evaluateNumberWithRunner:runner min:0 max:maxSize - 1];
+        NSNumber *srcW = [self.srcWidthExpression evaluateNumberWithRunner:runner min:0 max:maxSize];
+        NSNumber *srcH = [self.srcHeightExpression evaluateNumberWithRunner:runner min:0 max:maxSize];
+        [runner.renderer putScreenX:x.intValue Y:y.intValue srcX:srcX.intValue srcY:srcY.intValue srcWidth:srcW.intValue srcHeight:srcH.intValue];
+    }
+    else
+    {
+        [runner.renderer putScreenX:x.intValue Y:y.intValue srcX:0 srcY:0 srcWidth:0 srcHeight:0];
+    }
+    
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
 @implementation DirectionPadNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass

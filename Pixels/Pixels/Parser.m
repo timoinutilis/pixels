@@ -266,6 +266,12 @@
         case TTypeSymPaint:
             node = [self acceptPaint];
             break;
+        case TTypeSymGet:
+            node = [self acceptGet];
+            break;
+        case TTypeSymPut:
+            node = [self acceptPut];
+            break;
         default: {
             NSException *exception = [ProgramException exceptionWithName:@"ExpectedCommand" reason:@"Expected command" token:self.token];
             @throw exception;
@@ -312,6 +318,8 @@
         case TTypeSymSound:
         case TTypeSymLayer:
         case TTypeSymPaint:
+        case TTypeSymGet:
+        case TTypeSymPut:
             return YES;
         
         case TTypeSymEnd: {
@@ -888,6 +896,41 @@
     node.xExpression = [self acceptExpression];
     [self accept:TTypeSymComma];
     node.yExpression = [self acceptExpression];
+    return node;
+}
+
+- (Node *)acceptGet
+{
+    GetNode *node = [[GetNode alloc] init];
+    [self accept:TTypeSymGet];
+    node.fromXExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.fromYExpression = [self acceptExpression];
+    [self accept:TTypeSymTo];
+    node.toXExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.toYExpression = [self acceptExpression];
+    return node;
+}
+
+- (Node *)acceptPut
+{
+    PutNode *node = [[PutNode alloc] init];
+    [self accept:TTypeSymPut];
+    node.xExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.yExpression = [self acceptExpression];
+    if (self.token.type == TTypeSymComma)
+    {
+        [self accept:TTypeSymComma];
+        node.srcXExpression = [self acceptExpression];
+        [self accept:TTypeSymComma];
+        node.srcYExpression = [self acceptExpression];
+        [self accept:TTypeSymComma];
+        node.srcWidthExpression = [self acceptExpression];
+        [self accept:TTypeSymComma];
+        node.srcHeightExpression = [self acceptExpression];
+    }
     return node;
 }
 

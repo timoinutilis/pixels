@@ -65,7 +65,9 @@
         case TTypeSymClear: return @"CLEAR";
         case TTypeSymSound: return @"SOUND";
         case TTypeSymLayer: return @"LAYER";
-            
+        case TTypeSymGet: return @"GET";
+        case TTypeSymPut: return @"PUT";
+        
         case TTypeSymUp: return @"UP";
         case TTypeSymDown: return @"DOWN";
         case TTypeSymLeft: return @"LEFT";

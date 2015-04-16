@@ -27,6 +27,9 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
     uint8_t _pixelBuffer[RendererNumLayers][RendererSize][RendererSize];
     Sprite _sprites[RendererNumSprites];
     SpriteDef _spriteDefs[RendererNumSpriteDefs];
+    int _copyWidth;
+    int _copyHeight;
+    uint8_t _copyBuffer[RendererSize][RendererSize];
 }
 
 - (instancetype)init
@@ -267,6 +270,61 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
                 spanRight = 0;
             }
             y1++;
+        }
+    }
+}
+
+- (void)getScreenFromX:(int)fromX Y:(int)fromY toX:(int)toX Y:(int)toY
+{
+    if (fromX > toX)
+    {
+        int value = toX; toX = fromX; fromX = value;
+    }
+    if (fromY > toY)
+    {
+        int value = toY; toY = fromY; fromY = value;
+    }
+    _copyWidth = toX - fromX + 1;
+    _copyHeight = toY - fromY + 1;
+    for (int y = fromY; y <= toY; y++)
+    {
+        for (int x = fromX; x <= toX; x++)
+        {
+            _copyBuffer[y - fromY][x - fromX] = _pixelBuffer[_layerIndex][y][x];
+        }
+    }
+}
+
+- (void)putScreenX:(int)x Y:(int)y srcX:(int)srcX srcY:(int)srcY srcWidth:(int)srcWidth srcHeight:(int)srcHeight
+{
+    int px, py;
+    if (srcWidth == 0 || srcHeight == 0)
+    {
+        srcWidth = _copyWidth;
+        srcHeight = _copyHeight;
+    }
+    else
+    {
+        if (srcX + srcWidth > _copyWidth)
+        {
+            srcWidth = _copyWidth - srcX;
+        }
+        if (srcY + srcHeight > _copyHeight)
+        {
+            srcHeight = _copyHeight - srcY;
+        }
+    }
+    
+    for (int oy = 0; oy < srcHeight; oy++)
+    {
+        py = oy + y;
+        for (int ox = 0; ox < srcWidth; ox++)
+        {
+            px = ox + x;
+            if (px >= 0 && py >= 0 && px < RendererSize && py < RendererSize)
+            {
+                _pixelBuffer[_layerIndex][py][px] = _copyBuffer[srcY + oy][srcX + ox];
+            }
         }
     }
 }
