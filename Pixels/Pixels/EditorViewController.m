@@ -45,11 +45,11 @@ NSString *const CoachMarkIDHelp = @"CoachMarkIDHelp";
 {
     [super viewDidLoad];
     
+    self.view.backgroundColor = [AppStyle editorColor];
     self.sourceCodeTextView.backgroundColor = [AppStyle editorColor];
     self.sourceCodeTextView.textColor = [AppStyle tintColor];
     self.sourceCodeTextView.tintColor = [AppStyle brightColor];
     self.sourceCodeTextView.indicatorStyle = UIScrollViewIndicatorStyleWhite;
-    self.view.backgroundColor = [AppStyle darkColor];
     
     self.navigationItem.title = self.project.name;
     
@@ -84,6 +84,8 @@ NSString *const CoachMarkIDHelp = @"CoachMarkIDHelp";
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
+    [self.sourceCodeTextView flashScrollIndicators];
     
     AppController *app = [AppController sharedController];
     if (app.shouldShowTransferAlert)

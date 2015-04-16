@@ -10,6 +10,7 @@
 #import "AppController.h"
 #import "AppStyle.h"
 #import <StoreKit/StoreKit.h>
+#import "UIColor+Utils.h"
 
 @interface UpgradeViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
@@ -28,9 +29,11 @@
     [super viewDidLoad];
     
     [AppStyle styleNavigationController:self.navigationController];
+    self.view.tintColor = [AppStyle darkTintColor];
     self.view.backgroundColor = [AppStyle brightColor];
     self.titleLabel.textColor = [AppStyle darkColor];
     self.descriptionLabel.textColor = [AppStyle darkColor];
+    self.upgradedLabel.textColor = [AppStyle barColor];
     
     if ([SKPaymentQueue canMakePayments] && [AppController sharedController].purchaseState == PurchaseStateUninitialized)
     {

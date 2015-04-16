@@ -77,6 +77,8 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
+    [self.collectionView flashScrollIndicators];
     [self showAddedProject];
     
     AppController *app = [AppController sharedController];

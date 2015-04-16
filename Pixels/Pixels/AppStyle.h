@@ -13,6 +13,7 @@
 + (void)styleNavigationController:(UINavigationController *)nav;
 + (UIColor *)barColor;
 + (UIColor *)tintColor;
++ (UIColor *)darkTintColor;
 + (UIColor *)darkColor;
 + (UIColor *)brightColor;
 + (UIColor *)editorColor;
