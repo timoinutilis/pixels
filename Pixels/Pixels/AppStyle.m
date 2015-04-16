@@ -31,13 +31,17 @@
 
 + (UIColor *)darkColor
 {
-    return [UIColor colorWithHex:0x23223c alpha:1.0f];
-//    return [UIColor colorWithHex:0x1b1d37 alpha:1.0f];
+    return [UIColor colorWithHex:0x000222 alpha:1.0f];
 }
 
 + (UIColor *)brightColor
 {
     return [UIColor colorWithHex:0xf6f6f6 alpha:1.0f];
+}
+
++ (UIColor *)editorColor
+{
+    return [UIColor colorWithHex:0x292a41 alpha:1.0f];
 }
 
 + (UIColor *)alertTintColor

@@ -45,7 +45,7 @@ NSString *const CoachMarkIDHelp = @"CoachMarkIDHelp";
 {
     [super viewDidLoad];
     
-    self.sourceCodeTextView.backgroundColor = [AppStyle darkColor];
+    self.sourceCodeTextView.backgroundColor = [AppStyle editorColor];
     self.sourceCodeTextView.textColor = [AppStyle tintColor];
     self.sourceCodeTextView.tintColor = [AppStyle brightColor];
     self.sourceCodeTextView.indicatorStyle = UIScrollViewIndicatorStyleWhite;
