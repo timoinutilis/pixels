@@ -238,7 +238,7 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     self.nameLabel.text = @"Project Name";
     self.nameLabel.textColor = [AppStyle darkColor];
     CALayer *imageLayer = self.previewImageView.layer;
-    imageLayer.cornerRadius = 20;
+    imageLayer.cornerRadius = 14;
     imageLayer.masksToBounds = YES;
 }
 
