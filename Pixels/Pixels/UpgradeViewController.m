@@ -29,7 +29,6 @@
     [super viewDidLoad];
     
     [AppStyle styleNavigationController:self.navigationController];
-    self.view.tintColor = [AppStyle darkTintColor];
     self.view.backgroundColor = [AppStyle brightColor];
     self.titleLabel.textColor = [AppStyle darkColor];
     self.descriptionLabel.textColor = [AppStyle darkColor];

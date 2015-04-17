@@ -266,6 +266,18 @@ DO
 LOOP
 </pre>
 
+<h3 id="_POINT">=POINT</h3>
+<pre>v=POINT(x,y)</pre>
+<p>POINT returns the color index at the coordinates <i>x,y</i>.</p>
+<pre class="exm">
+    COLOR 11
+    PLOT 63,0
+    PRINT POINT(63,0)
+    PRINT POINT(63,1)
+    REM >>11
+    REM >>0
+</pre>
+
 <h3 id="_LINE">LINE</h3>
 <pre>LINE x1,y1 TO x2,y2</pre>
 <p>LINE draws a line from the coordinates <i>x1,y1</i> to the coordinates <i>x2,y2</i>.</p>
@@ -341,16 +353,22 @@ DO
 LOOP
 </pre>
 
-<h3 id="_POINT">=POINT</h3>
-<pre>v=POINT(x,y)</pre>
-<p>POINT returns the color index at the coordinates <i>x,y</i>.</p>
+<h3 id="_GET">GET</h3>
+<pre>GET x1,y1 TO x2,y2</pre>
+<p>Copies the rectangular screen area between <i>x1,y1</i> and <i>x2,y2</i> to a buffer. Use the PUT command to draw it on the screen.</p>
+
+<h3 id="_PUT">PUT</h3>
+<pre>PUT x,y[,sx,sy,sw,sh]</pre>
+<p>Draws the screen area copied by the GET command on the screen at the coordinates <i>x,y</i>. By default the complete copied area will be drawn. With the additional parameters you can draw a smaller part of the source image. With <i>sx</i> and <i>sy</i> you specify the top left corner of the source image, <i>sw</i> is the width and <i>sh</i> the height.</p>
 <pre class="exm">
-COLOR 11
-PLOT 63,0
-PRINT POINT(63,0)
-PRINT POINT(63,1)
-REM >>11
-REM >>0
+COLOR 4
+BAR 10,10 TO 30,20
+COLOR 8
+BAR 12,12 TO 28,18
+GET 10,10 TO 30,20
+PUT 15,25
+PUT 20,40,0,0,10,5
+PUT 40,40,11,6,10,5
 </pre>
 
 <h1 id="Control-structures">Control structures</h1>

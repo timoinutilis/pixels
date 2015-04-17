@@ -13,9 +13,11 @@
 
 + (void)styleNavigationController:(UINavigationController *)nav
 {
-    nav.view.tintColor = [AppStyle tintColor];
+    nav.view.tintColor = [AppStyle darkTintColor];
     nav.navigationBar.barTintColor = [AppStyle barColor];
+    nav.navigationBar.tintColor = [AppStyle tintColor];
     nav.toolbar.barTintColor = [AppStyle barColor];
+    nav.toolbar.tintColor = [AppStyle tintColor];
     nav.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [AppStyle darkColor]};
 }
 

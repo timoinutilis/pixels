@@ -14,11 +14,13 @@
 @interface WebViewController ()
 
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *getItem;
 
 @property UIActivityIndicatorView *activityView;
 @property UIBarButtonItem *backItem;
 @property UIBarButtonItem *forwardItem;
+@property UIBarButtonItem *getItem;
+@property UIBarButtonItem *spaceItem;
+@property UIBarButtonItem *doneItem;
 
 @end
 
@@ -33,14 +35,15 @@
     self.activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     UIBarButtonItem *activityItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityView];
     
-    NSMutableArray *toolbarItems = [NSMutableArray array];
-    [toolbarItems addObject:activityItem];
-    [toolbarItems addObjectsFromArray:self.toolbarItems];
-    self.toolbarItems = toolbarItems;
-    
     self.backItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:self action:@selector(onBackTapped:)];
     self.forwardItem = [[UIBarButtonItem alloc] initWithTitle:@"Forw." style:UIBarButtonItemStylePlain target:self action:@selector(onForwardTapped:)];
-    self.navigationItem.leftBarButtonItems = @[self.backItem, self.forwardItem];
+    self.navigationItem.leftBarButtonItems = @[self.backItem, self.forwardItem, activityItem];
+    
+    self.getItem = [[UIBarButtonItem alloc] initWithTitle:@"Get Program" style:UIBarButtonItemStylePlain target:self action:@selector(onGetTapped:)];
+    self.spaceItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+    self.spaceItem.width = 15;
+    self.doneItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(onDoneTapped:)];
+    self.navigationItem.rightBarButtonItems = @[self.doneItem];
     
     self.webView.delegate = self;
     
@@ -59,7 +62,7 @@
     self.forwardItem.enabled = self.webView.canGoForward;
 }
 
-- (IBAction)onDoneTapped:(id)sender
+- (void)onDoneTapped:(id)sender
 {
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
@@ -74,7 +77,7 @@
     [self.webView goForward];
 }
 
-- (IBAction)onGetTapped:(id)sender
+- (void)onGetTapped:(id)sender
 {
     
     Project *project = [[ModelManager sharedManager] createNewProject];
@@ -84,6 +87,23 @@
     [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
         [[NSNotificationCenter defaultCenter] postNotificationName:ExplorerRefreshAddedProjectNotification object:self];
     }];
+}
+
+- (void)updateWithSourceCode:(BOOL)hasSourceCode
+{
+    if (hasSourceCode)
+    {
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
+        {
+            self.title = nil;
+        }
+        [self.navigationItem setRightBarButtonItems:@[self.doneItem, self.spaceItem, self.getItem] animated:YES];
+    }
+    else
+    {
+        self.title = @"Web";
+        [self.navigationItem setRightBarButtonItems:@[self.doneItem] animated:YES];
+    }
 }
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
@@ -103,14 +123,14 @@
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
     [self.activityView startAnimating];
-    self.getItem.enabled = NO;
+    [self updateWithSourceCode:NO];
     [self updateButtons];
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
     [self.activityView stopAnimating];
-    self.getItem.enabled = [self pageHasSourceCode];
+    [self updateWithSourceCode:[self pageHasSourceCode]];
     [self updateButtons];
 }
 
