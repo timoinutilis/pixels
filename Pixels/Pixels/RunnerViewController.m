@@ -19,12 +19,12 @@
 #import "CoachMarkView.h"
 #import "AppStyle.h"
 
-NSString *const CoachMarkIDScale = @"CoachMarkIDScale";
-
 @interface RunnerViewController ()
 
 @property (weak, nonatomic) IBOutlet UIView *containerView;
 @property (weak, nonatomic) IBOutlet UIButton *exitButton;
+@property (weak, nonatomic) IBOutlet UIButton *zoomButton;
+@property (weak, nonatomic) IBOutlet UIButton *soundButton;
 @property (weak, nonatomic) IBOutlet RendererView *rendererView;
 @property (weak, nonatomic) IBOutlet UIButton *buttonA;
 @property (weak, nonatomic) IBOutlet UIButton *buttonB;
@@ -33,11 +33,9 @@ NSString *const CoachMarkIDScale = @"CoachMarkIDScale";
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTop;
 
-@property UIPinchGestureRecognizer *pinchRecognizer;
 @property UITapGestureRecognizer *tapRecognizer;
-@property NSTimer *coachMarkTimer;
 
-@property CGFloat scale;
+@property BOOL isFullscreen;
 @property Runner *runner;
 @property int numPlayers;
 @property BOOL isPaused;
@@ -49,10 +47,7 @@ NSString *const CoachMarkIDScale = @"CoachMarkIDScale";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.scale = self.project.scale.floatValue;
-    
-    self.pinchRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(onPinchGesture:)];
-    [self.containerView addGestureRecognizer:self.pinchRecognizer];
+    self.isFullscreen = NO; // TODO load
     
     self.tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapGesture:)];
     [self.containerView addGestureRecognizer:self.tapRecognizer];
@@ -75,56 +70,20 @@ NSString *const CoachMarkIDScale = @"CoachMarkIDScale";
     
     [self run];
     [self hideExitButtonAfterDelay];
-    
-    if ([[AppController sharedController] isUnshownInfoID:CoachMarkIDScale])
-    {
-        self.coachMarkTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(showCoachMark:) userInfo:nil repeats:NO];
-    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     
-    [self.coachMarkTimer invalidate];
     [self.runner.audioPlayer stop];
     
-    float scaleDiff = self.scale - self.project.scale.floatValue;
-    if (ABS(scaleDiff) >= 0.001f)
-    {
-        self.project.scale = @(self.scale);
-    }
+    // TODO save self.isFullscreen
 }
 
 - (void)viewWillLayoutSubviews
 {
     [self updateRendererConstraints];
-    [self updateRendererScale];
-}
-
-- (void)showCoachMark:(id)sender
-{
-    if (self.numPlayers > 0)
-    {
-        self.isPaused = YES;
-        [[AppController sharedController] onShowInfoID:CoachMarkIDScale];
-        [[CoachMarkView create] showWithText:@"You can change the game screen size by pinching." image:@"coach_scale" container:self.view complete:^{
-            self.isPaused = NO;
-        }];
-    }
-}
-
-- (void)onPinchGesture:(UIPinchGestureRecognizer *)gestureRecognizer
-{
-    if (gestureRecognizer.state == UIGestureRecognizerStateBegan)
-    {
-        gestureRecognizer.scale = self.scale;
-    }
-    else if (gestureRecognizer.state == UIGestureRecognizerStateChanged)
-    {
-        self.scale = MAX(0.25, MIN(1.0, gestureRecognizer.scale));
-        [self updateRendererScale];
-    }
 }
 
 - (void)onTapGesture:(UITapGestureRecognizer *)gestureRecognizer
@@ -139,6 +98,8 @@ NSString *const CoachMarkIDScale = @"CoachMarkIDScale";
 {
     [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionAllowUserInteraction animations:^{
         self.exitButton.alpha = 0.5;
+        self.zoomButton.alpha = 0.5;
+        self.soundButton.alpha = 0.5;
     } completion:^(BOOL finished) {
         if (hides)
         {
@@ -151,45 +112,38 @@ NSString *const CoachMarkIDScale = @"CoachMarkIDScale";
 {
     [UIView animateWithDuration:3 delay:3 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionAllowUserInteraction animations:^{
         self.exitButton.alpha = 0.05;
+        self.zoomButton.alpha = 0.05;
+        self.soundButton.alpha = 0.05;
     } completion:^(BOOL finished) {
     }];
 }
 
 - (void)updateRendererConstraints
 {
-    CGSize viewSize = self.view.frame.size;
-    if (self.numPlayers >= 1 && viewSize.width < viewSize.height)
+    UIWindow* window = [UIApplication sharedApplication].keyWindow;
+    if (self.isFullscreen)
     {
+        self.constraintWidth.constant = window.bounds.size.width;
+        self.constraintHeight.constant = window.bounds.size.height;
+        self.constraintTop.constant = 0;
         self.constraintTop.priority = UILayoutPriorityDefaultHigh;
     }
     else
     {
-        self.constraintTop.priority = UILayoutPriorityDefaultLow - 1;
-    }
-}
-
-- (void)updateRendererScale
-{
-    UIWindow* window = [UIApplication sharedApplication].keyWindow;
-    BOOL panorama = (window.bounds.size.width > window.bounds.size.height);
-    CGFloat longSide = panorama ? window.bounds.size.width : window.bounds.size.height;
-    CGFloat shortSide = panorama ? window.bounds.size.height : window.bounds.size.width;
-    
-    longSide *= self.scale;
-    if (shortSide > longSide)
-    {
-        shortSide = longSide;
-    }
-    
-    if (panorama)
-    {
-        self.constraintWidth.constant = longSide;
-        self.constraintHeight.constant = shortSide;
-    }
-    else
-    {
-        self.constraintWidth.constant = shortSide;
-        self.constraintHeight.constant = longSide;
+        BOOL isPanorama = window.bounds.size.width > window.bounds.size.height;
+        CGFloat shortSize = MIN(window.bounds.size.width, window.bounds.size.height);
+        CGFloat ratio = window.bounds.size.width / window.bounds.size.height;
+        self.constraintWidth.constant = shortSize;
+        self.constraintHeight.constant = shortSize;
+        self.constraintTop.constant = (isPanorama || ratio >= 0.65) ? 0 : self.exitButton.bounds.size.height;
+        if (self.numPlayers >= 1)
+        {
+            self.constraintTop.priority = UILayoutPriorityDefaultHigh;
+        }
+        else
+        {
+            self.constraintTop.priority = UILayoutPriorityDefaultLow - 1;
+        }
     }
 }
 
@@ -269,6 +223,21 @@ NSString *const CoachMarkIDScale = @"CoachMarkIDScale";
     {
         self.runner.endRequested = YES;
     }
+}
+- (IBAction)onZoomTapped:(id)sender
+{
+    self.isFullscreen = !self.isFullscreen;
+    [UIView animateWithDuration:0.3 animations:^{
+        [self updateRendererConstraints];
+        [self.rendererView layoutIfNeeded];
+    }];
+    
+    [self showExitButtonWithHiding:YES];
+}
+
+- (IBAction)onSoundTapped:(id)sender
+{
+    [self showExitButtonWithHiding:YES];
 }
 
 - (void)runnerLog:(NSString *)message
