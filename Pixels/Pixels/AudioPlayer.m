@@ -38,6 +38,7 @@ typedef struct PlayerSystem {
     double frameCount;
     int16_t noise[4096];
     int32_t filterBuffer[AudioFilterBufSize];
+    double volume;
 } PlayerSystem;
 
 static void RenderAudio(AudioQueueBufferRef buffer, PlayerSystem *player);
@@ -56,6 +57,7 @@ static double PitchToFrequency(int pitch);
     if (self = [super init])
     {
         _player.sampleRate = 22050;
+        _player.volume = 1.0;
         
         // AudioStreamBasicDescription
         _dataFormat.mSampleRate = _player.sampleRate;
@@ -190,6 +192,16 @@ static double PitchToFrequency(int pitch);
     }
     voice->gate = TRUE;
     voice->gateTime = 0.0;
+}
+
+- (void)setVolume:(double)volume
+{
+    _player.volume = volume;
+}
+
+- (double)volume
+{
+    return _player.volume;
 }
 
 @end
@@ -332,7 +344,7 @@ static void RenderAudio(AudioQueueBufferRef buffer, PlayerSystem *player)
         {
             player->filterBuffer[f] = player->filterBuffer[f - 1];
         }
-        player->filterBuffer[0] = sumSample;
+        player->filterBuffer[0] = sumSample * player->volume;
 
         audioData[i] = (  (player->filterBuffer[0] >> 3)
                         + (player->filterBuffer[1] >> 2)

@@ -19,6 +19,9 @@
 #import "CoachMarkView.h"
 #import "AppStyle.h"
 
+NSString *const UserDefaultsFullscreenKey = @"fullscreen";
+NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
+
 @interface RunnerViewController ()
 
 @property (weak, nonatomic) IBOutlet UIView *containerView;
@@ -35,7 +38,8 @@
 
 @property UITapGestureRecognizer *tapRecognizer;
 
-@property BOOL isFullscreen;
+@property (nonatomic) BOOL isFullscreen;
+@property (nonatomic) BOOL soundEnabled;
 @property Runner *runner;
 @property int numPlayers;
 @property BOOL isPaused;
@@ -47,7 +51,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.isFullscreen = NO; // TODO load
     
     self.tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapGesture:)];
     [self.containerView addGestureRecognizer:self.tapRecognizer];
@@ -57,6 +60,11 @@
     self.runner = [[Runner alloc] initWithRunnable:self.runnable];
     self.runner.delegate = self;
     self.rendererView.renderer = self.runner.renderer;
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    self.isFullscreen = [defaults boolForKey:[self projectKeyFor:UserDefaultsFullscreenKey]];
+    NSString *soundKey = [self projectKeyFor:UserDefaultsSoundEnabledKey];
+    self.soundEnabled = [defaults objectForKey:soundKey] ? [defaults boolForKey:soundKey] : YES;
 }
 
 - (BOOL)prefersStatusBarHidden
@@ -78,12 +86,28 @@
     
     [self.runner.audioPlayer stop];
     
-    // TODO save self.isFullscreen
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:self.isFullscreen forKey:[self projectKeyFor:UserDefaultsFullscreenKey]];
+    [defaults setBool:self.soundEnabled forKey:[self projectKeyFor:UserDefaultsSoundEnabledKey]];
 }
 
 - (void)viewWillLayoutSubviews
 {
     [self updateRendererConstraints];
+}
+
+- (NSString *)projectKeyFor:(NSString *)key
+{
+    NSString *projectKey;
+    if (self.project.isDefault.boolValue)
+    {
+        projectKey = [NSString stringWithFormat:@"%@ %@", self.project.name, key];
+    }
+    else
+    {
+        projectKey = [NSString stringWithFormat:@"%f %@", self.project.createdAt.timeIntervalSinceReferenceDate, key];
+    }
+    return projectKey;
 }
 
 - (void)onTapGesture:(UITapGestureRecognizer *)gestureRecognizer
@@ -227,17 +251,34 @@
 - (IBAction)onZoomTapped:(id)sender
 {
     self.isFullscreen = !self.isFullscreen;
+    [self showExitButtonWithHiding:YES];
+    
     [UIView animateWithDuration:0.3 animations:^{
         [self updateRendererConstraints];
         [self.rendererView layoutIfNeeded];
     }];
-    
-    [self showExitButtonWithHiding:YES];
 }
 
 - (IBAction)onSoundTapped:(id)sender
 {
+    self.soundEnabled = !self.soundEnabled;
     [self showExitButtonWithHiding:YES];
+}
+
+- (void)setIsFullscreen:(BOOL)isFullscreen
+{
+    _isFullscreen = isFullscreen;
+    UIImage *image = [UIImage imageNamed:(isFullscreen ? @"zoom_on" : @"zoom_off")];
+    [self.zoomButton setImage:image forState:UIControlStateNormal];
+}
+
+- (void)setSoundEnabled:(BOOL)soundEnabled
+{
+    _soundEnabled = soundEnabled;
+    UIImage *image = [UIImage imageNamed:(soundEnabled ? @"sound_off" : @"sound_on")];
+    [self.soundButton setImage:image forState:UIControlStateNormal];
+    
+    self.runner.audioPlayer.volume = soundEnabled ? 1.0 : 0.0;
 }
 
 - (void)runnerLog:(NSString *)message
