@@ -19,6 +19,7 @@ typedef NS_ENUM(NSInteger, PrePass) {
 @property (readonly) NSMutableDictionary *labels;
 @property (readonly) NSMutableArray *dataNodes;
 @property NSArray *transferDataNodes;
+@property BOOL usesGamepad;
 
 - (instancetype)initWithNodes:(NSArray *)nodes;
 - (void)prepare;

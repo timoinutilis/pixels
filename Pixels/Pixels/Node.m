@@ -576,6 +576,15 @@ NSString *const TRANSFER = @"TRANSFER";
 
 @implementation GamepadNode
 
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.playersExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    if (pass == PrePassInit)
+    {
+        runnable.usesGamepad = YES;
+    }
+}
+
 - (id)evaluateWithRunner:(Runner *)runner
 {
     NSNumber *players = [self.playersExpression evaluateNumberWithRunner:runner min:0 max:1];

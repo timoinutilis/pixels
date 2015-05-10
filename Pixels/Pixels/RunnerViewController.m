@@ -18,6 +18,7 @@
 #import "AppController.h"
 #import "CoachMarkView.h"
 #import "AppStyle.h"
+#import "Runnable.h"
 
 NSString *const UserDefaultsFullscreenKey = @"fullscreen";
 NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
@@ -32,11 +33,10 @@ NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
 @property (weak, nonatomic) IBOutlet UIButton *buttonA;
 @property (weak, nonatomic) IBOutlet UIButton *buttonB;
 @property (weak, nonatomic) IBOutlet Gamepad *gamepad;
+@property (weak, nonatomic) IBOutlet UIButton *backgroundButton;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintWidth;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTop;
-
-@property UITapGestureRecognizer *tapRecognizer;
 
 @property (nonatomic) BOOL isFullscreen;
 @property (nonatomic) BOOL soundEnabled;
@@ -52,17 +52,19 @@ NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
 {
     [super viewDidLoad];
     
-    self.tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapGesture:)];
-    [self.containerView addGestureRecognizer:self.tapRecognizer];
-    
     [self setGamepadModeWithPlayers:0];
     
     self.runner = [[Runner alloc] initWithRunnable:self.runnable];
     self.runner.delegate = self;
     self.rendererView.renderer = self.runner.renderer;
     
+    // user defaults
+    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    self.isFullscreen = [defaults boolForKey:[self projectKeyFor:UserDefaultsFullscreenKey]];
+    
+    NSString *fullscreenKey = [self projectKeyFor:UserDefaultsFullscreenKey];
+    self.isFullscreen = [defaults objectForKey:fullscreenKey] ? [defaults boolForKey:fullscreenKey] : !self.runnable.usesGamepad;
+    
     NSString *soundKey = [self projectKeyFor:UserDefaultsSoundEnabledKey];
     self.soundEnabled = [defaults objectForKey:soundKey] ? [defaults boolForKey:soundKey] : YES;
 }
@@ -110,12 +112,9 @@ NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
     return projectKey;
 }
 
-- (void)onTapGesture:(UITapGestureRecognizer *)gestureRecognizer
+- (IBAction)onBackgroundTouchDown:(id)sender
 {
-    if (gestureRecognizer.state == UIGestureRecognizerStateRecognized)
-    {
-        [self showExitButtonWithHiding:YES];
-    }
+    [self showExitButtonWithHiding:YES];
 }
 
 - (void)showExitButtonWithHiding:(BOOL)hides
@@ -160,7 +159,7 @@ NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
         self.constraintWidth.constant = shortSize;
         self.constraintHeight.constant = shortSize;
         self.constraintTop.constant = (isPanorama || ratio >= 0.65) ? 0 : self.exitButton.bounds.size.height;
-        if (self.numPlayers >= 1)
+        if (self.runnable.usesGamepad)
         {
             self.constraintTop.priority = UILayoutPriorityDefaultHigh;
         }
@@ -302,14 +301,19 @@ NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
         case ButtonTypeDown: return self.gamepad.isDirDown;
         case ButtonTypeLeft: return self.gamepad.isDirLeft;
         case ButtonTypeRight: return self.gamepad.isDirRight;
-        case ButtonTypeA: return self.buttonA.isHighlighted;
+        case ButtonTypeA: return self.buttonA.isHighlighted || self.backgroundButton.isHighlighted;
         case ButtonTypeB: return self.buttonB.isHighlighted;
     }
 }
 
 - (int)currentGamepadFlags
 {
-    return self.gamepad.isDirUp | (self.gamepad.isDirDown << 1) | (self.gamepad.isDirLeft << 2) | (self.gamepad.isDirRight << 3) | (self.buttonA.isHighlighted << 4) | (self.buttonB.isHighlighted << 5);
+    return self.gamepad.isDirUp
+        | (self.gamepad.isDirDown << 1)
+        | (self.gamepad.isDirLeft << 2)
+        | (self.gamepad.isDirRight << 3)
+        | ((self.buttonA.isHighlighted || self.backgroundButton.isHighlighted) << 4)
+        | (self.buttonB.isHighlighted << 5);
 }
 
 - (void)setGamepadModeWithPlayers:(int)players
@@ -328,7 +332,6 @@ NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
             self.buttonA.hidden = YES;
             self.buttonB.hidden = YES;
         }
-        [self updateRendererConstraints];
     });
 }
 

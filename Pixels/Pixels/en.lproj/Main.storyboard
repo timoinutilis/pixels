@@ -345,12 +345,25 @@ The upgrade is valid for all your devices and without time limit.</string>
                                             <constraint firstAttribute="width" constant="320" id="jPQ-zS-yRd"/>
                                         </constraints>
                                     </view>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Mt-zw-kOg" userLabel="Background Button">
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                        <state key="normal">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="onBackgroundTouchDown:" destination="glc-Eb-QOK" eventType="touchDown" id="ccS-ko-DfF"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.099565972222222215" alpha="1" colorSpace="calibratedWhite"/>
                                 <gestureRecognizers/>
                                 <constraints>
+                                    <constraint firstItem="8Mt-zw-kOg" firstAttribute="top" secondItem="wgn-Os-cIh" secondAttribute="top" id="HKA-ts-i6L"/>
                                     <constraint firstAttribute="centerY" secondItem="B6C-lp-NaC" secondAttribute="centerY" priority="250" id="IX4-nU-T5z"/>
-                                    <constraint firstItem="B6C-lp-NaC" firstAttribute="top" secondItem="wgn-Os-cIh" secondAttribute="top" id="nCm-iM-J6q"/>
+                                    <constraint firstAttribute="trailing" secondItem="8Mt-zw-kOg" secondAttribute="trailing" id="bdw-68-0ZE"/>
+                                    <constraint firstItem="8Mt-zw-kOg" firstAttribute="leading" secondItem="wgn-Os-cIh" secondAttribute="leading" id="eQj-UH-FW2"/>
+                                    <constraint firstItem="B6C-lp-NaC" firstAttribute="top" secondItem="wgn-Os-cIh" secondAttribute="top" priority="750" id="nCm-iM-J6q"/>
+                                    <constraint firstAttribute="bottom" secondItem="8Mt-zw-kOg" secondAttribute="bottom" id="pz3-JH-QQp"/>
                                     <constraint firstAttribute="centerX" secondItem="B6C-lp-NaC" secondAttribute="centerX" id="wZC-cb-Qbi"/>
                                 </constraints>
                             </view>
@@ -453,6 +466,7 @@ The upgrade is valid for all your devices and without time limit.</string>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>
+                        <outlet property="backgroundButton" destination="8Mt-zw-kOg" id="nvC-GD-mZe"/>
                         <outlet property="buttonA" destination="gGg-rj-ecJ" id="Lj8-wl-JCJ"/>
                         <outlet property="buttonB" destination="WUP-DK-URn" id="fTd-nZ-6E5"/>
                         <outlet property="constraintHeight" destination="QmA-x4-euh" id="LoG-gN-tgc"/>
