@@ -114,6 +114,21 @@ NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
 
 - (IBAction)onBackgroundTouchDown:(id)sender
 {
+    if (self.numPlayers > 0)
+    {
+        // show that gamepad should be used
+        [UIView animateWithDuration:0.1 animations:^{
+            self.gamepad.transform = CGAffineTransformMakeScale(1.1, 1.1);
+            self.buttonA.transform = CGAffineTransformMakeScale(1.1, 1.1);
+            self.buttonB.transform = CGAffineTransformMakeScale(1.1, 1.1);
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:0.1 animations:^{
+                self.gamepad.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                self.buttonA.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                self.buttonB.transform = CGAffineTransformMakeScale(1.0, 1.0);
+            }];
+        }];
+    }
     [self showExitButtonWithHiding:YES];
 }
 
@@ -301,7 +316,7 @@ NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
         case ButtonTypeDown: return self.gamepad.isDirDown;
         case ButtonTypeLeft: return self.gamepad.isDirLeft;
         case ButtonTypeRight: return self.gamepad.isDirRight;
-        case ButtonTypeA: return self.buttonA.isHighlighted || self.backgroundButton.isHighlighted;
+        case ButtonTypeA: return self.buttonA.isHighlighted || (self.backgroundButton.isHighlighted && self.numPlayers == 0);
         case ButtonTypeB: return self.buttonB.isHighlighted;
     }
 }
@@ -312,8 +327,8 @@ NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
         | (self.gamepad.isDirDown << 1)
         | (self.gamepad.isDirLeft << 2)
         | (self.gamepad.isDirRight << 3)
-        | ((self.buttonA.isHighlighted || self.backgroundButton.isHighlighted) << 4)
-        | (self.buttonB.isHighlighted << 5);
+        | ([self isButtonDown:ButtonTypeA] << 4)
+        | ([self isButtonDown:ButtonTypeB] << 5);
 }
 
 - (void)setGamepadModeWithPlayers:(int)players
