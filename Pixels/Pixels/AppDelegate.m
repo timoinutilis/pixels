@@ -10,6 +10,7 @@
 #import "ModelManager.h"
 #import "AppController.h"
 #import <StoreKit/StoreKit.h>
+#import <Parse/Parse.h>
 
 @interface AppDelegate ()
 @end
@@ -22,6 +23,14 @@
     // Override point for customization after application launch.
     
     [[SKPaymentQueue defaultQueue] addTransactionObserver:[AppController sharedController]];
+    
+    [Parse setApplicationId:@"JjXUGeQFrN79s4TcIunronsM13ehsBy0Pa1FLIUA" clientKey:@"hzklS2mYg0VDXvC8DAngFpDJVKQ7PSgKCaj5HKgu"];
+    
+    if (application.applicationState != UIApplicationStateBackground)
+    {
+        // Track an app open here if we launch with a push
+        [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
+    }
     
     return YES;
 }
@@ -53,6 +62,30 @@
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     [[ModelManager sharedManager] saveContext];
+}
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+    // Store the deviceToken in the current installation and save it to Parse.
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    [currentInstallation setDeviceTokenFromData:deviceToken];
+    [currentInstallation saveInBackground];
+}
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
+{
+    NSLog(@"%@", error.description);
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+{
+    if (application.applicationState == UIApplicationStateInactive)
+    {
+        // The application was just brought from the background to the foreground,
+        // so we consider the app as having been "opened by a push notification."
+        [PFAnalytics trackAppOpenedWithRemoteNotificationPayload:userInfo];
+    }
+    [PFPush handlePush:userInfo];
 }
 
 @end

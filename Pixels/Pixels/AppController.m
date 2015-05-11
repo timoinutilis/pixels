@@ -186,4 +186,14 @@ NSString *const PurchaseStateNotification = @"PurchaseStateNotification";
     [storage synchronize];
 }
 
+- (void)registerForNotifications
+{
+    // Register for Push Notitications
+    UIApplication *application = [UIApplication sharedApplication];
+    UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
+    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes categories:nil];
+    [application registerUserNotificationSettings:settings];
+    [application registerForRemoteNotifications];
+}
+
 @end

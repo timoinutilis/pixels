@@ -10,6 +10,8 @@
 #import "ModelManager.h"
 #import "ExplorerViewController.h"
 #import "AppStyle.h"
+#import "AppController.h"
+#import <Parse/Parse.h>
 
 @interface WebViewController ()
 
@@ -65,6 +67,8 @@
 - (void)onDoneTapped:(id)sender
 {
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    
+    [[AppController sharedController] registerForNotifications];
 }
 
 - (void)onBackTapped:(id)sender
@@ -132,6 +136,14 @@
     [self.activityView stopAnimating];
     [self updateWithSourceCode:[self pageHasSourceCode]];
     [self updateButtons];
+    
+    // reset app icon badge
+    PFInstallation *installation = [PFInstallation currentInstallation];
+    if (installation.badge != 0)
+    {
+        installation.badge = 0;
+        [installation saveEventually];
+    }
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error

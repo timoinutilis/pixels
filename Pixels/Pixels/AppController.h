@@ -37,4 +37,6 @@ extern NSString *const PurchaseStateNotification;
 
 - (void)onProgramOpened;
 
+- (void)registerForNotifications;
+
 @end
