@@ -17,6 +17,7 @@ typedef NS_ENUM(NSInteger, PurchaseState) {
 };
 
 extern NSString *const PurchaseStateNotification;
+extern NSString *const NewsNotification;
 
 @interface AppController : NSObject <SKProductsRequestDelegate, SKPaymentTransactionObserver>
 
@@ -25,6 +26,7 @@ extern NSString *const PurchaseStateNotification;
 @property (readonly) SKProduct *fullVersionProduct;
 @property (readonly) NSInteger numProgramsOpened;
 @property BOOL shouldShowTransferAlert;
+@property (nonatomic) NSInteger numNews;
 
 + (AppController *)sharedController;
 

@@ -24,14 +24,10 @@
     
     [[SKPaymentQueue defaultQueue] addTransactionObserver:[AppController sharedController]];
     
-    [Parse setApplicationId:@"JjXUGeQFrN79s4TcIunronsM13ehsBy0Pa1FLIUA" clientKey:@"hzklS2mYg0VDXvC8DAngFpDJVKQ7PSgKCaj5HKgu"];
-    
-    if (application.applicationState != UIApplicationStateBackground)
-    {
-        // Track an app open here if we launch with a push
-        [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
-    }
-    
+    NSString *parseAppID = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"ParseAppID"];
+    NSString *parseClientKey = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"ParseClientKey"];
+    [Parse setApplicationId:parseAppID clientKey:parseClientKey];
+        
     return YES;
 }
 
@@ -56,6 +52,7 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    [[NSNotificationCenter defaultCenter] postNotificationName:NewsNotification object:self];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -79,13 +76,8 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    if (application.applicationState == UIApplicationStateInactive)
-    {
-        // The application was just brought from the background to the foreground,
-        // so we consider the app as having been "opened by a push notification."
-        [PFAnalytics trackAppOpenedWithRemoteNotificationPayload:userInfo];
-    }
     [PFPush handlePush:userInfo];
+    [[NSNotificationCenter defaultCenter] postNotificationName:NewsNotification object:self];
 }
 
 @end

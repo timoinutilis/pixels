@@ -8,12 +8,14 @@
 
 #import "AppController.h"
 #import "AppStyle.h"
+#import <Parse/Parse.h>
 
 NSString *const FullVersionProductID = @"fullversion";
 
 NSString *const NumProgramsOpenedKey = @"NumProgramsOpened";
 
 NSString *const PurchaseStateNotification = @"PurchaseStateNotification";
+NSString *const NewsNotification = @"NewsNotification";
 
 @implementation AppController
 
@@ -194,6 +196,24 @@ NSString *const PurchaseStateNotification = @"PurchaseStateNotification";
     UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes categories:nil];
     [application registerUserNotificationSettings:settings];
     [application registerForRemoteNotifications];
+}
+
+- (NSInteger)numNews
+{
+    PFInstallation *installation = [PFInstallation currentInstallation];
+    return installation.badge;
+}
+
+- (void)setNumNews:(NSInteger)numNews
+{
+    PFInstallation *installation = [PFInstallation currentInstallation];
+    if (numNews != installation.badge)
+    {
+        installation.badge = numNews;
+        [installation saveEventually];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:NewsNotification object:self];
+    }
 }
 
 @end

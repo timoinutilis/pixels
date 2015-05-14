@@ -21,6 +21,7 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 @interface ExplorerViewController ()
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *getButton;
 
 @property NSMutableArray *projects;
 @property Project *addedProject;
@@ -49,12 +50,14 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didAddProject:) name:ModelManagerDidAddProjectNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshAddedProject:) name:ExplorerRefreshAddedProjectNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newsChanged:) name:NewsNotification object:nil];
 }
 
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:ModelManagerDidAddProjectNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:ExplorerRefreshAddedProjectNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:NewsNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -90,6 +93,21 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
             [[CoachMarkView create] showWithText:@"Tap the Plus button to create your first own program!" image:@"coach_add" container:self.navigationController.view complete:nil];
         }
     }
+    
+    [self updateGetButton];
+}
+
+- (void)updateGetButton
+{
+    NSInteger numNews = [AppController sharedController].numNews;
+    if (numNews > 0)
+    {
+        self.getButton.title = [NSString stringWithFormat:@"Get More (%ld)", (long)numNews];
+    }
+    else
+    {
+        self.getButton.title = @"Get More";
+    }
 }
 
 - (void)loadProjects
@@ -117,6 +135,11 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 - (void)refreshAddedProject:(NSNotification *)notification
 {
     [self showAddedProject];
+}
+
+- (void)newsChanged:(NSNotification *)notification
+{
+    [self updateGetButton];
 }
 
 - (void)onHelpTapped:(id)sender

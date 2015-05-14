@@ -11,7 +11,6 @@
 #import "ExplorerViewController.h"
 #import "AppStyle.h"
 #import "AppController.h"
-#import <Parse/Parse.h>
 
 @interface WebViewController ()
 
@@ -138,12 +137,7 @@
     [self updateButtons];
     
     // reset app icon badge
-    PFInstallation *installation = [PFInstallation currentInstallation];
-    if (installation.badge != 0)
-    {
-        installation.badge = 0;
-        [installation saveEventually];
-    }
+    [AppController sharedController].numNews = 0;
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
