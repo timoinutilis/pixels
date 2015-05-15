@@ -286,4 +286,10 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     }
 }
 
+- (void)setHighlighted:(BOOL)highlighted
+{
+    super.highlighted = highlighted;
+    self.previewImageView.alpha = highlighted ? 0.5 : 1.0;
+}
+
 @end
