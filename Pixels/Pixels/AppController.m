@@ -40,8 +40,12 @@ NSString *const NewsNotification = @"NewsNotification";
 
 - (BOOL)isFullVersion
 {
+#ifdef DEV
+    return YES;
+#else
     NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
     return [storage boolForKey:FullVersionProductID];
+#endif
 }
 
 - (void)showAlertWithTitle:(NSString *)title message:(NSString *)message

@@ -48,7 +48,6 @@
 		9276F3981A1D289C0060E909 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9276F3961A1D289C0060E909 /* Main.storyboard */; };
 		9276F39A1A1D289C0060E909 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9276F3991A1D289C0060E909 /* Images.xcassets */; };
 		9276F39D1A1D289C0060E909 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9276F39B1A1D289C0060E909 /* LaunchScreen.xib */; };
-		9276F3A91A1D289C0060E909 /* PixelsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9276F3A81A1D289C0060E909 /* PixelsTests.m */; };
 		9276F3B41A1D29BF0060E909 /* Scanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 9276F3B31A1D29BF0060E909 /* Scanner.m */; };
 		928445EE1B012C4700203974 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 928445EC1B012C4700203974 /* Bolts.framework */; };
 		928445EF1B012C4700203974 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 928445ED1B012C4700203974 /* Parse.framework */; };
@@ -81,16 +80,6 @@
 		92E53DFA1A5B3AC200FE9F91 /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E53DF91A5B3AC200FE9F91 /* ShareViewController.m */; };
 		92EDC4421A54701D007824A5 /* Gamepad.m in Sources */ = {isa = PBXBuildFile; fileRef = 92EDC4411A54701D007824A5 /* Gamepad.m */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		9276F3A31A1D289C0060E909 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9276F3811A1D289C0060E909 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 9276F3881A1D289C0060E909;
-			remoteInfo = Pixels;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		9204C1F01A6B458200A0123C /* NSString+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Utils.h"; path = "Class Utils/NSString+Utils.h"; sourceTree = "<group>"; };
@@ -167,7 +156,6 @@
 		9276F3931A1D289C0060E909 /* EditorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EditorViewController.h; sourceTree = "<group>"; };
 		9276F3941A1D289C0060E909 /* EditorViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EditorViewController.m; sourceTree = "<group>"; };
 		9276F3991A1D289C0060E909 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		9276F3A21A1D289C0060E909 /* LowRes Coder Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "LowRes Coder Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9276F3A71A1D289C0060E909 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9276F3A81A1D289C0060E909 /* PixelsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PixelsTests.m; sourceTree = "<group>"; };
 		9276F3B21A1D29BF0060E909 /* Scanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scanner.h; sourceTree = "<group>"; };
@@ -186,6 +174,7 @@
 		928445FE1B012CF700203974 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		928446001B012D0700203974 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		928446021B012D1300203974 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		928E14BD1B067AB9002DC8E6 /* Info_dev.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info_dev.plist; sourceTree = "<group>"; };
 		928FB8971A5C804200EA377F /* GORSeparatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GORSeparatorView.h; sourceTree = "<group>"; };
 		928FB8981A5C804200EA377F /* GORSeparatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GORSeparatorView.m; sourceTree = "<group>"; };
 		929797FB1A50956900DB5D70 /* PublishActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublishActivity.h; sourceTree = "<group>"; };
@@ -242,13 +231,6 @@
 				926864211AA5E50900F305B9 /* StoreKit.framework in Frameworks */,
 				928445EF1B012C4700203974 /* Parse.framework in Frameworks */,
 				928445EE1B012C4700203974 /* Bolts.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		9276F39F1A1D289C0060E909 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -410,7 +392,6 @@
 			isa = PBXGroup;
 			children = (
 				9276F3891A1D289C0060E909 /* LowRes Coder.app */,
-				9276F3A21A1D289C0060E909 /* LowRes Coder Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -441,6 +422,7 @@
 			isa = PBXGroup;
 			children = (
 				9276F38D1A1D289C0060E909 /* Info.plist */,
+				928E14BD1B067AB9002DC8E6 /* Info_dev.plist */,
 				9276F38E1A1D289C0060E909 /* main.m */,
 			);
 			name = "Supporting Files";
@@ -561,24 +543,6 @@
 			productReference = 9276F3891A1D289C0060E909 /* LowRes Coder.app */;
 			productType = "com.apple.product-type.application";
 		};
-		9276F3A11A1D289C0060E909 /* LowRes Coder Tests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 9276F3AF1A1D289C0060E909 /* Build configuration list for PBXNativeTarget "LowRes Coder Tests" */;
-			buildPhases = (
-				9276F39E1A1D289C0060E909 /* Sources */,
-				9276F39F1A1D289C0060E909 /* Frameworks */,
-				9276F3A01A1D289C0060E909 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				9276F3A41A1D289C0060E909 /* PBXTargetDependency */,
-			);
-			name = "LowRes Coder Tests";
-			productName = PixelsTests;
-			productReference = 9276F3A21A1D289C0060E909 /* LowRes Coder Tests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -597,10 +561,6 @@
 							};
 						};
 					};
-					9276F3A11A1D289C0060E909 = {
-						CreatedOnToolsVersion = 6.1;
-						TestTargetID = 9276F3881A1D289C0060E909;
-					};
 				};
 			};
 			buildConfigurationList = 9276F3841A1D289C0060E909 /* Build configuration list for PBXProject "Pixels" */;
@@ -616,7 +576,6 @@
 			projectRoot = "";
 			targets = (
 				9276F3881A1D289C0060E909 /* LowRes Coder */,
-				9276F3A11A1D289C0060E909 /* LowRes Coder Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -634,13 +593,6 @@
 				921DA0E51AA1F87700816B26 /* error.html in Resources */,
 				9276F39A1A1D289C0060E909 /* Images.xcassets in Resources */,
 				927334981A2A456900C89AF0 /* Help.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		9276F3A01A1D289C0060E909 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -705,23 +657,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		9276F39E1A1D289C0060E909 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				9276F3A91A1D289C0060E909 /* PixelsTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		9276F3A41A1D289C0060E909 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 9276F3881A1D289C0060E909 /* LowRes Coder */;
-			targetProxy = 9276F3A31A1D289C0060E909 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		9276F3961A1D289C0060E909 /* Main.storyboard */ = {
@@ -831,6 +767,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				INFOPLIST_FILE = Pixels/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -850,6 +787,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				INFOPLIST_FILE = Pixels/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -859,39 +797,129 @@
 			};
 			name = Release;
 		};
-		9276F3B01A1D289C0060E909 /* Debug */ = {
+		928E14B71B067943002DC8E6 /* Debug Dev */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = PixelsTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LowRes Coder.app/LowRes Coder";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 2;
 			};
-			name = Debug;
+			name = "Debug Dev";
 		};
-		9276F3B11A1D289C0060E909 /* Release */ = {
+		928E14B81B067943002DC8E6 /* Debug Dev */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Timo Kloss (2Q6EMPS7Y2)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Timo Kloss (2Q6EMPS7Y2)";
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEV=1",
+				);
+				INFOPLIST_FILE = Pixels/Info_dev.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME) Dev";
+				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = "Debug Dev";
+		};
+		928E14BA1B06794E002DC8E6 /* Release Dev */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 2;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = "Release Dev";
+		};
+		928E14BB1B06794E002DC8E6 /* Release Dev */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Timo Kloss (2Q6EMPS7Y2)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Timo Kloss (2Q6EMPS7Y2)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEV=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = PixelsTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LowRes Coder.app/LowRes Coder";
+				INFOPLIST_FILE = Pixels/Info_dev.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME) Dev";
+				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
-			name = Release;
+			name = "Release Dev";
 		};
 /* End XCBuildConfiguration section */
 
@@ -900,7 +928,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9276F3AA1A1D289C0060E909 /* Debug */,
+				928E14B71B067943002DC8E6 /* Debug Dev */,
 				9276F3AB1A1D289C0060E909 /* Release */,
+				928E14BA1B06794E002DC8E6 /* Release Dev */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -909,16 +939,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9276F3AD1A1D289C0060E909 /* Debug */,
+				928E14B81B067943002DC8E6 /* Debug Dev */,
 				9276F3AE1A1D289C0060E909 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		9276F3AF1A1D289C0060E909 /* Build configuration list for PBXNativeTarget "LowRes Coder Tests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				9276F3B01A1D289C0060E909 /* Debug */,
-				9276F3B11A1D289C0060E909 /* Release */,
+				928E14BB1B06794E002DC8E6 /* Release Dev */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
