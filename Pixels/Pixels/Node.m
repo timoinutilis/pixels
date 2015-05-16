@@ -1200,6 +1200,11 @@ NSString *const TRANSFER = @"TRANSFER";
     [self.pitchExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
     [self.durationExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
     [self.defExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    
+    if (pass == PrePassInit)
+    {
+        runnable.usesSound = YES;
+    }
 }
 
 - (id)evaluateWithRunner:(Runner *)runner

@@ -17,6 +17,8 @@ NSString *const NumProgramsOpenedKey = @"NumProgramsOpened";
 NSString *const PurchaseStateNotification = @"PurchaseStateNotification";
 NSString *const NewsNotification = @"NewsNotification";
 
+NSString *const InfoIDNews = @"InfoIDNews";
+
 @implementation AppController
 
 + (AppController *)sharedController
@@ -205,17 +207,29 @@ NSString *const NewsNotification = @"NewsNotification";
 - (NSInteger)numNews
 {
     PFInstallation *installation = [PFInstallation currentInstallation];
-    return installation.badge;
+    NSInteger numNews = installation.badge;
+    
+    // show news badge on first start
+    if (numNews == 0 && [self isUnshownInfoID:InfoIDNews])
+    {
+        numNews = 1;
+    }
+    
+    return numNews;
 }
 
 - (void)setNumNews:(NSInteger)numNews
 {
-    PFInstallation *installation = [PFInstallation currentInstallation];
-    if (numNews != installation.badge)
+    if (numNews != self.numNews)
     {
-        installation.badge = numNews;
-        [installation saveEventually];
+        PFInstallation *installation = [PFInstallation currentInstallation];
+        if (numNews != installation.badge)
+        {
+            installation.badge = numNews;
+            [installation saveEventually];
+        }
         
+        [self onShowInfoID:InfoIDNews];
         [[NSNotificationCenter defaultCenter] postNotificationName:NewsNotification object:self];
     }
 }

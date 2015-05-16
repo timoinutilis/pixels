@@ -67,6 +67,8 @@ NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
     
     NSString *soundKey = [self projectKeyFor:UserDefaultsSoundEnabledKey];
     self.soundEnabled = [defaults objectForKey:soundKey] ? [defaults boolForKey:soundKey] : YES;
+    
+    self.soundButton.hidden = !self.runnable.usesSound;
 }
 
 - (BOOL)prefersStatusBarHidden

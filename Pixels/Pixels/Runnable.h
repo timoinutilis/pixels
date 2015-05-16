@@ -20,6 +20,7 @@ typedef NS_ENUM(NSInteger, PrePass) {
 @property (readonly) NSMutableArray *dataNodes;
 @property NSArray *transferDataNodes;
 @property BOOL usesGamepad;
+@property BOOL usesSound;
 
 - (instancetype)initWithNodes:(NSArray *)nodes;
 - (void)prepare;
