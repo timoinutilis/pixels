@@ -42,12 +42,15 @@ NSString *const InfoIDNews = @"InfoIDNews";
 
 - (BOOL)isFullVersion
 {
-#ifdef DEV
-    return YES;
-#else
     NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
     return [storage boolForKey:FullVersionProductID];
-#endif
+}
+
+- (void)upgradeToFullVersion
+{
+    NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
+    [storage setBool:YES forKey:FullVersionProductID];
+    [storage synchronize];
 }
 
 - (void)showAlertWithTitle:(NSString *)title message:(NSString *)message
@@ -156,9 +159,7 @@ NSString *const InfoIDNews = @"InfoIDNews";
 {
     if ([productID isEqualToString:FullVersionProductID])
     {
-        NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
-        [storage setBool:YES forKey:FullVersionProductID];
-        [storage synchronize];
+        [self upgradeToFullVersion];
     }
 }
 

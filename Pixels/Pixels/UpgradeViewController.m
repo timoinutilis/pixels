@@ -11,6 +11,7 @@
 #import "AppStyle.h"
 #import <StoreKit/StoreKit.h>
 #import "UIColor+Utils.h"
+#import "DayCodeManager.h"
 
 @interface UpgradeViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
@@ -41,7 +42,7 @@
     
     self.activityView.hidesWhenStopped = YES;
     [self updateView];
-    
+        
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onPurchaseStateChange:) name:PurchaseStateNotification object:nil];
 }
 
@@ -131,6 +132,29 @@
 - (IBAction)onRestoreTapped:(id)sender
 {
     [[AppController sharedController] restorePurchases];
+}
+
+- (IBAction)onSecretTapped:(id)sender
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Enter Code" message:nil preferredStyle:UIAlertControllerStyleAlert];
+
+    [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+    }];
+
+    [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+
+        NSString *code = ((UITextField *)alert.textFields[0]).text;
+        DayCodeManager *manager = [[DayCodeManager alloc] init];
+        if ([manager isCodeValid:code])
+        {
+            [[AppController sharedController] upgradeToFullVersion];
+        }
+        
+    }]];
+    
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 @end

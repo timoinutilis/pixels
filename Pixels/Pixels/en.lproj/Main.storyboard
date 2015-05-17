@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="oli-IW-NHE">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14C1510" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="oli-IW-NHE">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -195,15 +195,15 @@ Inutilis Software, 2015</string>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7qu-NE-hxH">
-                                <rect key="frame" x="16" y="169" width="288" height="41"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7qu-NE-hxH">
+                                <rect key="frame" x="16" y="169" width="288" height="82"/>
                                 <string key="text">In the full version there is no size limit for programs.
 The upgrade is valid for all your devices and without time limit.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yqV-0v-CbY">
-                                <rect key="frame" x="49" y="242" width="222" height="30"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yqV-0v-CbY">
+                                <rect key="frame" x="49" y="283" width="222" height="30"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d5T-K3-Spc">
                                         <rect key="frame" x="0.0" y="0.0" width="61" height="30"/>
@@ -235,21 +235,36 @@ The upgrade is valid for all your devices and without time limit.</string>
                                     <constraint firstItem="jZ1-zl-x2q" firstAttribute="top" secondItem="yqV-0v-CbY" secondAttribute="top" id="tKg-9u-QlX"/>
                                 </constraints>
                             </view>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="0Cm-eG-Zxe">
-                                <rect key="frame" x="150" y="247" width="20" height="20"/>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="0Cm-eG-Zxe">
+                                <rect key="frame" x="150" y="288" width="20" height="20"/>
                             </activityIndicatorView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Thank you for the upgrade!" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mMK-I5-wyt">
-                                <rect key="frame" x="54" y="247" width="213" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Thank you for the upgrade!" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mMK-I5-wyt">
+                                <rect key="frame" x="54" y="288" width="213" height="21"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DLs-Ne-t0L" userLabel="Secret Button">
+                                <rect key="frame" x="0.0" y="472" width="44" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="32" id="mRj-As-DGg"/>
+                                    <constraint firstAttribute="width" constant="44" id="qo8-l6-awN"/>
+                                </constraints>
+                                <state key="normal">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="onSecretTapped:" destination="cfP-MT-scX" eventType="touchUpInside" id="PJJ-hZ-UQK"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="nq7-k6-o2g" firstAttribute="trailing" secondItem="GIV-Ht-ft8" secondAttribute="trailingMargin" id="1MW-BH-CMr"/>
+                            <constraint firstItem="uuo-gB-z3b" firstAttribute="top" secondItem="DLs-Ne-t0L" secondAttribute="bottom" id="2gg-0e-oVt"/>
                             <constraint firstAttribute="centerX" secondItem="iCN-wF-fZ1" secondAttribute="centerX" id="9HB-JD-Fbj"/>
                             <constraint firstItem="7qu-NE-hxH" firstAttribute="leading" secondItem="GIV-Ht-ft8" secondAttribute="leadingMargin" id="9zg-HS-QuW"/>
                             <constraint firstItem="yqV-0v-CbY" firstAttribute="top" secondItem="7qu-NE-hxH" secondAttribute="bottom" priority="750" constant="32" id="BDt-s7-qtC"/>
+                            <constraint firstItem="DLs-Ne-t0L" firstAttribute="leading" secondItem="GIV-Ht-ft8" secondAttribute="leading" id="G8R-pV-6jS"/>
                             <constraint firstAttribute="centerX" secondItem="yqV-0v-CbY" secondAttribute="centerX" id="GkS-av-F75"/>
                             <constraint firstItem="0Cm-eG-Zxe" firstAttribute="centerY" secondItem="yqV-0v-CbY" secondAttribute="centerY" id="KOy-sR-KjM"/>
                             <constraint firstAttribute="centerX" secondItem="mMK-I5-wyt" secondAttribute="centerX" id="MBv-uQ-xqt"/>

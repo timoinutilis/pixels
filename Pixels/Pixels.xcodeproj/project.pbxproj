@@ -24,6 +24,8 @@
 		924CC0FE1A220B3C00D2AF68 /* Runner.m in Sources */ = {isa = PBXBuildFile; fileRef = 924CC0FD1A220B3C00D2AF68 /* Runner.m */; };
 		92509CCA1A28F99D0086E7E3 /* ExplorerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92509CC91A28F99D0086E7E3 /* ExplorerViewController.m */; };
 		925A01A91A1E67F900A321E6 /* Parser.m in Sources */ = {isa = PBXBuildFile; fileRef = 925A01A81A1E67F900A321E6 /* Parser.m */; };
+		925C28191B092BD9007AC515 /* DayCodeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 925C28181B092BD9007AC515 /* DayCodeManager.m */; };
+		925C281F1B092CA4007AC515 /* NSDate+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 925C281E1B092CA4007AC515 /* NSDate+Utils.m */; };
 		926086321A5E8560006C5523 /* Runnable.m in Sources */ = {isa = PBXBuildFile; fileRef = 926086311A5E8560006C5523 /* Runnable.m */; };
 		9267E87F1A5AF61B00D08C42 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9267E86D1A5AF61B00D08C42 /* AFHTTPRequestOperation.m */; };
 		9267E8801A5AF61B00D08C42 /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9267E86F1A5AF61B00D08C42 /* AFHTTPRequestOperationManager.m */; };
@@ -112,6 +114,10 @@
 		92509CC91A28F99D0086E7E3 /* ExplorerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExplorerViewController.m; sourceTree = "<group>"; };
 		925A01A71A1E67F900A321E6 /* Parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Parser.h; sourceTree = "<group>"; };
 		925A01A81A1E67F900A321E6 /* Parser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Parser.m; sourceTree = "<group>"; };
+		925C28171B092BD9007AC515 /* DayCodeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DayCodeManager.h; sourceTree = "<group>"; };
+		925C28181B092BD9007AC515 /* DayCodeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DayCodeManager.m; sourceTree = "<group>"; };
+		925C281D1B092CA4007AC515 /* NSDate+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDate+Utils.h"; path = "Class Utils/NSDate+Utils.h"; sourceTree = "<group>"; };
+		925C281E1B092CA4007AC515 /* NSDate+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDate+Utils.m"; path = "Class Utils/NSDate+Utils.m"; sourceTree = "<group>"; };
 		926086301A5E8560006C5523 /* Runnable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Runnable.h; sourceTree = "<group>"; };
 		926086311A5E8560006C5523 /* Runnable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Runnable.m; sourceTree = "<group>"; };
 		9267E86C1A5AF61B00D08C42 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
@@ -244,6 +250,8 @@
 				9204C1F11A6B458200A0123C /* NSString+Utils.m */,
 				92E36D171ADD294E00C16CBE /* UIColor+Utils.h */,
 				92E36D181ADD294E00C16CBE /* UIColor+Utils.m */,
+				925C281D1B092CA4007AC515 /* NSDate+Utils.h */,
+				925C281E1B092CA4007AC515 /* NSDate+Utils.m */,
 			);
 			name = "Class Utils";
 			sourceTree = "<group>";
@@ -408,6 +416,8 @@
 				926864261AA6087300F305B9 /* AppController.m */,
 				92E36D1A1ADD2D4200C16CBE /* AppStyle.h */,
 				92E36D1B1ADD2D4200C16CBE /* AppStyle.m */,
+				925C28171B092BD9007AC515 /* DayCodeManager.h */,
+				925C28181B092BD9007AC515 /* DayCodeManager.m */,
 				9231159C1A444A4100624201 /* Views */,
 				927333F11A2A3EDD00C89AF0 /* View Controllers */,
 				9276F3B51A1D29D30060E909 /* Compiler */,
@@ -610,6 +620,7 @@
 				9276F3951A1D289C0060E909 /* EditorViewController.m in Sources */,
 				9267E87F1A5AF61B00D08C42 /* AFHTTPRequestOperation.m in Sources */,
 				9267E8861A5AF61B00D08C42 /* AFURLResponseSerialization.m in Sources */,
+				925C28191B092BD9007AC515 /* DayCodeManager.m in Sources */,
 				92E36D191ADD294E00C16CBE /* UIColor+Utils.m in Sources */,
 				9272C1491A1DE2D000E97957 /* Token.m in Sources */,
 				9204C1F21A6B458200A0123C /* NSString+Utils.m in Sources */,
@@ -631,6 +642,7 @@
 				92C98F3F1A20CFD900215AE9 /* ProgramException.m in Sources */,
 				9267E8821A5AF61B00D08C42 /* AFNetworkReachabilityManager.m in Sources */,
 				926864271AA6087300F305B9 /* AppController.m in Sources */,
+				925C281F1B092CA4007AC515 /* NSDate+Utils.m in Sources */,
 				92E36D1F1ADD679D00C16CBE /* GORLabel.m in Sources */,
 				9276F38F1A1D289C0060E909 /* main.m in Sources */,
 				9267E8801A5AF61B00D08C42 /* AFHTTPRequestOperationManager.m in Sources */,

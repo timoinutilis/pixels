@@ -10,6 +10,7 @@
 #import "GORSeparatorView.h"
 #import "AppController.h"
 #import "AppStyle.h"
+#import "DayCodeManager.h"
 
 @interface AboutViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
@@ -40,15 +41,24 @@
                         @"Full version",
                         @"Rate in App Store",
                         @"More from Inutilis",
-                        @"Contact"];
+                        @"Contact",
+                        @"DEV Code"];
     
     if ([AppController sharedController].isFullVersion)
     {
-        self.menuIndices = @[@1, @2, @3];
+        self.menuIndices = @[@1, @2, @3
+#ifdef DEV
+                             , @4
+#endif
+                             ];
     }
     else
     {
-        self.menuIndices = @[@0, @1, @2, @3];
+        self.menuIndices = @[@0, @1, @2, @3
+#ifdef DEV
+                             , @4
+#endif
+                             ];
     }
 }
 
@@ -99,6 +109,12 @@
         [self sendMail];
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
+    else if (index.integerValue == 4)
+    {
+        // DEV Code
+        [self showCode];
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    }
 }
 
 - (void)sendMail
@@ -130,6 +146,15 @@
 - (NSString *)appVersion
 {
     return [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+}
+
+- (void)showCode
+{
+    DayCodeManager *manager = [[DayCodeManager alloc] init];
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Today's Code" message:manager.todaysCode preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 @end

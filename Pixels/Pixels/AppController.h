@@ -30,6 +30,8 @@ extern NSString *const NewsNotification;
 
 + (AppController *)sharedController;
 
+- (void)upgradeToFullVersion;
+
 - (void)requestProducts;
 - (void)purchaseProduct:(SKProduct *)product;
 - (void)restorePurchases;
