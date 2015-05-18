@@ -11,7 +11,7 @@
 #import <AVFoundation/AVAudioSession.h>
 
 int const AudioNumVoices = 3;
-int const AudioNumSoundDefs = 16;
+int const AudioNumSoundDefs = 64;
 int const AudioFilterBufSize = 7;
 int const AudioSequenceBufSize = 1024;
 

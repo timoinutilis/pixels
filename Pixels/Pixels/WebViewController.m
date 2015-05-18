@@ -65,9 +65,10 @@
 
 - (void)onDoneTapped:(id)sender
 {
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
+        [[AppController sharedController] registerForNotifications];
+    }];
     
-    [[AppController sharedController] registerForNotifications];
 }
 
 - (void)onBackTapped:(id)sender
@@ -89,6 +90,7 @@
     
     [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
         [[NSNotificationCenter defaultCenter] postNotificationName:ExplorerRefreshAddedProjectNotification object:self];
+        [[AppController sharedController] registerForNotifications];
     }];
 }
 
