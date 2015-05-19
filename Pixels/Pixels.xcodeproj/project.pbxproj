@@ -22,6 +22,10 @@
 		923115A21A444AA800624201 /* Renderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 923115A11A444AA800624201 /* Renderer.m */; };
 		9248A6B01A7A641D00FD5656 /* Default Projects in Resources */ = {isa = PBXBuildFile; fileRef = 9248A6AF1A7A641D00FD5656 /* Default Projects */; };
 		924CC0FE1A220B3C00D2AF68 /* Runner.m in Sources */ = {isa = PBXBuildFile; fileRef = 924CC0FD1A220B3C00D2AF68 /* Runner.m */; };
+		924F83291B0B347C00B96C91 /* Community.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 924F83281B0B347C00B96C91 /* Community.storyboard */; };
+		924F832C1B0B5B6E00B96C91 /* CommunityMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924F832B1B0B5B6E00B96C91 /* CommunityMasterViewController.m */; };
+		924F83301B0B5BDF00B96C91 /* CommunityListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924F832F1B0B5BDF00B96C91 /* CommunityListViewController.m */; };
+		924F83331B0B610D00B96C91 /* CommunitySplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924F83321B0B610D00B96C91 /* CommunitySplitViewController.m */; };
 		92509CCA1A28F99D0086E7E3 /* ExplorerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92509CC91A28F99D0086E7E3 /* ExplorerViewController.m */; };
 		925A01A91A1E67F900A321E6 /* Parser.m in Sources */ = {isa = PBXBuildFile; fileRef = 925A01A81A1E67F900A321E6 /* Parser.m */; };
 		925C28191B092BD9007AC515 /* DayCodeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 925C28181B092BD9007AC515 /* DayCodeManager.m */; };
@@ -110,6 +114,13 @@
 		9248A6AF1A7A641D00FD5656 /* Default Projects */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Default Projects"; sourceTree = "<group>"; };
 		924CC0FC1A220B3C00D2AF68 /* Runner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Runner.h; sourceTree = "<group>"; };
 		924CC0FD1A220B3C00D2AF68 /* Runner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Runner.m; sourceTree = "<group>"; };
+		924F83281B0B347C00B96C91 /* Community.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Community.storyboard; sourceTree = "<group>"; };
+		924F832A1B0B5B6E00B96C91 /* CommunityMasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommunityMasterViewController.h; sourceTree = "<group>"; };
+		924F832B1B0B5B6E00B96C91 /* CommunityMasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommunityMasterViewController.m; sourceTree = "<group>"; };
+		924F832E1B0B5BDF00B96C91 /* CommunityListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommunityListViewController.h; sourceTree = "<group>"; };
+		924F832F1B0B5BDF00B96C91 /* CommunityListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommunityListViewController.m; sourceTree = "<group>"; };
+		924F83311B0B610D00B96C91 /* CommunitySplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommunitySplitViewController.h; sourceTree = "<group>"; };
+		924F83321B0B610D00B96C91 /* CommunitySplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommunitySplitViewController.m; sourceTree = "<group>"; };
 		92509CC81A28F99D0086E7E3 /* ExplorerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExplorerViewController.h; sourceTree = "<group>"; };
 		92509CC91A28F99D0086E7E3 /* ExplorerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExplorerViewController.m; sourceTree = "<group>"; };
 		925A01A71A1E67F900A321E6 /* Parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Parser.h; sourceTree = "<group>"; };
@@ -300,6 +311,20 @@
 			name = Runtime;
 			sourceTree = "<group>";
 		};
+		924F832D1B0B5B7800B96C91 /* Community */ = {
+			isa = PBXGroup;
+			children = (
+				924F83281B0B347C00B96C91 /* Community.storyboard */,
+				924F832A1B0B5B6E00B96C91 /* CommunityMasterViewController.h */,
+				924F832B1B0B5B6E00B96C91 /* CommunityMasterViewController.m */,
+				924F832E1B0B5BDF00B96C91 /* CommunityListViewController.h */,
+				924F832F1B0B5BDF00B96C91 /* CommunityListViewController.m */,
+				924F83311B0B610D00B96C91 /* CommunitySplitViewController.h */,
+				924F83321B0B610D00B96C91 /* CommunitySplitViewController.m */,
+			);
+			name = Community;
+			sourceTree = "<group>";
+		};
 		9267E86B1A5AF61B00D08C42 /* AFNetworking */ = {
 			isa = PBXGroup;
 			children = (
@@ -343,6 +368,7 @@
 			children = (
 				927334991A2A457A00C89AF0 /* Main */,
 				9273349A1A2A458100C89AF0 /* Help */,
+				924F832D1B0B5B7800B96C91 /* Community */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -595,6 +621,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				924F83291B0B347C00B96C91 /* Community.storyboard in Resources */,
 				9204EF6A1A4C430300B8C29C /* manual.html in Resources */,
 				9276F3981A1D289C0060E909 /* Main.storyboard in Resources */,
 				9276F39D1A1D289C0060E909 /* LaunchScreen.xib in Resources */,
@@ -621,6 +648,7 @@
 				9267E87F1A5AF61B00D08C42 /* AFHTTPRequestOperation.m in Sources */,
 				9267E8861A5AF61B00D08C42 /* AFURLResponseSerialization.m in Sources */,
 				925C28191B092BD9007AC515 /* DayCodeManager.m in Sources */,
+				924F83301B0B5BDF00B96C91 /* CommunityListViewController.m in Sources */,
 				92E36D191ADD294E00C16CBE /* UIColor+Utils.m in Sources */,
 				9272C1491A1DE2D000E97957 /* Token.m in Sources */,
 				9204C1F21A6B458200A0123C /* NSString+Utils.m in Sources */,
@@ -633,9 +661,11 @@
 				92EDC4421A54701D007824A5 /* Gamepad.m in Sources */,
 				92E36D1C1ADD2D4300C16CBE /* AppStyle.m in Sources */,
 				925A01A91A1E67F900A321E6 /* Parser.m in Sources */,
+				924F832C1B0B5B6E00B96C91 /* CommunityMasterViewController.m in Sources */,
 				9267E8831A5AF61B00D08C42 /* AFSecurityPolicy.m in Sources */,
 				9267E8871A5AF61B00D08C42 /* AFURLSessionManager.m in Sources */,
 				920E68221AB74CDA0038994A /* SplashViewController.m in Sources */,
+				924F83331B0B610D00B96C91 /* CommunitySplitViewController.m in Sources */,
 				92A0EC0D1A56DA1F0051D74C /* Model.xcdatamodeld in Sources */,
 				9204EF681A4C397300B8C29C /* HelpTextViewController.m in Sources */,
 				9267E8811A5AF61B00D08C42 /* AFHTTPSessionManager.m in Sources */,

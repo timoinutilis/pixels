@@ -155,6 +155,14 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     [self showAddedProject];
 }
 
+- (IBAction)onCommunityTapped:(id)sender
+{
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Community" bundle:nil];
+    UIViewController *vc = (UIViewController *)[storyboard instantiateInitialViewController];
+    
+    [self presentViewController:vc animated:YES completion:nil];
+}
+
 - (void)showAddedProject
 {
     if (self.addedProject)

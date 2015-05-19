@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="oli-IW-NHE">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14C1510" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="oli-IW-NHE">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -801,7 +801,7 @@ The upgrade is valid for all your devices and without time limit.</string>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="2yy-HZ-kmz"/>
                         <barButtonItem title="Get More" width="300" style="done" id="nKq-5T-IY6">
                             <connections>
-                                <segue destination="CoB-d2-vQK" kind="presentation" modalPresentationStyle="pageSheet" id="9vX-4Z-REx"/>
+                                <action selector="onCommunityTapped:" destination="Xni-Pq-CRZ" id="pYr-Fg-kYF"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="vFl-oa-cU0"/>
@@ -823,70 +823,6 @@ The upgrade is valid for all your devices and without time limit.</string>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JJn-Ol-X1d" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1058" y="1152"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="dgH-hK-LDg">
-            <objects>
-                <navigationController id="CoB-d2-vQK" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="ZQj-jz-BbW">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translucent="NO" id="Age-ee-n7m">
-                        <autoresizingMask key="autoresizingMask"/>
-                    </toolbar>
-                    <connections>
-                        <segue destination="iYf-6m-CT5" kind="relationship" relationship="rootViewController" id="uZM-bm-ZyK"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="1f2-rc-ofO" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="163" y="2140"/>
-        </scene>
-        <!--Web View Controller-->
-        <scene sceneID="RdJ-oP-pRn">
-            <objects>
-                <viewController id="iYf-6m-CT5" customClass="WebViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="NSi-WR-1pk"/>
-                        <viewControllerLayoutGuide type="bottom" id="wWs-V6-rnF"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="Tnq-2U-8rj">
-                        <rect key="frame" x="0.0" y="44" width="600" height="556"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <webView contentMode="scaleToFill" scalesPageToFit="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DkH-lW-Bwd">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="556"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <dataDetectorType key="dataDetectorTypes"/>
-                            </webView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstAttribute="trailing" secondItem="DkH-lW-Bwd" secondAttribute="trailing" id="1eB-Wt-e5d"/>
-                            <constraint firstAttribute="bottom" secondItem="DkH-lW-Bwd" secondAttribute="bottom" id="6fZ-mN-hlW"/>
-                            <constraint firstItem="DkH-lW-Bwd" firstAttribute="top" secondItem="Tnq-2U-8rj" secondAttribute="top" id="9Nd-9h-fE1"/>
-                            <constraint firstItem="DkH-lW-Bwd" firstAttribute="leading" secondItem="Tnq-2U-8rj" secondAttribute="leading" id="fHo-14-GSr"/>
-                        </constraints>
-                    </view>
-                    <toolbarItems>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="WNM-SY-bQ9"/>
-                        <barButtonItem title="Get Program" id="O0J-yv-ClI">
-                            <connections>
-                                <action selector="onGetTapped:" destination="iYf-6m-CT5" id="L4t-kX-Rf8"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="fNa-mt-hrB"/>
-                    </toolbarItems>
-                    <navigationItem key="navigationItem" id="YQs-dK-PZO"/>
-                    <connections>
-                        <outlet property="getItem" destination="O0J-yv-ClI" id="Cnt-Ow-XOq"/>
-                        <outlet property="webView" destination="DkH-lW-Bwd" id="Wv7-RB-c6m"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="1T9-ab-dn4" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="826" y="2140"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="lad-M1-adN">
