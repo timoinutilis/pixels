@@ -6,13 +6,13 @@
 //  Copyright (c) 2015 Inutilis Software. All rights reserved.
 //
 
-#import "CommunitySplitViewController.h"
+#import "CommSplitViewController.h"
 
-@interface CommunitySplitViewController ()
+@interface CommSplitViewController ()
 
 @end
 
-@implementation CommunitySplitViewController
+@implementation CommSplitViewController
 
 - (void)viewDidLoad
 {

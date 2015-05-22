@@ -30,7 +30,7 @@ NSString *const LowResCoderShare = @"LowResCoderShare";
 
 - (NSString *)activityTitle
 {
-    return @"LowRes Coder Web";
+    return @"Community";
 }
 
 - (UIImage *)activityImage

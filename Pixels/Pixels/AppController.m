@@ -179,7 +179,6 @@ NSString *const InfoIDNews = @"InfoIDNews";
 {
     NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
     [storage setBool:YES forKey:infoId];
-    [storage synchronize];
 }
 
 - (NSInteger)numProgramsOpened
@@ -192,7 +191,6 @@ NSString *const InfoIDNews = @"InfoIDNews";
 {
     NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
     [storage setInteger:([storage integerForKey:NumProgramsOpenedKey] + 1) forKey:NumProgramsOpenedKey];
-    [storage synchronize];
 }
 
 - (void)registerForNotifications

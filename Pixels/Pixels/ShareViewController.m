@@ -12,12 +12,11 @@
 #import "GORTextView.h"
 #import "GORSeparatorView.h"
 #import "AppStyle.h"
+#import "CommunityModel.h"
 
 @interface ShareViewController ()
 @property ShareHeaderCell *headerCell;
 @property TextFieldCell *titleCell;
-@property TextFieldCell *authorCell;
-@property TextFieldCell *mailCell;
 @property (nonatomic) IBOutlet UIBarButtonItem *sendItem;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *cancelItem;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionPlaceholderLabel;
@@ -62,24 +61,8 @@
     self.titleCell.separatorView.separatorColor = self.tableView.separatorColor;
     self.titleCell.backgroundColor = [UIColor clearColor];
     
-    self.authorCell = [self.tableView dequeueReusableCellWithIdentifier:@"TextFieldCell"];
-    self.authorCell.label.text = @"Author:";
-    self.authorCell.textField.autocapitalizationType = UITextAutocapitalizationTypeWords;
-    self.authorCell.separatorView.separatorColor = self.tableView.separatorColor;
-    self.authorCell.backgroundColor = [UIColor clearColor];
-    
-    self.mailCell = [self.tableView dequeueReusableCellWithIdentifier:@"TextFieldCell"];
-    self.mailCell.label.text = @"E-Mail:";
-    self.mailCell.textField.autocorrectionType = UITextAutocorrectionTypeNo;
-    self.mailCell.textField.keyboardType = UIKeyboardTypeEmailAddress;
-    self.mailCell.textField.placeholder = @"Optional, will not be published";
-    self.mailCell.separatorView.separatorColor = self.tableView.separatorColor;
-    self.mailCell.backgroundColor = [UIColor clearColor];
-    
     [self addCell:self.headerCell];
     [self addCell:self.titleCell];
-    [self addCell:self.authorCell];
-    [self addCell:self.mailCell];
     
     self.descriptionTextView.placeholderView = self.descriptionPlaceholderLabel;
     self.descriptionTextView.hidePlaceholderWhenFirstResponder = YES;
@@ -98,7 +81,7 @@
 {
     [self.view endEditing:YES];
     
-    if (self.titleCell.textField.text.length == 0 || self.authorCell.textField.text.length == 0 || self.descriptionTextView.text.length == 0)
+    if (self.titleCell.textField.text.length == 0 || self.descriptionTextView.text.length == 0)
     {
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Please fill out all required fields!" message:nil preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
@@ -111,49 +94,57 @@
     }
 }
 
-- (IBAction)onWebsiteTapped:(id)sender
-{
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://lowres.inutilis.com"]];
-}
-
 - (void)send
 {
     [self isBusy:YES];
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSDictionary *parameters = @{@"secret": @"916486295",
-                                 @"author": self.authorCell.textField.text,
-                                 @"mail": self.mailCell.textField.text,
-                                 @"title": self.titleCell.textField.text,
-                                 @"description": self.descriptionTextView.text,
-                                 @"source_code": self.project.sourceCode};
     
-    [manager POST:@"http://apps.timokloss.com/tools/pixelsshare.php" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    // save image
+
+    PFFile *imageFile = [PFFile fileWithName:@"image.png" data:self.project.iconData];
+    [imageFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         
-        NSDictionary *response = responseObject;
-        if (response[@"error"])
+        if (succeeded)
         {
-            [self isBusy:NO];
-            UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Error" message:response[@"error"] preferredStyle:UIAlertControllerStyleAlert];
-            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-            alert.view.tintColor = [AppStyle alertTintColor];
-            [self presentViewController:alert animated:YES completion:nil];
+            // save post
+
+            LCCPost *post = [LCCPost object];
+            post.type = LCCPostTypeProgram;
+            post.user = (LCCUser *)[PFUser currentUser];
+            post.title = self.titleCell.textField.text;
+            post.detail = self.descriptionTextView.text;
+            post.data = self.project.sourceCode;
+            post.image = imageFile;
+            
+            [post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                
+                if (succeeded)
+                {
+                    [self.shareDelegate onClosedWithSuccess:YES];
+                }
+                else
+                {
+                    [self showSendError];
+                }
+                
+            }];
         }
         else
         {
-            [self.shareDelegate onClosedWithSuccess:YES];
+            [self showSendError];
         }
         
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
-        [self isBusy:NO];
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Error" message:@"Could not send program. Please try later!" preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-        alert.view.tintColor = [AppStyle alertTintColor];
-        [self presentViewController:alert animated:YES completion:nil];
-        
-        NSLog(@"error: %@", error);
-        
     }];
+    
+}
+
+- (void)showSendError
+{
+    [self isBusy:NO];
+    
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Could not send program" message:@"Please try again later!" preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+    alert.view.tintColor = [AppStyle alertTintColor];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)isBusy:(BOOL)isBusy
@@ -180,7 +171,7 @@
 {
     [super awakeFromNib];
     self.headerLabel.textColor = [AppStyle darkColor];
-    self.headerLabel.text = @"Send your program to Inutilis! If we like it, we will publish it on the official LowRes Coder website!";
+    self.headerLabel.text = @"Post your program! If we like it, we will feature it in the community news!";
     CALayer *imageLayer = self.iconImageView.layer;
     imageLayer.cornerRadius = 20;
     imageLayer.masksToBounds = YES;

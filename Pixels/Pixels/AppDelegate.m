@@ -11,6 +11,7 @@
 #import "AppController.h"
 #import <StoreKit/StoreKit.h>
 #import <Parse/Parse.h>
+#import "CommunityModel.h"
 
 @interface AppDelegate ()
 @end
@@ -23,6 +24,8 @@
     // Override point for customization after application launch.
     
     [[SKPaymentQueue defaultQueue] addTransactionObserver:[AppController sharedController]];
+    
+    [CommunityModel registerSubclasses];
     
     NSString *parseAppID = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"ParseAppID"];
     NSString *parseClientKey = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"ParseClientKey"];

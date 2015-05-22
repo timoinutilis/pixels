@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CommunitySplitViewController : UISplitViewController
+@interface CommSplitViewController : UISplitViewController
 
 @end
