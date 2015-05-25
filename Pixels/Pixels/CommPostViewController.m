@@ -158,7 +158,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
         LCCComment *comment = self.comments[indexPath.row];
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommentCell" forIndexPath:indexPath];
         cell.textLabel.text = comment.text;
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ - %@", comment.user.username, [NSDateFormatter localizedStringFromDate:comment.createdAt dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterShortStyle]];
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ - %@", comment.user.username, [NSDateFormatter localizedStringFromDate:comment.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle]];
         return cell;
     }
     else if (indexPath.section == 2)

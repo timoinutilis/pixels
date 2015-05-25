@@ -11,6 +11,7 @@
 		9204EF681A4C397300B8C29C /* HelpTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9204EF671A4C397300B8C29C /* HelpTextViewController.m */; };
 		9204EF6A1A4C430300B8C29C /* manual.html in Resources */ = {isa = PBXBuildFile; fileRef = 9204EF691A4C430300B8C29C /* manual.html */; };
 		920822031A4DABB8005B7862 /* HelpContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 920822021A4DABB8005B7862 /* HelpContent.m */; };
+		920E5E5E1B1324FE00071C6A /* LCCFollow.m in Sources */ = {isa = PBXBuildFile; fileRef = 920E5E5D1B1324FE00071C6A /* LCCFollow.m */; };
 		920E681D1AB731620038994A /* CoachMarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 920E681C1AB731620038994A /* CoachMarkView.m */; };
 		920E681F1AB7317E0038994A /* CoachMarkView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 920E681E1AB7317E0038994A /* CoachMarkView.xib */; };
 		920E68221AB74CDA0038994A /* SplashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 920E68211AB74CDA0038994A /* SplashViewController.m */; };
@@ -118,6 +119,8 @@
 		9204EF691A4C430300B8C29C /* manual.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = manual.html; sourceTree = "<group>"; };
 		920822011A4DABB8005B7862 /* HelpContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpContent.h; sourceTree = "<group>"; };
 		920822021A4DABB8005B7862 /* HelpContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpContent.m; sourceTree = "<group>"; };
+		920E5E5C1B1324FE00071C6A /* LCCFollow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCFollow.h; sourceTree = "<group>"; };
+		920E5E5D1B1324FE00071C6A /* LCCFollow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCFollow.m; sourceTree = "<group>"; };
 		920E681B1AB731620038994A /* CoachMarkView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoachMarkView.h; sourceTree = "<group>"; };
 		920E681C1AB731620038994A /* CoachMarkView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoachMarkView.m; sourceTree = "<group>"; };
 		920E681E1AB7317E0038994A /* CoachMarkView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CoachMarkView.xib; sourceTree = "<group>"; };
@@ -649,6 +652,8 @@
 				92C081531B0DF1900006331B /* LCCPost.m */,
 				92884F2C1B0F33850032623D /* LCCComment.h */,
 				92884F2D1B0F33850032623D /* LCCComment.m */,
+				920E5E5C1B1324FE00071C6A /* LCCFollow.h */,
+				920E5E5D1B1324FE00071C6A /* LCCFollow.m */,
 			);
 			name = "Community Model";
 			sourceTree = "<group>";
@@ -800,6 +805,7 @@
 				92E53DF51A5B3A1D00FE9F91 /* GORScrollViewDelegate.m in Sources */,
 				92884F1C1B0F25B30032623D /* SDWebImageCompat.m in Sources */,
 				92C081541B0DF1900006331B /* LCCPost.m in Sources */,
+				920E5E5E1B1324FE00071C6A /* LCCFollow.m in Sources */,
 				92884F2B1B0F307F0032623D /* CommSourceCodeViewController.m in Sources */,
 				92E53DF71A5B3A1D00FE9F91 /* GORTextView.m in Sources */,
 				9276F3921A1D289C0060E909 /* AppDelegate.m in Sources */,

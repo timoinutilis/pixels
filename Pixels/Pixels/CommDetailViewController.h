@@ -23,3 +23,11 @@ typedef NS_ENUM(NSInteger, CommListMode) {
 - (void)setUser:(LCCUser *)user mode:(CommListMode)mode;
 
 @end
+
+
+
+@interface CommProfileCell : UITableViewCell
+
+@property (nonatomic) LCCUser *user;
+
+@end

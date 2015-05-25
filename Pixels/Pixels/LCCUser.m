@@ -10,4 +10,16 @@
 
 @implementation LCCUser
 
+@dynamic about;
+@dynamic lastPostDate;
+
+- (BOOL)isMe
+{
+    if ([PFUser currentUser])
+    {
+        return [self.objectId isEqualToString:[PFUser currentUser].objectId];
+    }
+    return NO;
+}
+
 @end

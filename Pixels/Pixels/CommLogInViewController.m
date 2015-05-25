@@ -78,8 +78,9 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
 {
     NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
     [storage setObject:self.userNameTextField.text forKey:UserDefaultsLogInKey];
-
-    [[NSNotificationCenter defaultCenter] postNotificationName:CurrentUserChangeNotification object:self];
+    
+    [[CommunityModel sharedInstance] onLoggedIn];
+    
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 

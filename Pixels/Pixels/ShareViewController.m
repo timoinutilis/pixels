@@ -119,6 +119,7 @@
                 
                 if (succeeded)
                 {
+                    [[CommunityModel sharedInstance] onPostedWithDate:post.createdAt];
                     [self.shareDelegate onClosedWithSuccess:YES];
                 }
                 else

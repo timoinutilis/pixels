@@ -39,11 +39,15 @@ typedef NS_ENUM(NSInteger, CellTag) {
     [super viewDidLoad];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserChanged:) name:CurrentUserChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onFollowsChanged:) name:FollowsChangeNotification object:nil];
+    
+    [[CommunityModel sharedInstance] updateCurrentUser];
 }
 
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:CurrentUserChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:FollowsChangeNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -52,6 +56,11 @@ typedef NS_ENUM(NSInteger, CellTag) {
 }
 
 - (void)onUserChanged:(NSNotification *)notification
+{
+    [self.tableView reloadData];
+}
+
+- (void)onFollowsChanged:(NSNotification *)notification
 {
     [self.tableView reloadData];
 }
@@ -90,6 +99,10 @@ typedef NS_ENUM(NSInteger, CellTag) {
     else if (section == 1)
     {
         return [PFUser currentUser] ? 2 : 1;
+    }
+    else if (section == 2)
+    {
+        return [CommunityModel sharedInstance].follows.count;
     }
     return 0;
 }
@@ -132,8 +145,9 @@ typedef NS_ENUM(NSInteger, CellTag) {
     }
     else if (indexPath.section == 2)
     {
+        LCCFollow *follow = [CommunityModel sharedInstance].follows[indexPath.row];
         cell = [tableView dequeueReusableCellWithIdentifier:@"MenuCell" forIndexPath:indexPath];
-        cell.textLabel.text = @"User";
+        cell.textLabel.text = follow.followsUser.username;
         cell.tag = CellTagFollowing;
     }
     
@@ -155,7 +169,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
         case CellTagLogOut: {
             [tableView deselectRowAtIndexPath:indexPath animated:YES];
             [PFUser logOutInBackgroundWithBlock:^(NSError *error) {
-                [tableView reloadData];
+                [[CommunityModel sharedInstance] onLoggedOut];
             }];
             break;
         }
@@ -189,7 +203,8 @@ typedef NS_ENUM(NSInteger, CellTag) {
                 break;
             }
             case CellTagFollowing: {
-                LCCUser *user = nil; //TODO
+                LCCFollow *follow = [CommunityModel sharedInstance].follows[indexPath.row];
+                LCCUser *user = follow.followsUser;
                 [vc setUser:user mode:CommListModeProfile];
                 break;
             }
