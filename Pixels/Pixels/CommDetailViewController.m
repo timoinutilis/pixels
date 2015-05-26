@@ -10,9 +10,11 @@
 #import "CommunityModel.h"
 #import "CommPostViewController.h"
 #import "UIImageView+WebCache.h"
+#import "CommUsersViewController.h"
 
 typedef NS_ENUM(NSInteger, CellTag) {
     CellTagNoAction,
+    CellTagPost,
     CellTagFollowers,
     CellTagFollowing
 };
@@ -100,18 +102,6 @@ typedef NS_ENUM(NSInteger, CellTag) {
                 self.posts = objects;
                 [self.tableView reloadData];
             }];
-            break;
-        }
-        case CommListModeFollowers: {
-            self.title = [NSString stringWithFormat:@"Followers of %@", self.user.username];
-            
-            self.posts = nil;
-            break;
-        }
-        case CommListModeFollowing: {
-            self.title = [NSString stringWithFormat:@"Following %@", self.user.username];
-            
-            self.posts = nil;
             break;
         }
         case CommListModeUndefined:
@@ -212,6 +202,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
         LCCPost *post = self.posts[indexPath.row];
         cell.textLabel.text = post.title;
         cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ - %@", post.user.username, [NSDateFormatter localizedStringFromDate:post.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle]];
+        cell.tag = CellTagPost;
         
         [cell.imageView sd_setImageWithURL:[NSURL URLWithString:post.image.url] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
             CALayer *layer = cell.imageView.layer;
@@ -225,21 +216,31 @@ typedef NS_ENUM(NSInteger, CellTag) {
     return nil;
 }
 
-
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-    if ([segue.identifier isEqualToString:@"ProgramPost"])
+    switch (cell.tag)
     {
-        LCCPost *post = self.posts[indexPath.row];
-        CommPostViewController *vc = (CommPostViewController *)segue.destinationViewController;
-        [vc setPost:post mode:CommPostModeProgram];
+        case CellTagFollowers: {
+            CommUsersViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"CommUsersView"];
+            [vc setUser:self.user mode:CommUsersModeFollowers];
+            [self.navigationController pushViewController:vc animated:YES];
+            break;
+        }
+        case CellTagFollowing: {
+            CommUsersViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"CommUsersView"];
+            [vc setUser:self.user mode:CommUsersModeFollowing];
+            [self.navigationController pushViewController:vc animated:YES];
+            break;
+        }
+        case CellTagPost: {
+            CommPostViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"CommPostView"];
+            LCCPost *post = self.posts[indexPath.row];
+            [vc setPost:post mode:CommPostModeProgram];
+            [self.navigationController pushViewController:vc animated:YES];
+            break;
+        }
     }
 }
 

@@ -98,6 +98,7 @@
 		92C0815A1B0E021A0006331B /* CommPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C081591B0E021A0006331B /* CommPostViewController.m */; };
 		92C98F3F1A20CFD900215AE9 /* ProgramException.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C98F3E1A20CFD900215AE9 /* ProgramException.m */; };
 		92C98F421A20F2F000215AE9 /* Node.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C98F411A20F2F000215AE9 /* Node.m */; };
+		92D2C2021B13442A00539BA6 /* CommUsersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D2C2011B13442A00539BA6 /* CommUsersViewController.m */; };
 		92D518B91A6975C10000F917 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D518B81A6975C10000F917 /* AboutViewController.m */; };
 		92E2B8AA1A52F08D00D0DF29 /* ActivityItemSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E2B8A91A52F08D00D0DF29 /* ActivityItemSource.m */; };
 		92E36D191ADD294E00C16CBE /* UIColor+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E36D181ADD294E00C16CBE /* UIColor+Utils.m */; };
@@ -279,6 +280,8 @@
 		92C98F3E1A20CFD900215AE9 /* ProgramException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProgramException.m; sourceTree = "<group>"; };
 		92C98F401A20F2F000215AE9 /* Node.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Node.h; sourceTree = "<group>"; };
 		92C98F411A20F2F000215AE9 /* Node.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Node.m; sourceTree = "<group>"; };
+		92D2C2001B13442A00539BA6 /* CommUsersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommUsersViewController.h; sourceTree = "<group>"; };
+		92D2C2011B13442A00539BA6 /* CommUsersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommUsersViewController.m; sourceTree = "<group>"; };
 		92D518B71A6975C10000F917 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
 		92D518B81A6975C10000F917 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
 		92E2B8A81A52F08D00D0DF29 /* ActivityItemSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityItemSource.h; sourceTree = "<group>"; };
@@ -400,6 +403,8 @@
 				92C081591B0E021A0006331B /* CommPostViewController.m */,
 				92884F291B0F307F0032623D /* CommSourceCodeViewController.h */,
 				92884F2A1B0F307F0032623D /* CommSourceCodeViewController.m */,
+				92D2C2001B13442A00539BA6 /* CommUsersViewController.h */,
+				92D2C2011B13442A00539BA6 /* CommUsersViewController.m */,
 			);
 			name = Community;
 			sourceTree = "<group>";
@@ -810,6 +815,7 @@
 				92E53DF71A5B3A1D00FE9F91 /* GORTextView.m in Sources */,
 				9276F3921A1D289C0060E909 /* AppDelegate.m in Sources */,
 				92C0815A1B0E021A0006331B /* CommPostViewController.m in Sources */,
+				92D2C2021B13442A00539BA6 /* CommUsersViewController.m in Sources */,
 				92B60FE31AC024250011233B /* GameButton.m in Sources */,
 				92884F191B0F25B30032623D /* MKAnnotationView+WebCache.m in Sources */,
 				9276F3B41A1D29BF0060E909 /* Scanner.m in Sources */,
