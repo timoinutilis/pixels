@@ -20,6 +20,8 @@ typedef NS_ENUM(NSInteger, CellTag) {
 
 @interface CommMasterViewController ()
 
+@property NSIndexPath *currentSelection;
+
 @end
 
 @implementation CommMasterViewController
@@ -27,7 +29,6 @@ typedef NS_ENUM(NSInteger, CellTag) {
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
     {
         self.clearsSelectionOnViewWillAppear = NO;
@@ -41,6 +42,8 @@ typedef NS_ENUM(NSInteger, CellTag) {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserChanged:) name:CurrentUserChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onFollowsChanged:) name:FollowsChangeNotification object:nil];
     
+    self.currentSelection = [NSIndexPath indexPathForRow:0 inSection:0];
+    
     [[CommunityModel sharedInstance] updateCurrentUser];
 }
 
@@ -48,6 +51,14 @@ typedef NS_ENUM(NSInteger, CellTag) {
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:CurrentUserChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:FollowsChangeNotification object:nil];
+}
+
+- (void)showCurrentSelection
+{
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
+    {
+        [self.tableView selectRowAtIndexPath:self.currentSelection animated:NO scrollPosition:UITableViewScrollPositionNone];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -58,11 +69,13 @@ typedef NS_ENUM(NSInteger, CellTag) {
 - (void)onUserChanged:(NSNotification *)notification
 {
     [self.tableView reloadData];
+    [self showCurrentSelection];
 }
 
 - (void)onFollowsChanged:(NSNotification *)notification
 {
     [self.tableView reloadData];
+    [self showCurrentSelection];
 }
 
 - (IBAction)onDoneTapped:(id)sender
@@ -171,6 +184,10 @@ typedef NS_ENUM(NSInteger, CellTag) {
             [PFUser logOutInBackgroundWithBlock:^(NSError *error) {
                 [[CommunityModel sharedInstance] onLoggedOut];
             }];
+            break;
+        }
+        default: {
+            self.currentSelection = indexPath;
             break;
         }
     }

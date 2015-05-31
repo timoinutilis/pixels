@@ -11,6 +11,7 @@
 #import "UIImageView+WebCache.h"
 #import "CommSourceCodeViewController.h"
 #import "CommDetailViewController.h"
+#import "UIViewController+CommUtils.h"
 
 typedef NS_ENUM(NSInteger, CellTag) {
     CellTagNoAction,
@@ -22,6 +23,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
 @property LCCPost *post;
 @property NSMutableArray *comments;
 @property CommPostMode mode;
+@property ProgramTitleCell *programTitleCell;
 @property WriteCommentCell *writeCommentCell;
 @end
 
@@ -31,22 +33,43 @@ typedef NS_ENUM(NSInteger, CellTag) {
 {
     [super viewDidLoad];
     
-    self.comments = [NSMutableArray array];
+    self.programTitleCell = [self.tableView dequeueReusableCellWithIdentifier:@"ProgramTitleCell"];
+    
     self.writeCommentCell = [self.tableView dequeueReusableCellWithIdentifier:@"WriteCommentCell"];
+    
+    if (self.post)
+    {
+        self.programTitleCell.post = self.post;
+        [self loadAll];
+    }
 }
 
 - (void)setPost:(LCCPost *)post mode:(CommPostMode)mode
 {
     self.post = post;
     self.mode = mode;
-    self.title = post.title;
-    [self.tableView reloadData];
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:post.title style:UIBarButtonItemStylePlain target:nil action:nil];
+//    self.title = post.title;
     
+    if ([self isViewLoaded])
+    {
+        self.programTitleCell.post = post;
+        [self loadAll];
+        [self.tableView reloadData];
+    }
+}
+
+- (void)loadAll
+{
     [self loadComments];
+    [self loadProgram];
+    [self loadCounters];
 }
 
 - (void)loadComments
 {
+    self.comments = [NSMutableArray array];
+    
     PFQuery *query = [PFQuery queryWithClassName:[LCCComment parseClassName]];
     [query whereKey:@"post" equalTo:self.post];
     [query includeKey:@"user"];
@@ -54,9 +77,84 @@ typedef NS_ENUM(NSInteger, CellTag) {
     query.cachePolicy = kPFCachePolicyNetworkElseCache;
     
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        self.comments = [NSMutableArray arrayWithArray:objects];
-        [self.tableView reloadData];
+        
+        if (objects)
+        {
+            self.comments = [NSMutableArray arrayWithArray:objects];
+            [self.tableView reloadData];
+        }
+        else if (error)
+        {
+            NSLog(@"Error: %@", error.description);
+        }
+        
     }];
+}
+
+- (void)loadProgram
+{
+    if ([self.post.program isDataAvailable])
+    {
+        self.programTitleCell.getProgramButton.enabled = YES;
+    }
+    else
+    {
+        [self.post.program fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+            
+            if (object)
+            {
+                self.programTitleCell.getProgramButton.enabled = YES;
+            }
+            else if (error)
+            {
+                NSLog(@"Error: %@", error.description);
+            }
+            
+        }];
+    }
+}
+
+- (void)loadCounters
+{
+    // Likes
+    [[CommunityModel sharedInstance] fetchCountForPost:self.post type:LCCCountTypeLike block:^(NSArray *users) {
+        if (users)
+        {
+            self.programTitleCell.likeCount = users.count;
+            if (![self.post.user isMe])
+            {
+                BOOL liked = [[CommunityModel sharedInstance] isCurrentUserInArray:users];
+                if (liked)
+                {
+                    [self.programTitleCell likeIt];
+                }
+                else
+                {
+                    self.programTitleCell.likeButton.enabled = YES;
+                }
+            }
+        }
+    }];
+    
+    // Downloads
+    [[CommunityModel sharedInstance] fetchCountForPost:self.post type:LCCCountTypeDownload block:^(NSArray *users) {
+        if (users)
+        {
+            self.programTitleCell.downloadCount = users.count;
+        }
+    }];
+}
+
+- (IBAction)onLikeTapped:(id)sender
+{
+    [[CommunityModel sharedInstance] countPost:self.post type:LCCCountTypeLike];
+    self.programTitleCell.likeCount++;
+    [self.programTitleCell likeIt];
+}
+
+- (IBAction)onGetProgramTapped:(id)sender
+{
+    [self addProgramOfPost:self.post];
 }
 
 - (IBAction)onSendCommentTapped:(id)sender
@@ -71,7 +169,16 @@ typedef NS_ENUM(NSInteger, CellTag) {
         if (succeeded)
         {
             [self.comments addObject:comment];
-            [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.comments.count - 1 inSection:1]] withRowAnimation:UITableViewRowAnimationAutomatic];
+            if (self.comments.count == 1)
+            {
+                // first comment (need to refresh headers)
+                [self.tableView reloadData];
+            }
+            else
+            {
+                // later comment
+                [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.comments.count - 1 inSection:1]] withRowAnimation:UITableViewRowAnimationAutomatic];
+            }
             [self.writeCommentCell reset];
         }
         else
@@ -79,7 +186,6 @@ typedef NS_ENUM(NSInteger, CellTag) {
             UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Could not send comment" message:@"Please try again later!" preferredStyle:UIAlertControllerStyleAlert];
             [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
             [self presentViewController:alert animated:YES completion:nil];
-
         }
         
     }];
@@ -134,9 +240,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
     {
         if (indexPath.row == 0)
         {
-            ProgramTitleCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ProgramTitleCell" forIndexPath:indexPath];
-            cell.post = self.post;
-            return cell;
+            return self.programTitleCell;
         }
         else if (indexPath.row == 1)
         {
@@ -181,7 +285,10 @@ typedef NS_ENUM(NSInteger, CellTag) {
     switch (cell.tag)
     {
         case CellTagSourceCode: {
-            [self performSegueWithIdentifier:@"SourceCode" sender:self];
+            if ([self.post isDataAvailable])
+            {
+                [self performSegueWithIdentifier:@"SourceCode" sender:self];
+            }
             break;
         }
         case CellTagPostAuthor: {
@@ -228,6 +335,8 @@ typedef NS_ENUM(NSInteger, CellTag) {
 @property (weak, nonatomic) IBOutlet UIImageView *programImage;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *programDetailLabel;
+@property (weak, nonatomic) IBOutlet UILabel *likeCountLabel;
+@property (weak, nonatomic) IBOutlet UILabel *downloadCountLabel;
 @end
 
 @implementation ProgramTitleCell
@@ -240,14 +349,38 @@ typedef NS_ENUM(NSInteger, CellTag) {
     layer.cornerRadius = 6;
     layer.borderWidth = 1;
     layer.borderColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.25].CGColor;
+    
+    self.getProgramButton.enabled = NO;
+    self.likeButton.enabled = NO;
 }
 
 - (void)setPost:(LCCPost *)post
 {
-    _post = post;
-    [self.programImage sd_setImageWithURL:[NSURL URLWithString:post.image.url]];
-    self.titleLabel.text = post.title;
-    self.programDetailLabel.text = post.detail;
+    if (post != _post)
+    {
+        _post = post;
+        [self.programImage sd_setImageWithURL:[NSURL URLWithString:post.image.url]];
+        self.titleLabel.text = post.title;
+        self.programDetailLabel.text = post.detail;
+    }
+}
+
+- (void)setLikeCount:(NSInteger)likeCount
+{
+    _likeCount = likeCount;
+    self.likeCountLabel.text = [NSString stringWithFormat:@"%ld", (long)likeCount];
+}
+
+- (void)setDownloadCount:(NSInteger)downloadCount
+{
+    _downloadCount = downloadCount;
+    self.downloadCountLabel.text = [NSString stringWithFormat:@"%ld", (long)downloadCount];
+}
+
+- (void)likeIt
+{
+    [self.likeButton setTitle:@"You like this" forState:UIControlStateNormal];
+    self.likeButton.enabled = NO;
 }
 
 @end

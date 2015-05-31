@@ -16,7 +16,7 @@
 @dynamic image;
 @dynamic title;
 @dynamic detail;
-@dynamic data;
+@dynamic program;
 @dynamic sharedPost;
 
 + (NSString *)parseClassName

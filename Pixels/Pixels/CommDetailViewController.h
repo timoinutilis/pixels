@@ -25,7 +25,9 @@ typedef NS_ENUM(NSInteger, CommListMode) {
 
 
 @interface CommProfileCell : UITableViewCell
-
 @property (nonatomic) LCCUser *user;
+@end
 
+@interface CommInfoCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UILabel *infoTextLabel;
 @end

@@ -52,7 +52,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Menu" id="8IW-Vc-57b">
-                        <barButtonItem key="leftBarButtonItem" style="done" systemItem="done" id="Coj-mP-aYn">
+                        <barButtonItem key="leftBarButtonItem" title="Close" id="Coj-mP-aYn">
                             <connections>
                                 <action selector="onDoneTapped:" destination="swO-wf-6bs" id="cLi-Qn-YhQ"/>
                             </connections>
@@ -79,7 +79,7 @@
             </objects>
             <point key="canvasLocation" x="365" y="108"/>
         </scene>
-        <!--Detail-->
+        <!--Comm Detail View Controller-->
         <scene sceneID="MMV-lQ-ogW">
             <objects>
                 <tableViewController storyboardIdentifier="CommDetailView" id="AS4-Ac-pfc" customClass="CommDetailViewController" sceneMemberID="viewController">
@@ -133,6 +133,30 @@
                                     <outlet property="titleLabel" destination="Z4m-sp-bKt" id="bkA-fg-F1o"/>
                                 </connections>
                             </tableViewCell>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="CommInfoCell" id="aEv-vU-DoW" customClass="CommInfoCell">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="aEv-vU-DoW" id="uNZ-4E-tMF">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Info" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xXp-pd-eNg">
+                                            <rect key="frame" x="8" y="16" width="304" height="11"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="bottomMargin" secondItem="xXp-pd-eNg" secondAttribute="bottom" constant="8" id="2T9-dv-DEm"/>
+                                        <constraint firstItem="xXp-pd-eNg" firstAttribute="leading" secondItem="uNZ-4E-tMF" secondAttribute="leadingMargin" id="CIC-W9-gRe"/>
+                                        <constraint firstItem="xXp-pd-eNg" firstAttribute="top" secondItem="uNZ-4E-tMF" secondAttribute="topMargin" constant="8" id="Dej-Md-oQv"/>
+                                        <constraint firstItem="xXp-pd-eNg" firstAttribute="trailing" secondItem="uNZ-4E-tMF" secondAttribute="trailingMargin" id="Ow0-Us-h82"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="infoTextLabel" destination="xXp-pd-eNg" id="wdO-xn-DxT"/>
+                                </connections>
+                            </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="DetailMenuCell" textLabel="2Y4-AQ-4g5" style="IBUITableViewCellStyleDefault" id="10a-Ps-wAS">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
@@ -174,7 +198,7 @@
                             <outlet property="delegate" destination="AS4-Ac-pfc" id="Jvj-Lc-tDE"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Detail" id="k5D-Jf-65v"/>
+                    <navigationItem key="navigationItem" id="k5D-Jf-65v"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HjS-Q8-aUX" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -215,7 +239,7 @@
             </objects>
             <point key="canvasLocation" x="907" y="1498"/>
         </scene>
-        <!--Post-->
+        <!--Comm Post View Controller-->
         <scene sceneID="AJm-x8-XSN">
             <objects>
                 <tableViewController storyboardIdentifier="CommPostView" id="gW4-UF-hxM" customClass="CommPostViewController" sceneMemberID="viewController">
@@ -246,6 +270,9 @@
                                             <state key="normal" title="Like">
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
+                                            <connections>
+                                                <action selector="onLikeTapped:" destination="gW4-UF-hxM" eventType="touchUpInside" id="bS8-sO-Fwc"/>
+                                            </connections>
                                         </button>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="v5V-7R-srr">
                                             <rect key="frame" x="8" y="16" width="128" height="128"/>
@@ -259,26 +286,49 @@
                                             <state key="normal" title="Get Program">
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
+                                            <connections>
+                                                <action selector="onGetProgramTapped:" destination="gW4-UF-hxM" eventType="touchUpInside" id="Qza-iC-e8c"/>
+                                            </connections>
                                         </button>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="..." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DfN-KT-w2b">
+                                            <rect key="frame" x="198" y="55" width="13" height="18"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="..." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UPg-iD-XA3">
+                                            <rect key="frame" x="256" y="93" width="13" height="18"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="jxa-rR-LTR" firstAttribute="leading" secondItem="xPQ-5C-B44" secondAttribute="leadingMargin" id="1LT-Ze-P2y"/>
                                         <constraint firstItem="v5V-7R-srr" firstAttribute="leading" secondItem="xPQ-5C-B44" secondAttribute="leadingMargin" id="4Aj-ep-5ml"/>
                                         <constraint firstItem="v5V-7R-srr" firstAttribute="top" secondItem="xPQ-5C-B44" secondAttribute="topMargin" constant="8" id="6qQ-dR-2mg"/>
                                         <constraint firstItem="jxa-rR-LTR" firstAttribute="top" secondItem="v5V-7R-srr" secondAttribute="bottom" constant="16" id="7CO-nq-lMu"/>
+                                        <constraint firstItem="DfN-KT-w2b" firstAttribute="baseline" secondItem="saM-rf-vcT" secondAttribute="baseline" id="801-8J-ym0"/>
+                                        <constraint firstItem="DfN-KT-w2b" firstAttribute="leading" secondItem="saM-rf-vcT" secondAttribute="trailing" constant="16" id="84W-tb-FcT"/>
                                         <constraint firstItem="rJe-9g-5yj" firstAttribute="trailing" secondItem="xPQ-5C-B44" secondAttribute="trailingMargin" id="Amv-We-HFf"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="jxa-rR-LTR" secondAttribute="bottom" constant="8" id="HSt-rU-qJH"/>
                                         <constraint firstItem="rJe-9g-5yj" firstAttribute="top" secondItem="xPQ-5C-B44" secondAttribute="topMargin" constant="8" id="YZd-WQ-AWN"/>
+                                        <constraint firstItem="UPg-iD-XA3" firstAttribute="baseline" secondItem="FUY-dp-hIg" secondAttribute="baseline" id="ZzE-oB-mH8"/>
                                         <constraint firstItem="rJe-9g-5yj" firstAttribute="leading" secondItem="v5V-7R-srr" secondAttribute="trailing" constant="16" id="bYL-rt-TRa"/>
                                         <constraint firstItem="jxa-rR-LTR" firstAttribute="top" relation="greaterThanOrEqual" secondItem="FUY-dp-hIg" secondAttribute="bottom" constant="8" id="fn6-az-mRD"/>
                                         <constraint firstItem="FUY-dp-hIg" firstAttribute="leading" secondItem="v5V-7R-srr" secondAttribute="trailing" constant="16" id="fxY-ji-W0T"/>
                                         <constraint firstItem="saM-rf-vcT" firstAttribute="top" secondItem="rJe-9g-5yj" secondAttribute="bottom" constant="12" id="mmM-T4-9wk"/>
+                                        <constraint firstItem="UPg-iD-XA3" firstAttribute="leading" secondItem="FUY-dp-hIg" secondAttribute="trailing" constant="16" id="n45-Ei-320"/>
                                         <constraint firstItem="FUY-dp-hIg" firstAttribute="top" secondItem="saM-rf-vcT" secondAttribute="bottom" constant="8" id="nYW-qk-2Of"/>
                                         <constraint firstItem="jxa-rR-LTR" firstAttribute="trailing" secondItem="xPQ-5C-B44" secondAttribute="trailingMargin" id="tFv-8c-yNO"/>
                                         <constraint firstItem="saM-rf-vcT" firstAttribute="leading" secondItem="v5V-7R-srr" secondAttribute="trailing" constant="16" id="vg2-ds-9OU"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="downloadCountLabel" destination="UPg-iD-XA3" id="ETo-Vj-3SF"/>
+                                    <outlet property="getProgramButton" destination="FUY-dp-hIg" id="jHk-Vz-lsd"/>
+                                    <outlet property="likeButton" destination="saM-rf-vcT" id="fZo-Pb-MrR"/>
+                                    <outlet property="likeCountLabel" destination="DfN-KT-w2b" id="yTM-M2-WL9"/>
                                     <outlet property="programDetailLabel" destination="jxa-rR-LTR" id="sme-Yx-90a"/>
                                     <outlet property="programImage" destination="v5V-7R-srr" id="DH5-CN-GEt"/>
                                     <outlet property="titleLabel" destination="rJe-9g-5yj" id="FQZ-JF-Bm2"/>
@@ -367,7 +417,7 @@
                             <outlet property="delegate" destination="gW4-UF-hxM" id="Fty-hU-3Nj"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Post" id="SlP-TI-OHv"/>
+                    <navigationItem key="navigationItem" id="SlP-TI-OHv"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <segue destination="2BS-Ju-8fE" kind="show" identifier="SourceCode" id="fww-cx-Yur"/>

@@ -105,28 +105,44 @@
         
         if (succeeded)
         {
-            // save post
-
-            LCCPost *post = [LCCPost object];
-            post.type = LCCPostTypeProgram;
-            post.user = (LCCUser *)[PFUser currentUser];
-            post.title = self.titleCell.textField.text;
-            post.detail = self.descriptionTextView.text;
-            post.data = self.project.sourceCode;
-            post.image = imageFile;
+            // save source code
             
-            [post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            LCCProgram *program = [LCCProgram object];
+            program.sourceCode = self.project.sourceCode;
+
+            [program saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 
                 if (succeeded)
                 {
-                    [[CommunityModel sharedInstance] onPostedWithDate:post.createdAt];
-                    [self.shareDelegate onClosedWithSuccess:YES];
+                    // save post
+                    
+                    LCCPost *post = [LCCPost object];
+                    post.type = LCCPostTypeProgram;
+                    post.user = (LCCUser *)[PFUser currentUser];
+                    post.title = self.titleCell.textField.text;
+                    post.detail = self.descriptionTextView.text;
+                    post.program = program;
+                    post.image = imageFile;
+                    
+                    [post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                        
+                        if (succeeded)
+                        {
+                            [[CommunityModel sharedInstance] onPostedWithDate:post.createdAt];
+                            [self.shareDelegate onClosedWithSuccess:YES];
+                        }
+                        else
+                        {
+                            [self showSendError];
+                        }
+                        
+                    }];
+                    
                 }
                 else
                 {
                     [self showSendError];
                 }
-                
             }];
         }
         else

@@ -75,21 +75,38 @@ typedef NS_ENUM(NSInteger, CellTag) {
         case CommListModeNews: {
             self.title = @"News";
             
-            PFQuery *query = [PFQuery queryWithClassName:[LCCPost parseClassName]];
-            [query whereKey:@"user" containedIn:[[CommunityModel sharedInstance] arrayWithFollowedUser]];
-            [query includeKey:@"sharedPost"];
-            [query includeKey:@"user"];
-            [query orderByDescending:@"createdAt"];
-            query.cachePolicy = kPFCachePolicyNetworkElseCache;
-            
-            [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-                self.posts = objects;
+            NSArray *followedUsers = [[CommunityModel sharedInstance] arrayWithFollowedUser];
+            if (followedUsers.count > 0)
+            {
+                PFQuery *query = [PFQuery queryWithClassName:[LCCPost parseClassName]];
+                [query whereKey:@"user" containedIn:followedUsers];
+                [query includeKey:@"sharedPost"];
+                [query includeKey:@"user"];
+                [query orderByDescending:@"createdAt"];
+                query.cachePolicy = kPFCachePolicyNetworkElseCache;
+                
+                [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                    if (objects)
+                    {
+                        self.posts = objects;
+                        [self.tableView reloadData];
+                    }
+                    else if (error)
+                    {
+                        NSLog(@"Error: %@", error.description);
+                    }
+                }];
+            }
+            else
+            {
+                self.posts = nil;
                 [self.tableView reloadData];
-            }];
+            }
             break;
         }
         case CommListModeProfile: {
-            self.title = self.user.username;
+            self.title = nil;
+            self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:self.user.username style:UIBarButtonItemStylePlain target:nil action:nil];
             
             PFQuery *query = [PFQuery queryWithClassName:[LCCPost parseClassName]];
             [query whereKey:@"user" equalTo:self.user];
@@ -99,8 +116,15 @@ typedef NS_ENUM(NSInteger, CellTag) {
             query.cachePolicy = kPFCachePolicyNetworkElseCache;
             
             [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-                self.posts = objects;
-                [self.tableView reloadData];
+                if (objects)
+                {
+                    self.posts = objects;
+                    [self.tableView reloadData];
+                }
+                else if (error)
+                {
+                    NSLog(@"Error: %@", error.description);
+                }
             }];
             break;
         }
@@ -141,6 +165,10 @@ typedef NS_ENUM(NSInteger, CellTag) {
         {
             return 3;
         }
+        else if (self.mode == CommListModeNews)
+        {
+            return 1;
+        }
     }
     else if (section == 1)
     {
@@ -158,7 +186,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
 {
     if (section == 0)
     {
-        return @"User";
+        return (self.mode == CommListModeNews) ? @"Info" : @"User";
     }
     else if (section == 1)
     {
@@ -194,6 +222,12 @@ typedef NS_ENUM(NSInteger, CellTag) {
                 }
                 return cell;
             }
+        }
+        else if (self.mode == CommListModeNews)
+        {
+            CommInfoCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommInfoCell" forIndexPath:indexPath];
+            cell.infoTextLabel.text = @"Here you see the posts of all the users you follow.";
+            return cell;
         }
     }
     else if (indexPath.section == 1)
@@ -259,7 +293,16 @@ typedef NS_ENUM(NSInteger, CellTag) {
 {
     _user = user;
     self.titleLabel.text = user.username;
-    self.profileDetailLabel.text = user.about;
+    if (user.about.length > 0)
+    {
+        self.profileDetailLabel.text = user.about;
+        self.profileDetailLabel.alpha = 1.0;
+    }
+    else
+    {
+        self.profileDetailLabel.text = @"No about text written yet";
+        self.profileDetailLabel.alpha = 0.5;
+    }
     if ([self.user isMe])
     {
         self.actionButton.hidden = NO;
@@ -283,4 +326,8 @@ typedef NS_ENUM(NSInteger, CellTag) {
     }
 }
 
+@end
+
+
+@implementation CommInfoCell
 @end

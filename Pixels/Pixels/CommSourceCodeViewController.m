@@ -8,6 +8,7 @@
 
 #import "CommSourceCodeViewController.h"
 #import "CommunityModel.h"
+#import "UIViewController+CommUtils.h"
 
 @interface CommSourceCodeViewController ()
 
@@ -22,11 +23,12 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.textView.text = self.post.data;
+    self.textView.text = self.post.program.sourceCode;
 }
 
 - (IBAction)onGetTapped:(id)sender
 {
+    [self addProgramOfPost:self.post];
 }
 
 @end

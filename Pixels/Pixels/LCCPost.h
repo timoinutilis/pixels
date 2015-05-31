@@ -8,7 +8,7 @@
 
 #import <Parse/Parse.h>
 
-@class LCCUser;
+@class LCCUser, LCCProgram;
 
 typedef NS_ENUM(int, LCCPostType) {
     LCCPostTypeUndefined,
@@ -33,7 +33,7 @@ typedef NS_ENUM(int, LCCPostCategory) {
 @property (retain) PFFile *image;
 @property (retain) NSString *title;
 @property (retain) NSString *detail;
-@property (retain) NSString *data;
+@property (retain) LCCProgram *program;
 @property (retain) LCCPost *sharedPost;
 
 @end

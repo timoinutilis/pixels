@@ -28,6 +28,9 @@
 		924F83301B0B5BDF00B96C91 /* CommDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924F832F1B0B5BDF00B96C91 /* CommDetailViewController.m */; };
 		924F83331B0B610D00B96C91 /* CommSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924F83321B0B610D00B96C91 /* CommSplitViewController.m */; };
 		92509CCA1A28F99D0086E7E3 /* ExplorerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92509CC91A28F99D0086E7E3 /* ExplorerViewController.m */; };
+		925935A11B1B77D7001CE0B1 /* LCCProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = 925935A01B1B77D7001CE0B1 /* LCCProgram.m */; };
+		925935A41B1B7E4F001CE0B1 /* UIViewController+CommUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 925935A31B1B7E4F001CE0B1 /* UIViewController+CommUtils.m */; };
+		925935A71B1B80C9001CE0B1 /* LCCCount.m in Sources */ = {isa = PBXBuildFile; fileRef = 925935A61B1B80C9001CE0B1 /* LCCCount.m */; };
 		925A01A91A1E67F900A321E6 /* Parser.m in Sources */ = {isa = PBXBuildFile; fileRef = 925A01A81A1E67F900A321E6 /* Parser.m */; };
 		925C28191B092BD9007AC515 /* DayCodeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 925C28181B092BD9007AC515 /* DayCodeManager.m */; };
 		925C281F1B092CA4007AC515 /* NSDate+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 925C281E1B092CA4007AC515 /* NSDate+Utils.m */; };
@@ -150,6 +153,12 @@
 		924F83321B0B610D00B96C91 /* CommSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommSplitViewController.m; sourceTree = "<group>"; };
 		92509CC81A28F99D0086E7E3 /* ExplorerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExplorerViewController.h; sourceTree = "<group>"; };
 		92509CC91A28F99D0086E7E3 /* ExplorerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExplorerViewController.m; sourceTree = "<group>"; };
+		9259359F1B1B77D7001CE0B1 /* LCCProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCProgram.h; sourceTree = "<group>"; };
+		925935A01B1B77D7001CE0B1 /* LCCProgram.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCProgram.m; sourceTree = "<group>"; };
+		925935A21B1B7E4F001CE0B1 /* UIViewController+CommUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+CommUtils.h"; sourceTree = "<group>"; };
+		925935A31B1B7E4F001CE0B1 /* UIViewController+CommUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+CommUtils.m"; sourceTree = "<group>"; };
+		925935A51B1B80C9001CE0B1 /* LCCCount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCCount.h; sourceTree = "<group>"; };
+		925935A61B1B80C9001CE0B1 /* LCCCount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCCount.m; sourceTree = "<group>"; };
 		925A01A71A1E67F900A321E6 /* Parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Parser.h; sourceTree = "<group>"; };
 		925A01A81A1E67F900A321E6 /* Parser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Parser.m; sourceTree = "<group>"; };
 		925C28171B092BD9007AC515 /* DayCodeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DayCodeManager.h; sourceTree = "<group>"; };
@@ -405,6 +414,8 @@
 				92884F2A1B0F307F0032623D /* CommSourceCodeViewController.m */,
 				92D2C2001B13442A00539BA6 /* CommUsersViewController.h */,
 				92D2C2011B13442A00539BA6 /* CommUsersViewController.m */,
+				925935A21B1B7E4F001CE0B1 /* UIViewController+CommUtils.h */,
+				925935A31B1B7E4F001CE0B1 /* UIViewController+CommUtils.m */,
 			);
 			name = Community;
 			sourceTree = "<group>";
@@ -659,6 +670,10 @@
 				92884F2D1B0F33850032623D /* LCCComment.m */,
 				920E5E5C1B1324FE00071C6A /* LCCFollow.h */,
 				920E5E5D1B1324FE00071C6A /* LCCFollow.m */,
+				9259359F1B1B77D7001CE0B1 /* LCCProgram.h */,
+				925935A01B1B77D7001CE0B1 /* LCCProgram.m */,
+				925935A51B1B80C9001CE0B1 /* LCCCount.h */,
+				925935A61B1B80C9001CE0B1 /* LCCCount.m */,
 			);
 			name = "Community Model";
 			sourceTree = "<group>";
@@ -806,6 +821,7 @@
 				92884F261B0F25B30032623D /* UIImageView+HighlightedWebCache.m in Sources */,
 				92E2B8AA1A52F08D00D0DF29 /* ActivityItemSource.m in Sources */,
 				92884F231B0F25B30032623D /* UIImage+GIF.m in Sources */,
+				925935A11B1B77D7001CE0B1 /* LCCProgram.m in Sources */,
 				92884F1D1B0F25B30032623D /* SDWebImageDecoder.m in Sources */,
 				92E53DF51A5B3A1D00FE9F91 /* GORScrollViewDelegate.m in Sources */,
 				92884F1C1B0F25B30032623D /* SDWebImageCompat.m in Sources */,
@@ -852,6 +868,7 @@
 				926086321A5E8560006C5523 /* Runnable.m in Sources */,
 				922A77461AA46CCB004EE2CA /* Project.m in Sources */,
 				920E681D1AB731620038994A /* CoachMarkView.m in Sources */,
+				925935A71B1B80C9001CE0B1 /* LCCCount.m in Sources */,
 				924CC0FE1A220B3C00D2AF68 /* Runner.m in Sources */,
 				92E53DF41A5B3A1D00FE9F91 /* GORMenuTableViewController.m in Sources */,
 				92B7A5331AA8C71000B6CA81 /* AudioPlayer.m in Sources */,
@@ -863,6 +880,7 @@
 				92E53DFA1A5B3AC200FE9F91 /* ShareViewController.m in Sources */,
 				926864241AA607A000F305B9 /* UpgradeViewController.m in Sources */,
 				92C0811C1B0DDCDB0006331B /* CommunityModel.m in Sources */,
+				925935A41B1B7E4F001CE0B1 /* UIViewController+CommUtils.m in Sources */,
 				92509CCA1A28F99D0086E7E3 /* ExplorerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

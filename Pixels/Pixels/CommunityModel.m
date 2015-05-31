@@ -27,8 +27,10 @@ NSString *const FollowsChangeNotification = @"FollowsChangeNotification";
 {
     [LCCUser registerSubclass];
     [LCCPost registerSubclass];
+    [LCCProgram registerSubclass];
     [LCCComment registerSubclass];
     [LCCFollow registerSubclass];
+    [LCCCount registerSubclass];
 }
 
 - (void)onLoggedIn
@@ -151,6 +153,64 @@ NSString *const FollowsChangeNotification = @"FollowsChangeNotification";
         [array addObject:follow.followsUser];
     }
     return array;
+}
+
+- (void)countPost:(LCCPost *)post type:(LCCCountType)type
+{
+    if (![post.user isMe])
+    {
+        LCCCount *count = [LCCCount object];
+        count.post = post;
+        count.user = (LCCUser *)[PFUser currentUser];
+        count.type = type;
+        
+        [count saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if (!succeeded && error)
+            {
+                NSLog(@"Error: %@", error.description);
+            }
+        }];
+
+    }
+}
+
+- (void)fetchCountForPost:(LCCPost *)post type:(LCCCountType)type block:(void (^)(NSArray *users))block
+{
+    PFQuery *query = [PFQuery queryWithClassName:[LCCCount parseClassName]];
+    [query whereKey:@"post" equalTo:post];
+    [query whereKey:@"type" equalTo:@(type)];
+
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        
+        if (objects)
+        {
+            NSMutableArray *users = [NSMutableArray arrayWithCapacity:objects.count];
+            for (LCCCount *count in objects)
+            {
+                [users addObject:count.user];
+            }
+            block(users);
+        }
+        else if (error)
+        {
+            NSLog(@"Error: %@", error.description);
+            block(nil);
+        }
+        
+    }];
+}
+
+- (BOOL)isCurrentUserInArray:(NSArray *)array
+{
+    NSString *currentUserId = [PFUser currentUser].objectId;
+    for (LCCUser *user in array)
+    {
+        if ([user.objectId isEqualToString:currentUserId])
+        {
+            return YES;
+        }
+    }
+    return NO;
 }
 
 @end

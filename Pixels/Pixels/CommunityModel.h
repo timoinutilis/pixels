@@ -9,8 +9,10 @@
 #import <Foundation/Foundation.h>
 #import "LCCUser.h"
 #import "LCCPost.h"
+#import "LCCProgram.h"
 #import "LCCComment.h"
 #import "LCCFollow.h"
+#import "LCCCount.h"
 
 extern NSString *const CurrentUserChangeNotification;
 extern NSString *const FollowsChangeNotification;
@@ -32,5 +34,8 @@ extern NSString *const FollowsChangeNotification;
 - (LCCFollow *)followWithUser:(LCCUser *)user;
 - (BOOL)canFollowOrUnfollow:(LCCUser *)user;
 - (NSArray *)arrayWithFollowedUser;
+- (void)countPost:(LCCPost *)post type:(LCCCountType)type;
+- (void)fetchCountForPost:(LCCPost *)post type:(LCCCountType)type block:(void (^)(NSArray *users))block;
+- (BOOL)isCurrentUserInArray:(NSArray *)array;
 
 @end
