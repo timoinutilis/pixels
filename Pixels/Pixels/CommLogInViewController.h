@@ -6,8 +6,23 @@
 //  Copyright (c) 2015 Inutilis Software. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "GORMenuTableViewController.h"
 
-@interface CommLogInViewController : UIViewController
+@interface CommLogInViewController : GORMenuTableViewController
 
+@end
+
+
+@interface CommLogInInputCell : UITableViewCell
+
+@property (weak, nonatomic) IBOutlet UITextField *textField;
+
+- (void)setupAsUsername;
+- (void)setupAsPasswordVerify:(BOOL)verify;
+
+@end
+
+
+@interface CommLogInButtonCell : UITableViewCell
+- (void)setDisabled:(BOOL)disabled wheel:(BOOL)wheel;
 @end

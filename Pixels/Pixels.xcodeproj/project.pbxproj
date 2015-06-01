@@ -47,6 +47,7 @@
 		926864211AA5E50900F305B9 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 926864201AA5E50900F305B9 /* StoreKit.framework */; };
 		926864241AA607A000F305B9 /* UpgradeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 926864231AA607A000F305B9 /* UpgradeViewController.m */; };
 		926864271AA6087300F305B9 /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 926864261AA6087300F305B9 /* AppController.m */; };
+		926A6A181B1C929D00A85412 /* UIViewController+LowResCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 926A6A171B1C929D00A85412 /* UIViewController+LowResCoder.m */; };
 		926C72C71A2B579E00448EAB /* RunnerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 926C72C61A2B579E00448EAB /* RunnerViewController.m */; };
 		9272C1491A1DE2D000E97957 /* Token.m in Sources */ = {isa = PBXBuildFile; fileRef = 9272C1481A1DE2D000E97957 /* Token.m */; };
 		927334981A2A456900C89AF0 /* Help.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 927334971A2A456900C89AF0 /* Help.storyboard */; };
@@ -191,6 +192,8 @@
 		926864231AA607A000F305B9 /* UpgradeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpgradeViewController.m; sourceTree = "<group>"; };
 		926864251AA6087300F305B9 /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppController.h; sourceTree = "<group>"; };
 		926864261AA6087300F305B9 /* AppController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppController.m; sourceTree = "<group>"; };
+		926A6A161B1C929D00A85412 /* UIViewController+LowResCoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+LowResCoder.h"; sourceTree = "<group>"; };
+		926A6A171B1C929D00A85412 /* UIViewController+LowResCoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+LowResCoder.m"; sourceTree = "<group>"; };
 		926C72C51A2B579E00448EAB /* RunnerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RunnerViewController.h; sourceTree = "<group>"; };
 		926C72C61A2B579E00448EAB /* RunnerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RunnerViewController.m; sourceTree = "<group>"; };
 		926C72C81A2B5C9100448EAB /* RunnerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RunnerDelegate.h; sourceTree = "<group>"; };
@@ -461,6 +464,8 @@
 		927333F11A2A3EDD00C89AF0 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				926A6A161B1C929D00A85412 /* UIViewController+LowResCoder.h */,
+				926A6A171B1C929D00A85412 /* UIViewController+LowResCoder.m */,
 				927334991A2A457A00C89AF0 /* Main */,
 				9273349A1A2A458100C89AF0 /* Help */,
 				924F832D1B0B5B7800B96C91 /* Community */,
@@ -819,6 +824,7 @@
 				9204C1F21A6B458200A0123C /* NSString+Utils.m in Sources */,
 				92884F241B0F25B30032623D /* UIImage+MultiFormat.m in Sources */,
 				92884F261B0F25B30032623D /* UIImageView+HighlightedWebCache.m in Sources */,
+				926A6A181B1C929D00A85412 /* UIViewController+LowResCoder.m in Sources */,
 				92E2B8AA1A52F08D00D0DF29 /* ActivityItemSource.m in Sources */,
 				92884F231B0F25B30032623D /* UIImage+GIF.m in Sources */,
 				925935A11B1B77D7001CE0B1 /* LCCProgram.m in Sources */,

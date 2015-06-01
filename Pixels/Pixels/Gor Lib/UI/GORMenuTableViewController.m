@@ -16,6 +16,12 @@
 
 @implementation GORMenuTableViewController
 
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    self.dynamicRowHeights = YES;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -35,7 +41,25 @@
     {
         section--;
     }
-    [self addCell:cell section:section];
+    [self insertCell:cell section:section row:-1];
+}
+
+- (void)addCell:(UITableViewCell *)cell section:(NSInteger)section
+{
+    [self insertCell:cell section:section row:-1];
+}
+
+- (void)insertCell:(UITableViewCell *)cell section:(NSInteger)section row:(NSInteger)row
+{
+    GORMenuSection *sectionObj = [self sectionAt:section];
+    if (row == -1)
+    {
+        [sectionObj.cells addObject:cell];
+    }
+    else
+    {
+        [sectionObj.cells insertObject:cell atIndex:row];
+    }
     
     if ([cell isKindOfClass:[GORSpaceTableViewCell class]])
     {
@@ -47,14 +71,15 @@
     }
 }
 
-- (void)addCell:(UITableViewCell *)cell section:(NSInteger)section
+- (void)removeCell:(UITableViewCell *)cell section:(NSInteger)section
 {
-    while (section >= self.sections.count)
-    {
-        [self.sections addObject:[[GORMenuSection alloc] init]];
-    }
     GORMenuSection *sectionObj = self.sections[section];
-    [sectionObj.cells addObject:cell];
+    [sectionObj.cells removeObject:cell];
+
+    if ([cell isKindOfClass:[GORSpaceTableViewCell class]])
+    {
+        [self.spaceCells removeObject:cell];
+    }
 }
 
 - (void)removeCellWithReuseIdentifier:(NSString *)reuseIdentifier section:(NSInteger)section
@@ -71,14 +96,22 @@
     }
 }
 
+- (void)setIsHidden:(BOOL)hidden section:(NSInteger)section
+{
+    GORMenuSection *sectionObj = [self sectionAt:section];
+    sectionObj.isHidden = hidden;
+}
+
 - (void)setHeader:(UIView *)view section:(NSInteger)section
 {
-    while (section >= self.sections.count)
-    {
-        [self.sections addObject:[[GORMenuSection alloc] init]];
-    }
-    GORMenuSection *sectionObj = self.sections[section];
+    GORMenuSection *sectionObj = [self sectionAt:section];
     sectionObj.header = view;
+}
+
+- (void)setHeaderTitle:(NSString *)text section:(NSInteger)section
+{
+    GORMenuSection *sectionObj = [self sectionAt:section];
+    sectionObj.headerText = text;
 }
 
 - (void)updateSpace
@@ -107,9 +140,13 @@
     return nil;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (GORMenuSection *)sectionAt:(NSInteger)index
 {
-    
+    while (index >= self.sections.count)
+    {
+        [self.sections addObject:[[GORMenuSection alloc] init]];
+    }
+    return self.sections[index];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -117,10 +154,15 @@
     return self.sections.count;
 }
 
+- (CGFloat)actualRowHeight
+{
+    return (self.tableView.rowHeight > 0) ? self.tableView.rowHeight : 44.0;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     GORMenuSection *sectionObj = self.sections[section];
-    return sectionObj.cells.count;
+    return sectionObj.isHidden ? 0 : sectionObj.cells.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -135,25 +177,50 @@
     return sectionObj.header;
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    GORMenuSection *sectionObj = self.sections[section];
+    return sectionObj.headerText;
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    GORMenuSection *sectionObj = self.sections[indexPath.section];
-    UITableViewCell *cell = sectionObj.cells[indexPath.row];
-    
-    if (self.spaceCells && [cell isKindOfClass:[GORSpaceTableViewCell class]])
+    if (self.dynamicRowHeights)
     {
-        return floorf(self.verticalSpace / self.spaceCells.count);
+        GORMenuSection *sectionObj = self.sections[indexPath.section];
+        UITableViewCell *cell = sectionObj.cells[indexPath.row];
+        
+        if (self.spaceCells && [cell isKindOfClass:[GORSpaceTableViewCell class]])
+        {
+            return floorf(self.verticalSpace / self.spaceCells.count);
+        }
+        
+        if (![self.tableView respondsToSelector:@selector(separatorEffect)]) // iOS 8 check
+        {
+            // iOS 7 code
+            CGSize size = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
+            return size.height;
+        }
+        
+        // iOS 8 code
+        return UITableViewAutomaticDimension;
     }
     
-    if (![self.tableView respondsToSelector:@selector(separatorEffect)]) // iOS 8 check
+    return [self actualRowHeight];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (self.dynamicRowHeights)
     {
-        // iOS 7 code
-        [cell layoutSubviews];
-        CGSize size = [cell sizeThatFits:self.tableView.frame.size];
-        return size.height;
+        GORMenuSection *sectionObj = self.sections[indexPath.section];
+        UITableViewCell *cell = sectionObj.cells[indexPath.row];
+        if (cell.bounds.size.height > 1)
+        {
+            return cell.bounds.size.height;
+        }
+        return [self actualRowHeight];
     }
-    
-    // iOS 8 code
     return UITableViewAutomaticDimension;
 }
 
@@ -162,10 +229,10 @@
     GORMenuSection *sectionObj = self.sections[section];
     if (sectionObj.header)
     {
-        CGSize size = [sectionObj.header sizeThatFits:self.tableView.frame.size];
+        CGSize size = [sectionObj.header sizeThatFits:self.tableView.frame.size]; // maybe should be systemLayoutSizeFittingSize
         return size.height;
     }
-    return 0;
+    return UITableViewAutomaticDimension;
 }
 
 @end

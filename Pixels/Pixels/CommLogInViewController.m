@@ -8,13 +8,23 @@
 
 #import "CommLogInViewController.h"
 #import "CommunityModel.h"
+#import "UIViewController+LowResCoder.h"
 
 NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
 
 @interface CommLogInViewController ()
 
-@property (weak, nonatomic) IBOutlet UITextField *userNameTextField;
-@property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *cancelButton;
+
+@property CommLogInInputCell *logInUsernameCell;
+@property CommLogInInputCell *logInPasswordCell;
+@property CommLogInButtonCell *logInButtonCell;
+@property CommLogInInputCell *registerUsernameCell;
+@property CommLogInInputCell *registerPasswordCell;
+@property CommLogInInputCell *registerPasswordVerifyCell;
+@property CommLogInButtonCell *registerButtonCell;
+
+@property (nonatomic) BOOL isBusy;
 
 @end
 
@@ -23,14 +33,50 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     
+    self.dynamicRowHeights = NO;
+
+    self.logInUsernameCell = [self.tableView dequeueReusableCellWithIdentifier:@"CommLogInInputCell"];
+    [self.logInUsernameCell setupAsUsername];
+    self.logInPasswordCell = [self.tableView dequeueReusableCellWithIdentifier:@"CommLogInInputCell"];
+    [self.logInPasswordCell setupAsPasswordVerify:NO];
+    self.logInButtonCell = [self.tableView dequeueReusableCellWithIdentifier:@"CommLogInButtonCell"];
+    self.logInButtonCell.textLabel.text = @"Log In";
+    
+    self.registerUsernameCell = [self.tableView dequeueReusableCellWithIdentifier:@"CommLogInInputCell"];
+    [self.registerUsernameCell setupAsUsername];
+    self.registerPasswordCell = [self.tableView dequeueReusableCellWithIdentifier:@"CommLogInInputCell"];
+    [self.registerPasswordCell setupAsPasswordVerify:NO];
+    self.registerPasswordVerifyCell = [self.tableView dequeueReusableCellWithIdentifier:@"CommLogInInputCell"];
+    [self.registerPasswordVerifyCell setupAsPasswordVerify:YES];
+    self.registerButtonCell = [self.tableView dequeueReusableCellWithIdentifier:@"CommLogInButtonCell"];
+    self.registerButtonCell.textLabel.text = @"Register";
+    
+    [self setHeaderTitle:@"Log in with existing account" section:0];
+    [self addCell:self.logInUsernameCell section:0];
+    [self addCell:self.logInPasswordCell];
+    [self addCell:self.logInButtonCell];
+    
+    [self setHeaderTitle:@"Create a new account" section:1];
+    [self addCell:self.registerUsernameCell section:1];
+    [self addCell:self.registerPasswordCell];
+    [self addCell:self.registerPasswordVerifyCell];
+    [self addCell:self.registerButtonCell];
+
     NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
     NSString *lastUserName = [storage objectForKey:UserDefaultsLogInKey];
     if (lastUserName)
     {
-        self.userNameTextField.text = lastUserName;
+        self.logInUsernameCell.textField.text = lastUserName;
     }
+}
+
+- (void)setBusy:(BOOL)busy
+{
+    _isBusy = busy;
+    self.cancelButton.enabled = !busy;
+    [self.logInButtonCell setDisabled:busy wheel:NO];
+    [self.registerButtonCell setDisabled:busy wheel:NO];
 }
 
 - (IBAction)onCancelTapped:(id)sender
@@ -38,50 +84,176 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (IBAction)onRegisterTapped:(id)sender
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    LCCUser *user = (LCCUser *)[PFUser user];
-    user.username = self.userNameTextField.text;
-    user.password = self.passwordTextField.text;
+    if (!self.isBusy)
+    {
+        [self.view endEditing:YES];
+        
+        UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        if (cell == self.logInButtonCell)
+        {
+            [self onLogInTapped];
+        }
+        else if (cell == self.registerButtonCell)
+        {
+            [self onRegisterTapped];
+        }
+    }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (void)onRegisterTapped
+{
+    NSString *username = self.registerUsernameCell.textField.text;
+    NSString *password = self.registerPasswordCell.textField.text;
+    NSString *passwordVerify = self.registerPasswordVerifyCell.textField.text;
     
+    if (username.length < 4)
+    {
+        [self showAlertWithTitle:(username.length == 0 ? @"Please enter a username!" : @"Please enter a longer username!") message:nil block:^{
+            [self.registerUsernameCell.textField becomeFirstResponder];
+        }];
+        return;
+    }
+    if (password.length < 4)
+    {
+        [self showAlertWithTitle:(password.length == 0 ? @"Please enter a password!" : @"Please enter a longer password!") message:nil block:^{
+            [self.registerPasswordCell.textField becomeFirstResponder];
+        }];
+        return;
+    }
+    if (passwordVerify.length == 0)
+    {
+        [self showAlertWithTitle:@"Please repeat your password!" message:nil block:^{
+            [self.registerPasswordVerifyCell.textField becomeFirstResponder];
+        }];
+        return;
+    }
+    if (![password isEqualToString:passwordVerify])
+    {
+        [self showAlertWithTitle:@"Passwords do not match." message:nil block:^{
+            self.registerPasswordCell.textField.text = @"";
+            self.registerPasswordVerifyCell.textField.text = @"";
+            [self.registerPasswordCell.textField becomeFirstResponder];
+        }];
+        return;
+    }
+    
+    LCCUser *user = (LCCUser *)[PFUser user];
+    user.username = username;
+    user.password = password;
+    
+    [self setBusy:YES];
+    [self.registerButtonCell setDisabled:YES wheel:YES];
+
     [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         
+        [self setBusy:NO];
         if (succeeded)
         {
-            [self loggedIn];
+            [self loggedInWithUsername:username];
         }
         else if (error)
         {
-            NSLog(@"error: %@", error.description);
+            [self showAlertWithTitle:@"Could not register." message:error.userInfo[@"error"] block:nil];
         }
         
     }];
 }
 
-- (IBAction)onLogInTapped:(id)sender
+- (void)onLogInTapped
 {
-    [PFUser logInWithUsernameInBackground:self.userNameTextField.text password:self.passwordTextField.text block:^(PFUser *user, NSError *error) {
+    NSString *username = self.logInUsernameCell.textField.text;
+    NSString *password = self.logInPasswordCell.textField.text;
+    
+    if (username.length == 0)
+    {
+        [self showAlertWithTitle:@"Please enter a username!" message:nil block:^{
+            [self.logInUsernameCell.textField becomeFirstResponder];
+        }];
+        return;
+    }
+    if (password.length == 0)
+    {
+        [self showAlertWithTitle:@"Please enter a password!" message:nil block:^{
+            [self.logInPasswordCell.textField becomeFirstResponder];
+        }];
+        return;
+    }
+    
+    [self setBusy:YES];
+    [self.logInButtonCell setDisabled:YES wheel:YES];
+    
+    [PFUser logInWithUsernameInBackground:username password:password block:^(PFUser *user, NSError *error) {
        
+        [self setBusy:NO];
         if (user)
         {
-            [self loggedIn];
+            [self loggedInWithUsername:username];
         }
         else if (error)
         {
-            NSLog(@"error: %@", error.description);
+            [self showAlertWithTitle:@"Could not log in." message:error.userInfo[@"error"] block:nil];
         }
         
     }];
 }
 
-- (void)loggedIn
+- (void)loggedInWithUsername:(NSString *)username
 {
     NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
-    [storage setObject:self.userNameTextField.text forKey:UserDefaultsLogInKey];
+    [storage setObject:username forKey:UserDefaultsLogInKey];
     
     [[CommunityModel sharedInstance] onLoggedIn];
     
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+@end
+
+
+@implementation CommLogInInputCell
+
+- (void)setupAsUsername
+{
+    self.textField.autocapitalizationType = UITextAutocapitalizationTypeWords;
+    self.textField.placeholder = @"Username";
+}
+
+- (void)setupAsPasswordVerify:(BOOL)verify
+{
+    self.textField.secureTextEntry = YES;
+    self.textField.placeholder = verify ? @"Repeat password" : @"Password";
+}
+
+@end
+
+@implementation CommLogInButtonCell
+
+- (void)awakeFromNib
+{
+    self.textLabel.textColor = self.contentView.tintColor;
+}
+
+- (void)setDisabled:(BOOL)disabled wheel:(BOOL)wheel
+{
+    if (disabled)
+    {
+        self.textLabel.textColor = [UIColor grayColor];
+        if (wheel)
+        {
+            UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+            [indicator startAnimating];
+            self.accessoryView = indicator;
+        }
+    }
+    else
+    {
+        self.textLabel.textColor = self.contentView.tintColor;
+        self.accessoryView = nil;
+    }
+    [self layoutIfNeeded];
 }
 
 @end

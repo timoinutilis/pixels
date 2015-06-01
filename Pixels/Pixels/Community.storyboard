@@ -502,82 +502,6 @@
             </objects>
             <point key="canvasLocation" x="365" y="798"/>
         </scene>
-        <!--Log In-->
-        <scene sceneID="E8e-PJ-jBm">
-            <objects>
-                <viewController id="UEp-Jx-znX" customClass="CommLogInViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="b8H-C9-HYO"/>
-                        <viewControllerLayoutGuide type="bottom" id="cqZ-JC-2T0"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="kfW-bH-OCL">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="User Name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eO7-6b-EjQ">
-                                <rect key="frame" x="16" y="108" width="288" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="288" id="NGh-7e-2aV"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
-                            </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="DJY-jg-hab">
-                                <rect key="frame" x="16" y="146" width="288" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="288" id="dIm-e3-bdj"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" secureTextEntry="YES"/>
-                            </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jLc-zM-j0I">
-                                <rect key="frame" x="138" y="198" width="44" height="30"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" title="Log In">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="onLogInTapped:" destination="UEp-Jx-znX" eventType="touchUpInside" id="fL1-sw-daa"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kAl-6W-hp2">
-                                <rect key="frame" x="132" y="236" width="57" height="30"/>
-                                <state key="normal" title="Register">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="onRegisterTapped:" destination="UEp-Jx-znX" eventType="touchUpInside" id="sOk-FH-Aiu"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstAttribute="centerX" secondItem="DJY-jg-hab" secondAttribute="centerX" id="4qj-lJ-DKg"/>
-                            <constraint firstAttribute="centerX" secondItem="jLc-zM-j0I" secondAttribute="centerX" id="Cip-HX-GZH"/>
-                            <constraint firstAttribute="centerX" secondItem="eO7-6b-EjQ" secondAttribute="centerX" id="kL5-mL-UkY"/>
-                            <constraint firstItem="eO7-6b-EjQ" firstAttribute="top" secondItem="b8H-C9-HYO" secondAttribute="bottom" constant="44" id="lrn-Br-sgl"/>
-                            <constraint firstItem="DJY-jg-hab" firstAttribute="top" secondItem="eO7-6b-EjQ" secondAttribute="bottom" constant="8" id="nxb-Mx-Rrb"/>
-                            <constraint firstAttribute="centerX" secondItem="kAl-6W-hp2" secondAttribute="centerX" id="umH-lG-aVj"/>
-                            <constraint firstItem="jLc-zM-j0I" firstAttribute="top" secondItem="DJY-jg-hab" secondAttribute="bottom" constant="22" id="v7G-BE-lrv"/>
-                            <constraint firstItem="kAl-6W-hp2" firstAttribute="top" secondItem="jLc-zM-j0I" secondAttribute="bottom" constant="8" id="xE1-B4-p6A"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" title="Log In" id="Bky-uL-GPH">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="alg-zI-Mjb">
-                            <connections>
-                                <action selector="onCancelTapped:" destination="UEp-Jx-znX" id="lgK-Ue-WJq"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <connections>
-                        <outlet property="passwordTextField" destination="DJY-jg-hab" id="Hcd-3d-cU5"/>
-                        <outlet property="userNameTextField" destination="eO7-6b-EjQ" id="NqG-5i-hGM"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="6F9-wL-i43" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-225" y="1290"/>
-        </scene>
         <!--Navigation Controller-->
         <scene sceneID="yAa-8g-pDv">
             <objects>
@@ -590,12 +514,79 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="UEp-Jx-znX" kind="relationship" relationship="rootViewController" id="dib-dd-J3q"/>
+                        <segue destination="7LF-M9-tBs" kind="relationship" relationship="rootViewController" id="6nx-Yi-r3P"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vOo-Bs-B3s" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-675" y="1290"/>
+        </scene>
+        <!--Please Log In-->
+        <scene sceneID="w5B-OR-3JO">
+            <objects>
+                <tableViewController id="7LF-M9-tBs" customClass="CommLogInViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="8ev-cD-TmJ">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="CommLogInInputCell" id="Enq-TH-Uo7" customClass="CommLogInInputCell">
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Enq-TH-Uo7" id="OFA-mt-dvB">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="vAZ-3m-Uvh">
+                                            <rect key="frame" x="8" y="0.0" width="304" height="43"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
+                                        </textField>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="vAZ-3m-Uvh" firstAttribute="top" secondItem="OFA-mt-dvB" secondAttribute="top" id="DgO-ha-AtV"/>
+                                        <constraint firstItem="vAZ-3m-Uvh" firstAttribute="trailing" secondItem="OFA-mt-dvB" secondAttribute="trailingMargin" id="GsJ-Mo-iry"/>
+                                        <constraint firstItem="vAZ-3m-Uvh" firstAttribute="leading" secondItem="OFA-mt-dvB" secondAttribute="leadingMargin" id="Zmb-E5-kjn"/>
+                                        <constraint firstAttribute="bottom" secondItem="vAZ-3m-Uvh" secondAttribute="bottom" id="f6T-Hv-qpQ"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="textField" destination="vAZ-3m-Uvh" id="enF-qZ-co6"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CommLogInButtonCell" textLabel="Reu-9b-RhM" style="IBUITableViewCellStyleDefault" id="Ps3-Th-WwH" customClass="CommLogInButtonCell">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Ps3-Th-WwH" id="KVp-1k-f31">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Button" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Reu-9b-RhM">
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="7LF-M9-tBs" id="qDb-ce-41o"/>
+                            <outlet property="delegate" destination="7LF-M9-tBs" id="wb2-EL-Wcj"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Please Log In" id="wxf-w8-Aob">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="2tz-3n-7dH">
+                            <connections>
+                                <action selector="onCancelTapped:" destination="7LF-M9-tBs" id="nFY-qo-h32"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="cancelButton" destination="2tz-3n-7dH" id="Ten-2H-vFE"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="VfZ-DP-cbb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-205" y="1290"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
