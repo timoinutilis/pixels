@@ -149,7 +149,6 @@ NSString *const ModelManagerDidAddProjectNotification = @"ModelManagerDidAddProj
                 NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
                 [[AppController sharedController] storeError:error message:@"Core Data save"];
             }
-            [[AppController sharedController] storeError:[NSError errorWithDomain:@"FUF" code:100 userInfo:@{@"test":@"fuuu"}] message:@"Test"];
         }
     }
 }
