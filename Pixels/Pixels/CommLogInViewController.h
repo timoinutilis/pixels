@@ -10,6 +10,8 @@
 
 @interface CommLogInViewController : GORMenuTableViewController
 
++ (CommLogInViewController *)create;
+
 @end
 
 

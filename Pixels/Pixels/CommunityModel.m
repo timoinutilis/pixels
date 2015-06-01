@@ -11,6 +11,9 @@
 NSString *const CurrentUserChangeNotification = @"CurrentUserChangeNotification";
 NSString *const FollowsChangeNotification = @"FollowsChangeNotification";
 
+NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
+NSString *const LowResNewsUserIDKey = @"LowResNewsUserID";
+
 @implementation CommunityModel
 
 + (CommunityModel *)sharedInstance
@@ -47,6 +50,11 @@ NSString *const FollowsChangeNotification = @"FollowsChangeNotification";
     [self updateCurrentUser];
 }
 
+- (void)onUserDataChanged
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:CurrentUserChangeNotification object:self];
+}
+
 - (void)updateCurrentUser
 {
     if ([PFUser currentUser])
@@ -74,7 +82,25 @@ NSString *const FollowsChangeNotification = @"FollowsChangeNotification";
     else
     {
         _follows = [NSMutableArray array];
-        [[NSNotificationCenter defaultCenter] postNotificationName:FollowsChangeNotification object:self];
+        
+        LCCFollow *defaultFollow = [LCCFollow object];
+        NSString *newsUserID = [[NSBundle mainBundle] objectForInfoDictionaryKey:LowResNewsUserIDKey];
+        defaultFollow.followsUser = [LCCUser objectWithoutDataWithObjectId:newsUserID];
+        
+        [defaultFollow.followsUser fetchInBackgroundWithBlock:^(PFObject *object,  NSError *error) {
+            
+            if (object)
+            {
+                [_follows addObject:defaultFollow];
+                [[NSNotificationCenter defaultCenter] postNotificationName:FollowsChangeNotification object:self];
+            }
+            else
+            {
+                NSLog(@"Error: %@", error.description);
+                [[NSNotificationCenter defaultCenter] postNotificationName:FollowsChangeNotification object:self];
+            }
+            
+        }];
     }
 }
 
@@ -139,13 +165,13 @@ NSString *const FollowsChangeNotification = @"FollowsChangeNotification";
     LCCUser *currentUser = (LCCUser *)[PFUser currentUser];
     if (currentUser)
     {
-        NSString *newsUserID = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"LowResNewsUserID"];
+        NSString *newsUserID = [[NSBundle mainBundle] objectForInfoDictionaryKey:LowResNewsUserIDKey];
         return (![user isMe] && ![user.objectId isEqualToString:newsUserID]);
     }
     return NO;
 }
 
-- (NSArray *)arrayWithFollowedUser
+- (NSArray *)arrayWithFollowedUsers
 {
     NSMutableArray *array = [NSMutableArray array];
     for (LCCFollow *follow in self.follows)

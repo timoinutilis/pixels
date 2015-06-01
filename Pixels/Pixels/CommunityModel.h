@@ -17,6 +17,8 @@
 extern NSString *const CurrentUserChangeNotification;
 extern NSString *const FollowsChangeNotification;
 
+extern NSString *const UserDefaultsLogInKey;
+
 @interface CommunityModel : NSObject
 
 @property (readonly) NSMutableArray *follows;
@@ -26,6 +28,7 @@ extern NSString *const FollowsChangeNotification;
 
 - (void)onLoggedIn;
 - (void)onLoggedOut;
+- (void)onUserDataChanged;
 - (void)updateCurrentUser;
 - (void)onPostedWithDate:(NSDate *)date;
 
@@ -33,7 +36,7 @@ extern NSString *const FollowsChangeNotification;
 - (void)unfollowUser:(LCCUser *)user;
 - (LCCFollow *)followWithUser:(LCCUser *)user;
 - (BOOL)canFollowOrUnfollow:(LCCUser *)user;
-- (NSArray *)arrayWithFollowedUser;
+- (NSArray *)arrayWithFollowedUsers;
 - (void)countPost:(LCCPost *)post type:(LCCCountType)type;
 - (void)fetchCountForPost:(LCCPost *)post type:(LCCCountType)type block:(void (^)(NSArray *users))block;
 - (BOOL)isCurrentUserInArray:(NSArray *)array;

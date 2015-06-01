@@ -60,6 +60,7 @@
 		9276F39A1A1D289C0060E909 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9276F3991A1D289C0060E909 /* Images.xcassets */; };
 		9276F39D1A1D289C0060E909 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9276F39B1A1D289C0060E909 /* LaunchScreen.xib */; };
 		9276F3B41A1D29BF0060E909 /* Scanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 9276F3B31A1D29BF0060E909 /* Scanner.m */; };
+		927D345B1B1CB0D700967AE7 /* CommEditUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 927D345A1B1CB0D700967AE7 /* CommEditUserViewController.m */; };
 		928445EE1B012C4700203974 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 928445EC1B012C4700203974 /* Bolts.framework */; };
 		928445EF1B012C4700203974 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 928445ED1B012C4700203974 /* Parse.framework */; };
 		928445F11B012CAE00203974 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 928445F01B012CAE00203974 /* AudioToolbox.framework */; };
@@ -216,6 +217,8 @@
 		9276F3A81A1D289C0060E909 /* PixelsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PixelsTests.m; sourceTree = "<group>"; };
 		9276F3B21A1D29BF0060E909 /* Scanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scanner.h; sourceTree = "<group>"; };
 		9276F3B31A1D29BF0060E909 /* Scanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Scanner.m; sourceTree = "<group>"; };
+		927D34591B1CB0D700967AE7 /* CommEditUserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommEditUserViewController.h; sourceTree = "<group>"; };
+		927D345A1B1CB0D700967AE7 /* CommEditUserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommEditUserViewController.m; sourceTree = "<group>"; };
 		927E2FC81A72586E006C9B9C /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		927E2FC91A72586E006C9B9C /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Main.storyboard; sourceTree = "<group>"; };
 		928445EC1B012C4700203974 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
@@ -403,6 +406,8 @@
 			isa = PBXGroup;
 			children = (
 				924F83281B0B347C00B96C91 /* Community.storyboard */,
+				925935A21B1B7E4F001CE0B1 /* UIViewController+CommUtils.h */,
+				925935A31B1B7E4F001CE0B1 /* UIViewController+CommUtils.m */,
 				924F83311B0B610D00B96C91 /* CommSplitViewController.h */,
 				924F83321B0B610D00B96C91 /* CommSplitViewController.m */,
 				924F832A1B0B5B6E00B96C91 /* CommMasterViewController.h */,
@@ -417,8 +422,8 @@
 				92884F2A1B0F307F0032623D /* CommSourceCodeViewController.m */,
 				92D2C2001B13442A00539BA6 /* CommUsersViewController.h */,
 				92D2C2011B13442A00539BA6 /* CommUsersViewController.m */,
-				925935A21B1B7E4F001CE0B1 /* UIViewController+CommUtils.h */,
-				925935A31B1B7E4F001CE0B1 /* UIViewController+CommUtils.m */,
+				927D34591B1CB0D700967AE7 /* CommEditUserViewController.h */,
+				927D345A1B1CB0D700967AE7 /* CommEditUserViewController.m */,
 			);
 			name = Community;
 			sourceTree = "<group>";
@@ -842,6 +847,7 @@
 				92884F191B0F25B30032623D /* MKAnnotationView+WebCache.m in Sources */,
 				9276F3B41A1D29BF0060E909 /* Scanner.m in Sources */,
 				92EDC4421A54701D007824A5 /* Gamepad.m in Sources */,
+				927D345B1B1CB0D700967AE7 /* CommEditUserViewController.m in Sources */,
 				92E36D1C1ADD2D4300C16CBE /* AppStyle.m in Sources */,
 				925A01A91A1E67F900A321E6 /* Parser.m in Sources */,
 				924F832C1B0B5B6E00B96C91 /* CommMasterViewController.m in Sources */,

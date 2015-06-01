@@ -11,6 +11,8 @@
 #import "CommPostViewController.h"
 #import "UIImageView+WebCache.h"
 #import "CommUsersViewController.h"
+#import "CommEditUserViewController.h"
+#import "UIViewController+LowResCoder.h"
 
 typedef NS_ENUM(NSInteger, CellTag) {
     CellTagNoAction,
@@ -34,11 +36,13 @@ typedef NS_ENUM(NSInteger, CellTag) {
     [super viewDidLoad];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onFollowsChanged:) name:FollowsChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserChanged:) name:CurrentUserChangeNotification object:nil];
 }
 
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:FollowsChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:CurrentUserChangeNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -54,7 +58,15 @@ typedef NS_ENUM(NSInteger, CellTag) {
 
 - (void)setUser:(LCCUser *)user mode:(CommListMode)mode
 {
-    self.user = user;
+    if ([user isMe])
+    {
+        // use global instance of user
+        self.user = (LCCUser *)[PFUser currentUser];
+    }
+    else
+    {
+        self.user = user;
+    }
     self.mode = mode;
     
     [self updateData];
@@ -68,6 +80,14 @@ typedef NS_ENUM(NSInteger, CellTag) {
     }
 }
 
+- (void)onUserChanged:(NSNotification *)notification
+{
+    if (self.mode == CommListModeProfile && [self.user isMe])
+    {
+        [self.tableView reloadData];
+    }
+}
+
 - (void)updateData
 {
     switch (self.mode)
@@ -75,7 +95,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
         case CommListModeNews: {
             self.title = @"News";
             
-            NSArray *followedUsers = [[CommunityModel sharedInstance] arrayWithFollowedUser];
+            NSArray *followedUsers = [[CommunityModel sharedInstance] arrayWithFollowedUsers];
             if (followedUsers.count > 0)
             {
                 PFQuery *query = [PFQuery queryWithClassName:[LCCPost parseClassName]];
@@ -138,7 +158,8 @@ typedef NS_ENUM(NSInteger, CellTag) {
     if ([self.user isMe])
     {
         // Edit
-        //TODO
+        UIViewController *vc = [CommEditUserViewController create];
+        [self presentInNavigationViewController:vc];
     }
     else if ([[CommunityModel sharedInstance] followWithUser:self.user])
     {
@@ -226,7 +247,14 @@ typedef NS_ENUM(NSInteger, CellTag) {
         else if (self.mode == CommListModeNews)
         {
             CommInfoCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommInfoCell" forIndexPath:indexPath];
-            cell.infoTextLabel.text = @"Here you see the posts of all the users you follow.";
+            if ([PFUser currentUser])
+            {
+                cell.infoTextLabel.text = @"Here you see the posts of all the users you follow.";
+            }
+            else
+            {
+                cell.infoTextLabel.text = @"Here you see official news and featured programs. Log in to follow more users!";
+            }
             return cell;
         }
     }

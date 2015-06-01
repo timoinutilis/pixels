@@ -11,3 +11,7 @@
 @interface CommMasterViewController : UITableViewController
 
 @end
+
+
+@interface CommMasterActionCell : UITableViewCell
+@end

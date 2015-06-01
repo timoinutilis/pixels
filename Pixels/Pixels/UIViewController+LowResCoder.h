@@ -12,4 +12,6 @@
 
 - (void)showAlertWithTitle:(NSString *)title message:(NSString *)message block:(void (^)(void))block;
 
+- (void)presentInNavigationViewController:(UIViewController *)vc;
+
 @end

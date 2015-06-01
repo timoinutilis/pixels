@@ -9,6 +9,8 @@
 #import "CommMasterViewController.h"
 #import "CommDetailViewController.h"
 #import "CommunityModel.h"
+#import "CommLogInViewController.h"
+#import "UIViewController+LowResCoder.h"
 
 typedef NS_ENUM(NSInteger, CellTag) {
     CellTagNews,
@@ -20,6 +22,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
 
 @interface CommMasterViewController ()
 
+@property NSIndexPath *newsIndexPath;
 @property NSIndexPath *currentSelection;
 
 @end
@@ -42,7 +45,8 @@ typedef NS_ENUM(NSInteger, CellTag) {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserChanged:) name:CurrentUserChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onFollowsChanged:) name:FollowsChangeNotification object:nil];
     
-    self.currentSelection = [NSIndexPath indexPathForRow:0 inSection:0];
+    self.newsIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    self.currentSelection = self.newsIndexPath;
     
     [[CommunityModel sharedInstance] updateCurrentUser];
 }
@@ -69,7 +73,20 @@ typedef NS_ENUM(NSInteger, CellTag) {
 - (void)onUserChanged:(NSNotification *)notification
 {
     [self.tableView reloadData];
-    [self showCurrentSelection];
+    if (![PFUser currentUser] && ![self.currentSelection isEqual:self.newsIndexPath])
+    {
+        // show news
+        self.currentSelection = self.newsIndexPath;
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
+        {
+            [self.tableView selectRowAtIndexPath:self.currentSelection animated:NO scrollPosition:UITableViewScrollPositionNone];
+            [self performSegueWithIdentifier:@"Detail" sender:self];
+        }
+    }
+    else
+    {
+        [self showCurrentSelection];
+    }
 }
 
 - (void)onFollowsChanged:(NSNotification *)notification
@@ -175,8 +192,8 @@ typedef NS_ENUM(NSInteger, CellTag) {
     {
         case CellTagLogIn: {
             [tableView deselectRowAtIndexPath:indexPath animated:YES];
-            UIViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"CommLogInViewNav"];
-            [self presentViewController:vc animated:YES completion:nil];
+            UIViewController *vc = [CommLogInViewController create];
+            [self presentInNavigationViewController:vc];
             break;
         }
         case CellTagLogOut: {
@@ -229,5 +246,15 @@ typedef NS_ENUM(NSInteger, CellTag) {
     }
 }
 
+@end
+
+
+@implementation CommMasterActionCell
+
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    self.textLabel.textColor = self.contentView.tintColor;
+}
 
 @end

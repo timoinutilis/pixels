@@ -10,8 +10,6 @@
 #import "CommunityModel.h"
 #import "UIViewController+LowResCoder.h"
 
-NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
-
 @interface CommLogInViewController ()
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *cancelButton;
@@ -29,6 +27,13 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
 @end
 
 @implementation CommLogInViewController
+
++ (CommLogInViewController *)create
+{
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Community" bundle:nil];
+    CommLogInViewController *vc = (CommLogInViewController *)[storyboard instantiateViewControllerWithIdentifier:@"CommLogInView"];
+    return vc;
+}
 
 - (void)viewDidLoad
 {

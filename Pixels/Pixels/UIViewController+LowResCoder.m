@@ -22,4 +22,12 @@
     [self presentViewController:alert animated:YES completion:nil];
 }
 
+- (void)presentInNavigationViewController:(UIViewController *)vc;
+{
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+    nav.modalPresentationStyle = vc.modalPresentationStyle;
+    nav.modalTransitionStyle = vc.modalTransitionStyle;
+    [self presentViewController:nav animated:YES completion:nil];
+}
+
 @end
