@@ -7,6 +7,7 @@
 //
 
 #import "ModelManager.h"
+#import "AppController.h"
 
 NSString *const ModelManagerWillSaveDataNotification = @"ModelManagerWillSaveDataNotification";
 NSString *const ModelManagerDidAddProjectNotification = @"ModelManagerDidAddProjectNotification";
@@ -70,13 +71,18 @@ NSString *const ModelManagerDidAddProjectNotification = @"ModelManagerDidAddProj
     if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error])
     {
         NSLog(@"Core Data error: %@", error);
+        [[AppController sharedController] storeError:error message:@"Core Data persistentStoreCoordinator"];
+        
+        /*
         [[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil];
         
         _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
         if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error])
         {
             NSLog(@"Core Data error: %@", error);
+            [[AppController sharedController] storeError:error message:@"Core Data"];
         }
+         */
     }
     
     return _persistentStoreCoordinator;
@@ -111,6 +117,7 @@ NSString *const ModelManagerDidAddProjectNotification = @"ModelManagerDidAddProj
         if (error)
         {
             NSLog(@"Core Data temporaryContext error: %@", error);
+            [[AppController sharedController] storeError:error message:@"Core Data temporaryContext"];
         }
         else
         {
@@ -140,6 +147,7 @@ NSString *const ModelManagerDidAddProjectNotification = @"ModelManagerDidAddProj
             else
             {
                 NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+                [[AppController sharedController] storeError:error message:@"Core Data save"];
             }
         }
     }

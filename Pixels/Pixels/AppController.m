@@ -13,6 +13,7 @@
 NSString *const FullVersionProductID = @"fullversion";
 
 NSString *const NumProgramsOpenedKey = @"NumProgramsOpened";
+NSString *const ErrorKey = @"Error";
 
 NSString *const PurchaseStateNotification = @"PurchaseStateNotification";
 NSString *const NewsNotification = @"NewsNotification";
@@ -231,6 +232,24 @@ NSString *const InfoIDNews = @"InfoIDNews";
         [self onShowInfoID:InfoIDNews];
         [[NSNotificationCenter defaultCenter] postNotificationName:NewsNotification object:self];
     }
+}
+
+- (void)storeError:(NSError *)error message:(NSString *)message
+{
+    NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
+    [storage setObject:[NSString stringWithFormat:@"%@: %@", message, error.description] forKey:ErrorKey];
+    [storage synchronize];
+}
+
+- (NSString *)popStoredError
+{
+    NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
+    NSString *error = [storage objectForKey:ErrorKey];
+    if (error)
+    {
+        [storage removeObjectForKey:ErrorKey];
+    }
+    return error;
 }
 
 @end

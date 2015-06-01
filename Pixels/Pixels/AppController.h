@@ -43,4 +43,7 @@ extern NSString *const NewsNotification;
 
 - (void)registerForNotifications;
 
+- (void)storeError:(NSError *)error message:(NSString *)message;
+- (NSString *)popStoredError;
+
 @end

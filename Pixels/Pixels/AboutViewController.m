@@ -145,7 +145,8 @@
 
 - (NSString *)appVersion
 {
-    return [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+    NSBundle *bundle = [NSBundle mainBundle];
+    return [NSString stringWithFormat:@"%@ (%@)", [bundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"], [bundle objectForInfoDictionaryKey:@"CFBundleVersion"]];
 }
 
 - (void)showCode

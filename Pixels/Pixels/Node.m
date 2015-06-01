@@ -1743,6 +1743,10 @@ NSString *const TRANSFER = @"TRANSFER";
     {
         @throw [ProgramException invalidParameterExceptionWithNode:self value:number.intValue];
     }
+    if (position.intValue - 1 > len)
+    {
+        return @"";
+    }
     if (position.intValue - 1 + number.intValue > len)
     {
         return [string substringFromIndex:position.intValue - 1];

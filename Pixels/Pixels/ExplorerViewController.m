@@ -95,6 +95,15 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     }
     
     [self updateGetButton];
+    
+    // Show stored error
+    NSString *lastError = [[AppController sharedController] popStoredError];
+    if (lastError)
+    {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Sorry, there was an error." message:lastError preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+        [self presentViewController:alert animated:YES completion:nil];
+    }
 }
 
 - (void)updateGetButton
