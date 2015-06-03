@@ -8,11 +8,14 @@
 
 #import <Parse/Parse.h>
 
+extern NSString *const LowResNewsUserIDKey;
+
 @interface LCCUser : PFUser<PFSubclassing>
 
 @property (retain) NSString *about;
 @property (retain) NSDate *lastPostDate;
 
 - (BOOL)isMe;
+- (BOOL)isNewsUser;
 
 @end

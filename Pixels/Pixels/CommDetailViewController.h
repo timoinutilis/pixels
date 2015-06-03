@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class LCCUser;
+@class LCCUser, LCCPost;
 
 typedef NS_ENUM(NSInteger, CommListMode) {
     CommListModeUndefined = 0,
@@ -35,4 +35,8 @@ typedef NS_ENUM(NSInteger, CommListMode) {
 @interface CommWriteStatusCell : UITableViewCell
 @property (strong, nonatomic) IBOutlet UITextField *titleTextField;
 @property (strong, nonatomic) IBOutlet UITextView *textView;
+@end
+
+@interface CommPostCell : UITableViewCell
+@property (nonatomic) LCCPost *post;
 @end

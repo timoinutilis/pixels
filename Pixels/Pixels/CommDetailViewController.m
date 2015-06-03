@@ -214,9 +214,7 @@ static NSString *const SectionPosts = @"Posts";
             }
             else
             {
-                UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Could not send status update" message:@"Please try again later!" preferredStyle:UIAlertControllerStyleAlert];
-                [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-                [self presentViewController:alert animated:YES completion:nil];
+                [self showAlertWithTitle:@"Could not send status update" message:@"Please try again later!" block:nil];
             }
             
         }];
@@ -322,27 +320,10 @@ static NSString *const SectionPosts = @"Posts";
     }
     else if (sectionId == SectionPosts)
     {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ProgramCell" forIndexPath:indexPath];
         LCCPost *post = self.posts[indexPath.row];
-        cell.textLabel.text = post.title;
-        NSString *date = [NSDateFormatter localizedStringFromDate:post.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterNoStyle];
-        if (post.category != LCCPostCategoryStatus)
-        {
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ - %@ - %@", [post categoryString], post.user.username, date];
-        }
-        else
-        {
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ - %@", post.user.username, date];
-        }
+        CommPostCell *cell = [tableView dequeueReusableCellWithIdentifier:(post.type == LCCPostTypeStatus) ? @"StatusCell" : @"ProgramCell" forIndexPath:indexPath];
+        cell.post = post;
         cell.tag = CellTagPost;
-        
-        [cell.imageView sd_setImageWithURL:[NSURL URLWithString:post.image.url] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-            CALayer *layer = cell.imageView.layer;
-            layer.masksToBounds = YES;
-            layer.cornerRadius = 6;
-            [cell layoutSubviews];
-        }];
-
         return cell;
     }
     return nil;
@@ -369,7 +350,14 @@ static NSString *const SectionPosts = @"Posts";
         case CellTagPost: {
             CommPostViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"CommPostView"];
             LCCPost *post = self.posts[indexPath.row];
-            [vc setPost:post mode:CommPostModeProgram];
+            if (post.type == LCCPostTypeShare)
+            {
+                [vc setPost:post.sharedPost mode:CommPostModePost];
+            }
+            else
+            {
+                [vc setPost:post mode:CommPostModePost];
+            }
             [self.navigationController pushViewController:vc animated:YES];
             break;
         }
@@ -433,4 +421,48 @@ static NSString *const SectionPosts = @"Posts";
 @end
 
 @implementation CommWriteStatusCell
+@end
+
+@interface CommPostCell()
+@property (weak, nonatomic) IBOutlet UIImageView *iconImageView;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *dateLabel;
+@end
+
+@implementation CommPostCell
+
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    
+    CALayer *layer = self.iconImageView.layer;
+    layer.masksToBounds = YES;
+    layer.cornerRadius = 3;
+    layer.borderWidth = 0.5;
+    layer.borderColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.25].CGColor;
+}
+
+- (void)setPost:(LCCPost *)post
+{
+    _post = post;
+    
+    self.titleLabel.text = post.title;
+    self.titleLabel.textColor = [post.user isNewsUser] ? [UIColor redColor] : [UIColor darkTextColor];
+    NSString *date = [NSDateFormatter localizedStringFromDate:post.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterNoStyle];
+    NSString *name = (post.type == LCCPostTypeShare) ? [NSString stringWithFormat:@"Shared by %@", post.user.username] : post.user.username;
+    if (post.category != LCCPostCategoryStatus)
+    {
+        self.dateLabel.text = [NSString stringWithFormat:@"%@ - %@ - %@", [post categoryString], name, date];
+    }
+    else
+    {
+        self.dateLabel.text = [NSString stringWithFormat:@"%@ - %@", name, date];
+    }
+    
+    if (self.iconImageView)
+    {
+        [self.iconImageView sd_setImageWithURL:[NSURL URLWithString:post.image.url]];
+    }
+}
+
 @end

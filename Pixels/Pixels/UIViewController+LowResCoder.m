@@ -22,6 +22,16 @@
     [self presentViewController:alert animated:YES completion:nil];
 }
 
+- (void)showConfirmAlertWithTitle:(NSString *)title message:(NSString *)message block:(void (^)(void))block
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        block();
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
 - (void)presentInNavigationViewController:(UIViewController *)vc;
 {
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];

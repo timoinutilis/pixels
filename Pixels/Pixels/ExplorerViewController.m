@@ -111,11 +111,11 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     NSInteger numNews = [AppController sharedController].numNews;
     if (numNews > 0)
     {
-        self.getButton.title = [NSString stringWithFormat:@"Get More (%ld)", (long)numNews];
+        self.getButton.title = [NSString stringWithFormat:@"Community & News (%ld)", (long)numNews];
     }
     else
     {
-        self.getButton.title = @"Get More";
+        self.getButton.title = @"Community & News";
     }
 }
 

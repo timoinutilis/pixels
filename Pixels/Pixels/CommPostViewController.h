@@ -10,8 +10,7 @@
 
 typedef NS_ENUM(NSInteger, CommPostMode) {
     CommPostModeUndefined = 0,
-    CommPostModeProgram,
-    CommPostModeStatus
+    CommPostModePost
 };
 
 @class LCCPost;
@@ -26,6 +25,7 @@ typedef NS_ENUM(NSInteger, CommPostMode) {
 @property (weak, nonatomic) IBOutlet UIButton *likeButton;
 @property (weak, nonatomic) IBOutlet UIButton *getProgramButton;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
+@property (weak, nonatomic) IBOutlet UIButton *shareButton;
 @property (nonatomic) LCCPost *post;
 @property (nonatomic) NSInteger likeCount;
 @property (nonatomic) NSInteger downloadCount;

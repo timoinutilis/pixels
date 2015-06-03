@@ -12,7 +12,6 @@ NSString *const CurrentUserChangeNotification = @"CurrentUserChangeNotification"
 NSString *const FollowsChangeNotification = @"FollowsChangeNotification";
 
 NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
-NSString *const LowResNewsUserIDKey = @"LowResNewsUserID";
 
 @implementation CommunityModel
 
@@ -165,8 +164,7 @@ NSString *const LowResNewsUserIDKey = @"LowResNewsUserID";
     LCCUser *currentUser = (LCCUser *)[PFUser currentUser];
     if (currentUser)
     {
-        NSString *newsUserID = [[NSBundle mainBundle] objectForInfoDictionaryKey:LowResNewsUserIDKey];
-        return (![user isMe] && ![user.objectId isEqualToString:newsUserID]);
+        return (![user isMe] && ![user isNewsUser]);
     }
     return NO;
 }

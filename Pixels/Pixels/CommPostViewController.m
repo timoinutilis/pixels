@@ -12,6 +12,7 @@
 #import "CommSourceCodeViewController.h"
 #import "CommDetailViewController.h"
 #import "UIViewController+CommUtils.h"
+#import "UIViewController+LowResCoder.h"
 
 typedef NS_ENUM(NSInteger, CellTag) {
     CellTagNoAction,
@@ -38,6 +39,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
     self.writeCommentCell = [self.tableView dequeueReusableCellWithIdentifier:@"WriteCommentCell"];
     
     [self updateView];
+    [self loadAll];
 }
 
 - (void)setPost:(LCCPost *)post mode:(CommPostMode)mode
@@ -53,14 +55,21 @@ typedef NS_ENUM(NSInteger, CellTag) {
     
     self.titleCell = [self.tableView dequeueReusableCellWithIdentifier:(self.post.type == LCCPostTypeProgram ? @"ProgramTitleCell" : @"StatusTitleCell")];
     self.titleCell.post = self.post;
-    [self loadAll];
 }
 
 - (void)loadAll
 {
+    [self loadUser];
     [self loadComments];
     [self loadProgram];
     [self loadCounters];
+}
+
+- (void)loadUser
+{
+    [self.post.user fetchIfNeededInBackgroundWithBlock:^(PFObject *object,  NSError *error) {
+        [self.tableView reloadData];
+    }];
 }
 
 - (void)loadComments
@@ -152,6 +161,38 @@ typedef NS_ENUM(NSInteger, CellTag) {
 - (IBAction)onGetProgramTapped:(id)sender
 {
     [self addProgramOfPost:self.post];
+}
+
+- (IBAction)onShareTapped:(id)sender
+{
+    [self showConfirmAlertWithTitle:@"Do you really want to share this?" message:nil block:^{
+        [self share];
+    }];
+}
+
+- (void)share
+{
+    LCCPost *post = [LCCPost object];
+    post.user = (LCCUser *)[PFUser currentUser];
+    post.type = LCCPostTypeShare;
+    post.category = self.post.category;
+    post.image = self.post.image;
+    post.title = self.post.title;
+    post.detail = self.post.detail;
+    post.sharedPost = self.post;
+    
+    [post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        
+        if (succeeded)
+        {
+            [self showAlertWithTitle:@"Shared successfully" message:nil block:nil];
+        }
+        else
+        {
+            [self showAlertWithTitle:@"Could not share post" message:@"Please try again later!" block:nil];
+        }
+        
+    }];
 }
 
 - (IBAction)onSendCommentTapped:(id)sender
@@ -247,7 +288,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
         else if (indexPath.row == 1)
         {
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MenuCell" forIndexPath:indexPath];
-            cell.textLabel.text = [NSString stringWithFormat:@"By %@", self.post.user.username];
+            cell.textLabel.text = [NSString stringWithFormat:@"By %@", [self.post.user isDataAvailable] ? self.post.user.username : @"..."];
             cell.tag = CellTagPostAuthor;
             return cell;
         }
@@ -289,7 +330,12 @@ typedef NS_ENUM(NSInteger, CellTag) {
             break;
         }
         case CellTagPostAuthor: {
-            [self performSegueWithIdentifier:@"PostAuthor" sender:self];
+            if ([self.post.user isDataAvailable])
+            {
+                CommDetailViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"CommDetailView"];
+                [vc setUser:self.post.user mode:CommListModeProfile];
+                [self.navigationController pushViewController:vc animated:YES];
+            }
             break;
         }
         default:
@@ -309,11 +355,6 @@ typedef NS_ENUM(NSInteger, CellTag) {
     {
         CommSourceCodeViewController *vc = segue.destinationViewController;
         vc.post = self.post;
-    }
-    else if ([segue.identifier isEqualToString:@"PostAuthor"])
-    {
-        CommDetailViewController *vc = segue.destinationViewController;
-        [vc setUser:self.post.user mode:CommListModeProfile];
     }
     else if ([segue.identifier isEqualToString:@"CommentAuthor"])
     {
@@ -347,7 +388,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
         CALayer *layer = self.programImage.layer;
         layer.masksToBounds = YES;
         layer.cornerRadius = 6;
-        layer.borderWidth = 1;
+        layer.borderWidth = 0.5;
         layer.borderColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.25].CGColor;
     }
     
@@ -357,6 +398,9 @@ typedef NS_ENUM(NSInteger, CellTag) {
     }
     
     self.likeButton.enabled = NO;
+    
+    LCCUser *currentUser = (LCCUser *)[PFUser currentUser];
+    self.shareButton.hidden = ![currentUser isNewsUser];
 }
 
 - (void)setPost:(LCCPost *)post
@@ -380,6 +424,8 @@ typedef NS_ENUM(NSInteger, CellTag) {
         {
             self.dateLabel.text = [NSString stringWithFormat:@"%@ - %@", [post categoryString], date];
         }
+        
+        self.shareButton.enabled = ![post.user isMe];
     }
 }
 

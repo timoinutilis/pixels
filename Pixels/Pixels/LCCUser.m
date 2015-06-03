@@ -8,6 +8,8 @@
 
 #import "LCCUser.h"
 
+NSString *const LowResNewsUserIDKey = @"LowResNewsUserID";
+
 @implementation LCCUser
 
 @dynamic about;
@@ -20,6 +22,12 @@
         return [self.objectId isEqualToString:[PFUser currentUser].objectId];
     }
     return NO;
+}
+
+- (BOOL)isNewsUser
+{
+    NSString *newsUserID = [[NSBundle mainBundle] objectForInfoDictionaryKey:LowResNewsUserIDKey];
+    return ([self.objectId isEqualToString:newsUserID]);
 }
 
 @end

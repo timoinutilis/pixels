@@ -790,7 +790,7 @@ The upgrade is valid for all your devices and without time limit.</string>
                     </view>
                     <toolbarItems>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="2yy-HZ-kmz"/>
-                        <barButtonItem title="Get More" width="300" style="done" id="nKq-5T-IY6">
+                        <barButtonItem title="Community &amp; News" width="300" style="done" id="nKq-5T-IY6">
                             <connections>
                                 <action selector="onCommunityTapped:" destination="Xni-Pq-CRZ" id="pYr-Fg-kYF"/>
                             </connections>

@@ -11,6 +11,7 @@
 @interface UIViewController (LowResCoder)
 
 - (void)showAlertWithTitle:(NSString *)title message:(NSString *)message block:(void (^)(void))block;
+- (void)showConfirmAlertWithTitle:(NSString *)title message:(NSString *)message block:(void (^)(void))block;
 
 - (void)presentInNavigationViewController:(UIViewController *)vc;
 
