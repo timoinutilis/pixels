@@ -9,19 +9,25 @@
 #import "ShareViewController.h"
 #import "Project.h"
 #import "AFNetworking.h"
-#import "GORTextView.h"
-#import "GORSeparatorView.h"
-#import "AppStyle.h"
 #import "CommunityModel.h"
+#import "CommLogInViewController.h"
+#import "UIViewController+LowResCoder.h"
 
 @interface ShareViewController ()
+
 @property ShareHeaderCell *headerCell;
-@property TextFieldCell *titleCell;
+@property ShareTextFieldCell *titleCell;
+@property ShareTextViewCell *descriptionCell;
+@property ShareActionCell *loginCell;
+@property UITableViewCell *categoryGameCell;
+@property UITableViewCell *categoryToolCell;
+@property UITableViewCell *categoryDemoCell;
+
+@property (nonatomic) LCCPostCategory selectedCategory;
+
 @property (nonatomic) IBOutlet UIBarButtonItem *sendItem;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *cancelItem;
-@property (weak, nonatomic) IBOutlet UILabel *descriptionPlaceholderLabel;
-@property (weak, nonatomic) IBOutlet GORTextView *descriptionTextView;
-@property (weak, nonatomic) IBOutlet GORSeparatorView *separator2View;
+
 @end
 
 @implementation ShareViewController
@@ -29,46 +35,83 @@
 + (UIViewController *)createShareWithDelegate:(id <ShareViewControllerDelegate>)delegate project:(Project *)project
 {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    UIViewController *vc = (UIViewController *)[storyboard instantiateViewControllerWithIdentifier:@"Share"];
-    vc.modalPresentationStyle = UIModalPresentationFormSheet;
-    
-    ShareViewController *shareVC = (ShareViewController *)vc.childViewControllers[0];
-    shareVC.shareDelegate = delegate;
-    shareVC.project = project;
-    
-    return vc;
+    ShareViewController *vc = (ShareViewController *)[storyboard instantiateViewControllerWithIdentifier:@"ShareView"];
+    vc.shareDelegate = delegate;
+    vc.project = project;
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+    nav.modalPresentationStyle = vc.modalPresentationStyle;
+    nav.modalTransitionStyle = vc.modalTransitionStyle;
+    return nav;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    [AppStyle styleNavigationController:self.navigationController];
-    self.view.backgroundColor = [AppStyle brightColor];
-    self.descriptionTextView.textColor = [AppStyle darkColor];
-    self.tableView.separatorColor = [AppStyle barColor];
-    
-    self.tableView.estimatedRowHeight = 44.0;
-    
-    self.headerCell = [self.tableView dequeueReusableCellWithIdentifier:@"HeaderCell"];
+    self.headerCell = [self.tableView dequeueReusableCellWithIdentifier:@"ShareHeaderCell"];
     self.headerCell.iconImageView.image = (self.project.iconData) ? [UIImage imageWithData:self.project.iconData] : [UIImage imageNamed:@"icon_project"];
-    self.headerCell.backgroundColor = [UIColor clearColor];
-    
-    self.titleCell = [self.tableView dequeueReusableCellWithIdentifier:@"TextFieldCell"];
-    self.titleCell.label.text = @"Title:";
-    self.titleCell.textField.text = self.project.name;
-    self.titleCell.textField.autocapitalizationType = UITextAutocapitalizationTypeWords;
-    self.titleCell.separatorView.separatorColor = self.tableView.separatorColor;
-    self.titleCell.backgroundColor = [UIColor clearColor];
-    
     [self addCell:self.headerCell];
+    
+    self.loginCell = [self.tableView dequeueReusableCellWithIdentifier:@"ShareActionCell"];
+    [self addCell:self.loginCell];
+
+    [self setHeaderTitle:@"Program Title" section:1];
+    
+    self.titleCell = [self.tableView dequeueReusableCellWithIdentifier:@"ShareTextFieldCell"];
+    self.titleCell.textField.placeholder = @"Title";
+    self.titleCell.textField.text = self.project.name;
     [self addCell:self.titleCell];
+
+    [self setHeaderTitle:@"Category" section:2];
     
-    self.descriptionTextView.placeholderView = self.descriptionPlaceholderLabel;
-    self.descriptionTextView.hidePlaceholderWhenFirstResponder = YES;
-    self.descriptionPlaceholderLabel.textColor = [AppStyle barColor];
+    self.categoryGameCell = [self.tableView dequeueReusableCellWithIdentifier:@"BasicCell"];
+    self.categoryGameCell.textLabel.text = @"Game";
+    [self addCell:self.categoryGameCell];
     
-    self.separator2View.separatorColor = self.tableView.separatorColor;
+    self.categoryToolCell = [self.tableView dequeueReusableCellWithIdentifier:@"BasicCell"];
+    self.categoryToolCell.textLabel.text = @"Tool";
+    [self addCell:self.categoryToolCell];
+    
+    self.categoryDemoCell = [self.tableView dequeueReusableCellWithIdentifier:@"BasicCell"];
+    self.categoryDemoCell.textLabel.text = @"Demo (Gfx/SFX examples)";
+    [self addCell:self.categoryDemoCell];
+    
+    [self setHeaderTitle:@"Write a Description" section:3];
+    
+    self.descriptionCell = [self.tableView dequeueReusableCellWithIdentifier:@"ShareTextViewCell"];
+    [self addCell:self.descriptionCell];
+    
+    [self updateLogin:nil];
+    
+    self.selectedCategory = LCCPostCategoryUndefined;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLogin:) name:CurrentUserChangeNotification object:nil];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:CurrentUserChangeNotification object:nil];
+}
+
+- (void)setSelectedCategory:(LCCPostCategory)selectedCategory
+{
+    _selectedCategory = selectedCategory;
+    self.categoryGameCell.accessoryType = (selectedCategory == LCCPostCategoryGame) ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+    self.categoryToolCell.accessoryType = (selectedCategory == LCCPostCategoryTool) ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+    self.categoryDemoCell.accessoryType = (selectedCategory == LCCPostCategoryDemo) ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+}
+
+- (void)updateLogin:(NSNotification *)notification
+{
+    LCCUser *user = (LCCUser *)[PFUser currentUser];
+    if (user)
+    {
+        self.loginCell.textLabel.text = [NSString stringWithFormat:@"%@ (Tap to log out)", user.username];
+    }
+    else
+    {
+        self.loginCell.textLabel.text = @"Log in / Register";
+    }
 }
 
 - (IBAction)onCancelTapped:(id)sender
@@ -81,17 +124,55 @@
 {
     [self.view endEditing:YES];
     
-    if (self.titleCell.textField.text.length == 0 || self.descriptionTextView.text.length == 0)
+    if (![PFUser currentUser])
     {
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Please fill out all required fields!" message:nil preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-        alert.view.tintColor = [AppStyle alertTintColor];
-        [self presentViewController:alert animated:YES completion:nil];
+        [self showAlertWithTitle:@"Please log in!" message:nil block:nil];
+    }
+    else if (self.selectedCategory == LCCPostCategoryUndefined)
+    {
+        [self showAlertWithTitle:@"Please selecte a category!" message:nil block:nil];
+    }
+    else if (self.titleCell.textField.text.length == 0 || self.descriptionCell.textView.text.length == 0)
+    {
+        [self showAlertWithTitle:@"Please fill out all required fields!" message:nil block:nil];
     }
     else
     {
         [self send];
     }
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    
+    if (cell == self.loginCell)
+    {
+        if ([PFUser currentUser])
+        {
+            [PFUser logOutInBackgroundWithBlock:^(NSError *error) {
+                [[CommunityModel sharedInstance] onLoggedOut];
+            }];
+        }
+        else
+        {
+            CommLogInViewController *vc = [CommLogInViewController create];
+            [self presentInNavigationViewController:vc];
+        }
+    }
+    else if (cell == self.categoryGameCell)
+    {
+        self.selectedCategory = LCCPostCategoryGame;
+    }
+    else if (cell == self.categoryToolCell)
+    {
+        self.selectedCategory = LCCPostCategoryTool;
+    }
+    else if (cell == self.categoryDemoCell)
+    {
+        self.selectedCategory = LCCPostCategoryDemo;
+    }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (void)send
@@ -120,9 +201,10 @@
                     post.type = LCCPostTypeProgram;
                     post.user = (LCCUser *)[PFUser currentUser];
                     post.title = self.titleCell.textField.text;
-                    post.detail = self.descriptionTextView.text;
+                    post.detail = self.descriptionCell.textView.text;
                     post.program = program;
                     post.image = imageFile;
+                    post.category = self.selectedCategory;
                     
                     [post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                         
@@ -158,10 +240,7 @@
 {
     [self isBusy:NO];
     
-    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Could not send program" message:@"Please try again later!" preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-    alert.view.tintColor = [AppStyle alertTintColor];
-    [self presentViewController:alert animated:YES completion:nil];
+    [self showAlertWithTitle:@"Could not send program" message:@"Please try again later!" block:nil];
 }
 
 - (void)isBusy:(BOOL)isBusy
@@ -187,7 +266,6 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.headerLabel.textColor = [AppStyle darkColor];
     self.headerLabel.text = @"Post your program! If we like it, we will feature it in the community news!";
     CALayer *imageLayer = self.iconImageView.layer;
     imageLayer.cornerRadius = 20;
@@ -196,13 +274,19 @@
 
 @end
 
-@implementation TextFieldCell
+@implementation ShareTextFieldCell
+
+@end
+
+@implementation ShareActionCell
 
 - (void)awakeFromNib
 {
-    [super awakeFromNib];
-    self.label.textColor = [AppStyle barColor];
-    self.textField.textColor = [AppStyle darkColor];
+    self.textLabel.textColor = self.contentView.tintColor;
 }
+
+@end
+
+@implementation ShareTextViewCell
 
 @end

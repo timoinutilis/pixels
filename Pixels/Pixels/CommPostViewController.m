@@ -33,30 +33,23 @@ typedef NS_ENUM(NSInteger, CellTag) {
 {
     [super viewDidLoad];
     
+    self.tableView.estimatedRowHeight = 44;
+    
     self.writeCommentCell = [self.tableView dequeueReusableCellWithIdentifier:@"WriteCommentCell"];
     
-    if (self.post)
-    {
-        [self updateView];
-    }
+    [self updateView];
 }
 
 - (void)setPost:(LCCPost *)post mode:(CommPostMode)mode
 {
     self.post = post;
     self.mode = mode;
-    
-    if ([self isViewLoaded])
-    {
-        [self updateView];
-        [self.tableView reloadData];
-    }
 }
 
 - (void)updateView
 {
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:self.post.title style:UIBarButtonItemStylePlain target:nil action:nil];
-//    self.title = post.title;
+    self.title = self.post.title;
     
     self.titleCell = [self.tableView dequeueReusableCellWithIdentifier:(self.post.type == LCCPostTypeProgram ? @"ProgramTitleCell" : @"StatusTitleCell")];
     self.titleCell.post = self.post;
@@ -282,11 +275,6 @@ typedef NS_ENUM(NSInteger, CellTag) {
     return nil;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 44;
-}
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
@@ -382,7 +370,16 @@ typedef NS_ENUM(NSInteger, CellTag) {
         }
         self.titleLabel.text = post.title;
         self.programDetailLabel.text = post.detail;
-        self.dateLabel.text = [NSDateFormatter localizedStringFromDate:post.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
+        
+        NSString *date = [NSDateFormatter localizedStringFromDate:post.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
+        if (post.category == LCCPostCategoryStatus)
+        {
+            self.dateLabel.text = date;
+        }
+        else
+        {
+            self.dateLabel.text = [NSString stringWithFormat:@"%@ - %@", [post categoryString], date];
+        }
     }
 }
 

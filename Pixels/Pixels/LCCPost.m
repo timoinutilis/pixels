@@ -24,4 +24,21 @@
     return @"Post";
 }
 
+- (NSString *)categoryString
+{
+    switch (self.category)
+    {
+        case LCCPostCategoryGame:
+            return @"Game";
+        case LCCPostCategoryTool:
+            return @"Tool";
+        case LCCPostCategoryDemo:
+            return @"Demo";
+        case LCCPostCategoryStatus:
+            return @"Status";
+        default:
+            return @"Unknown";
+    }
+}
+
 @end

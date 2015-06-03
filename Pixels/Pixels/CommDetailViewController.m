@@ -41,6 +41,8 @@ static NSString *const SectionPosts = @"Posts";
 {
     [super viewDidLoad];
     
+    self.tableView.estimatedRowHeight = 44;
+    
     self.writeStatusCell = [self.tableView dequeueReusableCellWithIdentifier:@"CommWriteStatusCell"];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onFollowsChanged:) name:FollowsChangeNotification object:nil];
@@ -85,6 +87,10 @@ static NSString *const SectionPosts = @"Posts";
     if (self.mode == CommListModeNews)
     {
         [self updateData];
+    }
+    else if (self.mode == CommListModeProfile)
+    {
+        [self.tableView reloadData];
     }
 }
 
@@ -134,8 +140,8 @@ static NSString *const SectionPosts = @"Posts";
             break;
         }
         case CommListModeProfile: {
-            self.title = nil;
-            self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:self.user.username style:UIBarButtonItemStylePlain target:nil action:nil];
+            self.title = self.user.username;
+//            self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:self.user.username style:UIBarButtonItemStylePlain target:nil action:nil];
             self.sections = [self.user isMe] ? @[SectionInfo, SectionPostStatus, SectionPosts] : @[SectionInfo, SectionPosts];
             
             PFQuery *query = [PFQuery queryWithClassName:[LCCPost parseClassName]];
@@ -165,6 +171,7 @@ static NSString *const SectionPosts = @"Posts";
 
 - (IBAction)onActionTapped:(id)sender
 {
+    UIButton *button = (UIButton *)sender;
     if ([self.user isMe])
     {
         // Edit
@@ -173,10 +180,12 @@ static NSString *const SectionPosts = @"Posts";
     }
     else if ([[CommunityModel sharedInstance] followWithUser:self.user])
     {
+        button.enabled = NO;
         [[CommunityModel sharedInstance] unfollowUser:self.user];
     }
     else
     {
+        button.enabled = NO;
         [[CommunityModel sharedInstance] followUser:self.user];
     }
 }
@@ -244,11 +253,6 @@ static NSString *const SectionPosts = @"Posts";
         return self.posts.count;
     }
     return 0;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 44;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -321,7 +325,15 @@ static NSString *const SectionPosts = @"Posts";
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ProgramCell" forIndexPath:indexPath];
         LCCPost *post = self.posts[indexPath.row];
         cell.textLabel.text = post.title;
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ - %@", post.user.username, [NSDateFormatter localizedStringFromDate:post.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle]];
+        NSString *date = [NSDateFormatter localizedStringFromDate:post.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterNoStyle];
+        if (post.category != LCCPostCategoryStatus)
+        {
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ - %@ - %@", [post categoryString], post.user.username, date];
+        }
+        else
+        {
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ - %@", post.user.username, date];
+        }
         cell.tag = CellTagPost;
         
         [cell.imageView sd_setImageWithURL:[NSURL URLWithString:post.image.url] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
@@ -392,14 +404,16 @@ static NSString *const SectionPosts = @"Posts";
     if ([self.user isMe])
     {
         self.actionButton.hidden = NO;
+        self.actionButton.enabled = YES;
         [self.actionButton setTitle:@"Edit" forState:UIControlStateNormal];
     }
     else if ([[CommunityModel sharedInstance] canFollowOrUnfollow:user])
     {
         self.actionButton.hidden = NO;
+        self.actionButton.enabled = YES;
         if ([[CommunityModel sharedInstance] followWithUser:user])
         {
-            [self.actionButton setTitle:@"Unfollow" forState:UIControlStateNormal];
+            [self.actionButton setTitle:@"Stop Following" forState:UIControlStateNormal];
         }
         else
         {

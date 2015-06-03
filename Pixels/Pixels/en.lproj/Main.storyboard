@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14C1510" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="oli-IW-NHE">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="oli-IW-NHE">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -187,15 +187,15 @@ Inutilis Software, 2015</string>
                         <rect key="frame" x="0.0" y="44" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="icon_about" translatesAutoresizingMaskIntoConstraints="NO" id="iCN-wF-fZ1">
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_about" translatesAutoresizingMaskIntoConstraints="NO" id="iCN-wF-fZ1">
                                 <rect key="frame" x="110" y="16" width="100" height="100"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Upgrade to full version" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nq7-k6-o2g">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Upgrade to full version" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nq7-k6-o2g">
                                 <rect key="frame" x="16" y="132" width="288" height="21"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7qu-NE-hxH">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7qu-NE-hxH">
                                 <rect key="frame" x="16" y="169" width="288" height="82"/>
                                 <string key="text">In the full version there is no size limit for programs.
 The upgrade is valid for all your devices and without time limit.</string>
@@ -203,7 +203,7 @@ The upgrade is valid for all your devices and without time limit.</string>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yqV-0v-CbY">
-                                <rect key="frame" x="49" y="283" width="222" height="30"/>
+                                <rect key="frame" x="49" y="242" width="222" height="30"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d5T-K3-Spc">
                                         <rect key="frame" x="0.0" y="0.0" width="61" height="30"/>
@@ -236,10 +236,10 @@ The upgrade is valid for all your devices and without time limit.</string>
                                 </constraints>
                             </view>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="0Cm-eG-Zxe">
-                                <rect key="frame" x="150" y="288" width="20" height="20"/>
+                                <rect key="frame" x="150" y="247" width="20" height="20"/>
                             </activityIndicatorView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Thank you for the upgrade!" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mMK-I5-wyt">
-                                <rect key="frame" x="54" y="288" width="213" height="21"/>
+                                <rect key="frame" x="54" y="247" width="213" height="21"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -314,7 +314,7 @@ The upgrade is valid for all your devices and without time limit.</string>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lo1-hv-rUe" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2382" y="476"/>
+            <point key="canvasLocation" x="2530" y="476"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="2IR-fi-xuT">
@@ -517,7 +517,7 @@ The upgrade is valid for all your devices and without time limit.</string>
                                 <color key="textColor" red="0.0" green="0.93333333333333335" blue="0.80392156862745101" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="icon_about" translatesAutoresizingMaskIntoConstraints="NO" id="pcx-jG-qK2">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_about" translatesAutoresizingMaskIntoConstraints="NO" id="pcx-jG-qK2">
                                 <rect key="frame" x="110" y="189" width="100" height="100"/>
                             </imageView>
                         </subviews>
@@ -559,56 +559,26 @@ The upgrade is valid for all your devices and without time limit.</string>
             </objects>
             <point key="canvasLocation" x="350" y="1152"/>
         </scene>
-        <!--Publish-->
+        <!--Publish in Community-->
         <scene sceneID="bmj-RF-7ax">
             <objects>
-                <tableViewController id="u7G-9d-dgL" customClass="ShareViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="yXj-U7-NwB">
-                        <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                <tableViewController storyboardIdentifier="ShareView" modalPresentationStyle="formSheet" id="u7G-9d-dgL" customClass="ShareViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="interactive" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="yXj-U7-NwB">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <view key="tableFooterView" contentMode="scaleToFill" id="8T0-WR-gLK">
-                            <rect key="frame" x="0.0" y="206" width="600" height="300"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <subviews>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oTo-ap-szN" customClass="GORSeparatorView">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="1"/>
-                                    <constraints>
-                                        <constraint firstAttribute="height" constant="1" id="10t-1p-S6G"/>
-                                    </constraints>
-                                </view>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Write a description" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jzM-NH-C7P">
-                                    <rect key="frame" x="8" y="13" width="144" height="21"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pbc-p6-EDI" customClass="GORTextView">
-                                    <rect key="frame" x="8" y="8" width="584" height="284"/>
-                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                </textView>
-                            </subviews>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            <constraints>
-                                <constraint firstAttribute="bottomMargin" secondItem="Pbc-p6-EDI" secondAttribute="bottom" id="4rA-wS-fYq"/>
-                                <constraint firstItem="Pbc-p6-EDI" firstAttribute="leading" secondItem="8T0-WR-gLK" secondAttribute="leadingMargin" id="Czb-4C-Mdq"/>
-                                <constraint firstItem="oTo-ap-szN" firstAttribute="top" secondItem="8T0-WR-gLK" secondAttribute="top" id="DE6-bC-Kr9"/>
-                                <constraint firstItem="jzM-NH-C7P" firstAttribute="leading" secondItem="8T0-WR-gLK" secondAttribute="leadingMargin" id="Dzq-Yc-pNH"/>
-                                <constraint firstItem="jzM-NH-C7P" firstAttribute="top" secondItem="oTo-ap-szN" secondAttribute="bottom" constant="12" id="glk-CH-EqB"/>
-                                <constraint firstAttribute="trailingMargin" secondItem="Pbc-p6-EDI" secondAttribute="trailing" id="k1F-Yh-tKa"/>
-                                <constraint firstItem="Pbc-p6-EDI" firstAttribute="top" secondItem="8T0-WR-gLK" secondAttribute="topMargin" id="tf6-zP-093"/>
-                                <constraint firstAttribute="trailing" secondItem="oTo-ap-szN" secondAttribute="trailing" id="yy7-h8-cnE"/>
-                                <constraint firstItem="oTo-ap-szN" firstAttribute="leading" secondItem="8T0-WR-gLK" secondAttribute="leading" id="z3y-dv-RYP"/>
-                            </constraints>
-                        </view>
+                        <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="HeaderCell" rowHeight="140" id="xvF-Tr-YGB" customClass="ShareHeaderCell">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="ShareHeaderCell" rowHeight="100" id="xvF-Tr-YGB" customClass="ShareHeaderCell">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xvF-Tr-YGB" id="AQT-b1-zre">
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="(text)" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gnl-rd-zYM">
+                                            <rect key="frame" x="104" y="8" width="208" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bHI-XD-ggP">
                                             <rect key="frame" x="8" y="8" width="80" height="80"/>
                                             <constraints>
@@ -616,20 +586,15 @@ The upgrade is valid for all your devices and without time limit.</string>
                                                 <constraint firstAttribute="width" constant="80" id="oeE-xe-fv3"/>
                                             </constraints>
                                         </imageView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="(text)" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gnl-rd-zYM" customClass="GORLabel">
-                                            <rect key="frame" x="96" y="8" width="502" height="21"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="bHI-XD-ggP" secondAttribute="bottom" id="RKM-C0-evw"/>
-                                        <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="gnl-rd-zYM" secondAttribute="bottom" constant="8" id="b5U-pz-Vsp"/>
                                         <constraint firstItem="gnl-rd-zYM" firstAttribute="top" secondItem="AQT-b1-zre" secondAttribute="topMargin" id="cGP-kf-c0G"/>
+                                        <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="bHI-XD-ggP" secondAttribute="bottom" id="fVO-26-TOj"/>
                                         <constraint firstItem="bHI-XD-ggP" firstAttribute="leading" secondItem="AQT-b1-zre" secondAttribute="leadingMargin" id="gtv-gT-zPs"/>
-                                        <constraint firstItem="gnl-rd-zYM" firstAttribute="leading" secondItem="bHI-XD-ggP" secondAttribute="trailing" constant="8" id="mr1-0q-LbJ"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="gnl-rd-zYM" secondAttribute="bottom" priority="750" id="h1W-gr-1Xw"/>
+                                        <constraint firstItem="gnl-rd-zYM" firstAttribute="leading" secondItem="bHI-XD-ggP" secondAttribute="trailing" constant="16" id="mr1-0q-LbJ"/>
                                         <constraint firstItem="bHI-XD-ggP" firstAttribute="top" secondItem="AQT-b1-zre" secondAttribute="topMargin" id="xNO-8n-k8i"/>
-                                        <constraint firstAttribute="trailing" secondItem="gnl-rd-zYM" secondAttribute="trailing" constant="2" id="zfx-is-m4g"/>
+                                        <constraint firstItem="gnl-rd-zYM" firstAttribute="trailing" secondItem="AQT-b1-zre" secondAttribute="trailingMargin" id="z1Z-Hx-IbQ"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
@@ -637,49 +602,87 @@ The upgrade is valid for all your devices and without time limit.</string>
                                     <outlet property="iconImageView" destination="bHI-XD-ggP" id="AkC-BK-PfQ"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="TextFieldCell" id="ZUu-HX-fEM" customClass="TextFieldCell">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="ShareTextViewCell" rowHeight="200" id="Pqo-SX-TRF" customClass="ShareTextViewCell">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ZUu-HX-fEM" id="rQJ-W9-Alb">
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Pqo-SX-TRF" id="4Cj-St-32Q">
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LQ9-mO-tSv" customClass="GORSeparatorView">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="1"/>
+                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4ay-Ej-qtQ">
+                                            <rect key="frame" x="8" y="8" width="304" height="183"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="1" id="pb4-mV-jwh"/>
+                                                <constraint firstAttribute="height" constant="183" id="JaD-ZE-0Vv"/>
                                             </constraints>
-                                        </view>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n0X-vk-x9b">
-                                            <rect key="frame" x="8" y="11" width="42" height="21"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0xU-An-Aft">
-                                            <rect key="frame" x="58" y="0.0" width="532" height="44"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="43" id="MQc-fE-HBb"/>
-                                            </constraints>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <textInputTraits key="textInputTraits"/>
-                                        </textField>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                        </textView>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstAttribute="trailing" secondItem="LQ9-mO-tSv" secondAttribute="trailing" id="TAi-06-dE1"/>
-                                        <constraint firstItem="n0X-vk-x9b" firstAttribute="leading" secondItem="rQJ-W9-Alb" secondAttribute="leadingMargin" id="Zqe-Ia-rsf"/>
-                                        <constraint firstItem="0xU-An-Aft" firstAttribute="top" secondItem="rQJ-W9-Alb" secondAttribute="top" id="cv7-pZ-0Y8"/>
-                                        <constraint firstAttribute="trailing" secondItem="0xU-An-Aft" secondAttribute="trailing" constant="10" id="l5k-pd-25Y"/>
-                                        <constraint firstItem="LQ9-mO-tSv" firstAttribute="top" secondItem="rQJ-W9-Alb" secondAttribute="top" id="qw5-Rh-JDo"/>
-                                        <constraint firstAttribute="centerY" secondItem="n0X-vk-x9b" secondAttribute="centerY" id="r2b-AO-vpu"/>
-                                        <constraint firstItem="0xU-An-Aft" firstAttribute="leading" secondItem="n0X-vk-x9b" secondAttribute="trailing" constant="8" id="wzO-JN-2D9"/>
-                                        <constraint firstItem="LQ9-mO-tSv" firstAttribute="leading" secondItem="rQJ-W9-Alb" secondAttribute="leading" id="x9t-zS-Kev"/>
-                                        <constraint firstAttribute="bottom" secondItem="0xU-An-Aft" secondAttribute="bottom" id="yKm-d7-r1b"/>
+                                        <constraint firstItem="4ay-Ej-qtQ" firstAttribute="trailing" secondItem="4Cj-St-32Q" secondAttribute="trailingMargin" id="MmY-Yq-hck"/>
+                                        <constraint firstItem="4ay-Ej-qtQ" firstAttribute="top" secondItem="4Cj-St-32Q" secondAttribute="topMargin" id="ThQ-cq-kti"/>
+                                        <constraint firstItem="4ay-Ej-qtQ" firstAttribute="leading" secondItem="4Cj-St-32Q" secondAttribute="leadingMargin" id="dII-N1-kly"/>
+                                        <constraint firstItem="4ay-Ej-qtQ" firstAttribute="bottom" secondItem="4Cj-St-32Q" secondAttribute="bottomMargin" id="ieL-DP-zIE"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="label" destination="n0X-vk-x9b" id="x0I-qb-Nvb"/>
-                                    <outlet property="separatorView" destination="LQ9-mO-tSv" id="Kqu-d9-WQL"/>
-                                    <outlet property="textField" destination="0xU-An-Aft" id="XUF-qt-tFL"/>
+                                    <outlet property="textView" destination="4ay-Ej-qtQ" id="ikT-Wn-MHD"/>
                                 </connections>
+                            </tableViewCell>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="ShareTextFieldCell" id="ZW2-w3-XlI" customClass="ShareTextFieldCell">
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ZW2-w3-XlI" id="61o-q9-i4H">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="u5Y-Ku-yEI">
+                                            <rect key="frame" x="8" y="0.0" width="304" height="43"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="43" id="EEP-9O-6gv"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no"/>
+                                        </textField>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="u5Y-Ku-yEI" firstAttribute="top" secondItem="61o-q9-i4H" secondAttribute="top" id="QHi-6f-iUy"/>
+                                        <constraint firstItem="u5Y-Ku-yEI" firstAttribute="leading" secondItem="61o-q9-i4H" secondAttribute="leadingMargin" id="UW6-5r-ctA"/>
+                                        <constraint firstAttribute="bottom" secondItem="u5Y-Ku-yEI" secondAttribute="bottom" id="Udd-OT-xV5"/>
+                                        <constraint firstItem="u5Y-Ku-yEI" firstAttribute="trailing" secondItem="61o-q9-i4H" secondAttribute="trailingMargin" id="ir3-m7-VE3"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="textField" destination="u5Y-Ku-yEI" id="arf-e4-yYy"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ShareActionCell" textLabel="Bkv-a0-Znv" style="IBUITableViewCellStyleDefault" id="ma5-SP-xo6" customClass="ShareActionCell">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ma5-SP-xo6" id="XuR-i9-igh">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Action" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Bkv-a0-Znv">
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="BasicCell" textLabel="qAM-QR-v3H" style="IBUITableViewCellStyleDefault" id="w7C-S4-b0X">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="w7C-S4-b0X" id="HaC-xl-mGI">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="qAM-QR-v3H">
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
                             </tableViewCell>
                         </prototypes>
                         <sections/>
@@ -688,29 +691,28 @@ The upgrade is valid for all your devices and without time limit.</string>
                             <outlet property="delegate" destination="u7G-9d-dgL" id="igC-KT-ofg"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Publish" id="ble-yo-hgv">
+                    <navigationItem key="navigationItem" title="Publish in Community" id="ble-yo-hgv">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Pjk-qX-0wW">
                             <connections>
                                 <action selector="onCancelTapped:" destination="u7G-9d-dgL" id="JKe-1Q-LVm"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Send" style="done" id="O3a-N9-0XI">
+                        <barButtonItem key="rightBarButtonItem" title="Post" style="done" id="O3a-N9-0XI">
                             <connections>
                                 <action selector="onSendTapped:" destination="u7G-9d-dgL" id="Xvq-a5-u3Y"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="cancelItem" destination="Pjk-qX-0wW" id="Zvn-Lw-sHp"/>
-                        <outlet property="descriptionPlaceholderLabel" destination="jzM-NH-C7P" id="uz3-cf-XIe"/>
-                        <outlet property="descriptionTextView" destination="Pbc-p6-EDI" id="0Yr-z9-YVb"/>
                         <outlet property="sendItem" destination="O3a-N9-0XI" id="h8h-uj-TGx"/>
-                        <outlet property="separator2View" destination="oTo-ap-szN" id="RPF-Rf-qi9"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="t6o-4l-jLO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2622" y="2140"/>
+            <point key="canvasLocation" x="1842" y="1898"/>
         </scene>
         <!--Programs-->
         <scene sceneID="3mJ-o1-cJC">
@@ -812,24 +814,6 @@ The upgrade is valid for all your devices and without time limit.</string>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JJn-Ol-X1d" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1058" y="1152"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="lad-M1-adN">
-            <objects>
-                <navigationController storyboardIdentifier="Share" automaticallyAdjustsScrollViewInsets="NO" id="St8-To-Fxp" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="tkT-8N-CYc">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="u7G-9d-dgL" kind="relationship" relationship="rootViewController" id="LPI-Vb-J0F"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="AgB-4w-4it" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1882" y="2141"/>
         </scene>
     </scenes>
     <resources>
