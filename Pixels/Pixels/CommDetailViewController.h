@@ -31,3 +31,8 @@ typedef NS_ENUM(NSInteger, CommListMode) {
 @interface CommInfoCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *infoTextLabel;
 @end
+
+@interface CommWriteStatusCell : UITableViewCell
+@property (strong, nonatomic) IBOutlet UITextField *titleTextField;
+@property (strong, nonatomic) IBOutlet UITextView *textView;
+@end

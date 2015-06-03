@@ -25,6 +25,7 @@ typedef NS_ENUM(NSInteger, CommPostMode) {
 @interface ProgramTitleCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UIButton *likeButton;
 @property (weak, nonatomic) IBOutlet UIButton *getProgramButton;
+@property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 @property (nonatomic) LCCPost *post;
 @property (nonatomic) NSInteger likeCount;
 @property (nonatomic) NSInteger downloadCount;

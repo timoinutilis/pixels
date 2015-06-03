@@ -21,11 +21,17 @@ typedef NS_ENUM(NSInteger, CellTag) {
     CellTagFollowing
 };
 
+static NSString *const SectionInfo = @"Info";
+static NSString *const SectionPostStatus = @"PostStatus";
+static NSString *const SectionPosts = @"Posts";
+
 @interface CommDetailViewController ()
 
 @property LCCUser *user;
 @property CommListMode mode;
-@property NSArray *posts;
+@property NSMutableArray *posts;
+@property NSArray *sections;
+@property CommWriteStatusCell *writeStatusCell;
 
 @end
 
@@ -34,6 +40,8 @@ typedef NS_ENUM(NSInteger, CellTag) {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.writeStatusCell = [self.tableView dequeueReusableCellWithIdentifier:@"CommWriteStatusCell"];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onFollowsChanged:) name:FollowsChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserChanged:) name:CurrentUserChangeNotification object:nil];
@@ -94,6 +102,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
     {
         case CommListModeNews: {
             self.title = @"News";
+            self.sections = @[SectionInfo, SectionPosts];
             
             NSArray *followedUsers = [[CommunityModel sharedInstance] arrayWithFollowedUsers];
             if (followedUsers.count > 0)
@@ -108,7 +117,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
                 [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                     if (objects)
                     {
-                        self.posts = objects;
+                        self.posts = [NSMutableArray arrayWithArray:objects];
                         [self.tableView reloadData];
                     }
                     else if (error)
@@ -127,6 +136,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
         case CommListModeProfile: {
             self.title = nil;
             self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:self.user.username style:UIBarButtonItemStylePlain target:nil action:nil];
+            self.sections = [self.user isMe] ? @[SectionInfo, SectionPostStatus, SectionPosts] : @[SectionInfo, SectionPosts];
             
             PFQuery *query = [PFQuery queryWithClassName:[LCCPost parseClassName]];
             [query whereKey:@"user" equalTo:self.user];
@@ -138,7 +148,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
             [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                 if (objects)
                 {
-                    self.posts = objects;
+                    self.posts = [NSMutableArray arrayWithArray:objects];
                     [self.tableView reloadData];
                 }
                 else if (error)
@@ -171,16 +181,50 @@ typedef NS_ENUM(NSInteger, CellTag) {
     }
 }
 
+- (IBAction)onSendStatusTapped:(id)sender
+{
+    if (self.writeStatusCell.titleTextField.text.length > 0)
+    {
+        [self.view endEditing:YES];
+        
+        LCCPost *post = [LCCPost object];
+        post.user = (LCCUser *)[PFUser currentUser];
+        post.type = LCCPostTypeStatus;
+        post.category = LCCPostCategoryStatus;
+        post.title = self.writeStatusCell.titleTextField.text;
+        post.detail = self.writeStatusCell.textView.text;
+        
+        [post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            
+            if (succeeded)
+            {
+                [self.posts insertObject:post atIndex:0];
+                [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:2]] withRowAnimation:UITableViewRowAnimationAutomatic];
+                self.writeStatusCell.titleTextField.text = @"";
+                self.writeStatusCell.textView.text = @"";
+            }
+            else
+            {
+                UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Could not send status update" message:@"Please try again later!" preferredStyle:UIAlertControllerStyleAlert];
+                [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+                [self presentViewController:alert animated:YES completion:nil];
+            }
+            
+        }];
+    }
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    return self.sections.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == 0)
+    NSString *sectionId = self.sections[section];
+    if (sectionId == SectionInfo)
     {
         if (self.mode == CommListModeProfile)
         {
@@ -191,7 +235,11 @@ typedef NS_ENUM(NSInteger, CellTag) {
             return 1;
         }
     }
-    else if (section == 1)
+    else if (sectionId == SectionPostStatus)
+    {
+        return 1;
+    }
+    else if (sectionId == SectionPosts)
     {
         return self.posts.count;
     }
@@ -200,16 +248,21 @@ typedef NS_ENUM(NSInteger, CellTag) {
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return tableView.rowHeight;
+    return 44;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (section == 0)
+    NSString *sectionId = self.sections[section];
+    if (sectionId == SectionInfo)
     {
         return (self.mode == CommListModeNews) ? @"Info" : @"User";
     }
-    else if (section == 1)
+    else if (sectionId == SectionPostStatus)
+    {
+        return @"Write a Status Update";
+    }
+    else if (sectionId == SectionPosts)
     {
         return @"Posts";
     }
@@ -218,7 +271,8 @@ typedef NS_ENUM(NSInteger, CellTag) {
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0)
+    NSString *sectionId = self.sections[indexPath.section];
+    if (sectionId == SectionInfo)
     {
         if (self.mode == CommListModeProfile)
         {
@@ -258,7 +312,11 @@ typedef NS_ENUM(NSInteger, CellTag) {
             return cell;
         }
     }
-    else if (indexPath.section == 1)
+    else if (sectionId == SectionPostStatus)
+    {
+        return self.writeStatusCell;
+    }
+    else if (sectionId == SectionPosts)
     {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ProgramCell" forIndexPath:indexPath];
         LCCPost *post = self.posts[indexPath.row];
@@ -358,4 +416,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
 
 
 @implementation CommInfoCell
+@end
+
+@implementation CommWriteStatusCell
 @end
