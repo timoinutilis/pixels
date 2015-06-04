@@ -35,7 +35,6 @@ extern NSString *const UserDefaultsLogInKey;
 - (void)followUser:(LCCUser *)user;
 - (void)unfollowUser:(LCCUser *)user;
 - (LCCFollow *)followWithUser:(LCCUser *)user;
-- (BOOL)canFollowOrUnfollow:(LCCUser *)user;
 - (NSArray *)arrayWithFollowedUsers;
 - (void)countPost:(LCCPost *)post type:(LCCCountType)type;
 - (void)fetchCountForPost:(LCCPost *)post type:(LCCCountType)type block:(void (^)(NSArray *users))block;

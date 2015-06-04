@@ -11,6 +11,7 @@
 #import "UIImageView+WebCache.h"
 #import "CommSourceCodeViewController.h"
 #import "CommDetailViewController.h"
+#import "CommLogInViewController.h"
 #import "UIViewController+CommUtils.h"
 #import "UIViewController+LowResCoder.h"
 
@@ -40,6 +41,13 @@ typedef NS_ENUM(NSInteger, CellTag) {
     
     [self updateView];
     [self loadAll];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserChanged:) name:CurrentUserChangeNotification object:nil];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:CurrentUserChangeNotification object:nil];
 }
 
 - (void)setPost:(LCCPost *)post mode:(CommPostMode)mode
@@ -151,11 +159,24 @@ typedef NS_ENUM(NSInteger, CellTag) {
     }];
 }
 
+- (void)onUserChanged:(NSNotification *)notification
+{
+    [self.tableView reloadData];
+}
+
 - (IBAction)onLikeTapped:(id)sender
 {
-    [[CommunityModel sharedInstance] countPost:self.post type:LCCCountTypeLike];
-    self.titleCell.likeCount++;
-    [self.titleCell likeIt];
+    if (![PFUser currentUser])
+    {
+        CommLogInViewController *vc = [CommLogInViewController create];
+        [self presentInNavigationViewController:vc];
+    }
+    else
+    {
+        [[CommunityModel sharedInstance] countPost:self.post type:LCCCountTypeLike];
+        self.titleCell.likeCount++;
+        [self.titleCell likeIt];
+    }
 }
 
 - (IBAction)onGetProgramTapped:(id)sender
@@ -272,7 +293,8 @@ typedef NS_ENUM(NSInteger, CellTag) {
     }
     else if (section == 2)
     {
-        return @"Write a Comment";
+        NSString *name = ([PFUser currentUser] ? [PFUser currentUser].username : @"Guest");
+        return [NSString stringWithFormat:@"Write a Comment (as %@)", name];
     }
     return nil;
 }
@@ -305,7 +327,8 @@ typedef NS_ENUM(NSInteger, CellTag) {
         LCCComment *comment = self.comments[indexPath.row];
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommentCell" forIndexPath:indexPath];
         cell.textLabel.text = comment.text;
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ - %@", comment.user.username, [NSDateFormatter localizedStringFromDate:comment.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle]];
+        NSString *name = (comment.user ? comment.user.username : @"Guest");
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ - %@", name, [NSDateFormatter localizedStringFromDate:comment.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle]];
         return cell;
     }
     else if (indexPath.section == 2)

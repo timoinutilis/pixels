@@ -12,6 +12,7 @@
 #import "UIImageView+WebCache.h"
 #import "CommUsersViewController.h"
 #import "CommEditUserViewController.h"
+#import "CommLogInViewController.h"
 #import "UIViewController+LowResCoder.h"
 
 typedef NS_ENUM(NSInteger, CellTag) {
@@ -178,6 +179,11 @@ static NSString *const SectionPosts = @"Posts";
         UIViewController *vc = [CommEditUserViewController create];
         [self presentInNavigationViewController:vc];
     }
+    else if (![PFUser currentUser])
+    {
+        UIViewController *vc = [CommLogInViewController create];
+        [self presentInNavigationViewController:vc];
+    }
     else if ([[CommunityModel sharedInstance] followWithUser:self.user])
     {
         button.enabled = NO;
@@ -321,7 +327,8 @@ static NSString *const SectionPosts = @"Posts";
     else if (sectionId == SectionPosts)
     {
         LCCPost *post = self.posts[indexPath.row];
-        CommPostCell *cell = [tableView dequeueReusableCellWithIdentifier:(post.type == LCCPostTypeStatus) ? @"StatusCell" : @"ProgramCell" forIndexPath:indexPath];
+        NSString *cellType = (post.type == LCCPostTypeStatus) ? @"StatusCell" : @"ProgramCell";
+        CommPostCell *cell = [tableView dequeueReusableCellWithIdentifier:cellType forIndexPath:indexPath];
         cell.post = post;
         cell.tag = CellTagPost;
         return cell;
@@ -389,17 +396,22 @@ static NSString *const SectionPosts = @"Posts";
         self.profileDetailLabel.text = @"No about text written yet";
         self.profileDetailLabel.alpha = 0.5;
     }
+    
     if ([self.user isMe])
     {
         self.actionButton.hidden = NO;
         self.actionButton.enabled = YES;
         [self.actionButton setTitle:@"Edit" forState:UIControlStateNormal];
     }
-    else if ([[CommunityModel sharedInstance] canFollowOrUnfollow:user])
+    else if ([self.user isNewsUser])
+    {
+        self.actionButton.hidden = YES;
+    }
+    else
     {
         self.actionButton.hidden = NO;
         self.actionButton.enabled = YES;
-        if ([[CommunityModel sharedInstance] followWithUser:user])
+        if ([PFUser currentUser] && [[CommunityModel sharedInstance] followWithUser:user])
         {
             [self.actionButton setTitle:@"Stop Following" forState:UIControlStateNormal];
         }
@@ -407,10 +419,6 @@ static NSString *const SectionPosts = @"Posts";
         {
             [self.actionButton setTitle:@"Follow" forState:UIControlStateNormal];
         }
-    }
-    else
-    {
-        self.actionButton.hidden = YES;
     }
 }
 
@@ -424,6 +432,7 @@ static NSString *const SectionPosts = @"Posts";
 @end
 
 @interface CommPostCell()
+@property (weak, nonatomic) IBOutlet UIImageView *starImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *iconImageView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
@@ -446,8 +455,9 @@ static NSString *const SectionPosts = @"Posts";
 {
     _post = post;
     
+    self.starImageView.hidden = ![post.user isNewsUser];
+    
     self.titleLabel.text = post.title;
-    self.titleLabel.textColor = [post.user isNewsUser] ? [UIColor redColor] : [UIColor darkTextColor];
     NSString *date = [NSDateFormatter localizedStringFromDate:post.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterNoStyle];
     NSString *name = (post.type == LCCPostTypeShare) ? [NSString stringWithFormat:@"Shared by %@", post.user.username] : post.user.username;
     if (post.category != LCCPostCategoryStatus)

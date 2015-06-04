@@ -414,8 +414,6 @@
 				924F832B1B0B5B6E00B96C91 /* CommMasterViewController.m */,
 				924F832E1B0B5BDF00B96C91 /* CommDetailViewController.h */,
 				924F832F1B0B5BDF00B96C91 /* CommDetailViewController.m */,
-				92C081171B0DD9490006331B /* CommLogInViewController.h */,
-				92C081181B0DD9490006331B /* CommLogInViewController.m */,
 				92C081581B0E021A0006331B /* CommPostViewController.h */,
 				92C081591B0E021A0006331B /* CommPostViewController.m */,
 				92884F291B0F307F0032623D /* CommSourceCodeViewController.h */,
@@ -424,6 +422,8 @@
 				92D2C2011B13442A00539BA6 /* CommUsersViewController.m */,
 				927D34591B1CB0D700967AE7 /* CommEditUserViewController.h */,
 				927D345A1B1CB0D700967AE7 /* CommEditUserViewController.m */,
+				92C081171B0DD9490006331B /* CommLogInViewController.h */,
+				92C081181B0DD9490006331B /* CommLogInViewController.m */,
 			);
 			name = Community;
 			sourceTree = "<group>";

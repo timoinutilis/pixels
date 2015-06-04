@@ -106,8 +106,11 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
 - (void)onPostedWithDate:(NSDate *)date
 {
     LCCUser *user = (LCCUser *)[PFUser currentUser];
-    user.lastPostDate = date;
-    [user saveInBackground];
+    if (user)
+    {
+        user.lastPostDate = date;
+        [user saveInBackground];
+    }
 }
 
 - (void)followUser:(LCCUser *)user
@@ -159,16 +162,6 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
     return nil;
 }
 
-- (BOOL)canFollowOrUnfollow:(LCCUser *)user
-{
-    LCCUser *currentUser = (LCCUser *)[PFUser currentUser];
-    if (currentUser)
-    {
-        return (![user isMe] && ![user isNewsUser]);
-    }
-    return NO;
-}
-
 - (NSArray *)arrayWithFollowedUsers
 {
     NSMutableArray *array = [NSMutableArray array];
@@ -211,7 +204,7 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
             NSMutableArray *users = [NSMutableArray arrayWithCapacity:objects.count];
             for (LCCCount *count in objects)
             {
-                [users addObject:count.user];
+                [users addObject:(count.user ? count.user : [NSNull null])];
             }
             block(users);
         }
@@ -226,12 +219,15 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
 
 - (BOOL)isCurrentUserInArray:(NSArray *)array
 {
-    NSString *currentUserId = [PFUser currentUser].objectId;
-    for (LCCUser *user in array)
+    if ([PFUser currentUser])
     {
-        if ([user.objectId isEqualToString:currentUserId])
+        NSString *currentUserId = [PFUser currentUser].objectId;
+        for (LCCUser *user in array)
         {
-            return YES;
+            if ([user.objectId isEqualToString:currentUserId])
+            {
+                return YES;
+            }
         }
     }
     return NO;

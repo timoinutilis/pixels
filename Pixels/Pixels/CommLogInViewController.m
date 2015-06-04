@@ -62,7 +62,7 @@
     [self addCell:self.logInPasswordCell];
     [self addCell:self.logInButtonCell];
     
-    [self setHeaderTitle:@"Create a new account" section:1];
+    [self setHeaderTitle:@"Or create a new account" section:1];
     [self addCell:self.registerUsernameCell section:1];
     [self addCell:self.registerPasswordCell];
     [self addCell:self.registerPasswordVerifyCell];

@@ -126,7 +126,8 @@
     
     if (![PFUser currentUser])
     {
-        [self showAlertWithTitle:@"Please log in!" message:nil block:nil];
+        CommLogInViewController *vc = [CommLogInViewController create];
+        [self presentInNavigationViewController:vc];
     }
     else if (self.selectedCategory == LCCPostCategoryUndefined)
     {
