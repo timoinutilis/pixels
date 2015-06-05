@@ -19,6 +19,7 @@
 #import "CoachMarkView.h"
 #import "AppStyle.h"
 #import "Runnable.h"
+#import <GameController/GameController.h>
 
 NSString *const UserDefaultsFullscreenKey = @"fullscreen";
 NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
@@ -312,23 +313,30 @@ NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
 
 - (BOOL)isButtonDown:(ButtonType)type
 {
+    GCGamepad *gamePad;
+    if ([GCController controllers].count > 0)
+    {
+        GCController *gameController = [GCController controllers].firstObject;
+        gamePad = gameController.gamepad;
+    }
+    
     switch (type)
     {
-        case ButtonTypeUp: return self.gamepad.isDirUp;
-        case ButtonTypeDown: return self.gamepad.isDirDown;
-        case ButtonTypeLeft: return self.gamepad.isDirLeft;
-        case ButtonTypeRight: return self.gamepad.isDirRight;
-        case ButtonTypeA: return self.buttonA.isHighlighted || (self.backgroundButton.isHighlighted && self.numPlayers == 0);
-        case ButtonTypeB: return self.buttonB.isHighlighted;
+        case ButtonTypeUp: return self.gamepad.isDirUp || gamePad.dpad.up.pressed;
+        case ButtonTypeDown: return self.gamepad.isDirDown || gamePad.dpad.down.pressed;
+        case ButtonTypeLeft: return self.gamepad.isDirLeft || gamePad.dpad.left.pressed;
+        case ButtonTypeRight: return self.gamepad.isDirRight || gamePad.dpad.right.pressed;
+        case ButtonTypeA: return self.buttonA.isHighlighted || gamePad.buttonA.pressed || gamePad.buttonX.pressed || (self.backgroundButton.isHighlighted && self.numPlayers == 0);
+        case ButtonTypeB: return self.buttonB.isHighlighted || gamePad.buttonB.pressed || gamePad.buttonY.pressed;
     }
 }
 
 - (int)currentGamepadFlags
 {
-    return self.gamepad.isDirUp
-        | (self.gamepad.isDirDown << 1)
-        | (self.gamepad.isDirLeft << 2)
-        | (self.gamepad.isDirRight << 3)
+    return [self isButtonDown:ButtonTypeUp]
+        | ([self isButtonDown:ButtonTypeDown] << 1)
+        | ([self isButtonDown:ButtonTypeLeft] << 2)
+        | ([self isButtonDown:ButtonTypeRight] << 3)
         | ([self isButtonDown:ButtonTypeA] << 4)
         | ([self isButtonDown:ButtonTypeB] << 5);
 }
@@ -337,7 +345,7 @@ NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         self.numPlayers = players;
-        if (players >= 1)
+        if (players >= 1 && [GCController controllers].count == 0)
         {
             self.gamepad.hidden = NO;
             self.buttonA.hidden = NO;
