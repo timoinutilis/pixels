@@ -70,6 +70,15 @@ NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
     self.soundEnabled = [defaults objectForKey:soundKey] ? [defaults boolForKey:soundKey] : YES;
     
     self.soundButton.hidden = !self.runnable.usesSound;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onGameControllersChanged:) name:GCControllerDidConnectNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onGameControllersChanged:) name:GCControllerDidDisconnectNotification object:nil];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:GCControllerDidConnectNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:GCControllerDidDisconnectNotification object:nil];
 }
 
 - (BOOL)prefersStatusBarHidden
@@ -113,6 +122,11 @@ NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
         projectKey = [NSString stringWithFormat:@"%f %@", self.project.createdAt.timeIntervalSinceReferenceDate, key];
     }
     return projectKey;
+}
+
+- (void)onGameControllersChanged:(NSNotification *)notification
+{
+    [self updateGamepads];
 }
 
 - (IBAction)onBackgroundTouchDown:(id)sender
@@ -343,21 +357,35 @@ NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
 
 - (void)setGamepadModeWithPlayers:(int)players
 {
+    self.numPlayers = players;
+
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.numPlayers = players;
-        if (players >= 1 && [GCController controllers].count == 0)
-        {
-            self.gamepad.hidden = NO;
-            self.buttonA.hidden = NO;
-            self.buttonB.hidden = NO;
-        }
-        else
-        {
-            self.gamepad.hidden = YES;
-            self.buttonA.hidden = YES;
-            self.buttonB.hidden = YES;
-        }
+        [self updateGamepads];
     });
+}
+
+- (void)updateGamepads
+{
+    NSArray *gameControllers = [GCController controllers];
+    
+    if (gameControllers.count > 0)
+    {
+        GCController *gameController = gameControllers[0];
+        gameController.playerIndex = 0;
+    }
+    
+    if (self.numPlayers >= 1 && gameControllers.count == 0)
+    {
+        self.gamepad.hidden = NO;
+        self.buttonA.hidden = NO;
+        self.buttonB.hidden = NO;
+    }
+    else
+    {
+        self.gamepad.hidden = YES;
+        self.buttonA.hidden = YES;
+        self.buttonB.hidden = YES;
+    }
 }
 
 @end
