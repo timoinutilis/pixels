@@ -9,20 +9,23 @@
 #import "CommUsersViewController.h"
 #import "CommunityModel.h"
 #import "CommDetailViewController.h"
+#import "ExtendedActivityIndicatorView.h"
 
 @interface CommUsersViewController ()
 
 @property LCCUser *user;
 @property CommUsersMode mode;
 @property NSMutableArray *users;
+@property ExtendedActivityIndicatorView *activityIndicator;
 
 @end
 
 @implementation CommUsersViewController
 
-- (void)viewDidLoad
+- (void)awakeFromNib
 {
-    [super viewDidLoad];
+    self.activityIndicator = [[ExtendedActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
 }
 
 - (void)setUser:(LCCUser *)user mode:(CommUsersMode)mode
@@ -46,8 +49,10 @@
             [query orderByDescending:@"createdAt"];
             query.cachePolicy = kPFCachePolicyNetworkElseCache;
             
+            [self.activityIndicator increaseActivity];
             [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                 
+                [self.activityIndicator decreaseActivity];
                 self.users = [NSMutableArray arrayWithCapacity:objects.count];
                 for (LCCFollow *follow in objects)
                 {
@@ -67,8 +72,10 @@
             [query orderByDescending:@"createdAt"];
             query.cachePolicy = kPFCachePolicyNetworkElseCache;
             
+            [self.activityIndicator increaseActivity];
             [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                 
+                [self.activityIndicator decreaseActivity];
                 self.users = [NSMutableArray arrayWithCapacity:objects.count];
                 for (LCCFollow *follow in objects)
                 {

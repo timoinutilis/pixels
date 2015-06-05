@@ -14,6 +14,7 @@
 #import "CommLogInViewController.h"
 #import "UIViewController+CommUtils.h"
 #import "UIViewController+LowResCoder.h"
+#import "ExtendedActivityIndicatorView.h"
 
 typedef NS_ENUM(NSInteger, CellTag) {
     CellTagNoAction,
@@ -27,9 +28,16 @@ typedef NS_ENUM(NSInteger, CellTag) {
 @property CommPostMode mode;
 @property ProgramTitleCell *titleCell;
 @property WriteCommentCell *writeCommentCell;
+@property ExtendedActivityIndicatorView *activityIndicator;
 @end
 
 @implementation CommPostViewController
+
+- (void)awakeFromNib
+{
+    self.activityIndicator = [[ExtendedActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];    
+}
 
 - (void)viewDidLoad
 {
@@ -69,15 +77,25 @@ typedef NS_ENUM(NSInteger, CellTag) {
 {
     [self loadUser];
     [self loadComments];
-    [self loadProgram];
+    if (self.post.type == LCCPostTypeProgram)
+    {
+        [self loadProgram];
+    }
     [self loadCounters];
 }
 
 - (void)loadUser
 {
-    [self.post.user fetchIfNeededInBackgroundWithBlock:^(PFObject *object,  NSError *error) {
-        [self.tableView reloadData];
-    }];
+    if (![self.post.user isDataAvailable])
+    {
+        [self.activityIndicator increaseActivity];
+        [self.post.user fetchInBackgroundWithBlock:^(PFObject *object,  NSError *error) {
+
+            [self.activityIndicator decreaseActivity];
+            [self.tableView reloadData];
+            
+        }];
+    }
 }
 
 - (void)loadComments
@@ -90,8 +108,10 @@ typedef NS_ENUM(NSInteger, CellTag) {
     [query orderByAscending:@"createdAt"];
     query.cachePolicy = kPFCachePolicyNetworkElseCache;
     
+    [self.activityIndicator increaseActivity];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         
+        [self.activityIndicator decreaseActivity];
         if (objects)
         {
             self.comments = [NSMutableArray arrayWithArray:objects];
@@ -113,8 +133,10 @@ typedef NS_ENUM(NSInteger, CellTag) {
     }
     else
     {
+        [self.activityIndicator increaseActivity];
         [self.post.program fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
             
+            [self.activityIndicator decreaseActivity];
             if (object)
             {
                 self.titleCell.getProgramButton.enabled = YES;
@@ -131,7 +153,10 @@ typedef NS_ENUM(NSInteger, CellTag) {
 - (void)loadCounters
 {
     // Likes
+    [self.activityIndicator increaseActivity];
     [[CommunityModel sharedInstance] fetchCountForPost:self.post type:LCCCountTypeLike block:^(NSArray *users) {
+        
+        [self.activityIndicator decreaseActivity];
         if (users)
         {
             self.titleCell.likeCount = users.count;
@@ -148,15 +173,23 @@ typedef NS_ENUM(NSInteger, CellTag) {
                 }
             }
         }
+        
     }];
     
-    // Downloads
-    [[CommunityModel sharedInstance] fetchCountForPost:self.post type:LCCCountTypeDownload block:^(NSArray *users) {
-        if (users)
-        {
-            self.titleCell.downloadCount = users.count;
-        }
-    }];
+    if (self.post.type == LCCPostTypeProgram)
+    {
+        // Downloads
+        [self.activityIndicator increaseActivity];
+        [[CommunityModel sharedInstance] fetchCountForPost:self.post type:LCCCountTypeDownload block:^(NSArray *users) {
+            
+            [self.activityIndicator decreaseActivity];
+            if (users)
+            {
+                self.titleCell.downloadCount = users.count;
+            }
+            
+        }];
+    }
 }
 
 - (void)onUserChanged:(NSNotification *)notification
@@ -202,8 +235,10 @@ typedef NS_ENUM(NSInteger, CellTag) {
     post.detail = self.post.detail;
     post.sharedPost = self.post;
     
+    [self.activityIndicator increaseActivity];
     [post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         
+        [self.activityIndicator decreaseActivity];
         if (succeeded)
         {
             [self showAlertWithTitle:@"Shared successfully" message:nil block:nil];
@@ -227,7 +262,15 @@ typedef NS_ENUM(NSInteger, CellTag) {
         comment.post = self.post;
         comment.text = self.writeCommentCell.textView.text;
         
+        UIButton *button = (UIButton *)sender;
+        
+        [self.activityIndicator increaseActivity];
+        button.enabled = NO;
+        
         [comment saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            
+            [self.activityIndicator decreaseActivity];
+            button.enabled = YES;
             
             if (succeeded)
             {

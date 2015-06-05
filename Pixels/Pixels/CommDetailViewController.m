@@ -14,6 +14,7 @@
 #import "CommEditUserViewController.h"
 #import "CommLogInViewController.h"
 #import "UIViewController+LowResCoder.h"
+#import "ExtendedActivityIndicatorView.h"
 
 typedef NS_ENUM(NSInteger, CellTag) {
     CellTagNoAction,
@@ -33,10 +34,17 @@ static NSString *const SectionPosts = @"Posts";
 @property NSMutableArray *posts;
 @property NSArray *sections;
 @property CommWriteStatusCell *writeStatusCell;
+@property ExtendedActivityIndicatorView *activityIndicator;
 
 @end
 
 @implementation CommDetailViewController
+
+- (void)awakeFromNib
+{
+    self.activityIndicator = [[ExtendedActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];    
+}
 
 - (void)viewDidLoad
 {
@@ -121,7 +129,10 @@ static NSString *const SectionPosts = @"Posts";
                 [query orderByDescending:@"createdAt"];
                 query.cachePolicy = kPFCachePolicyNetworkElseCache;
                 
+                [self.activityIndicator increaseActivity];
                 [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                    
+                    [self.activityIndicator decreaseActivity];
                     if (objects)
                     {
                         self.posts = [NSMutableArray arrayWithArray:objects];
@@ -131,6 +142,7 @@ static NSString *const SectionPosts = @"Posts";
                     {
                         NSLog(@"Error: %@", error.description);
                     }
+                    
                 }];
             }
             else
@@ -152,7 +164,10 @@ static NSString *const SectionPosts = @"Posts";
             [query orderByDescending:@"createdAt"];
             query.cachePolicy = kPFCachePolicyNetworkElseCache;
             
+            [self.activityIndicator increaseActivity];
             [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                
+                [self.activityIndicator decreaseActivity];
                 if (objects)
                 {
                     self.posts = [NSMutableArray arrayWithArray:objects];
@@ -162,6 +177,7 @@ static NSString *const SectionPosts = @"Posts";
                 {
                     NSLog(@"Error: %@", error.description);
                 }
+                
             }];
             break;
         }
