@@ -31,10 +31,12 @@ NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
 @property (weak, nonatomic) IBOutlet UIButton *zoomButton;
 @property (weak, nonatomic) IBOutlet UIButton *soundButton;
 @property (weak, nonatomic) IBOutlet RendererView *rendererView;
+@property (weak, nonatomic) IBOutlet UIButton *pauseButton;
 @property (weak, nonatomic) IBOutlet UIButton *buttonA;
 @property (weak, nonatomic) IBOutlet UIButton *buttonB;
 @property (weak, nonatomic) IBOutlet Gamepad *gamepad;
 @property (weak, nonatomic) IBOutlet UIButton *backgroundButton;
+@property (weak, nonatomic) IBOutlet UILabel *pausedLabel;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintWidth;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTop;
@@ -43,7 +45,8 @@ NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
 @property (nonatomic) BOOL soundEnabled;
 @property Runner *runner;
 @property int numPlayers;
-@property BOOL isPaused;
+@property (nonatomic) BOOL isPaused;
+@property GCController *gameController;
 
 @end
 
@@ -59,6 +62,8 @@ NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
     self.runner.delegate = self;
     self.rendererView.renderer = self.runner.renderer;
     
+    self.pausedLabel.hidden = YES;
+    
     // user defaults
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -71,8 +76,8 @@ NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
     
     self.soundButton.hidden = !self.runnable.usesSound;
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onGameControllersChanged:) name:GCControllerDidConnectNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onGameControllersChanged:) name:GCControllerDidDisconnectNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(gameControllerDidConnect:) name:GCControllerDidConnectNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(gameControllerDidDisconnect:) name:GCControllerDidDisconnectNotification object:nil];
 }
 
 - (void)dealloc
@@ -124,14 +129,28 @@ NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
     return projectKey;
 }
 
-- (void)onGameControllersChanged:(NSNotification *)notification
+- (void)gameControllerDidConnect:(NSNotification *)notification
 {
     [self updateGamepads];
 }
 
+- (void)gameControllerDidDisconnect:(NSNotification *)notification
+{
+    [self updateGamepads];
+    
+    if (!self.gameController && !self.isPaused)
+    {
+        [self setIsPaused:YES message:@"GAME CONTROLLER DISCONNECTED, PAUSED"];
+    }
+}
+
 - (IBAction)onBackgroundTouchDown:(id)sender
 {
-    if (self.numPlayers > 0)
+    if (self.isPaused)
+    {
+        self.isPaused = NO;
+    }
+    else if (self.numPlayers > 0)
     {
         // show that gamepad should be used
         [UIView animateWithDuration:0.1 animations:^{
@@ -277,6 +296,10 @@ NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
     else
     {
         self.runner.endRequested = YES;
+        if (self.isPaused)
+        {
+            self.isPaused = NO;
+        }
     }
 }
 - (IBAction)onZoomTapped:(id)sender
@@ -294,6 +317,43 @@ NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
 {
     self.soundEnabled = !self.soundEnabled;
     [self showExitButtonWithHiding:YES];
+}
+
+- (IBAction)onPauseTapped:(id)sender
+{
+    self.isPaused = !self.isPaused;
+}
+
+- (void)setIsPaused:(BOOL)isPaused
+{
+    [self setIsPaused:isPaused message:@"PAUSED"];
+}
+
+- (void)setIsPaused:(BOOL)isPaused message:(NSString *)message
+{
+    _isPaused = isPaused;
+    self.pausedLabel.hidden = !isPaused;
+    self.rendererView.hidden = isPaused;
+    [self updateOnScreenGamepads];
+    if (isPaused)
+    {
+        self.runner.audioPlayer.volume = 0.0;
+        self.pausedLabel.text = message;
+        [self performSelector:@selector(togglePausedLabel) withObject:nil afterDelay:0.5];
+    }
+    else
+    {
+        self.runner.audioPlayer.volume = self.soundEnabled ? 1.0 : 0.0;
+    }
+}
+
+- (void)togglePausedLabel
+{
+    if (self.isPaused)
+    {
+        self.pausedLabel.hidden = !self.pausedLabel.hidden;
+        [self performSelector:@selector(togglePausedLabel) withObject:nil afterDelay:0.5];
+    }
 }
 
 - (void)setIsFullscreen:(BOOL)isFullscreen
@@ -327,19 +387,15 @@ NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
 
 - (BOOL)isButtonDown:(ButtonType)type
 {
-    GCGamepad *gamePad;
-    if ([GCController controllers].count > 0)
-    {
-        GCController *gameController = [GCController controllers].firstObject;
-        gamePad = gameController.gamepad;
-    }
+    GCGamepad *gamePad = self.gameController.gamepad;
+    GCControllerDirectionPad *extDirPad = self.gameController.extendedGamepad.leftThumbstick;
     
     switch (type)
     {
-        case ButtonTypeUp: return self.gamepad.isDirUp || gamePad.dpad.up.pressed;
-        case ButtonTypeDown: return self.gamepad.isDirDown || gamePad.dpad.down.pressed;
-        case ButtonTypeLeft: return self.gamepad.isDirLeft || gamePad.dpad.left.pressed;
-        case ButtonTypeRight: return self.gamepad.isDirRight || gamePad.dpad.right.pressed;
+        case ButtonTypeUp: return self.gamepad.isDirUp || gamePad.dpad.up.pressed || extDirPad.up.pressed;
+        case ButtonTypeDown: return self.gamepad.isDirDown || gamePad.dpad.down.pressed || extDirPad.down.pressed;
+        case ButtonTypeLeft: return self.gamepad.isDirLeft || gamePad.dpad.left.pressed || extDirPad.left.pressed;
+        case ButtonTypeRight: return self.gamepad.isDirRight || gamePad.dpad.right.pressed || extDirPad.right.pressed;
         case ButtonTypeA: return self.buttonA.isHighlighted || gamePad.buttonA.pressed || gamePad.buttonX.pressed || (self.backgroundButton.isHighlighted && self.numPlayers == 0);
         case ButtonTypeB: return self.buttonB.isHighlighted || gamePad.buttonB.pressed || gamePad.buttonY.pressed;
     }
@@ -366,25 +422,55 @@ NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
 
 - (void)updateGamepads
 {
+    // find connected game controller
+    self.gameController = nil;
     NSArray *gameControllers = [GCController controllers];
-    
     if (gameControllers.count > 0)
     {
-        GCController *gameController = gameControllers[0];
-        gameController.playerIndex = 0;
+        for (GCController *gameController in gameControllers)
+        {
+            if (gameController.playerIndex == 0)
+            {
+                self.gameController = gameController;
+                break;
+            }
+            else if (gameController.isAttachedToDevice)
+            {
+                self.gameController = gameController;
+                self.gameController.playerIndex = 0;
+                break;
+            }
+        }
+        if (!self.gameController)
+        {
+            self.gameController = gameControllers[0];
+            self.gameController.playerIndex = 0;
+        }
+        
+        __weak RunnerViewController *weakSelf = self;
+        self.gameController.controllerPausedHandler = ^(GCController *gameController) {
+            [weakSelf onPauseTapped:gameController];
+        };
     }
     
-    if (self.numPlayers >= 1 && gameControllers.count == 0)
-    {
-        self.gamepad.hidden = NO;
-        self.buttonA.hidden = NO;
-        self.buttonB.hidden = NO;
-    }
-    else
+    [self updateOnScreenGamepads];
+}
+
+- (void)updateOnScreenGamepads
+{
+    if (self.numPlayers == 0 || self.gameController || self.isPaused)
     {
         self.gamepad.hidden = YES;
         self.buttonA.hidden = YES;
         self.buttonB.hidden = YES;
+        self.pauseButton.hidden = YES;
+    }
+    else
+    {
+        self.gamepad.hidden = NO;
+        self.buttonA.hidden = NO;
+        self.buttonB.hidden = NO;
+        self.pauseButton.hidden = NO;
     }
 }
 

@@ -443,12 +443,33 @@ The upgrade is valid for all your devices and without time limit.</string>
                                 </state>
                                 <state key="highlighted" image="button_a_pressed"/>
                             </button>
+                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d20-TV-G8l" userLabel="Pause Button">
+                                <rect key="frame" x="524" y="480" width="55" height="55"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="55" id="Wn0-Yo-G4N"/>
+                                    <constraint firstAttribute="height" constant="55" id="cmB-Ky-EKk"/>
+                                </constraints>
+                                <state key="normal" image="pause">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="onPauseTapped:" destination="glc-Eb-QOK" eventType="touchUpInside" id="sYd-mE-zJr"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PAUSED" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="91e-Xg-Kad">
+                                <rect key="frame" x="10" y="286" width="580" height="28"/>
+                                <fontDescription key="fontDescription" name="Menlo-Regular" family="Menlo" pointSize="24"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <gestureRecognizers/>
                         <constraints>
+                            <constraint firstItem="vm8-Vn-fOJ" firstAttribute="top" relation="greaterThanOrEqual" secondItem="d20-TV-G8l" secondAttribute="bottom" id="0UH-LC-O2D"/>
                             <constraint firstItem="WUP-DK-URn" firstAttribute="leading" secondItem="gGg-rj-ecJ" secondAttribute="trailing" id="1nO-se-RY7"/>
                             <constraint firstItem="kUA-yC-VoN" firstAttribute="top" secondItem="7pe-HW-2Cc" secondAttribute="top" id="5T8-i5-zkV"/>
                             <constraint firstItem="wgn-Os-cIh" firstAttribute="top" secondItem="7pe-HW-2Cc" secondAttribute="top" id="5cK-O7-fVw"/>
+                            <constraint firstItem="d20-TV-G8l" firstAttribute="leading" secondItem="gGg-rj-ecJ" secondAttribute="trailing" priority="750" constant="30" id="BEN-ZQ-3n2"/>
                             <constraint firstItem="Sy3-3B-3ez" firstAttribute="top" secondItem="7pe-HW-2Cc" secondAttribute="top" id="CBT-Ah-9EE"/>
                             <constraint firstAttribute="bottom" secondItem="wgn-Os-cIh" secondAttribute="bottom" id="KXT-Er-Hxj"/>
                             <constraint firstItem="ceS-Jn-ChI" firstAttribute="leading" secondItem="7pe-HW-2Cc" secondAttribute="leading" constant="44" id="OsW-tt-HSN">
@@ -456,15 +477,19 @@ The upgrade is valid for all your devices and without time limit.</string>
                                 <variation key="widthClass=compact" constant="11"/>
                             </constraint>
                             <constraint firstItem="wgn-Os-cIh" firstAttribute="leading" secondItem="7pe-HW-2Cc" secondAttribute="leading" id="PqW-SW-bRW"/>
+                            <constraint firstAttribute="centerY" secondItem="91e-Xg-Kad" secondAttribute="centerY" id="Ukp-yl-CPZ"/>
                             <constraint firstItem="U9l-B1-gng" firstAttribute="top" secondItem="7pe-HW-2Cc" secondAttribute="top" id="aUb-1W-ipI"/>
                             <constraint firstItem="kUA-yC-VoN" firstAttribute="leading" secondItem="Sy3-3B-3ez" secondAttribute="trailing" id="aYX-iD-5mN"/>
                             <constraint firstAttribute="trailing" secondItem="kUA-yC-VoN" secondAttribute="trailing" id="aoH-oi-bIC"/>
+                            <constraint firstItem="d20-TV-G8l" firstAttribute="top" secondItem="WUP-DK-URn" secondAttribute="bottom" priority="750" constant="30" id="bZ1-Rs-Tji"/>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="d20-TV-G8l" secondAttribute="trailing" id="dB1-0i-OxM"/>
                             <constraint firstItem="U9l-B1-gng" firstAttribute="leading" secondItem="7pe-HW-2Cc" secondAttribute="leading" id="gHu-Cg-qnB"/>
                             <constraint firstAttribute="trailing" secondItem="wgn-Os-cIh" secondAttribute="trailing" id="gZl-g8-tmR"/>
                             <constraint firstItem="vm8-Vn-fOJ" firstAttribute="top" secondItem="ceS-Jn-ChI" secondAttribute="bottom" constant="88" id="i2v-NB-2DY">
                                 <variation key="heightClass=compact" constant="11"/>
                                 <variation key="widthClass=compact" constant="11"/>
                             </constraint>
+                            <constraint firstAttribute="trailing" secondItem="91e-Xg-Kad" secondAttribute="trailing" constant="10" id="l8r-TN-jJz"/>
                             <constraint firstAttribute="trailing" secondItem="WUP-DK-URn" secondAttribute="trailing" constant="38" id="lML-pE-zo0">
                                 <variation key="heightClass=compact" constant="5"/>
                                 <variation key="widthClass=compact" constant="5"/>
@@ -477,6 +502,7 @@ The upgrade is valid for all your devices and without time limit.</string>
                                 <variation key="heightClass=compact" constant="66"/>
                                 <variation key="widthClass=compact" constant="66"/>
                             </constraint>
+                            <constraint firstItem="91e-Xg-Kad" firstAttribute="leading" secondItem="7pe-HW-2Cc" secondAttribute="leading" constant="10" id="qsh-GE-erk"/>
                         </constraints>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
@@ -490,6 +516,8 @@ The upgrade is valid for all your devices and without time limit.</string>
                         <outlet property="containerView" destination="wgn-Os-cIh" id="Urd-Fb-b8e"/>
                         <outlet property="exitButton" destination="U9l-B1-gng" id="T69-ZT-cvs"/>
                         <outlet property="gamepad" destination="ceS-Jn-ChI" id="zue-Ro-PGK"/>
+                        <outlet property="pauseButton" destination="d20-TV-G8l" id="WIN-67-BLK"/>
+                        <outlet property="pausedLabel" destination="91e-Xg-Kad" id="c7V-Wf-0tg"/>
                         <outlet property="rendererView" destination="B6C-lp-NaC" id="d1n-8y-Uwo"/>
                         <outlet property="soundButton" destination="Sy3-3B-3ez" id="EjC-2X-cVZ"/>
                         <outlet property="zoomButton" destination="kUA-yC-VoN" id="Jep-IP-xMD"/>
@@ -915,6 +943,7 @@ The upgrade is valid for all your devices and without time limit.</string>
         <image name="exit" width="36" height="36"/>
         <image name="icon_about" width="100" height="100"/>
         <image name="icon_project" width="96" height="96"/>
+        <image name="pause" width="36" height="36"/>
         <image name="sound_off" width="36" height="36"/>
         <image name="star" width="28" height="28"/>
         <image name="zoom_off" width="36" height="36"/>
