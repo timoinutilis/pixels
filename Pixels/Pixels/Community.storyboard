@@ -550,7 +550,7 @@
                                     </subviews>
                                 </tableViewCellContentView>
                             </tableViewCell>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="CommentCell" textLabel="q1J-T6-aMD" detailTextLabel="tZF-vz-Zcd" style="IBUITableViewCellStyleSubtitle" id="gXP-zJ-Qos">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="CommentCell" textLabel="q1J-T6-aMD" detailTextLabel="tZF-vz-Zcd" style="IBUITableViewCellStyleSubtitle" id="gXP-zJ-Qos">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="gXP-zJ-Qos" id="PwZ-dw-rh7">
@@ -573,6 +573,27 @@
                                 <connections>
                                     <segue destination="AS4-Ac-pfc" kind="show" identifier="CommentAuthor" id="4LD-8J-91a"/>
                                 </connections>
+                            </tableViewCell>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="GuestCommentCell" textLabel="FtR-Mq-Axm" detailTextLabel="Dhl-xX-hdF" style="IBUITableViewCellStyleSubtitle" id="IZp-gR-hzA">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="IZp-gR-hzA" id="Owr-7B-Az2">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Guest Comment" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="FtR-Mq-Axm">
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Dhl-xX-hdF">
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="WriteCommentCell" rowHeight="126" id="3Of-yo-PTx" customClass="WriteCommentCell">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -626,9 +647,6 @@
                     </tableView>
                     <navigationItem key="navigationItem" id="SlP-TI-OHv"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
-                    <connections>
-                        <segue destination="2BS-Ju-8fE" kind="show" identifier="SourceCode" id="fww-cx-Yur"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZZP-Ol-r5D" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -637,17 +655,17 @@
         <!--Source Code-->
         <scene sceneID="lsn-xD-5hn">
             <objects>
-                <viewController id="2BS-Ju-8fE" customClass="CommSourceCodeViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CommSourceCodeView" id="2BS-Ju-8fE" customClass="CommSourceCodeViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="xfj-TI-1sl"/>
                         <viewControllerLayoutGuide type="bottom" id="doW-dm-yup"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="rYM-tM-BEi">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9ok-Xn-h4I">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" name="Menlo-Regular" family="Menlo" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -668,6 +686,7 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="textView" destination="9ok-Xn-h4I" id="gVH-qG-ECa"/>
                     </connections>

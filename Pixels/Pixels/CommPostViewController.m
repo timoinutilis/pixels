@@ -15,6 +15,7 @@
 #import "UIViewController+CommUtils.h"
 #import "UIViewController+LowResCoder.h"
 #import "ExtendedActivityIndicatorView.h"
+#import "NSString+Utils.h"
 
 typedef NS_ENUM(NSInteger, CellTag) {
     CellTagNoAction,
@@ -66,8 +67,8 @@ typedef NS_ENUM(NSInteger, CellTag) {
 
 - (void)updateView
 {
-    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:self.post.title style:UIBarButtonItemStylePlain target:nil action:nil];
-    self.title = self.post.title;
+//    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:self.post.title style:UIBarButtonItemStylePlain target:nil action:nil];
+    self.title = [self.post.title stringWithMaxWords:4];
     
     self.titleCell = [self.tableView dequeueReusableCellWithIdentifier:(self.post.type == LCCPostTypeProgram ? @"ProgramTitleCell" : @"StatusTitleCell")];
     self.titleCell.post = self.post;
@@ -253,14 +254,14 @@ typedef NS_ENUM(NSInteger, CellTag) {
 
 - (IBAction)onSendCommentTapped:(id)sender
 {
-    if (self.writeCommentCell.textView.text.length > 0)
+    NSString *commentText = self.writeCommentCell.textView.text;
+    commentText = [commentText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    if (commentText.length > 0)
     {
-        [self.view endEditing:YES];
-        
         LCCComment *comment = [LCCComment object];
         comment.user = (LCCUser *)[PFUser currentUser];
         comment.post = self.post;
-        comment.text = self.writeCommentCell.textView.text;
+        comment.text = commentText;
         
         UIButton *button = (UIButton *)sender;
         
@@ -368,7 +369,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
     else if (indexPath.section == 1)
     {
         LCCComment *comment = self.comments[indexPath.row];
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommentCell" forIndexPath:indexPath];
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:(comment.user ? @"CommentCell" : @"GuestCommentCell") forIndexPath:indexPath];
         cell.textLabel.text = comment.text;
         NSString *name = (comment.user ? comment.user.username : @"Guest");
         cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ - %@", name, [NSDateFormatter localizedStringFromDate:comment.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle]];
@@ -389,9 +390,15 @@ typedef NS_ENUM(NSInteger, CellTag) {
     switch (cell.tag)
     {
         case CellTagSourceCode: {
-            if ([self.post isDataAvailable])
+            if ([self.post isDataAvailable] && [self.post.program isDataAvailable])
             {
-                [self performSegueWithIdentifier:@"SourceCode" sender:self];
+                CommSourceCodeViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"CommSourceCodeView"];
+                vc.post = self.post;
+                [self.navigationController pushViewController:vc animated:YES];
+            }
+            else
+            {
+                [tableView deselectRowAtIndexPath:indexPath animated:YES];
             }
             break;
         }
@@ -401,6 +408,10 @@ typedef NS_ENUM(NSInteger, CellTag) {
                 CommDetailViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"CommDetailView"];
                 [vc setUser:self.post.user mode:CommListModeProfile];
                 [self.navigationController pushViewController:vc animated:YES];
+            }
+            else
+            {
+                [tableView deselectRowAtIndexPath:indexPath animated:YES];
             }
             break;
         }
@@ -417,12 +428,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
 {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-    if ([segue.identifier isEqualToString:@"SourceCode"])
-    {
-        CommSourceCodeViewController *vc = segue.destinationViewController;
-        vc.post = self.post;
-    }
-    else if ([segue.identifier isEqualToString:@"CommentAuthor"])
+    if ([segue.identifier isEqualToString:@"CommentAuthor"])
     {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         LCCComment *comment = self.comments[indexPath.row];

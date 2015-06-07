@@ -40,4 +40,17 @@
     return numberOfLines;
 }
 
+- (NSString *)stringWithMaxWords:(int)maxWords
+{
+    NSArray *parts = [self componentsSeparatedByString:@" "];
+    if (parts.count > maxWords)
+    {
+        NSMutableArray *mutableParts = parts.mutableCopy;
+        [mutableParts removeObjectsInRange:NSMakeRange(maxWords, parts.count - maxWords)];
+        NSString *shortString = [mutableParts componentsJoinedByString:@" "];
+        return [NSString stringWithFormat:@"%@...", shortString];
+    }
+    return self;
+}
+
 @end

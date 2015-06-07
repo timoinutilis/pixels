@@ -340,6 +340,7 @@ NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
         self.runner.audioPlayer.volume = 0.0;
         self.pausedLabel.text = message;
         [self performSelector:@selector(togglePausedLabel) withObject:nil afterDelay:0.5];
+        [self showExitButtonWithHiding:YES];
     }
     else
     {

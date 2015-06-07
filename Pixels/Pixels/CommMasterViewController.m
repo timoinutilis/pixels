@@ -11,6 +11,7 @@
 #import "CommunityModel.h"
 #import "CommLogInViewController.h"
 #import "UIViewController+LowResCoder.h"
+#import "AppController.h"
 
 typedef NS_ENUM(NSInteger, CellTag) {
     CellTagNews,
@@ -97,7 +98,9 @@ typedef NS_ENUM(NSInteger, CellTag) {
 
 - (IBAction)onDoneTapped:(id)sender
 {
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
+        [[AppController sharedController] registerForNotifications];
+    }];
 }
 
 #pragma mark - Table view data source

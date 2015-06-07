@@ -15,6 +15,7 @@
 #import "CommLogInViewController.h"
 #import "UIViewController+LowResCoder.h"
 #import "ExtendedActivityIndicatorView.h"
+#import "AppController.h"
 
 typedef NS_ENUM(NSInteger, CellTag) {
     CellTagNoAction,
@@ -137,6 +138,9 @@ static NSString *const SectionPosts = @"Posts";
                     {
                         self.posts = [NSMutableArray arrayWithArray:objects];
                         [self.tableView reloadData];
+                        
+                        // reset app icon badge
+                        [AppController sharedController].numNews = 0;
                     }
                     else if (error)
                     {
@@ -214,25 +218,27 @@ static NSString *const SectionPosts = @"Posts";
 
 - (IBAction)onSendStatusTapped:(id)sender
 {
-    if (self.writeStatusCell.titleTextField.text.length > 0)
+    NSString *statusTitleText = self.writeStatusCell.titleTextField.text;
+    statusTitleText = [statusTitleText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    if (statusTitleText.length > 0)
     {
-        [self.view endEditing:YES];
-        
         LCCPost *post = [LCCPost object];
         post.user = (LCCUser *)[PFUser currentUser];
         post.type = LCCPostTypeStatus;
         post.category = LCCPostCategoryStatus;
-        post.title = self.writeStatusCell.titleTextField.text;
-        post.detail = self.writeStatusCell.textView.text;
+        post.title = statusTitleText;
+        post.detail = [self.writeStatusCell.textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         
         [post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             
             if (succeeded)
             {
                 [self.posts insertObject:post atIndex:0];
-                [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:2]] withRowAnimation:UITableViewRowAnimationAutomatic];
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:2];
+                [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
                 self.writeStatusCell.titleTextField.text = @"";
                 self.writeStatusCell.textView.text = @"";
+                [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
             }
             else
             {
