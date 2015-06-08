@@ -94,7 +94,7 @@
         }
         if (![password isEqualToString:passwordVerify])
         {
-            [self showAlertWithTitle:@"Passwords do not match." message:nil block:^{
+            [self showAlertWithTitle:@"Passwords do not match" message:nil block:^{
                 self.passwordCell.textField.text = @"";
                 self.passwordVerifyCell.textField.text = @"";
                 [self.passwordCell.textField becomeFirstResponder];
@@ -127,7 +127,7 @@
         }
         else if (error)
         {
-            [self showAlertWithTitle:@"Could not save changes." message:error.userInfo[@"error"] block:nil];
+            [self showAlertWithTitle:@"Could not save changes" message:error.userInfo[@"error"] block:nil];
         }
         
     }];

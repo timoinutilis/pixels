@@ -67,7 +67,6 @@ typedef NS_ENUM(NSInteger, CellTag) {
 
 - (void)updateView
 {
-//    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:self.post.title style:UIBarButtonItemStylePlain target:nil action:nil];
     self.title = [self.post.title stringWithMaxWords:4];
     
     self.titleCell = [self.tableView dequeueReusableCellWithIdentifier:(self.post.type == LCCPostTypeProgram ? @"ProgramTitleCell" : @"StatusTitleCell")];
@@ -91,9 +90,16 @@ typedef NS_ENUM(NSInteger, CellTag) {
     {
         [self.activityIndicator increaseActivity];
         [self.post.user fetchInBackgroundWithBlock:^(PFObject *object,  NSError *error) {
-
+            
             [self.activityIndicator decreaseActivity];
-            [self.tableView reloadData];
+            if (object)
+            {
+                [self.tableView reloadData];
+            }
+            else if (error)
+            {
+                [self showAlertWithTitle:@"Could not load user" message:error.userInfo[@"error"] block:nil];
+            }
             
         }];
     }
@@ -120,7 +126,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
         }
         else if (error)
         {
-            NSLog(@"Error: %@", error.description);
+            [self showAlertWithTitle:@"Could not load comments" message:error.userInfo[@"error"] block:nil];
         }
         
     }];
@@ -144,7 +150,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
             }
             else if (error)
             {
-                NSLog(@"Error: %@", error.description);
+                [self showAlertWithTitle:@"Could not load source code" message:error.userInfo[@"error"] block:nil];
             }
             
         }];
@@ -244,9 +250,9 @@ typedef NS_ENUM(NSInteger, CellTag) {
         {
             [self showAlertWithTitle:@"Shared successfully" message:nil block:nil];
         }
-        else
+        else if (error)
         {
-            [self showAlertWithTitle:@"Could not share post" message:@"Please try again later!" block:nil];
+            [self showAlertWithTitle:@"Could not share post" message:error.userInfo[@"error"] block:nil];
         }
         
     }];
@@ -288,11 +294,9 @@ typedef NS_ENUM(NSInteger, CellTag) {
                 }
                 [self.writeCommentCell reset];
             }
-            else
+            else if (error)
             {
-                UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Could not send comment" message:@"Please try again later!" preferredStyle:UIAlertControllerStyleAlert];
-                [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-                [self presentViewController:alert animated:YES completion:nil];
+                [self showAlertWithTitle:@"Could not send comment" message:error.userInfo[@"error"] block:nil];
             }
             
         }];

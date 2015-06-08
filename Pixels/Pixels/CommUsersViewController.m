@@ -10,6 +10,7 @@
 #import "CommunityModel.h"
 #import "CommDetailViewController.h"
 #import "ExtendedActivityIndicatorView.h"
+#import "UIViewController+LowResCoder.h"
 
 @interface CommUsersViewController ()
 
@@ -53,12 +54,19 @@
             [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                 
                 [self.activityIndicator decreaseActivity];
-                self.users = [NSMutableArray arrayWithCapacity:objects.count];
-                for (LCCFollow *follow in objects)
+                if (objects)
                 {
-                    [self.users addObject:follow.user];
+                    self.users = [NSMutableArray arrayWithCapacity:objects.count];
+                    for (LCCFollow *follow in objects)
+                    {
+                        [self.users addObject:follow.user];
+                    }
+                    [self.tableView reloadData];
                 }
-                [self.tableView reloadData];
+                else if (error)
+                {
+                    [self showAlertWithTitle:@"Could not load users" message:error.userInfo[@"error"] block:nil];
+                }
                 
             }];
             break;
@@ -76,12 +84,19 @@
             [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                 
                 [self.activityIndicator decreaseActivity];
-                self.users = [NSMutableArray arrayWithCapacity:objects.count];
-                for (LCCFollow *follow in objects)
+                if (objects)
                 {
-                    [self.users addObject:follow.followsUser];
+                    self.users = [NSMutableArray arrayWithCapacity:objects.count];
+                    for (LCCFollow *follow in objects)
+                    {
+                        [self.users addObject:follow.followsUser];
+                    }
+                    [self.tableView reloadData];
                 }
-                [self.tableView reloadData];
+                else if (error)
+                {
+                    [self showAlertWithTitle:@"Could not load users" message:error.userInfo[@"error"] block:nil];
+                }
                 
             }];
             break;

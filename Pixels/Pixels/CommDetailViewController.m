@@ -144,7 +144,7 @@ static NSString *const SectionPosts = @"Posts";
                     }
                     else if (error)
                     {
-                        NSLog(@"Error: %@", error.description);
+                        [self showAlertWithTitle:@"Could not load news" message:error.userInfo[@"error"] block:nil];
                     }
                     
                 }];
@@ -179,7 +179,7 @@ static NSString *const SectionPosts = @"Posts";
                 }
                 else if (error)
                 {
-                    NSLog(@"Error: %@", error.description);
+                    [self showAlertWithTitle:@"Could not load posts" message:error.userInfo[@"error"] block:nil];
                 }
                 
             }];
@@ -240,9 +240,9 @@ static NSString *const SectionPosts = @"Posts";
                 self.writeStatusCell.textView.text = @"";
                 [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
             }
-            else
+            else if (error)
             {
-                [self showAlertWithTitle:@"Could not send status update" message:@"Please try again later!" block:nil];
+                [self showAlertWithTitle:@"Could not send status update" message:error.userInfo[@"error"] block:nil];
             }
             
         }];

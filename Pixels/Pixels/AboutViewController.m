@@ -11,6 +11,7 @@
 #import "AppController.h"
 #import "AppStyle.h"
 #import "DayCodeManager.h"
+#import "UIViewController+LowResCoder.h"
 
 @interface AboutViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
@@ -152,10 +153,7 @@
 - (void)showCode
 {
     DayCodeManager *manager = [[DayCodeManager alloc] init];
-    
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Today's Code" message:manager.todaysCode preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-    [self presentViewController:alert animated:YES completion:nil];
+    [self showAlertWithTitle:@"Today's Code" message:manager.todaysCode block:nil];
 }
 
 @end

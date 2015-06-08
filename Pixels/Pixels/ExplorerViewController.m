@@ -13,6 +13,7 @@
 #import "AppController.h"
 #import "CoachMarkView.h"
 #import "AppStyle.h"
+#import "UIViewController+LowResCoder.h"
 
 NSString *const ExplorerRefreshAddedProjectNotification = @"ExplorerRefreshAddedProjectNotification";
 
@@ -100,9 +101,7 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     NSString *lastError = [[AppController sharedController] popStoredError];
     if (lastError)
     {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Sorry, there was an error." message:lastError preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-        [self presentViewController:alert animated:YES completion:nil];
+        [self showAlertWithTitle:@"Sorry, there was an error" message:lastError block:nil];
     }
 }
 

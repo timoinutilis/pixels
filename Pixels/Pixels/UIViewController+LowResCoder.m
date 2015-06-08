@@ -12,14 +12,17 @@
 
 - (void)showAlertWithTitle:(NSString *)title message:(NSString *)message block:(void (^)(void))block
 {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        if (block)
-        {
-            block();
-        }
-    }]];
-    [self presentViewController:alert animated:YES completion:nil];
+    if (self.view.superview)
+    {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            if (block)
+            {
+                block();
+            }
+        }]];
+        [self presentViewController:alert animated:YES completion:nil];
+    }
 }
 
 - (void)showConfirmAlertWithTitle:(NSString *)title message:(NSString *)message block:(void (^)(void))block

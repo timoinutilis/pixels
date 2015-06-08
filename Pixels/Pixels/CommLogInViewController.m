@@ -137,7 +137,7 @@
     }
     if (![password isEqualToString:passwordVerify])
     {
-        [self showAlertWithTitle:@"Passwords do not match." message:nil block:^{
+        [self showAlertWithTitle:@"Passwords do not match" message:nil block:^{
             self.registerPasswordCell.textField.text = @"";
             self.registerPasswordVerifyCell.textField.text = @"";
             [self.registerPasswordCell.textField becomeFirstResponder];
@@ -161,7 +161,7 @@
         }
         else if (error)
         {
-            [self showAlertWithTitle:@"Could not register." message:error.userInfo[@"error"] block:nil];
+            [self showAlertWithTitle:@"Could not register" message:error.userInfo[@"error"] block:nil];
         }
         
     }];
@@ -199,7 +199,7 @@
         }
         else if (error)
         {
-            [self showAlertWithTitle:@"Could not log in." message:error.userInfo[@"error"] block:nil];
+            [self showAlertWithTitle:@"Could not log in" message:error.userInfo[@"error"] block:nil];
         }
         
     }];

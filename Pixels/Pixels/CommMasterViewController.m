@@ -202,7 +202,14 @@ typedef NS_ENUM(NSInteger, CellTag) {
         case CellTagLogOut: {
             [tableView deselectRowAtIndexPath:indexPath animated:YES];
             [PFUser logOutInBackgroundWithBlock:^(NSError *error) {
-                [[CommunityModel sharedInstance] onLoggedOut];
+                if (error)
+                {
+                    [self showAlertWithTitle:@"Could not log out" message:error.userInfo[@"error"] block:nil];
+                }
+                else
+                {
+                    [[CommunityModel sharedInstance] onLoggedOut];
+                }
             }];
             break;
         }
