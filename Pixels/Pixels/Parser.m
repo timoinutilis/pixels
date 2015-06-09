@@ -361,7 +361,7 @@
 
 - (BOOL)isImplicitLet
 {
-    return (self.token.type == TTypeIdentifier && ![self isLabel]);
+    return (self.token.type == TTypeIdentifier && ([self nextToken].type == TTypeSymOpEq || [self nextToken].type == TTypeSymDollar || [self nextToken].type == TTypeSymBracketOpen));
 }
 
 #pragma mark - Commands

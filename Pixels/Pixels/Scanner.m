@@ -15,6 +15,7 @@
 @property NSArray *sortedSymbols;
 @property NSCharacterSet *charSetNumbers;
 @property NSCharacterSet *charSetLetters;
+@property NSCharacterSet *charSetAlphaNum;
 @end
 
 @implementation Scanner
@@ -49,6 +50,7 @@
     
     self.charSetNumbers = [NSCharacterSet characterSetWithCharactersInString:@"0123456789"];
     self.charSetLetters = [NSCharacterSet characterSetWithCharactersInString:@"ABCDEFGHIJKLMNOPQRSTUVWXYZ_"];
+    self.charSetAlphaNum = [NSCharacterSet characterSetWithCharactersInString:@"ABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789"];
 }
 
 - (NSArray *)tokenizeText:(NSString *)text
@@ -63,6 +65,35 @@
         BOOL found = NO;
         
         tokenPosition = textPos;
+        
+        if (!found)
+        {
+            // check for line break
+            
+            unichar textCharacter = [text characterAtIndex:textPos];
+            if (textCharacter == '\n')
+            {
+                Token *token = [[Token alloc] init];
+                token.type = TTypeSymEol;
+                token.position = tokenPosition;
+                [tokens addObject:token];
+                
+                textPos++;
+                found = YES;
+            }
+        }
+        
+        if (!found)
+        {
+            // whitespace
+            
+            unichar textCharacter = [text characterAtIndex:textPos];
+            if ([[NSCharacterSet whitespaceCharacterSet] characterIsMember:textCharacter])
+            {
+                textPos++;
+                found = YES;
+            }
+        }
         
         if (!found)
         {
@@ -155,21 +186,30 @@
             for (NSString *symbol in self.sortedSymbols)
             {
                 NSUInteger symbLen = symbol.length;
-                for (NSUInteger symbPos = 0; symbPos < symbLen && textPos + symbPos < len; symbPos++)
+                BOOL symbolIsAlphaNum = [self.charSetAlphaNum characterIsMember:[symbol characterAtIndex:0]];
+                for (NSUInteger symbPos = 0; symbPos <= symbLen && textPos + symbPos < len; symbPos++)
                 {
-                    unichar symbCharacter = [symbol characterAtIndex:symbPos];
                     unichar textCharacter = [text characterAtIndex:textPos + symbPos];
-                    if (symbCharacter == textCharacter)
+                    
+                    if (symbPos < symbLen)
                     {
-                        if (symbPos == symbLen - 1)
+                        unichar symbCharacter = [symbol characterAtIndex:symbPos];
+                        if (symbCharacter != textCharacter)
                         {
-                            foundSymbol = symbol;
-                            textPos += symbLen;
+                            // not matching
                             break;
                         }
                     }
+                    else if (symbolIsAlphaNum && [self.charSetAlphaNum characterIsMember:textCharacter])
+                    {
+                        // matching, but word is longer, so seems to be an identifier
+                        break;
+                    }
                     else
                     {
+                        // symbol found!
+                        foundSymbol = symbol;
+                        textPos += symbLen;
                         break;
                     }
                 }
@@ -234,18 +274,6 @@
                 token.attrString = [text substringWithRange:range];
                 token.position = tokenPosition;
                 [tokens addObject:token];
-                found = YES;
-            }
-        }
-        
-        if (!found)
-        {
-            // whitespace
-            
-            unichar textCharacter = [text characterAtIndex:textPos];
-            if ([[NSCharacterSet whitespaceCharacterSet] characterIsMember:textCharacter])
-            {
-                textPos++;
                 found = YES;
             }
         }

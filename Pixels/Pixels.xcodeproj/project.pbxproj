@@ -542,14 +542,7 @@
 				92884EF71B0F25B30032623D /* SDWebImage */,
 				9267E86B1A5AF61B00D08C42 /* AFNetworking */,
 				92E53DEA1A5B3A1D00FE9F91 /* Gor Lib */,
-				9276F3901A1D289C0060E909 /* AppDelegate.h */,
-				9276F3911A1D289C0060E909 /* AppDelegate.m */,
-				926864251AA6087300F305B9 /* AppController.h */,
-				926864261AA6087300F305B9 /* AppController.m */,
-				92E36D1A1ADD2D4200C16CBE /* AppStyle.h */,
-				92E36D1B1ADD2D4200C16CBE /* AppStyle.m */,
-				925C28171B092BD9007AC515 /* DayCodeManager.h */,
-				925C28181B092BD9007AC515 /* DayCodeManager.m */,
+				928E5CF01B27735200D7CD6F /* App */,
 				92C081161B0DCD640006331B /* Community Model */,
 				9231159C1A444A4100624201 /* Views */,
 				927333F11A2A3EDD00C89AF0 /* View Controllers */,
@@ -665,6 +658,21 @@
 				92884F181B0F25B30032623D /* UIView+WebCacheOperation.m */,
 			);
 			path = SDWebImage;
+			sourceTree = "<group>";
+		};
+		928E5CF01B27735200D7CD6F /* App */ = {
+			isa = PBXGroup;
+			children = (
+				9276F3901A1D289C0060E909 /* AppDelegate.h */,
+				9276F3911A1D289C0060E909 /* AppDelegate.m */,
+				926864251AA6087300F305B9 /* AppController.h */,
+				926864261AA6087300F305B9 /* AppController.m */,
+				92E36D1A1ADD2D4200C16CBE /* AppStyle.h */,
+				92E36D1B1ADD2D4200C16CBE /* AppStyle.m */,
+				925C28171B092BD9007AC515 /* DayCodeManager.h */,
+				925C28181B092BD9007AC515 /* DayCodeManager.m */,
+			);
+			name = App;
 			sourceTree = "<group>";
 		};
 		92C081161B0DCD640006331B /* Community Model */ = {
