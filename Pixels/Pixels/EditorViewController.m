@@ -23,6 +23,7 @@
 #import "AppController.h"
 #import "CoachMarkView.h"
 #import "AppStyle.h"
+#import "UIViewController+LowResCoder.h"
 
 int const EditorDemoMaxLines = 24;
 NSString *const CoachMarkIDStart = @"CoachMarkIDStart";
@@ -284,10 +285,11 @@ NSString *const CoachMarkIDHelp = @"CoachMarkIDHelp";
 {
     if (self.sourceCodeTextView.text.length == 0)
     {
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"This program is empty. Write something!" message:nil preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-        alert.view.tintColor = [AppStyle alertTintColor];
-        [self presentViewController:alert animated:YES completion:nil];
+        [self showAlertWithTitle:@"This program is empty" message:@"Please write something!" block:nil];
+    }
+    else if (!self.project.iconData)
+    {
+        [self showAlertWithTitle:@"This program doesn't have an icon yet" message:@"Please start it once to create one automatically!" block:nil];
     }
     else
     {

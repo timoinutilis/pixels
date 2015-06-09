@@ -267,7 +267,7 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.headerLabel.text = @"Post your program! If we like it, we will feature it in the community news!";
+    self.headerLabel.text = @"Post your program to your community profile! If we like it, we will feature it in the news!";
     CALayer *imageLayer = self.iconImageView.layer;
     imageLayer.cornerRadius = 20;
     imageLayer.masksToBounds = YES;

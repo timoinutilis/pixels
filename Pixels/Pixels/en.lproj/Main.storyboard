@@ -545,7 +545,7 @@ The upgrade is valid for all your devices and without time limit.</string>
                                 <color key="textColor" red="0.0" green="0.93333333333333335" blue="0.80392156862745101" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_about" translatesAutoresizingMaskIntoConstraints="NO" id="pcx-jG-qK2">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="icon_about" translatesAutoresizingMaskIntoConstraints="NO" id="pcx-jG-qK2">
                                 <rect key="frame" x="110" y="189" width="100" height="100"/>
                             </imageView>
                         </subviews>
@@ -596,14 +596,14 @@ The upgrade is valid for all your devices and without time limit.</string>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="ShareHeaderCell" rowHeight="100" id="xvF-Tr-YGB" customClass="ShareHeaderCell">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="ShareHeaderCell" rowHeight="97" id="xvF-Tr-YGB" customClass="ShareHeaderCell">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xvF-Tr-YGB" id="AQT-b1-zre">
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="(text)" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gnl-rd-zYM">
-                                            <rect key="frame" x="104" y="8" width="208" height="21"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="(text)" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gnl-rd-zYM">
+                                            <rect key="frame" x="104" y="8" width="208" height="80"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="highlightedColor"/>
                                         </label>
@@ -617,10 +617,10 @@ The upgrade is valid for all your devices and without time limit.</string>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="gnl-rd-zYM" firstAttribute="top" secondItem="AQT-b1-zre" secondAttribute="topMargin" id="cGP-kf-c0G"/>
-                                        <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="bHI-XD-ggP" secondAttribute="bottom" id="fVO-26-TOj"/>
                                         <constraint firstItem="bHI-XD-ggP" firstAttribute="leading" secondItem="AQT-b1-zre" secondAttribute="leadingMargin" id="gtv-gT-zPs"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="gnl-rd-zYM" secondAttribute="bottom" priority="750" id="h1W-gr-1Xw"/>
                                         <constraint firstItem="gnl-rd-zYM" firstAttribute="leading" secondItem="bHI-XD-ggP" secondAttribute="trailing" constant="16" id="mr1-0q-LbJ"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="bHI-XD-ggP" secondAttribute="bottom" id="ndc-JR-Ni5"/>
+                                        <constraint firstItem="gnl-rd-zYM" firstAttribute="bottom" secondItem="AQT-b1-zre" secondAttribute="bottomMargin" id="xIc-wa-q7K"/>
                                         <constraint firstItem="bHI-XD-ggP" firstAttribute="top" secondItem="AQT-b1-zre" secondAttribute="topMargin" id="xNO-8n-k8i"/>
                                         <constraint firstItem="gnl-rd-zYM" firstAttribute="trailing" secondItem="AQT-b1-zre" secondAttribute="trailingMargin" id="z1Z-Hx-IbQ"/>
                                     </constraints>

@@ -51,7 +51,8 @@ static NSString *const SectionPosts = @"Posts";
 {
     [super viewDidLoad];
     
-    self.tableView.estimatedRowHeight = 44;
+    self.tableView.estimatedRowHeight = 53;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
     
     self.writeStatusCell = [self.tableView dequeueReusableCellWithIdentifier:@"CommWriteStatusCell"];
     
@@ -74,6 +75,12 @@ static NSString *const SectionPosts = @"Posts";
         LCCUser *user = (LCCUser *)[PFUser currentUser];
         [self setUser:user mode:CommListModeNews];
     }
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self.view endEditing:YES];
 }
 
 - (void)setUser:(LCCUser *)user mode:(CommListMode)mode
@@ -451,6 +458,14 @@ static NSString *const SectionPosts = @"Posts";
 @end
 
 @implementation CommWriteStatusCell
+
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    self.textView.placeholderView = self.detailPlaceholderLabel;
+    self.textView.hidePlaceholderWhenFirstResponder = YES;
+}
+
 @end
 
 @interface CommPostCell()

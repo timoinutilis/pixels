@@ -44,6 +44,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
 {
     [super viewDidLoad];
     
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 44;
     
     self.writeCommentCell = [self.tableView dequeueReusableCellWithIdentifier:@"WriteCommentCell"];
@@ -57,6 +58,12 @@ typedef NS_ENUM(NSInteger, CellTag) {
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:CurrentUserChangeNotification object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self.view endEditing:YES];
 }
 
 - (void)setPost:(LCCPost *)post mode:(CommPostMode)mode

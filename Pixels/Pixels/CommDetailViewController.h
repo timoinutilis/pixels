@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GORTextView.h"
 
 @class LCCUser, LCCPost;
 
@@ -33,8 +34,9 @@ typedef NS_ENUM(NSInteger, CommListMode) {
 @end
 
 @interface CommWriteStatusCell : UITableViewCell
-@property (strong, nonatomic) IBOutlet UITextField *titleTextField;
-@property (strong, nonatomic) IBOutlet UITextView *textView;
+@property (weak, nonatomic) IBOutlet UITextField *titleTextField;
+@property (weak, nonatomic) IBOutlet GORTextView *textView;
+@property (weak, nonatomic) IBOutlet UILabel *detailPlaceholderLabel;
 @end
 
 @interface CommPostCell : UITableViewCell
