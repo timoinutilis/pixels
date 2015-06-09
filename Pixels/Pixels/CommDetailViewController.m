@@ -225,16 +225,21 @@ static NSString *const SectionPosts = @"Posts";
 
 - (IBAction)onSendStatusTapped:(id)sender
 {
-    NSString *statusTitleText = self.writeStatusCell.titleTextField.text;
-    statusTitleText = [statusTitleText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    if (statusTitleText.length > 0)
+    NSString *statusTitleText = [self.writeStatusCell.titleTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSString *statusDetailText = [self.writeStatusCell.textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+    if (statusTitleText.length == 0 || statusDetailText.length == 0)
+    {
+        [self showAlertWithTitle:@"Please write a title and a detail text!" message:nil block:nil];
+    }
+    else
     {
         LCCPost *post = [LCCPost object];
         post.user = (LCCUser *)[PFUser currentUser];
         post.type = LCCPostTypeStatus;
         post.category = LCCPostCategoryStatus;
         post.title = statusTitleText;
-        post.detail = [self.writeStatusCell.textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        post.detail = statusDetailText;
         
         [post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             
