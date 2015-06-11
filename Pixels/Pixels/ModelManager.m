@@ -72,17 +72,6 @@ NSString *const ModelManagerDidAddProjectNotification = @"ModelManagerDidAddProj
     {
         NSLog(@"Core Data error: %@", error);
         [[AppController sharedController] storeError:error message:@"Core Data persistentStoreCoordinator"];
-        
-        /*
-        [[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil];
-        
-        _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-        if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error])
-        {
-            NSLog(@"Core Data error: %@", error);
-            [[AppController sharedController] storeError:error message:@"Core Data"];
-        }
-         */
     }
     
     return _persistentStoreCoordinator;
@@ -102,7 +91,7 @@ NSString *const ModelManagerDidAddProjectNotification = @"ModelManagerDidAddProj
     {
         return nil;
     }
-    _managedObjectContext = [[NSManagedObjectContext alloc] init];
+    _managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
     [_managedObjectContext setPersistentStoreCoordinator:coordinator];
     return _managedObjectContext;
 }
@@ -121,7 +110,7 @@ NSString *const ModelManagerDidAddProjectNotification = @"ModelManagerDidAddProj
         }
         else
         {
-            _temporaryContext = [[NSManagedObjectContext alloc] init];
+            _temporaryContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
             [_temporaryContext setPersistentStoreCoordinator:coordinator];
         }
     }
@@ -132,15 +121,14 @@ NSString *const ModelManagerDidAddProjectNotification = @"ModelManagerDidAddProj
 
 - (void)saveContext
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:ModelManagerWillSaveDataNotification object:self];
-    
-    NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
-    if (managedObjectContext != nil)
-    {
+    [self.managedObjectContext performBlockAndWait:^{
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:ModelManagerWillSaveDataNotification object:self];
+        
         NSError *error = nil;
-        if ([managedObjectContext hasChanges])
+        if ([self.managedObjectContext hasChanges])
         {
-            if ([managedObjectContext save:&error])
+            if ([self.managedObjectContext save:&error])
             {
                 // saved!
             }
@@ -150,37 +138,48 @@ NSString *const ModelManagerDidAddProjectNotification = @"ModelManagerDidAddProj
                 [[AppController sharedController] storeError:error message:@"Core Data save"];
             }
         }
-    }
+        
+    }];
 }
 
 #pragma mark - stuff
 
 - (void)createDefaultProjects
 {
-    NSError *error;
-    NSURL *url = [[NSBundle mainBundle] URLForResource:@"DefaultProjects" withExtension:@"json" subdirectory:@"Default Projects"];
-    NSData *jsonData = [NSData dataWithContentsOfURL:url];
-    NSArray *jsonProjects = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
-    
-    for (NSDictionary *jsonProject in jsonProjects)
-    {
-        Project *project = [NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:self.temporaryContext];
-        project.isDefault = @YES;
-        project.name = jsonProject[@"name"];
-        project.createdAt = [NSDate date];
-        project.sourceCode = jsonProject[@"sourceCode"];
+    [self.temporaryContext performBlockAndWait:^{
         
-        NSString *iconName = jsonProject[@"icon"];
-        NSURL *iconUrl = [[NSBundle mainBundle] URLForResource:iconName withExtension:@"png" subdirectory:@"Default Projects"];
-        project.iconData = [NSData dataWithContentsOfURL:iconUrl];
-    }
+        NSError *error;
+        NSURL *url = [[NSBundle mainBundle] URLForResource:@"DefaultProjects" withExtension:@"json" subdirectory:@"Default Projects"];
+        NSData *jsonData = [NSData dataWithContentsOfURL:url];
+        NSArray *jsonProjects = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
+        
+        for (NSDictionary *jsonProject in jsonProjects)
+        {
+            Project *project = [NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:self.temporaryContext];
+            project.isDefault = @YES;
+            project.name = jsonProject[@"name"];
+            project.createdAt = [NSDate date];
+            project.sourceCode = jsonProject[@"sourceCode"];
+            
+            NSString *iconName = jsonProject[@"icon"];
+            NSURL *iconUrl = [[NSBundle mainBundle] URLForResource:iconName withExtension:@"png" subdirectory:@"Default Projects"];
+            project.iconData = [NSData dataWithContentsOfURL:iconUrl];
+        }
+        
+    }];
 }
 
 - (Project *)createNewProject
 {
-    Project *project = [NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:self.managedObjectContext];
-    project.name = @"Unnamed Program";
-    project.createdAt = [NSDate date];
+    __block Project *project;
+    
+    [self.managedObjectContext performBlockAndWait:^{
+        
+        project = [NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:self.managedObjectContext];
+        project.name = @"Unnamed Program";
+        project.createdAt = [NSDate date];
+        
+    }];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:ModelManagerDidAddProjectNotification object:self userInfo:@{@"project": project}];
     
@@ -189,16 +188,26 @@ NSString *const ModelManagerDidAddProjectNotification = @"ModelManagerDidAddProj
 
 - (void)deleteProject:(Project *)project
 {
-    [self.managedObjectContext deleteObject:project];
+    [self.managedObjectContext performBlockAndWait:^{
+        
+        [self.managedObjectContext deleteObject:project];
+        
+    }];
 }
 
 - (Project *)duplicateProject:(Project *)project sourceCode:(NSString *)sourceCode
 {
-    Project *newProject = [NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:self.managedObjectContext];
-    newProject.name = [NSString stringWithFormat:@"Copy of %@", project.name];
-    newProject.iconData = project.iconData;
-    newProject.sourceCode = sourceCode ? sourceCode : project.sourceCode;
-    newProject.createdAt = [NSDate date];
+    __block Project *newProject;
+    
+    [self.managedObjectContext performBlockAndWait:^{
+        
+        newProject = [NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:self.managedObjectContext];
+        newProject.name = [NSString stringWithFormat:@"Copy of %@", project.name];
+        newProject.iconData = project.iconData;
+        newProject.sourceCode = sourceCode ? sourceCode : project.sourceCode;
+        newProject.createdAt = [NSDate date];
+        
+    }];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:ModelManagerDidAddProjectNotification object:self userInfo:@{@"project": newProject}];
     

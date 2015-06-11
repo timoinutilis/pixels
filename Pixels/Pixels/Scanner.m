@@ -256,7 +256,7 @@
                 while (textPos < len)
                 {
                     textCharacter = [text characterAtIndex:textPos];
-                    if ([self.charSetLetters characterIsMember:textCharacter] || [self.charSetNumbers characterIsMember:textCharacter])
+                    if ([self.charSetAlphaNum characterIsMember:textCharacter])
                     {
                         textPos++;
                     }
