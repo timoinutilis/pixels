@@ -26,6 +26,8 @@
 	<string>JjXUGeQFrN79s4TcIunronsM13ehsBy0Pa1FLIUA</string>
 	<key>ParseClientKey</key>
 	<string>hzklS2mYg0VDXvC8DAngFpDJVKQ7PSgKCaj5HKgu</string>
+	<key>LowResNewsUserID</key>
+	<string>T5VWaLW28x</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

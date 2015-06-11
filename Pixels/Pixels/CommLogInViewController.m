@@ -154,13 +154,24 @@
 
     [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         
-        [self setBusy:NO];
         if (succeeded)
         {
-            [self loggedInWithUsername:username];
+            LCCFollow *defaultFollow = [LCCFollow object];
+            NSString *newsUserID = [[NSBundle mainBundle] objectForInfoDictionaryKey:LowResNewsUserIDKey];
+            defaultFollow.user = user;
+            defaultFollow.followsUser = [LCCUser objectWithoutDataWithObjectId:newsUserID];
+            
+            [defaultFollow saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                
+                //TODO fail handling, but not here...
+                [self setBusy:NO];
+                [self loggedInWithUsername:username];
+                
+            }];
         }
         else if (error)
         {
+            [self setBusy:NO];
             [self showAlertWithTitle:@"Could not register" message:error.userInfo[@"error"] block:nil];
         }
         

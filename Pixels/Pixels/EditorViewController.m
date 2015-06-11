@@ -113,7 +113,7 @@ NSString *const CoachMarkIDHelp = @"CoachMarkIDHelp";
         if ([app isUnshownInfoID:CoachMarkIDShare])
         {
             [app onShowInfoID:CoachMarkIDShare];
-        [[CoachMarkView create] showWithText:@"Are you happy with your program? Share it on the LowRes Coder website!" image:@"coach_share" container:self.navigationController.view complete:nil];
+        [[CoachMarkView create] showWithText:@"Are you happy with your program? Share it with the community!" image:@"coach_share" container:self.navigationController.view complete:nil];
         }
     }
     else if ([self.sourceCodeTextView.text isEqualToString:@""])
@@ -158,6 +158,7 @@ NSString *const CoachMarkIDHelp = @"CoachMarkIDHelp";
         && ![self isExample]
         && ![self.sourceCodeTextView.text isEqualToString:self.project.sourceCode])
     {
+        [ModelManager sharedManager].debugSaveCount++;
         self.project.sourceCode = self.sourceCodeTextView.text;
     }
 }

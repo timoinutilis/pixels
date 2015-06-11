@@ -123,7 +123,14 @@ NSString *const ModelManagerDidAddProjectNotification = @"ModelManagerDidAddProj
 {
     [self.managedObjectContext performBlockAndWait:^{
         
+        self.debugSaveCount = 0;
         [[NSNotificationCenter defaultCenter] postNotificationName:ModelManagerWillSaveDataNotification object:self];
+        
+        if (self.debugSaveCount > 1)
+        {
+            [[AppController sharedController] storeError:[NSError errorWithDomain:@"LowResCoder" code:1 userInfo:nil]
+                                                 message:[NSString stringWithFormat:@"DebugSaveCount = %ld", (long)self.debugSaveCount]];
+        }
         
         NSError *error = nil;
         if ([self.managedObjectContext hasChanges])
