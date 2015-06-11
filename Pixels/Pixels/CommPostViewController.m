@@ -255,6 +255,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
         [self.activityIndicator decreaseActivity];
         if (succeeded)
         {
+            [[CommunityModel sharedInstance] onPostedWithDate:post.createdAt];
             [self showAlertWithTitle:@"Shared successfully" message:nil block:nil];
         }
         else if (error)

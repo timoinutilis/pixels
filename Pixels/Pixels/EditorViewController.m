@@ -159,7 +159,7 @@ NSString *const CoachMarkIDHelp = @"CoachMarkIDHelp";
         && ![self.sourceCodeTextView.text isEqualToString:self.project.sourceCode])
     {
         [ModelManager sharedManager].debugSaveCount++;
-        self.project.sourceCode = self.sourceCodeTextView.text;
+        self.project.sourceCode = self.sourceCodeTextView.text.uppercaseString;
     }
 }
 
@@ -317,7 +317,7 @@ NSString *const CoachMarkIDHelp = @"CoachMarkIDHelp";
 
 - (void)runProgram
 {
-    NSString *sourceCode = self.sourceCodeTextView.text;
+    NSString *sourceCode = self.sourceCodeTextView.text.uppercaseString;
     NSString *transferSourceCode = [EditorTextView transferText];
     
     if (   ![AppController sharedController].isFullVersion
@@ -382,7 +382,7 @@ NSString *const CoachMarkIDHelp = @"CoachMarkIDHelp";
 - (Runnable *)compileSourceCode:(NSString *)sourceCode
 {
     Scanner *scanner = [[Scanner alloc] init];
-    NSArray *tokens = [scanner tokenizeText:sourceCode.uppercaseString];
+    NSArray *tokens = [scanner tokenizeText:sourceCode];
     
     if (tokens.count > 0)
     {

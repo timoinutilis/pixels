@@ -240,7 +240,6 @@
 - (void)showSendError
 {
     [self isBusy:NO];
-    
     [self showAlertWithTitle:@"Could not send program" message:@"Please try again later!" block:nil];
 }
 
@@ -267,7 +266,7 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.headerLabel.text = @"Post your program to your community profile! If we like it, we will feature it in the news!";
+    self.headerLabel.text = @"Post this program to your community profile! If we like it, we will feature it in the news!";
     CALayer *imageLayer = self.iconImageView.layer;
     imageLayer.cornerRadius = 20;
     imageLayer.masksToBounds = YES;
