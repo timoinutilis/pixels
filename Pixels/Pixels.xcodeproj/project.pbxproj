@@ -20,6 +20,7 @@
 		922A77461AA46CCB004EE2CA /* Project.m in Sources */ = {isa = PBXBuildFile; fileRef = 922A77451AA46CCB004EE2CA /* Project.m */; };
 		9231159F1A444A6B00624201 /* RendererView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9231159E1A444A6B00624201 /* RendererView.m */; };
 		923115A21A444AA800624201 /* Renderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 923115A11A444AA800624201 /* Renderer.m */; };
+		9245076E1B2B839C006956F1 /* NSError+LowResCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 9245076D1B2B839C006956F1 /* NSError+LowResCoder.m */; };
 		9248A6B01A7A641D00FD5656 /* Default Projects in Resources */ = {isa = PBXBuildFile; fileRef = 9248A6AF1A7A641D00FD5656 /* Default Projects */; };
 		924CC0FE1A220B3C00D2AF68 /* Runner.m in Sources */ = {isa = PBXBuildFile; fileRef = 924CC0FD1A220B3C00D2AF68 /* Runner.m */; };
 		924F83291B0B347C00B96C91 /* Community.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 924F83281B0B347C00B96C91 /* Community.storyboard */; };
@@ -101,7 +102,6 @@
 		92C0811C1B0DDCDB0006331B /* CommunityModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C0811B1B0DDCDB0006331B /* CommunityModel.m */; };
 		92C081541B0DF1900006331B /* LCCPost.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C081531B0DF1900006331B /* LCCPost.m */; };
 		92C0815A1B0E021A0006331B /* CommPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C081591B0E021A0006331B /* CommPostViewController.m */; };
-		92C98F3F1A20CFD900215AE9 /* ProgramException.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C98F3E1A20CFD900215AE9 /* ProgramException.m */; };
 		92C98F421A20F2F000215AE9 /* Node.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C98F411A20F2F000215AE9 /* Node.m */; };
 		92D2C2021B13442A00539BA6 /* CommUsersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D2C2011B13442A00539BA6 /* CommUsersViewController.m */; };
 		92D518B91A6975C10000F917 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D518B81A6975C10000F917 /* AboutViewController.m */; };
@@ -141,6 +141,8 @@
 		9231159E1A444A6B00624201 /* RendererView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RendererView.m; sourceTree = "<group>"; };
 		923115A01A444AA800624201 /* Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
 		923115A11A444AA800624201 /* Renderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Renderer.m; sourceTree = "<group>"; };
+		9245076C1B2B839C006956F1 /* NSError+LowResCoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+LowResCoder.h"; sourceTree = "<group>"; };
+		9245076D1B2B839C006956F1 /* NSError+LowResCoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+LowResCoder.m"; sourceTree = "<group>"; };
 		9248A6AF1A7A641D00FD5656 /* Default Projects */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Default Projects"; sourceTree = "<group>"; };
 		924CC0FC1A220B3C00D2AF68 /* Runner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Runner.h; sourceTree = "<group>"; };
 		924CC0FD1A220B3C00D2AF68 /* Runner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Runner.m; sourceTree = "<group>"; };
@@ -291,8 +293,6 @@
 		92C081531B0DF1900006331B /* LCCPost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCPost.m; sourceTree = "<group>"; };
 		92C081581B0E021A0006331B /* CommPostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommPostViewController.h; sourceTree = "<group>"; };
 		92C081591B0E021A0006331B /* CommPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommPostViewController.m; sourceTree = "<group>"; };
-		92C98F3D1A20CFD900215AE9 /* ProgramException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgramException.h; sourceTree = "<group>"; };
-		92C98F3E1A20CFD900215AE9 /* ProgramException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProgramException.m; sourceTree = "<group>"; };
 		92C98F401A20F2F000215AE9 /* Node.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Node.h; sourceTree = "<group>"; };
 		92C98F411A20F2F000215AE9 /* Node.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Node.m; sourceTree = "<group>"; };
 		92D2C2001B13442A00539BA6 /* CommUsersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommUsersViewController.h; sourceTree = "<group>"; };
@@ -594,8 +594,8 @@
 				925A01A81A1E67F900A321E6 /* Parser.m */,
 				926086301A5E8560006C5523 /* Runnable.h */,
 				926086311A5E8560006C5523 /* Runnable.m */,
-				92C98F3D1A20CFD900215AE9 /* ProgramException.h */,
-				92C98F3E1A20CFD900215AE9 /* ProgramException.m */,
+				9245076C1B2B839C006956F1 /* NSError+LowResCoder.h */,
+				9245076D1B2B839C006956F1 /* NSError+LowResCoder.m */,
 			);
 			name = Compiler;
 			sourceTree = "<group>";
@@ -819,6 +819,7 @@
 				92884F201B0F25B30032623D /* SDWebImageManager.m in Sources */,
 				92884F211B0F25B30032623D /* SDWebImagePrefetcher.m in Sources */,
 				92C081191B0DD9490006331B /* CommLogInViewController.m in Sources */,
+				9245076E1B2B839C006956F1 /* NSError+LowResCoder.m in Sources */,
 				92E53DF61A5B3A1D00FE9F91 /* GORTableViewController.m in Sources */,
 				9267E8841A5AF61B00D08C42 /* AFURLConnectionOperation.m in Sources */,
 				92884F1A1B0F25B30032623D /* NSData+ImageContentType.m in Sources */,
@@ -866,7 +867,6 @@
 				92A0EC0D1A56DA1F0051D74C /* Model.xcdatamodeld in Sources */,
 				9204EF681A4C397300B8C29C /* HelpTextViewController.m in Sources */,
 				9267E8811A5AF61B00D08C42 /* AFHTTPSessionManager.m in Sources */,
-				92C98F3F1A20CFD900215AE9 /* ProgramException.m in Sources */,
 				9267E8821A5AF61B00D08C42 /* AFNetworkReachabilityManager.m in Sources */,
 				926864271AA6087300F305B9 /* AppController.m in Sources */,
 				925C281F1B092CA4007AC515 /* NSDate+Utils.m in Sources */,

@@ -10,6 +10,8 @@
 
 @interface Parser : NSObject
 
+@property (nonatomic) NSError *error;
+
 - (NSArray *)parseTokens:(NSArray *)tokens;
 
 @end

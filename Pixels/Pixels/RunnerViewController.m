@@ -11,7 +11,7 @@
 #import "RendererView.h"
 #import "Project.h"
 #import "Gamepad.h"
-#import "ProgramException.h"
+#import "NSError+LowResCoder.h"
 #import "NSString+Utils.h"
 #import "EditorTextView.h"
 #import "AudioPlayer.h"
@@ -232,25 +232,23 @@ NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
         
         Runner *runner = self.runner;
 
-        @try
+        while (!runner.isFinished && !runner.error)
         {
-            while (!runner.isFinished)
+            if (self.isPaused)
             {
-                if (self.isPaused)
-                {
-                    [NSThread sleepForTimeInterval:0.1];
-                }
-                else
-                {
-                    [runner runCommand];
-                }
+                [NSThread sleepForTimeInterval:0.1];
+            }
+            else
+            {
+                [runner runCommand];
             }
         }
-        @catch (ProgramException *exception)
+        
+        if (runner.error)
         {
             // runtime error!
-            NSString *line = [self.project.sourceCode substringWithLineAtIndex:exception.position];
-            UIAlertController* alert = [UIAlertController alertControllerWithTitle:exception.reason message:line preferredStyle:UIAlertControllerStyleAlert];
+            NSString *line = [self.project.sourceCode substringWithLineAtIndex:runner.error.programPosition];
+            UIAlertController* alert = [UIAlertController alertControllerWithTitle:runner.error.localizedDescription message:line preferredStyle:UIAlertControllerStyleAlert];
             [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                 [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
             }]];
@@ -259,6 +257,7 @@ NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
             
             self.runner.endRequested = NO;
         }
+        
         [self updateRendererView];
         
         // thumbnail

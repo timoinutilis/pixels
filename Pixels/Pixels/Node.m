@@ -10,7 +10,7 @@
 #import "Runner.h"
 #import "Renderer.h"
 #import "AudioPlayer.h"
-#import "ProgramException.h"
+#import "NSError+LowResCoder.h"
 
 NSString *const TRANSFER = @"TRANSFER";
 
@@ -24,7 +24,8 @@ NSString *const TRANSFER = @"TRANSFER";
 {
     if (pass == PrePassCheckSemantic && !canBeString && self.returnsString)
     {
-        @throw [ProgramException typeMismatchExceptionWithNode:self];
+        runnable.error = [NSError typeMismatchErrorWithNode:self];
+        return;
     }
     [self prepareWithRunnable:runnable pass:pass];
 }
@@ -39,7 +40,8 @@ NSString *const TRANSFER = @"TRANSFER";
     NSNumber *number = [self evaluateWithRunner:runner];
     if (number && (number.intValue < min || number.intValue > max))
     {
-        @throw [ProgramException invalidParameterExceptionWithNode:self value:number.intValue];
+        runner.error = [NSError invalidParameterErrorWithNode:self value:number.intValue];
+        return nil;
     }
     return number;
 }
@@ -210,7 +212,8 @@ NSString *const TRANSFER = @"TRANSFER";
     {
         if (!runnable.labels[self.label])
         {
-            @throw [ProgramException undefinedLabelExceptionWithNode:self label:self.label];
+            runnable.error = [NSError undefinedLabelErrorWithNode:self label:self.label];
+            return;
         }
     }
 }
@@ -233,7 +236,8 @@ NSString *const TRANSFER = @"TRANSFER";
     {
         if (!runnable.labels[self.label])
         {
-            @throw [ProgramException undefinedLabelExceptionWithNode:self label:self.label];
+            runnable.error = [NSError undefinedLabelErrorWithNode:self label:self.label];
+            return;
         }
     }
 }
@@ -313,10 +317,8 @@ NSString *const TRANSFER = @"TRANSFER";
         [self.matchingVariable prepareWithRunnable:runnable pass:pass canBeString:NO];
         if (pass == PrePassCheckSemantic && ![self.variable.identifier isEqualToString:self.matchingVariable.identifier])
         {
-            NSException *exception = [ProgramException exceptionWithName:@"UnmatchingNext"
-                                                                  reason:@"NEXT not matching with FOR"
-                                                                   token:self.token];
-            @throw exception;
+            runnable.error = [NSError programErrorWithCode:LRCErrorCodeSemantic reason:@"NEXT not matching with FOR" token:self.token];
+            return;
         }
     }
     
@@ -374,7 +376,8 @@ NSString *const TRANSFER = @"TRANSFER";
     {
         if (self.variable.isString != self.expression.returnsString)
         {
-            @throw [ProgramException typeMismatchExceptionWithNode:self];
+            runnable.error = [NSError typeMismatchErrorWithNode:self];
+            return;
         }
     }
 }
@@ -533,7 +536,8 @@ NSString *const TRANSFER = @"TRANSFER";
     NSNumber *value = [self.time evaluateWithRunner:runner];
     if (value.floatValue < 0.0)
     {
-        @throw [ProgramException invalidParameterExceptionWithNode:self value:value.floatValue];
+        runner.error = [NSError invalidParameterErrorWithNode:self value:value.floatValue];
+        return nil;
     }
     NSTimeInterval timeInterval = MAX(value.floatValue, 0.04);
     if (self.tap)
@@ -823,8 +827,8 @@ NSString *const TRANSFER = @"TRANSFER";
     
     if (arrayVariable.sizes.count != 1 || ((NSNumber *)arrayVariable.sizes[0]).intValue != RendererSpriteSize * 2)
     {
-        NSException *exception = [ProgramException exceptionWithName:@"IncorrectArraySize" reason:@"Incorrect array size" token:self.token];
-        @throw exception;
+        runner.error = [NSError programErrorWithCode:LRCErrorCodeRuntime reason:@"Incorrect array size" token:self.token];
+        return nil;
     }
     
     SpriteDef *def = [runner.renderer spriteDefAtIndex:image.intValue];
@@ -993,7 +997,8 @@ NSString *const TRANSFER = @"TRANSFER";
         
         if (constant.returnsString != variable.isString)
         {
-            @throw [ProgramException typeMismatchExceptionWithNode:variable];
+            runner.error = [NSError typeMismatchErrorWithNode:variable];
+            return nil;
         }
         
         id value = [constant evaluateWithRunner:runner];
@@ -1015,7 +1020,8 @@ NSString *const TRANSFER = @"TRANSFER";
     {
         if (self.label && !runnable.labels[self.label] && ![self.label isEqualToString:TRANSFER])
         {
-            @throw [ProgramException undefinedLabelExceptionWithNode:self label:self.label];
+            runnable.error = [NSError undefinedLabelErrorWithNode:self label:self.label];
+            return;
         }
     }
 }
@@ -1090,7 +1096,8 @@ NSString *const TRANSFER = @"TRANSFER";
     {
         if (self.label && !runnable.labels[self.label])
         {
-            @throw [ProgramException undefinedLabelExceptionWithNode:self label:self.label];
+            runnable.error = [NSError undefinedLabelErrorWithNode:self label:self.label];
+            return;
         }
     }
 }
@@ -1132,11 +1139,13 @@ NSString *const TRANSFER = @"TRANSFER";
     
     if (pulseWidth && (pulseWidth.doubleValue < 0.0 || pulseWidth.doubleValue > 1.0))
     {
-        @throw [ProgramException invalidParameterExceptionWithNode:self value:pulseWidth.floatValue];
+        runner.error = [NSError invalidParameterErrorWithNode:self value:pulseWidth.floatValue];
+        return nil;
     }
     if (maxTime && maxTime.doubleValue < 0)
     {
-        @throw [ProgramException invalidParameterExceptionWithNode:self value:maxTime.floatValue];
+        runner.error = [NSError invalidParameterErrorWithNode:self value:maxTime.floatValue];
+        return nil;
     }
     
     SoundDef *def = [runner.audioPlayer soundDefAtIndex:n.intValue];
@@ -1176,7 +1185,8 @@ NSString *const TRANSFER = @"TRANSFER";
     
     if (pulseBend && (pulseBend.doubleValue < -1.0 || pulseBend.doubleValue > 1.0))
     {
-        @throw [ProgramException invalidParameterExceptionWithNode:self value:pulseBend.floatValue];
+        runner.error = [NSError invalidParameterErrorWithNode:self value:pulseBend.floatValue];
+        return nil;
     }
     
     SoundDef *def = [runner.audioPlayer soundDefAtIndex:n.intValue];
@@ -1366,7 +1376,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *port = [self.portExpression evaluateNumberWithRunner:runner min:0 max:0];
+    /*NSNumber *port = */[self.portExpression evaluateNumberWithRunner:runner min:0 max:0];
     BOOL result = NO;
     switch (self.type)
     {
@@ -1404,7 +1414,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *port = [self.portExpression evaluateNumberWithRunner:runner min:0 max:0];
+    /*NSNumber *port = */[self.portExpression evaluateNumberWithRunner:runner min:0 max:0];
     NSNumber *button = [self.buttonExpression evaluateWithRunner:runner];
     BOOL result = NO;
     switch (button.intValue)
@@ -1445,8 +1455,8 @@ NSString *const TRANSFER = @"TRANSFER";
             break;
         }
         default:
-            @throw [ProgramException invalidParameterExceptionWithNode:self value:button.intValue];
-            break;
+            runner.error = [NSError invalidParameterErrorWithNode:self value:button.intValue];
+            return nil;
     }
     return @(result ? -1 : 0);
 }
@@ -1625,7 +1635,8 @@ NSString *const TRANSFER = @"TRANSFER";
         case TTypeSymLog:
             if (value <= 0)
             {
-                @throw [ProgramException invalidParameterExceptionWithNode:self value:value];
+                runner.error = [NSError invalidParameterErrorWithNode:self value:value];
+                return nil;
             }
             result = logf(value);
             break;
@@ -1638,7 +1649,8 @@ NSString *const TRANSFER = @"TRANSFER";
         case TTypeSymSqr:
             if (value < 0)
             {
-                @throw [ProgramException invalidParameterExceptionWithNode:self value:value];
+                runner.error = [NSError invalidParameterErrorWithNode:self value:value];
+                return nil;
             }
             result = sqrtf(value);
             break;
@@ -1669,7 +1681,8 @@ NSString *const TRANSFER = @"TRANSFER";
     NSNumber *number = [self.numberExpression evaluateWithRunner:runner];
     if (number.intValue < 0)
     {
-        @throw [ProgramException invalidParameterExceptionWithNode:self value:number.intValue];
+        runner.error = [NSError invalidParameterErrorWithNode:self value:number.intValue];
+        return nil;
     }
     if (number.intValue >= string.length)
     {
@@ -1702,7 +1715,8 @@ NSString *const TRANSFER = @"TRANSFER";
     NSUInteger len = string.length;
     if (number.intValue < 0)
     {
-        @throw [ProgramException invalidParameterExceptionWithNode:self value:number.intValue];
+        runner.error = [NSError invalidParameterErrorWithNode:self value:number.intValue];
+        return nil;
     }
     if (number.intValue >= len)
     {
@@ -1737,11 +1751,13 @@ NSString *const TRANSFER = @"TRANSFER";
     NSUInteger len = string.length;
     if (position.intValue < 1)
     {
-        @throw [ProgramException invalidParameterExceptionWithNode:self value:position.intValue];
+        runner.error = [NSError invalidParameterErrorWithNode:self value:position.intValue];
+        return nil;
     }
     if (number.intValue < 1)
     {
-        @throw [ProgramException invalidParameterExceptionWithNode:self value:number.intValue];
+        runner.error = [NSError invalidParameterErrorWithNode:self value:number.intValue];
+        return nil;
     }
     if (position.intValue - 1 > len)
     {
@@ -1781,7 +1797,8 @@ NSString *const TRANSFER = @"TRANSFER";
     
     if (position.intValue < 1)
     {
-        @throw [ProgramException invalidParameterExceptionWithNode:self value:position.intValue];
+        runner.error = [NSError invalidParameterErrorWithNode:self value:position.intValue];
+        return nil;
     }
     if (position.intValue > len)
     {
@@ -1835,7 +1852,8 @@ NSString *const TRANSFER = @"TRANSFER";
     NSString *string = [self.stringExpression evaluateWithRunner:runner];
     if (string.length < 1)
     {
-        @throw [ProgramException invalidParameterExceptionWithNode:self value:0];
+        runner.error = [NSError invalidParameterErrorWithNode:self value:0];
+        return nil;
     }
     unichar character = [string characterAtIndex:0];
     return @((int)character);
@@ -1943,14 +1961,16 @@ NSString *const TRANSFER = @"TRANSFER";
             case TTypeSymOpUneq:
                 if (leftReturnsString != rightReturnsString)
                 {
-                    @throw [ProgramException typeMismatchExceptionWithNode:self];
+                    runnable.error = [NSError typeMismatchErrorWithNode:self];
+                    return;
                 }
                 break;
 
             default:
                 if (leftReturnsString || rightReturnsString)
                 {
-                    @throw [ProgramException typeMismatchExceptionWithNode:self];
+                    runnable.error = [NSError typeMismatchErrorWithNode:self];
+                    return;
                 }
         }
     }

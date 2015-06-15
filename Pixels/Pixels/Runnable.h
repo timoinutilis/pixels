@@ -21,6 +21,7 @@ typedef NS_ENUM(NSInteger, PrePass) {
 @property NSArray *transferDataNodes;
 @property BOOL usesGamepad;
 @property BOOL usesSound;
+@property (nonatomic) NSError *error;
 
 - (instancetype)initWithNodes:(NSArray *)nodes;
 - (void)prepare;

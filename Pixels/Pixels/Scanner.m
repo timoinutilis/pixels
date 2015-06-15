@@ -8,7 +8,7 @@
 
 #import "Scanner.h"
 #import "Token.h"
-#import "ProgramException.h"
+#import "NSError+LowResCoder.h"
 
 @interface Scanner ()
 @property NSMutableDictionary *symbols;
@@ -51,6 +51,15 @@
     self.charSetNumbers = [NSCharacterSet characterSetWithCharactersInString:@"0123456789"];
     self.charSetLetters = [NSCharacterSet characterSetWithCharactersInString:@"ABCDEFGHIJKLMNOPQRSTUVWXYZ_"];
     self.charSetAlphaNum = [NSCharacterSet characterSetWithCharactersInString:@"ABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789"];
+}
+
+- (void)setError:(NSError *)error
+{
+    // don't overwrite existing error
+    if (!_error)
+    {
+        _error = error;
+    }
 }
 
 - (NSArray *)tokenizeText:(NSString *)text
@@ -116,8 +125,8 @@
                     }
                     else if (textCharacter == '\n')
                     {
-                        NSException *exception = [ProgramException exceptionWithName:@"ExpectedEndOfString" reason:@"Expected end of string" position:textPos + stringPos];
-                        @throw exception;
+                        self.error = [NSError programErrorWithCode:LRCErrorCodeTokenize reason:@"Expected end of string" position:textPos + stringPos];
+                        return nil;
                     }
                 }
                 if (foundString)
@@ -281,10 +290,10 @@
         if (!found)
         {
             unichar textCharacter = [text characterAtIndex:textPos];
-            NSException *exception = [ProgramException exceptionWithName:@"UnexpectedCharacter"
-                                                                  reason:[NSString stringWithFormat:@"Unexpected character '%c'", textCharacter]
-                                                                position:textPos];
-            @throw exception;
+            self.error = [NSError programErrorWithCode:LRCErrorCodeTokenize
+                                                reason:[NSString stringWithFormat:@"Unexpected character '%c'", textCharacter]
+                                              position:textPos];
+            return nil;
         }
     }
     

@@ -36,6 +36,7 @@
 @interface Runner : NSObject
 
 @property (weak) id<RunnerDelegate> delegate;
+@property (nonatomic) NSError *error;
 @property Renderer *renderer;
 @property AudioPlayer *audioPlayer;
 @property int printLine;

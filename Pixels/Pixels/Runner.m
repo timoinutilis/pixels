@@ -11,7 +11,7 @@
 #import "Renderer.h"
 #import "AudioPlayer.h"
 #import "Runnable.h"
-#import "ProgramException.h"
+#import "NSError+LowResCoder.h"
 
 NSTimeInterval const RunnerOnEndTimeOut = 2;
 
@@ -46,6 +46,15 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
     return self;
 }
 
+- (void)setError:(NSError *)error
+{
+    // don't overwrite existing error
+    if (!_error)
+    {
+        _error = error;
+    }
+}
+
 - (BOOL)isFinished
 {
     return self.sequencesStack.count == 0;
@@ -55,10 +64,8 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
 {
     if (self.timeWhenOnEndStarted != 0 && CFAbsoluteTimeGetCurrent() - self.timeWhenOnEndStarted > RunnerOnEndTimeOut)
     {
-        NSException *exception = [ProgramException exceptionWithName:@"OnEndTimeout"
-                                                              reason:@"ON END timed out"
-                                                               token:self.currentOnEndGoto.token];
-        @throw exception;
+        self.error = [NSError programErrorWithCode:LRCErrorCodeRuntime reason:@"ON END timed out" token:self.currentOnEndGoto.token];
+        return;
     }
     else if (self.endRequested && self.timeWhenOnEndStarted == 0)
     {
@@ -124,10 +131,8 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
         sequence = self.sequencesStack.lastObject;
         if (!sequence)
         {
-            NSException *exception = [ProgramException exceptionWithName:@"ExitOutsideLoop"
-                                                                  reason:@"EXIT outside of loop"
-                                                                   token:token];
-            @throw exception;
+            self.error = [NSError programErrorWithCode:LRCErrorCodeRuntime reason:@"EXIT outside of loop" token:token];
+            return;
         }
     }
     [self.sequencesStack removeLastObject];
@@ -164,11 +169,10 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
         [self.sequencesStack removeLastObject];
         sequence = self.sequencesStack.lastObject;
     }
-    
-    NSException *exception = [ProgramException exceptionWithName:@"UnaccessibleLabel"
-                                                          reason:[NSString stringWithFormat:@"Unaccessible label %@", label]
-                                                           token:token];
-    @throw exception;
+
+    self.error = [NSError programErrorWithCode:LRCErrorCodeRuntime
+                                        reason:[NSString stringWithFormat:@"Unaccessible label %@", label]
+                                         token:token];
 }
 
 - (void)returnFromGosubAtToken:(Token *)token
@@ -187,10 +191,7 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
         return;
     }
     
-    NSException *exception = [ProgramException exceptionWithName:@"ReturnWithoutGosub"
-                                                          reason:@"RETURN without GOSUB"
-                                                           token:token];
-    @throw exception;
+    self.error = [NSError programErrorWithCode:LRCErrorCodeRuntime reason:@"RETURN without GOSUB" token:token];
 }
 
 - (void)addSequenceWithNodes:(NSArray *)nodes isLoop:(BOOL)isLoop parent:(Node *)parent
@@ -213,9 +214,8 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
         int size = [sizes[i] intValue];
         if (size < 1)
         {
-            NSException *exception = [ProgramException invalidParameterExceptionWithNode:variable value:size - 1];
-
-            @throw exception;
+            self.error = [NSError invalidParameterErrorWithNode:variable value:size - 1];
+            return;
         }
     }
     
@@ -223,20 +223,18 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
     
     if (!arrayVariable.values)
     {
-        NSException *exception = [ProgramException exceptionWithName:@"ArrayTooLarge"
-                                                              reason:@"Array too large"
-                                                               token:variable.token];
-        @throw exception;
+        self.error = [NSError programErrorWithCode:LRCErrorCodeRuntime reason:@"Array too large" token:variable.token];
+        return;
     }
     
     NSMutableDictionary *dict = variable.isString ? self.stringVariables : self.numberVariables;
     
     if (dict[variable.identifier])
     {
-        NSException *exception = [ProgramException exceptionWithName:@"VariableAlreadyUsed"
-                                                              reason:[NSString stringWithFormat:@"Variable %@ already used", variable.identifier]
-                                                               token:variable.token];
-        @throw exception;
+        self.error = [NSError programErrorWithCode:LRCErrorCodeRuntime
+                                            reason:[NSString stringWithFormat:@"Variable %@ already used", variable.identifier]
+                                             token:variable.token];
+        return;
     }
     
     dict[variable.identifier] = arrayVariable;
@@ -263,15 +261,15 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
     BOOL isArrayVariable = [dict[variable.identifier] isKindOfClass:[ArrayVariable class]];
     if (!isArrayVariable)
     {
-        NSException *exception = [ProgramException exceptionWithName:@"VariableNotDimensionalized"
-                                                              reason:[NSString stringWithFormat:@"Variable %@ not dimensionalized", variable.identifier]
-                                                               token:variable.token];
-        @throw exception;
+        self.error = [NSError programErrorWithCode:LRCErrorCodeRuntime
+                                            reason:[NSString stringWithFormat:@"Variable %@ not dimensionalized", variable.identifier]
+                                             token:variable.token];
+        return nil;
     }
     if (variable.indexExpressions)
     {
-        NSException *exception = [ProgramException exceptionWithName:@"NoIndexAllowed" reason:@"No index allowed" token:variable.token];
-        @throw exception;
+        self.error = [NSError programErrorWithCode:LRCErrorCodeRuntime reason:@"No index allowed" token:variable.token];
+        return nil;
     }
     return dict[variable.identifier];
 }
@@ -288,20 +286,18 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
         // accessing array variable
         if (!isArrayVariable)
         {
-            NSException *exception = [ProgramException exceptionWithName:@"VariableNotDimensionalized"
-                                                                  reason:[NSString stringWithFormat:@"Variable %@ not dimensionalized", variable.identifier]
-                                                                   token:variable.token];
-            @throw exception;
+            self.error = [NSError programErrorWithCode:LRCErrorCodeRuntime
+                                                reason:[NSString stringWithFormat:@"Variable %@ not dimensionalized", variable.identifier]
+                                                 token:variable.token];
+            return nil;
         }
         ArrayVariable *arrayVariable = dict[variable.identifier];
         
         // check dimensions
         if (variable.indexExpressions.count != arrayVariable.sizes.count)
         {
-            NSException *exception = [ProgramException exceptionWithName:@"IncorrectDimensions"
-                                                                  reason:@"Incorrect number of dimensions"
-                                                                   token:variable.token];
-            @throw exception;
+            self.error = [NSError programErrorWithCode:LRCErrorCodeRuntime reason:@"Incorrect number of dimensions" token:variable.token];
+            return nil;
         }
         
         NSArray *indexes = [variable indexesWithRunner:self add:0];
@@ -312,10 +308,10 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
             int index = [indexes[i] intValue];
             if (index < 0 || index >= [arrayVariable.sizes[i] intValue])
             {
-                NSException *exception = [ProgramException exceptionWithName:@"IndexOutOfBounds"
-                                                                      reason:[NSString stringWithFormat:@"Index out of bounds (%d)", index]
-                                                                       token:variable.token];
-                @throw exception;
+                self.error = [NSError programErrorWithCode:LRCErrorCodeRuntime
+                                                    reason:[NSString stringWithFormat:@"Index out of bounds (%d)", index]
+                                                     token:variable.token];
+                return nil;
             }
         }
         
@@ -334,10 +330,10 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
         // accessing simple variable
         if (isArrayVariable)
         {
-            NSException *exception = [ProgramException exceptionWithName:@"ArrayVariableWithoutIndex"
-                                                                  reason:[NSString stringWithFormat:@"Array variable %@ without index", variable.identifier]
-                                                                   token:variable.token];
-            @throw exception;
+            self.error = [NSError programErrorWithCode:LRCErrorCodeRuntime
+                                                reason:[NSString stringWithFormat:@"Array variable %@ without index", variable.identifier]
+                                                 token:variable.token];
+            return nil;
         }
         
         if (setValue)
@@ -395,9 +391,7 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
         self.dataConstantIndex = 0;
     }
     
-    NSException *exception = [ProgramException exceptionWithName:@"OutOfData" reason:@"Out of data" token:token];
-    @throw exception;
-    
+    self.error = [NSError programErrorWithCode:LRCErrorCodeRuntime reason:@"Out of data" token:token];
     return nil;
 }
 

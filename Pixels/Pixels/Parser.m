@@ -9,7 +9,7 @@
 #import "Parser.h"
 #import "Token.h"
 #import "Node.h"
-#import "ProgramException.h"
+#import "NSError+LowResCoder.h"
 
 @interface Parser ()
 
@@ -28,6 +28,15 @@
     self.token = self.tokens[0];
     
     return [self acceptProgram];
+}
+
+- (void)setError:(NSError *)error
+{
+    // don't overwrite existing error
+    if (!_error)
+    {
+        _error = error;
+    }
 }
 
 #pragma mark - Basics
@@ -53,10 +62,10 @@
     }
     else
     {
-        NSException *exception = [ProgramException exceptionWithName:@"UnexpectedToken"
-                                                              reason:[NSString stringWithFormat:@"Expected %@", [Token stringForType:tokenType printable:YES]]
-                                                               token:self.token];
-        @throw exception;
+        self.error = [NSError programErrorWithCode:LRCErrorCodeParse
+                                            reason:[NSString stringWithFormat:@"Expected %@", [Token stringForType:tokenType printable:YES]]
+                                             token:self.token];
+        return;
     }
 }
 
@@ -273,8 +282,8 @@
             node = [self acceptPut];
             break;
         default: {
-            NSException *exception = [ProgramException exceptionWithName:@"ExpectedCommand" reason:@"Expected command" token:self.token];
-            @throw exception;
+            self.error = [NSError programErrorWithCode:LRCErrorCodeParse reason:@"Expected command" token:self.token];
+            return nil;
         }
     }
     node.token = firstToken;
@@ -751,8 +760,8 @@
                 break;
             }
             default: {
-                NSException *exception = [ProgramException exceptionWithName:@"ExpectedConstant" reason:@"Expected constant" token:self.token];
-                @throw exception;
+                self.error = [NSError programErrorWithCode:LRCErrorCodeParse reason:@"Expected constant" token:self.token];
+                return nil;
             }
         }
         
@@ -1045,8 +1054,8 @@
                 break;
             }
             default: {
-                NSException *exception = [ProgramException exceptionWithName:@"ExpectedExpression" reason:@"Expected expression" token:self.token];
-                @throw exception;
+                self.error = [NSError programErrorWithCode:LRCErrorCodeParse reason:@"Expected expression" token:self.token];
+                return nil;
             }
         }
     }
@@ -1149,10 +1158,10 @@
                 node.type = [type characterAtIndex:0];
                 if (node.type != 'X' && node.type != 'Y' && node.type != 'I')
                 {
-                    NSException *exception = [ProgramException exceptionWithName:@"UnexpectedToken"
-                                                                          reason:[NSString stringWithFormat:@"Unexpected %@", type]
-                                                                           token:self.token];
-                    @throw exception;
+                    self.error = [NSError programErrorWithCode:LRCErrorCodeParse
+                                                        reason:[NSString stringWithFormat:@"Unexpected %@", type]
+                                                         token:self.token];
+                    return nil;
 
                 }
                 [self accept:TTypeSymBracketOpen];

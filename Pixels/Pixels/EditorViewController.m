@@ -11,7 +11,6 @@
 #import "Parser.h"
 #import "Token.h"
 #import "Runnable.h"
-#import "ProgramException.h"
 #import "Runner.h"
 #import "ModelManager.h"
 #import "RunnerViewController.h"
@@ -24,6 +23,7 @@
 #import "CoachMarkView.h"
 #import "AppStyle.h"
 #import "UIViewController+LowResCoder.h"
+#import "NSError+LowResCoder.h"
 
 int const EditorDemoMaxLines = 24;
 NSString *const CoachMarkIDStart = @"CoachMarkIDStart";
@@ -342,32 +342,27 @@ NSString *const CoachMarkIDHelp = @"CoachMarkIDHelp";
     
     if (transferSourceCode.length > 0)
     {
-        @try
+        Runnable *runnable = [self compileSourceCode:transferSourceCode error:nil];
+        if (runnable)
         {
-            Runnable *runnable = [self compileSourceCode:transferSourceCode];
             transferDataNodes = runnable.dataNodes;
-        }
-        @catch (NSException *exception)
-        {
-            // ignore
         }
     }
     
-    @try
+    NSError *error;
+    
+    Runnable *runnable = [self compileSourceCode:sourceCode error:&error];
+    if (runnable)
     {
-        Runnable *runnable = [self compileSourceCode:sourceCode];
-        if (runnable)
-        {
-            runnable.transferDataNodes = transferDataNodes;
-            [self run:runnable];
-        }
+        runnable.transferDataNodes = transferDataNodes;
+        [self run:runnable];
     }
-    @catch (ProgramException *exception)
+    else if (error)
     {
-        NSUInteger errorPosition = exception.position;
+        NSUInteger errorPosition = error.programPosition;
         NSString *line = [sourceCode substringWithLineAtIndex:errorPosition];
         
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:exception.reason message:line preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:error.localizedDescription message:line preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
         [alert addAction:[UIAlertAction actionWithTitle:@"Go to Error" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             NSRange range = NSMakeRange(errorPosition, 0);
@@ -379,22 +374,37 @@ NSString *const CoachMarkIDHelp = @"CoachMarkIDHelp";
     }
 }
 
-- (Runnable *)compileSourceCode:(NSString *)sourceCode
+- (Runnable *)compileSourceCode:(NSString *)sourceCode error:(NSError **)errorPtr
 {
     Scanner *scanner = [[Scanner alloc] init];
     NSArray *tokens = [scanner tokenizeText:sourceCode];
     
-    if (tokens.count > 0)
+    if (scanner.error)
+    {
+        if (errorPtr) *errorPtr = scanner.error;
+    }
+    else if (tokens.count > 0)
     {
         Parser *parser = [[Parser alloc] init];
         NSArray *nodes = [parser parseTokens:tokens];
         
-        if (nodes.count > 0)
+        if (parser.error)
+        {
+            if (errorPtr) *errorPtr = parser.error;
+        }
+        else if (nodes.count > 0)
         {
             Runnable *runnable = [[Runnable alloc] initWithNodes:nodes];
             [runnable prepare];
             
-            return runnable;
+            if (runnable.error)
+            {
+                if (errorPtr) *errorPtr = parser.error;
+            }
+            else
+            {
+                return runnable;
+            }
         }
     }
     return nil;

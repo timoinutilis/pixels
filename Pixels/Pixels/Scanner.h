@@ -10,6 +10,8 @@
 
 @interface Scanner : NSObject
 
+@property (nonatomic) NSError *error;
+
 - (NSArray *)tokenizeText:(NSString *)text;
 
 @end

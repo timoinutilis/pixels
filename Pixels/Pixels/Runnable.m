@@ -22,6 +22,15 @@
     return self;
 }
 
+- (void)setError:(NSError *)error
+{
+    // don't overwrite existing error
+    if (!_error)
+    {
+        _error = error;
+    }
+}
+
 - (void)prepare
 {
     [self prepareNodes:self.nodes pass:PrePassInit];
