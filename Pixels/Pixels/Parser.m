@@ -65,7 +65,34 @@
         self.error = [NSError programErrorWithCode:LRCErrorCodeParse
                                             reason:[NSString stringWithFormat:@"Expected %@", [Token stringForType:tokenType printable:YES]]
                                              token:self.token];
-        return;
+    }
+}
+
+- (void)accept:(TType)tokenType1 and:(TType)tokenType2
+{
+    Token *errorToken;
+    if (self.token.type != tokenType1)
+    {
+        errorToken = self.token;
+    }
+    else
+    {
+        [self accept:tokenType1];
+        if (self.token.type != tokenType2)
+        {
+            errorToken = self.token;
+        }
+        else
+        {
+            [self accept:tokenType2];
+        }
+    }
+    
+    if (errorToken)
+    {
+        self.error = [NSError programErrorWithCode:LRCErrorCodeParse
+                                            reason:[NSString stringWithFormat:@"Expected %@ %@", [Token stringForType:tokenType1 printable:YES], [Token stringForType:tokenType2 printable:YES]]
+                                             token:errorToken];
     }
 }
 
@@ -95,6 +122,10 @@
     while (self.currentTokenIndex < self.tokens.count)
     {
         Node *node = [self acceptCommandLine];
+        if (self.error)
+        {
+            return nil;
+        }
         if (node)
         {
             [nodes addObject:node];
@@ -109,6 +140,10 @@
     while (self.currentTokenIndex < self.tokens.count && ([self isCommand] || [self isLabel] || self.token.type == TTypeSymEol))
     {
         Node *node = [self acceptCommandLine];
+        if (self.error)
+        {
+            return nil;
+        }
         if (node)
         {
             [nodes addObject:node];
@@ -446,7 +481,11 @@
             [self accept:TTypeSymElse];
             if (self.token.type == TTypeSymIf)
             {
-                node.elseCommands = @[[self acceptIf]];
+                Node *elseCommand = [self acceptIf];
+                if (elseCommand)
+                {
+                    node.elseCommands = @[elseCommand];
+                }
                 blockClosed = YES;
             }
             else
@@ -457,18 +496,25 @@
         }
         if (!blockClosed)
         {
-            [self accept:TTypeSymEnd];
-            [self accept:TTypeSymIf];
+            [self accept:TTypeSymEnd and:TTypeSymIf];
         }
     }
     else
     {
         // single line
-        node.commands = @[[self acceptCommand]];
+        Node *command = [self acceptCommand];
+        if (command)
+        {
+            node.commands = @[command];
+        }
         if (self.token.type == TTypeSymElse)
         {
             [self accept:TTypeSymElse];
-            node.elseCommands = @[[self acceptCommand]];
+            Node *elseCommand = [self acceptCommand];
+            if (elseCommand)
+            {
+                node.elseCommands = @[elseCommand];
+            }
         }
     }
     return node;
@@ -670,8 +716,7 @@
 - (Node *)acceptDefSprite
 {
     DefSpriteNode *node = [[DefSpriteNode alloc] init];
-    [self accept:TTypeSymDef];
-    [self accept:TTypeSymSprite];
+    [self accept:TTypeSymDef and:TTypeSymSprite];
     node.imageExpression = [self acceptExpression];
     [self accept:TTypeSymComma];
     node.dataVariable = [self acceptVariable];
@@ -681,8 +726,7 @@
 - (Node *)acceptSpritePalette
 {
     SpritePaletteNode *node = [[SpritePaletteNode alloc] init];
-    [self accept:TTypeSymSprite];
-    [self accept:TTypeSymPalette];
+    [self accept:TTypeSymSprite and:TTypeSymPalette];
     node.nExpression = [self acceptExpression];
     [self accept:TTypeSymComma];
     node.color1Expression = [self acceptOptionalExpression];
@@ -720,8 +764,7 @@
 - (Node *)acceptSpriteOff
 {
     SpriteOffNode *node = [[SpriteOffNode alloc] init];
-    [self accept:TTypeSymSprite];
-    [self accept:TTypeSymOff];
+    [self accept:TTypeSymSprite and:TTypeSymOff];
     node.nExpression = [self acceptOptionalExpression];
     return node;
 }
@@ -761,8 +804,12 @@
             }
             default: {
                 self.error = [NSError programErrorWithCode:LRCErrorCodeParse reason:@"Expected constant" token:self.token];
-                return nil;
             }
+        }
+        
+        if (self.error)
+        {
+            return nil;
         }
         
         [constants addObject:constantNode];
@@ -818,8 +865,7 @@
 - (Node *)acceptOnEndGoto
 {
     OnEndGotoNode *node = [[OnEndGotoNode alloc] init];
-    [self accept:TTypeSymOn];
-    [self accept:TTypeSymEnd];
+    [self accept:TTypeSymOn and:TTypeSymEnd];
     if (self.token.type == TTypeSymGoto)
     {
         [self accept:TTypeSymGoto];
@@ -831,8 +877,7 @@
 
 - (Node *)acceptDefSound
 {
-    [self accept:TTypeSymDef];
-    [self accept:TTypeSymSound];
+    [self accept:TTypeSymDef and:TTypeSymSound];
     if (self.token.type == TTypeSymLine)
     {
         [self accept:TTypeSymLine];
@@ -884,8 +929,7 @@
 - (Node *)acceptSoundOff
 {
     SoundOffNode *node = [[SoundOffNode alloc] init];
-    [self accept:TTypeSymSound];
-    [self accept:TTypeSymOff];
+    [self accept:TTypeSymSound and:TTypeSymOff];
     node.voiceExpression = [self acceptOptionalExpression];
     return node;
 }
@@ -985,6 +1029,10 @@
     Node *node = [self acceptExpressionLevel:level + 1];
     while ([operators indexOfObject:@(self.token.type)] != NSNotFound)
     {
+        if (self.error)
+        {
+            return nil;
+        }
         Operator2Node *newNode = [[Operator2Node alloc] init];
         newNode.token = self.token;
         newNode.leftExpression = node;
@@ -1122,8 +1170,7 @@
         }
         case TTypeSymText: {
             TextWidthNode *node = [[TextWidthNode alloc] init];
-            [self accept:TTypeSymText];
-            [self accept:TTypeSymWidth];
+            [self accept:TTypeSymText and:TTypeSymWidth];
             [self accept:TTypeSymBracketOpen];
             node.valueExpression = [self acceptExpression];
             [self accept:TTypeSymBracketClose];
@@ -1323,6 +1370,10 @@
         do
         {
             Node *indexExpression = [self acceptExpression];
+            if (self.error)
+            {
+                return nil;
+            }
             [indexExpressions addObject:indexExpression];
             more = (self.token.type == TTypeSymComma);
             if (more)
@@ -1343,6 +1394,10 @@
     do
     {
         VariableNode *variable = [self acceptVariable];
+        if (self.error)
+        {
+            return nil;
+        }
         [variables addObject:variable];
         more = (self.token.type == TTypeSymComma);
         if (more)
@@ -1360,6 +1415,10 @@
     do
     {
         Node *expression = [self acceptExpression];
+        if (self.error)
+        {
+            return nil;
+        }
         [expressions addObject:expression];
         more = (self.token.type == TTypeSymComma);
         if (more)

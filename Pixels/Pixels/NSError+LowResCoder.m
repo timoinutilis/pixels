@@ -43,6 +43,11 @@ NSString *const LRCErrorDomain = @"com.inutilis.LowResCoder.ErrorDomain";
                                    token:node.token];
 }
 
++ (NSError *)divisionByZeroErrorWithNode:(Node *)node
+{
+    return [NSError programErrorWithCode:LRCErrorCodeDivisionByZero reason:@"Division by zero" token:node.token];
+}
+
 - (NSUInteger)programPosition
 {
     if (self.userInfo[@"position"])

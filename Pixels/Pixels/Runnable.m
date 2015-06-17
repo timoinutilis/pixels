@@ -34,7 +34,10 @@
 - (void)prepare
 {
     [self prepareNodes:self.nodes pass:PrePassInit];
-    [self prepareNodes:self.nodes pass:PrePassCheckSemantic];
+    if (!self.error)
+    {
+        [self prepareNodes:self.nodes pass:PrePassCheckSemantic];
+    }
 }
 
 - (void)prepareNodes:(NSArray *)nodes pass:(PrePass)pass
@@ -42,6 +45,10 @@
     for (Node *node in nodes)
     {
         [node prepareWithRunnable:self pass:pass];
+        if (self.error)
+        {
+            return;
+        }
     }
 }
 

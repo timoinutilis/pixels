@@ -399,7 +399,7 @@ NSString *const CoachMarkIDHelp = @"CoachMarkIDHelp";
             
             if (runnable.error)
             {
-                if (errorPtr) *errorPtr = parser.error;
+                if (errorPtr) *errorPtr = runnable.error;
             }
             else
             {

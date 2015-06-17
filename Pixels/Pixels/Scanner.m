@@ -196,9 +196,10 @@
             {
                 NSUInteger symbLen = symbol.length;
                 BOOL symbolIsAlphaNum = [self.charSetAlphaNum characterIsMember:[symbol characterAtIndex:0]];
-                for (NSUInteger symbPos = 0; symbPos <= symbLen && textPos + symbPos < len; symbPos++)
+                for (NSUInteger symbPos = 0; symbPos <= symbLen && textPos + symbPos <= len; symbPos++)
                 {
-                    unichar textCharacter = [text characterAtIndex:textPos + symbPos];
+                    NSUInteger charPos = textPos + symbPos;
+                    unichar textCharacter = (charPos < len) ? [text characterAtIndex:charPos] : '\n';
                     
                     if (symbPos < symbLen)
                     {

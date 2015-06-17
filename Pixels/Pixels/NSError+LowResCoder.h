@@ -16,6 +16,7 @@ typedef NS_ENUM(NSInteger, LRCErrorCode) {
     LRCErrorCodeTypeMismatch,
     LRCErrorCodeInvalidParameter,
     LRCErrorCodeUndefinedLabel,
+    LRCErrorCodeDivisionByZero,
     LRCErrorCodeSemantic,
     LRCErrorCodeRuntime
 };
@@ -29,6 +30,7 @@ typedef NS_ENUM(NSInteger, LRCErrorCode) {
 + (NSError *)typeMismatchErrorWithNode:(Node *)node;
 + (NSError *)invalidParameterErrorWithNode:(Node *)node value:(float)value;
 + (NSError *)undefinedLabelErrorWithNode:(Node *)node label:(NSString *)label;
++ (NSError *)divisionByZeroErrorWithNode:(Node *)node;
 
 - (NSUInteger)programPosition;
 
