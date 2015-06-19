@@ -12,6 +12,7 @@
 #import <StoreKit/StoreKit.h>
 #import <Parse/Parse.h>
 #import "CommunityModel.h"
+#import "AppStyle.h"
 
 @interface AppDelegate ()
 @end
@@ -30,6 +31,8 @@
     NSString *parseAppID = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"ParseAppID"];
     NSString *parseClientKey = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"ParseClientKey"];
     [Parse setApplicationId:parseAppID clientKey:parseClientKey];
+    
+    [AppStyle setAppearance];
         
     return YES;
 }

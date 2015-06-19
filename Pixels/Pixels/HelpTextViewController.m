@@ -9,7 +9,6 @@
 #import "HelpTextViewController.h"
 #import "HelpTableViewController.h"
 #import "HelpContent.h"
-#import "AppStyle.h"
 
 @interface HelpTextViewController ()
 
@@ -37,10 +36,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    [AppStyle styleNavigationController:self.navigationController];
-    self.view.backgroundColor = [AppStyle brightColor];
-    self.webView.backgroundColor = [AppStyle brightColor];
     
     self.webView.delegate = self;
     

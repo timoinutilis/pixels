@@ -9,6 +9,7 @@
 #import "CommSourceCodeViewController.h"
 #import "CommunityModel.h"
 #import "UIViewController+CommUtils.h"
+#import "AppStyle.h"
 
 @interface CommSourceCodeViewController ()
 
@@ -21,8 +22,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     
+    self.view.backgroundColor = [AppStyle editorColor];
+    self.textView.backgroundColor = [AppStyle editorColor];
+    self.textView.textColor = [AppStyle tintColor];
+    self.textView.tintColor = [AppStyle brightColor];
+    self.textView.indicatorStyle = UIScrollViewIndicatorStyleWhite;
+
     self.textView.text = self.post.program.sourceCode;
 }
 

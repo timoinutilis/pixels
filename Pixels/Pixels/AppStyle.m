@@ -11,14 +11,29 @@
 
 @implementation AppStyle
 
-+ (void)styleNavigationController:(UINavigationController *)nav
++ (void)setAppearance
 {
-    nav.view.tintColor = [AppStyle darkTintColor];
-    nav.navigationBar.barTintColor = [AppStyle barColor];
-    nav.navigationBar.tintColor = [AppStyle tintColor];
-    nav.toolbar.barTintColor = [AppStyle barColor];
-    nav.toolbar.tintColor = [AppStyle tintColor];
-    nav.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [AppStyle darkColor]};
+    // App tint color
+    UIWindow *window = (UIWindow *)[UIApplication sharedApplication].windows.firstObject;
+    window.tintColor = [AppStyle darkTintColor];
+    
+    // Bars
+    [UINavigationBar appearance].barTintColor = [AppStyle barColor];
+    [UINavigationBar appearance].tintColor = [AppStyle tintColor];
+    [UINavigationBar appearance].translucent = NO;
+    [UINavigationBar appearance].titleTextAttributes = @{NSForegroundColorAttributeName: [AppStyle darkColor]};
+    [UIToolbar appearance].barTintColor = [AppStyle barColor];
+    [UIToolbar appearance].tintColor = [AppStyle tintColor];
+    [UIToolbar appearance].translucent = NO;
+    
+    // View
+    [UIWebView appearance].backgroundColor = [AppStyle brightColor];
+    [UITableView appearance].backgroundColor = [AppStyle brightColor];
+    [UITableViewCell appearance].backgroundColor = [AppStyle brightColor];
+    [UICollectionView appearance].backgroundColor = [AppStyle brightColor];
+    [UITextView appearanceWhenContainedIn:[UITableViewCell class], nil].backgroundColor = [AppStyle brightColor];
+    
+    //TODO labels! root views!
 }
 
 + (UIColor *)barColor
@@ -49,7 +64,6 @@
 + (UIColor *)editorColor
 {
     return [UIColor colorWithHex:0x0e2a27 alpha:1.0f];
-//    return [UIColor colorWithHex:0x292a41 alpha:1.0f];
 }
 
 + (UIColor *)alertTintColor

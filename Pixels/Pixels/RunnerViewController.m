@@ -17,7 +17,6 @@
 #import "AudioPlayer.h"
 #import "AppController.h"
 #import "CoachMarkView.h"
-#import "AppStyle.h"
 #import "Runnable.h"
 #import <GameController/GameController.h>
 
@@ -252,7 +251,6 @@ NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
             [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                 [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
             }]];
-            alert.view.tintColor = [AppStyle alertTintColor];
             [self presentViewController:alert animated:YES completion:nil];
             
             self.runner.endRequested = NO;

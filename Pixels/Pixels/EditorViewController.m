@@ -97,7 +97,6 @@ NSString *const CoachMarkIDHelp = @"CoachMarkIDHelp";
                                                                        message:@"Tap \"Paste from Transfer\" in the text edit menu to paste it into your source code."
                                                                 preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-        alert.view.tintColor = [AppStyle alertTintColor];
         [self presentViewController:alert animated:YES completion:nil];
     }
     else if (self.project.isDefault.boolValue)
@@ -181,7 +180,6 @@ NSString *const CoachMarkIDHelp = @"CoachMarkIDHelp";
             [self.sourceCodeTextView becomeFirstResponder];
         }]];
         
-        alert.view.tintColor = [AppStyle alertTintColor];
         [self presentViewController:alert animated:YES completion:nil];
         return NO;
     }
@@ -205,7 +203,6 @@ NSString *const CoachMarkIDHelp = @"CoachMarkIDHelp";
     {
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Example programs cannot be deleted." message:nil preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-        alert.view.tintColor = [AppStyle alertTintColor];
         [self presentViewController:alert animated:YES completion:nil];
     }
     else if (self.sourceCodeTextView.text.length == 0)
@@ -222,7 +219,6 @@ NSString *const CoachMarkIDHelp = @"CoachMarkIDHelp";
         
         [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
         
-        alert.view.tintColor = [AppStyle alertTintColor];
         [self presentViewController:alert animated:YES completion:nil];
     }
 }
@@ -246,7 +242,6 @@ NSString *const CoachMarkIDHelp = @"CoachMarkIDHelp";
     
     [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
     
-    alert.view.tintColor = [AppStyle alertTintColor];
     [self presentViewController:alert animated:YES completion:nil];
 }
 
@@ -256,7 +251,6 @@ NSString *const CoachMarkIDHelp = @"CoachMarkIDHelp";
     {
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Example programs cannot be renamed." message:nil preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-        alert.view.tintColor = [AppStyle alertTintColor];
         [self presentViewController:alert animated:YES completion:nil];
     }
     else
@@ -277,7 +271,6 @@ NSString *const CoachMarkIDHelp = @"CoachMarkIDHelp";
         
         [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
         
-        alert.view.tintColor = [AppStyle alertTintColor];
         [self presentViewController:alert animated:YES completion:nil];
     }
 }
@@ -332,7 +325,6 @@ NSString *const CoachMarkIDHelp = @"CoachMarkIDHelp";
         [alert addAction:[UIAlertAction actionWithTitle:@"More Info" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             [self performSegueWithIdentifier:@"Upgrade" sender:self];
         }]];
-        alert.view.tintColor = [AppStyle alertTintColor];
         [self presentViewController:alert animated:YES completion:nil];
 
         return;
@@ -369,7 +361,6 @@ NSString *const CoachMarkIDHelp = @"CoachMarkIDHelp";
             self.sourceCodeTextView.selectedRange = range;
             [self.sourceCodeTextView becomeFirstResponder];
         }]];
-        alert.view.tintColor = [AppStyle alertTintColor];
         [self presentViewController:alert animated:YES completion:nil];
     }
 }

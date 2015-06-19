@@ -29,10 +29,7 @@
 {
     [super viewDidLoad];
     
-    [AppStyle styleNavigationController:self.navigationController];
     self.view.backgroundColor = [AppStyle brightColor];
-    self.titleLabel.textColor = [AppStyle darkColor];
-    self.descriptionLabel.textColor = [AppStyle darkColor];
     self.upgradedLabel.textColor = [AppStyle barColor];
     
     if ([SKPaymentQueue canMakePayments] && [AppController sharedController].purchaseState == PurchaseStateUninitialized)

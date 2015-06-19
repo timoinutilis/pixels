@@ -267,4 +267,10 @@ typedef NS_ENUM(NSInteger, CellTag) {
     self.textLabel.textColor = self.contentView.tintColor;
 }
 
+- (void)tintColorDidChange
+{
+    [super tintColorDidChange];
+    self.textLabel.textColor = self.contentView.tintColor;
+}
+
 @end

@@ -27,14 +27,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    [AppStyle styleNavigationController:self.navigationController];
-    self.view.backgroundColor = [AppStyle brightColor];
-    self.tableView.separatorColor = [AppStyle barColor];
-    
+        
     self.separatorView.separatorColor = self.tableView.separatorColor;
-    self.titleLabel.textColor = [AppStyle darkColor];
-    self.versionLabel.textColor = [AppStyle darkColor];
     self.versionLabel.text = [NSString stringWithFormat:@"Version %@", self.appVersion];
     self.copyrightLabel.textColor = [AppStyle barColor];
     
@@ -78,8 +72,6 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     NSNumber *index = self.menuIndices[indexPath.row];
     cell.textLabel.text = self.menuTitles[index.integerValue];
-    cell.textLabel.textColor = [AppStyle darkColor];
-    cell.backgroundColor = [AppStyle brightColor];
     return cell;
 }
 

@@ -252,6 +252,12 @@
     self.textLabel.textColor = self.contentView.tintColor;
 }
 
+- (void)tintColorDidChange
+{
+    [super tintColorDidChange];
+    self.textLabel.textColor = self.contentView.tintColor;
+}
+
 - (void)setDisabled:(BOOL)disabled wheel:(BOOL)wheel
 {
     if (disabled)

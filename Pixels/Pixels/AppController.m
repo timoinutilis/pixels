@@ -7,7 +7,6 @@
 //
 
 #import "AppController.h"
-#import "AppStyle.h"
 #import <Parse/Parse.h>
 
 NSString *const FullVersionProductID = @"fullversion";
@@ -60,7 +59,6 @@ NSString *const InfoIDNews = @"InfoIDNews";
 
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-    alert.view.tintColor = [AppStyle alertTintColor];
     
     [vc presentViewController:alert animated:YES completion:nil];
 }

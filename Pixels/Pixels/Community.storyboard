@@ -5,12 +5,12 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--Menu-->
+        <!--Community Menu-->
         <scene sceneID="SO3-tF-MdQ">
             <objects>
                 <tableViewController clearsSelectionOnViewWillAppear="NO" id="swO-wf-6bs" customClass="CommMasterViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="lyL-nt-E8w">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
@@ -51,7 +51,9 @@
                             <outlet property="delegate" destination="swO-wf-6bs" id="skB-rY-Mbo"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Menu" id="8IW-Vc-57b">
+                    <extendedEdge key="edgesForExtendedLayout"/>
+                    <navigationItem key="navigationItem" title="Community Menu" id="8IW-Vc-57b">
+                        <barButtonItem key="backBarButtonItem" title="Menu" id="DIt-lx-b7M"/>
                         <barButtonItem key="leftBarButtonItem" title="Close" id="Coj-mP-aYn">
                             <connections>
                                 <action selector="onDoneTapped:" destination="swO-wf-6bs" id="cLi-Qn-YhQ"/>
@@ -84,7 +86,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="CommDetailView" id="AS4-Ac-pfc" customClass="CommDetailViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="interactive" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="ovN-r1-QPa">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
@@ -244,7 +246,7 @@
                                                 <constraint firstAttribute="width" constant="32" id="NZd-Xw-3IB"/>
                                             </constraints>
                                         </imageView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" text="00/00/2050" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DLo-wj-oa8">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" text="00/00/2050" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DLo-wj-oa8">
                                             <rect key="frame" x="48" y="30" width="59" height="14"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -265,6 +267,7 @@
                                         <constraint firstItem="aCn-Yc-1tY" firstAttribute="leading" secondItem="ljC-i4-bqg" secondAttribute="trailing" constant="8" id="Eax-1r-eRi"/>
                                         <constraint firstItem="aCn-Yc-1tY" firstAttribute="centerY" secondItem="3Nk-Fn-Nnv" secondAttribute="centerY" constant="0.5" id="K27-wm-P1q"/>
                                         <constraint firstItem="DLo-wj-oa8" firstAttribute="top" secondItem="aCn-Yc-1tY" secondAttribute="bottom" constant="2" id="Qfu-S7-exf"/>
+                                        <constraint firstAttribute="trailing" secondItem="DLo-wj-oa8" secondAttribute="trailing" priority="750" id="ajf-JL-lL1"/>
                                         <constraint firstItem="ljC-i4-bqg" firstAttribute="leading" secondItem="LwT-a8-abS" secondAttribute="leadingMargin" id="bdH-ZL-xfK"/>
                                         <constraint firstItem="DLo-wj-oa8" firstAttribute="leading" secondItem="ljC-i4-bqg" secondAttribute="trailing" constant="8" id="gZG-ug-LRA"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="DLo-wj-oa8" secondAttribute="bottom" id="hbM-fb-zbu"/>
@@ -285,7 +288,7 @@
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="G8f-BL-phE" id="GrM-qS-w3j">
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" text="00/00/2050" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="w2y-TD-Nes">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" text="00/00/2050" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="w2y-TD-Nes">
                                             <rect key="frame" x="8" y="30" width="59" height="14"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -309,6 +312,7 @@
                                         <constraint firstItem="0ZD-lr-cSE" firstAttribute="centerY" secondItem="rAM-5n-Zcu" secondAttribute="centerY" id="Wcd-Wl-ldg"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="w2y-TD-Nes" secondAttribute="bottom" id="YoI-9s-RmF"/>
                                         <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="0ZD-lr-cSE" secondAttribute="trailing" priority="999" constant="8" id="n8n-ye-7hp"/>
+                                        <constraint firstAttribute="trailing" secondItem="w2y-TD-Nes" secondAttribute="trailing" priority="750" id="p39-dJ-ODT"/>
                                         <constraint firstItem="rAM-5n-Zcu" firstAttribute="leading" secondItem="GrM-qS-w3j" secondAttribute="leadingMargin" id="u8N-Va-a5u"/>
                                     </constraints>
                                 </tableViewCellContentView>
@@ -324,6 +328,7 @@
                             <outlet property="delegate" destination="AS4-Ac-pfc" id="Jvj-Lc-tDE"/>
                         </connections>
                     </tableView>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" id="k5D-Jf-65v"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                 </tableViewController>
@@ -360,6 +365,7 @@
                             <outlet property="delegate" destination="KiV-df-CG5" id="myl-qY-PWG"/>
                         </connections>
                     </tableView>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="THg-Zt-Vwm" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -655,6 +661,7 @@
                             <outlet property="delegate" destination="gW4-UF-hxM" id="Fty-hU-3Nj"/>
                         </connections>
                     </tableView>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" id="SlP-TI-OHv"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                 </tableViewController>
@@ -671,13 +678,13 @@
                         <viewControllerLayoutGuide type="bottom" id="doW-dm-yup"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="rYM-tM-BEi">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="64" width="480" height="256"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9ok-Xn-h4I">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <rect key="frame" x="0.0" y="0.0" width="480" height="256"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" name="Menlo-Regular" family="Menlo" pointSize="16"/>
+                                <fontDescription key="fontDescription" name="Menlo-Regular" family="Menlo" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                         </subviews>
@@ -689,6 +696,7 @@
                             <constraint firstAttribute="bottom" secondItem="9ok-Xn-h4I" secondAttribute="bottom" id="SC5-oB-cbJ"/>
                         </constraints>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Source Code" id="aKz-KH-GH5">
                         <barButtonItem key="rightBarButtonItem" title="Get Program" id="L1C-u6-CQ5">
                             <connections>
@@ -697,6 +705,8 @@
                         </barButtonItem>
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="textView" destination="9ok-Xn-h4I" id="gVH-qG-ECa"/>
                     </connections>
@@ -742,7 +752,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="CommLogInView" modalPresentationStyle="formSheet" id="7LF-M9-tBs" customClass="CommLogInViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="8ev-cD-TmJ">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
@@ -789,6 +799,7 @@
                             <outlet property="delegate" destination="7LF-M9-tBs" id="wb2-EL-Wcj"/>
                         </connections>
                     </tableView>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Please Log In" id="wxf-w8-Aob">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="2tz-3n-7dH">
                             <connections>
@@ -811,7 +822,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="CommEditUserView" modalPresentationStyle="formSheet" id="gDV-Oi-g37" customClass="CommEditUserViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="90i-6K-xrf">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
@@ -873,6 +884,7 @@
                             <outlet property="delegate" destination="gDV-Oi-g37" id="p5N-vG-dWa"/>
                         </connections>
                     </tableView>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Edit User" id="Rg6-K3-oBM">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="DpH-gn-c4f">
                             <connections>
@@ -900,7 +912,7 @@
         <image name="star_small" width="14" height="15"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="4LD-8J-91a"/>
         <segue reference="9aI-id-JMf"/>
+        <segue reference="5Vc-mm-s6x"/>
     </inferredMetricsTieBreakers>
 </document>

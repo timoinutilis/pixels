@@ -12,7 +12,6 @@
 #import "HelpTextViewController.h"
 #import "AppController.h"
 #import "CoachMarkView.h"
-#import "AppStyle.h"
 #import "UIViewController+LowResCoder.h"
 
 NSString *const ExplorerRefreshAddedProjectNotification = @"ExplorerRefreshAddedProjectNotification";
@@ -35,9 +34,6 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    [AppStyle styleNavigationController:self.navigationController];
-    self.collectionView.backgroundColor = [AppStyle brightColor];
     
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(onAddTapped:)];
     UIBarButtonItem *helpButton = [[UIBarButtonItem alloc] initWithTitle:@"Help" style:UIBarButtonItemStylePlain target:self action:@selector(onHelpTapped:)];
@@ -275,7 +271,6 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 - (void)awakeFromNib
 {
     self.nameLabel.text = @"Project Name";
-    self.nameLabel.textColor = [AppStyle darkColor];
     CALayer *imageLayer = self.previewImageView.layer;
     imageLayer.cornerRadius = 20;
     imageLayer.masksToBounds = YES;

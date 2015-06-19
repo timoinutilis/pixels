@@ -10,7 +10,8 @@
 
 @interface AppStyle : NSObject
 
-+ (void)styleNavigationController:(UINavigationController *)nav;
++ (void)setAppearance;
+
 + (UIColor *)barColor;
 + (UIColor *)tintColor;
 + (UIColor *)darkTintColor;

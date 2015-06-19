@@ -46,14 +46,15 @@ LOOP
 <p>How about sending your first program to a friend? Tap on the Share button (in the bottom left corner) and select Mail. Choose an address and tap the Send button. You may want to send it also to yourself to have a back-up.</p>
 <p>You are ready now! Well, maybe you don't know programming yet, so you should read the other chapters, too! Also try all the other included programs and learn from them! You can duplicate them and experiment with the copies.</p>
 
-<h2 id="_Publish">Publish your work!</h2>
-<p>When you created something and you are happy with it, you should share it with the LowRes Coder community! The Share menu offers you a "LowRes Coder Web" action. Use it to send your program to us. We will review it and publish it on the official <a href="http://lowres.inutilis.com">LowRes Coder website</a>.</p>
+<h2 id="_Publish">Publish your work in the community!</h2>
+<p>LowRes Coder has an integrated community network. You can create you own profile page to post your programs or status updates. Follow other programers to try and discuss their works.</p>
+<p>When you created something and you are happy with it, you should share it! The Share menu offers you a "Community" action. Use it to post your program on your profile page. We keep an eye on most of the activity, if we like something, we will share it in the official LowRes Coder news!</p>
 
 <h1 id="BASIC-principles">Basic principles</h1>
 
 <h2 id="_Variables">Variables</h2>
 <p>Variables are the names used to refer to values stored in the memory of a computer. They are used to hold the results of calculations in a program. The contents of a variable can be changed at any time.<br/>
-You can choose any variable names in your programs, with the following restrictions: They must begin with a letter and cannot start with an existing LowRes Coder command or function name. Allowed characters are the letters A to Z, the numbers 0 to 9 and the underscore "_", but no spaces.<br/>
+You can choose any variable names in your programs, with the following restrictions: They must begin with a letter and cannot match with an existing LowRes Coder command or function name (but they can begin with one). Allowed characters are the letters A to Z, the numbers 0 to 9 and the underscore "_", but no spaces.<br/>
 In LowRes Coder you don't have to declare variables. They start to exist automatically when they appear the first time in your program.</p>
 
 <h3 id="_Numbers">Numbers</h3>
@@ -301,6 +302,19 @@ BOX 0,0 TO 63,63
 <p>BAR paints a filled rectangle with the diagonal corners at the coordinates <i>x1,y1</i> and <i>x2,y2</i>.</p>
 <pre class="exm">
 BAR 2,20 TO 61,43
+</pre>
+
+<h3 id="_PAINT">PAINT</h3>
+<pre>PAINT x,y</pre>
+<p>PAINT flood fills a closed area, starting at the coordinates <i>x,y</i>.</p>
+<pre class="exm">
+COLOR 8
+BOX 2,20 TO 61,43
+LINE 2,20 TO 61,43
+COLOR 7
+PAINT 60,21
+COLOR 9
+PAINT 3,42
 </pre>
 
 <h3 id="_TEXT">TEXT</h3>
