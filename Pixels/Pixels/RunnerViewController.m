@@ -239,7 +239,9 @@ NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
             }
             else
             {
-                [runner runCommand];
+                @autoreleasepool {
+                    [runner runCommand];
+                }
             }
         }
         

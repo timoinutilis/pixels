@@ -804,6 +804,7 @@
             }
             default: {
                 self.error = [NSError programErrorWithCode:LRCErrorCodeParse reason:@"Expected constant" token:self.token];
+                return nil;
             }
         }
         

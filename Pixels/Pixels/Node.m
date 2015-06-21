@@ -2261,6 +2261,7 @@ NSString *const TRANSFER = @"TRANSFER";
             if (rightFloat == 0.0)
             {
                 runner.error = [NSError divisionByZeroErrorWithNode:self];
+                return @(0);
             }
             float result = ((NSNumber *)leftValue).floatValue / rightFloat;
             return @(result);
@@ -2270,6 +2271,7 @@ NSString *const TRANSFER = @"TRANSFER";
             if (rightInt == 0)
             {
                 runner.error = [NSError divisionByZeroErrorWithNode:self];
+                return @(0);
             }
             int result = ((NSNumber *)leftValue).intValue % rightInt;
             return @(result);

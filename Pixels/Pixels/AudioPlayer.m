@@ -112,26 +112,24 @@ static double PitchToFrequency(int pitch);
     {
         _isActive = YES;
         
-        OSStatus result;
-        
         AVAudioSession* session = [AVAudioSession sharedInstance];
         [session setCategory:AVAudioSessionCategoryAmbient error:nil];
         [session setPreferredSampleRate:_player.sampleRate error:nil];
         _player.sampleRate = session.sampleRate;
         _dataFormat.mSampleRate = session.sampleRate;
         
-        result = AudioQueueNewOutput(&_dataFormat, OutputBufferCallback, &_player, NULL, kCFRunLoopCommonModes, 0, &_queue);
+        AudioQueueNewOutput(&_dataFormat, OutputBufferCallback, &_player, NULL, kCFRunLoopCommonModes, 0, &_queue);
         
         AudioQueueBufferRef buffer;
         for (int i = 0; i < 3; i++)
         {
-            result = AudioQueueAllocateBuffer(_queue, 1024, &buffer);
+            AudioQueueAllocateBuffer(_queue, 1024, &buffer);
             buffer->mAudioDataByteSize = buffer->mAudioDataBytesCapacity;
             RenderAudio(buffer, &_player);
-            result = AudioQueueEnqueueBuffer(_queue, buffer, 0, NULL);
+            AudioQueueEnqueueBuffer(_queue, buffer, 0, NULL);
         }
         
-        result = AudioQueueStart(_queue, NULL);
+        AudioQueueStart(_queue, NULL);
     }
 }
 

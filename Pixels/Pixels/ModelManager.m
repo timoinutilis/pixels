@@ -153,40 +153,30 @@ NSString *const ModelManagerDidAddProjectNotification = @"ModelManagerDidAddProj
 
 - (void)createDefaultProjects
 {
-    [self.temporaryContext performBlockAndWait:^{
+    NSError *error;
+    NSURL *url = [[NSBundle mainBundle] URLForResource:@"DefaultProjects" withExtension:@"json" subdirectory:@"Default Projects"];
+    NSData *jsonData = [NSData dataWithContentsOfURL:url];
+    NSArray *jsonProjects = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
+    
+    for (NSDictionary *jsonProject in jsonProjects)
+    {
+        Project *project = [NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:self.temporaryContext];
+        project.isDefault = @YES;
+        project.name = jsonProject[@"name"];
+        project.createdAt = [NSDate date];
+        project.sourceCode = jsonProject[@"sourceCode"];
         
-        NSError *error;
-        NSURL *url = [[NSBundle mainBundle] URLForResource:@"DefaultProjects" withExtension:@"json" subdirectory:@"Default Projects"];
-        NSData *jsonData = [NSData dataWithContentsOfURL:url];
-        NSArray *jsonProjects = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
-        
-        for (NSDictionary *jsonProject in jsonProjects)
-        {
-            Project *project = [NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:self.temporaryContext];
-            project.isDefault = @YES;
-            project.name = jsonProject[@"name"];
-            project.createdAt = [NSDate date];
-            project.sourceCode = jsonProject[@"sourceCode"];
-            
-            NSString *iconName = jsonProject[@"icon"];
-            NSURL *iconUrl = [[NSBundle mainBundle] URLForResource:iconName withExtension:@"png" subdirectory:@"Default Projects"];
-            project.iconData = [NSData dataWithContentsOfURL:iconUrl];
-        }
-        
-    }];
+        NSString *iconName = jsonProject[@"icon"];
+        NSURL *iconUrl = [[NSBundle mainBundle] URLForResource:iconName withExtension:@"png" subdirectory:@"Default Projects"];
+        project.iconData = [NSData dataWithContentsOfURL:iconUrl];
+    }
 }
 
 - (Project *)createNewProject
 {
-    __block Project *project;
-    
-    [self.managedObjectContext performBlockAndWait:^{
-        
-        project = [NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:self.managedObjectContext];
-        project.name = @"Unnamed Program";
-        project.createdAt = [NSDate date];
-        
-    }];
+    Project *project = [NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:self.managedObjectContext];
+    project.name = @"Unnamed Program";
+    project.createdAt = [NSDate date];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:ModelManagerDidAddProjectNotification object:self userInfo:@{@"project": project}];
     
@@ -195,26 +185,16 @@ NSString *const ModelManagerDidAddProjectNotification = @"ModelManagerDidAddProj
 
 - (void)deleteProject:(Project *)project
 {
-    [self.managedObjectContext performBlockAndWait:^{
-        
-        [self.managedObjectContext deleteObject:project];
-        
-    }];
+    [self.managedObjectContext deleteObject:project];
 }
 
 - (Project *)duplicateProject:(Project *)project sourceCode:(NSString *)sourceCode
 {
-    __block Project *newProject;
-    
-    [self.managedObjectContext performBlockAndWait:^{
-        
-        newProject = [NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:self.managedObjectContext];
-        newProject.name = [NSString stringWithFormat:@"Copy of %@", project.name];
-        newProject.iconData = project.iconData;
-        newProject.sourceCode = sourceCode ? sourceCode : project.sourceCode;
-        newProject.createdAt = [NSDate date];
-        
-    }];
+    Project *newProject = [NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:self.managedObjectContext];
+    newProject.name = [NSString stringWithFormat:@"Copy of %@", project.name];
+    newProject.iconData = project.iconData;
+    newProject.sourceCode = sourceCode ? sourceCode : project.sourceCode;
+    newProject.createdAt = [NSDate date];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:ModelManagerDidAddProjectNotification object:self userInfo:@{@"project": newProject}];
     
