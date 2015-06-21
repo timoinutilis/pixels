@@ -8,6 +8,8 @@
 
 #import "AppStyle.h"
 #import "UIColor+Utils.h"
+#import "BackgroundView.h"
+#import "TextLabel.h"
 
 @implementation AppStyle
 
@@ -26,14 +28,18 @@
     [UIToolbar appearance].tintColor = [AppStyle tintColor];
     [UIToolbar appearance].translucent = NO;
     
-    // View
+    // Backgrounds
+    [BackgroundView appearance].backgroundColor = [AppStyle brightColor];
     [UIWebView appearance].backgroundColor = [AppStyle brightColor];
     [UITableView appearance].backgroundColor = [AppStyle brightColor];
     [UITableViewCell appearance].backgroundColor = [AppStyle brightColor];
     [UICollectionView appearance].backgroundColor = [AppStyle brightColor];
     [UITextView appearanceWhenContainedIn:[UITableViewCell class], nil].backgroundColor = [AppStyle brightColor];
     
-    //TODO labels! root views!
+    // Texts
+    [TextLabel appearance].textColor = [AppStyle darkColor];
+    [UITextField appearance].textColor = [AppStyle darkColor];
+    [UITextView appearance].textColor = [AppStyle darkColor];
 }
 
 + (UIColor *)barColor

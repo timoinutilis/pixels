@@ -29,7 +29,6 @@
 {
     [super viewDidLoad];
     
-    self.view.backgroundColor = [AppStyle brightColor];
     self.upgradedLabel.textColor = [AppStyle barColor];
     
     if ([SKPaymentQueue canMakePayments] && [AppController sharedController].purchaseState == PurchaseStateUninitialized)
