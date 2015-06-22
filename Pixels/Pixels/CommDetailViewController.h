@@ -27,6 +27,7 @@ typedef NS_ENUM(NSInteger, CommListMode) {
 
 @interface CommProfileCell : UITableViewCell
 @property (nonatomic) LCCUser *user;
+- (void)toggleDetailSize;
 @end
 
 @interface CommInfoCell : UITableViewCell

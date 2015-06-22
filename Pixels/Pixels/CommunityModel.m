@@ -10,6 +10,7 @@
 
 NSString *const CurrentUserChangeNotification = @"CurrentUserChangeNotification";
 NSString *const FollowsChangeNotification = @"FollowsChangeNotification";
+NSString *const PostDeleteNotification = @"PostDeleteNotification";
 
 NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
 

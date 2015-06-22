@@ -34,6 +34,7 @@ static NSString *const SectionPosts = @"Posts";
 @property CommListMode mode;
 @property NSMutableArray *posts;
 @property NSArray *sections;
+@property CommProfileCell *profileCell;
 @property CommWriteStatusCell *writeStatusCell;
 @property ExtendedActivityIndicatorView *activityIndicator;
 
@@ -55,15 +56,18 @@ static NSString *const SectionPosts = @"Posts";
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     
     self.writeStatusCell = [self.tableView dequeueReusableCellWithIdentifier:@"CommWriteStatusCell"];
+    self.profileCell = [self.tableView dequeueReusableCellWithIdentifier:@"CommProfileCell"];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onFollowsChanged:) name:FollowsChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserChanged:) name:CurrentUserChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onPostDeleted:) name:PostDeleteNotification object:nil];
 }
 
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:FollowsChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:CurrentUserChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:PostDeleteNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -119,6 +123,20 @@ static NSString *const SectionPosts = @"Posts";
     }
 }
 
+- (void)onPostDeleted:(NSNotification *)notification
+{
+    NSString *deletedPostId = notification.userInfo[@"postId"];
+    for (LCCPost *post in self.posts)
+    {
+        if ([post.objectId isEqualToString:deletedPostId])
+        {
+            [self.posts removeObject:post];
+            [self.tableView reloadData];
+            return;
+        }
+    }
+}
+
 - (void)updateData
 {
     switch (self.mode)
@@ -165,7 +183,6 @@ static NSString *const SectionPosts = @"Posts";
         }
         case CommListModeProfile: {
             self.title = self.user.username;
-//            self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:self.user.username style:UIBarButtonItemStylePlain target:nil action:nil];
             self.sections = [self.user isMe] ? @[SectionInfo, SectionPostStatus, SectionPosts] : @[SectionInfo, SectionPosts];
             
             PFQuery *query = [PFQuery queryWithClassName:[LCCPost parseClassName]];
@@ -221,6 +238,12 @@ static NSString *const SectionPosts = @"Posts";
         button.enabled = NO;
         [[CommunityModel sharedInstance] followUser:self.user];
     }
+}
+
+- (IBAction)onMoreTapped:(id)sender
+{
+    [self.profileCell toggleDetailSize];
+    [self.tableView reloadData];
 }
 
 - (IBAction)onSendStatusTapped:(id)sender
@@ -320,9 +343,11 @@ static NSString *const SectionPosts = @"Posts";
         {
             if (indexPath.row == 0)
             {
-                CommProfileCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommProfileCell" forIndexPath:indexPath];
-                cell.user = self.user;
-                return cell;
+                if (self.profileCell.user != self.user)
+                {
+                    self.profileCell.user = self.user;
+                }
+                return self.profileCell;
             }
             else
             {
@@ -412,6 +437,8 @@ static NSString *const SectionPosts = @"Posts";
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *profileDetailLabel;
 @property (weak, nonatomic) IBOutlet UIButton *actionButton;
+@property (weak, nonatomic) IBOutlet UIButton *moreButton;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *detailHeightConstraint;
 @end
 
 @implementation CommProfileCell
@@ -453,6 +480,47 @@ static NSString *const SectionPosts = @"Posts";
         {
             [self.actionButton setTitle:@"Follow" forState:UIControlStateNormal];
         }
+    }
+    
+    [self updateMoreButton];
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    if (self.profileDetailLabel.frame.size.height >= self.detailHeightConstraint.constant)
+    {
+        self.moreButton.hidden = NO;
+        [self updateMoreButton];
+    }
+    else
+    {
+        self.moreButton.hidden = YES;
+    }
+}
+
+- (void)toggleDetailSize
+{
+    if (self.detailHeightConstraint.priority < 999)
+    {
+        self.detailHeightConstraint.priority = 999;
+    }
+    else
+    {
+        self.detailHeightConstraint.priority = 1;
+    }
+    [self updateMoreButton];
+}
+
+- (void)updateMoreButton
+{
+    if (self.detailHeightConstraint.priority < 999)
+    {
+        [self.moreButton setTitle:@"Less" forState:UIControlStateNormal];
+    }
+    else
+    {
+        [self.moreButton setTitle:@"More" forState:UIControlStateNormal];
     }
 }
 

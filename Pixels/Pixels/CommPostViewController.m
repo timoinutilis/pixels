@@ -20,7 +20,8 @@
 typedef NS_ENUM(NSInteger, CellTag) {
     CellTagNoAction,
     CellTagSourceCode,
-    CellTagPostAuthor
+    CellTagPostAuthor,
+    CellTagDelete
 };
 
 @interface CommPostViewController ()
@@ -105,7 +106,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
             }
             else if (error)
             {
-                [self showAlertWithTitle:@"Could not load user" message:error.userInfo[@"error"] block:nil];
+                [self showAlertWithTitle:@"Could not load user." message:error.userInfo[@"error"] block:nil];
             }
             
         }];
@@ -133,7 +134,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
         }
         else if (error)
         {
-            [self showAlertWithTitle:@"Could not load comments" message:error.userInfo[@"error"] block:nil];
+            [self showAlertWithTitle:@"Could not load comments." message:error.userInfo[@"error"] block:nil];
         }
         
     }];
@@ -157,7 +158,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
             }
             else if (error)
             {
-                [self showAlertWithTitle:@"Could not load source code" message:error.userInfo[@"error"] block:nil];
+                [self showAlertWithTitle:@"Could not load source code." message:error.userInfo[@"error"] block:nil];
             }
             
         }];
@@ -256,11 +257,11 @@ typedef NS_ENUM(NSInteger, CellTag) {
         if (succeeded)
         {
             [[CommunityModel sharedInstance] onPostedWithDate:post.createdAt];
-            [self showAlertWithTitle:@"Shared successfully" message:nil block:nil];
+            [self showAlertWithTitle:@"Shared successfully." message:nil block:nil];
         }
         else if (error)
         {
-            [self showAlertWithTitle:@"Could not share post" message:error.userInfo[@"error"] block:nil];
+            [self showAlertWithTitle:@"Could not share post." message:error.userInfo[@"error"] block:nil];
         }
         
     }];
@@ -304,11 +305,31 @@ typedef NS_ENUM(NSInteger, CellTag) {
             }
             else if (error)
             {
-                [self showAlertWithTitle:@"Could not send comment" message:error.userInfo[@"error"] block:nil];
+                [self showAlertWithTitle:@"Could not send comment." message:error.userInfo[@"error"] block:nil];
             }
             
         }];
     }
+}
+
+- (void)deletePost
+{
+    [self.activityIndicator increaseActivity];
+    
+    [self.post deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        
+        [self.activityIndicator decreaseActivity];
+        if (succeeded)
+        {
+            [[NSNotificationCenter defaultCenter] postNotificationName:PostDeleteNotification object:self userInfo:@{@"postId": self.post.objectId}];
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+        else if (error)
+        {
+            [self showAlertWithTitle:@"Could not delete post." message:error.userInfo[@"error"] block:nil];
+        }
+        
+    }];
 }
 
 #pragma mark - Table view data source
@@ -324,7 +345,12 @@ typedef NS_ENUM(NSInteger, CellTag) {
     // Return the number of rows in the section.
     if (section == 0)
     {
-        return (self.post.type == LCCPostTypeProgram ? 3 : 2);
+        NSInteger num = (self.post.type == LCCPostTypeProgram ? 3 : 2);
+        if ([self.post.user isMe])
+        {
+            num++; // "delete" cell
+        }
+        return num;
     }
     else if (section == 1)
     {
@@ -370,11 +396,19 @@ typedef NS_ENUM(NSInteger, CellTag) {
             cell.tag = CellTagPostAuthor;
             return cell;
         }
-        else if (indexPath.row == 2)
+        else if (indexPath.row == 2 && self.post.type == LCCPostTypeProgram)
         {
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MenuCell" forIndexPath:indexPath];
             cell.textLabel.text = @"Source Code";
             cell.tag = CellTagSourceCode;
+            return cell;
+        }
+        else // row 2 for status or 3 for program
+        {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DeleteCell" forIndexPath:indexPath];
+            cell.textLabel.text = @"Delete";
+            cell.textLabel.textColor = [UIColor redColor];
+            cell.tag = CellTagDelete;
             return cell;
         }
     }
@@ -425,6 +459,19 @@ typedef NS_ENUM(NSInteger, CellTag) {
             {
                 [tableView deselectRowAtIndexPath:indexPath animated:YES];
             }
+            break;
+        }
+        case CellTagDelete: {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Do you really want to delete this post?" message:nil preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+                [self deletePost];
+            }]];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+            
+            [self presentViewController:alert animated:YES completion:nil];
+            [tableView deselectRowAtIndexPath:indexPath animated:YES];
             break;
         }
         default:

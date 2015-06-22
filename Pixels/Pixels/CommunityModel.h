@@ -16,6 +16,7 @@
 
 extern NSString *const CurrentUserChangeNotification;
 extern NSString *const FollowsChangeNotification;
+extern NSString *const PostDeleteNotification;
 
 extern NSString *const UserDefaultsLogInKey;
 
