@@ -30,6 +30,8 @@ NSString *const CoachMarkIDStart = @"CoachMarkIDStart";
 NSString *const CoachMarkIDShare = @"CoachMarkIDShare";
 NSString *const CoachMarkIDHelp = @"CoachMarkIDHelp";
 
+static int s_editorInstancesCount = 0;
+
 
 @interface EditorViewController ()
 
@@ -45,6 +47,12 @@ NSString *const CoachMarkIDHelp = @"CoachMarkIDHelp";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    s_editorInstancesCount++;
+    if (s_editorInstancesCount > 1)
+    {
+        @throw [NSException exceptionWithName:@"TooManyEditorInstances" reason:@"Too many editor instances" userInfo:nil];
+    }
     
     self.view.backgroundColor = [AppStyle editorColor];
     self.sourceCodeTextView.backgroundColor = [AppStyle editorColor];
@@ -80,6 +88,8 @@ NSString *const CoachMarkIDHelp = @"CoachMarkIDHelp";
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:ModelManagerWillSaveDataNotification object:nil];
+    
+    s_editorInstancesCount--;
 }
 
 - (void)viewDidAppear:(BOOL)animated
