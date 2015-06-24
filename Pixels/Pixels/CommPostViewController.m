@@ -31,6 +31,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
 @property ProgramTitleCell *titleCell;
 @property WriteCommentCell *writeCommentCell;
 @property ExtendedActivityIndicatorView *activityIndicator;
+@property BOOL wasDeleted;
 @end
 
 @implementation CommPostViewController
@@ -54,11 +55,22 @@ typedef NS_ENUM(NSInteger, CellTag) {
     [self loadAll];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserChanged:) name:CurrentUserChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onPostDeleted:) name:PostDeleteNotification object:nil];
 }
 
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:CurrentUserChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:PostDeleteNotification object:nil];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    if (self.wasDeleted)
+    {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -71,6 +83,22 @@ typedef NS_ENUM(NSInteger, CellTag) {
 {
     self.post = post;
     self.mode = mode;
+}
+
+- (void)onPostDeleted:(NSNotification *)notification
+{
+    NSString *deletedPostId = notification.userInfo[@"postId"];
+    if ([deletedPostId isEqualToString:self.post.objectId])
+    {
+        if (self.navigationController.topViewController == self)
+        {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+        else
+        {
+            self.wasDeleted = YES;
+        }
+    }
 }
 
 - (void)updateView
@@ -322,7 +350,6 @@ typedef NS_ENUM(NSInteger, CellTag) {
         if (succeeded)
         {
             [[NSNotificationCenter defaultCenter] postNotificationName:PostDeleteNotification object:self userInfo:@{@"postId": self.post.objectId}];
-            [self.navigationController popViewControllerAnimated:YES];
         }
         else if (error)
         {
@@ -468,7 +495,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
                 [self deletePost];
             }]];
             
-            [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+            [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDefault handler:nil]];
             
             [self presentViewController:alert animated:YES completion:nil];
             [tableView deselectRowAtIndexPath:indexPath animated:YES];

@@ -227,7 +227,7 @@ static int s_editorInstancesCount = 0;
             [self deleteProject];
         }]];
         
-        [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+        [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDefault handler:nil]];
         
         [self presentViewController:alert animated:YES completion:nil];
     }

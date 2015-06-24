@@ -36,22 +36,23 @@
                         @"Full version",
                         @"Rate in App Store",
                         @"More from Inutilis",
+                        @"Roadmap and Feedback",
                         @"Contact",
                         @"DEV Code"];
     
     if ([AppController sharedController].isFullVersion)
     {
-        self.menuIndices = @[@1, @2, @3
+        self.menuIndices = @[@1, @3, @4, @2
 #ifdef DEV
-                             , @4
+                             , @5
 #endif
                              ];
     }
     else
     {
-        self.menuIndices = @[@0, @1, @2, @3
+        self.menuIndices = @[@0, @1, @3, @4, @2
 #ifdef DEV
-                             , @4
+                             , @5
 #endif
                              ];
     }
@@ -98,11 +99,18 @@
     }
     else if (index.integerValue == 3)
     {
+        // Future
+        NSURL *url = [NSURL URLWithString:@"http://lowres.inutilis.com/future/"];
+        [[UIApplication sharedApplication] openURL:url];
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    }
+    else if (index.integerValue == 4)
+    {
         // Contact
         [self sendMail];
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
-    else if (index.integerValue == 4)
+    else if (index.integerValue == 5)
     {
         // DEV Code
         [self showCode];
@@ -115,6 +123,7 @@
     if ([MFMailComposeViewController canSendMail])
     {
         MFMailComposeViewController *mailViewController = [[MFMailComposeViewController alloc] init];
+        mailViewController.view.tintColor = [AppStyle tintColor];
         mailViewController.mailComposeDelegate = self;
         
         UIDevice *device = [UIDevice currentDevice];
