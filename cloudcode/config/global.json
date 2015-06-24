@@ -1,0 +1,18 @@
+{
+  "global": {
+    "parseVersion": "1.4.2"
+  },
+  "applications": {
+    "LowRes Coder": {
+      "applicationId": "JjXUGeQFrN79s4TcIunronsM13ehsBy0Pa1FLIUA",
+      "masterKey": "g8mqpMyqSxN78OUfwmT7gwPLqOIQ4VqG4N0YWAg3"
+    },
+    "LowRes Coder Dev": {
+      "applicationId": "Kvptj1r1eu3uqU3xooGwuKXtqDoQQGF5bGRF4uh2",
+      "masterKey": "seVLqxpGkvBw6qZTfZEjEiO249IfsANPnPnYJbsM"
+    },
+    "_default": {
+      "link": "LowRes Coder"
+    }
+  }
+}

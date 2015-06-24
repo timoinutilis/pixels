@@ -126,14 +126,20 @@ static NSString *const SectionPosts = @"Posts";
 - (void)onPostDeleted:(NSNotification *)notification
 {
     NSString *deletedPostId = notification.userInfo[@"postId"];
-    for (LCCPost *post in self.posts)
+    BOOL changed = NO;
+    for (int i = (int)self.posts.count - 1; i >= 0; i--)
     {
-        if ([post.objectId isEqualToString:deletedPostId])
+        LCCPost *post = self.posts[i];
+        if (   [post.objectId isEqualToString:deletedPostId]
+            || [post.sharedPost.objectId isEqualToString:deletedPostId])
         {
-            [self.posts removeObject:post];
-            [self.tableView reloadData];
-            return;
+            [self.posts removeObjectAtIndex:i];
+            changed = YES;
         }
+    }
+    if (changed)
+    {
+        [self.tableView reloadData];
     }
 }
 
@@ -161,7 +167,7 @@ static NSString *const SectionPosts = @"Posts";
                     [self.activityIndicator decreaseActivity];
                     if (objects)
                     {
-                        self.posts = [NSMutableArray arrayWithArray:objects];
+                        self.posts = [self filteredNewsWithPosts:objects];
                         [self.tableView reloadData];
                         
                         // reset app icon badge
@@ -212,6 +218,26 @@ static NSString *const SectionPosts = @"Posts";
         case CommListModeUndefined:
             break;
     }
+}
+
+- (NSMutableArray *)filteredNewsWithPosts:(NSArray *)objects
+{
+    NSMutableSet *sharedPosts = [NSMutableSet setWithCapacity:objects.count];
+    NSMutableArray *filteredPosts = [NSMutableArray arrayWithCapacity:objects.count];
+    
+    for (LCCPost *post in objects)
+    {
+        if (post.sharedPost)
+        {
+            [sharedPosts addObject:post.sharedPost.objectId];
+        }
+        if (![sharedPosts containsObject:post.objectId])
+        {
+            [filteredPosts addObject:post];
+        }
+    }
+    
+    return filteredPosts;
 }
 
 - (IBAction)onActionTapped:(id)sender

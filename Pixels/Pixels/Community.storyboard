@@ -132,7 +132,7 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="Bto-6a-pRU" firstAttribute="top" secondItem="qjj-sk-LfZ" secondAttribute="bottom" id="0v2-0r-GVr"/>
-                                        <constraint firstItem="Bto-6a-pRU" firstAttribute="trailing" secondItem="TD5-Lg-rOg" secondAttribute="trailingMargin" id="GIY-bN-LI0"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="Bto-6a-pRU" secondAttribute="trailing" id="9pq-1S-lif"/>
                                         <constraint firstItem="Z4m-sp-bKt" firstAttribute="leading" secondItem="TD5-Lg-rOg" secondAttribute="leadingMargin" id="Gcp-he-ipP"/>
                                         <constraint firstItem="Bto-6a-pRU" firstAttribute="bottom" secondItem="TD5-Lg-rOg" secondAttribute="bottomMargin" id="LQQ-DZ-Z7c"/>
                                         <constraint firstItem="qjj-sk-LfZ" firstAttribute="trailing" secondItem="TD5-Lg-rOg" secondAttribute="trailingMargin" id="OaI-Dq-gx6"/>
