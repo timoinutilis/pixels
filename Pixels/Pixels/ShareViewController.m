@@ -267,9 +267,12 @@
 {
     [super awakeFromNib];
     self.headerLabel.text = @"Post this program to your community profile! If we like it, we will feature it in the news!";
-    CALayer *imageLayer = self.iconImageView.layer;
-    imageLayer.cornerRadius = 20;
-    imageLayer.masksToBounds = YES;
+    CALayer *layer = self.iconImageView.layer;
+    layer.masksToBounds = YES;
+    layer.cornerRadius = 6;
+    layer.borderWidth = 0.5;
+    layer.borderColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.25].CGColor;
+
 }
 
 @end

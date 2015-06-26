@@ -545,7 +545,7 @@ The upgrade is valid for all your devices and without time limit.</string>
                                 <color key="textColor" red="0.0" green="0.93333333333333335" blue="0.80392156862745101" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_about" translatesAutoresizingMaskIntoConstraints="NO" id="pcx-jG-qK2">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="icon_about" translatesAutoresizingMaskIntoConstraints="NO" id="pcx-jG-qK2">
                                 <rect key="frame" x="110" y="189" width="100" height="100"/>
                             </imageView>
                         </subviews>
@@ -602,7 +602,7 @@ The upgrade is valid for all your devices and without time limit.</string>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xvF-Tr-YGB" id="AQT-b1-zre">
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="(text)" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gnl-rd-zYM" customClass="TextLabel">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="(text)" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="208" translatesAutoresizingMaskIntoConstraints="NO" id="gnl-rd-zYM" customClass="TextLabel">
                                             <rect key="frame" x="104" y="8" width="208" height="80"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="highlightedColor"/>
@@ -619,7 +619,7 @@ The upgrade is valid for all your devices and without time limit.</string>
                                         <constraint firstItem="gnl-rd-zYM" firstAttribute="top" secondItem="AQT-b1-zre" secondAttribute="topMargin" id="cGP-kf-c0G"/>
                                         <constraint firstItem="bHI-XD-ggP" firstAttribute="leading" secondItem="AQT-b1-zre" secondAttribute="leadingMargin" id="gtv-gT-zPs"/>
                                         <constraint firstItem="gnl-rd-zYM" firstAttribute="leading" secondItem="bHI-XD-ggP" secondAttribute="trailing" constant="16" id="mr1-0q-LbJ"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="bHI-XD-ggP" secondAttribute="bottom" id="ndc-JR-Ni5"/>
+                                        <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="bHI-XD-ggP" secondAttribute="bottom" id="ndc-JR-Ni5"/>
                                         <constraint firstItem="gnl-rd-zYM" firstAttribute="bottom" secondItem="AQT-b1-zre" secondAttribute="bottomMargin" id="xIc-wa-q7K"/>
                                         <constraint firstItem="bHI-XD-ggP" firstAttribute="top" secondItem="AQT-b1-zre" secondAttribute="topMargin" id="xNO-8n-k8i"/>
                                         <constraint firstItem="gnl-rd-zYM" firstAttribute="trailing" secondItem="AQT-b1-zre" secondAttribute="trailingMargin" id="z1Z-Hx-IbQ"/>
