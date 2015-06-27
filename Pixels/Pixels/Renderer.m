@@ -295,7 +295,7 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
     }
 }
 
-- (void)putScreenX:(int)x Y:(int)y srcX:(int)srcX srcY:(int)srcY srcWidth:(int)srcWidth srcHeight:(int)srcHeight
+- (void)putScreenX:(int)x Y:(int)y srcX:(int)srcX srcY:(int)srcY srcWidth:(int)srcWidth srcHeight:(int)srcHeight transparency:(int)transparency
 {
     int px, py;
     if (srcWidth == 0 || srcHeight == 0)
@@ -323,7 +323,11 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
             px = ox + x;
             if (px >= 0 && py >= 0 && px < RendererSize && py < RendererSize)
             {
-                _pixelBuffer[_layerIndex][py][px] = _copyBuffer[srcY + oy][srcX + ox];
+                uint8_t color = _copyBuffer[srcY + oy][srcX + ox];
+                if (transparency == -1 || color != transparency)
+                {
+                    _pixelBuffer[_layerIndex][py][px] = color;
+                }
             }
         }
     }

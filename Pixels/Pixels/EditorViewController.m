@@ -123,7 +123,7 @@ static int s_editorInstancesCount = 0;
         if ([app isUnshownInfoID:CoachMarkIDShare])
         {
             [app onShowInfoID:CoachMarkIDShare];
-        [[CoachMarkView create] showWithText:@"Are you happy with your program? Share it with the community!" image:@"coach_share" container:self.navigationController.view complete:nil];
+            [[CoachMarkView create] showWithText:@"Are you happy with your program? Share it with the community!" image:@"coach_share" container:self.navigationController.view complete:nil];
         }
     }
     else if ([self.sourceCodeTextView.text isEqualToString:@""])
@@ -179,6 +179,7 @@ static int s_editorInstancesCount = 0;
     {
         self.examplesDontSaveWarningShowed = YES;
         
+        EditorViewController __weak *weakSelf = self;
         NSString *message = [AppController sharedController].isFullVersion
         ? @"If you want to keep your changes, you can duplicate the program to have your own copy."
         : @"Anyway you can still experiment with the program.";
@@ -188,7 +189,7 @@ static int s_editorInstancesCount = 0;
                                                                 preferredStyle:UIAlertControllerStyleAlert];
         
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            [self.sourceCodeTextView becomeFirstResponder];
+            [weakSelf.sourceCodeTextView becomeFirstResponder];
         }]];
         
         [self presentViewController:alert animated:YES completion:nil];
@@ -222,10 +223,11 @@ static int s_editorInstancesCount = 0;
     }
     else
     {
+        EditorViewController __weak *weakSelf = self;
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Do you really want to delete this program?" message:nil preferredStyle:UIAlertControllerStyleAlert];
         
         [alert addAction:[UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
-            [self deleteProject];
+            [weakSelf deleteProject];
         }]];
         
         [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDefault handler:nil]];
@@ -243,10 +245,11 @@ static int s_editorInstancesCount = 0;
 
 - (IBAction)onDuplicateTapped:(id)sender
 {
+    EditorViewController __weak *weakSelf = self;
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Do you want to make a copy of this program?" message:nil preferredStyle:UIAlertControllerStyleAlert];
     
     [alert addAction:[UIAlertAction actionWithTitle:@"Duplicate" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-        [[ModelManager sharedManager] duplicateProject:self.project sourceCode:self.sourceCodeTextView.text];
+        [[ModelManager sharedManager] duplicateProject:weakSelf.project sourceCode:weakSelf.sourceCodeTextView.text];
         [[ModelManager sharedManager] saveContext];
         [self.navigationController popViewControllerAnimated:YES];
     }]];
@@ -266,18 +269,20 @@ static int s_editorInstancesCount = 0;
     }
     else
     {
+        EditorViewController __weak *weakSelf = self;
+        
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Please enter new program name!" message:nil preferredStyle:UIAlertControllerStyleAlert];
 
         [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
-            textField.text = self.project.name;
+            textField.text = weakSelf.project.name;
             textField.clearButtonMode = UITextFieldViewModeAlways;
             textField.autocapitalizationType = UITextAutocapitalizationTypeWords;
         }];
         
         [alert addAction:[UIAlertAction actionWithTitle:@"Rename" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-            self.project.name = ((UITextField *)alert.textFields[0]).text;
-            self.navigationItem.title = self.project.name;
-            [self saveProject];
+            weakSelf.project.name = ((UITextField *)alert.textFields[0]).text;
+            weakSelf.navigationItem.title = weakSelf.project.name;
+            [weakSelf saveProject];
         }]];
         
         [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
@@ -324,13 +329,15 @@ static int s_editorInstancesCount = 0;
         && !self.project.isDefault.boolValue
         && sourceCode.countLines > EditorDemoMaxLines)
     {
+        EditorViewController __weak *weakSelf = self;
+        
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Please upgrade to full version!"
                                                                        message:[NSString stringWithFormat:@"The free version can only run programs with up to %d lines.", EditorDemoMaxLines]
                                                                 preferredStyle:UIAlertControllerStyleAlert];
         
         [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
         [alert addAction:[UIAlertAction actionWithTitle:@"More Info" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            [self performSegueWithIdentifier:@"Upgrade" sender:self];
+            [weakSelf performSegueWithIdentifier:@"Upgrade" sender:weakSelf];
         }]];
         [self presentViewController:alert animated:YES completion:nil];
 
@@ -360,13 +367,14 @@ static int s_editorInstancesCount = 0;
     {
         NSUInteger errorPosition = error.programPosition;
         NSString *line = [sourceCode substringWithLineAtIndex:errorPosition];
+        EditorViewController __weak *weakSelf = self;
         
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:error.localizedDescription message:line preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
         [alert addAction:[UIAlertAction actionWithTitle:@"Go to Error" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             NSRange range = NSMakeRange(errorPosition, 0);
-            self.sourceCodeTextView.selectedRange = range;
-            [self.sourceCodeTextView becomeFirstResponder];
+            weakSelf.sourceCodeTextView.selectedRange = range;
+            [weakSelf.sourceCodeTextView becomeFirstResponder];
         }]];
         [self presentViewController:alert animated:YES completion:nil];
     }

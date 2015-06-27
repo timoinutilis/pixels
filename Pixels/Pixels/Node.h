@@ -248,6 +248,7 @@
 @property Node *srcYExpression;
 @property Node *srcWidthExpression;
 @property Node *srcHeightExpression;
+@property Node *transparencyExpression;
 @end
 
 @interface DirectionPadNode : Node

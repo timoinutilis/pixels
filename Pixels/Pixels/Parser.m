@@ -984,6 +984,11 @@
         node.srcWidthExpression = [self acceptExpression];
         [self accept:TTypeSymComma];
         node.srcHeightExpression = [self acceptExpression];
+        if (self.token.type == TTypeSymComma)
+        {
+            [self accept:TTypeSymComma];
+            node.transparencyExpression = [self acceptExpression];
+        }
     }
     return node;
 }

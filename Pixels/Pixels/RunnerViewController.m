@@ -248,10 +248,11 @@ NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
         if (runner.error)
         {
             // runtime error!
+            RunnerViewController __weak *weakSelf = self;
             NSString *line = [self.project.sourceCode substringWithLineAtIndex:runner.error.programPosition];
             UIAlertController* alert = [UIAlertController alertControllerWithTitle:runner.error.localizedDescription message:line preferredStyle:UIAlertControllerStyleAlert];
             [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+                [weakSelf.presentingViewController dismissViewControllerAnimated:YES completion:nil];
             }]];
             [self presentViewController:alert animated:YES completion:nil];
             

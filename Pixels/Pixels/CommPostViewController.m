@@ -491,10 +491,11 @@ typedef NS_ENUM(NSInteger, CellTag) {
             break;
         }
         case CellTagDelete: {
+            CommPostViewController __weak *weakSelf = self;
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Do you really want to delete this post?" message:nil preferredStyle:UIAlertControllerStyleAlert];
             
             [alert addAction:[UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-                [self deletePost];
+                [weakSelf deletePost];
             }]];
             
             [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDefault handler:nil]];
