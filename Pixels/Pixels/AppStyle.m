@@ -10,6 +10,7 @@
 #import "UIColor+Utils.h"
 #import "BackgroundView.h"
 #import "TextLabel.h"
+#import "GORLabel.h"
 
 @implementation AppStyle
 
@@ -38,6 +39,7 @@
     
     // Texts
     [TextLabel appearance].textColor = [AppStyle darkColor];
+    [GORLabel appearance].textColor = [AppStyle darkColor];
     [UITextField appearance].textColor = [AppStyle darkColor];
     [UITextView appearance].textColor = [AppStyle darkColor];
 }

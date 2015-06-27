@@ -16,6 +16,7 @@
 #import "UIViewController+LowResCoder.h"
 #import "ExtendedActivityIndicatorView.h"
 #import "AppController.h"
+#import "GORCycleManager.h"
 
 typedef NS_ENUM(NSInteger, CellTag) {
     CellTagNoAction,
@@ -556,6 +557,10 @@ static NSString *const SectionPosts = @"Posts";
 @implementation CommInfoCell
 @end
 
+@interface CommWriteStatusCell()
+@property GORCycleManager *cycleManager;
+@end
+
 @implementation CommWriteStatusCell
 
 - (void)awakeFromNib
@@ -563,6 +568,8 @@ static NSString *const SectionPosts = @"Posts";
     [super awakeFromNib];
     self.textView.placeholderView = self.detailPlaceholderLabel;
     self.textView.hidePlaceholderWhenFirstResponder = YES;
+    
+    self.cycleManager = [[GORCycleManager alloc] initWithFields:@[self.titleTextField, self.textView]];
 }
 
 @end

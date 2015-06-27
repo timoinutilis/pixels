@@ -343,10 +343,12 @@ typedef NS_ENUM(NSInteger, CellTag) {
 - (void)deletePost
 {
     [self.activityIndicator increaseActivity];
+    self.view.userInteractionEnabled = NO;
     
     [self.post deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         
         [self.activityIndicator decreaseActivity];
+        self.view.userInteractionEnabled = YES;
         if (succeeded)
         {
             [[NSNotificationCenter defaultCenter] postNotificationName:PostDeleteNotification object:self userInfo:@{@"postId": self.post.objectId}];
@@ -394,7 +396,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
 {
     if (section == 0)
     {
-        return (self.post.type == LCCPostTypeProgram ? @"Program" : @"Status Update");
+        return (self.post.type == LCCPostTypeProgram ? [self.post categoryString] : @"Status Update");
     }
     else if (section == 1)
     {
@@ -573,15 +575,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
         self.titleLabel.text = post.title;
         self.programDetailLabel.text = post.detail;
         
-        NSString *date = [NSDateFormatter localizedStringFromDate:post.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
-        if (post.category == LCCPostCategoryStatus)
-        {
-            self.dateLabel.text = date;
-        }
-        else
-        {
-            self.dateLabel.text = [NSString stringWithFormat:@"%@ - %@", [post categoryString], date];
-        }
+        self.dateLabel.text = [NSDateFormatter localizedStringFromDate:post.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
         
         self.shareButton.enabled = ![post.user isMe];
     }

@@ -24,6 +24,7 @@
 #import "AppStyle.h"
 #import "UIViewController+LowResCoder.h"
 #import "NSError+LowResCoder.h"
+#import "Compiler.h"
 
 int const EditorDemoMaxLines = 24;
 NSString *const CoachMarkIDStart = @"CoachMarkIDStart";
@@ -291,10 +292,6 @@ static int s_editorInstancesCount = 0;
     {
         [self showAlertWithTitle:@"This program is empty" message:@"Please write something!" block:nil];
     }
-    else if (!self.project.iconData)
-    {
-        [self showAlertWithTitle:@"This program doesn't have an icon yet" message:@"Please start it once to create one automatically!" block:nil];
-    }
     else
     {
         [self saveProject];
@@ -344,7 +341,7 @@ static int s_editorInstancesCount = 0;
     
     if (transferSourceCode.length > 0)
     {
-        Runnable *runnable = [self compileSourceCode:transferSourceCode error:nil];
+        Runnable *runnable = [Compiler compileSourceCode:transferSourceCode error:nil];
         if (runnable)
         {
             transferDataNodes = runnable.dataNodes;
@@ -353,7 +350,7 @@ static int s_editorInstancesCount = 0;
     
     NSError *error;
     
-    Runnable *runnable = [self compileSourceCode:sourceCode error:&error];
+    Runnable *runnable = [Compiler compileSourceCode:sourceCode error:&error];
     if (runnable)
     {
         runnable.transferDataNodes = transferDataNodes;
@@ -375,41 +372,6 @@ static int s_editorInstancesCount = 0;
     }
 }
 
-- (Runnable *)compileSourceCode:(NSString *)sourceCode error:(NSError **)errorPtr
-{
-    Scanner *scanner = [[Scanner alloc] init];
-    NSArray *tokens = [scanner tokenizeText:sourceCode];
-    
-    if (scanner.error)
-    {
-        if (errorPtr) *errorPtr = scanner.error;
-    }
-    else if (tokens.count > 0)
-    {
-        Parser *parser = [[Parser alloc] init];
-        NSArray *nodes = [parser parseTokens:tokens];
-        
-        if (parser.error)
-        {
-            if (errorPtr) *errorPtr = parser.error;
-        }
-        else if (nodes.count > 0)
-        {
-            Runnable *runnable = [[Runnable alloc] initWithNodes:nodes];
-            [runnable prepare];
-            
-            if (runnable.error)
-            {
-                if (errorPtr) *errorPtr = runnable.error;
-            }
-            else
-            {
-                return runnable;
-            }
-        }
-    }
-    return nil;
-}
 
 - (void)run:(Runnable *)runnable
 {

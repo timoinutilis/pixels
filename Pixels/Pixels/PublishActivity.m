@@ -14,6 +14,7 @@ NSString *const LowResCoderShare = @"LowResCoderShare";
 
 @interface PublishActivity () <ShareViewControllerDelegate>
 @property Project *project;
+@property UIViewController *shareViewController;
 @end
 
 @implementation PublishActivity
@@ -25,7 +26,7 @@ NSString *const LowResCoderShare = @"LowResCoderShare";
 
 - (NSString *)activityType
 {
-    return @"LowResCoderShare";
+    return LowResCoderShare;
 }
 
 - (NSString *)activityTitle
@@ -46,11 +47,12 @@ NSString *const LowResCoderShare = @"LowResCoderShare";
 - (void)prepareWithActivityItems:(NSArray *)activityItems
 {
     self.project = activityItems[0];
+    self.shareViewController = [ShareViewController createShareWithDelegate:self project:self.project];
 }
 
 - (UIViewController *)activityViewController
 {
-    return [ShareViewController createShareWithDelegate:self project:self.project];
+    return self.shareViewController;
 }
 
 - (void)onClosedWithSuccess:(BOOL)success

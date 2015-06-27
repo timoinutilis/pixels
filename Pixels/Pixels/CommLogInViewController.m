@@ -9,8 +9,9 @@
 #import "CommLogInViewController.h"
 #import "CommunityModel.h"
 #import "UIViewController+LowResCoder.h"
+#import "GORCycleManager.h"
 
-@interface CommLogInViewController ()
+@interface CommLogInViewController () <UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *cancelButton;
 
@@ -23,6 +24,8 @@
 @property CommLogInButtonCell *registerButtonCell;
 
 @property (nonatomic) BOOL isBusy;
+@property GORCycleManager *loginCycleManager;
+@property GORCycleManager *signUpCycleManager;
 
 @end
 
@@ -39,6 +42,8 @@
 {
     [super viewDidLoad];
     
+    CommLogInViewController __weak *weakSelf = self;
+    
     self.dynamicRowHeights = NO;
 
     self.logInUsernameCell = [self.tableView dequeueReusableCellWithIdentifier:@"CommLogInInputCell"];
@@ -48,6 +53,8 @@
     self.logInButtonCell = [self.tableView dequeueReusableCellWithIdentifier:@"CommLogInButtonCell"];
     self.logInButtonCell.textLabel.text = @"Log In";
     
+    self.loginCycleManager = [[GORCycleManager alloc] initWithFields:@[self.logInUsernameCell.textField, self.logInPasswordCell.textField] endBlock:^{ [weakSelf onLogInTapped]; }];
+    
     self.registerUsernameCell = [self.tableView dequeueReusableCellWithIdentifier:@"CommLogInInputCell"];
     [self.registerUsernameCell setupAsUsername];
     self.registerPasswordCell = [self.tableView dequeueReusableCellWithIdentifier:@"CommLogInInputCell"];
@@ -56,7 +63,9 @@
     [self.registerPasswordVerifyCell setupAsPasswordVerify:YES];
     self.registerButtonCell = [self.tableView dequeueReusableCellWithIdentifier:@"CommLogInButtonCell"];
     self.registerButtonCell.textLabel.text = @"Register";
-    
+
+    self.signUpCycleManager = [[GORCycleManager alloc] initWithFields:@[self.registerUsernameCell.textField, self.registerPasswordCell.textField, self.registerPasswordVerifyCell.textField] endBlock:^{ [weakSelf onRegisterTapped]; }];
+
     [self setHeaderTitle:@"Log in with existing account" section:0];
     [self addCell:self.logInUsernameCell section:0];
     [self addCell:self.logInPasswordCell];
@@ -106,6 +115,12 @@
         }
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return NO;
 }
 
 - (void)onRegisterTapped

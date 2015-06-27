@@ -118,6 +118,8 @@
 		92E53DF71A5B3A1D00FE9F91 /* GORTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E53DF31A5B3A1D00FE9F91 /* GORTextView.m */; };
 		92E53DFA1A5B3AC200FE9F91 /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E53DF91A5B3AC200FE9F91 /* ShareViewController.m */; };
 		92EDC4421A54701D007824A5 /* Gamepad.m in Sources */ = {isa = PBXBuildFile; fileRef = 92EDC4411A54701D007824A5 /* Gamepad.m */; };
+		92F0C36A1B3EAF0B00000646 /* GORCycleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F0C3691B3EAF0B00000646 /* GORCycleManager.m */; };
+		92F0C36D1B3EBF6D00000646 /* Compiler.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F0C36C1B3EBF6D00000646 /* Compiler.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -328,6 +330,10 @@
 		92E53DF91A5B3AC200FE9F91 /* ShareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShareViewController.m; sourceTree = "<group>"; };
 		92EDC4401A54701D007824A5 /* Gamepad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Gamepad.h; sourceTree = "<group>"; };
 		92EDC4411A54701D007824A5 /* Gamepad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Gamepad.m; sourceTree = "<group>"; };
+		92F0C3681B3EAF0B00000646 /* GORCycleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GORCycleManager.h; sourceTree = "<group>"; };
+		92F0C3691B3EAF0B00000646 /* GORCycleManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GORCycleManager.m; sourceTree = "<group>"; };
+		92F0C36B1B3EBF6D00000646 /* Compiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Compiler.h; sourceTree = "<group>"; };
+		92F0C36C1B3EBF6D00000646 /* Compiler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Compiler.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -599,6 +605,8 @@
 		9276F3B51A1D29D30060E909 /* Compiler */ = {
 			isa = PBXGroup;
 			children = (
+				92F0C36B1B3EBF6D00000646 /* Compiler.h */,
+				92F0C36C1B3EBF6D00000646 /* Compiler.m */,
 				9272C1471A1DE2D000E97957 /* Token.h */,
 				9272C1481A1DE2D000E97957 /* Token.m */,
 				92C98F401A20F2F000215AE9 /* Node.h */,
@@ -746,6 +754,8 @@
 				928FB8981A5C804200EA377F /* GORSeparatorView.m */,
 				92E36D1D1ADD679D00C16CBE /* GORLabel.h */,
 				92E36D1E1ADD679D00C16CBE /* GORLabel.m */,
+				92F0C3681B3EAF0B00000646 /* GORCycleManager.h */,
+				92F0C3691B3EAF0B00000646 /* GORCycleManager.m */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -876,6 +886,7 @@
 				927D345B1B1CB0D700967AE7 /* CommEditUserViewController.m in Sources */,
 				92E36D1C1ADD2D4300C16CBE /* AppStyle.m in Sources */,
 				925A01A91A1E67F900A321E6 /* Parser.m in Sources */,
+				92F0C36D1B3EBF6D00000646 /* Compiler.m in Sources */,
 				9293D46D1B219BCC009A156B /* ExtendedActivityIndicatorView.m in Sources */,
 				924F832C1B0B5B6E00B96C91 /* CommMasterViewController.m in Sources */,
 				9267E8831A5AF61B00D08C42 /* AFSecurityPolicy.m in Sources */,
@@ -913,6 +924,7 @@
 				92884F1B1B0F25B30032623D /* SDImageCache.m in Sources */,
 				921B234C1A9E3DA800C45AFA /* EditorTextView.m in Sources */,
 				9231159F1A444A6B00624201 /* RendererView.m in Sources */,
+				92F0C36A1B3EAF0B00000646 /* GORCycleManager.m in Sources */,
 				92C98F421A20F2F000215AE9 /* Node.m in Sources */,
 				926C72C71A2B579E00448EAB /* RunnerViewController.m in Sources */,
 				92E53DFA1A5B3AC200FE9F91 /* ShareViewController.m in Sources */,

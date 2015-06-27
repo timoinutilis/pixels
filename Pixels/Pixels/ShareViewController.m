@@ -12,6 +12,8 @@
 #import "CommunityModel.h"
 #import "CommLogInViewController.h"
 #import "UIViewController+LowResCoder.h"
+#import "GORCycleManager.h"
+#import "Compiler.h"
 
 @interface ShareViewController ()
 
@@ -24,6 +26,7 @@
 @property UITableViewCell *categoryDemoCell;
 
 @property (nonatomic) LCCPostCategory selectedCategory;
+@property GORCycleManager *cycleManager;
 
 @property (nonatomic) IBOutlet UIBarButtonItem *sendItem;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *cancelItem;
@@ -85,12 +88,37 @@
     
     self.selectedCategory = LCCPostCategoryUndefined;
     
+    self.cycleManager = [[GORCycleManager alloc] initWithFields:@[self.titleCell.textField, self.descriptionCell.textView]];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLogin:) name:CurrentUserChangeNotification object:nil];
 }
 
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:CurrentUserChangeNotification object:nil];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    if (!self.project.iconData)
+    {
+        [self showAlertWithTitle:@"This program doesn't have an icon yet." message:@"Please start it once to create one!" block:^{
+            [self onCancelTapped:nil];
+        }];
+    }
+    else
+    {
+        NSError *error;
+        [Compiler compileSourceCode:self.project.sourceCode error:&error];
+        if (error)
+        {
+            [self showAlertWithTitle:@"This program has errors." message:@"Please fix them before posting!" block:^{
+                [self onCancelTapped:nil];
+            }];
+        }
+    }
 }
 
 - (void)setSelectedCategory:(LCCPostCategory)selectedCategory
@@ -266,7 +294,7 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.headerLabel.text = @"Post this program to your community profile! If we like it, we will feature it in the news!";
+    self.headerLabel.text = @"Post this program to your community profile! If we like it, we will feature it in the LowRes Coder news!";
     CALayer *layer = self.iconImageView.layer;
     layer.masksToBounds = YES;
     layer.cornerRadius = 6;

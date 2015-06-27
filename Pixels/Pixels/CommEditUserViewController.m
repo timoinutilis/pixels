@@ -9,6 +9,7 @@
 #import "CommEditUserViewController.h"
 #import "CommunityModel.h"
 #import "UIViewController+LowResCoder.h"
+#import "GORCycleManager.h"
 
 @interface CommEditUserViewController ()
 
@@ -19,6 +20,7 @@
 @property CommEditUserInputCell *passwordVerifyCell;
 @property CommEditUserTextViewCell *aboutCell;
 @property LCCUser *user;
+@property GORCycleManager *cycleManager;
 
 @end
 
@@ -54,6 +56,8 @@
     [self setHeaderTitle:@"Write something about you" section:1];
     self.aboutCell = [self.tableView dequeueReusableCellWithIdentifier:@"CommEditUserTextViewCell"];
     [self addCell:self.aboutCell];
+    
+    self.cycleManager = [[GORCycleManager alloc] initWithFields:@[self.usernameCell.textField, self.passwordCell.textField, self.passwordVerifyCell.textField, self.aboutCell.textView]];
     
     // set user data
     self.user = (LCCUser *)[PFUser currentUser];
