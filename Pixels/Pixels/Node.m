@@ -1412,6 +1412,44 @@ NSString *const TRANSFER = @"TRANSFER";
 
 
 
+@implementation SoundEndNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.voiceExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    BOOL isPlaying = NO;
+    if (self.voiceExpression)
+    {
+        NSNumber *voice = [self.voiceExpression evaluateNumberWithRunner:runner min:0 max:AudioNumVoices - 1];
+        if (runner.error)
+        {
+            return nil;
+        }
+        
+        isPlaying = [runner.audioPlayer voiceIsPlayingQueue:voice.intValue];
+    }
+    else
+    {
+        for (int i = 0; i < AudioNumVoices; i++)
+        {
+            if ([runner.audioPlayer voiceIsPlayingQueue:i])
+            {
+                isPlaying = YES;
+                break;
+            }
+        }
+    }
+    return @(!isPlaying);
+}
+
+@end
+
+
+
 @implementation LayerNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
