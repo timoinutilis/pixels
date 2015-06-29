@@ -40,7 +40,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
 {
     [super awakeFromNib];
     self.activityIndicator = [[ExtendedActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
 }
 
 - (void)viewDidLoad
@@ -49,6 +49,12 @@ typedef NS_ENUM(NSInteger, CellTag) {
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 44;
+    
+    // simple workaround for Split View bug, Table View doesn't adjust for Keyboard on iPhone
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
+    {
+        self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 252, 0);
+    }
     
     self.writeCommentCell = [self.tableView dequeueReusableCellWithIdentifier:@"WriteCommentCell"];
     
