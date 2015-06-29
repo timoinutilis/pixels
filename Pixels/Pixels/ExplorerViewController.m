@@ -270,6 +270,7 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 
 - (void)awakeFromNib
 {
+    [super awakeFromNib];
     self.nameLabel.text = @"Project Name";
     CALayer *imageLayer = self.previewImageView.layer;
     imageLayer.cornerRadius = 20;

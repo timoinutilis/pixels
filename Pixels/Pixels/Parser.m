@@ -1241,6 +1241,18 @@
             [self accept:self.token.type];
             return node;
         }
+        case TTypeSymSound: {
+            SoundEndNode *node = [[SoundEndNode alloc] init];
+            [self accept:TTypeSymSound];
+            [self accept:TTypeSymEnd];
+            if (self.token.type == TTypeSymBracketOpen)
+            {
+                [self accept:TTypeSymBracketOpen];
+                node.voiceExpression = [self acceptExpression];
+                [self accept:TTypeSymBracketClose];
+            }
+            return node;
+        }
         case TTypeSymAbs:
         case TTypeSymAtn:
         case TTypeSymCos:

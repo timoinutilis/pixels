@@ -615,6 +615,22 @@ SOUND 0,61,24,0
 <pre>SOUND OFF [voice]</pre>
 <p>Stops the sound of <i>voice</i> and clears its queue. If the <i>voice</i> parameter is omitted, all voices will be stopped.</p>
 
+<h3 id="_SOUNDEND">=SOUND END</h3>
+<pre>v=SOUND END[(voice)]</pre>
+<p>This function returns TRUE, if the queue of the given <i>voice</i> is empty. A queue is already empty when its last sound is still playing. If the parameter is omitted, all voices are checked.</p>
+<pre class="exm">
+DO
+  IF SOUND END THEN
+    SOUND 0,49,12,1
+    SOUND 0,53,12
+    SOUND 0,56,12
+    SOUND 0,61,24,0
+    SOUND 0,0,12
+  END IF
+  WAIT 0.1
+LOOP
+</pre>
+
 <h3 id="_DEFSOUND">DEF SOUND</h3>
 <pre>DEF SOUND instr,wave[,pulse[,time]]</pre>
 <p>Defines one of up to 64 different instruments which can be used with SOUND, so <i>instr</i> can be a value from 0 to 63.</p>

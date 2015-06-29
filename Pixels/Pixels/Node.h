@@ -230,6 +230,10 @@
 @property Node *voiceExpression;
 @end
 
+@interface SoundEndNode : Node
+@property Node *voiceExpression;
+@end
+
 @interface LayerNode : Node
 @property Node *nExpression;
 @end

@@ -45,6 +45,8 @@ static NSString *const SectionPosts = @"Posts";
 
 - (void)awakeFromNib
 {
+    [super awakeFromNib];
+    
     self.activityIndicator = [[ExtendedActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];    
 }
@@ -55,6 +57,13 @@ static NSString *const SectionPosts = @"Posts";
     
     self.tableView.estimatedRowHeight = 53;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
+    
+    // simple workaround for Split View bug, Table View doesn't adjust for Keyboard on iPhone
+    if (   self.mode == CommListModeProfile && [self.user isMe] // only me has text input
+        && [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
+    {
+        self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 252, 0);
+    }
     
     self.writeStatusCell = [self.tableView dequeueReusableCellWithIdentifier:@"CommWriteStatusCell"];
     self.profileCell = [self.tableView dequeueReusableCellWithIdentifier:@"CommProfileCell"];
