@@ -264,6 +264,7 @@
 
 - (void)awakeFromNib
 {
+    [super awakeFromNib];
     self.textLabel.textColor = self.contentView.tintColor;
 }
 

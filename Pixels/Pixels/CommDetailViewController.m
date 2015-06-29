@@ -45,6 +45,8 @@ static NSString *const SectionPosts = @"Posts";
 
 - (void)awakeFromNib
 {
+    [super awakeFromNib];
+    
     self.activityIndicator = [[ExtendedActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];    
 }
