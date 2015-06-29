@@ -977,17 +977,28 @@
     if (self.token.type == TTypeSymComma)
     {
         [self accept:TTypeSymComma];
-        node.srcXExpression = [self acceptExpression];
-        [self accept:TTypeSymComma];
-        node.srcYExpression = [self acceptExpression];
-        [self accept:TTypeSymComma];
-        node.srcWidthExpression = [self acceptExpression];
-        [self accept:TTypeSymComma];
-        node.srcHeightExpression = [self acceptExpression];
+        Node *expression = [self acceptExpression]; // parameter can have two meanings
         if (self.token.type == TTypeSymComma)
         {
+            // PUT with source rectangle
+            node.srcXExpression = expression;
             [self accept:TTypeSymComma];
-            node.transparencyExpression = [self acceptExpression];
+            node.srcYExpression = [self acceptExpression];
+            [self accept:TTypeSymComma];
+            node.srcWidthExpression = [self acceptExpression];
+            [self accept:TTypeSymComma];
+            node.srcHeightExpression = [self acceptExpression];
+            if (self.token.type == TTypeSymComma)
+            {
+                // optional transparency
+                [self accept:TTypeSymComma];
+                node.transparencyExpression = [self acceptExpression];
+            }
+        }
+        else
+        {
+            // PUT with transparency but without source rectangle
+            node.transparencyExpression = expression;
         }
     }
     return node;

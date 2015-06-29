@@ -149,8 +149,8 @@
         }
         
         // create image
-        CGSize size = CGSizeMake(self.renderer.size * 4, self.renderer.size * 4);
-        UIGraphicsBeginImageContextWithOptions(size, YES, 0.0);
+        CGSize size = CGSizeMake(self.renderer.size * 2, self.renderer.size * 2);
+        UIGraphicsBeginImageContextWithOptions(size, YES, 1.0);
         [self renderWithSize:size data:best];
         thumb = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();

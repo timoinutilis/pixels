@@ -664,7 +664,7 @@ The upgrade is valid for all your devices and without time limit.</string>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ZW2-w3-XlI" id="61o-q9-i4H">
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="u5Y-Ku-yEI">
+                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="u5Y-Ku-yEI">
                                             <rect key="frame" x="8" y="0.0" width="304" height="43"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="43" id="EEP-9O-6gv"/>

@@ -1485,10 +1485,14 @@ NSString *const TRANSFER = @"TRANSFER";
 {
     NSNumber *x = [self.xExpression evaluateWithRunner:runner];
     NSNumber *y = [self.yExpression evaluateWithRunner:runner];
+    NSNumber *trans = [self.transparencyExpression evaluateNumberWithRunner:runner min:-1 max:15];
+    
     if (runner.error)
     {
         return nil;
     }
+    
+    int transInt = (trans ? trans.intValue : -1);
     
     if (self.srcXExpression)
     {
@@ -1497,17 +1501,17 @@ NSString *const TRANSFER = @"TRANSFER";
         NSNumber *srcY = [self.srcYExpression evaluateNumberWithRunner:runner min:0 max:maxSize - 1];
         NSNumber *srcW = [self.srcWidthExpression evaluateNumberWithRunner:runner min:0 max:maxSize];
         NSNumber *srcH = [self.srcHeightExpression evaluateNumberWithRunner:runner min:0 max:maxSize];
-        NSNumber *trans = [self.transparencyExpression evaluateNumberWithRunner:runner min:-1 max:15];
+        
         if (runner.error)
         {
             return nil;
         }
         
-        [runner.renderer putScreenX:x.intValue Y:y.intValue srcX:srcX.intValue srcY:srcY.intValue srcWidth:srcW.intValue srcHeight:srcH.intValue transparency:(trans ? trans.intValue : -1)];
+        [runner.renderer putScreenX:x.intValue Y:y.intValue srcX:srcX.intValue srcY:srcY.intValue srcWidth:srcW.intValue srcHeight:srcH.intValue transparency:transInt];
     }
     else
     {
-        [runner.renderer putScreenX:x.intValue Y:y.intValue srcX:0 srcY:0 srcWidth:0 srcHeight:0 transparency:-1];
+        [runner.renderer putScreenX:x.intValue Y:y.intValue srcX:0 srcY:0 srcWidth:0 srcHeight:0 transparency:transInt];
     }
     
     [runner next];
