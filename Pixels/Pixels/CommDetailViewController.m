@@ -38,6 +38,7 @@ static NSString *const SectionPosts = @"Posts";
 @property CommProfileCell *profileCell;
 @property CommWriteStatusCell *writeStatusCell;
 @property ExtendedActivityIndicatorView *activityIndicator;
+@property BOOL userNeedsUpdate;
 
 @end
 
@@ -121,6 +122,7 @@ static NSString *const SectionPosts = @"Posts";
     }
     else if (self.mode == CommListModeProfile)
     {
+        self.userNeedsUpdate = YES;
         [self.tableView reloadData];
     }
 }
@@ -129,6 +131,7 @@ static NSString *const SectionPosts = @"Posts";
 {
     if (self.mode == CommListModeProfile && [self.user isMe])
     {
+        self.userNeedsUpdate = YES;
         [self.tableView reloadData];
     }
 }
@@ -379,9 +382,10 @@ static NSString *const SectionPosts = @"Posts";
         {
             if (indexPath.row == 0)
             {
-                if (self.profileCell.user != self.user)
+                if (self.profileCell.user != self.user || self.userNeedsUpdate)
                 {
                     self.profileCell.user = self.user;
+                    self.userNeedsUpdate = NO;
                 }
                 return self.profileCell;
             }
@@ -406,7 +410,7 @@ static NSString *const SectionPosts = @"Posts";
             CommInfoCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommInfoCell" forIndexPath:indexPath];
             if ([PFUser currentUser])
             {
-                cell.infoTextLabel.text = @"Here you see the posts of all the users you follow.";
+                cell.infoTextLabel.text = @"Here you see official news, featured programs, and posts of all the users you follow.";
             }
             else
             {

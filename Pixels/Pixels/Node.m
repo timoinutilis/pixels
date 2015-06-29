@@ -1443,7 +1443,7 @@ NSString *const TRANSFER = @"TRANSFER";
             }
         }
     }
-    return @(!isPlaying);
+    return @(isPlaying ? 0 : -1); // opposite result => isPlaying != soundEnd
 }
 
 @end
