@@ -61,7 +61,64 @@ Parse.Cloud.afterSave("Comment", function(request) {
 
   var post = request.object.get('post');
   var user = request.object.get('user');
-  //TODO
-  // Installation needs user...
+  var text = request.object.get('text');
+
+  if (!user) {
+    // commented as guest
+    return;
+  }
+
+  if (text.length > 100) {
+    text = text.substr(0, 100) + "...";
+  }
+
+  post.fetch().then(function() {
+
+    return user.fetch();
+
+  }).then(function() {
+    
+    var postOwner = post.get("user");
+    var postTitle = post.get("title");
+
+    if (postTitle.length > 30) {
+      postTitle = postTitle.substr(0, 30) + "...";
+    }
+
+    var alertText = user.get("username") + " commented on \"" + postTitle + "\": \"" + text + "\"";
+
+    var pushQuery = new Parse.Query(Parse.Installation);
+
+    if (user.id == postOwner.id) {
+      // commented on own post, notify all commenters of post
+
+      //TODO
+
+    } else {
+      // commented on other post, notify post owner
+
+      pushQuery.equalTo('user', postOwner);
+
+      //TODO add commenting user to post
+    }
+
+    return Parse.Push.send({
+        where: pushQuery,
+        data: {
+          alert: alertText,
+          badge: "Increment"
+        }
+      });
+
+  }).then(function() {
+
+    // done
+
+  }, function(error) {
+
+    // there was some error.
+    response.error("afterSave(Comment): " + error.message);
+
+  });
 
 });
