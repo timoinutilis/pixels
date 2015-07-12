@@ -275,6 +275,7 @@
 		92884F2A1B0F307F0032623D /* CommSourceCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommSourceCodeViewController.m; sourceTree = "<group>"; };
 		92884F2C1B0F33850032623D /* LCCComment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCComment.h; sourceTree = "<group>"; };
 		92884F2D1B0F33850032623D /* LCCComment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCComment.m; sourceTree = "<group>"; };
+		928DBBA51B52918400C5EBCC /* Model 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 3.xcdatamodel"; sourceTree = "<group>"; };
 		928E14BD1B067AB9002DC8E6 /* Info_dev.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info_dev.plist; sourceTree = "<group>"; };
 		928FB8971A5C804200EA377F /* GORSeparatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GORSeparatorView.h; sourceTree = "<group>"; };
 		928FB8981A5C804200EA377F /* GORSeparatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GORSeparatorView.m; sourceTree = "<group>"; };
@@ -1226,10 +1227,11 @@
 		92A0EC0B1A56DA1F0051D74C /* Model.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				928DBBA51B52918400C5EBCC /* Model 3.xcdatamodel */,
 				92A0EC0E1A56DA630051D74C /* Model 2.xcdatamodel */,
 				92A0EC0C1A56DA1F0051D74C /* Model.xcdatamodel */,
 			);
-			currentVersion = 92A0EC0E1A56DA630051D74C /* Model 2.xcdatamodel */;
+			currentVersion = 928DBBA51B52918400C5EBCC /* Model 3.xcdatamodel */;
 			path = Model.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

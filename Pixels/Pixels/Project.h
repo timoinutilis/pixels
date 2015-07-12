@@ -18,5 +18,6 @@
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSNumber * scale;
 @property (nonatomic, retain) NSString * sourceCode;
+@property (nonatomic, retain) NSString * postId;
 
 @end

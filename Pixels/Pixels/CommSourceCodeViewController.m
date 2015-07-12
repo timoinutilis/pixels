@@ -34,7 +34,7 @@
 
 - (IBAction)onGetTapped:(id)sender
 {
-    [self addProgramOfPost:self.post];
+    [self onGetProgramTappedWithPost:self.post];
 }
 
 @end

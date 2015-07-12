@@ -56,9 +56,14 @@ typedef NS_ENUM(NSInteger, CellTag) {
         self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 252, 0);
     }
     
+    if (self.navigationController.viewControllers.firstObject == self)
+    {
+        // is modal
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Close" style:UIBarButtonItemStylePlain target:self action:@selector(onDoneTapped:)];
+    }
+    
     self.writeCommentCell = [self.tableView dequeueReusableCellWithIdentifier:@"WriteCommentCell"];
     
-    [self updateView];
     [self loadAll];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserChanged:) name:CurrentUserChangeNotification object:nil];
@@ -118,6 +123,34 @@ typedef NS_ENUM(NSInteger, CellTag) {
 
 - (void)loadAll
 {
+    if ([self.post isDataAvailable])
+    {
+        [self loadSubData];
+    }
+    else
+    {
+        [self.activityIndicator increaseActivity];
+        self.title = @"Loading...";
+        [self.post fetchInBackgroundWithBlock:^(PFObject *object,  NSError *error) {
+            
+            [self.activityIndicator decreaseActivity];
+            if (object)
+            {
+                [self loadSubData];
+            }
+            else if (error)
+            {
+                self.title = @"Error";
+                [self showAlertWithTitle:@"Could not load post." message:error.userInfo[@"error"] block:nil];
+            }
+            
+        }];
+    }
+}
+
+- (void)loadSubData
+{
+    [self updateView];
     [self loadUser];
     [self loadComments];
     if (self.post.type == LCCPostTypeProgram)
@@ -247,6 +280,11 @@ typedef NS_ENUM(NSInteger, CellTag) {
     [self.tableView reloadData];
 }
 
+- (void)onDoneTapped:(id)sender
+{
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
 - (IBAction)onLikeTapped:(id)sender
 {
     if (![PFUser currentUser])
@@ -264,7 +302,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
 
 - (IBAction)onGetProgramTapped:(id)sender
 {
-    [self addProgramOfPost:self.post];
+    [self onGetProgramTappedWithPost:self.post];
 }
 
 - (IBAction)onShareTapped:(id)sender
@@ -373,7 +411,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 3;
+    return ([self.post isDataAvailable] ? 3 : 0);
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

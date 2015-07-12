@@ -30,5 +30,6 @@ extern NSString *const ModelManagerDidAddProjectNotification;
 - (Project *)createNewProject;
 - (void)deleteProject:(Project *)project;
 - (Project *)duplicateProject:(Project *)project sourceCode:(NSString *)sourceCode;
+- (BOOL)hasProjectWithPostId:(NSString *)postId;
 
 @end

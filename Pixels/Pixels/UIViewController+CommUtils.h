@@ -12,6 +12,6 @@
 
 @interface UIViewController (CommUtils)
 
-- (void)addProgramOfPost:(LCCPost *)post;
+- (void)onGetProgramTappedWithPost:(LCCPost *)post;
 
 @end

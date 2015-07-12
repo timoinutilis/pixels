@@ -56,3 +56,12 @@ Parse.Cloud.beforeDelete("Post", function(request, response) {
   });
 
 });
+
+Parse.Cloud.afterSave("Comment", function(request) {
+
+  var post = request.object.get('post');
+  var user = request.object.get('user');
+  //TODO
+  // Installation needs user...
+
+});

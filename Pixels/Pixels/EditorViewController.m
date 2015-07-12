@@ -25,6 +25,8 @@
 #import "UIViewController+LowResCoder.h"
 #import "NSError+LowResCoder.h"
 #import "Compiler.h"
+#import "CommPostViewController.h"
+#import "CommunityModel.h"
 
 int const EditorDemoMaxLines = 24;
 NSString *const CoachMarkIDStart = @"CoachMarkIDStart";
@@ -289,6 +291,29 @@ static int s_editorInstancesCount = 0;
         
         [self presentViewController:alert animated:YES completion:nil];
     }
+}
+
+- (IBAction)onFeedbackTapped:(id)sender
+{
+    if (!self.project.postId)
+    {
+        [self showAlertWithTitle:@"This program is not connected to any post in the community." message:nil block:nil];
+    }
+    else
+    {
+        LCCPost *post = [LCCPost objectWithoutDataWithClassName:[LCCPost parseClassName] objectId:self.project.postId];
+        [self showPost:post];
+    }
+}
+
+- (void)showPost:(LCCPost *)post
+{
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Community" bundle:nil];
+    CommPostViewController *vc = (CommPostViewController *)[storyboard instantiateViewControllerWithIdentifier:@"CommPostView"];
+    [vc setPost:post mode:CommPostModePost];
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+    nav.modalPresentationStyle = UIModalPresentationFormSheet;
+    [self presentViewController:nav animated:YES completion:nil];
 }
 
 - (IBAction)onActionTapped:(id)sender

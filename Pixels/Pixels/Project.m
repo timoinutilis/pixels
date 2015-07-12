@@ -17,5 +17,6 @@
 @dynamic name;
 @dynamic scale;
 @dynamic sourceCode;
+@dynamic postId;
 
 @end

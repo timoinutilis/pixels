@@ -240,6 +240,7 @@
                         if (succeeded)
                         {
                             [[CommunityModel sharedInstance] onPostedWithDate:post.createdAt];
+                            self.project.postId = post.objectId;
                             [self.shareDelegate onClosedWithSuccess:YES];
                         }
                         else

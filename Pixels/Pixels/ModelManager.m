@@ -201,4 +201,12 @@ NSString *const ModelManagerDidAddProjectNotification = @"ModelManagerDidAddProj
     return newProject;
 }
 
+- (BOOL)hasProjectWithPostId:(NSString *)postId
+{
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Project"];
+    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"postId == %@", postId];
+    NSArray *objects = [self.managedObjectContext executeFetchRequest:fetchRequest error:nil];
+    return (objects.count > 0);
+}
+
 @end

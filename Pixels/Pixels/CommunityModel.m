@@ -102,6 +102,11 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
             
         }];
     }
+    
+    // update installation
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    currentInstallation[@"user"] = [PFUser currentUser] ? [PFUser currentUser] : [NSNull null];
+    [currentInstallation saveInBackground];
 }
 
 - (void)onPostedWithDate:(NSDate *)date

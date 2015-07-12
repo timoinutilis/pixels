@@ -7,6 +7,7 @@
 //
 
 #import "UIViewController+CommUtils.h"
+#import "UIViewController+LowResCoder.h"
 #import "CommunityModel.h"
 #import "ModelManager.h"
 #import "ExplorerViewController.h"
@@ -14,11 +15,27 @@
 
 @implementation UIViewController (CommUtils)
 
+- (void)onGetProgramTappedWithPost:(LCCPost *)post
+{
+    if ([[ModelManager sharedManager] hasProjectWithPostId:post.objectId])
+    {
+        id __weak weakSelf = self;
+        [self showConfirmAlertWithTitle:@"Do you want to get another copy?" message:@"You already got this program." block:^{
+            [weakSelf addProgramOfPost:post];
+        }];
+    }
+    else
+    {
+        [self addProgramOfPost:post];
+    }
+}
+
 - (void)addProgramOfPost:(LCCPost *)post
 {
     Project *project = [[ModelManager sharedManager] createNewProject];
     project.name = post.title;
     project.sourceCode = post.program.sourceCode;
+    project.postId = post.objectId;
     
     [[CommunityModel sharedInstance] countPost:post type:LCCCountTypeDownload];
 
