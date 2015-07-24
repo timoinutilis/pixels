@@ -34,6 +34,7 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
     [LCCComment registerSubclass];
     [LCCFollow registerSubclass];
     [LCCCount registerSubclass];
+    [LCCPostStats registerSubclass];
 }
 
 - (void)onLoggedIn
@@ -193,7 +194,15 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
                 NSLog(@"Error: %@", error.description);
             }
         }];
-
+        
+        if (type == LCCCountTypeLike)
+        {
+            [self increaseStatsWithPost:post key:LCCPostStatsLikesKey];
+        }
+        else if (type == LCCCountTypeDownload)
+        {
+            [self increaseStatsWithPost:post key:LCCPostStatsDownloadsKey];
+        }
     }
 }
 
@@ -221,6 +230,39 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
         }
         
     }];
+}
+
+- (void)increaseStatsWithPost:(LCCPost *)post key:(NSString *)key
+{
+    LCCPostStats *stats = post.stats;
+    if (!stats)
+    {
+        post.stats = [LCCPostStats object];
+        [post.stats incrementKey:key];
+        [post saveInBackground];
+    }
+    else if (![stats isDataAvailable])
+    {
+        [stats fetchInBackgroundWithBlock:^(PFObject *object,  NSError *error) {
+            
+            if (object)
+            {
+                [stats incrementKey:key];
+                [stats saveInBackground];
+            }
+            else if (error)
+            {
+                NSLog(@"fetch stats error: %@", error);
+            }
+            
+        }];
+    }
+    else
+    {
+        [stats incrementKey:key];
+        [stats saveInBackground];
+    }
+
 }
 
 - (BOOL)isCurrentUserInArray:(NSArray *)array

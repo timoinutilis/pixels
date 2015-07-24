@@ -210,26 +210,57 @@ typedef NS_ENUM(NSInteger, CellTag) {
 
 - (void)loadProgram
 {
-    if ([self.post.program isDataAvailable])
+    if (self.post.programFile)
     {
-        self.titleCell.getProgramButton.enabled = YES;
+        // New format: Load program from file
+        
+        if ([self.post.programFile isDataAvailable])
+        {
+            self.titleCell.getProgramButton.enabled = YES;
+        }
+        else
+        {
+            [self.activityIndicator increaseActivity];
+            [self.post.programFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+                
+                [self.activityIndicator decreaseActivity];
+                if (data)
+                {
+                    self.titleCell.getProgramButton.enabled = YES;
+                }
+                else if (error)
+                {
+                    [self showAlertWithTitle:@"Could not load source code." message:error.userInfo[@"error"] block:nil];
+                }
+                
+            }];
+        }
     }
     else
     {
-        [self.activityIndicator increaseActivity];
-        [self.post.program fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-            
-            [self.activityIndicator decreaseActivity];
-            if (object)
-            {
-                self.titleCell.getProgramButton.enabled = YES;
-            }
-            else if (error)
-            {
-                [self showAlertWithTitle:@"Could not load source code." message:error.userInfo[@"error"] block:nil];
-            }
-            
-        }];
+        // Old format: Load program from database object
+        
+        if ([self.post.program isDataAvailable])
+        {
+            self.titleCell.getProgramButton.enabled = YES;
+        }
+        else
+        {
+            [self.activityIndicator increaseActivity];
+            [self.post.program fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+                
+                [self.activityIndicator decreaseActivity];
+                if (object)
+                {
+                    self.titleCell.getProgramButton.enabled = YES;
+                }
+                else if (error)
+                {
+                    [self showAlertWithTitle:@"Could not load source code." message:error.userInfo[@"error"] block:nil];
+                }
+                
+            }];
+        }
     }
 }
 
@@ -321,6 +352,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
     post.image = self.post.image;
     post.title = self.post.title;
     post.detail = self.post.detail;
+    post.stats = self.post.stats;
     post.sharedPost = self.post;
     
     [self.activityIndicator increaseActivity];
@@ -375,6 +407,8 @@ typedef NS_ENUM(NSInteger, CellTag) {
                     [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.comments.count - 1 inSection:1]] withRowAnimation:UITableViewRowAnimationAutomatic];
                 }
                 [self.writeCommentCell reset];
+                
+                [[CommunityModel sharedInstance] increaseStatsWithPost:self.post key:LCCPostStatsCommentsKey];
             }
             else if (error)
             {
@@ -510,7 +544,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
     switch (cell.tag)
     {
         case CellTagSourceCode: {
-            if ([self.post isDataAvailable] && [self.post.program isDataAvailable])
+            if ([self.post isDataAvailable] && ([self.post.program isDataAvailable] || [self.post.programFile isDataAvailable]))
             {
                 CommSourceCodeViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"CommSourceCodeView"];
                 vc.post = self.post;

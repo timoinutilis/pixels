@@ -14,6 +14,7 @@
 #import "UIViewController+LowResCoder.h"
 #import "GORCycleManager.h"
 #import "Compiler.h"
+#import "NSString+Utils.h"
 
 @interface ShareViewController ()
 
@@ -68,7 +69,7 @@
     [self setHeaderTitle:@"Category" section:2];
     
     self.categoryGameCell = [self.tableView dequeueReusableCellWithIdentifier:@"BasicCell"];
-    self.categoryGameCell.textLabel.text = @"Game";
+    self.categoryGameCell.textLabel.text = @"Game (or demo of game)";
     [self addCell:self.categoryGameCell];
     
     self.categoryToolCell = [self.tableView dequeueReusableCellWithIdentifier:@"BasicCell"];
@@ -207,55 +208,52 @@
 - (void)send
 {
     [self isBusy:YES];
-    
-    // save image
 
-    PFFile *imageFile = [PFFile fileWithName:@"image.png" data:self.project.iconData];
-    [imageFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+    NSString *title = self.titleCell.textField.text;
+    NSString *description = self.descriptionCell.textView.text;
+    
+    NSString *fileTitle = [title stringByReplacingOccurrencesOfString:@"[^a-zA-Z_0-9]+" withString:@"" options:NSRegularExpressionSearch range:NSMakeRange(0, title.length)];
+    if (fileTitle.length > 30)
+    {
+        fileTitle = [fileTitle substringToIndex:30];
+    }
+    
+    // icon image
+    
+    NSString *iconFileName = [NSString stringWithFormat:@"%@.png", fileTitle];
+    PFFile *imageFile = [PFFile fileWithName:iconFileName data:self.project.iconData];
+
+    // source code
+    
+    NSString *programFileName = [NSString stringWithFormat:@"%@.txt", fileTitle];
+    NSData *fileData = [self.project.sourceCode dataUsingEncoding:NSUTF8StringEncoding];
+    PFFile *programFile = [PFFile fileWithName:programFileName data:fileData contentType:@"text/plain"];
+    
+    // note for users with old app version
+    
+    LCCProgram *program = [LCCProgram object];
+    program.sourceCode = @"REM ************************\nREM PLEASE UPDATE LOWRES CODER AND GET THIS PROGRAM AGAIN\nREM ************************";
+    
+    // post
+    
+    LCCPost *post = [LCCPost object];
+    post.type = LCCPostTypeProgram;
+    post.user = (LCCUser *)[PFUser currentUser];
+    post.title = title;
+    post.detail = description;
+    post.program = program;
+    post.programFile = programFile;
+    post.image = imageFile;
+    post.category = self.selectedCategory;
+    post.stats = [LCCPostStats object];
+    
+    [post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         
         if (succeeded)
         {
-            // save source code
-            
-            LCCProgram *program = [LCCProgram object];
-            program.sourceCode = self.project.sourceCode;
-
-            [program saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                
-                if (succeeded)
-                {
-                    // save post
-                    
-                    LCCPost *post = [LCCPost object];
-                    post.type = LCCPostTypeProgram;
-                    post.user = (LCCUser *)[PFUser currentUser];
-                    post.title = self.titleCell.textField.text;
-                    post.detail = self.descriptionCell.textView.text;
-                    post.program = program;
-                    post.image = imageFile;
-                    post.category = self.selectedCategory;
-                    
-                    [post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                        
-                        if (succeeded)
-                        {
-                            [[CommunityModel sharedInstance] onPostedWithDate:post.createdAt];
-                            self.project.postId = post.objectId;
-                            [self.shareDelegate onClosedWithSuccess:YES];
-                        }
-                        else
-                        {
-                            [self showSendError];
-                        }
-                        
-                    }];
-                    
-                }
-                else
-                {
-                    [self showSendError];
-                }
-            }];
+            [[CommunityModel sharedInstance] onPostedWithDate:post.createdAt];
+            self.project.postId = post.objectId;
+            [self.shareDelegate onClosedWithSuccess:YES];
         }
         else
         {

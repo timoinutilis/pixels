@@ -85,6 +85,8 @@ static NSString *const SectionPosts = @"Posts";
 {
     [super viewWillAppear:animated];
     
+    [self.tableView reloadData];
+    
     if (self.mode == CommListModeUndefined)
     {
         LCCUser *user = (LCCUser *)[PFUser currentUser];
@@ -171,6 +173,7 @@ static NSString *const SectionPosts = @"Posts";
                 [query whereKey:@"user" containedIn:followedUsers];
                 [query includeKey:@"sharedPost"];
                 [query includeKey:@"user"];
+                [query includeKey:@"stats"];
                 [query orderByDescending:@"createdAt"];
                 query.cachePolicy = kPFCachePolicyNetworkElseCache;
                 
@@ -208,6 +211,7 @@ static NSString *const SectionPosts = @"Posts";
             [query whereKey:@"user" equalTo:self.user];
             [query includeKey:@"sharedPost"];
             [query includeKey:@"user"];
+            [query includeKey:@"stats"];
             [query orderByDescending:@"createdAt"];
             query.cachePolicy = kPFCachePolicyNetworkElseCache;
             
@@ -428,6 +432,7 @@ static NSString *const SectionPosts = @"Posts";
         LCCPost *post = self.posts[indexPath.row];
         NSString *cellType = (post.type == LCCPostTypeStatus) ? @"StatusCell" : @"ProgramCell";
         CommPostCell *cell = [tableView dequeueReusableCellWithIdentifier:cellType forIndexPath:indexPath];
+        cell.showName = (self.mode == CommListModeNews);
         cell.post = post;
         cell.tag = CellTagPost;
         return cell;
@@ -592,6 +597,7 @@ static NSString *const SectionPosts = @"Posts";
 @property (weak, nonatomic) IBOutlet UIImageView *iconImageView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
+@property (weak, nonatomic) IBOutlet UILabel *statsLabel;
 @end
 
 @implementation CommPostCell
@@ -614,15 +620,44 @@ static NSString *const SectionPosts = @"Posts";
     self.starImageView.hidden = ![post.user isNewsUser];
     
     self.titleLabel.text = post.title;
-    NSString *date = [NSDateFormatter localizedStringFromDate:post.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterNoStyle];
-    NSString *name = (post.type == LCCPostTypeShare) ? [NSString stringWithFormat:@"Shared by %@", post.user.username] : post.user.username;
+
+    NSMutableArray *infos = [NSMutableArray arrayWithCapacity:4];
     if (post.category != LCCPostCategoryStatus)
     {
-        self.dateLabel.text = [NSString stringWithFormat:@"%@ - %@ - %@", [post categoryString], name, date];
+        [infos addObject:[post categoryString]];
+    }
+    if (self.showName)
+    {
+        NSString *name = (post.type == LCCPostTypeShare) ? [NSString stringWithFormat:@"Shared by %@", post.user.username] : post.user.username;
+        [infos addObject:name];
+    }
+    NSString *date = [NSDateFormatter localizedStringFromDate:post.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterNoStyle];
+    [infos addObject:date];
+    self.dateLabel.text = [infos componentsJoinedByString:@" - "];
+    
+    if ([post.stats isDataAvailable])
+    {
+        NSString *likesWord = post.stats.numLikes == 1 ? @"Like" : @"Likes";
+        NSString *downloadsWord = post.stats.numDownloads == 1 ? @"Download" : @"Downloads";
+        NSString *commentsWord = post.stats.numComments == 1 ? @"Comment" : @"Comments";
+        
+        if (post.category == LCCPostCategoryStatus)
+        {
+            self.statsLabel.text = [NSString stringWithFormat:@"%d %@, %d %@",
+                                    post.stats.numLikes, likesWord,
+                                    post.stats.numComments, commentsWord];
+        }
+        else
+        {
+            self.statsLabel.text = [NSString stringWithFormat:@"%d %@, %d %@, %d %@",
+                                    post.stats.numLikes, likesWord,
+                                    post.stats.numDownloads, downloadsWord,
+                                    post.stats.numComments, commentsWord];
+        }
     }
     else
     {
-        self.dateLabel.text = [NSString stringWithFormat:@"%@ - %@", name, date];
+        self.statsLabel.text = @" ";
     }
     
     if (self.iconImageView)

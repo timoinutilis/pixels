@@ -34,7 +34,7 @@
 {
     Project *project = [[ModelManager sharedManager] createNewProject];
     project.name = post.title;
-    project.sourceCode = post.program.sourceCode;
+    project.sourceCode = [post sourceCode];
     project.postId = post.objectId;
     
     [[CommunityModel sharedInstance] countPost:post type:LCCCountTypeDownload];

@@ -48,7 +48,7 @@
         NSMutableArray *mutableParts = parts.mutableCopy;
         [mutableParts removeObjectsInRange:NSMakeRange(maxWords, parts.count - maxWords)];
         NSString *shortString = [mutableParts componentsJoinedByString:@" "];
-        return [NSString stringWithFormat:@"%@...", shortString];
+        return [NSString stringWithFormat:@"%@…", shortString];
     }
     return self;
 }
