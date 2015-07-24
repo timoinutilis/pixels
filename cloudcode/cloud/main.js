@@ -2,7 +2,37 @@ var Post = Parse.Object.extend("Post");
 var Program = Parse.Object.extend("Program");
 var Comment = Parse.Object.extend("Comment");
 var Count = Parse.Object.extend("Count");
+var PostStats = Parse.Object.extend("PostStats");
 
+
+function increasePostStats(post, key) {
+  var stats = post.get("stats");
+  if (!stats) {
+    stats = new PostStats();
+    stats.increment(key);
+    post.set("stats", stats);
+    return post.save();
+  }
+  stats.increment(key);
+  return stats.save();
+}
+
+
+Parse.Cloud.beforeSave("Post", function(request, response) {
+
+  if (!request.object.get("stats")) {
+    var stats = new PostStats();
+    request.object.set("stats", stats);
+    stats.save().then(function () {
+      response.success();
+    }, function (error) {
+      response.error("beforeSave(Post): " + error.message);
+    });
+  } else {
+    response.success();
+  }
+
+});
 
 Parse.Cloud.beforeDelete("Post", function(request, response) {
 
@@ -145,12 +175,32 @@ Parse.Cloud.afterSave("Comment", function(request) {
 
   }).then(function() {
 
-    // done
+    return increasePostStats(post, "numComments");
 
   }, function(error) {
 
     // there was some error.
-    response.error("afterSave(Comment): " + error.message);
+    //TODO log "afterSave(Comment): " + error.message
+
+  });
+
+});
+
+Parse.Cloud.afterSave("Count", function(request) {
+
+  var post = request.object.get('post');
+  var type = request.object.get('type');
+
+  var incKey;
+  if (type == 1) {
+    incKey = "numLikes";
+  } else if (type == 2) {
+    incKey = "numDownloads";
+  }
+
+  post.fetch().then(function() {
+
+    return increasePostStats(post, incKey);
 
   });
 

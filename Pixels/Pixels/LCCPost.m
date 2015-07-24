@@ -20,6 +20,7 @@
 @dynamic program;
 @dynamic programFile;
 @dynamic sharedPost;
+@dynamic stats;
 
 + (NSString *)parseClassName
 {

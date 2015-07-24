@@ -40,7 +40,6 @@ extern NSString *const UserDefaultsLogInKey;
 - (NSArray *)arrayWithFollowedUsers;
 - (void)countPost:(LCCPost *)post type:(LCCCountType)type;
 - (void)fetchCountForPost:(LCCPost *)post type:(LCCCountType)type block:(void (^)(NSArray *users))block;
-- (void)increaseStatsWithPost:(LCCPost *)post key:(NSString *)key;
 - (BOOL)isCurrentUserInArray:(NSArray *)array;
 
 @end

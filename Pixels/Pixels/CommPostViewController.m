@@ -407,8 +407,6 @@ typedef NS_ENUM(NSInteger, CellTag) {
                     [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.comments.count - 1 inSection:1]] withRowAnimation:UITableViewRowAnimationAutomatic];
                 }
                 [self.writeCommentCell reset];
-                
-                [[CommunityModel sharedInstance] increaseStatsWithPost:self.post key:LCCPostStatsCommentsKey];
             }
             else if (error)
             {
