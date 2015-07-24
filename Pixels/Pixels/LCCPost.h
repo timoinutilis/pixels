@@ -33,7 +33,8 @@ typedef NS_ENUM(int, LCCPostCategory) {
 @property (retain) PFFile *image;
 @property (retain) NSString *title;
 @property (retain) NSString *detail;
-@property (retain) LCCProgram *program;
+@property (retain) LCCProgram *program; // deprecated, uses programFile now
+@property (retain) PFFile *programFile;
 @property (retain) LCCPost *sharedPost;
 
 - (NSString *)categoryString;
