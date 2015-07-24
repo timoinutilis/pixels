@@ -13,6 +13,7 @@
 #import "LCCComment.h"
 #import "LCCFollow.h"
 #import "LCCCount.h"
+#import "LCCPostStats.h"
 
 extern NSString *const CurrentUserChangeNotification;
 extern NSString *const FollowsChangeNotification;
@@ -39,6 +40,7 @@ extern NSString *const UserDefaultsLogInKey;
 - (NSArray *)arrayWithFollowedUsers;
 - (void)countPost:(LCCPost *)post type:(LCCCountType)type;
 - (void)fetchCountForPost:(LCCPost *)post type:(LCCCountType)type block:(void (^)(NSArray *users))block;
+- (void)increaseStatsWithPost:(LCCPost *)post key:(NSString *)key;
 - (BOOL)isCurrentUserInArray:(NSArray *)array;
 
 @end

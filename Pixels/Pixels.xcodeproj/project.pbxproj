@@ -28,6 +28,7 @@
 		924F83301B0B5BDF00B96C91 /* CommDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924F832F1B0B5BDF00B96C91 /* CommDetailViewController.m */; };
 		924F83331B0B610D00B96C91 /* CommSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924F83321B0B610D00B96C91 /* CommSplitViewController.m */; };
 		92509CCA1A28F99D0086E7E3 /* ExplorerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92509CC91A28F99D0086E7E3 /* ExplorerViewController.m */; };
+		9254DF601B628A3C00774E98 /* LCCPostStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 9254DF5F1B628A3C00774E98 /* LCCPostStats.m */; };
 		925935A11B1B77D7001CE0B1 /* LCCProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = 925935A01B1B77D7001CE0B1 /* LCCProgram.m */; };
 		925935A41B1B7E4F001CE0B1 /* UIViewController+CommUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 925935A31B1B7E4F001CE0B1 /* UIViewController+CommUtils.m */; };
 		925935A71B1B80C9001CE0B1 /* LCCCount.m in Sources */ = {isa = PBXBuildFile; fileRef = 925935A61B1B80C9001CE0B1 /* LCCCount.m */; };
@@ -160,6 +161,8 @@
 		924F83321B0B610D00B96C91 /* CommSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommSplitViewController.m; sourceTree = "<group>"; };
 		92509CC81A28F99D0086E7E3 /* ExplorerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExplorerViewController.h; sourceTree = "<group>"; };
 		92509CC91A28F99D0086E7E3 /* ExplorerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExplorerViewController.m; sourceTree = "<group>"; };
+		9254DF5E1B628A3C00774E98 /* LCCPostStats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCPostStats.h; sourceTree = "<group>"; };
+		9254DF5F1B628A3C00774E98 /* LCCPostStats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCPostStats.m; sourceTree = "<group>"; };
 		9259359F1B1B77D7001CE0B1 /* LCCProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCProgram.h; sourceTree = "<group>"; };
 		925935A01B1B77D7001CE0B1 /* LCCProgram.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCProgram.m; sourceTree = "<group>"; };
 		925935A21B1B7E4F001CE0B1 /* UIViewController+CommUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+CommUtils.h"; sourceTree = "<group>"; };
@@ -713,6 +716,8 @@
 				925935A01B1B77D7001CE0B1 /* LCCProgram.m */,
 				925935A51B1B80C9001CE0B1 /* LCCCount.h */,
 				925935A61B1B80C9001CE0B1 /* LCCCount.m */,
+				9254DF5E1B628A3C00774E98 /* LCCPostStats.h */,
+				9254DF5F1B628A3C00774E98 /* LCCPostStats.m */,
 			);
 			name = "Community Model";
 			sourceTree = "<group>";
@@ -914,6 +919,7 @@
 				926086321A5E8560006C5523 /* Runnable.m in Sources */,
 				922A77461AA46CCB004EE2CA /* Project.m in Sources */,
 				920E681D1AB731620038994A /* CoachMarkView.m in Sources */,
+				9254DF601B628A3C00774E98 /* LCCPostStats.m in Sources */,
 				925935A71B1B80C9001CE0B1 /* LCCCount.m in Sources */,
 				924CC0FE1A220B3C00D2AF68 /* Runner.m in Sources */,
 				92E53DF41A5B3A1D00FE9F91 /* GORMenuTableViewController.m in Sources */,

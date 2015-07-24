@@ -46,6 +46,14 @@ Parse.Cloud.beforeDelete("Post", function(request, response) {
 
   }).then(function() {
 
+    // delete stats if available
+    var stats = request.object.get("stats");
+    if (stats) {
+      return stats.destroy();
+    }
+
+  }).then(function() {
+
     response.success();
 
   }, function(error) {

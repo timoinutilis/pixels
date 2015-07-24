@@ -245,6 +245,7 @@
     post.programFile = programFile;
     post.image = imageFile;
     post.category = self.selectedCategory;
+    post.stats = [LCCPostStats object];
     
     [post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         

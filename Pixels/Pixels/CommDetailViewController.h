@@ -41,5 +41,6 @@ typedef NS_ENUM(NSInteger, CommListMode) {
 @end
 
 @interface CommPostCell : UITableViewCell
+@property BOOL showName;
 @property (nonatomic) LCCPost *post;
 @end
