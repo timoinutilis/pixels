@@ -27,6 +27,7 @@ extern NSString *const NewsNotification;
 @property (readonly) NSInteger numProgramsOpened;
 @property BOOL shouldShowTransferAlert;
 @property (nonatomic) NSInteger numNews;
+@property NSString *shouldShowPostId;
 
 + (AppController *)sharedController;
 
@@ -45,5 +46,7 @@ extern NSString *const NewsNotification;
 
 - (void)storeError:(NSError *)error message:(NSString *)message;
 - (NSString *)popStoredError;
+
+- (void)handlePush:(NSDictionary *)userInfo inForeground:(BOOL)inForeground;
 
 @end

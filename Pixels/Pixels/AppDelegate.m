@@ -33,7 +33,13 @@
     [Parse setApplicationId:parseAppID clientKey:parseClientKey];
     
     [AppStyle setAppearance];
-        
+    
+    if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey])
+    {
+        NSDictionary *userInfo = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
+        [[AppController sharedController] handlePush:userInfo inForeground:NO];
+    }
+    
     return YES;
 }
 
@@ -83,8 +89,8 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    [PFPush handlePush:userInfo];
-    [[NSNotificationCenter defaultCenter] postNotificationName:NewsNotification object:self];
+    BOOL inForeground = (application.applicationState == UIApplicationStateActive);
+    [[AppController sharedController] handlePush:userInfo inForeground:inForeground];
 }
 
 @end

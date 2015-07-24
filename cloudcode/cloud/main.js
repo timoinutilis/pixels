@@ -87,28 +87,53 @@ Parse.Cloud.afterSave("Comment", function(request) {
 
     var alertText = user.get("username") + " commented on \"" + postTitle + "\": \"" + text + "\"";
 
-    var pushQuery = new Parse.Query(Parse.Installation);
-
     if (user.id == postOwner.id) {
       // commented on own post, notify all commenters of post
 
-      //TODO
+      var commentsQuery = new Parse.Query(Comment);
+      commentsQuery.equalTo("post", post);
+
+      return commentsQuery.find().then(function(comments) {
+        var commentersObj = {};
+        commentersObj[postOwner.id] = true;
+        var commenters = [];
+        for (var i = 0; i < comments.length; i++) {
+          var commenter = comments[i].get("user");
+          if (!commentersObj[commenter.id]) {
+            commentersObj[commenter.id] = true;
+            commenters.push(commenter);
+          }
+        }
+
+        var pushQuery = new Parse.Query(Parse.Installation);
+        pushQuery.containedIn('user', commenters);
+
+        return Parse.Push.send({
+          where: pushQuery,
+          data: {
+            alert: alertText,
+            badge: "Increment",
+            lrcPostId: post.id
+          }
+        });
+      });
 
     } else {
       // commented on other post, notify post owner
 
+      var pushQuery = new Parse.Query(Parse.Installation);
       pushQuery.equalTo('user', postOwner);
 
-      //TODO add commenting user to post
-    }
-
-    return Parse.Push.send({
+      return Parse.Push.send({
         where: pushQuery,
         data: {
           alert: alertText,
-          badge: "Increment"
+          badge: "Increment",
+          lrcPostId: post.id
         }
       });
+    }
+
 
   }).then(function() {
 

@@ -250,4 +250,26 @@ NSString *const InfoIDNews = @"InfoIDNews";
     return error;
 }
 
+- (void)handlePush:(NSDictionary *)userInfo inForeground:(BOOL)inForeground
+{
+    NSString *postId = userInfo[@"lrcPostId"];
+    NSDictionary *aps = userInfo[@"aps"];
+    NSString *alert = aps[@"alert"];
+    NSNumber *badge = aps[@"badge"];
+    
+    if (badge)
+    {
+        [UIApplication sharedApplication].applicationIconBadgeNumber = badge.integerValue;
+    }
+    
+    if (inForeground)
+    {
+    }
+    else
+    {
+        self.shouldShowPostId = postId;
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:NewsNotification object:self];
+}
+
 @end
