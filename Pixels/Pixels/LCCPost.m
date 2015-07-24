@@ -7,6 +7,7 @@
 //
 
 #import "LCCPost.h"
+#import "LCCProgram.h"
 
 @implementation LCCPost
 
@@ -40,6 +41,18 @@
         default:
             return @"Unknown";
     }
+}
+
+- (NSString *)sourceCode
+{
+    if (self.programFile)
+    {
+        // new format
+        return [[NSString alloc] initWithData:[self.programFile getData] encoding:NSUTF8StringEncoding];
+    }
+
+    // old format
+    return self.program.sourceCode;
 }
 
 @end

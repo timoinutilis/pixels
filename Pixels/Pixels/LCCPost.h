@@ -38,5 +38,6 @@ typedef NS_ENUM(int, LCCPostCategory) {
 @property (retain) LCCPost *sharedPost;
 
 - (NSString *)categoryString;
+- (NSString *)sourceCode;
 
 @end

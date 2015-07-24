@@ -28,8 +28,8 @@
     self.textView.textColor = [AppStyle tintColor];
     self.textView.tintColor = [AppStyle brightColor];
     self.textView.indicatorStyle = UIScrollViewIndicatorStyleWhite;
-
-    self.textView.text = self.post.program.sourceCode;
+    
+    self.textView.text = [self.post sourceCode];
 }
 
 - (IBAction)onGetTapped:(id)sender
