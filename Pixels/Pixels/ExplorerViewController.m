@@ -80,6 +80,7 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     
     [self.collectionView flashScrollIndicators];
     [self showAddedProject];
+    [self checkShowCommunityPost];
     
     AppController *app = [AppController sharedController];
     if (app.numProgramsOpened >= 3)
@@ -144,6 +145,7 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 - (void)newsChanged:(NSNotification *)notification
 {
     [self updateGetButton];
+    [self checkShowCommunityPost];
 }
 
 - (void)onHelpTapped:(id)sender
@@ -161,6 +163,29 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 
 - (IBAction)onCommunityTapped:(id)sender
 {
+    [self showCommunity];
+}
+
+- (void)checkShowCommunityPost
+{
+    AppController *app = [AppController sharedController];
+    if (app.shouldShowPostId && !app.isCommunityOpen)
+    {
+        UIViewController *vc = self.navigationController.topViewController;
+        if (vc.presentedViewController)
+        {
+            [vc dismissViewControllerAnimated:NO completion:nil];
+        }
+        [self.navigationController popToViewController:self animated:NO];
+        
+        [self showCommunity];
+    }
+}
+
+- (void)showCommunity
+{
+    [AppController sharedController].isCommunityOpen = YES;
+    
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Community" bundle:nil];
     UIViewController *vc = (UIViewController *)[storyboard instantiateInitialViewController];
     

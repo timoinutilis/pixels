@@ -28,6 +28,7 @@ extern NSString *const NewsNotification;
 @property BOOL shouldShowTransferAlert;
 @property (nonatomic) NSInteger numNews;
 @property NSString *shouldShowPostId;
+@property BOOL isCommunityOpen;
 
 + (AppController *)sharedController;
 
