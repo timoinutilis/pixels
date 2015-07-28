@@ -8,6 +8,7 @@
 
 #import "AppController.h"
 #import <Parse/Parse.h>
+#import "UIViewController+LowResCoder.h"
 
 NSString *const FullVersionProductID = @"fullversion";
 
@@ -254,7 +255,7 @@ NSString *const InfoIDNews = @"InfoIDNews";
 {
     NSString *postId = userInfo[@"lrcPostId"];
     NSDictionary *aps = userInfo[@"aps"];
-    NSString *alert = aps[@"alert"];
+    NSString *alertText = aps[@"alert"];
     NSNumber *badge = aps[@"badge"];
     
     if (badge)
@@ -264,6 +265,12 @@ NSString *const InfoIDNews = @"InfoIDNews";
     
     if (inForeground)
     {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Notification" message:alertText preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"Show" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            //TODO
+        }]];
+        [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
     }
     else
     {
