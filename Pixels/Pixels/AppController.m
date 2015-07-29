@@ -9,6 +9,8 @@
 #import "AppController.h"
 #import <Parse/Parse.h>
 #import "UIViewController+LowResCoder.h"
+#import "CWStatusBarNotification.h"
+#import "AppStyle.h"
 
 NSString *const FullVersionProductID = @"fullversion";
 
@@ -19,6 +21,10 @@ NSString *const PurchaseStateNotification = @"PurchaseStateNotification";
 NSString *const NewsNotification = @"NewsNotification";
 
 NSString *const InfoIDNews = @"InfoIDNews";
+
+@interface AppController()
+@property NSString *notificationPostId;
+@end
 
 @implementation AppController
 
@@ -37,6 +43,7 @@ NSString *const InfoIDNews = @"InfoIDNews";
     if (self = [super init])
     {
         _purchaseState = PurchaseStateUninitialized;
+        [self initNotification];
     }
     return self;
 }
@@ -265,18 +272,39 @@ NSString *const InfoIDNews = @"InfoIDNews";
     
     if (inForeground)
     {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Notification" message:alertText preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:[UIAlertAction actionWithTitle:@"Show" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            //TODO
-        }]];
-        [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
-        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
+        self.notificationPostId = postId;
+        [_notification displayNotificationWithMessage:alertText forDuration:3];
     }
     else
     {
         self.shouldShowPostId = postId;
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:NewsNotification object:self];
+}
+
+- (void)initNotification
+{
+    _notification = [[CWStatusBarNotification alloc] init];
+    _notification.notificationStyle = CWNotificationStyleNavigationBarNotification;
+    _notification.notificationAnimationInStyle = CWNotificationAnimationStyleTop;
+    _notification.notificationAnimationOutStyle = CWNotificationAnimationStyleTop;
+    _notification.notificationAnimationType = CWNotificationAnimationTypeOverlay;
+    _notification.notificationLabelBackgroundColor = [AppStyle tintColor];
+    _notification.notificationLabelTextColor = [AppStyle darkColor];
+    _notification.multiline = YES;
+    
+    __weak AppController *weakSelf = self;
+    _notification.notificationTappedBlock = ^(void) {
+        
+        if (!weakSelf.notification.notificationIsDismissing)
+        {
+            [weakSelf.notification dismissNotification];
+            
+            weakSelf.shouldShowPostId = weakSelf.notificationPostId;
+            [[NSNotificationCenter defaultCenter] postNotificationName:NewsNotification object:weakSelf];
+        }
+        
+    };
 }
 
 @end

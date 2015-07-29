@@ -19,6 +19,8 @@ typedef NS_ENUM(NSInteger, PurchaseState) {
 extern NSString *const PurchaseStateNotification;
 extern NSString *const NewsNotification;
 
+@class CWStatusBarNotification;
+
 @interface AppController : NSObject <SKProductsRequestDelegate, SKPaymentTransactionObserver>
 
 @property (readonly) PurchaseState purchaseState;
@@ -29,6 +31,7 @@ extern NSString *const NewsNotification;
 @property (nonatomic) NSInteger numNews;
 @property NSString *shouldShowPostId;
 @property BOOL isCommunityOpen;
+@property (readonly) CWStatusBarNotification *notification;
 
 + (AppController *)sharedController;
 
