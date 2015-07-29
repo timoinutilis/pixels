@@ -273,7 +273,21 @@ NSString *const InfoIDNews = @"InfoIDNews";
     if (inForeground)
     {
         self.notificationPostId = postId;
-        [_notification displayNotificationWithMessage:alertText forDuration:3];
+        
+//        [self.notification displayNotificationWithMessage:alertText forDuration:3];
+
+        
+        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 64)];
+        view.backgroundColor = [AppStyle tintColor];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 20, 300, 44)];
+        label.backgroundColor = [UIColor clearColor];
+        label.textColor = [AppStyle darkColor];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.text = alertText;
+        label.numberOfLines = 0;
+        label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        [view addSubview:label];
+        [self.notification displayNotificationWithView:view forDuration:3];
     }
     else
     {
@@ -289,9 +303,6 @@ NSString *const InfoIDNews = @"InfoIDNews";
     _notification.notificationAnimationInStyle = CWNotificationAnimationStyleTop;
     _notification.notificationAnimationOutStyle = CWNotificationAnimationStyleTop;
     _notification.notificationAnimationType = CWNotificationAnimationTypeOverlay;
-    _notification.notificationLabelBackgroundColor = [AppStyle tintColor];
-    _notification.notificationLabelTextColor = [AppStyle darkColor];
-    _notification.multiline = YES;
     
     __weak AppController *weakSelf = self;
     _notification.notificationTappedBlock = ^(void) {
