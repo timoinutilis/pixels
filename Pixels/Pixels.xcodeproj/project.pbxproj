@@ -32,7 +32,6 @@
 		925935A11B1B77D7001CE0B1 /* LCCProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = 925935A01B1B77D7001CE0B1 /* LCCProgram.m */; };
 		925935A41B1B7E4F001CE0B1 /* UIViewController+CommUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 925935A31B1B7E4F001CE0B1 /* UIViewController+CommUtils.m */; };
 		925935A71B1B80C9001CE0B1 /* LCCCount.m in Sources */ = {isa = PBXBuildFile; fileRef = 925935A61B1B80C9001CE0B1 /* LCCCount.m */; };
-		925983AE1B68DB7F00EE0104 /* CWStatusBarNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 925983AD1B68DB7F00EE0104 /* CWStatusBarNotification.m */; };
 		925A01A91A1E67F900A321E6 /* Parser.m in Sources */ = {isa = PBXBuildFile; fileRef = 925A01A81A1E67F900A321E6 /* Parser.m */; };
 		925C28191B092BD9007AC515 /* DayCodeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 925C28181B092BD9007AC515 /* DayCodeManager.m */; };
 		925C281F1B092CA4007AC515 /* NSDate+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 925C281E1B092CA4007AC515 /* NSDate+Utils.m */; };
@@ -109,6 +108,7 @@
 		92C98F421A20F2F000215AE9 /* Node.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C98F411A20F2F000215AE9 /* Node.m */; };
 		92D2C2021B13442A00539BA6 /* CommUsersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D2C2011B13442A00539BA6 /* CommUsersViewController.m */; };
 		92D518B91A6975C10000F917 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D518B81A6975C10000F917 /* AboutViewController.m */; };
+		92E1AF961B6A49E8000B1B0D /* NotificationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E1AF951B6A49E8000B1B0D /* NotificationView.m */; };
 		92E2B8AA1A52F08D00D0DF29 /* ActivityItemSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E2B8A91A52F08D00D0DF29 /* ActivityItemSource.m */; };
 		92E36D191ADD294E00C16CBE /* UIColor+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E36D181ADD294E00C16CBE /* UIColor+Utils.m */; };
 		92E36D1C1ADD2D4300C16CBE /* AppStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E36D1B1ADD2D4200C16CBE /* AppStyle.m */; };
@@ -170,8 +170,6 @@
 		925935A31B1B7E4F001CE0B1 /* UIViewController+CommUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+CommUtils.m"; sourceTree = "<group>"; };
 		925935A51B1B80C9001CE0B1 /* LCCCount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCCount.h; sourceTree = "<group>"; };
 		925935A61B1B80C9001CE0B1 /* LCCCount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCCount.m; sourceTree = "<group>"; };
-		925983AC1B68DB7F00EE0104 /* CWStatusBarNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWStatusBarNotification.h; sourceTree = "<group>"; };
-		925983AD1B68DB7F00EE0104 /* CWStatusBarNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWStatusBarNotification.m; sourceTree = "<group>"; };
 		925A01A71A1E67F900A321E6 /* Parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Parser.h; sourceTree = "<group>"; };
 		925A01A81A1E67F900A321E6 /* Parser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Parser.m; sourceTree = "<group>"; };
 		925C28171B092BD9007AC515 /* DayCodeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DayCodeManager.h; sourceTree = "<group>"; };
@@ -315,6 +313,8 @@
 		92D2C2011B13442A00539BA6 /* CommUsersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommUsersViewController.m; sourceTree = "<group>"; };
 		92D518B71A6975C10000F917 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
 		92D518B81A6975C10000F917 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
+		92E1AF941B6A49E8000B1B0D /* NotificationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationView.h; sourceTree = "<group>"; };
+		92E1AF951B6A49E8000B1B0D /* NotificationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationView.m; sourceTree = "<group>"; };
 		92E2B8A81A52F08D00D0DF29 /* ActivityItemSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityItemSource.h; sourceTree = "<group>"; };
 		92E2B8A91A52F08D00D0DF29 /* ActivityItemSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityItemSource.m; sourceTree = "<group>"; };
 		92E36D171ADD294E00C16CBE /* UIColor+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+Utils.h"; path = "Class Utils/UIColor+Utils.h"; sourceTree = "<group>"; };
@@ -411,6 +411,8 @@
 				92ACDC3C1B359C7A009252D6 /* TextLabel.m */,
 				9215D7771B37361100A65E55 /* StandardTableViewCell.h */,
 				9215D7781B37361100A65E55 /* StandardTableViewCell.m */,
+				92E1AF941B6A49E8000B1B0D /* NotificationView.h */,
+				92E1AF951B6A49E8000B1B0D /* NotificationView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -453,15 +455,6 @@
 				92C081181B0DD9490006331B /* CommLogInViewController.m */,
 			);
 			name = Community;
-			sourceTree = "<group>";
-		};
-		925983AB1B68DB7F00EE0104 /* CWStatusBarNotification */ = {
-			isa = PBXGroup;
-			children = (
-				925983AC1B68DB7F00EE0104 /* CWStatusBarNotification.h */,
-				925983AD1B68DB7F00EE0104 /* CWStatusBarNotification.m */,
-			);
-			path = CWStatusBarNotification;
 			sourceTree = "<group>";
 		};
 		9267E86B1A5AF61B00D08C42 /* AFNetworking */ = {
@@ -574,7 +567,6 @@
 			children = (
 				9204EF6B1A4C431400B8C29C /* Assets */,
 				92884EF71B0F25B30032623D /* SDWebImage */,
-				925983AB1B68DB7F00EE0104 /* CWStatusBarNotification */,
 				9267E86B1A5AF61B00D08C42 /* AFNetworking */,
 				92E53DEA1A5B3A1D00FE9F91 /* Gor Lib */,
 				928E5CF01B27735200D7CD6F /* App */,
@@ -879,7 +871,6 @@
 				9204C1F21A6B458200A0123C /* NSString+Utils.m in Sources */,
 				92884F241B0F25B30032623D /* UIImage+MultiFormat.m in Sources */,
 				92884F261B0F25B30032623D /* UIImageView+HighlightedWebCache.m in Sources */,
-				925983AE1B68DB7F00EE0104 /* CWStatusBarNotification.m in Sources */,
 				926A6A181B1C929D00A85412 /* UIViewController+LowResCoder.m in Sources */,
 				92E2B8AA1A52F08D00D0DF29 /* ActivityItemSource.m in Sources */,
 				92884F231B0F25B30032623D /* UIImage+GIF.m in Sources */,
@@ -933,6 +924,7 @@
 				926086321A5E8560006C5523 /* Runnable.m in Sources */,
 				922A77461AA46CCB004EE2CA /* Project.m in Sources */,
 				920E681D1AB731620038994A /* CoachMarkView.m in Sources */,
+				92E1AF961B6A49E8000B1B0D /* NotificationView.m in Sources */,
 				9254DF601B628A3C00774E98 /* LCCPostStats.m in Sources */,
 				925935A71B1B80C9001CE0B1 /* LCCCount.m in Sources */,
 				924CC0FE1A220B3C00D2AF68 /* Runner.m in Sources */,

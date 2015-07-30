@@ -232,7 +232,7 @@
     // note for users with old app version
     
     LCCProgram *program = [LCCProgram object];
-    program.sourceCode = @"REM ************************\nREM PLEASE UPDATE LOWRES CODER AND GET THIS PROGRAM AGAIN\nREM ************************";
+    program.sourceCode = @"REM ************************\nREM LOWRES CODER 3.1 OR NEWER REQUIRED\nREM PLEASE UPDATE LOWRES CODER AND GET THIS PROGRAM AGAIN\nREM ************************";
     
     // post
     

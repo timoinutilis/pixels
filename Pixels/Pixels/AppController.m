@@ -9,8 +9,7 @@
 #import "AppController.h"
 #import <Parse/Parse.h>
 #import "UIViewController+LowResCoder.h"
-#import "CWStatusBarNotification.h"
-#import "AppStyle.h"
+#import "NotificationView.h"
 
 NSString *const FullVersionProductID = @"fullversion";
 
@@ -22,9 +21,6 @@ NSString *const NewsNotification = @"NewsNotification";
 
 NSString *const InfoIDNews = @"InfoIDNews";
 
-@interface AppController()
-@property NSString *notificationPostId;
-@end
 
 @implementation AppController
 
@@ -43,7 +39,6 @@ NSString *const InfoIDNews = @"InfoIDNews";
     if (self = [super init])
     {
         _purchaseState = PurchaseStateUninitialized;
-        [self initNotification];
     }
     return self;
 }
@@ -272,50 +267,19 @@ NSString *const InfoIDNews = @"InfoIDNews";
     
     if (inForeground)
     {
-        self.notificationPostId = postId;
+        __weak AppController *weakSelf = self;
         
-//        [self.notification displayNotificationWithMessage:alertText forDuration:3];
-
+        [NotificationView showMessage:alertText block:^{
+            weakSelf.shouldShowPostId = postId;
+            [[NSNotificationCenter defaultCenter] postNotificationName:NewsNotification object:weakSelf];
+        }];
         
-        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 64)];
-        view.backgroundColor = [AppStyle tintColor];
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 20, 300, 44)];
-        label.backgroundColor = [UIColor clearColor];
-        label.textColor = [AppStyle darkColor];
-        label.textAlignment = NSTextAlignmentCenter;
-        label.text = alertText;
-        label.numberOfLines = 0;
-        label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        [view addSubview:label];
-        [self.notification displayNotificationWithView:view forDuration:3];
     }
     else
     {
         self.shouldShowPostId = postId;
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:NewsNotification object:self];
-}
-
-- (void)initNotification
-{
-    _notification = [[CWStatusBarNotification alloc] init];
-    _notification.notificationStyle = CWNotificationStyleNavigationBarNotification;
-    _notification.notificationAnimationInStyle = CWNotificationAnimationStyleTop;
-    _notification.notificationAnimationOutStyle = CWNotificationAnimationStyleTop;
-    _notification.notificationAnimationType = CWNotificationAnimationTypeOverlay;
-    
-    __weak AppController *weakSelf = self;
-    _notification.notificationTappedBlock = ^(void) {
-        
-        if (!weakSelf.notification.notificationIsDismissing)
-        {
-            [weakSelf.notification dismissNotification];
-            
-            weakSelf.shouldShowPostId = weakSelf.notificationPostId;
-            [[NSNotificationCenter defaultCenter] postNotificationName:NewsNotification object:weakSelf];
-        }
-        
-    };
 }
 
 @end

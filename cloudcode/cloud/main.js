@@ -17,7 +17,7 @@ function increasePostStats(post, key) {
   return stats.save();
 }
 
-
+/*
 Parse.Cloud.beforeSave("Post", function(request, response) {
 
   if (!request.object.get("stats")) {
@@ -33,7 +33,7 @@ Parse.Cloud.beforeSave("Post", function(request, response) {
   }
 
 });
-
+*/
 Parse.Cloud.beforeDelete("Post", function(request, response) {
 
   var postsQuery = new Parse.Query(Post);
