@@ -11,6 +11,7 @@
 #import "CommDetailViewController.h"
 #import "ExtendedActivityIndicatorView.h"
 #import "UIViewController+LowResCoder.h"
+#import "UIViewController+CommUtils.h"
 
 @interface CommUsersViewController ()
 
@@ -23,11 +24,14 @@
 
 @implementation CommUsersViewController
 
-- (void)awakeFromNib
+- (void)viewDidLoad
 {
-    [super awakeFromNib];
+    [super viewDidLoad];
+    
     self.activityIndicator = [[ExtendedActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
+    UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onDoneTapped:)];
+    UIBarButtonItem *activityItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
+    self.navigationItem.rightBarButtonItems = @[doneItem, activityItem];
 }
 
 - (void)setUser:(LCCUser *)user mode:(CommUsersMode)mode
@@ -36,6 +40,11 @@
     self.mode = mode;
     
     [self updateData];
+}
+
+- (void)onDoneTapped:(id)sender
+{
+    [self closeCommunity];
 }
 
 - (void)updateData

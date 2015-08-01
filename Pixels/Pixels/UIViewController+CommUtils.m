@@ -45,4 +45,11 @@
     }];
 }
 
+- (void)closeCommunity
+{
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
+        [[AppController sharedController] registerForNotifications];
+    }];
+}
+
 @end

@@ -36,16 +36,14 @@ typedef NS_ENUM(NSInteger, CellTag) {
 
 @implementation CommPostViewController
 
-- (void)awakeFromNib
-{
-    [super awakeFromNib];
-    self.activityIndicator = [[ExtendedActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.activityIndicator = [[ExtendedActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onDoneTapped:)];
+    UIBarButtonItem *activityItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
+    self.navigationItem.rightBarButtonItems = @[doneItem, activityItem];
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 44;
@@ -54,12 +52,6 @@ typedef NS_ENUM(NSInteger, CellTag) {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
     {
         self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 252, 0);
-    }
-    
-    if (self.navigationController.viewControllers.firstObject == self)
-    {
-        // is modal
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Close" style:UIBarButtonItemStylePlain target:self action:@selector(onDoneTapped:)];
     }
     
     self.writeCommentCell = [self.tableView dequeueReusableCellWithIdentifier:@"WriteCommentCell"];
@@ -95,6 +87,11 @@ typedef NS_ENUM(NSInteger, CellTag) {
 {
     self.post = post;
     self.mode = mode;
+}
+
+- (void)onDoneTapped:(id)sender
+{
+    [self closeCommunity];
 }
 
 - (void)onPostDeleted:(NSNotification *)notification
@@ -309,11 +306,6 @@ typedef NS_ENUM(NSInteger, CellTag) {
 - (void)onUserChanged:(NSNotification *)notification
 {
     [self.tableView reloadData];
-}
-
-- (void)onDoneTapped:(id)sender
-{
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (IBAction)onLikeTapped:(id)sender

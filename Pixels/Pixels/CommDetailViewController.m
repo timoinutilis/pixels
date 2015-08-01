@@ -14,6 +14,7 @@
 #import "CommEditUserViewController.h"
 #import "CommLogInViewController.h"
 #import "UIViewController+LowResCoder.h"
+#import "UIViewController+CommUtils.h"
 #import "ExtendedActivityIndicatorView.h"
 #import "AppController.h"
 #import "GORCycleManager.h"
@@ -44,17 +45,14 @@ static NSString *const SectionPosts = @"Posts";
 
 @implementation CommDetailViewController
 
-- (void)awakeFromNib
-{
-    [super awakeFromNib];
-    
-    self.activityIndicator = [[ExtendedActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];    
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.activityIndicator = [[ExtendedActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onDoneTapped:)];
+    UIBarButtonItem *activityItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
+    self.navigationItem.rightBarButtonItems = @[doneItem, activityItem];
     
     self.tableView.estimatedRowHeight = 53;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
@@ -114,6 +112,11 @@ static NSString *const SectionPosts = @"Posts";
     self.mode = mode;
     
     [self updateData];
+}
+
+- (void)onDoneTapped:(id)sender
+{
+    [self closeCommunity];
 }
 
 - (void)onFollowsChanged:(NSNotification *)notification

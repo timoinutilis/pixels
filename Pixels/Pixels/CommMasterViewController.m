@@ -11,6 +11,7 @@
 #import "CommunityModel.h"
 #import "CommLogInViewController.h"
 #import "UIViewController+LowResCoder.h"
+#import "UIViewController+CommUtils.h"
 #import "AppController.h"
 
 typedef NS_ENUM(NSInteger, CellTag) {
@@ -33,6 +34,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
 - (void)awakeFromNib
 {
     [super awakeFromNib];
+    
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
     {
         self.clearsSelectionOnViewWillAppear = NO;
@@ -42,6 +44,12 @@ typedef NS_ENUM(NSInteger, CellTag) {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    if (YES) //TODO is split?
+    {
+        UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onDoneTapped:)];
+        self.navigationItem.rightBarButtonItem = doneItem;
+    }
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserChanged:) name:CurrentUserChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onFollowsChanged:) name:FollowsChangeNotification object:nil];
@@ -96,11 +104,9 @@ typedef NS_ENUM(NSInteger, CellTag) {
     [self showCurrentSelection];
 }
 
-- (IBAction)onDoneTapped:(id)sender
+- (void)onDoneTapped:(id)sender
 {
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
-        [[AppController sharedController] registerForNotifications];
-    }];
+    [self closeCommunity];
 }
 
 #pragma mark - Table view data source
