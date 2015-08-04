@@ -77,9 +77,11 @@ Parse.Cloud.beforeDelete("Post", function(request, response) {
   }).then(function() {
 
     // delete stats if available
-    var stats = request.object.get("stats");
-    if (stats) {
-      return stats.destroy();
+    if (request.object.get("type") != 3) { // not if post is a "share"
+      var stats = request.object.get("stats");
+      if (stats) {
+        return stats.destroy();
+      }
     }
 
   }).then(function() {

@@ -18,12 +18,14 @@
 extern NSString *const CurrentUserChangeNotification;
 extern NSString *const FollowsChangeNotification;
 extern NSString *const PostDeleteNotification;
+extern NSString *const UserUpdateNotification;
 
 extern NSString *const UserDefaultsLogInKey;
 
 @interface CommunityModel : NSObject
 
 @property (readonly) NSMutableArray *follows;
+@property (readonly) BOOL isUpdatingUser;
 
 + (CommunityModel *)sharedInstance;
 + (void)registerSubclasses;

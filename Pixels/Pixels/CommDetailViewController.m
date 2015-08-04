@@ -40,6 +40,7 @@ static NSString *const SectionPosts = @"Posts";
 @property CommWriteStatusCell *writeStatusCell;
 @property ExtendedActivityIndicatorView *activityIndicator;
 @property BOOL userNeedsUpdate;
+@property BOOL showsUserUpdateActivity;
 
 @end
 
@@ -83,7 +84,8 @@ static NSString *const SectionPosts = @"Posts";
 {
     [super viewWillAppear:animated];
     
-    [self.tableView reloadData];
+    [self onUserUpdate:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserUpdate:) name:UserUpdateNotification object:nil];
     
     if (self.mode == CommListModeUndefined)
     {
@@ -96,6 +98,8 @@ static NSString *const SectionPosts = @"Posts";
 {
     [super viewWillDisappear:animated];
     [self.view endEditing:YES];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UserUpdateNotification object:nil];
 }
 
 - (void)setUser:(LCCUser *)user mode:(CommListMode)mode
@@ -158,6 +162,23 @@ static NSString *const SectionPosts = @"Posts";
     if (changed)
     {
         [self.tableView reloadData];
+    }
+}
+
+- (void)onUserUpdate:(NSNotification *)notification
+{
+    if ([CommunityModel sharedInstance].isUpdatingUser)
+    {
+        if (!self.showsUserUpdateActivity)
+        {
+            [self.activityIndicator increaseActivity];
+            self.showsUserUpdateActivity = YES;
+        }
+    }
+    else if (self.showsUserUpdateActivity)
+    {
+        [self.activityIndicator decreaseActivity];
+        self.showsUserUpdateActivity = NO;
     }
 }
 

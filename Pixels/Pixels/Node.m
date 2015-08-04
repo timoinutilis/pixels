@@ -1193,7 +1193,7 @@ NSString *const TRANSFER = @"TRANSFER";
             }
             [strings addObject:string];
         }
-        NSString *dataString = [strings componentsJoinedByString:@","];
+        NSString *dataString = [strings componentsJoinedByString:@", "];
         [runner.transferStrings addObject:[NSString stringWithFormat:@"DATA %@", dataString]];
     }
     [runner next];

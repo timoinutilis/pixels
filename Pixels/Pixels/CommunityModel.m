@@ -11,6 +11,7 @@
 NSString *const CurrentUserChangeNotification = @"CurrentUserChangeNotification";
 NSString *const FollowsChangeNotification = @"FollowsChangeNotification";
 NSString *const PostDeleteNotification = @"PostDeleteNotification";
+NSString *const UserUpdateNotification = @"UserUpdateNotification";
 
 NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
 
@@ -58,6 +59,9 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
 
 - (void)updateCurrentUser
 {
+    _isUpdatingUser = YES;
+    [[NSNotificationCenter defaultCenter] postNotificationName:UserUpdateNotification object:self];
+    
     if ([PFUser currentUser])
     {
         PFQuery *query = [PFQuery queryWithClassName:[LCCFollow parseClassName]];
@@ -77,6 +81,8 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
             {
                 NSLog(@"Error: %@", error.description);
             }
+            _isUpdatingUser = NO;
+            [[NSNotificationCenter defaultCenter] postNotificationName:UserUpdateNotification object:self];
             
         }];
     }
@@ -100,6 +106,8 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
                 NSLog(@"Error: %@", error.description);
                 [[NSNotificationCenter defaultCenter] postNotificationName:FollowsChangeNotification object:self];
             }
+            _isUpdatingUser = NO;
+            [[NSNotificationCenter defaultCenter] postNotificationName:UserUpdateNotification object:self];
             
         }];
     }
