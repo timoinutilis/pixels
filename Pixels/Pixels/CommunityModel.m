@@ -138,6 +138,8 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
         {
             [self.follows insertObject:follow atIndex:0];
             [[NSNotificationCenter defaultCenter] postNotificationName:FollowsChangeNotification object:self];
+            
+            [PFAnalytics trackEvent:@"follow"];
         }
         else
         {
@@ -156,6 +158,8 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
             {
                 [self.follows removeObject:follow];
                 [[NSNotificationCenter defaultCenter] postNotificationName:FollowsChangeNotification object:self];
+                
+                [PFAnalytics trackEvent:@"unfollow"];
             }
             else
             {

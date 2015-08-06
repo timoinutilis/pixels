@@ -320,6 +320,9 @@ typedef NS_ENUM(NSInteger, CellTag) {
         [[CommunityModel sharedInstance] countPost:self.post type:LCCCountTypeLike];
         self.titleCell.likeCount++;
         [self.titleCell likeIt];
+        
+        NSDictionary *dimensions = @{@"category": [self.post categoryString]};
+        [PFAnalytics trackEvent:@"like" dimensions:dimensions];
     }
 }
 
@@ -401,6 +404,10 @@ typedef NS_ENUM(NSInteger, CellTag) {
                     [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.comments.count - 1 inSection:1]] withRowAnimation:UITableViewRowAnimationAutomatic];
                 }
                 [self.writeCommentCell reset];
+                
+                NSDictionary *dimensions = @{@"user": [PFUser currentUser] ? @"registered" : @"guest",
+                                             @"category": [self.post categoryString]};
+                [PFAnalytics trackEvent:@"comment" dimensions:dimensions];
             }
             else if (error)
             {

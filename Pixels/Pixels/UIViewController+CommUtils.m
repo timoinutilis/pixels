@@ -32,6 +32,11 @@
 
 - (void)addProgramOfPost:(LCCPost *)post
 {
+    NSDictionary *dimensions = @{@"user": [PFUser currentUser] ? @"registered" : @"guest",
+                                 @"category": [post categoryString]};
+
+    [PFAnalytics trackEvent:@"get_program" dimensions:dimensions];
+    
     Project *project = [[ModelManager sharedManager] createNewProject];
     project.name = post.title;
     project.sourceCode = [post sourceCode];

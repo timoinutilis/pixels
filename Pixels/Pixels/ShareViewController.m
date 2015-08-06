@@ -254,6 +254,9 @@
             [[CommunityModel sharedInstance] onPostedWithDate:post.createdAt];
             self.project.postId = post.objectId;
             [self.shareDelegate onClosedWithSuccess:YES];
+            
+            NSDictionary *dimensions = @{@"category": [post categoryString]};
+            [PFAnalytics trackEvent:@"post" dimensions:dimensions];
         }
         else
         {

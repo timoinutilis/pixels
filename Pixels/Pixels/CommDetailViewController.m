@@ -348,6 +348,9 @@ static NSString *const SectionPosts = @"Posts";
                 [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
                 self.writeStatusCell.titleTextField.text = @"";
                 self.writeStatusCell.textView.text = @"";
+                
+                NSDictionary *dimensions = @{@"category": [post categoryString]};
+                [PFAnalytics trackEvent:@"post" dimensions:dimensions];
             }
             else if (error)
             {
