@@ -324,6 +324,11 @@ static NSString *const SectionPosts = @"Posts";
     }
     else
     {
+        [self.view endEditing:YES];
+        
+        UIButton *button = (UIButton *)sender;
+        button.enabled = NO;
+        
         LCCPost *post = [LCCPost object];
         post.user = (LCCUser *)[PFUser currentUser];
         post.type = LCCPostTypeStatus;
@@ -331,7 +336,10 @@ static NSString *const SectionPosts = @"Posts";
         post.title = statusTitleText;
         post.detail = statusDetailText;
         
+        [self.activityIndicator increaseActivity];
         [post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            
+            [self.activityIndicator decreaseActivity];
             
             if (succeeded)
             {
@@ -340,13 +348,13 @@ static NSString *const SectionPosts = @"Posts";
                 [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
                 self.writeStatusCell.titleTextField.text = @"";
                 self.writeStatusCell.textView.text = @"";
-                [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
             }
             else if (error)
             {
-                [self showAlertWithTitle:@"Could not send status update" message:error.userInfo[@"error"] block:nil];
+                [self showAlertWithTitle:@"Could not send status update." message:error.userInfo[@"error"] block:nil];
             }
             
+            button.enabled = YES;
         }];
     }
 }

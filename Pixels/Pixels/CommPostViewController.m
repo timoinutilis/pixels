@@ -330,8 +330,9 @@ typedef NS_ENUM(NSInteger, CellTag) {
 
 - (IBAction)onShareTapped:(id)sender
 {
+    CommPostViewController __weak *weakSelf = self;
     [self showConfirmAlertWithTitle:@"Do you really want to share this?" message:nil block:^{
-        [self share];
+        [weakSelf share];
     }];
 }
 
@@ -370,6 +371,8 @@ typedef NS_ENUM(NSInteger, CellTag) {
     commentText = [commentText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     if (commentText.length > 0)
     {
+        [self.view endEditing:YES];
+        
         LCCComment *comment = [LCCComment object];
         comment.user = (LCCUser *)[PFUser currentUser];
         comment.post = self.post;
@@ -383,7 +386,6 @@ typedef NS_ENUM(NSInteger, CellTag) {
         [comment saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             
             [self.activityIndicator decreaseActivity];
-            button.enabled = YES;
             
             if (succeeded)
             {
@@ -404,6 +406,8 @@ typedef NS_ENUM(NSInteger, CellTag) {
             {
                 [self showAlertWithTitle:@"Could not send comment." message:error.userInfo[@"error"] block:nil];
             }
+
+            button.enabled = YES;
             
         }];
     }
