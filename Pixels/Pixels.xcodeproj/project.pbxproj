@@ -105,6 +105,7 @@
 		92C0811C1B0DDCDB0006331B /* CommunityModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C0811B1B0DDCDB0006331B /* CommunityModel.m */; };
 		92C081541B0DF1900006331B /* LCCPost.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C081531B0DF1900006331B /* LCCPost.m */; };
 		92C0815A1B0E021A0006331B /* CommPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C081591B0E021A0006331B /* CommPostViewController.m */; };
+		92C135D31B81D95100E9F5A4 /* NSMutableDictionary+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C135D21B81D95100E9F5A4 /* NSMutableDictionary+Utils.m */; };
 		92C98F421A20F2F000215AE9 /* Node.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C98F411A20F2F000215AE9 /* Node.m */; };
 		92D2C2021B13442A00539BA6 /* CommUsersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D2C2011B13442A00539BA6 /* CommUsersViewController.m */; };
 		92D518B91A6975C10000F917 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D518B81A6975C10000F917 /* AboutViewController.m */; };
@@ -307,6 +308,8 @@
 		92C081531B0DF1900006331B /* LCCPost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCPost.m; sourceTree = "<group>"; };
 		92C081581B0E021A0006331B /* CommPostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommPostViewController.h; sourceTree = "<group>"; };
 		92C081591B0E021A0006331B /* CommPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommPostViewController.m; sourceTree = "<group>"; };
+		92C135D11B81D95100E9F5A4 /* NSMutableDictionary+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSMutableDictionary+Utils.h"; path = "Class Utils/NSMutableDictionary+Utils.h"; sourceTree = "<group>"; };
+		92C135D21B81D95100E9F5A4 /* NSMutableDictionary+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSMutableDictionary+Utils.m"; path = "Class Utils/NSMutableDictionary+Utils.m"; sourceTree = "<group>"; };
 		92C98F401A20F2F000215AE9 /* Node.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Node.h; sourceTree = "<group>"; };
 		92C98F411A20F2F000215AE9 /* Node.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Node.m; sourceTree = "<group>"; };
 		92D2C2001B13442A00539BA6 /* CommUsersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommUsersViewController.h; sourceTree = "<group>"; };
@@ -374,6 +377,8 @@
 				92E36D181ADD294E00C16CBE /* UIColor+Utils.m */,
 				925C281D1B092CA4007AC515 /* NSDate+Utils.h */,
 				925C281E1B092CA4007AC515 /* NSDate+Utils.m */,
+				92C135D11B81D95100E9F5A4 /* NSMutableDictionary+Utils.h */,
+				92C135D21B81D95100E9F5A4 /* NSMutableDictionary+Utils.m */,
 			);
 			name = "Class Utils";
 			sourceTree = "<group>";
@@ -915,6 +920,7 @@
 				92884F251B0F25B30032623D /* UIImage+WebP.m in Sources */,
 				9267E8851A5AF61B00D08C42 /* AFURLRequestSerialization.m in Sources */,
 				928FB8991A5C804200EA377F /* GORSeparatorView.m in Sources */,
+				92C135D31B81D95100E9F5A4 /* NSMutableDictionary+Utils.m in Sources */,
 				92884F1E1B0F25B30032623D /* SDWebImageDownloader.m in Sources */,
 				927334A01A2A499B00C89AF0 /* ModelManager.m in Sources */,
 				9273349D1A2A478700C89AF0 /* HelpTableViewController.m in Sources */,

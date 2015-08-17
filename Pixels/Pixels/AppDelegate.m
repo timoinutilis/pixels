@@ -114,4 +114,9 @@
     [[AppController sharedController] handlePush:userInfo inForeground:inForeground];
 }
 
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    return [[AppController sharedController] handleOpenURL:url];
+}
+
 @end

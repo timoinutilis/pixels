@@ -10,6 +10,7 @@
 #import <Parse/Parse.h>
 #import "UIViewController+LowResCoder.h"
 #import "NotificationView.h"
+#import "NSMutableDictionary+Utils.h"
 
 NSString *const FullVersionProductID = @"fullversion";
 
@@ -280,6 +281,22 @@ NSString *const InfoIDNews = @"InfoIDNews";
         self.shouldShowPostId = postId;
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:NewsNotification object:self];
+}
+
+- (BOOL)handleOpenURL:(NSURL *)url
+{
+    if ([[url scheme] isEqualToString:@"lowrescoder"])
+    {
+        NSMutableDictionary *params = [NSMutableDictionary dictionaryWithParamsFromURL:url];
+        NSString *postId = params[@"lccpost"];
+        if (postId)
+        {
+            self.shouldShowPostId = postId;
+            [[NSNotificationCenter defaultCenter] postNotificationName:NewsNotification object:self];
+        }
+        return YES;
+    }
+    return NO;
 }
 
 @end

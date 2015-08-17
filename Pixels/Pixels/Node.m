@@ -258,9 +258,28 @@ NSString *const TRANSFER = @"TRANSFER";
 
 @implementation ReturnNode
 
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    if (pass == PrePassCheckSemantic)
+    {
+        if (self.label && !runnable.labels[self.label])
+        {
+            runnable.error = [NSError undefinedLabelErrorWithNode:self label:self.label];
+            return;
+        }
+    }
+}
+
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    [runner returnFromGosubAtToken:self.token];
+    if (self.label)
+    {
+        [runner returnFromGosubToLabel:self.label atToken:self.token];
+    }
+    else
+    {
+        [runner returnFromGosubAtToken:self.token];
+    }
     return nil;
 }
 
@@ -1882,6 +1901,44 @@ NSString *const TRANSFER = @"TRANSFER";
             break;
         case TTypeSymTan:
             result = tanf(value);
+            break;
+        default:
+            break;
+    }
+    return @(result);
+}
+
+@end
+
+
+
+@implementation Maths2Node
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.xExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.yExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    NSNumber *x = [self.xExpression evaluateWithRunner:runner];
+    NSNumber *y = [self.xExpression evaluateWithRunner:runner];
+    if (runner.error)
+    {
+        return nil;
+    }
+    
+    float valueX = x.floatValue;
+    float valueY = y.floatValue;
+    float result = 0;
+    switch (self.type)
+    {
+        case TTypeSymMin:
+            result = MIN(valueX, valueY);
+            break;
+        case TTypeSymMax:
+            result = MAX(valueX, valueY);
             break;
         default:
             break;

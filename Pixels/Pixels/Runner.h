@@ -58,6 +58,7 @@
 - (void)resetSequence;
 - (void)gotoLabel:(NSString *)label isGosub:(BOOL)isGosub atToken:(Token *)token;
 - (void)returnFromGosubAtToken:(Token *)token;
+- (void)returnFromGosubToLabel:(NSString *)label atToken:(Token *)token;
 - (void)addSequenceWithNodes:(NSArray *)nodes isLoop:(BOOL)isLoop parent:(Node *)parent;
 
 - (void)dimVariable:(VariableNode *)variable;

@@ -177,6 +177,11 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
 
 - (void)returnFromGosubAtToken:(Token *)token
 {
+    [self returnFromGosubToLabel:nil atToken:token];
+}
+
+- (void)returnFromGosubToLabel:(NSString *)label atToken:(Token *)token
+{
     SequenceTreeSnapshot *snapshot = self.gosubStack.lastObject;
     if (snapshot)
     {
@@ -187,7 +192,15 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
             Sequence *sequence = self.sequencesStack[i];
             sequence.index = [snapshot.indexes[i] integerValue];
         }
-        [self next];
+        
+        if (label)
+        {
+            [self gotoLabel:label isGosub:NO atToken:token];
+        }
+        else
+        {
+            [self next];
+        }
         return;
     }
     

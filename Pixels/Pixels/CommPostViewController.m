@@ -42,8 +42,9 @@ typedef NS_ENUM(NSInteger, CellTag) {
     
     self.activityIndicator = [[ExtendedActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onDoneTapped:)];
+    UIBarButtonItem *actionItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(onActionTapped:)];
     UIBarButtonItem *activityItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
-    self.navigationItem.rightBarButtonItems = @[doneItem, activityItem];
+    self.navigationItem.rightBarButtonItems = @[doneItem, actionItem, activityItem];
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 44;
@@ -92,6 +93,16 @@ typedef NS_ENUM(NSInteger, CellTag) {
 - (void)onDoneTapped:(id)sender
 {
     [self closeCommunity];
+}
+
+- (void)onActionTapped:(id)sender
+{
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://lowres.inutilis.com/programs/?lccpost=%@", self.post.objectId]];
+    
+    UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:@[url] applicationActivities:nil];
+    
+    activityVC.popoverPresentationController.barButtonItem = sender;
+    [self presentViewController:activityVC animated:YES completion:nil];
 }
 
 - (void)onPostDeleted:(NSNotification *)notification

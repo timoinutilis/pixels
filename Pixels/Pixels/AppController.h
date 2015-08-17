@@ -52,5 +52,6 @@ extern NSString *const NewsNotification;
 - (NSString *)popStoredError;
 
 - (void)handlePush:(NSDictionary *)userInfo inForeground:(BOOL)inForeground;
-
+- (BOOL)handleOpenURL:(NSURL *)url;
+;
 @end

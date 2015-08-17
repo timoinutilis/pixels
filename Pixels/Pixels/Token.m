@@ -98,6 +98,8 @@
         case TTypeSymSqr: return @"SQR";
         case TTypeSymTan: return @"TAN";
         case TTypeSymTap: return @"TAP";
+        case TTypeSymMin: return @"MIN";
+        case TTypeSymMax: return @"MAX";
         
         case TTypeSymTrue: return @"TRUE";
         case TTypeSymFalse: return @"FALSE";

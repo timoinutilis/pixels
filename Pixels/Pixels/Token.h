@@ -95,6 +95,8 @@ typedef NS_ENUM(NSInteger, TType) {
     TTypeSymSqr,
     TTypeSymTan,
     TTypeSymTap,
+    TTypeSymMin,
+    TTypeSymMax,
     
     // Constants
     TTypeSymTrue,

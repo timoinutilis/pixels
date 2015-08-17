@@ -59,6 +59,7 @@
 @end
 
 @interface ReturnNode : Node
+@property NSString *label;
 @end
 
 @interface PrintNode : Node
@@ -293,6 +294,12 @@
 @interface Maths1Node : Node
 @property TType type;
 @property Node *xExpression;
+@end
+
+@interface Maths2Node : Node
+@property TType type;
+@property Node *xExpression;
+@property Node *yExpression;
 @end
 
 @interface LeftSNode : Node

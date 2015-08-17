@@ -114,6 +114,11 @@
     return NO;
 }
 
+- (BOOL)tokenIsParameter
+{
+    return self.token.type != TTypeSymComma && self.token.type != TTypeSymEol && self.token.type != TTypeSymElse;
+}
+
 #pragma mark - Lines
 
 - (NSArray *)acceptProgram
@@ -440,6 +445,12 @@
 {
     ReturnNode *node = [[ReturnNode alloc] init];
     [self accept:TTypeSymReturn];
+    
+    if ([self tokenIsParameter])
+    {
+        node.label = self.token.attrString;
+        [self accept:TTypeIdentifier];
+    }
     return node;
 }
 
@@ -1013,11 +1024,11 @@
 
 - (Node *)acceptOptionalExpression
 {
-    if (self.token.type == TTypeSymComma || self.token.type == TTypeSymEol || self.token.type == TTypeSymElse)
+    if ([self tokenIsParameter])
     {
-        return nil;
+        return [self acceptExpression];
     }
-    return [self acceptExpression];
+    return nil;
 }
 
 - (Node *)acceptExpressionLevel:(int)level
@@ -1268,6 +1279,19 @@
             [self accept:self.token.type];
             [self accept:TTypeSymBracketOpen];
             node.xExpression = [self acceptExpression];
+            [self accept:TTypeSymBracketClose];
+            return node;
+        }
+
+        case TTypeSymMin:
+        case TTypeSymMax: {
+            Maths2Node *node = [[Maths2Node alloc] init];
+            node.type = self.token.type;
+            [self accept:self.token.type];
+            [self accept:TTypeSymBracketOpen];
+            node.xExpression = [self acceptExpression];
+            [self accept:TTypeSymComma];
+            node.yExpression = [self acceptExpression];
             [self accept:TTypeSymBracketClose];
             return node;
         }
