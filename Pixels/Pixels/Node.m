@@ -11,6 +11,7 @@
 #import "Renderer.h"
 #import "AudioPlayer.h"
 #import "NSError+LowResCoder.h"
+#import "NumberPool.h"
 
 NSString *const TRANSFER = @"TRANSFER";
 
@@ -35,9 +36,9 @@ NSString *const TRANSFER = @"TRANSFER";
     return nil;
 }
 
-- (NSNumber *)evaluateNumberWithRunner:(Runner *)runner min:(int)min max:(int)max
+- (Number *)evaluateNumberWithRunner:(Runner *)runner min:(int)min max:(int)max
 {
-    NSNumber *number = [self evaluateWithRunner:runner];
+    Number *number = [self evaluateWithRunner:runner];
     if (number && (number.intValue < min || number.intValue > max))
     {
         runner.error = [NSError invalidParameterErrorWithNode:self value:number.intValue];
@@ -74,7 +75,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    return @(self.value);
+    return [runner.numberPool numberWithValue:self.value];
 }
 
 @end
@@ -131,10 +132,10 @@ NSString *const TRANSFER = @"TRANSFER";
     NSMutableArray *indexes = [NSMutableArray array];
     for (Node *expressionNode in self.indexExpressions)
     {
-        NSNumber *indexNumber = [expressionNode evaluateWithRunner:runner];
+        Number *indexNumber = [expressionNode evaluateWithRunner:runner];
         if (addValue != 0)
         {
-            indexNumber = @(indexNumber.intValue + addValue);
+            indexNumber = [runner.numberPool numberWithValue:(indexNumber.intValue + addValue)];
         }
         [indexes addObject:indexNumber];
     }
@@ -181,7 +182,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *value = [self.condition evaluateWithRunner:runner];
+    Number *value = [self.condition evaluateWithRunner:runner];
     if (runner.error)
     {
         return nil;
@@ -354,9 +355,9 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *startValue = [self.startExpression evaluateWithRunner:runner];
-    NSNumber *endValue = [self.endExpression evaluateWithRunner:runner];
-    NSNumber *stepValue = [self.stepExpression evaluateWithRunner:runner];
+    Number *startValue = [self.startExpression evaluateWithRunner:runner];
+    Number *endValue = [self.endExpression evaluateWithRunner:runner];
+    Number *stepValue = [self.stepExpression evaluateWithRunner:runner];
     if (runner.error)
     {
         return nil;
@@ -379,12 +380,12 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (void)endOfLoopWithRunner:(Runner *)runner
 {
-    NSNumber *oldValue = [runner valueOfVariable:self.variable];
+    Number *oldValue = [runner valueOfVariable:self.variable];
     if (runner.error)
     {
         return;
     }
-    NSNumber *value = @(oldValue.floatValue + self.increment);
+    Number *value = [runner.numberPool numberWithValue:(oldValue.floatValue + self.increment)];
     [runner setValue:value forVariable:self.variable];
     if ((self.increment > 0 && value.floatValue > self.limit) || (self.increment < 0 && value.floatValue < self.limit))
     {
@@ -474,7 +475,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (void)endOfLoopWithRunner:(Runner *)runner
 {
-    NSNumber *value = [self.condition evaluateWithRunner:runner];
+    Number *value = [self.condition evaluateWithRunner:runner];
     if (runner.error)
     {
         return;
@@ -504,7 +505,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *value = [self.condition evaluateWithRunner:runner];
+    Number *value = [self.condition evaluateWithRunner:runner];
     if (runner.error)
     {
         return nil;
@@ -523,7 +524,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (void)endOfLoopWithRunner:(Runner *)runner
 {
-    NSNumber *value = [self.condition evaluateWithRunner:runner];
+    Number *value = [self.condition evaluateWithRunner:runner];
     if (runner.error)
     {
         return;
@@ -588,7 +589,7 @@ NSString *const TRANSFER = @"TRANSFER";
 {
     [runner.delegate updateRendererView];
     
-    NSNumber *value = [self.time evaluateWithRunner:runner];
+    Number *value = [self.time evaluateWithRunner:runner];
     if (runner.error)
     {
         return nil;
@@ -651,7 +652,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *players = [self.playersExpression evaluateNumberWithRunner:runner min:0 max:1];
+    Number *players = [self.playersExpression evaluateNumberWithRunner:runner min:0 max:1];
     if (runner.error)
     {
         return nil;
@@ -674,7 +675,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *value = [self.color evaluateNumberWithRunner:runner min:0 max:15];
+    Number *value = [self.color evaluateNumberWithRunner:runner min:0 max:15];
     if (runner.error)
     {
         return nil;
@@ -701,7 +702,7 @@ NSString *const TRANSFER = @"TRANSFER";
     int c = 0;
     if (self.color)
     {
-        NSNumber *color = [self.color evaluateNumberWithRunner:runner min:0 max:15];
+        Number *color = [self.color evaluateNumberWithRunner:runner min:0 max:15];
         c = color.intValue;
     }
     if (runner.error)
@@ -729,8 +730,8 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *x = [self.xExpression evaluateWithRunner:runner];
-    NSNumber *y = [self.yExpression evaluateWithRunner:runner];
+    Number *x = [self.xExpression evaluateWithRunner:runner];
+    Number *y = [self.yExpression evaluateWithRunner:runner];
     if (runner.error)
     {
         return nil;
@@ -757,10 +758,10 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *fromX = [self.fromXExpression evaluateWithRunner:runner];
-    NSNumber *fromY = [self.fromYExpression evaluateWithRunner:runner];
-    NSNumber *toX = [self.toXExpression evaluateWithRunner:runner];
-    NSNumber *toY = [self.toYExpression evaluateWithRunner:runner];
+    Number *fromX = [self.fromXExpression evaluateWithRunner:runner];
+    Number *fromY = [self.fromYExpression evaluateWithRunner:runner];
+    Number *toX = [self.toXExpression evaluateWithRunner:runner];
+    Number *toY = [self.toYExpression evaluateWithRunner:runner];
     if (runner.error)
     {
         return nil;
@@ -787,10 +788,10 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *fromX = [self.fromXExpression evaluateWithRunner:runner];
-    NSNumber *fromY = [self.fromYExpression evaluateWithRunner:runner];
-    NSNumber *toX = [self.toXExpression evaluateWithRunner:runner];
-    NSNumber *toY = [self.toYExpression evaluateWithRunner:runner];
+    Number *fromX = [self.fromXExpression evaluateWithRunner:runner];
+    Number *fromY = [self.fromYExpression evaluateWithRunner:runner];
+    Number *toX = [self.toXExpression evaluateWithRunner:runner];
+    Number *toY = [self.toYExpression evaluateWithRunner:runner];
     if (runner.error)
     {
         return nil;
@@ -826,12 +827,12 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *fromX = [self.fromXExpression evaluateWithRunner:runner];
-    NSNumber *fromY = [self.fromYExpression evaluateWithRunner:runner];
-    NSNumber *toX = [self.toXExpression evaluateWithRunner:runner];
-    NSNumber *toY = [self.toYExpression evaluateWithRunner:runner];
-    NSNumber *deltaX = [self.deltaXExpression evaluateWithRunner:runner];
-    NSNumber *deltaY = [self.deltaYExpression evaluateWithRunner:runner];
+    Number *fromX = [self.fromXExpression evaluateWithRunner:runner];
+    Number *fromY = [self.fromYExpression evaluateWithRunner:runner];
+    Number *toX = [self.toXExpression evaluateWithRunner:runner];
+    Number *toY = [self.toYExpression evaluateWithRunner:runner];
+    Number *deltaX = [self.deltaXExpression evaluateWithRunner:runner];
+    Number *deltaY = [self.deltaYExpression evaluateWithRunner:runner];
     if (runner.error)
     {
         return nil;
@@ -859,9 +860,9 @@ NSString *const TRANSFER = @"TRANSFER";
 - (id)evaluateWithRunner:(Runner *)runner
 {
     id value = [self.valueExpression evaluateWithRunner:runner];
-    NSNumber *x = [self.xExpression evaluateWithRunner:runner];
-    NSNumber *y = [self.yExpression evaluateWithRunner:runner];
-    NSNumber *align = [self.alignExpression evaluateWithRunner:runner];
+    Number *x = [self.xExpression evaluateWithRunner:runner];
+    Number *y = [self.yExpression evaluateWithRunner:runner];
+    Number *align = [self.alignExpression evaluateWithRunner:runner];
     if (runner.error)
     {
         return nil;
@@ -901,8 +902,8 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *x = [self.xExpression evaluateWithRunner:runner];
-    NSNumber *y = [self.yExpression evaluateWithRunner:runner];
+    Number *x = [self.xExpression evaluateWithRunner:runner];
+    Number *y = [self.yExpression evaluateWithRunner:runner];
     if (runner.error)
     {
         return nil;
@@ -927,14 +928,14 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *image = [self.imageExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSpriteDefs - 1];
+    Number *image = [self.imageExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSpriteDefs - 1];
     ArrayVariable *arrayVariable = [runner arrayOfVariable:self.dataVariable];
     if (runner.error)
     {
         return nil;
     }
     
-    if (arrayVariable.sizes.count != 1 || ((NSNumber *)arrayVariable.sizes[0]).intValue != RendererSpriteSize * 2)
+    if (arrayVariable.sizes.count != 1 || ((Number *)arrayVariable.sizes[0]).intValue != RendererSpriteSize * 2)
     {
         runner.error = [NSError programErrorWithCode:LRCErrorCodeRuntime reason:@"Incorrect array size" token:self.token];
         return nil;
@@ -968,7 +969,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSprites - 1];
+    Number *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSprites - 1];
     if (runner.error)
     {
         return nil;
@@ -977,17 +978,17 @@ NSString *const TRANSFER = @"TRANSFER";
     Sprite *sprite = [runner.renderer spriteAtIndex:n.intValue];
     if (self.color1Expression)
     {
-        NSNumber *color1 = [self.color1Expression evaluateNumberWithRunner:runner min:0 max:15];
+        Number *color1 = [self.color1Expression evaluateNumberWithRunner:runner min:0 max:15];
         sprite->colors[0] = color1.intValue;
     }
     if (self.color2Expression)
     {
-        NSNumber *color2 = [self.color2Expression evaluateNumberWithRunner:runner min:0 max:15];
+        Number *color2 = [self.color2Expression evaluateNumberWithRunner:runner min:0 max:15];
         sprite->colors[1] = color2.intValue;
     }
     if (self.color3Expression)
     {
-        NSNumber *color3 = [self.color3Expression evaluateNumberWithRunner:runner min:0 max:15];
+        Number *color3 = [self.color3Expression evaluateNumberWithRunner:runner min:0 max:15];
         sprite->colors[2] = color3.intValue;
     }
     
@@ -1011,7 +1012,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSprites - 1];
+    Number *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSprites - 1];
     if (runner.error)
     {
         return nil;
@@ -1021,17 +1022,17 @@ NSString *const TRANSFER = @"TRANSFER";
     sprite->visible = YES;
     if (self.xExpression)
     {
-        NSNumber *x = [self.xExpression evaluateWithRunner:runner];
+        Number *x = [self.xExpression evaluateWithRunner:runner];
         sprite->x = x.floatValue;
     }
     if (self.yExpression)
     {
-        NSNumber *y = [self.yExpression evaluateWithRunner:runner];
+        Number *y = [self.yExpression evaluateWithRunner:runner];
         sprite->y = y.floatValue;
     }
     if (self.imageExpression)
     {
-        NSNumber *image = [self.imageExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSpriteDefs - 1];
+        Number *image = [self.imageExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSpriteDefs - 1];
         sprite->image = image.intValue;
     }
     
@@ -1052,7 +1053,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSprites - 1];
+    Number *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSprites - 1];
     if (runner.error)
     {
         return nil;
@@ -1267,21 +1268,21 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:AudioNumSoundDefs - 1];
-    NSNumber *wave = [self.waveExpression evaluateNumberWithRunner:runner min:0 max:3];
-    NSNumber *pulseWidth = [self.pulseWidthExpression evaluateWithRunner:runner];
-    NSNumber *maxTime = [self.maxTimeExpression evaluateWithRunner:runner];
+    Number *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:AudioNumSoundDefs - 1];
+    Number *wave = [self.waveExpression evaluateNumberWithRunner:runner min:0 max:3];
+    Number *pulseWidth = [self.pulseWidthExpression evaluateWithRunner:runner];
+    Number *maxTime = [self.maxTimeExpression evaluateWithRunner:runner];
     if (runner.error)
     {
         return nil;
     }
     
-    if (pulseWidth && (pulseWidth.doubleValue < 0.0 || pulseWidth.doubleValue > 1.0))
+    if (pulseWidth && (pulseWidth.floatValue < 0.0 || pulseWidth.floatValue > 1.0))
     {
         runner.error = [NSError invalidParameterErrorWithNode:self value:pulseWidth.floatValue];
         return nil;
     }
-    if (maxTime && maxTime.doubleValue < 0)
+    if (maxTime && maxTime.floatValue < 0)
     {
         runner.error = [NSError invalidParameterErrorWithNode:self value:maxTime.floatValue];
         return nil;
@@ -1289,8 +1290,8 @@ NSString *const TRANSFER = @"TRANSFER";
     
     SoundDef *def = [runner.audioPlayer soundDefAtIndex:n.intValue];
     def->wave = wave.intValue;
-    def->pulseWidth = pulseWidth ? pulseWidth.doubleValue : 0.5;
-    def->maxTime = maxTime.doubleValue;
+    def->pulseWidth = pulseWidth ? pulseWidth.floatValue : 0.5;
+    def->maxTime = maxTime.floatValue;
 
     // reset values from Def Sound Line
     def->bendTime = 1.0;
@@ -1317,25 +1318,25 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:AudioNumSoundDefs - 1];
-    NSNumber *bendTime = [self.bendTimeExpression evaluateWithRunner:runner];
-    NSNumber *pitchBend = [self.pitchBendExpression evaluateWithRunner:runner];
-    NSNumber *pulseBend = [self.pulseBendExpression evaluateWithRunner:runner];
+    Number *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:AudioNumSoundDefs - 1];
+    Number *bendTime = [self.bendTimeExpression evaluateWithRunner:runner];
+    Number *pitchBend = [self.pitchBendExpression evaluateWithRunner:runner];
+    Number *pulseBend = [self.pulseBendExpression evaluateWithRunner:runner];
     if (runner.error)
     {
         return nil;
     }
     
-    if (pulseBend && (pulseBend.doubleValue < -1.0 || pulseBend.doubleValue > 1.0))
+    if (pulseBend && (pulseBend.floatValue < -1.0 || pulseBend.floatValue > 1.0))
     {
         runner.error = [NSError invalidParameterErrorWithNode:self value:pulseBend.floatValue];
         return nil;
     }
     
     SoundDef *def = [runner.audioPlayer soundDefAtIndex:n.intValue];
-    def->bendTime = bendTime.doubleValue;
+    def->bendTime = bendTime.floatValue;
     def->pitchBend = pitchBend.intValue;
-    def->pulseBend = pulseBend.doubleValue;
+    def->pulseBend = pulseBend.floatValue;
     
     [runner next];
     return nil;
@@ -1362,10 +1363,10 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *voice = [self.voiceExpression evaluateNumberWithRunner:runner min:0 max:AudioNumVoices - 1];
-    NSNumber *pitch = [self.pitchExpression evaluateNumberWithRunner:runner min:0 max:96];
-    NSNumber *duration = [self.durationExpression evaluateNumberWithRunner:runner min:0 max:127];
-    NSNumber *soundDef = [self.defExpression evaluateNumberWithRunner:runner min:0 max:AudioNumSoundDefs - 1];
+    Number *voice = [self.voiceExpression evaluateNumberWithRunner:runner min:0 max:AudioNumVoices - 1];
+    Number *pitch = [self.pitchExpression evaluateNumberWithRunner:runner min:0 max:96];
+    Number *duration = [self.durationExpression evaluateNumberWithRunner:runner min:0 max:127];
+    Number *soundDef = [self.defExpression evaluateNumberWithRunner:runner min:0 max:AudioNumSoundDefs - 1];
     if (runner.error)
     {
         return nil;
@@ -1405,7 +1406,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *voice = [self.voiceExpression evaluateNumberWithRunner:runner min:0 max:AudioNumVoices - 1];
+    Number *voice = [self.voiceExpression evaluateNumberWithRunner:runner min:0 max:AudioNumVoices - 1];
     if (runner.error)
     {
         return nil;
@@ -1443,7 +1444,7 @@ NSString *const TRANSFER = @"TRANSFER";
     BOOL isPlaying = NO;
     if (self.voiceExpression)
     {
-        NSNumber *voice = [self.voiceExpression evaluateNumberWithRunner:runner min:0 max:AudioNumVoices - 1];
+        Number *voice = [self.voiceExpression evaluateNumberWithRunner:runner min:0 max:AudioNumVoices - 1];
         if (runner.error)
         {
             return nil;
@@ -1462,7 +1463,7 @@ NSString *const TRANSFER = @"TRANSFER";
             }
         }
     }
-    return @(isPlaying ? 0 : -1); // opposite result => isPlaying != soundEnd
+    return [runner.numberPool numberWithValue:(isPlaying ? 0 : -1)]; // opposite result => isPlaying != soundEnd
 }
 
 @end
@@ -1478,7 +1479,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumLayers - 1];
+    Number *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumLayers - 1];
     if (runner.error)
     {
         return nil;
@@ -1508,10 +1509,10 @@ NSString *const TRANSFER = @"TRANSFER";
 {
     int maxPixel = runner.renderer.size - 1;
     
-    NSNumber *fromX = [self.fromXExpression evaluateNumberWithRunner:runner min:0 max:maxPixel];
-    NSNumber *fromY = [self.fromYExpression evaluateNumberWithRunner:runner min:0 max:maxPixel];
-    NSNumber *toX = [self.toXExpression evaluateNumberWithRunner:runner min:0 max:maxPixel];
-    NSNumber *toY = [self.toYExpression evaluateNumberWithRunner:runner min:0 max:maxPixel];
+    Number *fromX = [self.fromXExpression evaluateNumberWithRunner:runner min:0 max:maxPixel];
+    Number *fromY = [self.fromYExpression evaluateNumberWithRunner:runner min:0 max:maxPixel];
+    Number *toX = [self.toXExpression evaluateNumberWithRunner:runner min:0 max:maxPixel];
+    Number *toY = [self.toYExpression evaluateNumberWithRunner:runner min:0 max:maxPixel];
     if (runner.error)
     {
         return nil;
@@ -1540,9 +1541,9 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *x = [self.xExpression evaluateWithRunner:runner];
-    NSNumber *y = [self.yExpression evaluateWithRunner:runner];
-    NSNumber *trans = [self.transparencyExpression evaluateNumberWithRunner:runner min:-1 max:15];
+    Number *x = [self.xExpression evaluateWithRunner:runner];
+    Number *y = [self.yExpression evaluateWithRunner:runner];
+    Number *trans = [self.transparencyExpression evaluateNumberWithRunner:runner min:-1 max:15];
     
     if (runner.error)
     {
@@ -1554,10 +1555,10 @@ NSString *const TRANSFER = @"TRANSFER";
     if (self.srcXExpression)
     {
         int maxSize = runner.renderer.size;
-        NSNumber *srcX = [self.srcXExpression evaluateNumberWithRunner:runner min:0 max:maxSize - 1];
-        NSNumber *srcY = [self.srcYExpression evaluateNumberWithRunner:runner min:0 max:maxSize - 1];
-        NSNumber *srcW = [self.srcWidthExpression evaluateNumberWithRunner:runner min:0 max:maxSize];
-        NSNumber *srcH = [self.srcHeightExpression evaluateNumberWithRunner:runner min:0 max:maxSize];
+        Number *srcX = [self.srcXExpression evaluateNumberWithRunner:runner min:0 max:maxSize - 1];
+        Number *srcY = [self.srcYExpression evaluateNumberWithRunner:runner min:0 max:maxSize - 1];
+        Number *srcW = [self.srcWidthExpression evaluateNumberWithRunner:runner min:0 max:maxSize];
+        Number *srcH = [self.srcHeightExpression evaluateNumberWithRunner:runner min:0 max:maxSize];
         
         if (runner.error)
         {
@@ -1588,7 +1589,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    /*NSNumber *port = */[self.portExpression evaluateNumberWithRunner:runner min:0 max:0];
+    /*Number *port = */[self.portExpression evaluateNumberWithRunner:runner min:0 max:0];
     if (runner.error)
     {
         return nil;
@@ -1615,7 +1616,7 @@ NSString *const TRANSFER = @"TRANSFER";
         default:
             break;
     }
-    return @(result ? -1 : 0);
+    return [runner.numberPool numberWithValue:(result ? -1 : 0)];
 }
 
 @end
@@ -1631,8 +1632,8 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    /*NSNumber *port = */[self.portExpression evaluateNumberWithRunner:runner min:0 max:0];
-    NSNumber *button = [self.buttonExpression evaluateWithRunner:runner];
+    /*Number *port = */[self.portExpression evaluateNumberWithRunner:runner min:0 max:0];
+    Number *button = [self.buttonExpression evaluateWithRunner:runner];
     if (runner.error)
     {
         return nil;
@@ -1680,7 +1681,7 @@ NSString *const TRANSFER = @"TRANSFER";
             runner.error = [NSError invalidParameterErrorWithNode:self value:button.intValue];
             return nil;
     }
-    return @(result ? -1 : 0);
+    return [runner.numberPool numberWithValue:(result ? -1 : 0)];
 }
 
 @end
@@ -1697,14 +1698,14 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *x = [self.xExpression evaluateWithRunner:runner];
-    NSNumber *y = [self.yExpression evaluateWithRunner:runner];
+    Number *x = [self.xExpression evaluateWithRunner:runner];
+    Number *y = [self.yExpression evaluateWithRunner:runner];
     if (runner.error)
     {
         return nil;
     }
     
-    return @([runner.renderer colorAtX:x.intValue Y:y.intValue]);
+    return [runner.numberPool numberWithValue:([runner.renderer colorAtX:x.intValue Y:y.intValue])];
 }
 
 @end
@@ -1728,7 +1729,7 @@ NSString *const TRANSFER = @"TRANSFER";
     
     NSString *string = ([value isKindOfClass:[NSString class]]) ? (NSString *)value : [NSString stringWithFormat:@"%@", value];
     int width = [runner.renderer widthForText:string];
-    return @(width);
+    return [runner.numberPool numberWithValue:width];
 }
 
 @end
@@ -1744,7 +1745,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSprites - 1];
+    Number *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSprites - 1];
     if (runner.error)
     {
         return nil;
@@ -1753,17 +1754,17 @@ NSString *const TRANSFER = @"TRANSFER";
     Sprite *sprite = [runner.renderer spriteAtIndex:n.intValue];
     if (self.type == 'X')
     {
-        return @(sprite->x);
+        return [runner.numberPool numberWithValue:sprite->x];
     }
     if (self.type == 'Y')
     {
-        return @(sprite->y);
+        return [runner.numberPool numberWithValue:sprite->y];
     }
     if (self.type == 'I')
     {
-        return @(sprite->visible ? sprite->image : -1);
+        return [runner.numberPool numberWithValue:(sprite->visible ? sprite->image : -1)];
     }
-    return @(0);
+    return [runner.numberPool numberWithValue:(0)];
 }
 
 @end
@@ -1781,17 +1782,17 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSprites - 1];
+    Number *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSprites - 1];
     int first = 0;
     int last = RendererNumSprites - 1;
     
     if (self.otherNExpression)
     {
-        NSNumber *otherN = [self.otherNExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSprites - 1];
+        Number *otherN = [self.otherNExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSprites - 1];
         first = otherN.intValue;
         if (self.lastNExpression)
         {
-            NSNumber *lastN = [self.lastNExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSprites - 1];
+            Number *lastN = [self.lastNExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSprites - 1];
             last = lastN.intValue;
         }
         else
@@ -1809,11 +1810,11 @@ NSString *const TRANSFER = @"TRANSFER";
         if ([runner.renderer checkCollisionBetweenSprite:n.intValue andSprite:i])
         {
             runner.lastSpriteHit = i;
-            return @(-1);
+            return [runner.numberPool numberWithValue:-1];
         }
     }
     
-    return @(0);
+    return [runner.numberPool numberWithValue:0];
 }
 
 @end
@@ -1836,7 +1837,7 @@ NSString *const TRANSFER = @"TRANSFER";
         default:
             break;
     }
-    return @(result);
+    return [runner.numberPool numberWithValue:result];
 }
 
 @end
@@ -1852,7 +1853,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *x = [self.xExpression evaluateWithRunner:runner];
+    Number *x = [self.xExpression evaluateWithRunner:runner];
     if (runner.error)
     {
         return nil;
@@ -1905,7 +1906,7 @@ NSString *const TRANSFER = @"TRANSFER";
         default:
             break;
     }
-    return @(result);
+    return [runner.numberPool numberWithValue:result];
 }
 
 @end
@@ -1922,8 +1923,8 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *x = [self.xExpression evaluateWithRunner:runner];
-    NSNumber *y = [self.xExpression evaluateWithRunner:runner];
+    Number *x = [self.xExpression evaluateWithRunner:runner];
+    Number *y = [self.xExpression evaluateWithRunner:runner];
     if (runner.error)
     {
         return nil;
@@ -1943,7 +1944,7 @@ NSString *const TRANSFER = @"TRANSFER";
         default:
             break;
     }
-    return @(result);
+    return [runner.numberPool numberWithValue:result];
 }
 
 @end
@@ -1961,7 +1962,7 @@ NSString *const TRANSFER = @"TRANSFER";
 - (id)evaluateWithRunner:(Runner *)runner
 {
     NSString *string = [self.stringExpression evaluateWithRunner:runner];
-    NSNumber *number = [self.numberExpression evaluateWithRunner:runner];
+    Number *number = [self.numberExpression evaluateWithRunner:runner];
     if (runner.error)
     {
         return nil;
@@ -1999,7 +2000,7 @@ NSString *const TRANSFER = @"TRANSFER";
 - (id)evaluateWithRunner:(Runner *)runner
 {
     NSString *string = [self.stringExpression evaluateWithRunner:runner];
-    NSNumber *number = [self.numberExpression evaluateWithRunner:runner];
+    Number *number = [self.numberExpression evaluateWithRunner:runner];
     if (runner.error)
     {
         return nil;
@@ -2039,8 +2040,8 @@ NSString *const TRANSFER = @"TRANSFER";
 - (id)evaluateWithRunner:(Runner *)runner
 {
     NSString *string = [self.stringExpression evaluateWithRunner:runner];
-    NSNumber *position = [self.positionExpression evaluateWithRunner:runner];
-    NSNumber *number = [self.numberExpression evaluateWithRunner:runner];
+    Number *position = [self.positionExpression evaluateWithRunner:runner];
+    Number *number = [self.numberExpression evaluateWithRunner:runner];
     if (runner.error)
     {
         return nil;
@@ -2090,7 +2091,7 @@ NSString *const TRANSFER = @"TRANSFER";
 {
     NSString *string = [self.stringExpression evaluateWithRunner:runner];
     NSString *search = [self.searchExpression evaluateWithRunner:runner];
-    NSNumber *position = [self.positionExpression evaluateWithRunner:runner];
+    Number *position = [self.positionExpression evaluateWithRunner:runner];
     if (runner.error)
     {
         return nil;
@@ -2105,15 +2106,15 @@ NSString *const TRANSFER = @"TRANSFER";
     }
     if (position.intValue > len)
     {
-        return @(0);
+        return [runner.numberPool numberWithValue:0];
     }
     
     NSRange range = [string rangeOfString:search options:0 range:NSMakeRange(position.intValue - 1, len - position.intValue + 1)];
     if (range.location == NSNotFound)
     {
-        return @(0);
+        return [runner.numberPool numberWithValue:0];
     }
-    return @(range.location + 1);
+    return [runner.numberPool numberWithValue:(range.location + 1)];
 }
 
 @end
@@ -2129,7 +2130,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *ascii = [self.asciiExpression evaluateNumberWithRunner:runner min:0 max:127];
+    Number *ascii = [self.asciiExpression evaluateNumberWithRunner:runner min:0 max:127];
     if (runner.error)
     {
         return nil;
@@ -2169,7 +2170,7 @@ NSString *const TRANSFER = @"TRANSFER";
         return nil;
     }
     unichar character = [string characterAtIndex:0];
-    return @((int)character);
+    return [runner.numberPool numberWithValue:(int)character];
 }
 
 @end
@@ -2191,7 +2192,7 @@ NSString *const TRANSFER = @"TRANSFER";
         return nil;
     }
     
-    return @(string.length);
+    return [runner.numberPool numberWithValue:string.length];
 }
 
 @end
@@ -2213,7 +2214,7 @@ NSString *const TRANSFER = @"TRANSFER";
         return nil;
     }
     
-    return @(string.floatValue);
+    return [runner.numberPool numberWithValue:string.floatValue];
 }
 
 @end
@@ -2229,7 +2230,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *number = [self.numberExpression evaluateWithRunner:runner];
+    Number *number = [self.numberExpression evaluateWithRunner:runner];
     if (runner.error)
     {
         return nil;
@@ -2256,7 +2257,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *number = [self.numberExpression evaluateWithRunner:runner];
+    Number *number = [self.numberExpression evaluateWithRunner:runner];
     if (runner.error)
     {
         return nil;
@@ -2324,19 +2325,19 @@ NSString *const TRANSFER = @"TRANSFER";
     switch (self.type)
     {
         case TTypeSymOpOr: {
-            int leftInt = ((NSNumber *)leftValue).intValue;
-            int rightInt = ((NSNumber *)rightValue).intValue;
-            return @(leftInt | rightInt);
+            int leftInt = ((Number *)leftValue).intValue;
+            int rightInt = ((Number *)rightValue).intValue;
+            return [runner.numberPool numberWithValue:(leftInt | rightInt)];
         }
         case TTypeSymOpXor: {
-            int leftInt = ((NSNumber *)leftValue).intValue;
-            int rightInt = ((NSNumber *)rightValue).intValue;
-            return @(leftInt ^ rightInt);
+            int leftInt = ((Number *)leftValue).intValue;
+            int rightInt = ((Number *)rightValue).intValue;
+            return [runner.numberPool numberWithValue:(leftInt ^ rightInt)];
         }
         case TTypeSymOpAnd: {
-            int leftInt = ((NSNumber *)leftValue).intValue;
-            int rightInt = ((NSNumber *)rightValue).intValue;
-            return @(leftInt & rightInt);
+            int leftInt = ((Number *)leftValue).intValue;
+            int rightInt = ((Number *)rightValue).intValue;
+            return [runner.numberPool numberWithValue:(leftInt & rightInt)];
         }
         case TTypeSymOpPlus: {
             if (leftIsString || rightIsString)
@@ -2345,41 +2346,41 @@ NSString *const TRANSFER = @"TRANSFER";
             }
             else
             {
-                float result = ((NSNumber *)leftValue).floatValue + ((NSNumber *)rightValue).floatValue;
-                return @(result);
+                float result = ((Number *)leftValue).floatValue + ((Number *)rightValue).floatValue;
+                return [runner.numberPool numberWithValue:result];
             }
         }
         case TTypeSymOpMinus: {
-            float result = ((NSNumber *)leftValue).floatValue - ((NSNumber *)rightValue).floatValue;
-            return @(result);
+            float result = ((Number *)leftValue).floatValue - ((Number *)rightValue).floatValue;
+            return [runner.numberPool numberWithValue:result];
         }
         case TTypeSymOpMul: {
-            float result = ((NSNumber *)leftValue).floatValue * ((NSNumber *)rightValue).floatValue;
-            return @(result);
+            float result = ((Number *)leftValue).floatValue * ((Number *)rightValue).floatValue;
+            return [runner.numberPool numberWithValue:result];
         }
         case TTypeSymOpDiv: {
-            float rightFloat = ((NSNumber *)rightValue).floatValue;
+            float rightFloat = ((Number *)rightValue).floatValue;
             if (rightFloat == 0.0)
             {
                 runner.error = [NSError divisionByZeroErrorWithNode:self];
-                return @(0);
+                return [runner.numberPool numberWithValue:0];
             }
-            float result = ((NSNumber *)leftValue).floatValue / rightFloat;
-            return @(result);
+            float result = ((Number *)leftValue).floatValue / rightFloat;
+            return [runner.numberPool numberWithValue:result];
         }
         case TTypeSymOpMod: {
-            int rightInt = ((NSNumber *)rightValue).intValue;
+            int rightInt = ((Number *)rightValue).intValue;
             if (rightInt == 0)
             {
                 runner.error = [NSError divisionByZeroErrorWithNode:self];
-                return @(0);
+                return [runner.numberPool numberWithValue:0];
             }
-            int result = ((NSNumber *)leftValue).intValue % rightInt;
-            return @(result);
+            int result = ((Number *)leftValue).intValue % rightInt;
+            return [runner.numberPool numberWithValue:result];
         }
         case TTypeSymOpPow: {
-            int result = powf(((NSNumber *)leftValue).floatValue, ((NSNumber *)rightValue).floatValue);
-            return @(result);
+            int result = powf(((Number *)leftValue).floatValue, ((Number *)rightValue).floatValue);
+            return [runner.numberPool numberWithValue:result];
         }
         case TTypeSymOpEq:
         case TTypeSymOpUneq: {
@@ -2390,35 +2391,35 @@ NSString *const TRANSFER = @"TRANSFER";
             }
             else
             {
-                result = ((NSNumber *)leftValue).floatValue == ((NSNumber *)rightValue).floatValue;
+                result = ((Number *)leftValue).floatValue == ((Number *)rightValue).floatValue;
             }
             if (self.type == TTypeSymOpUneq)
             {
                 result = !result;
             }
-            return @(result ? -1 : 0);
+            return [runner.numberPool numberWithValue:(result ? -1 : 0)];
         }
         case TTypeSymOpGr: {
-            BOOL result = ((NSNumber *)leftValue).floatValue > ((NSNumber *)rightValue).floatValue;
-            return @(result ? -1 : 0);
+            BOOL result = ((Number *)leftValue).floatValue > ((Number *)rightValue).floatValue;
+            return [runner.numberPool numberWithValue:(result ? -1 : 0)];
         }
         case TTypeSymOpLe: {
-            BOOL result = ((NSNumber *)leftValue).floatValue < ((NSNumber *)rightValue).floatValue;
-            return @(result ? -1 : 0);
+            BOOL result = ((Number *)leftValue).floatValue < ((Number *)rightValue).floatValue;
+            return [runner.numberPool numberWithValue:(result ? -1 : 0)];
         }
         case TTypeSymOpGrEq: {
-            BOOL result = ((NSNumber *)leftValue).floatValue >= ((NSNumber *)rightValue).floatValue;
-            return @(result ? -1 : 0);
+            BOOL result = ((Number *)leftValue).floatValue >= ((Number *)rightValue).floatValue;
+            return [runner.numberPool numberWithValue:(result ? -1 : 0)];
         }
         case TTypeSymOpLeEq: {
-            BOOL result = ((NSNumber *)leftValue).floatValue <= ((NSNumber *)rightValue).floatValue;
-            return @(result ? -1 : 0);
+            BOOL result = ((Number *)leftValue).floatValue <= ((Number *)rightValue).floatValue;
+            return [runner.numberPool numberWithValue:(result ? -1 : 0)];
         }
         default: {
             // invalid
         }
     }
-    return @(0);
+    return [runner.numberPool numberWithValue:0];
 }
 
 - (BOOL)returnsString
@@ -2443,7 +2444,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSNumber *value = [self.expression evaluateWithRunner:runner];
+    Number *value = [self.expression evaluateWithRunner:runner];
     if (runner.error)
     {
         return nil;
@@ -2454,9 +2455,9 @@ NSString *const TRANSFER = @"TRANSFER";
         case TTypeSymOpPlus:
             return value;
         case TTypeSymOpMinus:
-            return @(-value.floatValue);
+            return [runner.numberPool numberWithValue:(-value.floatValue)];
         case TTypeSymOpNot:
-            return @(~value.intValue);
+            return [runner.numberPool numberWithValue:(~value.intValue)];
         default: {
             // invalid
         }

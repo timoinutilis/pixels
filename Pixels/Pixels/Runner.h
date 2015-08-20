@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "RunnerDelegate.h"
 
-@class Node, OnEndGotoNode, Renderer, AudioPlayer, Runnable, VariableNode, Token;
+@class Node, OnEndGotoNode, Renderer, AudioPlayer, Runnable, VariableNode, Token, NumberPool;
 
 @interface Sequence : NSObject
 @property NSArray *nodes;
@@ -42,6 +42,7 @@
 @property int printLine;
 @property NSUInteger dataNodeIndex;
 @property NSUInteger dataConstantIndex;
+@property (readonly) NumberPool *numberPool;
 @property (readonly) NSMutableArray *transferStrings;
 @property OnEndGotoNode *currentOnEndGoto;
 @property BOOL endRequested;
