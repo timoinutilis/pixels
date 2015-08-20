@@ -9,10 +9,15 @@
 #import <Foundation/Foundation.h>
 
 @interface Number : NSObject
+
 @property float floatValue;
 @property int intValue;
 @property (readonly) NSString *stringValue;
+
++ (Number *)numberWithValue:(float)value;
+
 @end
+
 
 @interface NumberPool : NSObject
 

@@ -127,15 +127,15 @@ NSString *const TRANSFER = @"TRANSFER";
     return self.isString;
 }
 
-- (NSArray *)indexesWithRunner:(Runner *)runner add:(int)addValue
+- (NSArray *)indexesWithRunner:(Runner *)runner isDim:(BOOL)isDim
 {
     NSMutableArray *indexes = [NSMutableArray array];
     for (Node *expressionNode in self.indexExpressions)
     {
         Number *indexNumber = [expressionNode evaluateWithRunner:runner];
-        if (addValue != 0)
+        if (isDim)
         {
-            indexNumber = [runner.numberPool numberWithValue:(indexNumber.intValue + addValue)];
+            indexNumber = [Number numberWithValue:(indexNumber.intValue + 1)];
         }
         [indexes addObject:indexNumber];
     }

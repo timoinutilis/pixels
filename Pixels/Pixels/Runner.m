@@ -222,7 +222,7 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
 
 - (void)dimVariable:(VariableNode *)variable
 {
-    NSArray *sizes = [variable indexesWithRunner:self add:1];
+    NSArray *sizes = [variable indexesWithRunner:self isDim:YES];
     
     // check bounds
     for (NSUInteger i = 0; i < sizes.count; i++)
@@ -316,7 +316,7 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
             return nil;
         }
         
-        NSArray *indexes = [variable indexesWithRunner:self add:0];
+        NSArray *indexes = [variable indexesWithRunner:self isDim:NO];
         
         // check bounds
         for (NSUInteger i = 0; i < indexes.count; i++)
@@ -369,7 +369,7 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
 {
     if ([value isKindOfClass:[Number class]])
     {
-        if (!varValue)
+        if (!varValue || varValue == [NSNull null])
         {
             varValue = [[Number alloc] init];
         }

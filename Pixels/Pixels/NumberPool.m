@@ -10,6 +10,13 @@
 
 @implementation Number
 
++ (Number *)numberWithValue:(float)value
+{
+    Number *number = [[Number alloc] init];
+    number.floatValue = value;
+    return number;
+}
+
 - (void)setIntValue:(int)intValue
 {
     _floatValue = intValue;
