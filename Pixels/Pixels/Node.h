@@ -202,7 +202,8 @@
 @property BOOL clear;
 @end
 
-@interface OnEndGotoNode : Node
+@interface OnXGotoNode : Node
+@property TType xType;
 @property NSString *label;
 @end
 

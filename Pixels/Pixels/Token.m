@@ -67,6 +67,7 @@
         case TTypeSymLayer: return @"LAYER";
         case TTypeSymGet: return @"GET";
         case TTypeSymPut: return @"PUT";
+        case TTypeSymPause: return @"PAUSE";
         
         case TTypeSymUp: return @"UP";
         case TTypeSymDown: return @"DOWN";

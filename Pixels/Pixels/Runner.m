@@ -217,6 +217,16 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
     [self.sequencesStack addObject:sequence];
 }
 
+- (BOOL)handlePauseButton
+{
+    if (self.currentOnPauseGoto)
+    {
+        [self gotoLabel:self.currentOnPauseGoto.label isGosub:NO atToken:self.currentOnPauseGoto.token];
+        return YES;
+    }
+    return NO;
+}
+
 - (void)dimVariable:(VariableNode *)variable
 {
     NSArray *sizes = [variable indexesWithRunner:self add:1];

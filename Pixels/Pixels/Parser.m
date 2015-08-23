@@ -267,7 +267,7 @@
             node = [self acceptWrite];
             break;
         case TTypeSymOn:
-            node = [self acceptOnEndGoto];
+            node = [self acceptOnXGoto];
             break;
         case TTypeSymDef: {
             Token *next = [self nextToken];
@@ -874,10 +874,21 @@
     return node;
 }
 
-- (Node *)acceptOnEndGoto
+- (Node *)acceptOnXGoto
 {
-    OnEndGotoNode *node = [[OnEndGotoNode alloc] init];
-    [self accept:TTypeSymOn and:TTypeSymEnd];
+    OnXGotoNode *node = [[OnXGotoNode alloc] init];
+
+    [self accept:TTypeSymOn];
+    node.xType = self.token.type;
+    if (node.xType != TTypeSymEnd && node.xType != TTypeSymPause)
+    {
+        self.error = [NSError programErrorWithCode:LRCErrorCodeParse
+                                            reason:[NSString stringWithFormat:@"Unexpected %@", [Token stringForType:node.xType printable:YES]]
+                                             token:self.token];
+        return nil;
+    }
+    [self accept:node.xType];
+    
     if (self.token.type == TTypeSymGoto)
     {
         [self accept:TTypeSymGoto];

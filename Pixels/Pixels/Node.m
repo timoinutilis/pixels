@@ -1223,7 +1223,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 
 
-@implementation OnEndGotoNode
+@implementation OnXGotoNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
 {
@@ -1239,13 +1239,14 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    if (self.label)
+    OnXGotoNode *node = (self.label ? self : nil);
+    if (self.xType == TTypeSymEnd)
     {
-        runner.currentOnEndGoto = self;
+        runner.currentOnEndGoto = node;
     }
-    else
+    else if (self.xType == TTypeSymPause)
     {
-        runner.currentOnEndGoto = nil;
+        runner.currentOnPauseGoto = node;
     }
     [runner next];
     return nil;

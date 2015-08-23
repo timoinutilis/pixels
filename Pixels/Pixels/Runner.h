@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "RunnerDelegate.h"
 
-@class Node, OnEndGotoNode, Renderer, AudioPlayer, Runnable, VariableNode, Token;
+@class Node, OnXGotoNode, Renderer, AudioPlayer, Runnable, VariableNode, Token;
 
 @interface Sequence : NSObject
 @property NSArray *nodes;
@@ -43,7 +43,8 @@
 @property NSUInteger dataNodeIndex;
 @property NSUInteger dataConstantIndex;
 @property (readonly) NSMutableArray *transferStrings;
-@property OnEndGotoNode *currentOnEndGoto;
+@property OnXGotoNode *currentOnEndGoto;
+@property OnXGotoNode *currentOnPauseGoto;
 @property BOOL endRequested;
 @property int lastSpriteHit;
 @property BOOL buttonATapped;
@@ -60,6 +61,7 @@
 - (void)returnFromGosubAtToken:(Token *)token;
 - (void)returnFromGosubToLabel:(NSString *)label atToken:(Token *)token;
 - (void)addSequenceWithNodes:(NSArray *)nodes isLoop:(BOOL)isLoop parent:(Node *)parent;
+- (BOOL)handlePauseButton;
 
 - (void)dimVariable:(VariableNode *)variable;
 - (void)setValue:(id)value forVariable:(VariableNode *)variable;

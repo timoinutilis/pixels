@@ -321,7 +321,10 @@ NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
 
 - (IBAction)onPauseTapped:(id)sender
 {
-    self.isPaused = !self.isPaused;
+    if (![self.runner handlePauseButton])
+    {
+        self.isPaused = !self.isPaused;
+    }
 }
 
 - (void)setIsPaused:(BOOL)isPaused
