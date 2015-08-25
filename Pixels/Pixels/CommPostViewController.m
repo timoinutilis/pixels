@@ -42,15 +42,23 @@ typedef NS_ENUM(NSInteger, CellTag) {
     
     self.activityIndicator = [[ExtendedActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onDoneTapped:)];
-    UIBarButtonItem *actionItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(onActionTapped:)];
     UIBarButtonItem *activityItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
-    self.navigationItem.rightBarButtonItems = @[doneItem, actionItem, activityItem];
+    
+    if (![self.post isDataAvailable] || self.post.type == LCCPostTypeProgram)
+    {
+        UIBarButtonItem *actionItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(onActionTapped:)];
+        self.navigationItem.rightBarButtonItems = @[doneItem, actionItem, activityItem];
+    }
+    else
+    {
+        self.navigationItem.rightBarButtonItems = @[doneItem, activityItem];
+    }
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 44;
     
     // simple workaround for Split View bug, Table View doesn't adjust for Keyboard on iPhone
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone && self.splitViewController)
     {
         self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 252, 0);
     }

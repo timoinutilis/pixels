@@ -370,7 +370,7 @@ NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
 - (void)setSoundEnabled:(BOOL)soundEnabled
 {
     _soundEnabled = soundEnabled;
-    UIImage *image = [UIImage imageNamed:(soundEnabled ? @"sound_off" : @"sound_on")];
+    UIImage *image = [UIImage imageNamed:(soundEnabled ? @"sound_on" : @"sound_off")];
     [self.soundButton setImage:image forState:UIControlStateNormal];
     
     self.runner.audioPlayer.volume = soundEnabled ? 1.0 : 0.0;
