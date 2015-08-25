@@ -62,7 +62,14 @@ get_header(); ?>
 		<p class="lcc-author"><strong>By <a href="<?php echo $pageUrl . "?lccuser=" . $lccUser->getObjectId(); ?>"><?php echo $lccUser->get("username"); ?></a></strong></p>
 		<div class="lcc-images"><img src="<?php echo $postImageUrl; ?>"></div>
 		<p class="lcc-description"><?php echo wptexturize(nl2br($lccPost->get("detail"))); ?></p>
-		<p><strong><a href="https://itunes.apple.com/us/app/lowres-coder/id962117496?mt=8&uo=4">Get LowRes Coder</a> to use this program.</strong></p>
+		<p>
+			<strong><a href="https://itunes.apple.com/us/app/lowres-coder/id962117496?mt=8&uo=4">Get LowRes Coder</a> to use this program.</strong>
+			<form method="GET" action="lowrescoder://">
+				<input type="hidden" name="lccpost" value="<?php echo $lccPost->getObjectId(); ?>">
+				<input type="submit" value="Open in App">
+				(Button requires LowRes Coder 3.2)
+			</form>
+		</p>
 
 		<iframe class="lcc-sourcecode" src="<?php echo $sourceCodeUrl; ?>" width="100%" height="400"></iframe>
 
