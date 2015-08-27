@@ -22,6 +22,7 @@
 
 NSString *const UserDefaultsFullscreenKey = @"fullscreen";
 NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
+NSString *const UserDefaultsPersistentKey = @"persistent";
 
 @interface RunnerViewController ()
 
@@ -72,6 +73,13 @@ NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
     
     NSString *soundKey = [self projectKeyFor:UserDefaultsSoundEnabledKey];
     self.soundEnabled = [defaults objectForKey:soundKey] ? [defaults boolForKey:soundKey] : YES;
+
+    NSString *persistentKey = [self projectKeyFor:UserDefaultsPersistentKey];
+    NSDictionary *persistentVariables = [defaults dictionaryForKey:persistentKey];
+    if (persistentVariables)
+    {
+        [self.runner loadPersistentVariables:persistentVariables];
+    }
     
     self.soundButton.hidden = !self.runnable.usesSound;
     
@@ -107,6 +115,12 @@ NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setBool:self.isFullscreen forKey:[self projectKeyFor:UserDefaultsFullscreenKey]];
     [defaults setBool:self.soundEnabled forKey:[self projectKeyFor:UserDefaultsSoundEnabledKey]];
+    
+    NSDictionary *persistentVariables = [self.runner getPersistentVariables];
+    if (persistentVariables)
+    {
+        [defaults setObject:persistentVariables forKey:[self projectKeyFor:UserDefaultsPersistentKey]];
+    }
 }
 
 - (void)viewWillLayoutSubviews

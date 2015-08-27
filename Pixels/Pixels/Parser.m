@@ -211,6 +211,9 @@
         case TTypeSymDim:
             node = [self acceptDim];
             break;
+        case TTypeSymPersist:
+            node = [self acceptPersist];
+            break;
         case TTypeSymWhile:
             node = [self acceptWhileWend];
             break;
@@ -471,6 +474,19 @@
 {
     DimNode *node = [[DimNode alloc] init];
     [self accept:TTypeSymDim];
+    if (self.token.type == TTypeSymPersist)
+    {
+        [self accept:TTypeSymPersist];
+        node.persist = YES;
+    }
+    node.variableNodes = [self acceptVariableList];
+    return node;
+}
+
+- (Node *)acceptPersist
+{
+    PersistNode *node = [[PersistNode alloc] init];
+    [self accept:TTypeSymPersist];
     node.variableNodes = [self acceptVariableList];
     return node;
 }

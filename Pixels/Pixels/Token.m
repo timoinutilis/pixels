@@ -68,6 +68,7 @@
         case TTypeSymGet: return @"GET";
         case TTypeSymPut: return @"PUT";
         case TTypeSymPause: return @"PAUSE";
+        case TTypeSymPersist: return @"PERSIST";
         
         case TTypeSymUp: return @"UP";
         case TTypeSymDown: return @"DOWN";

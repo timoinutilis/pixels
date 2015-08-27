@@ -69,10 +69,14 @@ A$, B2$, MY_NAME$, TXT$
 <p>You assign a text to a string variable like this:</p>
 <pre class="exm">A$="HELLO"</pre>
 
+<h3 id="_PERSIST">PERSIST</h3>
+<pre>PERSIST x,y,z,...</pre>
+<p>TODO</p>
+
 <h2 id="_Arrays">Arrays</h2>
 <p>An array is a group of values of the same type, referenced by a single variable name. The individual values in an array are called elements. Array elements are variables also. They can be used in any BASIC command or function that uses variables.</p>
 <h3 id="_DIM">DIM</h3>
-<pre>DIM var(x,y,z,...)</pre>
+<pre>DIM [PERSIST] var(x,y,z,...)</pre>
 <p>DIM defines a table of variables in your program. These tables may have as many dimensions as you want and you define for each dimension the highest element index.</p>
 <pre class="exm">DIM TXT$(10),A(10,5),B(5,5,2)</pre>
 <p>In order to access an element in the array you simply type the array name followed by the index numbers. These numbers are separated by commas and are enclosed between round brackets. Note that the element numbers of these arrays always start from zero.</p>
@@ -551,6 +555,15 @@ PRINT "BYE!"
 WAIT 2
 </pre>
 <p>ON END (without GOTO) clears the label and activates the normal behavior again.</p>
+
+<h3 id="_ONPAUSEGOTO">ON PAUSE GOTO</h3>
+<pre>ON PAUSE GOTO label</pre>
+<pre>ON PAUSE</pre>
+<p>This command adds special handling for the moment the user taps the pause button. Instead of pausing the program, it will jump to <i>label</i>.</p>
+<pre class="exm">
+    TODO
+</pre>
+<p>ON PAUSE (without GOTO) clears the label and activates the normal behavior again.</p>
 
 <h1 id="User-input">User input</h1>
 

@@ -449,6 +449,34 @@ NSString *const TRANSFER = @"TRANSFER";
     for (VariableNode *variableNode in self.variableNodes)
     {
         [runner dimVariable:variableNode];
+        if (self.persist)
+        {
+            [runner persistVariable:variableNode asArray:YES];
+        }
+    }
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
+@implementation PersistNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    for (VariableNode *variableNode in self.variableNodes)
+    {
+        [variableNode prepareWithRunnable:runnable pass:pass];
+    }
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    for (VariableNode *variableNode in self.variableNodes)
+    {
+        [runner persistVariable:variableNode asArray:NO];
     }
     [runner next];
     return nil;

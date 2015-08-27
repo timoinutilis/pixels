@@ -15,6 +15,7 @@
 
 NSTimeInterval const RunnerOnEndTimeOut = 2;
 
+
 @interface Runner ()
 @property Runnable *runnable;
 @property NSMutableArray *sequencesStack;
@@ -23,6 +24,9 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
 @property NSMutableArray *gosubStack;
 @property BOOL dataTransferEnabled;
 @property NSTimeInterval timeWhenOnEndStarted;
+@property NSDictionary *loadedPersistentVariables;
+@property NSMutableSet *persistentNumberVariables;
+@property NSMutableSet *persistentStringVariables;
 @end
 
 @implementation Runner
@@ -40,6 +44,10 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
         self.sequencesStack = [NSMutableArray array];
         self.gosubStack = [NSMutableArray array];
         _transferStrings = [NSMutableArray array];
+        
+        self.loadedPersistentVariables = [NSDictionary dictionary];
+        self.persistentNumberVariables = [NSMutableSet set];
+        self.persistentStringVariables = [NSMutableSet set];
         
         [self addSequenceWithNodes:runnable.nodes isLoop:NO parent:nil];
     }
@@ -225,6 +233,99 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
         return YES;
     }
     return NO;
+}
+
+- (void)loadPersistentVariables:(NSDictionary *)dict
+{
+    self.loadedPersistentVariables = dict;
+}
+
+- (NSDictionary *)getPersistentVariables
+{
+    if (self.error) return nil;
+    
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    NSString *key = nil;
+    
+    for (key in self.persistentNumberVariables)
+    {
+        if (self.numberVariables[key])
+        {
+            dict[key] = [self persistentObjectForValue:self.numberVariables[key]];
+        }
+    }
+    for (key in self.persistentStringVariables)
+    {
+        if (self.stringVariables[key])
+        {
+            NSString *pKey = [NSString stringWithFormat:@"%@$", key];
+            dict[pKey] = [self persistentObjectForValue:self.stringVariables[key]];
+        }
+    }
+    
+    return dict;
+}
+                
+- (id)persistentObjectForValue:(id)value
+{
+    if ([value isKindOfClass:[ArrayVariable class]])
+    {
+        //TODO arrays
+        return @[];
+    }
+    return value;
+}
+
+- (void)persistVariable:(VariableNode *)variable asArray:(BOOL)asArray
+{
+    NSMutableDictionary *varDict = nil;
+    NSString *persKey = nil;
+    if (variable.isString)
+    {
+        varDict = self.stringVariables;
+        persKey = [NSString stringWithFormat:@"%@$", variable.identifier];
+    }
+    else
+    {
+        varDict = self.numberVariables;
+        persKey = variable.identifier;
+    }
+    
+    // check if variable can be used persistent
+    if (!asArray)
+    {
+        id value = varDict[variable.identifier];
+        if (value)
+        {
+            self.error = [NSError programErrorWithCode:LRCErrorCodeRuntime
+                                                reason:[NSString stringWithFormat:@"Variable %@ already used", variable.identifier]
+                                                 token:variable.token];
+        }
+    }
+    
+    // register variable name as persistent
+    if (variable.isString)
+    {
+        [self.persistentStringVariables addObject:variable.identifier];
+    }
+    else
+    {
+        [self.persistentNumberVariables addObject:variable.identifier];
+    }
+    
+    // restore persistent value
+    id persistantValue = self.loadedPersistentVariables[persKey];
+    if (persistantValue)
+    {
+        if (asArray)
+        {
+            //TODO
+        }
+        else
+        {
+            [self setValue:persistantValue forVariable:variable];
+        }
+    }
 }
 
 - (void)dimVariable:(VariableNode *)variable

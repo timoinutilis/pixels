@@ -82,6 +82,11 @@
 
 @interface DimNode : Node
 @property NSArray *variableNodes;
+@property BOOL persist;
+@end
+
+@interface PersistNode : Node
+@property NSArray *variableNodes;
 @end
 
 @interface RepeatUntilNode : Node

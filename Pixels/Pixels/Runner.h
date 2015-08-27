@@ -63,6 +63,10 @@
 - (void)addSequenceWithNodes:(NSArray *)nodes isLoop:(BOOL)isLoop parent:(Node *)parent;
 - (BOOL)handlePauseButton;
 
+- (void)loadPersistentVariables:(NSDictionary *)dict;
+- (NSDictionary *)getPersistentVariables;
+- (void)persistVariable:(VariableNode *)variable asArray:(BOOL)asArray;
+
 - (void)dimVariable:(VariableNode *)variable;
 - (void)setValue:(id)value forVariable:(VariableNode *)variable;
 - (id)valueOfVariable:(VariableNode *)variable;
