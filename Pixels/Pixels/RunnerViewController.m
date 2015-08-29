@@ -18,6 +18,7 @@
 #import "AppController.h"
 #import "CoachMarkView.h"
 #import "Runnable.h"
+#import "VariableManager.h"
 #import <GameController/GameController.h>
 
 NSString *const UserDefaultsFullscreenKey = @"fullscreen";
@@ -78,7 +79,7 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
     NSDictionary *persistentVariables = [defaults dictionaryForKey:persistentKey];
     if (persistentVariables)
     {
-        [self.runner loadPersistentVariables:persistentVariables];
+        [self.runner.variables loadPersistentVariables:persistentVariables];
     }
     
     self.soundButton.hidden = !self.runnable.usesSound;
@@ -116,7 +117,7 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
     [defaults setBool:self.isFullscreen forKey:[self projectKeyFor:UserDefaultsFullscreenKey]];
     [defaults setBool:self.soundEnabled forKey:[self projectKeyFor:UserDefaultsSoundEnabledKey]];
     
-    NSDictionary *persistentVariables = [self.runner getPersistentVariables];
+    NSDictionary *persistentVariables = [self.runner.variables getPersistentVariables];
     if (persistentVariables)
     {
         [defaults setObject:persistentVariables forKey:[self projectKeyFor:UserDefaultsPersistentKey]];

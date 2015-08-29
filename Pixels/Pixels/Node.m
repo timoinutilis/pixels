@@ -11,6 +11,7 @@
 #import "Renderer.h"
 #import "AudioPlayer.h"
 #import "NSError+LowResCoder.h"
+#import "VariableManager.h"
 #import "NumberPool.h"
 
 NSString *const TRANSFER = @"TRANSFER";
@@ -119,7 +120,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    return [runner valueOfVariable:self];
+    return [runner.variables valueOfVariable:self];
 }
 
 - (BOOL)returnsString
@@ -363,7 +364,7 @@ NSString *const TRANSFER = @"TRANSFER";
         return nil;
     }
     
-    [runner setValue:startValue forVariable:self.variable];
+    [runner.variables setValue:startValue forVariable:self.variable];
     self.limit = endValue.floatValue;
     self.increment = stepValue.floatValue;
     
@@ -380,13 +381,13 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (void)endOfLoopWithRunner:(Runner *)runner
 {
-    Number *oldValue = [runner valueOfVariable:self.variable];
+    Number *oldValue = [runner.variables valueOfVariable:self.variable];
     if (runner.error)
     {
         return;
     }
     Number *value = [runner.numberPool numberWithValue:(oldValue.floatValue + self.increment)];
-    [runner setValue:value forVariable:self.variable];
+    [runner.variables setValue:value forVariable:self.variable];
     if ((self.increment > 0 && value.floatValue > self.limit) || (self.increment < 0 && value.floatValue < self.limit))
     {
         [runner exitLoopAtToken:self.token];
@@ -426,7 +427,7 @@ NSString *const TRANSFER = @"TRANSFER";
         return nil;
     }
     
-    [runner setValue:value forVariable:self.variable];
+    [runner.variables setValue:value forVariable:self.variable];
     [runner next];
     return nil;
 }
@@ -449,10 +450,10 @@ NSString *const TRANSFER = @"TRANSFER";
 {
     for (VariableNode *variableNode in self.variableNodes)
     {
-        [runner dimVariable:variableNode];
+        [runner.variables dimVariable:variableNode];
         if (self.persist)
         {
-            [runner persistVariable:variableNode asArray:YES];
+            [runner.variables persistVariable:variableNode asArray:YES];
         }
     }
     [runner next];
@@ -477,7 +478,7 @@ NSString *const TRANSFER = @"TRANSFER";
 {
     for (VariableNode *variableNode in self.variableNodes)
     {
-        [runner persistVariable:variableNode asArray:NO];
+        [runner.variables persistVariable:variableNode asArray:NO];
     }
     [runner next];
     return nil;
@@ -957,7 +958,7 @@ NSString *const TRANSFER = @"TRANSFER";
 - (id)evaluateWithRunner:(Runner *)runner
 {
     Number *image = [self.imageExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSpriteDefs - 1];
-    ArrayVariable *arrayVariable = [runner arrayOfVariable:self.dataVariable];
+    ArrayVariable *arrayVariable = [runner.variables arrayOfVariable:self.dataVariable];
     if (runner.error)
     {
         return nil;
@@ -1161,7 +1162,7 @@ NSString *const TRANSFER = @"TRANSFER";
             return nil;
         }
         
-        [runner setValue:value forVariable:variable];
+        [runner.variables setValue:value forVariable:variable];
     }
     [runner next];
     return nil;

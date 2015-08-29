@@ -29,6 +29,7 @@
 		924F83301B0B5BDF00B96C91 /* CommDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924F832F1B0B5BDF00B96C91 /* CommDetailViewController.m */; };
 		924F83331B0B610D00B96C91 /* CommSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924F83321B0B610D00B96C91 /* CommSplitViewController.m */; };
 		92509CCA1A28F99D0086E7E3 /* ExplorerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92509CC91A28F99D0086E7E3 /* ExplorerViewController.m */; };
+		9251440F1B92044100C9D254 /* VariableManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9251440E1B92044100C9D254 /* VariableManager.m */; };
 		9254DF601B628A3C00774E98 /* LCCPostStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 9254DF5F1B628A3C00774E98 /* LCCPostStats.m */; };
 		925935A11B1B77D7001CE0B1 /* LCCProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = 925935A01B1B77D7001CE0B1 /* LCCProgram.m */; };
 		925935A41B1B7E4F001CE0B1 /* UIViewController+CommUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 925935A31B1B7E4F001CE0B1 /* UIViewController+CommUtils.m */; };
@@ -166,6 +167,8 @@
 		924F83321B0B610D00B96C91 /* CommSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommSplitViewController.m; sourceTree = "<group>"; };
 		92509CC81A28F99D0086E7E3 /* ExplorerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExplorerViewController.h; sourceTree = "<group>"; };
 		92509CC91A28F99D0086E7E3 /* ExplorerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExplorerViewController.m; sourceTree = "<group>"; };
+		9251440D1B92044100C9D254 /* VariableManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VariableManager.h; sourceTree = "<group>"; };
+		9251440E1B92044100C9D254 /* VariableManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VariableManager.m; sourceTree = "<group>"; };
 		9254DF5E1B628A3C00774E98 /* LCCPostStats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCPostStats.h; sourceTree = "<group>"; };
 		9254DF5F1B628A3C00774E98 /* LCCPostStats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCPostStats.m; sourceTree = "<group>"; };
 		9259359F1B1B77D7001CE0B1 /* LCCProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCProgram.h; sourceTree = "<group>"; };
@@ -437,6 +440,8 @@
 				92B7A5321AA8C71000B6CA81 /* AudioPlayer.m */,
 				9232FA0B1B860CF80082DDF1 /* NumberPool.h */,
 				9232FA0C1B860CF80082DDF1 /* NumberPool.m */,
+				9251440D1B92044100C9D254 /* VariableManager.h */,
+				9251440E1B92044100C9D254 /* VariableManager.m */,
 			);
 			name = Runtime;
 			sourceTree = "<group>";
@@ -921,6 +926,7 @@
 				9276F38F1A1D289C0060E909 /* main.m in Sources */,
 				9267E8801A5AF61B00D08C42 /* AFHTTPRequestOperationManager.m in Sources */,
 				92D518B91A6975C10000F917 /* AboutViewController.m in Sources */,
+				9251440F1B92044100C9D254 /* VariableManager.m in Sources */,
 				92884F221B0F25B30032623D /* UIButton+WebCache.m in Sources */,
 				92884F251B0F25B30032623D /* UIImage+WebP.m in Sources */,
 				9267E8851A5AF61B00D08C42 /* AFURLRequestSerialization.m in Sources */,
