@@ -78,6 +78,10 @@
         //TODO arrays
         return @[];
     }
+    if ([value isKindOfClass:[Number class]])
+    {
+        return @(((Number *)value).floatValue);
+    }
     return value;
 }
 
@@ -122,6 +126,11 @@
     id persistantValue = self.loadedPersistentVariables[persKey];
     if (persistantValue)
     {
+        if ([persistantValue isKindOfClass:[NSNumber class]])
+        {
+            persistantValue = [self.runner.numberPool numberWithValue:((NSNumber *)persistantValue).floatValue];
+        }
+        
         if (asArray)
         {
             //TODO
