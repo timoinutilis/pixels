@@ -20,6 +20,7 @@
 		922A77461AA46CCB004EE2CA /* Project.m in Sources */ = {isa = PBXBuildFile; fileRef = 922A77451AA46CCB004EE2CA /* Project.m */; };
 		9231159F1A444A6B00624201 /* RendererView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9231159E1A444A6B00624201 /* RendererView.m */; };
 		923115A21A444AA800624201 /* Renderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 923115A11A444AA800624201 /* Renderer.m */; };
+		9232FA0D1B860CF80082DDF1 /* NumberPool.m in Sources */ = {isa = PBXBuildFile; fileRef = 9232FA0C1B860CF80082DDF1 /* NumberPool.m */; };
 		9245076E1B2B839C006956F1 /* NSError+LowResCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 9245076D1B2B839C006956F1 /* NSError+LowResCoder.m */; };
 		9248A6B01A7A641D00FD5656 /* Default Projects in Resources */ = {isa = PBXBuildFile; fileRef = 9248A6AF1A7A641D00FD5656 /* Default Projects */; };
 		924CC0FE1A220B3C00D2AF68 /* Runner.m in Sources */ = {isa = PBXBuildFile; fileRef = 924CC0FD1A220B3C00D2AF68 /* Runner.m */; };
@@ -149,6 +150,8 @@
 		9231159E1A444A6B00624201 /* RendererView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RendererView.m; sourceTree = "<group>"; };
 		923115A01A444AA800624201 /* Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
 		923115A11A444AA800624201 /* Renderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Renderer.m; sourceTree = "<group>"; };
+		9232FA0B1B860CF80082DDF1 /* NumberPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NumberPool.h; sourceTree = "<group>"; };
+		9232FA0C1B860CF80082DDF1 /* NumberPool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NumberPool.m; sourceTree = "<group>"; };
 		9245076C1B2B839C006956F1 /* NSError+LowResCoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+LowResCoder.h"; sourceTree = "<group>"; };
 		9245076D1B2B839C006956F1 /* NSError+LowResCoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+LowResCoder.m"; sourceTree = "<group>"; };
 		9248A6AF1A7A641D00FD5656 /* Default Projects */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Default Projects"; sourceTree = "<group>"; };
@@ -432,6 +435,8 @@
 				923115A11A444AA800624201 /* Renderer.m */,
 				92B7A5311AA8C71000B6CA81 /* AudioPlayer.h */,
 				92B7A5321AA8C71000B6CA81 /* AudioPlayer.m */,
+				9232FA0B1B860CF80082DDF1 /* NumberPool.h */,
+				9232FA0C1B860CF80082DDF1 /* NumberPool.m */,
 			);
 			name = Runtime;
 			sourceTree = "<group>";
@@ -936,6 +941,7 @@
 				924CC0FE1A220B3C00D2AF68 /* Runner.m in Sources */,
 				92E53DF41A5B3A1D00FE9F91 /* GORMenuTableViewController.m in Sources */,
 				92B7A5331AA8C71000B6CA81 /* AudioPlayer.m in Sources */,
+				9232FA0D1B860CF80082DDF1 /* NumberPool.m in Sources */,
 				92884F1B1B0F25B30032623D /* SDImageCache.m in Sources */,
 				921B234C1A9E3DA800C45AFA /* EditorTextView.m in Sources */,
 				9231159F1A444A6B00624201 /* RendererView.m in Sources */,

@@ -37,7 +37,7 @@
 @property NSString *identifier;
 @property BOOL isString;
 @property NSArray *indexExpressions;
-- (NSArray *)indexesWithRunner:(Runner *)runner add:(int)addValue;
+- (NSArray *)indexesWithRunner:(Runner *)runner isDim:(BOOL)isDim;
 @end
 
 @interface LabelNode : Node

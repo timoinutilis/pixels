@@ -10,6 +10,7 @@
 #import "Node.h"
 #import "Renderer.h"
 #import "AudioPlayer.h"
+#import "NumberPool.h"
 #import "Runnable.h"
 #import "NSError+LowResCoder.h"
 
@@ -43,6 +44,7 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
         self.stringVariables = [NSMutableDictionary dictionary];
         self.sequencesStack = [NSMutableArray array];
         self.gosubStack = [NSMutableArray array];
+        _numberPool = [[NumberPool alloc] init];
         _transferStrings = [NSMutableArray array];
         
         self.loadedPersistentVariables = [NSDictionary dictionary];
@@ -100,6 +102,7 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
             [self next];
         }
     }
+    [self.numberPool reset];
 }
 
 - (void)end
@@ -330,7 +333,7 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
 
 - (void)dimVariable:(VariableNode *)variable
 {
-    NSArray *sizes = [variable indexesWithRunner:self add:1];
+    NSArray *sizes = [variable indexesWithRunner:self isDim:YES];
     
     // check bounds
     for (NSUInteger i = 0; i < sizes.count; i++)
@@ -374,7 +377,7 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
     id value = [self accessVariable:variable setValue:nil];
     if (!value || value == [NSNull null])
     {
-        value = variable.isString ? @"" : @(0);
+        value = variable.isString ? @"" : [self.numberPool numberWithValue:0];
     }
     return value;
 }
@@ -424,7 +427,7 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
             return nil;
         }
         
-        NSArray *indexes = [variable indexesWithRunner:self add:0];
+        NSArray *indexes = [variable indexesWithRunner:self isDim:NO];
         
         // check bounds
         for (NSUInteger i = 0; i < indexes.count; i++)
@@ -442,7 +445,7 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
         NSUInteger offset = [arrayVariable offsetForIndexes:indexes];
         if (setValue)
         {
-            arrayVariable.values[offset] = setValue;
+            arrayVariable.values[offset] = [self valueWith:setValue variable:arrayVariable.values[offset]];
         }
         else
         {
@@ -462,7 +465,7 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
         
         if (setValue)
         {
-            dict[variable.identifier] = setValue;
+            dict[variable.identifier] = [self valueWith:setValue variable:dict[variable.identifier]];
         }
         else
         {
@@ -471,6 +474,20 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
     }
     
     return getValue;
+}
+
+- (id)valueWith:(id)value variable:(id)varValue
+{
+    if ([value isKindOfClass:[Number class]])
+    {
+        if (!varValue || varValue == [NSNull null])
+        {
+            varValue = [[Number alloc] init];
+        }
+        ((Number *)varValue).floatValue = ((Number *)value).floatValue;
+        return varValue;
+    }
+    return value;
 }
 
 - (void)restoreDataTransfer
