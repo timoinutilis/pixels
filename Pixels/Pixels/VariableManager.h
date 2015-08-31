@@ -30,7 +30,10 @@
 @interface ArrayVariable : NSObject
 @property (readonly) NSMutableArray *values;
 @property (readonly) NSArray *sizes;
-- (instancetype)initWithSizes:(NSArray *)sizes;
+@property (readonly) BOOL isString;
+- (instancetype)initWithSizes:(NSArray *)sizes isString:(BOOL)isString;
 - (NSUInteger)offsetForIndexes:(NSArray *)indexes;
 - (int)intAtOffset:(NSUInteger)offset;
+- (NSDictionary *)dictionary;
+- (void)loadFromDictionary:(NSDictionary *)dict;
 @end

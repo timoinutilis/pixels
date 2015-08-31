@@ -75,8 +75,8 @@
 {
     if ([value isKindOfClass:[ArrayVariable class]])
     {
-        //TODO arrays
-        return @[];
+        ArrayVariable *array = (ArrayVariable *)value;
+        return [array dictionary];
     }
     if ([value isKindOfClass:[Number class]])
     {
@@ -133,7 +133,8 @@
         
         if (asArray)
         {
-            //TODO
+            ArrayVariable *array = varDict[variable.identifier];
+            [array loadFromDictionary:persistantValue];
         }
         else
         {
@@ -157,14 +158,6 @@
         }
     }
     
-    ArrayVariable *arrayVariable = [[ArrayVariable alloc] initWithSizes:sizes];
-    
-    if (!arrayVariable.values)
-    {
-        self.runner.error = [NSError programErrorWithCode:LRCErrorCodeRuntime reason:@"Array too large" token:variable.token];
-        return;
-    }
-    
     NSMutableDictionary *dict = variable.isString ? self.stringVariables : self.numberVariables;
     
     if (dict[variable.identifier])
@@ -172,6 +165,14 @@
         self.runner.error = [NSError programErrorWithCode:LRCErrorCodeRuntime
                                                    reason:[NSString stringWithFormat:@"Variable %@ already used", variable.identifier]
                                                     token:variable.token];
+        return;
+    }
+    
+    ArrayVariable *arrayVariable = [[ArrayVariable alloc] initWithSizes:sizes isString:variable.isString];
+    
+    if (!arrayVariable.values)
+    {
+        self.runner.error = [NSError programErrorWithCode:LRCErrorCodeRuntime reason:@"Array too large" token:variable.token];
         return;
     }
     
@@ -306,18 +307,19 @@
 
 @implementation ArrayVariable
 
-- (instancetype)initWithSizes:(NSArray *)sizes
+- (instancetype)initWithSizes:(NSArray *)sizes isString:(BOOL)isString
 {
     if (self = [super init])
     {
         _sizes = sizes;
+        _isString = isString;
         NSUInteger capacity = [self calcCapacity];
         if (capacity <= 16384)
         {
             _values = [NSMutableArray arrayWithCapacity:capacity];
             for (NSUInteger i = 0; i < capacity; i++)
             {
-                _values[i] = [NSNull null];
+                _values[i] = isString ? @"" : [Number numberWithValue:0];
             }
         }
     }
@@ -351,12 +353,68 @@
 
 - (int)intAtOffset:(NSUInteger)offset;
 {
-    NSNumber *number = _values[offset];
+    Number *number = _values[offset];
     if (number && (id)number != [NSNull null])
     {
         return number.intValue;
     }
     return 0;
+}
+
+- (NSDictionary *)dictionary
+{
+    NSMutableArray *sizes = [NSMutableArray arrayWithCapacity:self.sizes.count];
+    for (Number *number in self.sizes)
+    {
+        [sizes addObject:@(number.intValue)];
+    }
+    
+    NSMutableArray *values = nil;
+    if (self.isString)
+    {
+        values = self.values;
+    }
+    else
+    {
+        values = [NSMutableArray arrayWithCapacity:self.values.count];
+        for (Number *number in self.values)
+        {
+            [values addObject:@(number.floatValue)];
+        }
+    }
+    return @{@"sizes": sizes,
+             @"values": values};
+}
+
+- (void)loadFromDictionary:(NSDictionary *)dict
+{
+    NSArray *srcSizes = dict[@"sizes"];
+    NSArray *srcValues = dict[@"values"];
+    
+    if (self.sizes.count != srcSizes.count)
+        return;
+    
+    for (int i = 0; i < srcSizes.count; i++)
+    {
+        Number *dstSize = self.sizes[i];
+        NSNumber *srcSize = srcSizes[i];
+        if (dstSize.intValue != srcSize.intValue)
+            return;
+    }
+    
+    for (int i = 0; i < srcValues.count; i++)
+    {
+        if (_isString)
+        {
+            self.values[i] = srcValues[i];
+        }
+        else
+        {
+            Number *dstNumber = self.values[i];
+            NSNumber *srcNumber = srcValues[i];
+            dstNumber.floatValue = srcNumber.floatValue;
+        }
+    }
 }
 
 @end
