@@ -71,7 +71,14 @@ A$, B2$, MY_NAME$, TXT$
 
 <h3 id="_PERSIST">PERSIST</h3>
 <pre>PERSIST x,y,z,...</pre>
-<p>TODO</p>
+<p>The PERSIST command declares the given variables as persistent. Their values are automatically stored on program exit, and loaded when PERSIST is called. The variables must be still unused at the moment of calling this command, so it should be placed at the beginning of a program. Persistent variables are useful for highscores or to save the current level. The following example shows different results on every start:</p>
+<pre class="exm">
+PERSIST NUM,T$
+NUM=NUM+1
+T$=T$+"A"
+PRINT NUM
+PRINT T$
+</pre>
 
 <h2 id="_Arrays">Arrays</h2>
 <p>An array is a group of values of the same type, referenced by a single variable name. The individual values in an array are called elements. Array elements are variables also. They can be used in any BASIC command or function that uses variables.</p>
@@ -87,6 +94,7 @@ ARR(10)=5
 PRINT ARR(10)
 PRINT ARR(0)
 </pre>
+<p>Include the PERSIST keyword to make the arrays persistent. Their values are automatically stored on program exit, and loaded when DIM PERSIST is called. If the size of an array changes, stored values get cleared.</p>
 
 <h2 id="_Arithmetic-operations">Arithmetic operations</h2>
 <p>The following arithmetic operations can be used in a numeric expression:</p>
@@ -561,7 +569,26 @@ WAIT 2
 <pre>ON PAUSE</pre>
 <p>This command adds special handling for the moment the user taps the pause button. Instead of pausing the program, it will jump to <i>label</i>.</p>
 <pre class="exm">
-    TODO
+GAMEPAD 1
+GAME:
+ON PAUSE GOTO GAMEMENU
+CLS
+DO
+  COLOR RND*16
+  TEXT 0,20,"PLAYING..."
+  TEXT 0,26,"PRESS PAUSE"
+  WAIT 0.1
+LOOP
+GAMEMENU:
+ON PAUSE GOTO GAME
+CLS
+DO
+  COLOR RND*16
+  TEXT 0,20,"PAUSED"
+  TEXT 0,26,"PRESS PAUSE"
+  TEXT 0,32,"TO CONTINUE"
+  WAIT 0.1
+LOOP
 </pre>
 <p>ON PAUSE (without GOTO) clears the label and activates the normal behavior again.</p>
 
