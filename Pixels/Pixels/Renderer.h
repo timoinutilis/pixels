@@ -20,6 +20,8 @@ typedef struct SpriteDef {
     uint16_t data[8];
 } SpriteDef;
 
+extern int const RendererSize;
+extern int const RendererNumColors;
 extern int const RendererNumLayers;
 extern int const RendererNumSprites;
 extern int const RendererNumSpriteDefs;
@@ -32,6 +34,9 @@ extern int const RendererSpriteSize;
 @property int colorIndex;
 @property int layerIndex;
 
+- (void)initPalette;
+- (int)paletteAtIndex:(int)index;
+- (void)setPalette:(int)color atIndex:(int)index;
 - (int)colorAtX:(int)x Y:(int)y;
 - (void)clearWithColorIndex:(int)colorIndex;
 - (void)plotX:(int)x Y:(int)y;

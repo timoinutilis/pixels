@@ -704,7 +704,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    Number *value = [self.color evaluateNumberWithRunner:runner min:0 max:15];
+    Number *value = [self.color evaluateNumberWithRunner:runner min:0 max:RendererNumColors - 1];
     if (runner.error)
     {
         return nil;
@@ -731,7 +731,7 @@ NSString *const TRANSFER = @"TRANSFER";
     int c = 0;
     if (self.color)
     {
-        Number *color = [self.color evaluateNumberWithRunner:runner min:0 max:15];
+        Number *color = [self.color evaluateNumberWithRunner:runner min:0 max:RendererNumColors - 1];
         c = color.intValue;
     }
     if (runner.error)
@@ -947,6 +947,62 @@ NSString *const TRANSFER = @"TRANSFER";
 
 
 
+@implementation PaletteNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.nExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.valueExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    if (self.clear)
+    {
+        [runner.renderer initPalette];
+    }
+    else
+    {
+        Number *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumColors - 1];
+        Number *value = [self.valueExpression evaluateNumberWithRunner:runner min:0 max:63];
+        if (runner.error)
+        {
+            return nil;
+        }
+        
+        [runner.renderer setPalette:value.intValue atIndex:n.intValue];
+    }
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
+@implementation PaletteFuncNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.nExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    Number *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumColors - 1];
+    if (runner.error)
+    {
+        return nil;
+    }
+    
+    int value = [runner.renderer paletteAtIndex:n.intValue];
+    return [runner.numberPool numberWithValue:value];
+}
+
+@end
+
+
+
 @implementation DefSpriteNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
@@ -1007,17 +1063,17 @@ NSString *const TRANSFER = @"TRANSFER";
     Sprite *sprite = [runner.renderer spriteAtIndex:n.intValue];
     if (self.color1Expression)
     {
-        Number *color1 = [self.color1Expression evaluateNumberWithRunner:runner min:0 max:15];
+        Number *color1 = [self.color1Expression evaluateNumberWithRunner:runner min:0 max:RendererNumColors - 1];
         sprite->colors[0] = color1.intValue;
     }
     if (self.color2Expression)
     {
-        Number *color2 = [self.color2Expression evaluateNumberWithRunner:runner min:0 max:15];
+        Number *color2 = [self.color2Expression evaluateNumberWithRunner:runner min:0 max:RendererNumColors - 1];
         sprite->colors[1] = color2.intValue;
     }
     if (self.color3Expression)
     {
-        Number *color3 = [self.color3Expression evaluateNumberWithRunner:runner min:0 max:15];
+        Number *color3 = [self.color3Expression evaluateNumberWithRunner:runner min:0 max:RendererNumColors - 1];
         sprite->colors[2] = color3.intValue;
     }
     
@@ -1573,7 +1629,7 @@ NSString *const TRANSFER = @"TRANSFER";
 {
     Number *x = [self.xExpression evaluateWithRunner:runner];
     Number *y = [self.yExpression evaluateWithRunner:runner];
-    Number *trans = [self.transparencyExpression evaluateNumberWithRunner:runner min:-1 max:15];
+    Number *trans = [self.transparencyExpression evaluateNumberWithRunner:runner min:-1 max:RendererNumColors - 1];
     
     if (runner.error)
     {
@@ -1954,7 +2010,7 @@ NSString *const TRANSFER = @"TRANSFER";
 - (id)evaluateWithRunner:(Runner *)runner
 {
     Number *x = [self.xExpression evaluateWithRunner:runner];
-    Number *y = [self.xExpression evaluateWithRunner:runner];
+    Number *y = [self.yExpression evaluateWithRunner:runner];
     if (runner.error)
     {
         return nil;

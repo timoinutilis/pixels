@@ -9,6 +9,7 @@
 #import "Renderer.h"
 
 int const RendererSize = 64;
+int const RendererNumColors = 16;
 int const RendererNumLayers = 2;
 int const RendererNumSprites = 16;
 int const RendererNumSpriteDefs = 64;
@@ -24,6 +25,7 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
 
 
 @implementation Renderer {
+    uint32_t _palette[RendererNumColors];
     uint8_t _pixelBuffer[RendererNumLayers][RendererSize][RendererSize];
     Sprite _sprites[RendererNumSprites];
     SpriteDef _spriteDefs[RendererNumSpriteDefs];
@@ -36,6 +38,7 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
 {
     if (self = [super init])
     {
+        [self initPalette];
         self.colorIndex = 1;
         [self clearWithColorIndex:0];
         
@@ -53,6 +56,28 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
 - (int)size
 {
     return RendererSize;
+}
+
+- (void)initPalette
+{
+    for (int i = 0; i < RendererNumColors; i++)
+    {
+        _palette[i] = ColorPalette[i];
+    }
+}
+
+- (int)paletteAtIndex:(int)index
+{
+    int color = _palette[index];
+    return ((color >> 18) & 0x30) | ((color >> 12) & 0x0C) | ((color >> 6) & 0x03);
+}
+
+- (void)setPalette:(int)color atIndex:(int)index
+{
+    int r = (color >> 4) & 0x03;
+    int g = (color >> 2) & 0x03;
+    int b = color & 0x03;
+    _palette[index] = r * 0x550000 | g * 0x5500 | b * 0x55;
 }
 
 - (int)colorAtX:(int)x Y:(int)y
@@ -468,7 +493,7 @@ uint8_t getSpritePixel(SpriteDef *def, int x, int y)
         }
     }
     
-    return ColorPalette[colorIndex];
+    return _palette[colorIndex];
 }
 
 @end

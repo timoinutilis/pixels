@@ -257,6 +257,9 @@
         case TTypeSymText:
             node = [self acceptText];
             break;
+        case TTypeSymPalette:
+            node = [self acceptPalette];
+            break;
         case TTypeSymData:
             node = [self acceptData];
             break;
@@ -372,6 +375,7 @@
         case TTypeSymPaint:
         case TTypeSymGet:
         case TTypeSymPut:
+        case TTypeSymPalette:
             return YES;
         
         case TTypeSymEnd: {
@@ -736,6 +740,24 @@
     {
         [self accept:TTypeSymComma];
         node.alignExpression = [self acceptExpression];
+    }
+    return node;
+}
+
+- (Node *)acceptPalette
+{
+    PaletteNode *node = [[PaletteNode alloc] init];
+    [self accept:TTypeSymPalette];
+    if (self.token.type == TTypeSymClear)
+    {
+        node.clear = YES;
+        [self accept:TTypeSymClear];
+    }
+    else
+    {
+        node.nExpression = [self acceptExpression];
+        [self accept:TTypeSymComma];
+        node.valueExpression = [self acceptExpression];
     }
     return node;
 }
@@ -1228,6 +1250,14 @@
             [self accept:TTypeSymText and:TTypeSymWidth];
             [self accept:TTypeSymBracketOpen];
             node.valueExpression = [self acceptExpression];
+            [self accept:TTypeSymBracketClose];
+            return node;
+        }
+        case TTypeSymPalette: {
+            PaletteFuncNode *node = [[PaletteFuncNode alloc] init];
+            [self accept:TTypeSymPalette];
+            [self accept:TTypeSymBracketOpen];
+            node.nExpression = [self acceptExpression];
             [self accept:TTypeSymBracketClose];
             return node;
         }

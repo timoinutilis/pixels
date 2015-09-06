@@ -167,6 +167,16 @@
 @property Node *yExpression;
 @end
 
+@interface PaletteNode : Node
+@property BOOL clear;
+@property Node *nExpression;
+@property Node *valueExpression;
+@end
+
+@interface PaletteFuncNode : Node
+@property Node *nExpression;
+@end
+
 @interface DefSpriteNode : Node
 @property Node *imageExpression;
 @property VariableNode *dataVariable;

@@ -257,6 +257,7 @@ FOR I=1 TO 15
   PRINT "COLOR "+I
 NEXT I
 </pre>
+<p>These default colors can be changed with the PALETTE command.</p>
 
 <h3 id="_CLS">CLS</h3>
 <pre>CLS [color]</pre>
@@ -398,6 +399,25 @@ PUT 20,40,0,0,10,5
 PUT 40,40,11,6,10,5
 </pre>
 
+<h3 id="_PALETTE">PALETTE</h3>
+<pre>PALETTE index,value</pre>
+<p>Changes the value of color <i>index</i> in the palette. There are 64 possible color values, mixed with each 4 shades of red, green and blue. You can calculate <i>value</i> like this:</p>
+<pre class="exm">VALUE = RED * 16 + GREEN * 4 + BLUE</pre>
+<p>(RED, GREEN and BLUE are values from 0 to 3). When you call this command all pixels on the screen with that index in the palette will change their color.</p>
+
+<h3 id="_PALETTE-CLEAR">PALETTE CLEAR</h3>
+<pre>PALETTE CLEAR</pre>
+<p>Resets the palette to the default colors (see COLOR command).</p>
+
+<h3 id="_PALETTE-FUNC">=PALETTE</h3>
+<pre>v=PALETTE(index)</pre>
+<p>This function returns the current value of the color <i>index</i> from the palette. You can get the RED, GREEN and BLUE values like this:</p>
+<pre class="exm">
+RED = INT(VALUE / 16)
+GREEN = INT(VALUE / 4) MOD 4
+BLUE = VALUE MOD 4
+</pre>
+
 <h1 id="Control-structures">Control structures</h1>
 
 <p>LowRes Coder offers several commands to control the execution of your programs. You can repeat sequences of code, execute different code depending on decisions and jump between program parts.</p>
@@ -463,6 +483,19 @@ RETURN
 <pre>RETURN [label]</pre>
 <p>The execution of the program returns to the last GOSUB call.</p>
 <p>The <i>label</i> parameter may be included in the RETURN command to return to a specific label from the subroutine. This label must be accessible from the position of the previously called GOSUB command.</p>
+<pre class="exm">
+FOR I=1 TO 5
+  GOSUB SHOWNUMBER
+NEXT I
+END
+SHOWNUMBER:
+IF I=4 THEN RETURN GAMEOVER
+PRINT "NUMBER "+I
+RETURN
+GAMEOVER:
+PRINT "GAME OVER"
+</pre>
+
 
 <h3 id="_FOR">FOR ... NEXT</h3>
 <pre>
