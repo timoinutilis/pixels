@@ -342,7 +342,7 @@ PAINT 3,42
 </table>
 <pre class="exm">TEXT 32,0,"CENTERED TEXT",1</pre>
 
-<h3 id="_TEXT-WIDTH">=TEXT WIDTH</h3>
+<h3 id="_TEXTWIDTH">=TEXT WIDTH</h3>
 <pre>v=TEXT WIDTH(text$)</pre>
 <p>TEXT WIDTH returns the width of <i>text$</i> in pixels as it would be drawn with the TEXT command.</p>
 <pre class="exm">
@@ -405,11 +405,11 @@ PUT 40,40,11,6,10,5
 <pre class="exm">VALUE = RED * 16 + GREEN * 4 + BLUE</pre>
 <p>(RED, GREEN and BLUE are values from 0 to 3). When you call this command all pixels on the screen with that index in the palette will change their color.</p>
 
-<h3 id="_PALETTE-CLEAR">PALETTE CLEAR</h3>
+<h3 id="_PALETTECLEAR">PALETTE CLEAR</h3>
 <pre>PALETTE CLEAR</pre>
 <p>Resets the palette to the default colors (see COLOR command).</p>
 
-<h3 id="_PALETTE-FUNC">=PALETTE</h3>
+<h3 id="_PALETTEFUNC">=PALETTE</h3>
 <pre>v=PALETTE(index)</pre>
 <p>This function returns the current value of the color <i>index</i> from the palette. You can get the RED, GREEN and BLUE values like this:</p>
 <pre class="exm">
@@ -747,7 +747,8 @@ DEF SPRITE 0,ARR
 SPRITE 0,10,10,0
 SPRITE 1,20,20,0
 SPRITE 2,30,30,0
-DATA 5,80,21,84,105,105,105,105,85,85,127,253,31,244,5,80
+DATA 5,80,21,84,105,105,105,105
+DATA 85,85,127,253,31,244,5,80
 </pre>
 <p>Don't be scared of the numbers, you can use the included program Sprite Designer to draw your images and transfer them to source code.</p>
 <p>Here is a little explanation of the format: The numbers in the data array are bytes. A sprite has 8x8 pixels and each pixel has two bits to define the color, that makes two bytes per line. Lines are stored from top to bottom, so in the end we have 16 bytes.</p>
@@ -770,8 +771,8 @@ SPRITE 0,,,1
 <p>Removes the sprite with the given <i>number</i> from the screen. If the parameter is omitted, all sprites are removed.</p>
 
 <h3 id="_SPRITEPALETTE">SPRITE PALETTE</h3>
-<pre>SPRITE PALETTE number,[color1],[color2],[color3]</pre>
-<p>Sets the colors for a sprite. Although a sprite image can only have three colors, each sprite on the screen can have its own color palette. See the available color numbers of the COLOR command. Single color parameters can be omitted to keep the current values of the sprite.</p>
+<pre>SPRITE PALETTE number,[c1],[c2],[c3]</pre>
+<p>Sets the colors <i>c1, c2,</i> and <i>c3</i> for a sprite. Although a sprite image can only have three colors, each sprite on the screen can have its own color palette. See the available color numbers of the COLOR command. Single color parameters can be omitted to keep the current values of the sprite.</p>
 <pre class="exm">
 REM ORANGE, WHITE, RED
 SPRITE PALETTE 0,7,1,4
@@ -1016,6 +1017,20 @@ FOR A=1 TO 5
 NEXT A
 </pre>
 <p>After running this example program, the transfer memory will contain 5 DATA commands each with three constants.</p>
+
+<h3 id="_WRITEDIM">WRITE DIM</h3>
+<pre>WRITE DIM array[,columns]</pre>
+<p>Writes all elements of an array to the transfer memory. <i>array</i> is the name of a variable (without index numbers). This command adds several DATA commands to the transfer memory, each with a maximum number of <i>columns</i> values. <i>columns</i> can be a number from 0 to 16. If the parameter is omitted or 0, the default value of 8 is used.</p>
+<pre class="exm">
+DIM ARR(3,7)
+FOR I=0 TO 3
+  FOR J=0 TO 7
+    ARR(I,J)=I*100+J
+  NEXT J
+NEXT I
+WRITE DIM ARR,4
+</pre>
+<p>After running this example program, the transfer memory will contain 8 DATA commands each with 4 constants.</p>
 
 <h3 id="_WRITECLEAR">WRITE CLEAR</h3>
 <pre>WRITE CLEAR</pre>
