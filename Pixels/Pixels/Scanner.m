@@ -244,6 +244,13 @@
                         }
                     }
                 }
+                else if (type > TType_reserved)
+                {
+                    self.error = [NSError programErrorWithCode:LRCErrorCodeTokenize
+                                                        reason:[NSString stringWithFormat:@"Reserved keyword %@", foundSymbol]
+                                                      position:textPos];
+                    return nil;
+                }
                 else
                 {
                     Token *token = [[Token alloc] init];

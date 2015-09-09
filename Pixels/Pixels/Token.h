@@ -44,13 +44,11 @@ typedef NS_ENUM(NSInteger, TType) {
     TTypeSymEnd,
     TTypeSymGamepad,
     TTypeSymPrint,
-    TTypeSymInput,
     TTypeSymData,
     TTypeSymRead,
     TTypeSymRestore,
     TTypeSymDim,
     TTypeSymPaint,
-    TTypeSymCircle,
     TTypeSymSprite,
     TTypeSymPalette,
     TTypeSymScroll,
@@ -130,6 +128,17 @@ typedef NS_ENUM(NSInteger, TType) {
     TTypeSymDollar,
     TTypeSymEol,
     
+    // Reserved (not used yet)
+    TType_reserved,
+    TTypeSymInput,
+    TTypeSymCircle,
+    TTypeSymSub,
+    TTypeSymCall,
+    TTypeSymShared,
+    TTypeSymSwap,
+    TTypeSymUbound,
+    TTypeSymScreen,
+
     TType_count
 };
 

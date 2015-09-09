@@ -48,13 +48,11 @@
         case TTypeSymEnd: return @"END";
         case TTypeSymGamepad: return @"GAMEPAD";
         case TTypeSymPrint: return @"PRINT";
-        case TTypeSymInput: return @"INPUT";
         case TTypeSymData: return @"DATA";
         case TTypeSymRead: return @"READ";
         case TTypeSymRestore: return @"RESTORE";
         case TTypeSymDim: return @"DIM";
         case TTypeSymPaint: return @"PAINT";
-        case TTypeSymCircle: return @"CIRCLE";
         case TTypeSymSprite: return @"SPRITE";
         case TTypeSymPalette: return @"PALETTE";
         case TTypeSymScroll: return @"SCROLL";
@@ -129,6 +127,17 @@
         case TTypeSymComma: return @",";
         case TTypeSymDollar: return @"$";
         case TTypeSymEol: return printable ? @"end of line" : nil;
+        
+        case TType_reserved: return nil;
+        
+        case TTypeSymInput: return @"INPUT";
+        case TTypeSymCircle: return @"CIRCLE";
+        case TTypeSymSub: return @"SUB";
+        case TTypeSymCall: return @"CALL";
+        case TTypeSymShared: return @"SHARED";
+        case TTypeSymSwap: return @"SWAP";
+        case TTypeSymUbound: return @"UBOUND";
+        case TTypeSymScreen: return @"SCREEN";
         
         case TType_count: return nil;
     }
