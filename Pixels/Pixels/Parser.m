@@ -898,8 +898,20 @@
 
 - (Node *)acceptWrite
 {
-    WriteNode *node = [[WriteNode alloc] init];
     [self accept:TTypeSymWrite];
+    if (self.token.type == TTypeSymDim)
+    {
+        [self accept:TTypeSymDim];
+        WriteDimNode *node = [[WriteDimNode alloc] init];
+        node.variable = [self acceptVariable];
+        if ([self acceptOptionalComma])
+        {
+            node.columnsExpression = [self acceptExpression];
+        }
+        return node;
+    }
+    
+    WriteNode *node = [[WriteNode alloc] init];
     if (self.token.type == TTypeSymClear)
     {
         [self accept:TTypeSymClear];

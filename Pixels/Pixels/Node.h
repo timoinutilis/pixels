@@ -212,9 +212,20 @@
 @property NSString *label;
 @end
 
-@interface WriteNode : Node
+@interface WriteBaseNode : Node
+@property NSMutableArray *strings;
+- (void)addValue:(id)value;
+- (void)writeDataLineWithRunner:(Runner *)runner;
+@end
+
+@interface WriteNode : WriteBaseNode
 @property NSArray *valueExpressions;
 @property BOOL clear;
+@end
+
+@interface WriteDimNode : WriteBaseNode
+@property VariableNode *variable;
+@property Node *columnsExpression;
 @end
 
 @interface OnXGotoNode : Node

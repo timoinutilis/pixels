@@ -1260,6 +1260,32 @@ NSString *const TRANSFER = @"TRANSFER";
 
 
 
+@implementation WriteBaseNode
+
+- (void)addValue:(id)value
+{
+    NSString *string = nil;
+    if ([value isKindOfClass:[NSString class]])
+    {
+        string = [NSString stringWithFormat:@"\"%@\"", value];
+    }
+    else
+    {
+        string = [value stringValue];
+    }
+    [self.strings addObject:string];
+}
+
+- (void)writeDataLineWithRunner:(Runner *)runner
+{
+    NSString *dataString = [self.strings componentsJoinedByString:@","];
+    [runner.transferStrings addObject:[NSString stringWithFormat:@"DATA %@", dataString]];
+}
+
+@end
+
+
+
 @implementation WriteNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
@@ -1278,29 +1304,65 @@ NSString *const TRANSFER = @"TRANSFER";
     }
     else
     {
-        NSMutableArray *strings = [NSMutableArray array];
+        self.strings = [NSMutableArray array];
         for (Node *valueNode in self.valueExpressions)
         {
-            NSString *string;
             id value = [valueNode evaluateWithRunner:runner];
             if (runner.error)
             {
                 return nil;
             }
             
-            if ([value isKindOfClass:[NSString class]])
-            {
-                string = [NSString stringWithFormat:@"\"%@\"", value];
-            }
-            else
-            {
-                string = [value stringValue];
-            }
-            [strings addObject:string];
+            [self addValue:value];
         }
-        NSString *dataString = [strings componentsJoinedByString:@","];
-        [runner.transferStrings addObject:[NSString stringWithFormat:@"DATA %@", dataString]];
+        [self writeDataLineWithRunner:runner];
     }
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
+@implementation WriteDimNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.variable prepareWithRunnable:runnable pass:pass canBeString:YES];
+    [self.columnsExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    Number *columnsNumber = [self.columnsExpression evaluateNumberWithRunner:runner min:0 max:16];
+    ArrayVariable *arrayVariable = [runner.variables arrayOfVariable:self.variable];
+    if (runner.error)
+    {
+        return nil;
+    }
+    
+    int currentColumn = 0;
+    int columns = (columnsNumber && columnsNumber.intValue != 0) ? columnsNumber.intValue : 8;
+    self.strings = [NSMutableArray array];
+    
+    for (id value in arrayVariable.values)
+    {
+        [self addValue:value];
+        
+        currentColumn++;
+        if (currentColumn == columns)
+        {
+            [self writeDataLineWithRunner:runner];
+            currentColumn = 0;
+            [self.strings removeAllObjects];
+        }
+    }
+    if (self.strings.count > 0)
+    {
+        [self writeDataLineWithRunner:runner];
+    }
+    
     [runner next];
     return nil;
 }
