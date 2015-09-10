@@ -138,6 +138,13 @@ typedef NS_ENUM(NSInteger, TType) {
     TTypeSymSwap,
     TTypeSymUbound,
     TTypeSymScreen,
+    TTypeSymPeek,
+    TTypeSymPoke,
+    TTypeSymRandomize,
+    TTypeSymBank,
+    TTypeSymDec,
+    TTypeSymFont,
+    TTypeSymInc,
 
     TType_count
 };

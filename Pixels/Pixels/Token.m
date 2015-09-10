@@ -44,6 +44,7 @@
         case TTypeSymLine: return @"LINE";
         case TTypeSymBox: return @"BOX";
         case TTypeSymBar: return @"BAR";
+        case TTypeSymCircle: return @"CIRCLE";
         case TTypeSymText: return @"TEXT";
         case TTypeSymEnd: return @"END";
         case TTypeSymGamepad: return @"GAMEPAD";
@@ -131,14 +132,21 @@
         case TType_reserved: return nil;
         
         case TTypeSymInput: return @"INPUT";
-        case TTypeSymCircle: return @"CIRCLE";
         case TTypeSymSub: return @"SUB";
         case TTypeSymCall: return @"CALL";
         case TTypeSymShared: return @"SHARED";
         case TTypeSymSwap: return @"SWAP";
         case TTypeSymUbound: return @"UBOUND";
         case TTypeSymScreen: return @"SCREEN";
-        
+        case TTypeSymFunction: return @"FUNCTION";
+        case TTypeSymPeek: return @"PEEK";
+        case TTypeSymPoke: return @"POKE";
+        case TTypeSymRandomize: return @"RANDOMIZE";
+        case TTypeSymBank: return @"BANK";
+        case TTypeSymDec: return @"INC";
+        case TTypeSymFont: return @"DEC";
+        case TTypeSymInc: return @"FONT";
+
         case TType_count: return nil;
     }
     return nil;
