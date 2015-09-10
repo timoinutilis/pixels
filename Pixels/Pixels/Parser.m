@@ -214,6 +214,9 @@
         case TTypeSymPersist:
             node = [self acceptPersist];
             break;
+        case TTypeSymSwap:
+            node = [self acceptSwap];
+            break;
         case TTypeSymWhile:
             node = [self acceptWhileWend];
             break;
@@ -358,6 +361,8 @@
         case TTypeSymRepeat:
         case TTypeSymDo:
         case TTypeSymExit:
+        case TTypeSymPersist:
+        case TTypeSymSwap:
         case TTypeSymWait:
         case TTypeSymColor:
         case TTypeSymCls:
@@ -496,6 +501,16 @@
     PersistNode *node = [[PersistNode alloc] init];
     [self accept:TTypeSymPersist];
     node.variableNodes = [self acceptVariableList];
+    return node;
+}
+
+- (Node *)acceptSwap
+{
+    SwapNode *node = [[SwapNode alloc] init];
+    [self accept:TTypeSymSwap];
+    node.variable1 = [self acceptVariable];
+    [self accept:TTypeSymComma];
+    node.variable2 = [self acceptVariable];
     return node;
 }
 
@@ -726,7 +741,11 @@
     {
         node.radiusYExpression = [self acceptExpression];
     }
-    node.fill = NO; //TODO
+    if (self.token.type == TTypeSymPaint)
+    {
+        [self accept:TTypeSymPaint];
+        node.fill = YES;
+    }
     return node;
 }
 

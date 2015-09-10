@@ -89,6 +89,11 @@
 @property NSArray *variableNodes;
 @end
 
+@interface SwapNode : Node
+@property VariableNode *variable1;
+@property VariableNode *variable2;
+@end
+
 @interface RepeatUntilNode : Node
 @property Node *condition;
 @property NSArray *commands;

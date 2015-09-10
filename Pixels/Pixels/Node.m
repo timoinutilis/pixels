@@ -488,6 +488,41 @@ NSString *const TRANSFER = @"TRANSFER";
 
 
 
+@implementation SwapNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.variable1 prepareWithRunnable:runnable pass:pass];
+    [self.variable2 prepareWithRunnable:runnable pass:pass];
+    
+    if (pass == PrePassCheckSemantic)
+    {
+        if (self.variable1.isString != self.variable2.isString)
+        {
+            runnable.error = [NSError typeMismatchErrorWithNode:self];
+            return;
+        }
+    }
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    id value1 = [runner.variables valueOfVariable:self.variable1];
+    id value2 = [runner.variables valueOfVariable:self.variable2];
+    if ([value2 isKindOfClass:[Number class]])
+    {
+        value2 = [runner.numberPool numberWithValue:((Number *)value2).floatValue];
+    }
+    [runner.variables setValue:value1 forVariable:self.variable2];
+    [runner.variables setValue:value2 forVariable:self.variable1];
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
 @implementation RepeatUntilNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
@@ -849,7 +884,7 @@ NSString *const TRANSFER = @"TRANSFER";
     [self.xExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
     [self.yExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
     [self.radiusXExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
-    [self.radiusYExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+//    [self.radiusYExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
 }
 
 - (id)evaluateWithRunner:(Runner *)runner
@@ -857,7 +892,7 @@ NSString *const TRANSFER = @"TRANSFER";
     Number *x = [self.xExpression evaluateWithRunner:runner];
     Number *y = [self.yExpression evaluateWithRunner:runner];
     Number *radiusX = [self.radiusXExpression evaluateWithRunner:runner];
-    Number *radiusY = [self.radiusYExpression evaluateWithRunner:runner];
+//    Number *radiusY = [self.radiusYExpression evaluateWithRunner:runner];
     if (runner.error)
     {
         return nil;

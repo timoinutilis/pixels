@@ -68,6 +68,7 @@
         case TTypeSymPut: return @"PUT";
         case TTypeSymPause: return @"PAUSE";
         case TTypeSymPersist: return @"PERSIST";
+        case TTypeSymSwap: return @"SWAP";
         
         case TTypeSymUp: return @"UP";
         case TTypeSymDown: return @"DOWN";
@@ -135,18 +136,15 @@
         case TTypeSymSub: return @"SUB";
         case TTypeSymCall: return @"CALL";
         case TTypeSymShared: return @"SHARED";
-        case TTypeSymSwap: return @"SWAP";
         case TTypeSymUbound: return @"UBOUND";
         case TTypeSymScreen: return @"SCREEN";
-        case TTypeSymFunction: return @"FUNCTION";
         case TTypeSymPeek: return @"PEEK";
         case TTypeSymPoke: return @"POKE";
         case TTypeSymRandomize: return @"RANDOMIZE";
         case TTypeSymBank: return @"BANK";
-        case TTypeSymDec: return @"INC";
-        case TTypeSymFont: return @"DEC";
-        case TTypeSymInc: return @"FONT";
-
+        case TTypeSymFont: return @"FONT";
+        case TTypeSymTimer: return @"TIMER";
+            
         case TType_count: return nil;
     }
     return nil;
