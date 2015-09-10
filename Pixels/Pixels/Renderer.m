@@ -233,14 +233,69 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
     }
 }
 
-- (void)drawCircleX:(int)x Y:(int)y radiusX:(int)radiusX radiusY:(int)radiusY
+- (void)drawCircleX:(int)centerX Y:(int)centerY radius:(int)radius
 {
+    int f = 1 - radius;
+    int ddF_x = 0;
+    int ddF_y = -2 * radius;
+    int x = 0;
+    int y = radius;
     
+    [self plotX:centerX Y:centerY + radius];
+    [self plotX:centerX Y:centerY - radius];
+    [self plotX:centerX + radius Y:centerY];
+    [self plotX:centerX - radius Y:centerY];
+    
+    while (x < y)
+    {
+        if (f >= 0)
+        {
+            y--;
+            ddF_y += 2;
+            f += ddF_y;
+        }
+        x++;
+        ddF_x += 2;
+        f += ddF_x + 1;
+        
+        [self plotX:centerX + x Y:centerY + y];
+        [self plotX:centerX - x Y:centerY + y];
+        [self plotX:centerX + x Y:centerY - y];
+        [self plotX:centerX - x Y:centerY - y];
+        [self plotX:centerX + y Y:centerY + x];
+        [self plotX:centerX - y Y:centerY + x];
+        [self plotX:centerX + y Y:centerY - x];
+        [self plotX:centerX - y Y:centerY - x];
+    }
 }
 
-- (void)fillCircleX:(int)x Y:(int)y radiusX:(int)radiusX radiusY:(int)radiusY
+- (void)fillCircleX:(int)centerX Y:(int)centerY radius:(int)radius
 {
+    int f = 1 - radius;
+    int ddF_x = 0;
+    int ddF_y = -2 * radius;
+    int x = 0;
+    int y = radius;
     
+    [self fillBoxFromX:centerX - radius Y:centerY toX:centerX + radius Y:centerY];
+    
+    while (x < y)
+    {
+        if (f >= 0)
+        {
+            y--;
+            ddF_y += 2;
+            f += ddF_y;
+        }
+        x++;
+        ddF_x += 2;
+        f += ddF_x + 1;
+        
+        [self fillBoxFromX:centerX - x Y:centerY + y toX:centerX + x Y:centerY + y];
+        [self fillBoxFromX:centerX - x Y:centerY - y toX:centerX + x Y:centerY - y];
+        [self fillBoxFromX:centerX - y Y:centerY + x toX:centerX + y Y:centerY + x];
+        [self fillBoxFromX:centerX - y Y:centerY - x toX:centerX + y Y:centerY - x];
+    }
 }
 
 - (void)floodFillX:(int)x Y:(int)y

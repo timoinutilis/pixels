@@ -251,6 +251,9 @@
         case TTypeSymBar:
             node = [self acceptBox];
             break;
+        case TTypeSymCircle:
+            node = [self acceptCircle];
+            break;
         case TTypeSymScroll:
             node = [self acceptScroll];
             break;
@@ -362,6 +365,7 @@
         case TTypeSymLine:
         case TTypeSymBox:
         case TTypeSymBar:
+        case TTypeSymCircle:
         case TTypeSymScroll:
         case TTypeSymText:
         case TTypeSymGamepad:
@@ -706,6 +710,23 @@
     node.toXExpression = [self acceptExpression];
     [self accept:TTypeSymComma];
     node.toYExpression = [self acceptExpression];
+    return node;
+}
+
+- (Node *)acceptCircle
+{
+    CircleNode *node = [[CircleNode alloc] init];
+    [self accept:TTypeSymCircle];
+    node.xExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.yExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.radiusXExpression = [self acceptExpression];
+    if ([self acceptOptionalComma])
+    {
+        node.radiusYExpression = [self acceptExpression];
+    }
+    node.fill = NO; //TODO
     return node;
 }
 

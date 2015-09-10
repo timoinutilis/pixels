@@ -146,6 +146,14 @@
 @property BOOL fill;
 @end
 
+@interface CircleNode : Node
+@property Node *xExpression;
+@property Node *yExpression;
+@property Node *radiusXExpression;
+@property Node *radiusYExpression;
+@property BOOL fill;
+@end
+
 @interface ScrollNode : Node
 @property Node *fromXExpression;
 @property Node *fromYExpression;

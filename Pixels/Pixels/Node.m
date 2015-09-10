@@ -842,6 +842,43 @@ NSString *const TRANSFER = @"TRANSFER";
 
 
 
+@implementation CircleNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.xExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.yExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.radiusXExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.radiusYExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    Number *x = [self.xExpression evaluateWithRunner:runner];
+    Number *y = [self.yExpression evaluateWithRunner:runner];
+    Number *radiusX = [self.radiusXExpression evaluateWithRunner:runner];
+    Number *radiusY = [self.radiusYExpression evaluateWithRunner:runner];
+    if (runner.error)
+    {
+        return nil;
+    }
+    
+    if (self.fill)
+    {
+        [runner.renderer fillCircleX:x.intValue Y:y.intValue radius:radiusX.intValue];
+    }
+    else
+    {
+        [runner.renderer drawCircleX:x.intValue Y:y.intValue radius:radiusX.intValue];
+    }
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
 @implementation ScrollNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
