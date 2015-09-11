@@ -144,6 +144,8 @@
         case TTypeSymBank: return @"BANK";
         case TTypeSymFont: return @"FONT";
         case TTypeSymTimer: return @"TIMER";
+        case TTypeSymTempo: return @"TEMPO";
+        case TTypeSymTrace: return @"TRACE";
             
         case TType_count: return nil;
     }
