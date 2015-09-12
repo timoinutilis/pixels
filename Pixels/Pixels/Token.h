@@ -146,6 +146,7 @@ typedef NS_ENUM(NSInteger, TType) {
     TTypeSymTimer,
     TTypeSymTempo,
     TTypeSymTrace,
+    TTypeSymHeight,
 
     TType_count
 };

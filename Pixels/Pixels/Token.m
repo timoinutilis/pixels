@@ -146,6 +146,7 @@
         case TTypeSymTimer: return @"TIMER";
         case TTypeSymTempo: return @"TEMPO";
         case TTypeSymTrace: return @"TRACE";
+        case TTypeSymHeight: return @"HEIGHT";
             
         case TType_count: return nil;
     }
