@@ -23,7 +23,8 @@
 {
     NSArray *views = [[NSBundle mainBundle] loadNibNamed:@"CoachMarkView" owner:self options:nil];
     CoachMarkView *view = (CoachMarkView *)views[0];
-    view.frame = [[UIScreen mainScreen] bounds];
+    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+    view.frame = window.bounds;
     return view;
 }
 
