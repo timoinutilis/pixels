@@ -322,9 +322,10 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
     self.isFullscreen = !self.isFullscreen;
     [self showExitButtonWithHiding:YES];
     
+    [self.containerView layoutIfNeeded];
+    [self updateRendererConstraints];
     [UIView animateWithDuration:0.3 animations:^{
-        [self updateRendererConstraints];
-        [self.rendererView layoutIfNeeded];
+        [self.containerView layoutIfNeeded];
     }];
 }
 
