@@ -26,6 +26,7 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 @property NSMutableArray *projects;
 @property Project *addedProject;
 @property Project *lastSelectedProject;
+@property BOOL showCommunityWhenReady;
 
 @end
 
@@ -171,20 +172,34 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     AppController *app = [AppController sharedController];
     if (app.shouldShowPostId && !app.isCommunityOpen)
     {
-        UIViewController *vc = self.navigationController.topViewController;
-        if (vc.presentedViewController)
+        if (self.showCommunityWhenReady)
         {
-            [vc dismissViewControllerAnimated:NO completion:nil];
+            [self showCommunity];
         }
-        [self.navigationController popToViewController:self animated:NO];
-        
-        [self showCommunity];
+        else
+        {
+            UIViewController *vc = self.navigationController.topViewController;
+            if (vc.presentedViewController)
+            {
+                [vc dismissViewControllerAnimated:NO completion:nil];
+            }
+            
+            if (vc == self)
+            {
+                [self showCommunity];
+            }
+            else
+            {
+                [self.navigationController popToViewController:self animated:YES];
+                self.showCommunityWhenReady = YES;
+            }
+        }
     }
 }
 
 - (void)showCommunity
 {
-    [AppController sharedController].isCommunityOpen = YES;
+    self.showCommunityWhenReady = NO;
     
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Community" bundle:nil];
     UIViewController *vc = (UIViewController *)[storyboard instantiateInitialViewController];

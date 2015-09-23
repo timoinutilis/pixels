@@ -24,24 +24,30 @@
     
     self.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newsChanged:) name:NewsNotification object:nil];
 }
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:NewsNotification object:nil];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [AppController sharedController].isCommunityOpen = YES;
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     [self checkShowPost];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newsChanged:) name:NewsNotification object:nil];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
     [AppController sharedController].isCommunityOpen = NO;
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:NewsNotification object:nil];
 }
 
 - (void)newsChanged:(NSNotification *)notification
