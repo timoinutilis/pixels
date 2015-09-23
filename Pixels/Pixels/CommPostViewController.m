@@ -57,10 +57,13 @@ typedef NS_ENUM(NSInteger, CellTag) {
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 44;
     
-    // simple workaround for Split View bug, Table View doesn't adjust for Keyboard on iPhone
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone && self.splitViewController)
+    if (!SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"9.0"))
     {
-        self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 252, 0);
+        // simple workaround for Split View bug, Table View doesn't adjust for Keyboard on iPhone
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone && self.splitViewController)
+        {
+            self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 252, 0);
+        }
     }
     
     self.writeCommentCell = [self.tableView dequeueReusableCellWithIdentifier:@"WriteCommentCell"];

@@ -27,7 +27,8 @@
 {
     CGFloat statusBarHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
     
-    CGRect frame = [UIScreen mainScreen].bounds;
+    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+    CGRect frame = window.bounds;
     frame.size.height = 44 + statusBarHeight;
     
     if (self = [super initWithFrame:frame])
