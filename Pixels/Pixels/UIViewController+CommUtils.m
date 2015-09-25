@@ -45,7 +45,6 @@
     [[CommunityModel sharedInstance] countPost:post type:LCCCountTypeDownload];
 
     [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:ExplorerRefreshAddedProjectNotification object:self];
         [[AppController sharedController] registerForNotifications];
     }];
 }

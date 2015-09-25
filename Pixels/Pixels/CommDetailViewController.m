@@ -209,9 +209,6 @@ static NSString *const SectionPosts = @"Posts";
                     {
                         self.posts = [self filteredNewsWithPosts:objects];
                         [self.tableView reloadData];
-                        
-                        // reset app icon badge
-                        [AppController sharedController].numNews = 0;
                     }
                     else if (error)
                     {

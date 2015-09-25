@@ -14,8 +14,6 @@
 #import "CoachMarkView.h"
 #import "UIViewController+LowResCoder.h"
 
-NSString *const ExplorerRefreshAddedProjectNotification = @"ExplorerRefreshAddedProjectNotification";
-
 NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 
 @interface ExplorerViewController ()
@@ -26,7 +24,6 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 @property NSMutableArray *projects;
 @property Project *addedProject;
 @property Project *lastSelectedProject;
-@property BOOL showCommunityWhenReady;
 
 @end
 
@@ -47,14 +44,12 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     [self loadProjects];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didAddProject:) name:ModelManagerDidAddProjectNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshAddedProject:) name:ExplorerRefreshAddedProjectNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newsChanged:) name:NewsNotification object:nil];
 }
 
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:ModelManagerDidAddProjectNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:ExplorerRefreshAddedProjectNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NewsNotification object:nil];
 }
 
@@ -81,7 +76,6 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     
     [self.collectionView flashScrollIndicators];
     [self showAddedProject];
-    [self checkShowCommunityPost];
     
     AppController *app = [AppController sharedController];
     if (app.numProgramsOpened >= 3)
@@ -138,15 +132,9 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     self.addedProject = notification.userInfo[@"project"];
 }
 
-- (void)refreshAddedProject:(NSNotification *)notification
-{
-    [self showAddedProject];
-}
-
 - (void)newsChanged:(NSNotification *)notification
 {
     [self updateGetButton];
-    [self checkShowCommunityPost];
 }
 
 - (void)onHelpTapped:(id)sender
@@ -167,40 +155,8 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     [self showCommunity];
 }
 
-- (void)checkShowCommunityPost
-{
-    AppController *app = [AppController sharedController];
-    if (app.shouldShowPostId && !app.isCommunityOpen)
-    {
-        if (self.showCommunityWhenReady)
-        {
-            [self showCommunity];
-        }
-        else
-        {
-            UIViewController *vc = self.navigationController.topViewController;
-            if (vc.presentedViewController)
-            {
-                [vc dismissViewControllerAnimated:NO completion:nil];
-            }
-            
-            if (vc == self)
-            {
-                [self showCommunity];
-            }
-            else
-            {
-                [self.navigationController popToViewController:self animated:YES];
-                self.showCommunityWhenReady = YES;
-            }
-        }
-    }
-}
-
 - (void)showCommunity
 {
-    self.showCommunityWhenReady = NO;
-    
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Community" bundle:nil];
     UIViewController *vc = (UIViewController *)[storyboard instantiateInitialViewController];
     

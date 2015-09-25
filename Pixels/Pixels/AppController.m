@@ -19,6 +19,7 @@ NSString *const ErrorKey = @"Error";
 
 NSString *const PurchaseStateNotification = @"PurchaseStateNotification";
 NSString *const NewsNotification = @"NewsNotification";
+NSString *const ShowPostNotification = @"ShowPostNotification";
 
 NSString *const InfoIDNews = @"InfoIDNews";
 
@@ -264,23 +265,29 @@ NSString *const InfoIDNews = @"InfoIDNews";
     if (badge)
     {
         [UIApplication sharedApplication].applicationIconBadgeNumber = badge.integerValue;
+        [[NSNotificationCenter defaultCenter] postNotificationName:NewsNotification object:self];
     }
     
     if (inForeground)
     {
-        __weak AppController *weakSelf = self;
-        
-        [NotificationView showMessage:alertText block:^{
-            weakSelf.shouldShowPostId = postId;
-            [[NSNotificationCenter defaultCenter] postNotificationName:NewsNotification object:weakSelf];
-        }];
-        
+        if (postId)
+        {
+            __weak AppController *weakSelf = self;
+            [NotificationView showMessage:alertText block:^{
+                weakSelf.shouldShowPostId = postId;
+                [[NSNotificationCenter defaultCenter] postNotificationName:ShowPostNotification object:weakSelf];
+            }];
+        }
+        else
+        {
+            [NotificationView showMessage:alertText block:nil];
+        }
     }
-    else
+    else if (postId)
     {
         self.shouldShowPostId = postId;
+        [[NSNotificationCenter defaultCenter] postNotificationName:ShowPostNotification object:self];
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:NewsNotification object:self];
 }
 
 - (BOOL)handleOpenURL:(NSURL *)url
@@ -292,7 +299,7 @@ NSString *const InfoIDNews = @"InfoIDNews";
         if (postId)
         {
             self.shouldShowPostId = postId;
-            [[NSNotificationCenter defaultCenter] postNotificationName:NewsNotification object:self];
+            [[NSNotificationCenter defaultCenter] postNotificationName:ShowPostNotification object:self];
         }
         return YES;
     }

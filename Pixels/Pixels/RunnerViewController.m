@@ -48,6 +48,7 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
 @property int numPlayers;
 @property (nonatomic) BOOL isPaused;
 @property GCController *gameController;
+@property BOOL dismissWhenFinished;
 
 @end
 
@@ -117,10 +118,9 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
     [defaults setBool:self.isFullscreen forKey:[self projectKeyFor:UserDefaultsFullscreenKey]];
     [defaults setBool:self.soundEnabled forKey:[self projectKeyFor:UserDefaultsSoundEnabledKey]];
     
-    NSDictionary *persistentVariables = [self.runner.variables getPersistentVariables];
-    if (persistentVariables)
+    if (!self.runner.isFinished && !self.runner.endRequested)
     {
-        [defaults setObject:persistentVariables forKey:[self projectKeyFor:UserDefaultsPersistentKey]];
+        [self requestEnd];
     }
 }
 
@@ -260,18 +260,21 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
             }
         }
         
-        if (runner.error)
+        if (runner.error && self.view.superview)
         {
             // runtime error!
             RunnerViewController __weak *weakSelf = self;
             NSString *line = [self.project.sourceCode substringWithLineAtIndex:runner.error.programPosition];
-            UIAlertController* alert = [UIAlertController alertControllerWithTitle:runner.error.localizedDescription message:line preferredStyle:UIAlertControllerStyleAlert];
-            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                [weakSelf.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-            }]];
-            [self presentViewController:alert animated:YES completion:nil];
             
-            self.runner.endRequested = NO;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                UIAlertController* alert = [UIAlertController alertControllerWithTitle:runner.error.localizedDescription message:line preferredStyle:UIAlertControllerStyleAlert];
+                [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                    [weakSelf.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+                }]];
+                [self presentViewController:alert animated:YES completion:nil];
+            });
+            
+            self.dismissWhenFinished = NO;
         }
         
         [self updateRendererView];
@@ -291,8 +294,16 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
             [AppController sharedController].shouldShowTransferAlert = YES;
         }
         
+        // persistent variables
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSDictionary *persistentVariables = [runner.variables getPersistentVariables];
+        if (persistentVariables)
+        {
+            [defaults setObject:persistentVariables forKey:[self projectKeyFor:UserDefaultsPersistentKey]];
+        }
+
         // dismiss view if user tapped exit button
-        if (self.runner.endRequested)
+        if (self.dismissWhenFinished)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
@@ -302,21 +313,28 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
     });
 }
 
+- (void)requestEnd
+{
+    self.runner.endRequested = YES;
+    if (self.isPaused)
+    {
+        self.isPaused = NO;
+    }
+}
+
 - (IBAction)onExitTapped:(id)sender
 {
+    self.dismissWhenFinished = YES;
     if (self.runner.isFinished)
     {
         [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
     }
     else
     {
-        self.runner.endRequested = YES;
-        if (self.isPaused)
-        {
-            self.isPaused = NO;
-        }
+        [self requestEnd];
     }
 }
+
 - (IBAction)onZoomTapped:(id)sender
 {
     self.isFullscreen = !self.isFullscreen;

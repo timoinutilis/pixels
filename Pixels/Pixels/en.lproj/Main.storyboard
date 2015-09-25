@@ -576,10 +576,10 @@ The upgrade is valid for all your devices and without time limit.</string>
             </objects>
             <point key="canvasLocation" x="-375" y="1152"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Root Navigation Controller-->
         <scene sceneID="RGF-gP-Rq2">
             <objects>
-                <navigationController storyboardIdentifier="AppStart" automaticallyAdjustsScrollViewInsets="NO" toolbarHidden="NO" id="vjV-e6-4vN" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="AppStart" automaticallyAdjustsScrollViewInsets="NO" toolbarHidden="NO" id="vjV-e6-4vN" customClass="RootNavigationController" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="hqa-KN-Vct">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
