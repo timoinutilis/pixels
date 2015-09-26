@@ -33,6 +33,7 @@
 - (void)addProgramOfPost:(LCCPost *)post
 {
     NSDictionary *dimensions = @{@"user": [PFUser currentUser] ? @"registered" : @"guest",
+                                 @"app": ([AppController sharedController].isFullVersion) ? @"full version" : @"free",
                                  @"category": [post categoryString]};
 
     [PFAnalytics trackEvent:@"get_program" dimensions:dimensions];

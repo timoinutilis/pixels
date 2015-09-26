@@ -16,6 +16,7 @@
 #import "UIViewController+LowResCoder.h"
 #import "ExtendedActivityIndicatorView.h"
 #import "NSString+Utils.h"
+#import "AppController.h"
 
 typedef NS_ENUM(NSInteger, CellTag) {
     CellTagNoAction,
@@ -343,7 +344,8 @@ typedef NS_ENUM(NSInteger, CellTag) {
         self.titleCell.likeCount++;
         [self.titleCell likeIt];
         
-        NSDictionary *dimensions = @{@"category": [self.post categoryString]};
+        NSDictionary *dimensions = @{@"category": [self.post categoryString],
+                                     @"app": ([AppController sharedController].isFullVersion) ? @"full version" : @"free"};
         [PFAnalytics trackEvent:@"like" dimensions:dimensions];
     }
 }
@@ -427,8 +429,9 @@ typedef NS_ENUM(NSInteger, CellTag) {
                 }
                 [self.writeCommentCell reset];
                 
-                NSDictionary *dimensions = @{@"user": [PFUser currentUser] ? @"registered" : @"guest",
-                                             @"category": [self.post categoryString]};
+                NSDictionary *dimensions = @{@"category": [self.post categoryString],
+                                             @"user": [PFUser currentUser] ? @"registered" : @"guest",
+                                             @"app": ([AppController sharedController].isFullVersion) ? @"full version" : @"free"};
                 [PFAnalytics trackEvent:@"comment" dimensions:dimensions];
             }
             else if (error)

@@ -61,6 +61,7 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
         if (self.lastSelectedProject.isDeleted || !self.lastSelectedProject.managedObjectContext)
         {
             [self loadProjects];
+            self.addedProject = nil;
         }
         else
         {

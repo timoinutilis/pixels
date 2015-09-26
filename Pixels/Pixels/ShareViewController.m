@@ -15,6 +15,7 @@
 #import "GORCycleManager.h"
 #import "Compiler.h"
 #import "NSString+Utils.h"
+#import "AppController.h"
 
 @interface ShareViewController ()
 
@@ -255,7 +256,8 @@
             self.project.postId = post.objectId;
             [self.shareDelegate onClosedWithSuccess:YES];
             
-            NSDictionary *dimensions = @{@"category": [post categoryString]};
+            NSDictionary *dimensions = @{@"category": [post categoryString],
+                                         @"app": ([AppController sharedController].isFullVersion) ? @"full version" : @"free"};
             [PFAnalytics trackEvent:@"post" dimensions:dimensions];
         }
         else

@@ -58,11 +58,14 @@ static NSString *const SectionPosts = @"Posts";
     self.tableView.estimatedRowHeight = 53;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     
-    // simple workaround for Split View bug, Table View doesn't adjust for Keyboard on iPhone
-    if (   self.mode == CommListModeProfile && [self.user isMe] // only me has text input
-        && [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
+    if (!SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"9.0"))
     {
-        self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 252, 0);
+        // simple workaround for Split View bug, Table View doesn't adjust for Keyboard on iPhone
+        if (   self.mode == CommListModeProfile && [self.user isMe] // only me has text input
+            && [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
+        {
+            self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 252, 0);
+        }
     }
     
     self.writeStatusCell = [self.tableView dequeueReusableCellWithIdentifier:@"CommWriteStatusCell"];
@@ -346,7 +349,8 @@ static NSString *const SectionPosts = @"Posts";
                 self.writeStatusCell.titleTextField.text = @"";
                 self.writeStatusCell.textView.text = @"";
                 
-                NSDictionary *dimensions = @{@"category": [post categoryString]};
+                NSDictionary *dimensions = @{@"category": [post categoryString],
+                                             @"app": ([AppController sharedController].isFullVersion) ? @"full version" : @"free"};
                 [PFAnalytics trackEvent:@"post" dimensions:dimensions];
             }
             else if (error)
