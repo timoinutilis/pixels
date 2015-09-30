@@ -36,9 +36,13 @@ NSString *const CoachMarkIDHelp = @"CoachMarkIDHelp";
 static int s_editorInstancesCount = 0;
 
 
-@interface EditorViewController ()
+@interface EditorViewController () <UITraitEnvironment>
 
 @property (weak, nonatomic) IBOutlet EditorTextView *sourceCodeTextView;
+
+@property NSArray *compactBarItems;
+@property NSArray *regularBarItems;
+
 @property BOOL examplesDontSaveWarningShowed;
 @property BOOL wasEditedSinceOpened;
 @property BOOL wasEditedSinceLastRun;
@@ -57,6 +61,16 @@ static int s_editorInstancesCount = 0;
         @throw [NSException exceptionWithName:@"TooManyEditorInstances" reason:@"Too many editor instances" userInfo:nil];
     }
     
+    UIBarButtonItem *startItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"start"] style:UIBarButtonItemStylePlain target:self action:@selector(onRunTapped:)];
+    UIBarButtonItem *helpItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"help"] style:UIBarButtonItemStylePlain target:self action:@selector(onHelpTapped:)];
+    UIBarButtonItem *projectItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"project"] style:UIBarButtonItemStylePlain target:self action:@selector(onProjectTapped:)];
+    UIBarButtonItem *searchItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search"] style:UIBarButtonItemStylePlain target:nil action:nil];
+    UIBarButtonItem *feedbackItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"feedback"] style:UIBarButtonItemStylePlain target:self action:@selector(onFeedbackTapped:)];
+    UIBarButtonItem *shareItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"share"] style:UIBarButtonItemStylePlain target:self action:@selector(onActionTapped:)];
+    
+    self.compactBarItems = @[startItem, helpItem];
+    self.regularBarItems = @[startItem, helpItem, projectItem, searchItem, feedbackItem, shareItem];
+    
     self.view.backgroundColor = [AppStyle editorColor];
     self.sourceCodeTextView.backgroundColor = [AppStyle editorColor];
     self.sourceCodeTextView.textColor = [AppStyle tintColor];
@@ -64,10 +78,6 @@ static int s_editorInstancesCount = 0;
     self.sourceCodeTextView.indicatorStyle = UIScrollViewIndicatorStyleWhite;
     
     self.navigationItem.title = self.project.name;
-    
-    UIBarButtonItem *runButton = [[UIBarButtonItem alloc] initWithTitle:@"Start" style:UIBarButtonItemStyleDone target:self action:@selector(onRunTapped:)];
-    UIBarButtonItem *helpButton = [[UIBarButtonItem alloc] initWithTitle:@"Help" style:UIBarButtonItemStylePlain target:self action:@selector(onHelpTapped:)];
-    self.navigationItem.rightBarButtonItems = @[runButton, helpButton];
     
     self.sourceCodeTextView.text = self.project.sourceCode ? self.project.sourceCode : @"";
     if ([self isExample] && ![AppController sharedController].isFullVersion)
@@ -93,6 +103,19 @@ static int s_editorInstancesCount = 0;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:ModelManagerWillSaveDataNotification object:nil];
     
     s_editorInstancesCount--;
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    if (self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular)
+    {
+        self.navigationItem.rightBarButtonItems = self.regularBarItems;
+    }
+    else
+    {
+        self.navigationItem.rightBarButtonItems = self.compactBarItems;
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -211,7 +234,35 @@ static int s_editorInstancesCount = 0;
     [self runProgram];
 }
 
-- (IBAction)onDeleteTapped:(id)sender
+- (IBAction)onProjectTapped:(id)sender
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    __weak EditorViewController *weakSelf = self;
+    
+    UIAlertAction* renameAction = [UIAlertAction actionWithTitle:@"Rename" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        [weakSelf onRenameTapped];
+    }];
+    [alert addAction:renameAction];
+
+    UIAlertAction* duplicateAction = [UIAlertAction actionWithTitle:@"Duplicate" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        [weakSelf onDuplicateTapped];
+    }];
+    [alert addAction:duplicateAction];
+
+    UIAlertAction* deleteAction = [UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
+        [weakSelf onDeleteTapped];
+    }];
+    [alert addAction:deleteAction];
+    
+    UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+    [alert addAction:cancelAction];
+    
+    alert.popoverPresentationController.barButtonItem = sender;
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)onDeleteTapped
 {
     if (self.project.isDefault.boolValue)
     {
@@ -245,7 +296,7 @@ static int s_editorInstancesCount = 0;
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (IBAction)onDuplicateTapped:(id)sender
+- (void)onDuplicateTapped
 {
     EditorViewController __weak *weakSelf = self;
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Do you want to make a copy of this program?" message:nil preferredStyle:UIAlertControllerStyleAlert];
@@ -261,7 +312,7 @@ static int s_editorInstancesCount = 0;
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-- (IBAction)onRenameTapped:(id)sender
+- (void)onRenameTapped
 {
     if (self.project.isDefault.boolValue)
     {

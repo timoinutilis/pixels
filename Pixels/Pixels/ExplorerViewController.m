@@ -16,10 +16,12 @@
 
 NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 
-@interface ExplorerViewController ()
+@interface ExplorerViewController () <UITraitEnvironment>
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *getButton;
+
+@property NSArray *compactBarItems;
+@property NSArray *regularBarItems;
 
 @property NSMutableArray *projects;
 @property Project *addedProject;
@@ -33,9 +35,13 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 {
     [super viewDidLoad];
     
-    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(onAddTapped:)];
-    UIBarButtonItem *helpButton = [[UIBarButtonItem alloc] initWithTitle:@"Help" style:UIBarButtonItemStylePlain target:self action:@selector(onHelpTapped:)];
-    self.navigationItem.rightBarButtonItems = @[addButton, helpButton];
+    UIBarButtonItem *aboutItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"about"] style:UIBarButtonItemStylePlain target:self action:@selector(onAboutTapped:)];
+    UIBarButtonItem *addItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"add"] style:UIBarButtonItemStylePlain target:self action:@selector(onAddTapped:)];
+    UIBarButtonItem *helpItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"help"] style:UIBarButtonItemStylePlain target:self action:@selector(onHelpTapped:)];
+    UIBarButtonItem *communityItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"community"] style:UIBarButtonItemStylePlain target:self action:@selector(onCommunityTapped:)];
+    
+    self.compactBarItems = @[communityItem];
+    self.regularBarItems = @[communityItem, helpItem, addItem, aboutItem];
     
     self.collectionView.dataSource = self;
     self.collectionView.delegate = self;
@@ -51,6 +57,20 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:ModelManagerDidAddProjectNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NewsNotification object:nil];
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    if (self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular)
+    {
+        self.navigationItem.rightBarButtonItems = self.regularBarItems;
+    }
+    else
+    {
+        self.navigationItem.rightBarButtonItems = self.compactBarItems;
+    }
+
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -100,7 +120,7 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 
 - (void)updateGetButton
 {
-    NSInteger numNews = [AppController sharedController].numNews;
+/*    NSInteger numNews = [AppController sharedController].numNews;
     if (numNews > 0)
     {
         self.getButton.title = [NSString stringWithFormat:@"Community & News (%ld)", (long)numNews];
@@ -108,7 +128,7 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     else
     {
         self.getButton.title = @"Community & News";
-    }
+    }*/
 }
 
 - (void)loadProjects
@@ -138,12 +158,21 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     [self updateGetButton];
 }
 
-- (void)onHelpTapped:(id)sender
+- (IBAction)onAboutTapped:(id)sender
+{
+    UIViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"AboutNav"];
+    vc.modalPresentationStyle = UIModalPresentationPopover;
+    vc.popoverPresentationController.barButtonItem = sender;
+    vc.popoverPresentationController.backgroundColor = self.navigationController.navigationBar.barTintColor;
+    [self presentViewController:vc animated:YES completion:nil];
+}
+
+- (IBAction)onHelpTapped:(id)sender
 {
     [HelpTextViewController showHelpWithParent:self];
 }
 
-- (void)onAddTapped:(id)sender
+- (IBAction)onAddTapped:(id)sender
 {
     [[AppController sharedController] onShowInfoID:CoachMarkIDAdd];
     
@@ -151,7 +180,7 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     [self showAddedProject];
 }
 
-- (IBAction)onCommunityTapped:(id)sender
+- (void)onCommunityTapped:(id)sender
 {
     [self showCommunity];
 }

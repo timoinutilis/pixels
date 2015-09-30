@@ -9,7 +9,7 @@
 #import "RootNavigationController.h"
 #import "AppController.h"
 
-@interface RootNavigationController ()
+@interface RootNavigationController () <UITraitEnvironment>
 
 @end
 
@@ -25,6 +25,12 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:ShowPostNotification object:nil];
+}
+
+- (void)traitCollectionDidChange:(nullable UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    self.toolbarHidden = (self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular);
 }
 
 - (void)viewDidAppear:(BOOL)animated

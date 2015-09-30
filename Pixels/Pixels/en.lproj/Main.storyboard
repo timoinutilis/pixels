@@ -35,31 +35,23 @@
                         </constraints>
                     </view>
                     <toolbarItems>
-                        <barButtonItem systemItem="action" id="cGO-bn-HFx">
+                        <barButtonItem image="share" id="zwc-v4-P8V">
                             <connections>
-                                <action selector="onActionTapped:" destination="BYZ-38-t0r" id="VMC-7I-tVO"/>
+                                <action selector="onActionTapped:" destination="BYZ-38-t0r" id="YNS-pc-17h"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="bqt-vh-wrD"/>
-                        <barButtonItem title="Rename" id="CHm-qP-7NQ">
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="98D-hX-d33"/>
+                        <barButtonItem image="feedback" id="8LS-VQ-qs0">
                             <connections>
-                                <action selector="onRenameTapped:" destination="BYZ-38-t0r" id="XDg-os-SKx"/>
+                                <action selector="onFeedbackTapped:" destination="BYZ-38-t0r" id="mRw-Ed-x06"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem title="Duplicate" id="TgO-6q-zTo">
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="mNe-u3-C2j"/>
+                        <barButtonItem image="search" id="yCH-sz-04N"/>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="ueO-YM-yIe"/>
+                        <barButtonItem image="project" id="AVs-La-NWD">
                             <connections>
-                                <action selector="onDuplicateTapped:" destination="BYZ-38-t0r" id="xsF-lh-vFH"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem title="Feedback" id="ZfN-Pp-0wI">
-                            <connections>
-                                <action selector="onFeedbackTapped:" destination="BYZ-38-t0r" id="PVR-Zc-cKl"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="Rqg-1b-j5U"/>
-                        <barButtonItem systemItem="trash" id="Pne-GF-gIj">
-                            <connections>
-                                <action selector="onDeleteTapped:" destination="BYZ-38-t0r" id="0RJ-Xc-6kb"/>
+                                <action selector="onProjectTapped:" destination="BYZ-38-t0r" id="j6M-yU-liD"/>
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
@@ -328,7 +320,7 @@ The upgrade is valid for all your devices and without time limit.</string>
         <!--Navigation Controller-->
         <scene sceneID="2IR-fi-xuT">
             <objects>
-                <navigationController id="i5J-w0-OfA" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="AboutNav" id="i5J-w0-OfA" sceneMemberID="viewController">
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="zDA-Mf-8KW">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -834,26 +826,27 @@ The upgrade is valid for all your devices and without time limit.</string>
                         </constraints>
                     </view>
                     <toolbarItems>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="2yy-HZ-kmz"/>
-                        <barButtonItem title="Community &amp; News" width="300" style="done" id="nKq-5T-IY6">
+                        <barButtonItem image="about" id="For-YS-mw8">
                             <connections>
-                                <action selector="onCommunityTapped:" destination="Xni-Pq-CRZ" id="pYr-Fg-kYF"/>
+                                <action selector="onAboutTapped:" destination="Xni-Pq-CRZ" id="oBW-AS-I6y"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="vFl-oa-cU0"/>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="cBs-k4-LRF"/>
+                        <barButtonItem image="add" id="7Vp-BO-qbV">
+                            <connections>
+                                <action selector="onAddTapped:" destination="Xni-Pq-CRZ" id="XLP-Jj-uOx"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="nHh-md-kLy"/>
+                        <barButtonItem image="help" id="dB3-mx-IZg">
+                            <connections>
+                                <action selector="onHelpTapped:" destination="Xni-Pq-CRZ" id="rrS-19-9dz"/>
+                            </connections>
+                        </barButtonItem>
                     </toolbarItems>
-                    <navigationItem key="navigationItem" title="Programs" id="qaN-Hc-taS">
-                        <barButtonItem key="leftBarButtonItem" title="About" id="For-YS-mw8">
-                            <connections>
-                                <segue destination="i5J-w0-OfA" kind="popoverPresentation" identifier="About" popoverAnchorBarButtonItem="For-YS-mw8" id="F2D-s9-jih">
-                                    <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
-                                </segue>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Programs" id="qaN-Hc-taS"/>
                     <connections>
                         <outlet property="collectionView" destination="mgK-pS-p2l" id="7gJ-is-fsu"/>
-                        <outlet property="getButton" destination="nKq-5T-IY6" id="lhx-jD-QU1"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JJn-Ol-X1d" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -862,14 +855,21 @@ The upgrade is valid for all your devices and without time limit.</string>
         </scene>
     </scenes>
     <resources>
+        <image name="about" width="8" height="17"/>
+        <image name="add" width="22" height="22"/>
         <image name="button_a" width="68" height="68"/>
         <image name="button_a_pressed" width="68" height="68"/>
         <image name="button_b" width="68" height="68"/>
         <image name="button_b_pressed" width="68" height="68"/>
         <image name="exit" width="36" height="36"/>
+        <image name="feedback" width="20" height="21"/>
+        <image name="help" width="13" height="22"/>
         <image name="icon_about" width="100" height="100"/>
         <image name="icon_project" width="96" height="96"/>
         <image name="pause" width="36" height="36"/>
+        <image name="project" width="20" height="25"/>
+        <image name="search" width="21" height="21"/>
+        <image name="share" width="19" height="26"/>
         <image name="sound_off" width="36" height="36"/>
         <image name="star" width="28" height="28"/>
         <image name="zoom_off" width="36" height="36"/>
