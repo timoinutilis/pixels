@@ -147,7 +147,14 @@
 - (IBAction)onCancelTapped:(id)sender
 {
     [self.view endEditing:YES];
-    [self.shareDelegate onClosedWithSuccess:NO];
+    if (self.shareDelegate)
+    {
+        [self.shareDelegate onClosedWithSuccess:NO];
+    }
+    else
+    {
+        [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    }
 }
 
 - (IBAction)onSendTapped:(id)sender
@@ -254,7 +261,14 @@
         {
             [[CommunityModel sharedInstance] onPostedWithDate:post.createdAt];
             self.project.postId = post.objectId;
-            [self.shareDelegate onClosedWithSuccess:YES];
+            if (self.shareDelegate)
+            {
+                [self.shareDelegate onClosedWithSuccess:YES];
+            }
+            else
+            {
+                [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+            }
             
             NSDictionary *dimensions = @{@"category": [post categoryString],
                                          @"app": ([AppController sharedController].isFullVersion) ? @"full version" : @"free"};

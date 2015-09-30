@@ -27,6 +27,7 @@
 #import "Compiler.h"
 #import "CommPostViewController.h"
 #import "CommunityModel.h"
+#import "ShareViewController.h"
 
 int const EditorDemoMaxLines = 24;
 NSString *const CoachMarkIDStart = @"CoachMarkIDStart";
@@ -63,13 +64,12 @@ static int s_editorInstancesCount = 0;
     
     UIBarButtonItem *startItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"start"] style:UIBarButtonItemStylePlain target:self action:@selector(onRunTapped:)];
     UIBarButtonItem *helpItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"help"] style:UIBarButtonItemStylePlain target:self action:@selector(onHelpTapped:)];
-    UIBarButtonItem *projectItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"project"] style:UIBarButtonItemStylePlain target:self action:@selector(onProjectTapped:)];
+    UIBarButtonItem *projectItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"share"] style:UIBarButtonItemStylePlain target:self action:@selector(onProjectTapped:)];
     UIBarButtonItem *searchItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search"] style:UIBarButtonItemStylePlain target:nil action:nil];
     UIBarButtonItem *feedbackItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"feedback"] style:UIBarButtonItemStylePlain target:self action:@selector(onFeedbackTapped:)];
-    UIBarButtonItem *shareItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"share"] style:UIBarButtonItemStylePlain target:self action:@selector(onActionTapped:)];
     
     self.compactBarItems = @[startItem, helpItem];
-    self.regularBarItems = @[startItem, helpItem, projectItem, searchItem, feedbackItem, shareItem];
+    self.regularBarItems = @[startItem, helpItem, searchItem, feedbackItem, projectItem];
     
     self.view.backgroundColor = [AppStyle editorColor];
     self.sourceCodeTextView.backgroundColor = [AppStyle editorColor];
@@ -239,23 +239,33 @@ static int s_editorInstancesCount = 0;
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
     __weak EditorViewController *weakSelf = self;
-    
-    UIAlertAction* renameAction = [UIAlertAction actionWithTitle:@"Rename" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+
+    UIAlertAction *shareCommAction = [UIAlertAction actionWithTitle:@"Publish in Community" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        [weakSelf onShareTapped:sender community:YES];
+    }];
+    [alert addAction:shareCommAction];
+
+    UIAlertAction *shareMenuAction = [UIAlertAction actionWithTitle:@"Share Source Code" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        [weakSelf onShareTapped:sender community:NO];
+    }];
+    [alert addAction:shareMenuAction];
+
+    UIAlertAction *renameAction = [UIAlertAction actionWithTitle:@"Rename" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
         [weakSelf onRenameTapped];
     }];
     [alert addAction:renameAction];
 
-    UIAlertAction* duplicateAction = [UIAlertAction actionWithTitle:@"Duplicate" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+    UIAlertAction *duplicateAction = [UIAlertAction actionWithTitle:@"Duplicate" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
         [weakSelf onDuplicateTapped];
     }];
     [alert addAction:duplicateAction];
 
-    UIAlertAction* deleteAction = [UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
+    UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
         [weakSelf onDeleteTapped];
     }];
     [alert addAction:deleteAction];
     
-    UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
     [alert addAction:cancelAction];
     
     alert.popoverPresentationController.barButtonItem = sender;
@@ -367,7 +377,7 @@ static int s_editorInstancesCount = 0;
     [self presentViewController:nav animated:YES completion:nil];
 }
 
-- (IBAction)onActionTapped:(id)sender
+- (void)onShareTapped:(id)sender community:(BOOL)community
 {
     if (self.sourceCodeTextView.text.length == 0)
     {
@@ -377,15 +387,23 @@ static int s_editorInstancesCount = 0;
     {
         [self saveProject];
         
-        ActivityItemSource *item = [[ActivityItemSource alloc] init];
-        item.project = self.project;
-        
-        PublishActivity *publishActivity = [[PublishActivity alloc] init];
-        
-        UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:@[item] applicationActivities:@[publishActivity]];
-        
-        activityVC.popoverPresentationController.barButtonItem = sender;
-        [self presentViewController:activityVC animated:YES completion:nil];
+        if (community)
+        {
+            UIViewController *vc = [ShareViewController createShareWithDelegate:nil project:self.project];
+            [self presentViewController:vc animated:YES completion:nil];
+        }
+        else
+        {
+            ActivityItemSource *item = [[ActivityItemSource alloc] init];
+            item.project = self.project;
+            
+//            PublishActivity *publishActivity = [[PublishActivity alloc] init];
+            
+            UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:@[item] applicationActivities:nil];
+            
+            activityVC.popoverPresentationController.barButtonItem = sender;
+            [self presentViewController:activityVC animated:YES completion:nil];
+        }
     }
 }
 

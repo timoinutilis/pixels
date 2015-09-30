@@ -35,23 +35,17 @@
                         </constraints>
                     </view>
                     <toolbarItems>
-                        <barButtonItem image="share" id="zwc-v4-P8V">
+                        <barButtonItem image="share" id="AVs-La-NWD">
                             <connections>
-                                <action selector="onActionTapped:" destination="BYZ-38-t0r" id="YNS-pc-17h"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="98D-hX-d33"/>
-                        <barButtonItem image="feedback" id="8LS-VQ-qs0">
-                            <connections>
-                                <action selector="onFeedbackTapped:" destination="BYZ-38-t0r" id="mRw-Ed-x06"/>
+                                <action selector="onProjectTapped:" destination="BYZ-38-t0r" id="j6M-yU-liD"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="mNe-u3-C2j"/>
                         <barButtonItem image="search" id="yCH-sz-04N"/>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="ueO-YM-yIe"/>
-                        <barButtonItem image="project" id="AVs-La-NWD">
+                        <barButtonItem image="feedback" id="8LS-VQ-qs0">
                             <connections>
-                                <action selector="onProjectTapped:" destination="BYZ-38-t0r" id="j6M-yU-liD"/>
+                                <action selector="onFeedbackTapped:" destination="BYZ-38-t0r" id="mRw-Ed-x06"/>
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
@@ -867,7 +861,6 @@ The upgrade is valid for all your devices and without time limit.</string>
         <image name="icon_about" width="100" height="100"/>
         <image name="icon_project" width="96" height="96"/>
         <image name="pause" width="36" height="36"/>
-        <image name="project" width="20" height="25"/>
         <image name="search" width="21" height="21"/>
         <image name="share" width="19" height="26"/>
         <image name="sound_off" width="36" height="36"/>
