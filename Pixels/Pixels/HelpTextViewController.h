@@ -8,13 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@class HelpContent;
-
 @interface HelpTextViewController : UIViewController <UIWebViewDelegate>
 
-@property (readonly) HelpContent *helpContent;
 @property (nonatomic) NSString *chapter;
-
-+ (void)showHelpWithParent:(UIViewController *)parent;
 
 @end

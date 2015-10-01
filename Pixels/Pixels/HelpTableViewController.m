@@ -9,10 +9,9 @@
 #import "HelpTableViewController.h"
 #import "HelpTextViewController.h"
 #import "HelpContent.h"
+#import "HelpSplitViewController.h"
 
 @interface HelpTableViewController ()
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *doneButton;
-@property HelpTextViewController *textViewController;
 @property HelpContent *helpContent;
 @end
 
@@ -26,14 +25,9 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    UINavigationController *nav = (UINavigationController *)self.presentingViewController;
-    self.textViewController = (HelpTextViewController *)(nav.topViewController);
-    self.helpContent = self.textViewController.helpContent;
-}
-
-- (IBAction)onDoneTapped:(id)sender
-{
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    
+    HelpSplitViewController *helpVC = (HelpSplitViewController *)self.splitViewController;
+    self.helpContent = helpVC.helpContent;
 }
 
 #pragma mark - Table view data source
@@ -77,8 +71,21 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     HelpChapter *chapter = self.helpContent.chapters[indexPath.row];
-    self.textViewController.chapter = chapter.htmlChapter;
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    HelpSplitViewController *helpVC = (HelpSplitViewController *)self.splitViewController;
+    [self.splitViewController showDetailViewController:helpVC.detailNavigationController sender:self];
+    
+    HelpTextViewController *textViewController = (HelpTextViewController *)helpVC.detailNavigationController.topViewController;
+    textViewController.chapter = chapter.htmlChapter;
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    if (self.splitViewController.displayMode == UISplitViewControllerDisplayModePrimaryOverlay)
+    {
+        [UIView animateWithDuration:0.3 animations:^{
+            self.splitViewController.preferredDisplayMode = UISplitViewControllerDisplayModePrimaryHidden;
+        }];
+        self.splitViewController.preferredDisplayMode = UISplitViewControllerDisplayModeAutomatic;
+    }
 }
 
 @end

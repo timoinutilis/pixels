@@ -10,6 +10,7 @@
 
 @interface HelpContent : NSObject <NSXMLParserDelegate>
 
+@property (readonly) NSURL *url;
 @property (readonly) NSString *manualHtml;
 @property (readonly) NSMutableArray *chapters;
 

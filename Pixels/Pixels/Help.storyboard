@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="ZzF-vd-cgo">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="p4g-d5-suo">
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
     </dependencies>
     <scenes>
@@ -66,20 +67,12 @@
                             <outlet property="delegate" destination="VCq-ww-h8L" id="0XA-SN-inR"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Contents" id="fxm-u0-rG6">
-                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="xrp-8A-zv1">
-                            <connections>
-                                <action selector="onDoneTapped:" destination="VCq-ww-h8L" id="mGz-oW-8WM"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <connections>
-                        <outlet property="doneButton" destination="xrp-8A-zv1" id="oF3-Ws-vw4"/>
-                    </connections>
+                    <extendedEdge key="edgesForExtendedLayout"/>
+                    <navigationItem key="navigationItem" title="Contents" id="fxm-u0-rG6"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MY5-DQ-QDS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1603" y="1573"/>
+            <point key="canvasLocation" x="1613" y="549"/>
         </scene>
         <!--Help-->
         <scene sceneID="eY0-Yc-uWs">
@@ -93,7 +86,7 @@
                         <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <webView contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HIl-A8-TZc">
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HIl-A8-TZc">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </webView>
@@ -106,27 +99,33 @@
                             <constraint firstItem="Gt2-ur-SmV" firstAttribute="top" secondItem="HIl-A8-TZc" secondAttribute="bottom" id="soh-Nr-MC4"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Help" id="f6y-xG-fkW">
-                        <barButtonItem key="leftBarButtonItem" title="Contents" id="dcf-ac-6zN">
-                            <connections>
-                                <action selector="onContentsTapped:" destination="WHi-Jx-MzX" id="fk5-wT-9Zl"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <extendedEdge key="edgesForExtendedLayout"/>
+                    <navigationItem key="navigationItem" title="Help" id="f6y-xG-fkW"/>
                     <connections>
                         <outlet property="webView" destination="HIl-A8-TZc" id="jzd-g0-myt"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Gqt-qH-IkC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1603" y="813"/>
+            <point key="canvasLocation" x="1613" y="1253"/>
         </scene>
-        <!--Help-->
+        <!--Help Split View Controller-->
+        <scene sceneID="ETx-sR-4BR">
+            <objects>
+                <splitViewController id="p4g-d5-suo" customClass="HelpSplitViewController" sceneMemberID="viewController">
+                    <connections>
+                        <segue destination="a40-4h-tm3" kind="relationship" relationship="masterViewController" id="DY6-vd-ItK"/>
+                        <segue destination="ZzF-vd-cgo" kind="relationship" relationship="detailViewController" id="hdU-ze-ObY"/>
+                    </connections>
+                </splitViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="CaA-s3-beX" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="29" y="813"/>
+        </scene>
+        <!--Navigation Controller-->
         <scene sceneID="Z0i-bd-2n2">
             <objects>
                 <navigationController id="ZzF-vd-cgo" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Help" image="help" id="xMt-Qm-aEu"/>
-                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="yBO-ew-DN8">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -137,12 +136,12 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="v6q-1o-VBs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="783" y="813"/>
+            <point key="canvasLocation" x="793" y="1253"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Contents-->
         <scene sceneID="KdV-MH-j2G">
             <objects>
-                <navigationController storyboardIdentifier="Contents" id="a40-4h-tm3" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="Contents" title="Contents" id="a40-4h-tm3" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="LGn-Hv-V0x">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -153,10 +152,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Za3-f5-mM3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="783" y="1573"/>
+            <point key="canvasLocation" x="793" y="549"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="help" width="13" height="22"/>
-    </resources>
 </document>

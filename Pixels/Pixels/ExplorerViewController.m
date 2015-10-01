@@ -166,11 +166,6 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     [self presentViewController:vc animated:YES completion:nil];
 }
 
-- (IBAction)onHelpTapped:(id)sender
-{
-    [HelpTextViewController showHelpWithParent:self];
-}
-
 - (IBAction)onAddTapped:(id)sender
 {
     [[AppController sharedController] onShowInfoID:CoachMarkIDAdd];

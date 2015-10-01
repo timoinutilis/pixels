@@ -223,6 +223,8 @@
 		92B7A5331AA8C71000B6CA81 /* AudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 92B7A5321AA8C71000B6CA81 /* AudioPlayer.m */; };
 		92B956FE1BBD6CD500699BFF /* TabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92B956FD1BBD6CD500699BFF /* TabBarController.m */; settings = {ASSET_TAGS = (); }; };
 		92B956FF1BBD6CD500699BFF /* TabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92B956FD1BBD6CD500699BFF /* TabBarController.m */; settings = {ASSET_TAGS = (); }; };
+		92B957021BBD912400699BFF /* HelpSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92B957011BBD912400699BFF /* HelpSplitViewController.m */; settings = {ASSET_TAGS = (); }; };
+		92B957031BBD912400699BFF /* HelpSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92B957011BBD912400699BFF /* HelpSplitViewController.m */; settings = {ASSET_TAGS = (); }; };
 		92C081151B0DCD5F0006331B /* LCCUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C081141B0DCD5F0006331B /* LCCUser.m */; };
 		92C081191B0DD9490006331B /* CommLogInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C081181B0DD9490006331B /* CommLogInViewController.m */; };
 		92C0811C1B0DDCDB0006331B /* CommunityModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C0811B1B0DDCDB0006331B /* CommunityModel.m */; };
@@ -430,6 +432,8 @@
 		92B7A5321AA8C71000B6CA81 /* AudioPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioPlayer.m; sourceTree = "<group>"; };
 		92B956FC1BBD6CD400699BFF /* TabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabBarController.h; sourceTree = "<group>"; };
 		92B956FD1BBD6CD500699BFF /* TabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabBarController.m; sourceTree = "<group>"; };
+		92B957001BBD912400699BFF /* HelpSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpSplitViewController.h; sourceTree = "<group>"; };
+		92B957011BBD912400699BFF /* HelpSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpSplitViewController.m; sourceTree = "<group>"; };
 		92C081131B0DCD5F0006331B /* LCCUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCUser.h; sourceTree = "<group>"; };
 		92C081141B0DCD5F0006331B /* LCCUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCUser.m; sourceTree = "<group>"; };
 		92C081171B0DD9490006331B /* CommLogInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommLogInViewController.h; sourceTree = "<group>"; };
@@ -673,10 +677,12 @@
 			isa = PBXGroup;
 			children = (
 				927334971A2A456900C89AF0 /* Help.storyboard */,
-				9204EF661A4C397300B8C29C /* HelpTextViewController.h */,
-				9204EF671A4C397300B8C29C /* HelpTextViewController.m */,
+				92B957001BBD912400699BFF /* HelpSplitViewController.h */,
+				92B957011BBD912400699BFF /* HelpSplitViewController.m */,
 				9273349B1A2A478700C89AF0 /* HelpTableViewController.h */,
 				9273349C1A2A478700C89AF0 /* HelpTableViewController.m */,
+				9204EF661A4C397300B8C29C /* HelpTextViewController.h */,
+				9204EF671A4C397300B8C29C /* HelpTextViewController.m */,
 				920822011A4DABB8005B7862 /* HelpContent.h */,
 				920822021A4DABB8005B7862 /* HelpContent.m */,
 			);
@@ -1084,6 +1090,7 @@
 				920E5E5E1B1324FE00071C6A /* LCCFollow.m in Sources */,
 				92884F2B1B0F307F0032623D /* CommSourceCodeViewController.m in Sources */,
 				929BCF131BB14800005F1DBD /* AFURLRequestSerialization.m in Sources */,
+				92B957021BBD912400699BFF /* HelpSplitViewController.m in Sources */,
 				92E53DF71A5B3A1D00FE9F91 /* GORTextView.m in Sources */,
 				927023D71BB40C580076DC4C /* RootNavigationController.m in Sources */,
 				9276F3921A1D289C0060E909 /* AppDelegate.m in Sources */,
@@ -1189,6 +1196,7 @@
 				929BCF371BB14A1B005F1DBD /* LCCFollow.m in Sources */,
 				929BCF381BB14A1B005F1DBD /* CommSourceCodeViewController.m in Sources */,
 				929BCF391BB14A1B005F1DBD /* AFURLRequestSerialization.m in Sources */,
+				92B957031BBD912400699BFF /* HelpSplitViewController.m in Sources */,
 				929BCF3A1BB14A1B005F1DBD /* GORTextView.m in Sources */,
 				927023D81BB40C580076DC4C /* RootNavigationController.m in Sources */,
 				929BCF3B1BB14A1B005F1DBD /* AppDelegate.m in Sources */,

@@ -9,29 +9,15 @@
 #import "HelpTextViewController.h"
 #import "HelpTableViewController.h"
 #import "HelpContent.h"
+#import "HelpSplitViewController.h"
 
 @interface HelpTextViewController ()
 
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
 
-@property UIViewController *contentsViewController;
-
 @end
 
 @implementation HelpTextViewController
-
-+ (void)showHelpWithParent:(UIViewController *)parent
-{
-    static UIViewController *helpViewController = nil;
-    
-    if (!helpViewController)
-    {
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Help" bundle:nil];
-        helpViewController = (UIViewController *)[storyboard instantiateInitialViewController];
-        helpViewController.modalPresentationStyle = UIModalPresentationPageSheet;
-    }
-    [parent presentViewController:helpViewController animated:YES completion:nil];
-}
 
 - (void)viewDidLoad
 {
@@ -39,28 +25,11 @@
     
     self.webView.delegate = self;
     
-    NSURL *url = [[NSBundle mainBundle] URLForResource:@"manual" withExtension:@"html"];
-    _helpContent = [[HelpContent alloc] initWithURL:url];
+    self.navigationItem.leftBarButtonItem = self.splitViewController.displayModeButtonItem;
+    self.navigationItem.leftItemsSupplementBackButton = YES;
     
-    [self.webView loadHTMLString:self.helpContent.manualHtml baseURL:url];
-}
-
-- (IBAction)onContentsTapped:(id)sender
-{
-    if (!self.contentsViewController)
-    {
-        self.contentsViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"Contents"];
-        self.contentsViewController.modalPresentationStyle = UIModalPresentationPopover;
-    }
-    self.contentsViewController.popoverPresentationController.barButtonItem = sender;
-    self.contentsViewController.popoverPresentationController.backgroundColor = self.navigationController.navigationBar.barTintColor;
-
-    [self presentViewController:self.contentsViewController animated:YES completion:nil];
-}
-
-- (IBAction)onDoneTapped:(id)sender
-{
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    HelpSplitViewController *helpVC = (HelpSplitViewController *)self.splitViewController;
+    [self.webView loadHTMLString:helpVC.helpContent.manualHtml baseURL:helpVC.helpContent.url];
 }
 
 - (void)setChapter:(NSString *)chapter

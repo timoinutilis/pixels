@@ -21,6 +21,7 @@
     if (self = [super init])
     {
         self.headerTags = @[@"h1", @"h2", @"h3", @"h4", @"h5", @"h6"];
+        _url = url;
         _manualHtml = [NSString stringWithContentsOfURL:url encoding:NSUTF8StringEncoding error:nil];
         _chapters = [NSMutableArray array];
         

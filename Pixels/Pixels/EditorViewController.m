@@ -406,11 +406,6 @@ static int s_editorInstancesCount = 0;
     }
 }
 
-- (void)onHelpTapped:(id)sender
-{
-    [HelpTextViewController showHelpWithParent:self];
-}
-
 #pragma mark - Compile and run
 
 - (void)runProgram
