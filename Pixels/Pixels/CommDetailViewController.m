@@ -51,9 +51,9 @@ static NSString *const SectionPosts = @"Posts";
     [super viewDidLoad];
     
     self.activityIndicator = [[ExtendedActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-    UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onDoneTapped:)];
+//    UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onDoneTapped:)];
     UIBarButtonItem *activityItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
-    self.navigationItem.rightBarButtonItems = @[doneItem, activityItem];
+    self.navigationItem.rightBarButtonItems = @[/*doneItem, */activityItem];
     
     self.tableView.estimatedRowHeight = 53;
     self.tableView.rowHeight = UITableViewAutomaticDimension;

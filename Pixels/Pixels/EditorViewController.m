@@ -63,13 +63,12 @@ static int s_editorInstancesCount = 0;
     }
     
     UIBarButtonItem *startItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"start"] style:UIBarButtonItemStylePlain target:self action:@selector(onRunTapped:)];
-    UIBarButtonItem *helpItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"help"] style:UIBarButtonItemStylePlain target:self action:@selector(onHelpTapped:)];
     UIBarButtonItem *projectItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"share"] style:UIBarButtonItemStylePlain target:self action:@selector(onProjectTapped:)];
     UIBarButtonItem *searchItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search"] style:UIBarButtonItemStylePlain target:nil action:nil];
     UIBarButtonItem *feedbackItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"feedback"] style:UIBarButtonItemStylePlain target:self action:@selector(onFeedbackTapped:)];
     
-    self.compactBarItems = @[startItem, helpItem];
-    self.regularBarItems = @[startItem, helpItem, searchItem, feedbackItem, projectItem];
+    self.compactBarItems = @[startItem, searchItem, feedbackItem, projectItem];
+    self.regularBarItems = @[startItem, searchItem, feedbackItem, projectItem];
     
     self.view.backgroundColor = [AppStyle editorColor];
     self.sourceCodeTextView.backgroundColor = [AppStyle editorColor];

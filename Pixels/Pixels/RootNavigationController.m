@@ -19,14 +19,14 @@
 {
     [super viewDidLoad];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkShowPost:) name:ShowPostNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkShowPost:) name:ShowPostNotification object:nil];
 }
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:ShowPostNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:ShowPostNotification object:nil];
 }
-
+/*
 - (void)traitCollectionDidChange:(nullable UITraitCollection *)previousTraitCollection
 {
     [super traitCollectionDidChange:previousTraitCollection];
@@ -64,5 +64,5 @@
     UIViewController *commVC = (UIViewController *)[storyboard instantiateInitialViewController];
     [self presentViewController:commVC animated:YES completion:nil];
 }
-
+*/
 @end

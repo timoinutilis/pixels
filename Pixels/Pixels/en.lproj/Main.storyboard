@@ -15,11 +15,11 @@
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="64" width="480" height="212"/>
+                        <rect key="frame" x="0.0" y="64" width="480" height="256"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" text="PRINT &quot;HELLO&quot;" translatesAutoresizingMaskIntoConstraints="NO" id="SjB-QF-tvR" customClass="EditorTextView">
-                                <rect key="frame" x="0.0" y="0.0" width="480" height="212"/>
+                                <rect key="frame" x="0.0" y="0.0" width="480" height="256"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <color key="tintColor" red="0.96470588239999999" green="0.96470588239999999" blue="0.96470588239999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" name="Menlo-Regular" family="Menlo" pointSize="18"/>
@@ -34,21 +34,7 @@
                             <constraint firstAttribute="trailing" secondItem="SjB-QF-tvR" secondAttribute="trailing" id="MHR-FO-uGb"/>
                         </constraints>
                     </view>
-                    <toolbarItems>
-                        <barButtonItem image="share" id="AVs-La-NWD">
-                            <connections>
-                                <action selector="onProjectTapped:" destination="BYZ-38-t0r" id="j6M-yU-liD"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="mNe-u3-C2j"/>
-                        <barButtonItem image="search" id="yCH-sz-04N"/>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="ueO-YM-yIe"/>
-                        <barButtonItem image="feedback" id="8LS-VQ-qs0">
-                            <connections>
-                                <action selector="onFeedbackTapped:" destination="BYZ-38-t0r" id="mRw-Ed-x06"/>
-                            </connections>
-                        </barButtonItem>
-                    </toolbarItems>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="(Program Name)" id="pmw-uN-wb5"/>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
@@ -66,23 +52,23 @@
             <objects>
                 <tableViewController id="5LG-2R-8H9" customClass="AboutViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="077-Dd-baa">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <view key="tableHeaderView" contentMode="scaleToFill" id="LVT-MC-nf7">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
+                            <rect key="frame" x="0.0" y="0.0" width="600" height="200"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_about" translatesAutoresizingMaskIntoConstraints="NO" id="LfM-vY-AYb">
-                                    <rect key="frame" x="110" y="16" width="100" height="100"/>
+                                    <rect key="frame" x="250" y="16" width="100" height="100"/>
                                 </imageView>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LOWRES CODER" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZfG-TZ-kA5" customClass="TextLabel">
-                                    <rect key="frame" x="73" y="132" width="174" height="28"/>
+                                    <rect key="frame" x="213" y="132" width="174" height="28"/>
                                     <fontDescription key="fontDescription" name="Menlo-Regular" family="Menlo" pointSize="24"/>
                                     <color key="textColor" red="0.0" green="0.0078431372550000003" blue="0.1333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="(Version x.x)" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6zC-PQ-jSm" customClass="TextLabel">
-                                    <rect key="frame" x="124" y="168" width="73" height="16"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(Version x.x)" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6zC-PQ-jSm" customClass="TextLabel">
+                                    <rect key="frame" x="262" y="168" width="76" height="16"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                     <color key="textColor" red="0.0" green="0.0078431372550000003" blue="0.1333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
@@ -99,16 +85,16 @@
                             </constraints>
                         </view>
                         <view key="tableFooterView" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" id="0Af-BT-7ZV">
-                            <rect key="frame" x="0.0" y="266" width="320" height="60"/>
+                            <rect key="frame" x="0.0" y="266" width="600" height="60"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9lf-cs-6VJ" customClass="GORSeparatorView">
+                                <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9lf-cs-6VJ" customClass="GORSeparatorView">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="1"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="1" id="xZm-Uc-7Jg"/>
                                     </constraints>
                                 </view>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g01-MB-aiJ">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g01-MB-aiJ">
                                     <rect key="frame" x="8" y="15" width="304" height="29"/>
                                     <string key="text">Developed by Timo Kloss
 Inutilis Software, 2015</string>
@@ -128,14 +114,14 @@ Inutilis Software, 2015</string>
                         </view>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="Cell" textLabel="Icg-Ii-iMl" style="IBUITableViewCellStyleDefault" id="7qv-2D-mwQ" customClass="StandardTableViewCell">
-                                <rect key="frame" x="0.0" y="222" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="222" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="7qv-2D-mwQ" id="dK2-OG-iIF">
-                                    <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="567" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Icg-Ii-iMl">
-                                            <rect key="frame" x="15" y="0.0" width="270" height="43"/>
+                                            <rect key="frame" x="15" y="0.0" width="550" height="43"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                             <color key="textColor" red="0.0" green="0.0078431372550000003" blue="0.1333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -151,13 +137,7 @@ Inutilis Software, 2015</string>
                             <outlet property="delegate" destination="5LG-2R-8H9" id="XgB-oZ-aLv"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="About" id="Slx-zm-xcw">
-                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="CWh-R6-BcP">
-                            <connections>
-                                <action selector="onDoneTapped:" destination="5LG-2R-8H9" id="Iw1-gt-dQd"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="About" id="Slx-zm-xcw"/>
                     <connections>
                         <outlet property="copyrightLabel" destination="g01-MB-aiJ" id="dL4-6e-uaV"/>
                         <outlet property="separatorView" destination="9lf-cs-6VJ" id="aB2-C9-Wsr"/>
@@ -168,7 +148,7 @@ Inutilis Software, 2015</string>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="k3f-cT-uxQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1922" y="384"/>
+            <point key="canvasLocation" x="985" y="329"/>
         </scene>
         <!--Full Version-->
         <scene sceneID="RT0-8l-uXi">
@@ -179,19 +159,19 @@ Inutilis Software, 2015</string>
                         <viewControllerLayoutGuide type="bottom" id="uuo-gB-z3b"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="GIV-Ht-ft8" customClass="BackgroundView">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_about" translatesAutoresizingMaskIntoConstraints="NO" id="iCN-wF-fZ1">
-                                <rect key="frame" x="110" y="16" width="100" height="100"/>
+                                <rect key="frame" x="250" y="16" width="100" height="100"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Upgrade to full version" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nq7-k6-o2g" customClass="TextLabel">
-                                <rect key="frame" x="16" y="132" width="288" height="21"/>
+                                <rect key="frame" x="20" y="132" width="560" height="21"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7qu-NE-hxH" customClass="TextLabel">
-                                <rect key="frame" x="16" y="169" width="288" height="82"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7qu-NE-hxH" customClass="TextLabel">
+                                <rect key="frame" x="20" y="169" width="560" height="82"/>
                                 <string key="text">In the full version there is no size limit for programs.
 The upgrade is valid for all your devices and without time limit.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -230,8 +210,8 @@ The upgrade is valid for all your devices and without time limit.</string>
                                     <constraint firstItem="jZ1-zl-x2q" firstAttribute="top" secondItem="yqV-0v-CbY" secondAttribute="top" id="tKg-9u-QlX"/>
                                 </constraints>
                             </view>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="0Cm-eG-Zxe">
-                                <rect key="frame" x="150" y="288" width="20" height="20"/>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="0Cm-eG-Zxe">
+                                <rect key="frame" x="290" y="288" width="20" height="20"/>
                             </activityIndicatorView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Thank you for the upgrade!" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mMK-I5-wyt">
                                 <rect key="frame" x="54" y="288" width="213" height="21"/>
@@ -239,7 +219,7 @@ The upgrade is valid for all your devices and without time limit.</string>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DLs-Ne-t0L" userLabel="Secret Button">
-                                <rect key="frame" x="0.0" y="472" width="44" height="32"/>
+                                <rect key="frame" x="0.0" y="504" width="44" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="32" id="mRj-As-DGg"/>
                                     <constraint firstAttribute="width" constant="44" id="qo8-l6-awN"/>
@@ -309,13 +289,12 @@ The upgrade is valid for all your devices and without time limit.</string>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lo1-hv-rUe" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2530" y="476"/>
+            <point key="canvasLocation" x="2366" y="469"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="2IR-fi-xuT">
             <objects>
                 <navigationController storyboardIdentifier="AboutNav" id="i5J-w0-OfA" sceneMemberID="viewController">
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="zDA-Mf-8KW">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -329,7 +308,7 @@ The upgrade is valid for all your devices and without time limit.</string>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Rpa-Qi-MJ5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1517" y="384"/>
+            <point key="canvasLocation" x="350" y="329"/>
         </scene>
         <!--Runner View Controller-->
         <scene sceneID="Ask-Tf-Oxf">
@@ -520,7 +499,7 @@ The upgrade is valid for all your devices and without time limit.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="y4k-k9-clM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2647" y="1152"/>
+            <point key="canvasLocation" x="2449" y="1152"/>
         </scene>
         <!--Splash View Controller-->
         <scene sceneID="1Ds-bG-bIC">
@@ -531,17 +510,17 @@ The upgrade is valid for all your devices and without time limit.</string>
                         <viewControllerLayoutGuide type="bottom" id="tUK-qw-813"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8pd-8W-KfW">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LOWRES CODER" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jK2-ES-kfq">
-                                <rect key="frame" x="73" y="305" width="174" height="28"/>
+                                <rect key="frame" x="213" y="321" width="174" height="28"/>
                                 <fontDescription key="fontDescription" name="Menlo-Regular" family="Menlo" pointSize="24"/>
                                 <color key="textColor" red="0.0" green="0.93333333333333335" blue="0.80392156862745101" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_about" translatesAutoresizingMaskIntoConstraints="NO" id="pcx-jG-qK2">
-                                <rect key="frame" x="110" y="189" width="100" height="100"/>
+                                <rect key="frame" x="250" y="205" width="100" height="100"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0078431372549019607" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -552,7 +531,6 @@ The upgrade is valid for all your devices and without time limit.</string>
                             <constraint firstAttribute="centerX" secondItem="pcx-jG-qK2" secondAttribute="centerX" id="xVt-MO-rjP"/>
                         </constraints>
                     </view>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="label" destination="jK2-ES-kfq" id="07P-fJ-k6j"/>
                         <outlet property="logoImageView" destination="pcx-jG-qK2" id="eLO-px-ceM"/>
@@ -560,12 +538,59 @@ The upgrade is valid for all your devices and without time limit.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qN3-zG-KO0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-375" y="1152"/>
+            <point key="canvasLocation" x="350" y="-447"/>
+        </scene>
+        <!--Tab Bar Controller-->
+        <scene sceneID="iSe-qW-mbf">
+            <objects>
+                <viewController storyboardIdentifier="AppStart" id="6lV-Jt-DO5" customClass="TabBarController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="fGA-Q9-aVA"/>
+                        <viewControllerLayoutGuide type="bottom" id="LWU-s0-U1O"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Boi-wO-esd">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tabBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vUw-dt-YsU">
+                                <rect key="frame" x="0.0" y="551" width="600" height="49"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <items>
+                                    <tabBarItem title="My Programs" image="project" id="kRG-Ph-IqE"/>
+                                    <tabBarItem title="Help" image="help" id="CV5-Ra-Y0e"/>
+                                    <tabBarItem title="About" image="about" id="4Vx-PC-JsJ"/>
+                                    <tabBarItem title="Community" image="community" id="2HQ-kr-FAd"/>
+                                </items>
+                            </tabBar>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RFX-s4-lmb">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="vUw-dt-YsU" firstAttribute="top" secondItem="RFX-s4-lmb" secondAttribute="bottom" id="EvE-Aa-DwR"/>
+                            <constraint firstAttribute="trailing" secondItem="RFX-s4-lmb" secondAttribute="trailing" id="YtS-Ls-Lam"/>
+                            <constraint firstAttribute="trailing" secondItem="vUw-dt-YsU" secondAttribute="trailing" id="ZU5-ed-c27"/>
+                            <constraint firstItem="RFX-s4-lmb" firstAttribute="top" secondItem="Boi-wO-esd" secondAttribute="top" id="gXQ-Ia-x9h"/>
+                            <constraint firstItem="LWU-s0-U1O" firstAttribute="top" secondItem="vUw-dt-YsU" secondAttribute="bottom" id="jFU-95-6IJ"/>
+                            <constraint firstItem="vUw-dt-YsU" firstAttribute="leading" secondItem="Boi-wO-esd" secondAttribute="leading" id="njr-nx-9De"/>
+                            <constraint firstItem="RFX-s4-lmb" firstAttribute="leading" secondItem="Boi-wO-esd" secondAttribute="leading" id="noU-0G-WZP"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="containerView" destination="RFX-s4-lmb" id="bGE-Uy-Gp0"/>
+                        <outlet property="tabBar" destination="vUw-dt-YsU" id="4b2-a4-9NS"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="H1X-lJ-11F" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="985" y="-447"/>
         </scene>
         <!--Root Navigation Controller-->
         <scene sceneID="RGF-gP-Rq2">
             <objects>
-                <navigationController storyboardIdentifier="AppStart" automaticallyAdjustsScrollViewInsets="NO" toolbarHidden="NO" id="vjV-e6-4vN" customClass="RootNavigationController" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="ExplorerNav" automaticallyAdjustsScrollViewInsets="NO" id="vjV-e6-4vN" customClass="RootNavigationController" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="hqa-KN-Vct">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -743,7 +768,7 @@ The upgrade is valid for all your devices and without time limit.</string>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="t6o-4l-jLO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1842" y="1898"/>
+            <point key="canvasLocation" x="1782" y="1692"/>
         </scene>
         <!--Programs-->
         <scene sceneID="3mJ-o1-cJC">
@@ -754,11 +779,11 @@ The upgrade is valid for all your devices and without time limit.</string>
                         <viewControllerLayoutGuide type="bottom" id="ijW-NB-o4Z"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="EsH-iL-o4a">
-                        <rect key="frame" x="0.0" y="64" width="600" height="492"/>
+                        <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" delaysContentTouches="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="mgK-pS-p2l">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="492"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="0.0" id="Ad7-yA-rdq">
                                     <size key="itemSize" width="140" height="140"/>
@@ -819,25 +844,7 @@ The upgrade is valid for all your devices and without time limit.</string>
                             <constraint firstAttribute="bottom" secondItem="mgK-pS-p2l" secondAttribute="bottom" id="skS-Md-d4t"/>
                         </constraints>
                     </view>
-                    <toolbarItems>
-                        <barButtonItem image="about" id="For-YS-mw8">
-                            <connections>
-                                <action selector="onAboutTapped:" destination="Xni-Pq-CRZ" id="oBW-AS-I6y"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="cBs-k4-LRF"/>
-                        <barButtonItem image="add" id="7Vp-BO-qbV">
-                            <connections>
-                                <action selector="onAddTapped:" destination="Xni-Pq-CRZ" id="XLP-Jj-uOx"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="nHh-md-kLy"/>
-                        <barButtonItem image="help" id="dB3-mx-IZg">
-                            <connections>
-                                <action selector="onHelpTapped:" destination="Xni-Pq-CRZ" id="rrS-19-9dz"/>
-                            </connections>
-                        </barButtonItem>
-                    </toolbarItems>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="Programs" id="qaN-Hc-taS"/>
                     <connections>
                         <outlet property="collectionView" destination="mgK-pS-p2l" id="7gJ-is-fsu"/>
@@ -850,19 +857,17 @@ The upgrade is valid for all your devices and without time limit.</string>
     </scenes>
     <resources>
         <image name="about" width="8" height="17"/>
-        <image name="add" width="22" height="22"/>
         <image name="button_a" width="68" height="68"/>
         <image name="button_a_pressed" width="68" height="68"/>
         <image name="button_b" width="68" height="68"/>
         <image name="button_b_pressed" width="68" height="68"/>
+        <image name="community" width="20" height="19"/>
         <image name="exit" width="36" height="36"/>
-        <image name="feedback" width="20" height="21"/>
         <image name="help" width="13" height="22"/>
         <image name="icon_about" width="100" height="100"/>
         <image name="icon_project" width="96" height="96"/>
         <image name="pause" width="36" height="36"/>
-        <image name="search" width="21" height="21"/>
-        <image name="share" width="19" height="26"/>
+        <image name="project" width="20" height="25"/>
         <image name="sound_off" width="36" height="36"/>
         <image name="star" width="28" height="28"/>
         <image name="zoom_off" width="36" height="36"/>

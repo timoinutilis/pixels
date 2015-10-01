@@ -24,7 +24,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
 
 @interface CommMasterViewController ()
 
-@property UIBarButtonItem *doneItem;
+//@property UIBarButtonItem *doneItem;
 @property NSIndexPath *newsIndexPath;
 @property NSIndexPath *currentSelection;
 
@@ -46,7 +46,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
 {
     [super viewDidLoad];
     
-    self.doneItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onDoneTapped:)];
+//    self.doneItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onDoneTapped:)];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserChanged:) name:CurrentUserChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onFollowsChanged:) name:FollowsChangeNotification object:nil];
@@ -75,7 +75,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
 {
     [super viewWillAppear:animated];
     
-    self.navigationItem.rightBarButtonItem = self.splitViewController.collapsed ? self.doneItem : nil;
+//    self.navigationItem.rightBarButtonItem = self.splitViewController.collapsed ? self.doneItem : nil;
 }
 
 - (void)onUserChanged:(NSNotification *)notification

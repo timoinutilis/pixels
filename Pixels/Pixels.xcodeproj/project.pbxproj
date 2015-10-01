@@ -221,6 +221,8 @@
 		92ACDC3D1B359C7A009252D6 /* TextLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 92ACDC3C1B359C7A009252D6 /* TextLabel.m */; };
 		92B60FE31AC024250011233B /* GameButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 92B60FE21AC024250011233B /* GameButton.m */; };
 		92B7A5331AA8C71000B6CA81 /* AudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 92B7A5321AA8C71000B6CA81 /* AudioPlayer.m */; };
+		92B956FE1BBD6CD500699BFF /* TabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92B956FD1BBD6CD500699BFF /* TabBarController.m */; settings = {ASSET_TAGS = (); }; };
+		92B956FF1BBD6CD500699BFF /* TabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92B956FD1BBD6CD500699BFF /* TabBarController.m */; settings = {ASSET_TAGS = (); }; };
 		92C081151B0DCD5F0006331B /* LCCUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C081141B0DCD5F0006331B /* LCCUser.m */; };
 		92C081191B0DD9490006331B /* CommLogInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C081181B0DD9490006331B /* CommLogInViewController.m */; };
 		92C0811C1B0DDCDB0006331B /* CommunityModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C0811B1B0DDCDB0006331B /* CommunityModel.m */; };
@@ -426,6 +428,8 @@
 		92B60FE21AC024250011233B /* GameButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameButton.m; sourceTree = "<group>"; };
 		92B7A5311AA8C71000B6CA81 /* AudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioPlayer.h; sourceTree = "<group>"; };
 		92B7A5321AA8C71000B6CA81 /* AudioPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioPlayer.m; sourceTree = "<group>"; };
+		92B956FC1BBD6CD400699BFF /* TabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabBarController.h; sourceTree = "<group>"; };
+		92B956FD1BBD6CD500699BFF /* TabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabBarController.m; sourceTree = "<group>"; };
 		92C081131B0DCD5F0006331B /* LCCUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCUser.h; sourceTree = "<group>"; };
 		92C081141B0DCD5F0006331B /* LCCUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCUser.m; sourceTree = "<group>"; };
 		92C081171B0DD9490006331B /* CommLogInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommLogInViewController.h; sourceTree = "<group>"; };
@@ -645,6 +649,8 @@
 				9276F3961A1D289C0060E909 /* Main.storyboard */,
 				920E68201AB74CDA0038994A /* SplashViewController.h */,
 				920E68211AB74CDA0038994A /* SplashViewController.m */,
+				92B956FC1BBD6CD400699BFF /* TabBarController.h */,
+				92B956FD1BBD6CD500699BFF /* TabBarController.m */,
 				927023D51BB40C580076DC4C /* RootNavigationController.h */,
 				927023D61BB40C580076DC4C /* RootNavigationController.m */,
 				92509CC81A28F99D0086E7E3 /* ExplorerViewController.h */,
@@ -1107,6 +1113,7 @@
 				9251440F1B92044100C9D254 /* VariableManager.m in Sources */,
 				92884F221B0F25B30032623D /* UIButton+WebCache.m in Sources */,
 				929BCF0F1BB14800005F1DBD /* AFHTTPSessionManager.m in Sources */,
+				92B956FE1BBD6CD500699BFF /* TabBarController.m in Sources */,
 				92884F251B0F25B30032623D /* UIImage+WebP.m in Sources */,
 				928FB8991A5C804200EA377F /* GORSeparatorView.m in Sources */,
 				92C135D31B81D95100E9F5A4 /* NSMutableDictionary+Utils.m in Sources */,
@@ -1211,6 +1218,7 @@
 				929BCF531BB14A1B005F1DBD /* VariableManager.m in Sources */,
 				929BCF541BB14A1B005F1DBD /* UIButton+WebCache.m in Sources */,
 				929BCF551BB14A1B005F1DBD /* AFHTTPSessionManager.m in Sources */,
+				92B956FF1BBD6CD500699BFF /* TabBarController.m in Sources */,
 				929BCF561BB14A1B005F1DBD /* UIImage+WebP.m in Sources */,
 				929BCF571BB14A1B005F1DBD /* GORSeparatorView.m in Sources */,
 				929BCF581BB14A1B005F1DBD /* NSMutableDictionary+Utils.m in Sources */,

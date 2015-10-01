@@ -112,11 +112,11 @@
 
 - (void)showApp
 {
-    UIView *splashView = self.view;
+//    UIView *splashView = self.view;
 
     UIViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"AppStart"];
     [UIApplication sharedApplication].keyWindow.rootViewController = vc;
-    [vc.view addSubview:splashView];
+/*    [vc.view addSubview:splashView];
     
     [UIView animateWithDuration:0.3 animations:^{
         
@@ -126,7 +126,7 @@
         
         [splashView removeFromSuperview];
         
-    }];
+    }];*/
 }
 
 @end

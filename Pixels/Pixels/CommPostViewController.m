@@ -42,17 +42,17 @@ typedef NS_ENUM(NSInteger, CellTag) {
     [super viewDidLoad];
     
     self.activityIndicator = [[ExtendedActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-    UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onDoneTapped:)];
+//    UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onDoneTapped:)];
     UIBarButtonItem *activityItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
     
     if (![self.post isDataAvailable] || self.post.type == LCCPostTypeProgram)
     {
         UIBarButtonItem *actionItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(onActionTapped:)];
-        self.navigationItem.rightBarButtonItems = @[doneItem, actionItem, activityItem];
+        self.navigationItem.rightBarButtonItems = @[/*doneItem, */actionItem, activityItem];
     }
     else
     {
-        self.navigationItem.rightBarButtonItems = @[doneItem, activityItem];
+        self.navigationItem.rightBarButtonItems = @[/*doneItem, */activityItem];
     }
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;

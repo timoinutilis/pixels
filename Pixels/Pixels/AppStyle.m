@@ -28,6 +28,12 @@
     [UIToolbar appearanceWhenContainedIn:[UINavigationController class], nil].barTintColor = [AppStyle barColor];
     [UIToolbar appearanceWhenContainedIn:[UINavigationController class], nil].tintColor = [AppStyle tintColor];
     [UIToolbar appearanceWhenContainedIn:[UINavigationController class], nil].translucent = NO;
+    [UITabBar appearance].barTintColor = [AppStyle barColor];
+    [UITabBar appearance].tintColor = [AppStyle tintColor];
+    [UITabBar appearance].translucent = NO;
+    [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[AppStyle darkColor], NSForegroundColorAttributeName, nil] forState:UIControlStateNormal];
+    [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[AppStyle tintColor], NSForegroundColorAttributeName, nil] forState:UIControlStateSelected];
+    
     
     // Backgrounds
     [BackgroundView appearance].backgroundColor = [AppStyle brightColor];

@@ -35,13 +35,10 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 {
     [super viewDidLoad];
     
-    UIBarButtonItem *aboutItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"about"] style:UIBarButtonItemStylePlain target:self action:@selector(onAboutTapped:)];
     UIBarButtonItem *addItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"add"] style:UIBarButtonItemStylePlain target:self action:@selector(onAddTapped:)];
-    UIBarButtonItem *helpItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"help"] style:UIBarButtonItemStylePlain target:self action:@selector(onHelpTapped:)];
-    UIBarButtonItem *communityItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"community"] style:UIBarButtonItemStylePlain target:self action:@selector(onCommunityTapped:)];
     
-    self.compactBarItems = @[communityItem];
-    self.regularBarItems = @[communityItem, helpItem, addItem, aboutItem];
+    self.compactBarItems = @[addItem];
+    self.regularBarItems = @[addItem];
     
     self.collectionView.dataSource = self;
     self.collectionView.delegate = self;
@@ -65,10 +62,12 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     if (self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular)
     {
         self.navigationItem.rightBarButtonItems = self.regularBarItems;
+        self.navigationItem.backBarButtonItem = nil;
     }
     else
     {
         self.navigationItem.rightBarButtonItems = self.compactBarItems;
+        self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     }
 
 }
