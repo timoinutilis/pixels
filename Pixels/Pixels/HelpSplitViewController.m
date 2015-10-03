@@ -20,6 +20,8 @@
     [super viewDidLoad];
     
     self.delegate = self;
+    self.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
+    self.preferredPrimaryColumnWidthFraction = 0.3;
 
     NSURL *url = [[NSBundle mainBundle] URLForResource:@"manual" withExtension:@"html"];
     _helpContent = [[HelpContent alloc] initWithURL:url];

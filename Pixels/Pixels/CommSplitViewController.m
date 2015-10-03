@@ -23,7 +23,7 @@
     // Do any additional setup after loading the view.
     
     self.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
-    
+    self.preferredPrimaryColumnWidthFraction = 0.3;
 }
 
 - (void)dealloc
@@ -33,7 +33,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [AppController sharedController].isCommunityOpen = YES;
     
     // reset app icon badge
     [AppController sharedController].numNews = 0;
@@ -49,7 +48,6 @@
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    [AppController sharedController].isCommunityOpen = NO;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:ShowPostNotification object:nil];
 }
 
@@ -67,6 +65,9 @@
         
         UINavigationController *nav = (UINavigationController *)self.viewControllers.lastObject;
         [nav pushViewController:vc animated:YES];
+        
+        // reset app icon badge
+        [AppController sharedController].numNews = 0;
     }
 }
 

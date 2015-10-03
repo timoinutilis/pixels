@@ -57,4 +57,9 @@
     }];
 }
 
+- (BOOL)isModal
+{
+    return self.navigationController.presentingViewController != nil;
+}
+
 @end

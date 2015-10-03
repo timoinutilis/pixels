@@ -31,7 +31,6 @@ extern NSString *const ShowPostNotification;
 @property BOOL shouldShowTransferAlert;
 @property (nonatomic) NSInteger numNews;
 @property NSString *shouldShowPostId;
-@property BOOL isCommunityOpen;
 @property (readonly) CWStatusBarNotification *notification;
 
 + (AppController *)sharedController;

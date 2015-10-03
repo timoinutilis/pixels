@@ -29,9 +29,17 @@
     [super viewDidLoad];
     
     self.activityIndicator = [[ExtendedActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-//    UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onDoneTapped:)];
+    UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onDoneTapped:)];
     UIBarButtonItem *activityItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
-    self.navigationItem.rightBarButtonItems = @[/*doneItem, */activityItem];
+    if ([self isModal])
+    {
+        self.navigationItem.rightBarButtonItems = @[doneItem, activityItem];
+    }
+    else
+    {
+        self.navigationItem.rightBarButtonItems = @[activityItem];
+    }
+
 }
 
 - (void)setUser:(LCCUser *)user mode:(CommUsersMode)mode

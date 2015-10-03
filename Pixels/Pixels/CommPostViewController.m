@@ -42,19 +42,22 @@ typedef NS_ENUM(NSInteger, CellTag) {
     [super viewDidLoad];
     
     self.activityIndicator = [[ExtendedActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-//    UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onDoneTapped:)];
-    UIBarButtonItem *activityItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
     
+    NSMutableArray *items = [NSMutableArray array];
+    if ([self isModal])
+    {
+        UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onDoneTapped:)];
+        [items addObject:doneItem];
+    }
     if (![self.post isDataAvailable] || self.post.type == LCCPostTypeProgram)
     {
         UIBarButtonItem *actionItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(onActionTapped:)];
-        self.navigationItem.rightBarButtonItems = @[/*doneItem, */actionItem, activityItem];
+        [items addObject:actionItem];
     }
-    else
-    {
-        self.navigationItem.rightBarButtonItems = @[/*doneItem, */activityItem];
-    }
-    
+    UIBarButtonItem *activityItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
+    [items addObject:activityItem];
+    self.navigationItem.rightBarButtonItems = items;
+
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 44;
     

@@ -47,13 +47,11 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     [self loadProjects];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didAddProject:) name:ModelManagerDidAddProjectNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newsChanged:) name:NewsNotification object:nil];
 }
 
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:ModelManagerDidAddProjectNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:NewsNotification object:nil];
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
@@ -107,27 +105,12 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
         }
     }
     
-    [self updateGetButton];
-    
     // Show stored error
     NSString *lastError = [[AppController sharedController] popStoredError];
     if (lastError)
     {
         [self showAlertWithTitle:@"Sorry, there was an error" message:lastError block:nil];
     }
-}
-
-- (void)updateGetButton
-{
-/*    NSInteger numNews = [AppController sharedController].numNews;
-    if (numNews > 0)
-    {
-        self.getButton.title = [NSString stringWithFormat:@"Community & News (%ld)", (long)numNews];
-    }
-    else
-    {
-        self.getButton.title = @"Community & News";
-    }*/
 }
 
 - (void)loadProjects
@@ -150,11 +133,6 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 - (void)didAddProject:(NSNotification *)notification
 {
     self.addedProject = notification.userInfo[@"project"];
-}
-
-- (void)newsChanged:(NSNotification *)notification
-{
-    [self updateGetButton];
 }
 
 - (IBAction)onAboutTapped:(id)sender
