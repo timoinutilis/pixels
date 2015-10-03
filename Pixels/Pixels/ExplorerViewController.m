@@ -9,7 +9,6 @@
 #import "ExplorerViewController.h"
 #import "ModelManager.h"
 #import "EditorViewController.h"
-#import "HelpTextViewController.h"
 #import "AppController.h"
 #import "CoachMarkView.h"
 #import "UIViewController+LowResCoder.h"
@@ -19,9 +18,6 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 @interface ExplorerViewController () <UITraitEnvironment>
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
-
-@property NSArray *compactBarItems;
-@property NSArray *regularBarItems;
 
 @property NSMutableArray *projects;
 @property Project *addedProject;
@@ -37,8 +33,7 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     
     UIBarButtonItem *addItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"add"] style:UIBarButtonItemStylePlain target:self action:@selector(onAddTapped:)];
     
-    self.compactBarItems = @[addItem];
-    self.regularBarItems = @[addItem];
+    self.navigationItem.rightBarButtonItems = @[addItem];
     
     self.collectionView.dataSource = self;
     self.collectionView.delegate = self;
@@ -59,15 +54,12 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     [super traitCollectionDidChange:previousTraitCollection];
     if (self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular)
     {
-        self.navigationItem.rightBarButtonItems = self.regularBarItems;
         self.navigationItem.backBarButtonItem = nil;
     }
     else
     {
-        self.navigationItem.rightBarButtonItems = self.compactBarItems;
         self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     }
-
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -135,34 +127,12 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     self.addedProject = notification.userInfo[@"project"];
 }
 
-- (IBAction)onAboutTapped:(id)sender
-{
-    UIViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"AboutNav"];
-    vc.modalPresentationStyle = UIModalPresentationPopover;
-    vc.popoverPresentationController.barButtonItem = sender;
-    vc.popoverPresentationController.backgroundColor = self.navigationController.navigationBar.barTintColor;
-    [self presentViewController:vc animated:YES completion:nil];
-}
-
-- (IBAction)onAddTapped:(id)sender
+- (void)onAddTapped:(id)sender
 {
     [[AppController sharedController] onShowInfoID:CoachMarkIDAdd];
     
     [[ModelManager sharedManager] createNewProject];
     [self showAddedProject];
-}
-
-- (void)onCommunityTapped:(id)sender
-{
-    [self showCommunity];
-}
-
-- (void)showCommunity
-{
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Community" bundle:nil];
-    UIViewController *vc = (UIViewController *)[storyboard instantiateInitialViewController];
-    
-    [self presentViewController:vc animated:YES completion:nil];
 }
 
 - (void)showAddedProject

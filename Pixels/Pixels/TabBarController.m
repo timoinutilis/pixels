@@ -7,17 +7,10 @@
 //
 
 #import "TabBarController.h"
-#import "RootNavigationController.h"
 #import "HelpTextViewController.h"
+#import "ExplorerViewController.h"
 #import "CommSplitViewController.h"
 #import "AppController.h"
-
-typedef NS_ENUM(NSInteger, Tab) {
-    TabPrograms,
-    TabHelp,
-    TabAbout,
-    TabCommunity
-};
 
 @interface TabBarController () <UITabBarDelegate>
 
@@ -26,7 +19,6 @@ typedef NS_ENUM(NSInteger, Tab) {
 
 @property NSArray *viewControllers;
 @property (nonatomic) UIViewController *selectedViewController;
-@property NSInteger selectedIndex;
 
 @end
 
@@ -36,6 +28,8 @@ typedef NS_ENUM(NSInteger, Tab) {
 {
     [super viewDidLoad];
     
+    [AppController sharedController].tabBarController = self;
+    
     for (int i = 0; i < self.tabBar.items.count; i++)
     {
         UITabBarItem *item = self.tabBar.items[i];
@@ -43,7 +37,7 @@ typedef NS_ENUM(NSInteger, Tab) {
         item.selectedImage = [item.selectedImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     }
 
-    RootNavigationController *projectsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"ExplorerNav"];
+    UIViewController *explorerVC = [self.storyboard instantiateViewControllerWithIdentifier:@"ExplorerNav"];
 
     UIStoryboard *helpStoryboard = [UIStoryboard storyboardWithName:@"Help" bundle:nil];
     UIViewController *helpVC = (UIViewController *)[helpStoryboard instantiateInitialViewController];
@@ -53,12 +47,11 @@ typedef NS_ENUM(NSInteger, Tab) {
     UIStoryboard *communityStoryboard = [UIStoryboard storyboardWithName:@"Community" bundle:nil];
     UIViewController *communityVC = (UIViewController *)[communityStoryboard instantiateInitialViewController];
 
-    self.viewControllers = @[projectsVC, helpVC, aboutVC, communityVC];
+    self.viewControllers = @[explorerVC, helpVC, aboutVC, communityVC];
     
     self.tabBar.delegate = self;
     
-    self.tabBar.selectedItem = self.tabBar.items[0];
-    self.selectedViewController = self.viewControllers[0];
+    self.selectedIndex = 0;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newsChanged:) name:NewsNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkShowPost:) name:ShowPostNotification object:nil];
@@ -82,6 +75,13 @@ typedef NS_ENUM(NSInteger, Tab) {
     [self checkShowPost:nil];
 }
 
+- (void)setSelectedIndex:(NSInteger)selectedIndex
+{
+    _selectedIndex = selectedIndex;
+    self.tabBar.selectedItem = self.tabBar.items[selectedIndex];
+    self.selectedViewController = self.viewControllers[selectedIndex];
+}
+
 - (void)setSelectedViewController:(UIViewController *)selectedViewController
 {
     if (_selectedViewController)
@@ -97,14 +97,13 @@ typedef NS_ENUM(NSInteger, Tab) {
         [self addChildViewController:_selectedViewController];
         [self.containerView addSubview:_selectedViewController.view];
         [_selectedViewController didMoveToParentViewController:self];
-        self.selectedIndex = [self.viewControllers indexOfObject:_selectedViewController];
     }
 }
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
 {
-    NSInteger index = [self.tabBar.items indexOfObject:item];
-    self.selectedViewController = self.viewControllers[index];
+    _selectedIndex = [self.tabBar.items indexOfObject:item];
+    self.selectedViewController = self.viewControllers[_selectedIndex];
 }
 
 - (void)newsChanged:(NSNotification *)notification
@@ -115,7 +114,7 @@ typedef NS_ENUM(NSInteger, Tab) {
 - (void)updateCommunityBadge
 {
     NSInteger numNews = [AppController sharedController].numNews;
-    UITabBarItem *item = self.tabBar.items[TabCommunity];
+    UITabBarItem *item = self.tabBar.items[TabIndexCommunity];
     if (numNews > 0)
     {
         item.badgeValue = @(numNews).stringValue;
@@ -129,7 +128,7 @@ typedef NS_ENUM(NSInteger, Tab) {
 - (void)checkShowPost:(NSNotification *)notification
 {
     AppController *app = [AppController sharedController];
-    if (app.shouldShowPostId && self.selectedIndex != TabCommunity)
+    if (app.shouldShowPostId && self.selectedIndex != TabIndexCommunity)
     {
         UIViewController *topVC = _selectedViewController;
         if ([topVC isKindOfClass:[UINavigationController class]])
@@ -139,20 +138,24 @@ typedef NS_ENUM(NSInteger, Tab) {
         if (topVC.presentedViewController)
         {
             [topVC dismissViewControllerAnimated:YES completion:^{
-                [self showCommunity];
+                self.selectedIndex = TabIndexCommunity;
             }];
         }
         else
         {
-            [self showCommunity];
+            self.selectedIndex = TabIndexCommunity;
         }
     }
 }
 
-- (void)showCommunity
+- (void)showExplorerAnimated:(BOOL)animated
 {
-    self.tabBar.selectedItem = self.tabBar.items[TabCommunity];
-    self.selectedViewController = self.viewControllers[TabCommunity];
+    self.selectedIndex = TabIndexExplorer;
+    UINavigationController *nav = (UINavigationController *)_selectedViewController;
+    if (![nav.topViewController isKindOfClass:[ExplorerViewController class]])
+    {
+        [nav popViewControllerAnimated:animated];
+    }
 }
 
 @end

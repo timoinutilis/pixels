@@ -130,7 +130,7 @@ static NSString *const SectionPosts = @"Posts";
 
 - (void)onDoneTapped:(id)sender
 {
-    [self closeCommunity];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)onFollowsChanged:(NSNotification *)notification
@@ -359,6 +359,8 @@ static NSString *const SectionPosts = @"Posts";
                 NSDictionary *dimensions = @{@"category": [post categoryString],
                                              @"app": ([AppController sharedController].isFullVersion) ? @"full version" : @"free"};
                 [PFAnalytics trackEvent:@"post" dimensions:dimensions];
+                
+                [[AppController sharedController] registerForNotifications];
             }
             else if (error)
             {

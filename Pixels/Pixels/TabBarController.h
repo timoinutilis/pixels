@@ -8,6 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSInteger, TabIndex) {
+    TabIndexExplorer,
+    TabIndexHelp,
+    TabIndexAbout,
+    TabIndexCommunity
+};
+
 @interface TabBarController : UIViewController
+
+@property (nonatomic) NSInteger selectedIndex;
+
+- (void)showExplorerAnimated:(BOOL)animated;
 
 @end

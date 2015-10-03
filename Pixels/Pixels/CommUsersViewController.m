@@ -52,7 +52,7 @@
 
 - (void)onDoneTapped:(id)sender
 {
-    [self closeCommunity];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)updateData

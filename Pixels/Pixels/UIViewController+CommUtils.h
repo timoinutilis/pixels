@@ -13,7 +13,6 @@
 @interface UIViewController (CommUtils)
 
 - (void)onGetProgramTappedWithPost:(LCCPost *)post;
-- (void)closeCommunity;
 - (BOOL)isModal;
 
 @end

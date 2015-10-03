@@ -105,7 +105,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
 
 - (void)onDoneTapped:(id)sender
 {
-    [self closeCommunity];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - Table view data source

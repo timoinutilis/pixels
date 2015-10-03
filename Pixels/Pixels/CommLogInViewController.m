@@ -10,6 +10,7 @@
 #import "CommunityModel.h"
 #import "UIViewController+LowResCoder.h"
 #import "GORCycleManager.h"
+#import "AppController.h"
 
 @interface CommLogInViewController () <UITextFieldDelegate>
 
@@ -238,7 +239,9 @@
     
     [[CommunityModel sharedInstance] onLoggedIn];
     
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
+        [[AppController sharedController] registerForNotifications];
+    }];
 }
 
 @end

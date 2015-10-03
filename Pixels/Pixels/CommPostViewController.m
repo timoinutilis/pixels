@@ -107,7 +107,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
 
 - (void)onDoneTapped:(id)sender
 {
-    [self closeCommunity];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)onActionTapped:(id)sender
@@ -436,6 +436,8 @@ typedef NS_ENUM(NSInteger, CellTag) {
                                              @"user": [PFUser currentUser] ? @"registered" : @"guest",
                                              @"app": ([AppController sharedController].isFullVersion) ? @"full version" : @"free"};
                 [PFAnalytics trackEvent:@"comment" dimensions:dimensions];
+                
+                [[AppController sharedController] registerForNotifications];
             }
             else if (error)
             {

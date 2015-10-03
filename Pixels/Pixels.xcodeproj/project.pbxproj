@@ -43,8 +43,6 @@
 		926864271AA6087300F305B9 /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 926864261AA6087300F305B9 /* AppController.m */; };
 		926A6A181B1C929D00A85412 /* UIViewController+LowResCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 926A6A171B1C929D00A85412 /* UIViewController+LowResCoder.m */; };
 		926C72C71A2B579E00448EAB /* RunnerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 926C72C61A2B579E00448EAB /* RunnerViewController.m */; };
-		927023D71BB40C580076DC4C /* RootNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 927023D61BB40C580076DC4C /* RootNavigationController.m */; settings = {ASSET_TAGS = (); }; };
-		927023D81BB40C580076DC4C /* RootNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 927023D61BB40C580076DC4C /* RootNavigationController.m */; settings = {ASSET_TAGS = (); }; };
 		9272C1491A1DE2D000E97957 /* Token.m in Sources */ = {isa = PBXBuildFile; fileRef = 9272C1481A1DE2D000E97957 /* Token.m */; };
 		927334981A2A456900C89AF0 /* Help.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 927334971A2A456900C89AF0 /* Help.storyboard */; };
 		9273349D1A2A478700C89AF0 /* HelpTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9273349C1A2A478700C89AF0 /* HelpTableViewController.m */; };
@@ -318,8 +316,6 @@
 		926C72C51A2B579E00448EAB /* RunnerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RunnerViewController.h; sourceTree = "<group>"; };
 		926C72C61A2B579E00448EAB /* RunnerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RunnerViewController.m; sourceTree = "<group>"; };
 		926C72C81A2B5C9100448EAB /* RunnerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RunnerDelegate.h; sourceTree = "<group>"; };
-		927023D51BB40C580076DC4C /* RootNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootNavigationController.h; sourceTree = "<group>"; };
-		927023D61BB40C580076DC4C /* RootNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootNavigationController.m; sourceTree = "<group>"; };
 		9272C1471A1DE2D000E97957 /* Token.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Token.h; sourceTree = "<group>"; };
 		9272C1481A1DE2D000E97957 /* Token.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Token.m; sourceTree = "<group>"; };
 		927334971A2A456900C89AF0 /* Help.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Help.storyboard; sourceTree = "<group>"; };
@@ -655,8 +651,6 @@
 				920E68211AB74CDA0038994A /* SplashViewController.m */,
 				92B956FC1BBD6CD400699BFF /* TabBarController.h */,
 				92B956FD1BBD6CD500699BFF /* TabBarController.m */,
-				927023D51BB40C580076DC4C /* RootNavigationController.h */,
-				927023D61BB40C580076DC4C /* RootNavigationController.m */,
 				92509CC81A28F99D0086E7E3 /* ExplorerViewController.h */,
 				92509CC91A28F99D0086E7E3 /* ExplorerViewController.m */,
 				9276F3931A1D289C0060E909 /* EditorViewController.h */,
@@ -1092,7 +1086,6 @@
 				929BCF131BB14800005F1DBD /* AFURLRequestSerialization.m in Sources */,
 				92B957021BBD912400699BFF /* HelpSplitViewController.m in Sources */,
 				92E53DF71A5B3A1D00FE9F91 /* GORTextView.m in Sources */,
-				927023D71BB40C580076DC4C /* RootNavigationController.m in Sources */,
 				9276F3921A1D289C0060E909 /* AppDelegate.m in Sources */,
 				92C0815A1B0E021A0006331B /* CommPostViewController.m in Sources */,
 				92D2C2021B13442A00539BA6 /* CommUsersViewController.m in Sources */,
@@ -1198,7 +1191,6 @@
 				929BCF391BB14A1B005F1DBD /* AFURLRequestSerialization.m in Sources */,
 				92B957031BBD912400699BFF /* HelpSplitViewController.m in Sources */,
 				929BCF3A1BB14A1B005F1DBD /* GORTextView.m in Sources */,
-				927023D81BB40C580076DC4C /* RootNavigationController.m in Sources */,
 				929BCF3B1BB14A1B005F1DBD /* AppDelegate.m in Sources */,
 				929BCF3C1BB14A1B005F1DBD /* CommPostViewController.m in Sources */,
 				929BCF3D1BB14A1B005F1DBD /* CommUsersViewController.m in Sources */,

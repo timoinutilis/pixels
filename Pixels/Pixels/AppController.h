@@ -20,9 +20,11 @@ extern NSString *const PurchaseStateNotification;
 extern NSString *const NewsNotification;
 extern NSString *const ShowPostNotification;
 
-@class CWStatusBarNotification;
+@class TabBarController;
 
 @interface AppController : NSObject <SKProductsRequestDelegate, SKPaymentTransactionObserver>
+
+@property (weak) TabBarController *tabBarController;
 
 @property (readonly) PurchaseState purchaseState;
 @property (readonly) BOOL isFullVersion;
@@ -31,7 +33,6 @@ extern NSString *const ShowPostNotification;
 @property BOOL shouldShowTransferAlert;
 @property (nonatomic) NSInteger numNews;
 @property NSString *shouldShowPostId;
-@property (readonly) CWStatusBarNotification *notification;
 
 + (AppController *)sharedController;
 

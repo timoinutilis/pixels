@@ -12,6 +12,7 @@
 #import "ModelManager.h"
 #import "ExplorerViewController.h"
 #import "AppController.h"
+#import "TabBarController.h"
 
 @implementation UIViewController (CommUtils)
 
@@ -44,17 +45,17 @@
     project.postId = post.objectId;
     
     [[CommunityModel sharedInstance] countPost:post type:LCCCountTypeDownload];
-
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
-        [[AppController sharedController] registerForNotifications];
-    }];
-}
-
-- (void)closeCommunity
-{
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
-        [[AppController sharedController] registerForNotifications];
-    }];
+    
+    if ([self isModal])
+    {
+        [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
+            [[AppController sharedController].tabBarController showExplorerAnimated:YES];
+        }];
+    }
+    else
+    {
+        [[AppController sharedController].tabBarController showExplorerAnimated:NO];
+    }
 }
 
 - (BOOL)isModal

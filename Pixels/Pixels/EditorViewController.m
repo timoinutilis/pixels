@@ -7,16 +7,11 @@
 //
 
 #import "EditorViewController.h"
-#import "Scanner.h"
-#import "Parser.h"
-#import "Token.h"
 #import "Runnable.h"
 #import "Runner.h"
 #import "ModelManager.h"
 #import "RunnerViewController.h"
-#import "HelpTextViewController.h"
 #import "ActivityItemSource.h"
-#import "PublishActivity.h"
 #import "NSString+Utils.h"
 #import "EditorTextView.h"
 #import "AppController.h"
@@ -37,12 +32,9 @@ NSString *const CoachMarkIDHelp = @"CoachMarkIDHelp";
 static int s_editorInstancesCount = 0;
 
 
-@interface EditorViewController () <UITraitEnvironment>
+@interface EditorViewController ()
 
 @property (weak, nonatomic) IBOutlet EditorTextView *sourceCodeTextView;
-
-@property NSArray *compactBarItems;
-@property NSArray *regularBarItems;
 
 @property BOOL examplesDontSaveWarningShowed;
 @property BOOL wasEditedSinceOpened;
@@ -67,8 +59,7 @@ static int s_editorInstancesCount = 0;
     UIBarButtonItem *searchItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search"] style:UIBarButtonItemStylePlain target:nil action:nil];
     UIBarButtonItem *feedbackItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"feedback"] style:UIBarButtonItemStylePlain target:self action:@selector(onFeedbackTapped:)];
     
-    self.compactBarItems = @[startItem, searchItem, feedbackItem, projectItem];
-    self.regularBarItems = @[startItem, searchItem, feedbackItem, projectItem];
+    self.navigationItem.rightBarButtonItems = @[startItem, searchItem, feedbackItem, projectItem];
     
     self.view.backgroundColor = [AppStyle editorColor];
     self.sourceCodeTextView.backgroundColor = [AppStyle editorColor];
@@ -102,19 +93,6 @@ static int s_editorInstancesCount = 0;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:ModelManagerWillSaveDataNotification object:nil];
     
     s_editorInstancesCount--;
-}
-
-- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
-{
-    [super traitCollectionDidChange:previousTraitCollection];
-    if (self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular)
-    {
-        self.navigationItem.rightBarButtonItems = self.regularBarItems;
-    }
-    else
-    {
-        self.navigationItem.rightBarButtonItems = self.compactBarItems;
-    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -233,7 +211,7 @@ static int s_editorInstancesCount = 0;
     [self runProgram];
 }
 
-- (IBAction)onProjectTapped:(id)sender
+- (void)onProjectTapped:(id)sender
 {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
@@ -353,7 +331,7 @@ static int s_editorInstancesCount = 0;
     }
 }
 
-- (IBAction)onFeedbackTapped:(id)sender
+- (void)onFeedbackTapped:(id)sender
 {
     if (!self.project.postId)
     {
@@ -395,8 +373,6 @@ static int s_editorInstancesCount = 0;
         {
             ActivityItemSource *item = [[ActivityItemSource alloc] init];
             item.project = self.project;
-            
-//            PublishActivity *publishActivity = [[PublishActivity alloc] init];
             
             UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:@[item] applicationActivities:nil];
             
