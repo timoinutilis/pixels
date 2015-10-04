@@ -163,11 +163,6 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
         
         [[AppController sharedController] onProgramOpened];
     }
-    else if ([segue.identifier isEqualToString:@"About"])
-    {
-        UIViewController *vc = segue.destinationViewController;
-        vc.popoverPresentationController.backgroundColor = self.navigationController.navigationBar.barTintColor;
-    }
 }
 
 #pragma mark <UICollectionViewDataSource>

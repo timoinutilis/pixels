@@ -78,14 +78,6 @@
     textViewController.chapter = chapter.htmlChapter;
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    if (self.splitViewController.displayMode == UISplitViewControllerDisplayModePrimaryOverlay)
-    {
-        [UIView animateWithDuration:0.3 animations:^{
-            self.splitViewController.preferredDisplayMode = UISplitViewControllerDisplayModePrimaryHidden;
-        }];
-        self.splitViewController.preferredDisplayMode = UISplitViewControllerDisplayModeAutomatic;
-    }
 }
 
 @end

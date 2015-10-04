@@ -29,6 +29,12 @@
 {
     [super viewDidLoad];
     
+    if (self.navigationController.presentingViewController)
+    {
+        UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onDoneTapped:)];
+        self.navigationItem.rightBarButtonItem = doneItem;
+    }
+    
     self.upgradedLabel.textColor = [AppStyle barColor];
     
     if ([SKPaymentQueue canMakePayments] && [AppController sharedController].purchaseState == PurchaseStateUninitialized)
@@ -114,7 +120,7 @@
     }
 }
 
-- (IBAction)onDoneTapped:(id)sender
+- (void)onDoneTapped:(id)sender
 {
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
@@ -132,6 +138,8 @@
 
 - (IBAction)onSecretTapped:(id)sender
 {
+    __weak UpgradeViewController *weakSelf = self;
+    
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Enter Code" message:nil preferredStyle:UIAlertControllerStyleAlert];
 
     [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
@@ -146,6 +154,7 @@
         if ([manager isCodeValid:code])
         {
             [[AppController sharedController] upgradeToFullVersion];
+            [weakSelf updateView];
         }
         
     }]];
