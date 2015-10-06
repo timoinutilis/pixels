@@ -175,7 +175,7 @@ Inutilis Software, 2015</string>
                         <viewControllerLayoutGuide type="bottom" id="uuo-gB-z3b"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="GIV-Ht-ft8" customClass="BackgroundView">
-                        <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                        <rect key="frame" x="0.0" y="44" width="600" height="556"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_about" translatesAutoresizingMaskIntoConstraints="NO" id="iCN-wF-fZ1">
@@ -188,8 +188,8 @@ Inutilis Software, 2015</string>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7qu-NE-hxH" customClass="TextLabel">
-                                <rect key="frame" x="20" y="169" width="560" height="82"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7qu-NE-hxH" customClass="TextLabel">
+                                <rect key="frame" x="20" y="169" width="560" height="41"/>
                                 <animations/>
                                 <string key="text">In the full version there is no size limit for programs.
 The upgrade is valid for all your devices and without time limit.</string>
@@ -197,10 +197,10 @@ The upgrade is valid for all your devices and without time limit.</string>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yqV-0v-CbY">
-                                <rect key="frame" x="49" y="283" width="222" height="30"/>
+                                <rect key="frame" x="188" y="262" width="225" height="30"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d5T-K3-Spc">
-                                        <rect key="frame" x="0.0" y="0.0" width="61" height="30"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d5T-K3-Spc">
+                                        <rect key="frame" x="0.0" y="0.0" width="64" height="30"/>
                                         <animations/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                         <state key="normal" title="Upgrade">
@@ -210,8 +210,8 @@ The upgrade is valid for all your devices and without time limit.</string>
                                             <action selector="onUpgradeTapped:" destination="cfP-MT-scX" eventType="touchUpInside" id="7wI-QE-jAw"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jZ1-zl-x2q">
-                                        <rect key="frame" x="93" y="0.0" width="129" height="30"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jZ1-zl-x2q">
+                                        <rect key="frame" x="96" y="0.0" width="129" height="30"/>
                                         <animations/>
                                         <state key="normal" title="Restore Purchases">
                                             <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -233,17 +233,17 @@ The upgrade is valid for all your devices and without time limit.</string>
                                 </constraints>
                             </view>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="0Cm-eG-Zxe">
-                                <rect key="frame" x="290" y="288" width="20" height="20"/>
+                                <rect key="frame" x="290" y="267" width="20" height="20"/>
                                 <animations/>
                             </activityIndicatorView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Thank you for the upgrade!" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mMK-I5-wyt">
-                                <rect key="frame" x="54" y="288" width="213" height="21"/>
+                                <rect key="frame" x="189" y="267" width="222" height="21"/>
                                 <animations/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DLs-Ne-t0L" userLabel="Secret Button">
-                                <rect key="frame" x="0.0" y="504" width="44" height="32"/>
+                                <rect key="frame" x="0.0" y="524" width="44" height="32"/>
                                 <animations/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="32" id="mRj-As-DGg"/>
@@ -298,7 +298,8 @@ The upgrade is valid for all your devices and without time limit.</string>
         <scene sceneID="VuW-xg-Nz9">
             <objects>
                 <navigationController id="gyc-hD-d0L" sceneMemberID="viewController">
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="600" height="600"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="ujA-bU-52q">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -943,6 +944,6 @@ The upgrade is valid for all your devices and without time limit.</string>
         <image name="zoom_off" width="36" height="36"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="XJL-Hs-NKe"/>
+        <segue reference="3Zj-t8-4PG"/>
     </inferredMetricsTieBreakers>
 </document>

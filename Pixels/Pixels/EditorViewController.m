@@ -23,6 +23,7 @@
 #import "CommPostViewController.h"
 #import "CommunityModel.h"
 #import "ShareViewController.h"
+#import "SearchToolbar.h"
 
 int const EditorDemoMaxLines = 24;
 NSString *const CoachMarkIDStart = @"CoachMarkIDStart";
@@ -32,9 +33,11 @@ NSString *const CoachMarkIDHelp = @"CoachMarkIDHelp";
 static int s_editorInstancesCount = 0;
 
 
-@interface EditorViewController ()
+@interface EditorViewController () <SearchToolbarDelegate>
 
 @property (weak, nonatomic) IBOutlet EditorTextView *sourceCodeTextView;
+
+@property SearchToolbar *searchToolbar;
 
 @property BOOL examplesDontSaveWarningShowed;
 @property BOOL wasEditedSinceOpened;
@@ -56,7 +59,7 @@ static int s_editorInstancesCount = 0;
     
     UIBarButtonItem *startItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"start"] style:UIBarButtonItemStylePlain target:self action:@selector(onRunTapped:)];
     UIBarButtonItem *projectItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"share"] style:UIBarButtonItemStylePlain target:self action:@selector(onProjectTapped:)];
-    UIBarButtonItem *searchItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search"] style:UIBarButtonItemStylePlain target:nil action:nil];
+    UIBarButtonItem *searchItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search"] style:UIBarButtonItemStylePlain target:self action:@selector(onSearchTapped:)];
     UIBarButtonItem *feedbackItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"feedback"] style:UIBarButtonItemStylePlain target:self action:@selector(onFeedbackTapped:)];
     
     self.navigationItem.rightBarButtonItems = @[startItem, searchItem, feedbackItem, projectItem];
@@ -209,6 +212,22 @@ static int s_editorInstancesCount = 0;
 - (void)onRunTapped:(id)sender
 {
     [self runProgram];
+}
+
+- (void)onSearchTapped:(id)sender
+{
+    if (self.searchToolbar)
+    {
+        [self.searchToolbar removeFromSuperview];
+        self.searchToolbar = nil;
+    }
+    else
+    {
+        self.searchToolbar = [[SearchToolbar alloc] initWithFrame:CGRectMake(0, self.sourceCodeTextView.frame.origin.y, self.sourceCodeTextView.frame.size.width, 44)];
+        [self.view addSubview:self.searchToolbar];
+        self.searchToolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        self.searchToolbar.searchDelegate = self;
+    }
 }
 
 - (void)onProjectTapped:(id)sender
@@ -380,6 +399,62 @@ static int s_editorInstancesCount = 0;
             [self presentViewController:activityVC animated:YES completion:nil];
         }
     }
+}
+
+#pragma mark - Search and Replace
+
+- (void)searchToolbar:(SearchToolbar *)searchToolbar didSearch:(NSString *)findText backwards:(BOOL)backwards
+{
+    NSString *sourceText = self.sourceCodeTextView.text;
+    
+    NSRange selectedRange = self.sourceCodeTextView.selectedRange;
+    NSUInteger startIndex;
+    BOOL didRestart = NO;
+    if (backwards)
+    {
+        startIndex = selectedRange.location;
+        if (startIndex == 0)
+        {
+            startIndex = sourceText.length;
+            didRestart = YES;
+        }
+    }
+    else
+    {
+        startIndex = selectedRange.location + selectedRange.length;
+        if (startIndex == sourceText.length)
+        {
+            startIndex = 0;
+            didRestart = YES;
+        }
+    }
+    BOOL found = [self find:findText backwards:backwards startIndex:startIndex];
+    if (!found && !didRestart)
+    {
+        startIndex = backwards ? sourceText.length : 0;
+        [self find:findText backwards:backwards startIndex:startIndex];
+    }
+}
+
+- (BOOL)find:(NSString *)findText backwards:(BOOL)backwards startIndex:(NSUInteger)startIndex
+{
+    NSString *sourceText = self.sourceCodeTextView.text;
+    
+    NSRange searchRange = backwards ? NSMakeRange(0, startIndex) : NSMakeRange(startIndex, sourceText.length - startIndex);
+    NSRange resultRange = [sourceText rangeOfString:findText options:(backwards ? NSCaseInsensitiveSearch | NSBackwardsSearch : NSCaseInsensitiveSearch) range:searchRange];
+    if (resultRange.location != NSNotFound)
+    {
+        self.sourceCodeTextView.selectedRange = resultRange;
+        [self.sourceCodeTextView becomeFirstResponder];
+        [self.sourceCodeTextView scrollRangeToVisible:resultRange];
+        return YES;
+    }
+    return NO;
+}
+
+- (void)searchToolbar:(SearchToolbar *)searchToolbar didReplace:(NSString *)findText with:(NSString *)replaceText
+{
+    
 }
 
 #pragma mark - Compile and run

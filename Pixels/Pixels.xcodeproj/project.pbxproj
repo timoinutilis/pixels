@@ -232,6 +232,8 @@
 		92C98F421A20F2F000215AE9 /* Node.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C98F411A20F2F000215AE9 /* Node.m */; };
 		92D2C2021B13442A00539BA6 /* CommUsersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D2C2011B13442A00539BA6 /* CommUsersViewController.m */; };
 		92D518B91A6975C10000F917 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D518B81A6975C10000F917 /* AboutViewController.m */; };
+		92D6AD421BC29C4A001E5EED /* SearchToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D6AD411BC29C4A001E5EED /* SearchToolbar.m */; settings = {ASSET_TAGS = (); }; };
+		92D6AD431BC29C4A001E5EED /* SearchToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D6AD411BC29C4A001E5EED /* SearchToolbar.m */; settings = {ASSET_TAGS = (); }; };
 		92E1AF961B6A49E8000B1B0D /* NotificationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E1AF951B6A49E8000B1B0D /* NotificationView.m */; };
 		92E2B8AA1A52F08D00D0DF29 /* ActivityItemSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E2B8A91A52F08D00D0DF29 /* ActivityItemSource.m */; };
 		92E36D191ADD294E00C16CBE /* UIColor+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E36D181ADD294E00C16CBE /* UIColor+Utils.m */; };
@@ -448,6 +450,8 @@
 		92D2C2011B13442A00539BA6 /* CommUsersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommUsersViewController.m; sourceTree = "<group>"; };
 		92D518B71A6975C10000F917 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
 		92D518B81A6975C10000F917 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
+		92D6AD401BC29C4A001E5EED /* SearchToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchToolbar.h; sourceTree = "<group>"; };
+		92D6AD411BC29C4A001E5EED /* SearchToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchToolbar.m; sourceTree = "<group>"; };
 		92E1AF941B6A49E8000B1B0D /* NotificationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationView.h; sourceTree = "<group>"; };
 		92E1AF951B6A49E8000B1B0D /* NotificationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationView.m; sourceTree = "<group>"; };
 		92E2B8A81A52F08D00D0DF29 /* ActivityItemSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityItemSource.h; sourceTree = "<group>"; };
@@ -570,6 +574,8 @@
 				9215D7781B37361100A65E55 /* StandardTableViewCell.m */,
 				92E1AF941B6A49E8000B1B0D /* NotificationView.h */,
 				92E1AF951B6A49E8000B1B0D /* NotificationView.m */,
+				92D6AD401BC29C4A001E5EED /* SearchToolbar.h */,
+				92D6AD411BC29C4A001E5EED /* SearchToolbar.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1122,6 +1128,7 @@
 				9273349D1A2A478700C89AF0 /* HelpTableViewController.m in Sources */,
 				92884F281B0F25B30032623D /* UIView+WebCacheOperation.m in Sources */,
 				929797FD1A50956900DB5D70 /* PublishActivity.m in Sources */,
+				92D6AD421BC29C4A001E5EED /* SearchToolbar.m in Sources */,
 				929BCF101BB14800005F1DBD /* AFNetworkReachabilityManager.m in Sources */,
 				920822031A4DABB8005B7862 /* HelpContent.m in Sources */,
 				926086321A5E8560006C5523 /* Runnable.m in Sources */,
@@ -1227,6 +1234,7 @@
 				929BCF5B1BB14A1B005F1DBD /* HelpTableViewController.m in Sources */,
 				929BCF5C1BB14A1B005F1DBD /* UIView+WebCacheOperation.m in Sources */,
 				929BCF5D1BB14A1B005F1DBD /* PublishActivity.m in Sources */,
+				92D6AD431BC29C4A001E5EED /* SearchToolbar.m in Sources */,
 				929BCF5E1BB14A1B005F1DBD /* AFNetworkReachabilityManager.m in Sources */,
 				929BCF5F1BB14A1B005F1DBD /* HelpContent.m in Sources */,
 				929BCF601BB14A1B005F1DBD /* Runnable.m in Sources */,
