@@ -36,12 +36,14 @@ static int s_editorInstancesCount = 0;
 @interface EditorViewController () <SearchToolbarDelegate>
 
 @property (weak, nonatomic) IBOutlet EditorTextView *sourceCodeTextView;
+@property (weak, nonatomic) IBOutlet SearchToolbar *searchToolbar;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *searchToolbarConstraint;
 
-@property SearchToolbar *searchToolbar;
 
 @property BOOL examplesDontSaveWarningShowed;
 @property BOOL wasEditedSinceOpened;
 @property BOOL wasEditedSinceLastRun;
+@property CGFloat keyboardHeight;
 
 @end
 
@@ -84,6 +86,12 @@ static int s_editorInstancesCount = 0;
     self.sourceCodeTextView.keyboardToolbar.translucent = YES;
     self.sourceCodeTextView.keyboardToolbar.barStyle = UIBarStyleBlack;
     
+    self.searchToolbar.searchDelegate = self;
+    self.searchToolbarConstraint.constant = -self.searchToolbar.bounds.size.height;
+    self.searchToolbar.hidden = YES;
+    
+    self.keyboardHeight = 0.0;
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willSaveData:) name:ModelManagerWillSaveDataNotification object:nil];
@@ -96,6 +104,11 @@ static int s_editorInstancesCount = 0;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:ModelManagerWillSaveDataNotification object:nil];
     
     s_editorInstancesCount--;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [self updateEditorInsets];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -149,15 +162,23 @@ static int s_editorInstancesCount = 0;
 
 - (void)keyboardWillShow:(NSNotification *)notification
 {
-    CGSize kbSize = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
-    UIEdgeInsets insets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height - self.navigationController.toolbar.frame.size.height, 0.0);
-    self.sourceCodeTextView.contentInset = insets;
-    self.sourceCodeTextView.scrollIndicatorInsets = insets;
+    self.keyboardHeight = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size.height;
+    [self updateEditorInsets];
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification
 {
-    UIEdgeInsets insets = UIEdgeInsetsZero;
+    self.keyboardHeight = 0.0;
+    [self updateEditorInsets];
+}
+
+- (void)updateEditorInsets
+{
+    UIEdgeInsets insets = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+    if (self.keyboardHeight > 0.0)
+    {
+        insets.bottom = self.keyboardHeight;
+    }
     self.sourceCodeTextView.contentInset = insets;
     self.sourceCodeTextView.scrollIndicatorInsets = insets;
 }
@@ -216,18 +237,26 @@ static int s_editorInstancesCount = 0;
 
 - (void)onSearchTapped:(id)sender
 {
-    if (self.searchToolbar)
+    [self.view layoutIfNeeded];
+    BOOL wasVisible = (self.searchToolbarConstraint.constant == 0.0);
+    if (wasVisible)
     {
-        [self.searchToolbar removeFromSuperview];
-        self.searchToolbar = nil;
+        self.searchToolbarConstraint.constant = -self.searchToolbar.bounds.size.height;
+        [self.searchToolbar endEditing:YES];
     }
     else
     {
-        self.searchToolbar = [[SearchToolbar alloc] initWithFrame:CGRectMake(0, self.sourceCodeTextView.frame.origin.y, self.sourceCodeTextView.frame.size.width, 44)];
-        [self.view addSubview:self.searchToolbar];
-        self.searchToolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        self.searchToolbar.searchDelegate = self;
+        self.searchToolbar.hidden = NO;
+        self.searchToolbarConstraint.constant = 0.0;
     }
+    [UIView animateWithDuration:0.3 animations:^{
+        [self.view layoutIfNeeded];
+    } completion:^(BOOL finished) {
+        if (wasVisible && self.searchToolbarConstraint.constant != 0.0)
+        {
+            self.searchToolbar.hidden = YES;
+        }
+    }];
 }
 
 - (void)onProjectTapped:(id)sender
@@ -454,7 +483,19 @@ static int s_editorInstancesCount = 0;
 
 - (void)searchToolbar:(SearchToolbar *)searchToolbar didReplace:(NSString *)findText with:(NSString *)replaceText
 {
+    NSString *sourceText = self.sourceCodeTextView.text;
     
+    NSRange selectedRange = self.sourceCodeTextView.selectedRange;
+    if ([[sourceText substringWithRange:selectedRange] isEqualToString:findText])
+    {
+        // replace
+        sourceText = [sourceText stringByReplacingCharactersInRange:selectedRange withString:replaceText];
+        self.sourceCodeTextView.text = sourceText;
+        self.sourceCodeTextView.selectedRange = NSMakeRange(selectedRange.location + replaceText.length, 0);
+    }
+    
+    // find next
+    [self searchToolbar:searchToolbar didSearch:findText backwards:NO];
 }
 
 #pragma mark - Compile and run
