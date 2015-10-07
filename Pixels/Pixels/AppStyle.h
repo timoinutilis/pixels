@@ -18,6 +18,6 @@
 + (UIColor *)darkColor;
 + (UIColor *)brightColor;
 + (UIColor *)editorColor;
-+ (UIColor *)alertTintColor;
++ (UIColor *)warningColor;
 
 @end

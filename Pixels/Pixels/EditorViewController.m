@@ -38,9 +38,10 @@ static int s_editorInstancesCount = 0;
 @property (weak, nonatomic) IBOutlet EditorTextView *sourceCodeTextView;
 @property (weak, nonatomic) IBOutlet SearchToolbar *searchToolbar;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *searchToolbarConstraint;
+@property (weak, nonatomic) IBOutlet UIView *infoView;
+@property (weak, nonatomic) IBOutlet UILabel *infoLabel;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *infoViewConstraint;
 
-
-@property BOOL examplesDontSaveWarningShowed;
 @property BOOL wasEditedSinceOpened;
 @property BOOL wasEditedSinceLastRun;
 @property CGFloat keyboardHeight;
@@ -89,6 +90,14 @@ static int s_editorInstancesCount = 0;
     self.searchToolbar.searchDelegate = self;
     self.searchToolbarConstraint.constant = -self.searchToolbar.bounds.size.height;
     self.searchToolbar.hidden = YES;
+    
+    self.infoView.backgroundColor = [AppStyle warningColor];
+    self.infoView.layer.shadowRadius = 1.0;
+    self.infoView.layer.shadowOpacity = 0.5;
+    self.infoView.layer.shadowOffset = CGSizeMake(0.0, 1.0);
+    self.infoLabel.textColor = [AppStyle brightColor];
+    self.infoViewConstraint.constant = -self.infoView.bounds.size.height;
+    self.infoView.hidden = YES;
     
     self.keyboardHeight = 0.0;
     
@@ -201,25 +210,9 @@ static int s_editorInstancesCount = 0;
 
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView
 {
-    if ([self isExample] && !self.examplesDontSaveWarningShowed)
+    if ([self isExample])
     {
-        self.examplesDontSaveWarningShowed = YES;
-        
-        EditorViewController __weak *weakSelf = self;
-        NSString *message = [AppController sharedController].isFullVersion
-        ? @"If you want to keep your changes, you can duplicate the program to have your own copy."
-        : @"Anyway you can still experiment with the program.";
-        
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Changes in example programs will not be saved."
-                                                                       message:message
-                                                                preferredStyle:UIAlertControllerStyleAlert];
-        
-        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            [weakSelf.sourceCodeTextView becomeFirstResponder];
-        }]];
-        
-        [self presentViewController:alert animated:YES completion:nil];
-        return NO;
+        [self showInfo:@"Changes in example programs will not be saved."];
     }
     return YES;
 }
@@ -496,6 +489,42 @@ static int s_editorInstancesCount = 0;
     
     // find next
     [self searchToolbar:searchToolbar didSearch:findText backwards:NO];
+}
+
+#pragma mark - Info bar
+
+- (void)showInfo:(NSString *)text
+{
+    self.infoLabel.text = text;
+    
+    if (self.infoViewConstraint.constant != 0.0)
+    {
+        [self.view layoutIfNeeded];
+        self.infoView.hidden = NO;
+        self.infoViewConstraint.constant = 0.0;
+
+        [UIView animateWithDuration:0.3 animations:^{
+            [self.view layoutIfNeeded];
+        }];
+    }
+}
+
+- (void)hideInfo
+{
+    if (self.infoViewConstraint.constant == 0.0)
+    {
+        [self.view layoutIfNeeded];
+        self.infoViewConstraint.constant = -self.infoView.bounds.size.height;
+        
+        [UIView animateWithDuration:0.3 animations:^{
+            [self.view layoutIfNeeded];
+        } completion:^(BOOL finished) {
+            if (self.infoViewConstraint.constant != 0.0)
+            {
+                self.infoView.hidden = YES;
+            }
+        }];
+    }
 }
 
 #pragma mark - Compile and run

@@ -80,9 +80,9 @@
     return [UIColor colorWithHex:0x0e2a27 alpha:1.0f];
 }
 
-+ (UIColor *)alertTintColor
++ (UIColor *)warningColor
 {
-    return [UIColor colorWithHex:0x05ad96 alpha:1.0f];
+    return [UIColor colorWithHex:0xee0021 alpha:1.0f];
 }
 
 @end
