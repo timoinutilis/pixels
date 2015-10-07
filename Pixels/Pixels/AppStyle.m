@@ -82,7 +82,7 @@
 
 + (UIColor *)warningColor
 {
-    return [UIColor colorWithHex:0xee0021 alpha:1.0f];
+    return [UIColor colorWithHex:0xF0573C alpha:1.0f];
 }
 
 @end
