@@ -82,6 +82,8 @@
 		92884F2B1B0F307F0032623D /* CommSourceCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92884F2A1B0F307F0032623D /* CommSourceCodeViewController.m */; };
 		92884F2E1B0F33850032623D /* LCCComment.m in Sources */ = {isa = PBXBuildFile; fileRef = 92884F2D1B0F33850032623D /* LCCComment.m */; };
 		928FB8991A5C804200EA377F /* GORSeparatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 928FB8981A5C804200EA377F /* GORSeparatorView.m */; };
+		929381D21BC540D700D41B72 /* UITextView+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 929381D11BC540D700D41B72 /* UITextView+Utils.m */; settings = {ASSET_TAGS = (); }; };
+		929381D31BC540D700D41B72 /* UITextView+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 929381D11BC540D700D41B72 /* UITextView+Utils.m */; settings = {ASSET_TAGS = (); }; };
 		9293D46D1B219BCC009A156B /* ExtendedActivityIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9293D46C1B219BCC009A156B /* ExtendedActivityIndicatorView.m */; };
 		929797FD1A50956900DB5D70 /* PublishActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 929797FC1A50956900DB5D70 /* PublishActivity.m */; };
 		929BCEF31BB142FC005F1DBD /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 929BCEF11BB142FC005F1DBD /* Bolts.framework */; settings = {ASSET_TAGS = (); }; };
@@ -390,6 +392,8 @@
 		928E14BD1B067AB9002DC8E6 /* Info_dev.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info_dev.plist; sourceTree = "<group>"; };
 		928FB8971A5C804200EA377F /* GORSeparatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GORSeparatorView.h; sourceTree = "<group>"; };
 		928FB8981A5C804200EA377F /* GORSeparatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GORSeparatorView.m; sourceTree = "<group>"; };
+		929381D01BC540D700D41B72 /* UITextView+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+Utils.h"; sourceTree = "<group>"; };
+		929381D11BC540D700D41B72 /* UITextView+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+Utils.m"; sourceTree = "<group>"; };
 		9293D46B1B219BCC009A156B /* ExtendedActivityIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExtendedActivityIndicatorView.h; sourceTree = "<group>"; };
 		9293D46C1B219BCC009A156B /* ExtendedActivityIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExtendedActivityIndicatorView.m; sourceTree = "<group>"; };
 		929797FB1A50956900DB5D70 /* PublishActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublishActivity.h; sourceTree = "<group>"; };
@@ -535,6 +539,8 @@
 				925C281E1B092CA4007AC515 /* NSDate+Utils.m */,
 				92C135D11B81D95100E9F5A4 /* NSMutableDictionary+Utils.h */,
 				92C135D21B81D95100E9F5A4 /* NSMutableDictionary+Utils.m */,
+				929381D01BC540D700D41B72 /* UITextView+Utils.h */,
+				929381D11BC540D700D41B72 /* UITextView+Utils.m */,
 			);
 			name = "Class Utils";
 			sourceTree = "<group>";
@@ -1079,6 +1085,7 @@
 				92884F241B0F25B30032623D /* UIImage+MultiFormat.m in Sources */,
 				92884F261B0F25B30032623D /* UIImageView+HighlightedWebCache.m in Sources */,
 				926A6A181B1C929D00A85412 /* UIViewController+LowResCoder.m in Sources */,
+				929381D21BC540D700D41B72 /* UITextView+Utils.m in Sources */,
 				92E2B8AA1A52F08D00D0DF29 /* ActivityItemSource.m in Sources */,
 				92884F231B0F25B30032623D /* UIImage+GIF.m in Sources */,
 				925935A11B1B77D7001CE0B1 /* LCCProgram.m in Sources */,
@@ -1185,6 +1192,7 @@
 				929BCF2C1BB14A1B005F1DBD /* UIImage+MultiFormat.m in Sources */,
 				929BCF2D1BB14A1B005F1DBD /* UIImageView+HighlightedWebCache.m in Sources */,
 				929BCF2E1BB14A1B005F1DBD /* UIViewController+LowResCoder.m in Sources */,
+				929381D31BC540D700D41B72 /* UITextView+Utils.m in Sources */,
 				929BCF2F1BB14A1B005F1DBD /* ActivityItemSource.m in Sources */,
 				929BCF301BB14A1B005F1DBD /* UIImage+GIF.m in Sources */,
 				929BCF311BB14A1B005F1DBD /* LCCProgram.m in Sources */,

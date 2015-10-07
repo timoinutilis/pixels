@@ -25,6 +25,7 @@
 #import "ShareViewController.h"
 #import "SearchToolbar.h"
 #import "TabBarController.h"
+#import "UITextView+Utils.h"
 
 int const EditorDemoMaxLines = 24;
 NSString *const CoachMarkIDStart = @"CoachMarkIDStart";
@@ -94,7 +95,7 @@ static int s_editorInstancesCount = 0;
     
     self.infoView.backgroundColor = [AppStyle warningColor];
     self.infoView.layer.shadowRadius = 1.0;
-    self.infoView.layer.shadowOpacity = 0.5;
+    self.infoView.layer.shadowOpacity = 1.0;
     self.infoView.layer.shadowOffset = CGSizeMake(0.0, 1.0);
     self.infoLabel.textColor = [AppStyle brightColor];
     self.infoViewConstraint.constant = -self.infoView.bounds.size.height;
@@ -474,7 +475,7 @@ static int s_editorInstancesCount = 0;
     {
         self.sourceCodeTextView.selectedRange = resultRange;
         [self.sourceCodeTextView becomeFirstResponder];
-        [self.sourceCodeTextView scrollRangeToVisible:resultRange];
+        [self.sourceCodeTextView scrollSelectedRangeToVisible];
         return YES;
     }
     return NO;
@@ -487,6 +488,13 @@ static int s_editorInstancesCount = 0;
     NSRange selectedRange = self.sourceCodeTextView.selectedRange;
     if ([[sourceText substringWithRange:selectedRange] isEqualToString:findText])
     {
+        if (!self.sourceCodeTextView.isFirstResponder)
+        {
+            // activate editor
+            [self.sourceCodeTextView becomeFirstResponder];
+            [self.sourceCodeTextView scrollSelectedRangeToVisible];
+            return;
+        }
         // replace
         sourceText = [sourceText stringByReplacingCharactersInRange:selectedRange withString:replaceText];
         self.sourceCodeTextView.text = sourceText;
