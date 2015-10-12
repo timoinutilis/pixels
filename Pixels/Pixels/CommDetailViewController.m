@@ -317,7 +317,8 @@ static NSString *const SectionPosts = @"Posts";
 - (IBAction)onMoreTapped:(id)sender
 {
     [self.profileCell toggleDetailSize];
-    [self.tableView reloadData];
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
 }
 
 - (IBAction)onSendStatusTapped:(id)sender
@@ -525,7 +526,7 @@ static NSString *const SectionPosts = @"Posts";
 
 @interface CommProfileCell()
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UILabel *profileDetailLabel;
+@property (weak, nonatomic) IBOutlet UITextView *detailTextView;
 @property (weak, nonatomic) IBOutlet UIButton *actionButton;
 @property (weak, nonatomic) IBOutlet UIButton *moreButton;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *detailHeightConstraint;
@@ -533,19 +534,27 @@ static NSString *const SectionPosts = @"Posts";
 
 @implementation CommProfileCell
 
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    
+    self.detailTextView.textContainer.lineFragmentPadding = 0;
+    self.detailTextView.textContainerInset = UIEdgeInsetsZero;
+}
+
 - (void)setUser:(LCCUser *)user
 {
     _user = user;
     self.titleLabel.text = user.username;
     if (user.about.length > 0)
     {
-        self.profileDetailLabel.text = user.about;
-        self.profileDetailLabel.alpha = 1.0;
+        self.detailTextView.text = [user.about stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        self.detailTextView.alpha = 1.0;
     }
     else
     {
-        self.profileDetailLabel.text = @"No about text written yet";
-        self.profileDetailLabel.alpha = 0.5;
+        self.detailTextView.text = @"No about text written yet";
+        self.detailTextView.alpha = 0.5;
     }
     
     if ([self.user isMe])
@@ -578,7 +587,7 @@ static NSString *const SectionPosts = @"Posts";
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    if (self.profileDetailLabel.frame.size.height >= self.detailHeightConstraint.constant)
+    if (self.detailTextView.frame.size.height >= self.detailHeightConstraint.constant)
     {
         self.moreButton.hidden = NO;
         [self updateMoreButton];
@@ -610,7 +619,7 @@ static NSString *const SectionPosts = @"Posts";
     }
     else
     {
-        [self.moreButton setTitle:@"More" forState:UIControlStateNormal];
+        [self.moreButton setTitle:@"More..." forState:UIControlStateNormal];
     }
 }
 

@@ -32,6 +32,11 @@ typedef NS_ENUM(NSInteger, CommPostMode) {
 - (void)likeIt;
 @end
 
+@interface CommentCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UITextView *textView;
+@property (weak, nonatomic) IBOutlet UILabel *dateLabel;
+@end
+
 @interface WriteCommentCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UITextView *textView;
 - (void)reset;

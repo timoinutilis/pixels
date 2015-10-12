@@ -554,10 +554,21 @@ typedef NS_ENUM(NSInteger, CellTag) {
     else if (indexPath.section == 1)
     {
         LCCComment *comment = self.comments[indexPath.row];
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:(comment.user ? @"CommentCell" : @"GuestCommentCell") forIndexPath:indexPath];
-        cell.textLabel.text = comment.text;
-        NSString *name = (comment.user ? comment.user.username : @"Guest");
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ - %@", name, [NSDateFormatter localizedStringFromDate:comment.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle]];
+        CommentCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommentCell" forIndexPath:indexPath];
+        cell.textView.text = comment.text;
+        
+        NSString *name;
+        if (comment.user)
+        {
+            name = comment.user.username;
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        }
+        else
+        {
+            name = @"Guest";
+            cell.accessoryType = UITableViewCellAccessoryNone;
+        }
+        cell.dateLabel.text = [NSString stringWithFormat:@"%@ - %@", name, [NSDateFormatter localizedStringFromDate:comment.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle]];
         return cell;
     }
     else if (indexPath.section == 2)
@@ -642,8 +653,8 @@ typedef NS_ENUM(NSInteger, CellTag) {
 
 @interface ProgramTitleCell()
 @property (weak, nonatomic) IBOutlet UIImageView *programImage;
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UILabel *programDetailLabel;
+@property (weak, nonatomic) IBOutlet UITextView *titleTextView;
+@property (weak, nonatomic) IBOutlet UITextView *detailTextView;
 @property (weak, nonatomic) IBOutlet UILabel *likeCountLabel;
 @property (weak, nonatomic) IBOutlet UILabel *downloadCountLabel;
 @end
@@ -662,6 +673,11 @@ typedef NS_ENUM(NSInteger, CellTag) {
         layer.borderWidth = 0.5;
         layer.borderColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.25].CGColor;
     }
+    
+    self.titleTextView.textContainer.lineFragmentPadding = 0;
+    self.titleTextView.textContainerInset = UIEdgeInsetsZero;
+    self.detailTextView.textContainer.lineFragmentPadding = 0;
+    self.detailTextView.textContainerInset = UIEdgeInsetsZero;
     
     if (self.getProgramButton)
     {
@@ -683,8 +699,8 @@ typedef NS_ENUM(NSInteger, CellTag) {
         {
             [self.programImage sd_setImageWithURL:[NSURL URLWithString:post.image.url]];
         }
-        self.titleLabel.text = post.title;
-        self.programDetailLabel.text = post.detail;
+        self.titleTextView.text = post.title;
+        self.detailTextView.text = [post.detail stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         
         self.dateLabel.text = [NSDateFormatter localizedStringFromDate:post.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
         
@@ -711,6 +727,17 @@ typedef NS_ENUM(NSInteger, CellTag) {
 {
     [self.likeButton setTitle:@"You like this" forState:UIControlStateNormal];
     self.likeButton.enabled = NO;
+}
+
+@end
+
+@implementation CommentCell
+
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    self.textView.textContainer.lineFragmentPadding = 0;
+    self.textView.textContainerInset = UIEdgeInsetsZero;
 }
 
 @end
