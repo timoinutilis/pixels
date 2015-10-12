@@ -7,19 +7,22 @@
 //
 
 #import "AboutViewController.h"
-#import "GORSeparatorView.h"
 #import "AppController.h"
 #import "AppStyle.h"
 #import "DayCodeManager.h"
 #import "UIViewController+LowResCoder.h"
+#import <MessageUI/MFMailComposeViewController.h>
 
-@interface AboutViewController ()
+@interface AboutViewController ()  <MFMailComposeViewControllerDelegate, UITableViewDataSource, UITableViewDelegate>
+
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *versionLabel;
 @property (weak, nonatomic) IBOutlet UILabel *copyrightLabel;
-@property (weak, nonatomic) IBOutlet GORSeparatorView *separatorView;
+
 @property NSArray *menuTitles;
 @property NSArray *menuIndices;
+
 @end
 
 @implementation AboutViewController
@@ -27,8 +30,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-        
-    self.separatorView.separatorColor = self.tableView.separatorColor;
+    
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    
     self.versionLabel.text = [NSString stringWithFormat:@"Version %@", self.appVersion];
     self.copyrightLabel.textColor = [AppStyle barColor];
     
@@ -58,9 +63,21 @@
     }
 }
 
-- (IBAction)onDoneTapped:(id)sender
+- (void)viewWillAppear:(BOOL)animated
 {
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    [super viewWillAppear:animated];
+    [self.tableView deselectRowAtIndexPath:self.tableView.indexPathForSelectedRow animated:YES];
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    CGFloat extraSpace = self.tableView.frame.size.height - self.tableView.contentSize.height;
+    if (extraSpace < 0.0)
+    {
+        extraSpace = 0.0;
+    }
+    self.tableView.contentInset = UIEdgeInsetsMake(round(extraSpace * 0.3), 0, 0, 0);
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -86,7 +103,7 @@
     else if (index.integerValue == 1)
     {
         // App Store
-        NSURL *url = [NSURL URLWithString:@"itms-apps://itunes.apple.com/us/app/lowres-coder/id962117496"];
+        NSURL *url = [NSURL URLWithString:@"https://itunes.apple.com/es/app/lowres-coder/id962117496?mt=8"];
         [[UIApplication sharedApplication] openURL:url];
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
     }

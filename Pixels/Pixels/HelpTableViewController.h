@@ -10,5 +10,7 @@
 
 @interface HelpTableViewController : UITableViewController
 
+- (void)updateBarButtonCollapsed:(BOOL)collapsed;
+
 @end
 

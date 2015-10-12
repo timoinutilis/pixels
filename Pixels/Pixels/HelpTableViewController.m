@@ -12,14 +12,20 @@
 #import "HelpSplitViewController.h"
 
 @interface HelpTableViewController ()
+
 @property HelpContent *helpContent;
+@property UIBarButtonItem *cancelItem;
+
 @end
+
 
 @implementation HelpTableViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    _cancelItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(onCancelTapped:)];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -28,6 +34,26 @@
     
     HelpSplitViewController *helpVC = (HelpSplitViewController *)self.splitViewController;
     self.helpContent = helpVC.helpContent;
+    
+    [self updateBarButtonCollapsed:self.splitViewController.collapsed];
+}
+
+- (void)updateBarButtonCollapsed:(BOOL)collapsed
+{
+    if (collapsed)
+    {
+        self.navigationItem.rightBarButtonItem = self.cancelItem;
+    }
+    else
+    {
+        self.navigationItem.rightBarButtonItem = nil;
+    }
+}
+
+- (void)onCancelTapped:(id)sender
+{
+    HelpSplitViewController *helpVC = (HelpSplitViewController *)self.splitViewController;
+    [self.splitViewController showDetailViewController:helpVC.detailNavigationController sender:self];
 }
 
 #pragma mark - Table view data source

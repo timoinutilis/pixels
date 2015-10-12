@@ -24,6 +24,8 @@
 #import "CommunityModel.h"
 #import "ShareViewController.h"
 #import "SearchToolbar.h"
+#import "TabBarController.h"
+#import "UITextView+Utils.h"
 
 int const EditorDemoMaxLines = 24;
 NSString *const CoachMarkIDStart = @"CoachMarkIDStart";
@@ -44,7 +46,7 @@ static int s_editorInstancesCount = 0;
 
 @property BOOL wasEditedSinceOpened;
 @property BOOL wasEditedSinceLastRun;
-@property CGFloat keyboardHeight;
+@property CGRect keyboardRect;
 
 @end
 
@@ -93,13 +95,13 @@ static int s_editorInstancesCount = 0;
     
     self.infoView.backgroundColor = [AppStyle warningColor];
     self.infoView.layer.shadowRadius = 1.0;
-    self.infoView.layer.shadowOpacity = 0.5;
+    self.infoView.layer.shadowOpacity = 1.0;
     self.infoView.layer.shadowOffset = CGSizeMake(0.0, 1.0);
     self.infoLabel.textColor = [AppStyle brightColor];
     self.infoViewConstraint.constant = -self.infoView.bounds.size.height;
     self.infoView.hidden = YES;
     
-    self.keyboardHeight = 0.0;
+    self.keyboardRect = CGRectZero;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -171,22 +173,27 @@ static int s_editorInstancesCount = 0;
 
 - (void)keyboardWillShow:(NSNotification *)notification
 {
-    self.keyboardHeight = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size.height;
+    self.keyboardRect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     [self updateEditorInsets];
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification
 {
-    self.keyboardHeight = 0.0;
+    self.keyboardRect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     [self updateEditorInsets];
 }
 
 - (void)updateEditorInsets
 {
     UIEdgeInsets insets = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-    if (self.keyboardHeight > 0.0)
+    if (self.keyboardRect.size.height > 0.0)
     {
-        insets.bottom = self.keyboardHeight;
+        CGRect rect = [self.navigationController.view convertRect:self.sourceCodeTextView.frame fromView:self.view];
+        CGFloat textBottomY = rect.origin.y + rect.size.height;
+        if (self.keyboardRect.origin.y < textBottomY)
+        {
+            insets.bottom = textBottomY - self.keyboardRect.origin.y;
+        }
     }
     self.sourceCodeTextView.contentInset = insets;
     self.sourceCodeTextView.scrollIndicatorInsets = insets;
@@ -468,7 +475,7 @@ static int s_editorInstancesCount = 0;
     {
         self.sourceCodeTextView.selectedRange = resultRange;
         [self.sourceCodeTextView becomeFirstResponder];
-        [self.sourceCodeTextView scrollRangeToVisible:resultRange];
+        [self.sourceCodeTextView scrollSelectedRangeToVisible];
         return YES;
     }
     return NO;
@@ -481,6 +488,13 @@ static int s_editorInstancesCount = 0;
     NSRange selectedRange = self.sourceCodeTextView.selectedRange;
     if ([[sourceText substringWithRange:selectedRange] isEqualToString:findText])
     {
+        if (!self.sourceCodeTextView.isFirstResponder)
+        {
+            // activate editor
+            [self.sourceCodeTextView becomeFirstResponder];
+            [self.sourceCodeTextView scrollSelectedRangeToVisible];
+            return;
+        }
         // replace
         sourceText = [sourceText stringByReplacingCharactersInRange:selectedRange withString:replaceText];
         self.sourceCodeTextView.text = sourceText;
