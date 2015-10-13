@@ -128,6 +128,11 @@ static NSString *const SectionPosts = @"Posts";
     [self updateData];
 }
 
+- (IBAction)onRefreshPulled:(id)sender
+{
+    [self updateData];
+}
+
 - (void)onDoneTapped:(id)sender
 {
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
@@ -218,12 +223,13 @@ static NSString *const SectionPosts = @"Posts";
                     if (objects)
                     {
                         self.posts = [self filteredNewsWithPosts:objects];
-                        [self.tableView reloadData];
+                        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:self.sections.count - 1] withRowAnimation:UITableViewRowAnimationAutomatic];
                     }
                     else if (error)
                     {
                         [self showAlertWithTitle:@"Could not load news" message:error.userInfo[@"error"] block:nil];
                     }
+                    [self.refreshControl endRefreshing];
                     
                 }];
             }
@@ -253,12 +259,13 @@ static NSString *const SectionPosts = @"Posts";
                 if (objects)
                 {
                     self.posts = [NSMutableArray arrayWithArray:objects];
-                    [self.tableView reloadData];
+                    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:self.sections.count - 1] withRowAnimation:UITableViewRowAnimationAutomatic];
                 }
                 else if (error)
                 {
                     [self showAlertWithTitle:@"Could not load posts" message:error.userInfo[@"error"] block:nil];
                 }
+                [self.refreshControl endRefreshing];
                 
             }];
             break;

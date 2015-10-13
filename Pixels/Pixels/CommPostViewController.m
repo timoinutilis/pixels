@@ -22,7 +22,8 @@ typedef NS_ENUM(NSInteger, CellTag) {
     CellTagNoAction,
     CellTagSourceCode,
     CellTagPostAuthor,
-    CellTagDelete
+    CellTagDelete,
+    CellTagComment
 };
 
 @interface CommPostViewController ()
@@ -103,6 +104,18 @@ typedef NS_ENUM(NSInteger, CellTag) {
 {
     self.post = post;
     self.mode = mode;
+}
+
+- (IBAction)onRefreshPulled:(id)sender
+{
+    if ([self.post isDataAvailable])
+    {
+        [self loadSubData];
+    }
+    else
+    {
+        [self.refreshControl endRefreshing];
+    }
 }
 
 - (void)onDoneTapped:(id)sender
@@ -221,12 +234,13 @@ typedef NS_ENUM(NSInteger, CellTag) {
         if (objects)
         {
             self.comments = [NSMutableArray arrayWithArray:objects];
-            [self.tableView reloadData];
+            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
         }
         else if (error)
         {
             [self showAlertWithTitle:@"Could not load comments." message:error.userInfo[@"error"] block:nil];
         }
+        [self.refreshControl endRefreshing];
         
     }];
 }
@@ -423,7 +437,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
                 if (self.comments.count == 1)
                 {
                     // first comment (need to refresh headers)
-                    [self.tableView reloadData];
+                    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
                 }
                 else
                 {
@@ -562,11 +576,15 @@ typedef NS_ENUM(NSInteger, CellTag) {
         {
             name = comment.user.username;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+            cell.tag = CellTagComment;
         }
         else
         {
             name = @"Guest";
             cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.tag = CellTagNoAction;
         }
         cell.dateLabel.text = [NSString stringWithFormat:@"%@ - %@", name, [NSDateFormatter localizedStringFromDate:comment.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle]];
         return cell;
@@ -625,29 +643,16 @@ typedef NS_ENUM(NSInteger, CellTag) {
             [tableView deselectRowAtIndexPath:indexPath animated:YES];
             break;
         }
+        case CellTagComment: {
+            LCCComment *comment = self.comments[indexPath.row];
+            CommDetailViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"CommDetailView"];
+            [vc setUser:comment.user mode:CommListModeProfile];
+            [self.navigationController pushViewController:vc animated:YES];
+        }
         default:
             break;
     }
 }
-
-
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-    if ([segue.identifier isEqualToString:@"CommentAuthor"])
-    {
-        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        LCCComment *comment = self.comments[indexPath.row];
-        LCCUser *user = comment.user;
-        CommDetailViewController *vc = segue.destinationViewController;
-        [vc setUser:user mode:CommListModeProfile];
-    }
-}
-
 
 @end
 
