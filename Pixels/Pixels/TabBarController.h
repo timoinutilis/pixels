@@ -20,5 +20,6 @@ typedef NS_ENUM(NSInteger, TabIndex) {
 @property (nonatomic) NSInteger selectedIndex;
 
 - (void)showExplorerAnimated:(BOOL)animated;
+- (void)showHelpForChapter:(NSString *)chapter;
 
 @end

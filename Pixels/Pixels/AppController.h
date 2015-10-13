@@ -20,11 +20,13 @@ extern NSString *const PurchaseStateNotification;
 extern NSString *const NewsNotification;
 extern NSString *const ShowPostNotification;
 
-@class TabBarController;
+@class TabBarController, HelpContent;
 
 @interface AppController : NSObject <SKProductsRequestDelegate, SKPaymentTransactionObserver>
 
 @property (weak) TabBarController *tabBarController;
+
+@property (readonly) HelpContent *helpContent;
 
 @property (readonly) PurchaseState purchaseState;
 @property (readonly) BOOL isFullVersion;

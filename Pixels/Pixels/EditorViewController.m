@@ -26,6 +26,7 @@
 #import "SearchToolbar.h"
 #import "TabBarController.h"
 #import "UITextView+Utils.h"
+#import "HelpContent.h"
 
 int const EditorDemoMaxLines = 24;
 NSString *const CoachMarkIDStart = @"CoachMarkIDStart";
@@ -35,7 +36,7 @@ NSString *const CoachMarkIDHelp = @"CoachMarkIDHelp";
 static int s_editorInstancesCount = 0;
 
 
-@interface EditorViewController () <SearchToolbarDelegate>
+@interface EditorViewController () <SearchToolbarDelegate, EditorTextViewDelegate, UITextViewDelegate>
 
 @property (weak, nonatomic) IBOutlet EditorTextView *sourceCodeTextView;
 @property (weak, nonatomic) IBOutlet SearchToolbar *searchToolbar;
@@ -84,6 +85,7 @@ static int s_editorInstancesCount = 0;
     }
     self.sourceCodeTextView.layoutManager.allowsNonContiguousLayout = NO;
     self.sourceCodeTextView.delegate = self;
+    self.sourceCodeTextView.editorDelegate = self;
     
     self.sourceCodeTextView.keyboardAppearance = UIKeyboardAppearanceDark;
     self.sourceCodeTextView.keyboardToolbar.translucent = YES;
@@ -503,6 +505,50 @@ static int s_editorInstancesCount = 0;
     
     // find next
     [self searchToolbar:searchToolbar didSearch:findText backwards:NO];
+}
+
+#pragma mark - EditorTextView
+
+- (void)editorTextView:(EditorTextView *)editorTextView didSelectHelpWithRange:(NSRange)range
+{
+    if ([editorTextView.text characterAtIndex:range.location + range.length] == '$')
+    {
+        // include "$"
+        range.length++;
+    }
+    NSString *text = [editorTextView.text substringWithRange:range];
+    HelpContent *helpContent = [AppController sharedController].helpContent;
+    NSArray *results = [helpContent chaptersForSearchText:text];
+    if (results.count == 1)
+    {
+        HelpChapter *chapter = results.firstObject;
+        [[AppController sharedController].tabBarController showHelpForChapter:chapter.htmlChapter];
+    }
+    else if (results.count > 1)
+    {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+        for (HelpChapter *chapter in results)
+        {
+            [alert addAction:[UIAlertAction actionWithTitle:chapter.title style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [[AppController sharedController].tabBarController showHelpForChapter:chapter.htmlChapter];
+            }]];
+        }
+        [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+        
+        UIPopoverPresentationController *ppc = alert.popoverPresentationController;
+        if (ppc)
+        {
+            ppc.sourceView = self.sourceCodeTextView;
+            ppc.sourceRect = [self.sourceCodeTextView.layoutManager boundingRectForGlyphRange:range inTextContainer:self.sourceCodeTextView.textContainer];
+            ppc.permittedArrowDirections = UIPopoverArrowDirectionUp | UIPopoverArrowDirectionDown;
+        }
+        [self presentViewController:alert animated:YES completion:nil];
+    }
+    else
+    {
+        NSString *title = [NSString stringWithFormat:@"%@ is not a keyword.", text];
+        [self showAlertWithTitle:title message:nil block:nil];
+    }
 }
 
 #pragma mark - Info bar

@@ -10,6 +10,7 @@
 #import "HelpTextViewController.h"
 #import "HelpContent.h"
 #import "HelpSplitViewController.h"
+#import "AppController.h"
 
 @interface HelpTableViewController ()
 
@@ -32,8 +33,7 @@
 {
     [super viewWillAppear:animated];
     
-    HelpSplitViewController *helpVC = (HelpSplitViewController *)self.splitViewController;
-    self.helpContent = helpVC.helpContent;
+    self.helpContent = [AppController sharedController].helpContent;
     
     [self updateBarButtonCollapsed:self.splitViewController.collapsed];
 }
@@ -98,10 +98,7 @@
 {
     HelpChapter *chapter = self.helpContent.chapters[indexPath.row];
     HelpSplitViewController *helpVC = (HelpSplitViewController *)self.splitViewController;
-    [self.splitViewController showDetailViewController:helpVC.detailNavigationController sender:self];
-    
-    HelpTextViewController *textViewController = (HelpTextViewController *)helpVC.detailNavigationController.topViewController;
-    textViewController.chapter = chapter.htmlChapter;
+    [helpVC showChapter:chapter.htmlChapter];
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

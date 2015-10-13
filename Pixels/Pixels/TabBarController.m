@@ -7,7 +7,7 @@
 //
 
 #import "TabBarController.h"
-#import "HelpTextViewController.h"
+#import "HelpSplitViewController.h"
 #import "ExplorerViewController.h"
 #import "CommSplitViewController.h"
 #import "AppController.h"
@@ -156,6 +156,13 @@
     {
         [nav popViewControllerAnimated:animated];
     }
+}
+
+- (void)showHelpForChapter:(NSString *)chapter
+{
+    self.selectedIndex = TabIndexHelp;
+    HelpSplitViewController *helpVC = (HelpSplitViewController *)_selectedViewController;
+    [helpVC showChapter:chapter];
 }
 
 @end

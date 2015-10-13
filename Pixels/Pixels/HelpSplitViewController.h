@@ -12,7 +12,8 @@
 
 @interface HelpSplitViewController : UISplitViewController
 
-@property (readonly) HelpContent *helpContent;
 @property (readonly) UINavigationController *detailNavigationController;
+
+- (void)showChapter:(NSString *)chapter;
 
 @end

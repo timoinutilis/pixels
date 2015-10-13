@@ -12,6 +12,7 @@
 @property NSArray *headerTags;
 @property NSString *currentTag;
 @property NSString *currentTagId;
+@property NSString *currentTagName;
 @end
 
 @implementation HelpContent
@@ -32,12 +33,29 @@
     return self;
 }
 
+- (NSArray *)chaptersForSearchText:(NSString *)text
+{
+    text = [[text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] uppercaseString];
+    NSMutableArray *results = [NSMutableArray array];
+    for (HelpChapter *chapter in self.chapters)
+    {
+        if (chapter.keywords && [chapter.keywords indexOfObject:text] != NSNotFound)
+        {
+            [results addObject:chapter];
+        }
+    }
+    return results;
+}
+
+#pragma mark - XML Parser
+
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict
 {
     if ([self.headerTags indexOfObject:elementName.lowercaseString] != NSNotFound)
     {
         self.currentTag = elementName;
         self.currentTagId = attributeDict[@"id"];
+        self.currentTagName = attributeDict[@"name"];
     }
 }
 
@@ -48,6 +66,7 @@
         HelpChapter *chapter = [[HelpChapter alloc] init];
         chapter.title = string;
         chapter.htmlChapter = self.currentTagId;
+        chapter.keywords = [self.currentTagName componentsSeparatedByString:@","];
         chapter.level = (int)[self.headerTags indexOfObject:self.currentTag.lowercaseString];
         [self.chapters addObject:chapter];
     }
@@ -59,6 +78,7 @@
     {
         self.currentTag = nil;
         self.currentTagId = nil;
+        self.currentTagName = nil;
     }
 }
 

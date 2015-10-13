@@ -8,12 +8,21 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol EditorTextViewDelegate;
+
 @interface EditorTextView : UITextView
 
 @property BOOL pastable;
 @property (readonly) UIToolbar *keyboardToolbar;
+@property (weak) id<EditorTextViewDelegate> editorDelegate;
 
 + (void)setTransferText:(NSString *)text;
 + (NSString *)transferText;
+
+@end
+
+@protocol EditorTextViewDelegate <NSObject>
+
+- (void)editorTextView:(EditorTextView *)editorTextView didSelectHelpWithRange:(NSRange)range;
 
 @end

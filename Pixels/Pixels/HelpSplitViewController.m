@@ -7,7 +7,7 @@
 //
 
 #import "HelpSplitViewController.h"
-#import "HelpContent.h"
+#import "HelpTextViewController.h"
 
 @interface HelpSplitViewController () <UISplitViewControllerDelegate>
 
@@ -23,10 +23,19 @@
     self.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
     self.preferredPrimaryColumnWidthFraction = 0.3;
 
-    NSURL *url = [[NSBundle mainBundle] URLForResource:@"manual" withExtension:@"html"];
-    _helpContent = [[HelpContent alloc] initWithURL:url];
-    
     _detailNavigationController = self.viewControllers.lastObject;
+}
+
+- (void)showChapter:(NSString *)chapter
+{
+    UINavigationController *nc = self.viewControllers.lastObject;
+    if (self.viewControllers.count == 1 && nc.viewControllers.count == 1)
+    {
+        [self showDetailViewController:self.detailNavigationController sender:self];
+    }
+    
+    HelpTextViewController *textViewController = (HelpTextViewController *)self.detailNavigationController.topViewController;
+    textViewController.chapter = chapter;
 }
 
 @end

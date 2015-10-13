@@ -11,6 +11,7 @@
 #import "UIViewController+LowResCoder.h"
 #import "NotificationView.h"
 #import "NSMutableDictionary+Utils.h"
+#import "HelpContent.h"
 
 NSString *const FullVersionProductID = @"fullversion";
 
@@ -41,6 +42,9 @@ NSString *const InfoIDNews = @"InfoIDNews";
     if (self = [super init])
     {
         _purchaseState = PurchaseStateUninitialized;
+        
+        NSURL *url = [[NSBundle mainBundle] URLForResource:@"manual" withExtension:@"html"];
+        _helpContent = [[HelpContent alloc] initWithURL:url];
     }
     return self;
 }

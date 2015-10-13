@@ -10,7 +10,7 @@
 
 @class Project;
 
-@interface EditorViewController : UIViewController <UITextViewDelegate>
+@interface EditorViewController : UIViewController
 
 @property Project *project;
 

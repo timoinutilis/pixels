@@ -36,6 +36,7 @@ NSString *EditorTextView_transferText;
 
     UIMenuController *menu = [UIMenuController sharedMenuController];
     menu.menuItems = @[
+                       [[UIMenuItem alloc] initWithTitle:@"Help" action:@selector(help:)],
                        [[UIMenuItem alloc] initWithTitle:@"Copy to Transfer" action:@selector(transferCopy:)],
                        [[UIMenuItem alloc] initWithTitle:@"Paste from Transfer" action:@selector(transferPaste:)]
                        ];
@@ -86,6 +87,10 @@ NSString *EditorTextView_transferText;
     {
         return self.pastable && [EditorTextView transferText].length > 0;
     }
+    else if (action == @selector(help:))
+    {
+        return self.selectedRange.length >= 2;
+    }
     else if (action == @selector(paste:))
     {
         return self.pastable && [super canPerformAction:action withSender:sender];
@@ -109,6 +114,11 @@ NSString *EditorTextView_transferText;
 - (void)transferPaste:(id)sender
 {
     [self insertText:[EditorTextView transferText]];
+}
+
+- (void)help:(id)sender
+{
+    [self.editorDelegate editorTextView:self didSelectHelpWithRange:self.selectedRange];
 }
 
 @end

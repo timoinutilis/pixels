@@ -16,11 +16,13 @@
 
 
 - (instancetype)initWithURL:(NSURL *)url;
+- (NSArray *)chaptersForSearchText:(NSString *)text;
 
 @end
 
 @interface HelpChapter : NSObject
 @property NSString *title;
 @property NSString *htmlChapter;
+@property NSArray *keywords;
 @property int level;
 @end
