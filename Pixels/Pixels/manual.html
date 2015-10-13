@@ -729,7 +729,7 @@ LOOP
 <p>If the waveform is "pulse wave" (2), you can set a pulse width between 0.0 and 1.0 with the <i>pulse</i> parameter. A value of 0.5 results in a square wave. For other waveforms this parameter is ignored.</p>
 <p>The <i>time</i> parameter defines the maximum duration of the sound in seconds. If a SOUND command sets a longer duration, the voice will play the maximum duration and then it will be silent until the next sound in the queue. Omit the parameter to play sounds always in full duration.</p>
 
-<h3 id="_DEFSOUNDLINE" name="DEF SOUND LINE,DEF SOUND,DEF,SOUND,LINE">DEF SOUND LINE</h3>
+<h3 id="_DEFSOUNDLINE" name="DEF SOUND LINE,DEF SOUND,SOUND LINE,DEF,SOUND,LINE">DEF SOUND LINE</h3>
 <pre>DEF SOUND LINE instr,time,pitch,pulse</pre>
 <p>Sets additional values for the instrument number <i>instr</i>. It makes sounds change over the given <i>time</i> (in seconds). Call this command (if needed) always after the DEF SOUND of the same instrument, otherwise the values will be reset.</p>
 <p>The sound will start with <i>pitch</i> added to the note's original value (or subtracted if <i>pitch</i> is negative). The <i>pulse</i> value is added to pulse width of the original sound (only if the waveform is "pulse").</p>

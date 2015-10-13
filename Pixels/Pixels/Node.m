@@ -305,7 +305,7 @@ NSString *const TRANSFER = @"TRANSFER";
     }
     if (runner.delegate)
     {
-        NSString *text = [NSString stringWithFormat:@"%@", value];
+        NSString *text = [value description];
         int fontHeight = 6;
         int screenSize = runner.renderer.size;
         int maxLines = screenSize / fontHeight - 1;
@@ -1947,7 +1947,7 @@ NSString *const TRANSFER = @"TRANSFER";
         return nil;
     }
     
-    NSString *string = ([value isKindOfClass:[NSString class]]) ? (NSString *)value : [NSString stringWithFormat:@"%@", value];
+    NSString *string = [value description];
     int width = [runner.renderer widthForText:string];
     return [runner.numberPool numberWithValue:width];
 }
@@ -2181,7 +2181,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSString *string = [self.stringExpression evaluateWithRunner:runner];
+    NSString *string = [[self.stringExpression evaluateWithRunner:runner] description];
     Number *number = [self.numberExpression evaluateWithRunner:runner];
     if (runner.error)
     {
@@ -2219,7 +2219,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSString *string = [self.stringExpression evaluateWithRunner:runner];
+    NSString *string = [[self.stringExpression evaluateWithRunner:runner] description];
     Number *number = [self.numberExpression evaluateWithRunner:runner];
     if (runner.error)
     {
@@ -2259,7 +2259,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSString *string = [self.stringExpression evaluateWithRunner:runner];
+    NSString *string = [[self.stringExpression evaluateWithRunner:runner] description];
     Number *position = [self.positionExpression evaluateWithRunner:runner];
     Number *number = [self.numberExpression evaluateWithRunner:runner];
     if (runner.error)
@@ -2309,8 +2309,8 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSString *string = [self.stringExpression evaluateWithRunner:runner];
-    NSString *search = [self.searchExpression evaluateWithRunner:runner];
+    NSString *string = [[self.stringExpression evaluateWithRunner:runner] description];
+    NSString *search = [[self.searchExpression evaluateWithRunner:runner] description];
     Number *position = [self.positionExpression evaluateWithRunner:runner];
     if (runner.error)
     {
@@ -2378,7 +2378,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSString *string = [self.stringExpression evaluateWithRunner:runner];
+    NSString *string = [[self.stringExpression evaluateWithRunner:runner] description];
     if (runner.error)
     {
         return nil;
@@ -2406,7 +2406,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSString *string = [self.stringExpression evaluateWithRunner:runner];
+    NSString *string = [[self.stringExpression evaluateWithRunner:runner] description];
     if (runner.error)
     {
         return nil;
@@ -2428,7 +2428,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    NSString *string = [self.stringExpression evaluateWithRunner:runner];
+    NSString *string = [[self.stringExpression evaluateWithRunner:runner] description];
     if (runner.error)
     {
         return nil;
