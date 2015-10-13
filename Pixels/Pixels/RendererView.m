@@ -134,6 +134,7 @@
     {
         // find best snapshot
         NSData *best;
+        /*
         int bestQuality = -1;
         NSUInteger first = self.snapshots.count * 0.3;
         NSUInteger last = MAX(1.0, ceil(self.snapshots.count * 0.7));
@@ -146,7 +147,10 @@
                 best = snapshot;
                 bestQuality = quality;
             }
-        }
+        }*/
+        
+        // just use the one in the middle
+        best = self.snapshots[self.snapshots.count / 2];
         
         // create image
         CGSize size = CGSizeMake(self.renderer.size * 2, self.renderer.size * 2);

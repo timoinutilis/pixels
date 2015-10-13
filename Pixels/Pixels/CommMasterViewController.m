@@ -22,7 +22,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
     CellTagFollowing
 };
 
-@interface CommMasterViewController ()
+@interface CommMasterViewController () <UITraitEnvironment>
 
 @property NSIndexPath *newsIndexPath;
 @property NSIndexPath *currentSelection;
@@ -34,11 +34,12 @@ typedef NS_ENUM(NSInteger, CellTag) {
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
-    {
-        self.clearsSelectionOnViewWillAppear = NO;
-    }
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    self.clearsSelectionOnViewWillAppear = self.splitViewController.collapsed;
 }
 
 - (void)viewDidLoad
