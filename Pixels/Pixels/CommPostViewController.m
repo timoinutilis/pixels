@@ -73,7 +73,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
     
     self.writeCommentCell = [self.tableView dequeueReusableCellWithIdentifier:@"WriteCommentCell"];
     
-    [self loadAll];
+    [self loadAllForceReload:NO];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserChanged:) name:CurrentUserChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onPostDeleted:) name:PostDeleteNotification object:nil];
@@ -108,14 +108,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
 
 - (IBAction)onRefreshPulled:(id)sender
 {
-    if ([self.post isDataAvailable])
-    {
-        [self loadSubDataForceReload:YES];
-    }
-    else
-    {
-        [self.refreshControl endRefreshing];
-    }
+    [self loadAllForceReload:YES];
 }
 
 - (void)onDoneTapped:(id)sender
@@ -157,22 +150,33 @@ typedef NS_ENUM(NSInteger, CellTag) {
     self.titleCell.post = self.post;
 }
 
-- (void)loadAll
+- (void)loadAllForceReload:(BOOL)forceReload
 {
-    if ([self.post isDataAvailable])
+    if ([self.post isDataAvailable] && !forceReload)
     {
         [self loadSubDataForceReload:NO];
     }
     else
     {
         [self.activityIndicator increaseActivity];
-        self.title = @"Loading...";
-        [self.post fetchInBackgroundWithBlock:^(PFObject *object,  NSError *error) {
+        if (!forceReload)
+        {
+            self.title = @"Loading...";
+        }
+        
+        PFQuery *query = [PFQuery queryWithClassName:[LCCPost parseClassName]];
+        [query includeKey:@"user"];
+        [query includeKey:@"stats"];
+        query.cachePolicy = forceReload ? kPFCachePolicyNetworkOnly : kPFCachePolicyCacheElseNetwork;
+        query.maxCacheAge = MAX_CACHE_AGE;
+        
+        [query getObjectInBackgroundWithId:self.post.objectId block:^(PFObject * _Nullable object, NSError * _Nullable error) {
             
             [self.activityIndicator decreaseActivity];
             if (object)
             {
-                [self loadSubDataForceReload:NO];
+                self.post = (LCCPost *)object;
+                [self loadSubDataForceReload:forceReload];
             }
             else if (error)
             {
@@ -228,8 +232,6 @@ typedef NS_ENUM(NSInteger, CellTag) {
     query.cachePolicy = forceReload ? kPFCachePolicyNetworkOnly : kPFCachePolicyCacheElseNetwork;
     query.maxCacheAge = MAX_CACHE_AGE;
     
-    BOOL wasCached = query.hasCachedResult && !forceReload;
-    
     [self.activityIndicator increaseActivity];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         
@@ -237,13 +239,13 @@ typedef NS_ENUM(NSInteger, CellTag) {
         if (objects)
         {
             self.comments = [NSMutableArray arrayWithArray:objects];
-            if (wasCached)
+            if (forceReload)
             {
-                [self.tableView reloadData];
+                [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
             }
             else
             {
-                [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self.tableView reloadData];
             }
         }
         else if (error)
@@ -313,7 +315,12 @@ typedef NS_ENUM(NSInteger, CellTag) {
 
 - (void)loadLike
 {
-    if (![self.post.user isMe])
+    if (![PFUser currentUser])
+    {
+        // "like" tap will ask for log-in.
+        self.titleCell.likeButton.enabled = YES;
+    }
+    else if (![self.post.user isMe])
     {
         PFQuery *query = [PFQuery queryWithClassName:[LCCCount parseClassName]];
         [query whereKey:@"post" equalTo:self.post];
@@ -712,10 +719,12 @@ typedef NS_ENUM(NSInteger, CellTag) {
         if (post.stats.isDataAvailable)
         {
             self.likeCount = post.stats.numLikes;
-            if (post.type == LCCPostTypeProgram)
-            {
-                self.downloadCount = post.stats.numDownloads;
-            }
+            self.downloadCount = post.stats.numDownloads;
+        }
+        else
+        {
+            self.likeCount = 0;
+            self.downloadCount = 0;
         }
     }
 }

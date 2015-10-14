@@ -74,8 +74,6 @@
             query.cachePolicy = forceReload ? kPFCachePolicyNetworkOnly : kPFCachePolicyCacheElseNetwork;
             query.maxCacheAge = MAX_CACHE_AGE;
             
-            BOOL wasCached = query.hasCachedResult && !forceReload;
-            
             [self.activityIndicator increaseActivity];
             [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                 
@@ -87,13 +85,13 @@
                     {
                         [self.users addObject:follow.user];
                     }
-                    if (wasCached)
+                    if (forceReload)
                     {
-                        [self.tableView reloadData];
+                        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
                     }
                     else
                     {
-                        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+                        [self.tableView reloadData];
                     }
                 }
                 else if (error)

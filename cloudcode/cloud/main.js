@@ -103,86 +103,84 @@ Parse.Cloud.afterSave("Comment", function(request) {
   var user = request.object.get('user');
   var text = request.object.get('text');
 
-  if (!user) {
-    // commented as guest
-    return;
-  }
-
   if (text.length > 100) {
     text = text.substr(0, 100) + "...";
   }
 
   post.fetch().then(function() {
 
-    return user.fetch();
-
-  }).then(function() {
-    
-    var postOwner = post.get("user");
-    var postTitle = post.get("title");
-
-    if (postTitle.length > 30) {
-      postTitle = postTitle.substr(0, 30) + "...";
-    }
-
-    var alertText = user.get("username") + " commented on \"" + postTitle + "\": \"" + text + "\"";
-
-    if (user.id == postOwner.id) {
-      // commented on own post, notify all commenters of post
-
-      var commentsQuery = new Parse.Query(Comment);
-      commentsQuery.equalTo("post", post);
-
-      return commentsQuery.find().then(function(comments) {
-        var commentersObj = {};
-        commentersObj[postOwner.id] = true;
-        var commenters = [];
-        for (var i = 0; i < comments.length; i++) {
-          var commenter = comments[i].get("user");
-          if (!commentersObj[commenter.id]) {
-            commentersObj[commenter.id] = true;
-            commenters.push(commenter);
-          }
-        }
-
-        var pushQuery = new Parse.Query(Parse.Installation);
-        pushQuery.containedIn('user', commenters);
-
-        return Parse.Push.send({
-          where: pushQuery,
-          data: {
-            alert: alertText,
-            badge: "Increment",
-            lrcPostId: post.id
-          }
-        });
-      });
-
-    } else {
-      // commented on other post, notify post owner
-
-      var pushQuery = new Parse.Query(Parse.Installation);
-      pushQuery.equalTo('user', postOwner);
-
-      return Parse.Push.send({
-        where: pushQuery,
-        data: {
-          alert: alertText,
-          badge: "Increment",
-          lrcPostId: post.id
-        }
-      });
-    }
-
-
-  }).then(function() {
-
     return increasePostStats(post, "numComments");
+
+  }).then(function() {
+
+    if (user) {
+
+      return user.fetch().then(function() {
+        
+        var postOwner = post.get("user");
+        var postTitle = post.get("title");
+
+        if (postTitle.length > 30) {
+          postTitle = postTitle.substr(0, 30) + "...";
+        }
+
+        var alertText = user.get("username") + " commented on \"" + postTitle + "\": \"" + text + "\"";
+
+        if (user.id == postOwner.id) {
+          // commented on own post, notify all commenters of post
+
+          var commentsQuery = new Parse.Query(Comment);
+          commentsQuery.equalTo("post", post);
+          commentsQuery.exists("user");
+
+          return commentsQuery.find().then(function(comments) {
+            var commentersObj = {};
+            commentersObj[postOwner.id] = true;
+            var commenters = [];
+            for (var i = 0; i < comments.length; i++) {
+              var commenter = comments[i].get("user");
+              if (!commentersObj[commenter.id]) {
+                commentersObj[commenter.id] = true;
+                commenters.push(commenter);
+              }
+            }
+
+            var pushQuery = new Parse.Query(Parse.Installation);
+            pushQuery.containedIn('user', commenters);
+
+            return Parse.Push.send({
+              where: pushQuery,
+              data: {
+                alert: alertText,
+                badge: "Increment",
+                lrcPostId: post.id
+              }
+            });
+          });
+
+        } else {
+          // commented on other post, notify post owner
+
+          var pushQuery = new Parse.Query(Parse.Installation);
+          pushQuery.equalTo('user', postOwner);
+
+          return Parse.Push.send({
+            where: pushQuery,
+            data: {
+              alert: alertText,
+              badge: "Increment",
+              lrcPostId: post.id
+            }
+          });
+        }
+      });
+    
+    }
 
   }, function(error) {
 
     // there was some error.
-    //TODO log "afterSave(Comment): " + error.message
+    console.error("afterSave(Comment): " + error.message);
 
   });
 

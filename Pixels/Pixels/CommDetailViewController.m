@@ -217,8 +217,6 @@ static NSString *const SectionPosts = @"Posts";
                 query.cachePolicy = forceReload ? kPFCachePolicyNetworkOnly : kPFCachePolicyCacheElseNetwork;
                 query.maxCacheAge = MAX_CACHE_AGE;
                 
-                BOOL wasCached = query.hasCachedResult && !forceReload;
-                
                 [self.activityIndicator increaseActivity];
                 [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                     
@@ -226,13 +224,13 @@ static NSString *const SectionPosts = @"Posts";
                     if (objects)
                     {
                         self.posts = [self filteredNewsWithPosts:objects];
-                        if (wasCached)
+                        if (forceReload)
                         {
-                            [self.tableView reloadData];
+                            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:self.sections.count - 1] withRowAnimation:UITableViewRowAnimationAutomatic];
                         }
                         else
                         {
-                            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:self.sections.count - 1] withRowAnimation:UITableViewRowAnimationAutomatic];
+                            [self.tableView reloadData];
                         }
                     }
                     else if (error)
@@ -263,8 +261,6 @@ static NSString *const SectionPosts = @"Posts";
             query.cachePolicy = forceReload ? kPFCachePolicyNetworkOnly : kPFCachePolicyCacheElseNetwork;;
             query.maxCacheAge = MAX_CACHE_AGE;
             
-            BOOL wasCached = query.hasCachedResult && !forceReload;
-            
             [self.activityIndicator increaseActivity];
             [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                 
@@ -272,13 +268,13 @@ static NSString *const SectionPosts = @"Posts";
                 if (objects)
                 {
                     self.posts = [NSMutableArray arrayWithArray:objects];
-                    if (wasCached)
+                    if (forceReload)
                     {
-                        [self.tableView reloadData];
+                        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:self.sections.count - 1] withRowAnimation:UITableViewRowAnimationAutomatic];
                     }
                     else
                     {
-                        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:self.sections.count - 1] withRowAnimation:UITableViewRowAnimationAutomatic];
+                        [self.tableView reloadData];
                     }
                 }
                 else if (error)
