@@ -193,7 +193,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
     {
         [self loadProgram];
     }
-    [self loadCounters];
+    [self loadLike];
 }
 
 - (void)loadUser
@@ -311,43 +311,31 @@ typedef NS_ENUM(NSInteger, CellTag) {
     }
 }
 
-- (void)loadCounters
+- (void)loadLike
 {
-    // Likes
-    [self.activityIndicator increaseActivity];
-    [[CommunityModel sharedInstance] fetchCountForPost:self.post type:LCCCountTypeLike block:^(NSArray *users) {
-        
-        [self.activityIndicator decreaseActivity];
-        if (users)
-        {
-            self.titleCell.likeCount = users.count;
-            if (![self.post.user isMe])
-            {
-                BOOL liked = [[CommunityModel sharedInstance] isCurrentUserInArray:users];
-                if (liked)
-                {
-                    [self.titleCell likeIt];
-                }
-                else
-                {
-                    self.titleCell.likeButton.enabled = YES;
-                }
-            }
-        }
-        
-    }];
-    
-    if (self.post.type == LCCPostTypeProgram)
+    if (![self.post.user isMe])
     {
-        // Downloads
+        PFQuery *query = [PFQuery queryWithClassName:[LCCCount parseClassName]];
+        [query whereKey:@"post" equalTo:self.post];
+        [query whereKey:@"type" equalTo:@(LCCCountTypeLike)];
+        [query whereKey:@"user" equalTo:[PFUser currentUser]];
+        
         [self.activityIndicator increaseActivity];
-        [[CommunityModel sharedInstance] fetchCountForPost:self.post type:LCCCountTypeDownload block:^(NSArray *users) {
+        [query countObjectsInBackgroundWithBlock:^(int number, NSError *PF_NULLABLE_S error) {
             
-            [self.activityIndicator decreaseActivity];
-            if (users)
+            if (error)
             {
-                self.titleCell.downloadCount = users.count;
+                NSLog(@"Error: %@", error.description);
             }
+            else if (number > 0)
+            {
+                [self.titleCell likeIt];
+            }
+            else
+            {
+                self.titleCell.likeButton.enabled = YES;
+            }
+            [self.activityIndicator decreaseActivity];
             
         }];
     }
@@ -720,6 +708,15 @@ typedef NS_ENUM(NSInteger, CellTag) {
         self.dateLabel.text = [NSDateFormatter localizedStringFromDate:post.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
         
         self.shareButton.enabled = ![post.user isMe];
+        
+        if (post.stats.isDataAvailable)
+        {
+            self.likeCount = post.stats.numLikes;
+            if (post.type == LCCPostTypeProgram)
+            {
+                self.downloadCount = post.stats.numDownloads;
+            }
+        }
     }
 }
 

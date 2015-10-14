@@ -209,46 +209,4 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
     }
 }
 
-- (void)fetchCountForPost:(LCCPost *)post type:(LCCCountType)type block:(void (^)(NSArray *users))block
-{
-    PFQuery *query = [PFQuery queryWithClassName:[LCCCount parseClassName]];
-    [query whereKey:@"post" equalTo:post];
-    [query whereKey:@"type" equalTo:@(type)];
-
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        
-        if (objects)
-        {
-            NSMutableArray *users = [NSMutableArray arrayWithCapacity:objects.count];
-            for (LCCCount *count in objects)
-            {
-                [users addObject:(count.user ? count.user : [NSNull null])];
-            }
-            block(users);
-        }
-        else if (error)
-        {
-            NSLog(@"Error: %@", error.description);
-            block(nil);
-        }
-        
-    }];
-}
-
-- (BOOL)isCurrentUserInArray:(NSArray *)array
-{
-    if ([PFUser currentUser])
-    {
-        NSString *currentUserId = [PFUser currentUser].objectId;
-        for (LCCUser *user in array)
-        {
-            if ([user.objectId isEqualToString:currentUserId])
-            {
-                return YES;
-            }
-        }
-    }
-    return NO;
-}
-
 @end

@@ -536,6 +536,7 @@ static NSString *const SectionPosts = @"Posts";
             LCCPost *post = self.posts[indexPath.row];
             if (post.type == LCCPostTypeShare)
             {
+                post.sharedPost.stats = post.stats;
                 [vc setPost:post.sharedPost mode:CommPostModePost];
             }
             else
