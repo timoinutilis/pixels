@@ -14,6 +14,8 @@
 #import "AppController.h"
 #import "TabBarController.h"
 
+const NSTimeInterval MAX_CACHE_AGE = 1 * 60 * 60;
+
 @implementation UIViewController (CommUtils)
 
 - (void)onGetProgramTappedWithPost:(LCCPost *)post

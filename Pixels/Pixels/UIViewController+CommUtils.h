@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+extern const NSTimeInterval MAX_CACHE_AGE;
+
 @class LCCPost;
 
 @interface UIViewController (CommUtils)

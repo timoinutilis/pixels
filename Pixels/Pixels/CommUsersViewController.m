@@ -47,7 +47,12 @@
     self.user = user;
     self.mode = mode;
     
-    [self updateData];
+    [self updateDataForceReload:NO];
+}
+
+- (IBAction)onRefreshPulled:(id)sender
+{
+    [self updateDataForceReload:YES];
 }
 
 - (void)onDoneTapped:(id)sender
@@ -55,7 +60,7 @@
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)updateData
+- (void)updateDataForceReload:(BOOL)forceReload
 {
     switch (self.mode)
     {
@@ -66,7 +71,10 @@
             [query whereKey:@"followsUser" equalTo:self.user];
             [query includeKey:@"user"];
             [query orderByDescending:@"createdAt"];
-            query.cachePolicy = kPFCachePolicyNetworkElseCache;
+            query.cachePolicy = forceReload ? kPFCachePolicyNetworkOnly : kPFCachePolicyCacheElseNetwork;
+            query.maxCacheAge = MAX_CACHE_AGE;
+            
+            BOOL wasCached = query.hasCachedResult && !forceReload;
             
             [self.activityIndicator increaseActivity];
             [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
@@ -79,12 +87,20 @@
                     {
                         [self.users addObject:follow.user];
                     }
-                    [self.tableView reloadData];
+                    if (wasCached)
+                    {
+                        [self.tableView reloadData];
+                    }
+                    else
+                    {
+                        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+                    }
                 }
                 else if (error)
                 {
                     [self showAlertWithTitle:@"Could not load users" message:error.userInfo[@"error"] block:nil];
                 }
+                [self.refreshControl endRefreshing];
                 
             }];
             break;
@@ -96,7 +112,10 @@
             [query whereKey:@"user" equalTo:self.user];
             [query includeKey:@"followsUser"];
             [query orderByDescending:@"createdAt"];
-            query.cachePolicy = kPFCachePolicyNetworkElseCache;
+            query.cachePolicy = forceReload ? kPFCachePolicyNetworkOnly : kPFCachePolicyCacheElseNetwork;
+            query.maxCacheAge = MAX_CACHE_AGE;
+            
+            BOOL wasCached = query.hasCachedResult && !forceReload;
             
             [self.activityIndicator increaseActivity];
             [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
@@ -109,12 +128,20 @@
                     {
                         [self.users addObject:follow.followsUser];
                     }
-                    [self.tableView reloadData];
+                    if (wasCached)
+                    {
+                        [self.tableView reloadData];
+                    }
+                    else
+                    {
+                        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+                    }
                 }
                 else if (error)
                 {
                     [self showAlertWithTitle:@"Could not load users" message:error.userInfo[@"error"] block:nil];
                 }
+                [self.refreshControl endRefreshing];
                 
             }];
             break;

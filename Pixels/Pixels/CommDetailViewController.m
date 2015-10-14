@@ -125,12 +125,12 @@ static NSString *const SectionPosts = @"Posts";
     }
     self.mode = mode;
     
-    [self updateData];
+    [self updateDataForceReload:NO];
 }
 
 - (IBAction)onRefreshPulled:(id)sender
 {
-    [self updateData];
+    [self updateDataForceReload:YES];
 }
 
 - (void)onDoneTapped:(id)sender
@@ -142,7 +142,7 @@ static NSString *const SectionPosts = @"Posts";
 {
     if (self.mode == CommListModeNews)
     {
-        [self updateData];
+        [self updateDataForceReload:NO];
     }
     else if (self.mode == CommListModeProfile)
     {
@@ -197,7 +197,7 @@ static NSString *const SectionPosts = @"Posts";
     }
 }
 
-- (void)updateData
+- (void)updateDataForceReload:(BOOL)forceReload
 {
     switch (self.mode)
     {
@@ -214,7 +214,10 @@ static NSString *const SectionPosts = @"Posts";
                 [query includeKey:@"user"];
                 [query includeKey:@"stats"];
                 [query orderByDescending:@"createdAt"];
-                query.cachePolicy = kPFCachePolicyNetworkElseCache;
+                query.cachePolicy = forceReload ? kPFCachePolicyNetworkOnly : kPFCachePolicyCacheElseNetwork;
+                query.maxCacheAge = MAX_CACHE_AGE;
+                
+                BOOL wasCached = query.hasCachedResult && !forceReload;
                 
                 [self.activityIndicator increaseActivity];
                 [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
@@ -223,7 +226,14 @@ static NSString *const SectionPosts = @"Posts";
                     if (objects)
                     {
                         self.posts = [self filteredNewsWithPosts:objects];
-                        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:self.sections.count - 1] withRowAnimation:UITableViewRowAnimationAutomatic];
+                        if (wasCached)
+                        {
+                            [self.tableView reloadData];
+                        }
+                        else
+                        {
+                            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:self.sections.count - 1] withRowAnimation:UITableViewRowAnimationAutomatic];
+                        }
                     }
                     else if (error)
                     {
@@ -250,7 +260,10 @@ static NSString *const SectionPosts = @"Posts";
             [query includeKey:@"user"];
             [query includeKey:@"stats"];
             [query orderByDescending:@"createdAt"];
-            query.cachePolicy = kPFCachePolicyNetworkElseCache;
+            query.cachePolicy = forceReload ? kPFCachePolicyNetworkOnly : kPFCachePolicyCacheElseNetwork;;
+            query.maxCacheAge = MAX_CACHE_AGE;
+            
+            BOOL wasCached = query.hasCachedResult && !forceReload;
             
             [self.activityIndicator increaseActivity];
             [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
@@ -259,7 +272,14 @@ static NSString *const SectionPosts = @"Posts";
                 if (objects)
                 {
                     self.posts = [NSMutableArray arrayWithArray:objects];
-                    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:self.sections.count - 1] withRowAnimation:UITableViewRowAnimationAutomatic];
+                    if (wasCached)
+                    {
+                        [self.tableView reloadData];
+                    }
+                    else
+                    {
+                        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:self.sections.count - 1] withRowAnimation:UITableViewRowAnimationAutomatic];
+                    }
                 }
                 else if (error)
                 {

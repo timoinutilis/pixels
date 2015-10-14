@@ -110,7 +110,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
 {
     if ([self.post isDataAvailable])
     {
-        [self loadSubData];
+        [self loadSubDataForceReload:YES];
     }
     else
     {
@@ -161,7 +161,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
 {
     if ([self.post isDataAvailable])
     {
-        [self loadSubData];
+        [self loadSubDataForceReload:NO];
     }
     else
     {
@@ -172,7 +172,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
             [self.activityIndicator decreaseActivity];
             if (object)
             {
-                [self loadSubData];
+                [self loadSubDataForceReload:NO];
             }
             else if (error)
             {
@@ -184,11 +184,11 @@ typedef NS_ENUM(NSInteger, CellTag) {
     }
 }
 
-- (void)loadSubData
+- (void)loadSubDataForceReload:(BOOL)forceReload
 {
     [self updateView];
     [self loadUser];
-    [self loadComments];
+    [self loadCommentsForceReload:forceReload];
     if (self.post.type == LCCPostTypeProgram)
     {
         [self loadProgram];
@@ -217,7 +217,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
     }
 }
 
-- (void)loadComments
+- (void)loadCommentsForceReload:(BOOL)forceReload
 {
     self.comments = [NSMutableArray array];
     
@@ -225,7 +225,10 @@ typedef NS_ENUM(NSInteger, CellTag) {
     [query whereKey:@"post" equalTo:self.post];
     [query includeKey:@"user"];
     [query orderByAscending:@"createdAt"];
-    query.cachePolicy = kPFCachePolicyNetworkElseCache;
+    query.cachePolicy = forceReload ? kPFCachePolicyNetworkOnly : kPFCachePolicyCacheElseNetwork;
+    query.maxCacheAge = MAX_CACHE_AGE;
+    
+    BOOL wasCached = query.hasCachedResult && !forceReload;
     
     [self.activityIndicator increaseActivity];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
@@ -234,7 +237,14 @@ typedef NS_ENUM(NSInteger, CellTag) {
         if (objects)
         {
             self.comments = [NSMutableArray arrayWithArray:objects];
-            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+            if (wasCached)
+            {
+                [self.tableView reloadData];
+            }
+            else
+            {
+                [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+            }
         }
         else if (error)
         {

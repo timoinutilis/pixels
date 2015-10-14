@@ -464,6 +464,13 @@
                     </tableView>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="tjr-ZW-fb3">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
+                        <connections>
+                            <action selector="onRefreshPulled:" destination="KiV-df-CG5" eventType="valueChanged" id="r09-js-NdQ"/>
+                        </connections>
+                    </refreshControl>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="THg-Zt-Vwm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
