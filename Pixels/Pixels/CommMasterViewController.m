@@ -39,7 +39,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
 {
     [super traitCollectionDidChange:previousTraitCollection];
-    self.clearsSelectionOnViewWillAppear = self.splitViewController.collapsed;
+    self.clearsSelectionOnViewWillAppear = (self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact);
 }
 
 - (void)viewDidLoad

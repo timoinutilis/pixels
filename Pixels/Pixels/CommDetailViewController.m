@@ -62,7 +62,7 @@ static NSString *const SectionPosts = @"Posts";
         self.navigationItem.rightBarButtonItems = @[activityItem];
     }
     
-    self.tableView.estimatedRowHeight = 53;
+    self.tableView.estimatedRowHeight = 72;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     
     if (!SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"9.0"))
@@ -376,11 +376,12 @@ static NSString *const SectionPosts = @"Posts";
             {
                 [PFQuery clearAllCachedResults];
                 
+                self.writeStatusCell.titleTextField.text = @"";
+                self.writeStatusCell.textView.text = @"";
+                
                 [self.posts insertObject:post atIndex:0];
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:2];
                 [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-                self.writeStatusCell.titleTextField.text = @"";
-                self.writeStatusCell.textView.text = @"";
                 
                 NSDictionary *dimensions = @{@"category": [post categoryString],
                                              @"app": ([AppController sharedController].isFullVersion) ? @"full version" : @"free"};

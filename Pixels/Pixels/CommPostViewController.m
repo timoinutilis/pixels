@@ -60,7 +60,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
     self.navigationItem.rightBarButtonItems = items;
 
     self.tableView.rowHeight = UITableViewAutomaticDimension;
-    self.tableView.estimatedRowHeight = 44;
+    self.tableView.estimatedRowHeight = 62;
     
     if (!SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"9.0"))
     {
@@ -440,18 +440,21 @@ typedef NS_ENUM(NSInteger, CellTag) {
             
             if (succeeded)
             {
+                [self.writeCommentCell reset];
+
                 [self.comments addObject:comment];
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.comments.count - 1 inSection:1];
+                
                 if (self.comments.count == 1)
                 {
                     // first comment (need to refresh headers)
-                    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+                    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationTop];
                 }
                 else
                 {
                     // later comment
-                    [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.comments.count - 1 inSection:1]] withRowAnimation:UITableViewRowAnimationAutomatic];
+                    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
                 }
-                [self.writeCommentCell reset];
                 
                 NSDictionary *dimensions = @{@"category": [self.post categoryString],
                                              @"user": [PFUser currentUser] ? @"registered" : @"guest",
