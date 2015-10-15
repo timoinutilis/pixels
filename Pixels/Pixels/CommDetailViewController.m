@@ -374,6 +374,7 @@ static NSString *const SectionPosts = @"Posts";
             
             if (succeeded)
             {
+                [[CommunityModel sharedInstance] onPostedWithDate:post.createdAt];
                 [PFQuery clearAllCachedResults];
                 
                 self.writeStatusCell.titleTextField.text = @"";

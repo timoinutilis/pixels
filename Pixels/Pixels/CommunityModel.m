@@ -75,6 +75,7 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
             if (objects)
             {
                 _follows = [NSMutableArray arrayWithArray:objects];
+                [self sortFollows];
                 [[NSNotificationCenter defaultCenter] postNotificationName:FollowsChangeNotification object:self];
             }
             else
@@ -126,6 +127,13 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
         user.lastPostDate = date;
         [user saveInBackground];
     }
+}
+
+- (void)sortFollows
+{
+    NSSortDescriptor *lastPost = [NSSortDescriptor sortDescriptorWithKey:@"followsUser.lastPostDate" ascending:NO];
+    NSSortDescriptor *followDate = [NSSortDescriptor sortDescriptorWithKey:@"createdAt" ascending:NO];
+    [self.follows sortUsingDescriptors:@[lastPost, followDate]];
 }
 
 - (void)followUser:(LCCUser *)user

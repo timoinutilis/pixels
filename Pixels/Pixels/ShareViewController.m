@@ -260,6 +260,8 @@
         if (succeeded)
         {
             [[CommunityModel sharedInstance] onPostedWithDate:post.createdAt];
+            [PFQuery clearAllCachedResults];
+            
             self.project.postId = post.objectId;
             if (self.shareDelegate)
             {

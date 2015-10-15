@@ -404,9 +404,9 @@ typedef NS_ENUM(NSInteger, CellTag) {
         if (succeeded)
         {
             [[CommunityModel sharedInstance] onPostedWithDate:post.createdAt];
-            [self showAlertWithTitle:@"Shared successfully." message:nil block:nil];
-            
             [PFQuery clearAllCachedResults];
+            
+            [self showAlertWithTitle:@"Shared successfully." message:nil block:nil];
         }
         else if (error)
         {

@@ -89,7 +89,7 @@ NSString *EditorTextView_transferText;
     }
     else if (action == @selector(help:))
     {
-        return self.selectedRange.length >= 2 && self.selectedRange.length <= 20;
+        return self.selectedRange.length > 0 && self.selectedRange.length <= 20;
     }
     else if (action == @selector(paste:))
     {
