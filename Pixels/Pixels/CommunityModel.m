@@ -136,6 +136,7 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
     [follow saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (succeeded)
         {
+            [PFQuery clearAllCachedResults];
             [self.follows insertObject:follow atIndex:0];
             [[NSNotificationCenter defaultCenter] postNotificationName:FollowsChangeNotification object:self];
             
@@ -156,6 +157,7 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
         [follow deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if (succeeded)
             {
+                [PFQuery clearAllCachedResults];
                 [self.follows removeObject:follow];
                 [[NSNotificationCenter defaultCenter] postNotificationName:FollowsChangeNotification object:self];
                 
@@ -201,7 +203,11 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
         count.type = type;
         
         [count saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            if (!succeeded && error)
+            if (succeeded)
+            {
+                [PFQuery clearAllCachedResults];
+            }
+            else if (error)
             {
                 NSLog(@"Error: %@", error.description);
             }

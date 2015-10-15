@@ -405,6 +405,8 @@ typedef NS_ENUM(NSInteger, CellTag) {
         {
             [[CommunityModel sharedInstance] onPostedWithDate:post.createdAt];
             [self showAlertWithTitle:@"Shared successfully." message:nil block:nil];
+            
+            [PFQuery clearAllCachedResults];
         }
         else if (error)
         {
@@ -457,6 +459,8 @@ typedef NS_ENUM(NSInteger, CellTag) {
                 [PFAnalytics trackEvent:@"comment" dimensions:dimensions];
                 
                 [[AppController sharedController] registerForNotifications];
+                
+                [PFQuery clearAllCachedResults];
             }
             else if (error)
             {
@@ -480,6 +484,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
         self.view.userInteractionEnabled = YES;
         if (succeeded)
         {
+            [PFQuery clearAllCachedResults];
             [[NSNotificationCenter defaultCenter] postNotificationName:PostDeleteNotification object:self userInfo:@{@"postId": self.post.objectId}];
         }
         else if (error)

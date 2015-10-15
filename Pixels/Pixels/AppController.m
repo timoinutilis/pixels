@@ -272,6 +272,8 @@ NSString *const InfoIDNews = @"InfoIDNews";
         [[NSNotificationCenter defaultCenter] postNotificationName:NewsNotification object:self];
     }
     
+    [PFQuery clearAllCachedResults];
+    
     if (inForeground)
     {
         if (postId)

@@ -121,6 +121,8 @@
         [self setBusy:NO];
         if (succeeded)
         {
+            [PFQuery clearAllCachedResults];
+            
             // save name for log-in view
             NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
             [storage setObject:username forKey:UserDefaultsLogInKey];

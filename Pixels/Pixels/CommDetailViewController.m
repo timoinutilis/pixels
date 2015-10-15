@@ -374,6 +374,8 @@ static NSString *const SectionPosts = @"Posts";
             
             if (succeeded)
             {
+                [PFQuery clearAllCachedResults];
+                
                 [self.posts insertObject:post atIndex:0];
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:2];
                 [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
