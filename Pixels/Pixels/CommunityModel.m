@@ -207,6 +207,7 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
 {
     // local stuff...
     
+    /* TODO bad: parse saves changes without asking!!
     if (post.stats && [post.stats isDataAvailable])
     {
         // modify stats locally but DON'T save it, Cloud Code is handling it.
@@ -223,6 +224,7 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
                 break;
         }
     }
+    */
     
     [[NSNotificationCenter defaultCenter] postNotificationName:PostCounterChangeNotification object:self userInfo:@{@"postId":post.objectId, @"type":@(type)}];
     

@@ -150,14 +150,14 @@ typedef NS_ENUM(NSInteger, CellTag) {
     if ([counterPostId isEqualToString:self.post.objectId])
     {
         StatsType type = [notification.userInfo[@"type"] integerValue];
+        if (self.post.stats)
+        {
+            self.titleCell.likeCount = self.post.stats.numLikes;
+            self.titleCell.downloadCount = self.post.stats.numDownloads;
+        }
         if (type == StatsTypeLike)
         {
-            self.titleCell.likeCount++;
             [self.titleCell likeIt];
-        }
-        else if (type == StatsTypeDownload)
-        {
-            self.titleCell.downloadCount++;
         }
     }
 }
@@ -339,7 +339,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
 
 - (void)loadStatsForceReload:(BOOL)forceReload
 {
-    if (!self.post.stats.isDataAvailable || forceReload)
+    if (self.post.stats && (!self.post.stats.isDataAvailable || forceReload))
     {
         [self.activityIndicator increaseActivity];
         [self.post.stats fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {

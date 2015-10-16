@@ -384,6 +384,7 @@ static NSString *const SectionPosts = @"Posts";
         post.category = LCCPostCategoryStatus;
         post.title = statusTitleText;
         post.detail = statusDetailText;
+        post.stats = [LCCPostStats object];
         
         [self.activityIndicator increaseActivity];
         [post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
