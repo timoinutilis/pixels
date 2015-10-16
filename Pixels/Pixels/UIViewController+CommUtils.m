@@ -35,18 +35,15 @@ const NSTimeInterval MAX_CACHE_AGE = 1 * 60 * 60;
 
 - (void)addProgramOfPost:(LCCPost *)post
 {
-    NSDictionary *dimensions = @{@"user": [PFUser currentUser] ? @"registered" : @"guest",
-                                 @"app": ([AppController sharedController].isFullVersion) ? @"full version" : @"free",
-                                 @"category": [post categoryString]};
-
-    [PFAnalytics trackEvent:@"get_program" dimensions:dimensions];
-    
     Project *project = [[ModelManager sharedManager] createNewProject];
     project.name = post.title;
     project.sourceCode = [post sourceCode];
     project.postId = post.objectId;
     
-    [[CommunityModel sharedInstance] countPost:post type:LCCCountTypeDownload];
+    if (![post.user isMe])
+    {
+        [[CommunityModel sharedInstance] countPost:post type:StatsTypeDownload];
+    }
     
     if ([self isModal])
     {

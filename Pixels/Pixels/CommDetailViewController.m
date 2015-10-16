@@ -81,6 +81,7 @@ static NSString *const SectionPosts = @"Posts";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onFollowsChanged:) name:FollowsChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserChanged:) name:CurrentUserChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onPostDeleted:) name:PostDeleteNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onCounterChanged:) name:PostCounterChangeNotification object:nil];
 }
 
 - (void)dealloc
@@ -88,6 +89,7 @@ static NSString *const SectionPosts = @"Posts";
     [[NSNotificationCenter defaultCenter] removeObserver:self name:FollowsChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:CurrentUserChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:PostDeleteNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:PostCounterChangeNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -172,11 +174,27 @@ static NSString *const SectionPosts = @"Posts";
         {
             [self.posts removeObjectAtIndex:i];
             changed = YES;
+            break;
         }
     }
     if (changed)
     {
         [self.tableView reloadData];
+    }
+}
+
+- (void)onCounterChanged:(NSNotification *)notification
+{
+    NSString *counterPostId = notification.userInfo[@"postId"];
+    for (int i = 0; i < (int)self.posts.count; i++)
+    {
+        LCCPost *post = self.posts[i];
+        if (   [post.objectId isEqualToString:counterPostId]
+            || [post.sharedPost.objectId isEqualToString:counterPostId])
+        {
+            [self.tableView reloadData];
+            break;
+        }
     }
 }
 

@@ -18,9 +18,16 @@
 extern NSString *const CurrentUserChangeNotification;
 extern NSString *const FollowsChangeNotification;
 extern NSString *const PostDeleteNotification;
+extern NSString *const PostCounterChangeNotification;
 extern NSString *const UserUpdateNotification;
 
 extern NSString *const UserDefaultsLogInKey;
+
+typedef NS_ENUM(NSInteger, StatsType) {
+    StatsTypeLike,
+    StatsTypeDownload,
+    StatsTypeComment
+};
 
 @interface CommunityModel : NSObject
 
@@ -40,6 +47,6 @@ extern NSString *const UserDefaultsLogInKey;
 - (void)unfollowUser:(LCCUser *)user;
 - (LCCFollow *)followWithUser:(LCCUser *)user;
 - (NSArray *)arrayWithFollowedUsers;
-- (void)countPost:(LCCPost *)post type:(LCCCountType)type;
+- (void)countPost:(LCCPost *)post type:(StatsType)type;
 
 @end

@@ -9,6 +9,7 @@
 #import <Parse/Parse.h>
 
 typedef NS_ENUM(NSInteger, LCCCountType) {
+    LCCCountTypeUndefined = 0,
     LCCCountTypeLike = 1,
     LCCCountTypeDownload = 2
 };

@@ -77,12 +77,14 @@ typedef NS_ENUM(NSInteger, CellTag) {
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserChanged:) name:CurrentUserChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onPostDeleted:) name:PostDeleteNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onCounterChanged:) name:PostCounterChangeNotification object:nil];
 }
 
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:CurrentUserChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:PostDeleteNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:PostCounterChangeNotification object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -142,7 +144,25 @@ typedef NS_ENUM(NSInteger, CellTag) {
     }
 }
 
-- (void)updateView
+- (void)onCounterChanged:(NSNotification *)notification
+{
+    NSString *counterPostId = notification.userInfo[@"postId"];
+    if ([counterPostId isEqualToString:self.post.objectId])
+    {
+        StatsType type = [notification.userInfo[@"type"] integerValue];
+        if (type == StatsTypeLike)
+        {
+            self.titleCell.likeCount++;
+            [self.titleCell likeIt];
+        }
+        else if (type == StatsTypeDownload)
+        {
+            self.titleCell.downloadCount++;
+        }
+    }
+}
+
+- (void)updatePostView
 {
     self.title = [self.post.title stringWithMaxWords:4];
     
@@ -152,22 +172,26 @@ typedef NS_ENUM(NSInteger, CellTag) {
 
 - (void)loadAllForceReload:(BOOL)forceReload
 {
-    if ([self.post isDataAvailable] && !forceReload)
+    if ([self.post isDataAvailable])
     {
-        [self loadSubDataForceReload:NO];
+        if (!forceReload)
+        {
+            [self updatePostView];
+        }
+        [self loadUser];
+        [self loadStatsForceReload:forceReload];
+        [self loadSubDataForceReload:forceReload];
     }
     else
     {
         [self.activityIndicator increaseActivity];
-        if (!forceReload)
-        {
-            self.title = @"Loading...";
-        }
         
+        self.title = @"Loading...";
+
         PFQuery *query = [PFQuery queryWithClassName:[LCCPost parseClassName]];
         [query includeKey:@"user"];
         [query includeKey:@"stats"];
-        query.cachePolicy = forceReload ? kPFCachePolicyNetworkOnly : kPFCachePolicyCacheElseNetwork;
+        query.cachePolicy = kPFCachePolicyCacheElseNetwork;
         query.maxCacheAge = MAX_CACHE_AGE;
         
         [query getObjectInBackgroundWithId:self.post.objectId block:^(PFObject * _Nullable object, NSError * _Nullable error) {
@@ -176,7 +200,8 @@ typedef NS_ENUM(NSInteger, CellTag) {
             if (object)
             {
                 self.post = (LCCPost *)object;
-                [self loadSubDataForceReload:forceReload];
+                [self updatePostView];
+                [self loadSubDataForceReload:NO];
             }
             else if (error)
             {
@@ -185,19 +210,18 @@ typedef NS_ENUM(NSInteger, CellTag) {
             }
             
         }];
+        
     }
 }
 
 - (void)loadSubDataForceReload:(BOOL)forceReload
 {
-    [self updateView];
-    [self loadUser];
+    [self loadLike];
     [self loadCommentsForceReload:forceReload];
     if (self.post.type == LCCPostTypeProgram)
     {
         [self loadProgram];
     }
-    [self loadLike];
 }
 
 - (void)loadUser
@@ -313,6 +337,28 @@ typedef NS_ENUM(NSInteger, CellTag) {
     }
 }
 
+- (void)loadStatsForceReload:(BOOL)forceReload
+{
+    if (!self.post.stats.isDataAvailable || forceReload)
+    {
+        [self.activityIndicator increaseActivity];
+        [self.post.stats fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+            
+            [self.activityIndicator decreaseActivity];
+            if (object)
+            {
+                self.titleCell.likeCount = self.post.stats.numLikes;
+                self.titleCell.downloadCount = self.post.stats.numDownloads;
+            }
+            else if (error)
+            {
+                [self showAlertWithTitle:@"Could not load statistics." message:error.userInfo[@"error"] block:nil];
+            }
+            
+        }];
+    }
+}
+
 - (void)loadLike
 {
     if (![PFUser currentUser])
@@ -360,15 +406,9 @@ typedef NS_ENUM(NSInteger, CellTag) {
         CommLogInViewController *vc = [CommLogInViewController create];
         [self presentInNavigationViewController:vc];
     }
-    else
+    else if (![self.post.user isMe])
     {
-        [[CommunityModel sharedInstance] countPost:self.post type:LCCCountTypeLike];
-        self.titleCell.likeCount++;
-        [self.titleCell likeIt];
-        
-        NSDictionary *dimensions = @{@"category": [self.post categoryString],
-                                     @"app": ([AppController sharedController].isFullVersion) ? @"full version" : @"free"};
-        [PFAnalytics trackEvent:@"like" dimensions:dimensions];
+        [[CommunityModel sharedInstance] countPost:self.post type:StatsTypeLike];
     }
 }
 
@@ -456,10 +496,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
                     [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
                 }
                 
-                NSDictionary *dimensions = @{@"category": [self.post categoryString],
-                                             @"user": [PFUser currentUser] ? @"registered" : @"guest",
-                                             @"app": ([AppController sharedController].isFullVersion) ? @"full version" : @"free"};
-                [PFAnalytics trackEvent:@"comment" dimensions:dimensions];
+                [[CommunityModel sharedInstance] countPost:self.post type:StatsTypeComment];
                 
                 [[AppController sharedController] registerForNotifications];
                 
