@@ -35,6 +35,8 @@ NSString *const CoachMarkIDHelp = @"CoachMarkIDHelp";
 
 static int s_editorInstancesCount = 0;
 
+typedef void(^InfoBlock)(void);
+
 
 @interface EditorViewController () <SearchToolbarDelegate, EditorTextViewDelegate, UITextViewDelegate>
 
@@ -48,6 +50,7 @@ static int s_editorInstancesCount = 0;
 @property BOOL wasEditedSinceOpened;
 @property BOOL wasEditedSinceLastRun;
 @property CGRect keyboardRect;
+@property (strong) InfoBlock infoBlock;
 
 @end
 
@@ -79,7 +82,7 @@ static int s_editorInstancesCount = 0;
     self.navigationItem.title = self.project.name;
     
     self.sourceCodeTextView.text = self.project.sourceCode ? self.project.sourceCode : @"";
-    if ([self isExample] && ![AppController sharedController].isFullVersion)
+    if (![AppController sharedController].isFullVersion)
     {
         self.sourceCodeTextView.pastable = NO;
     }
@@ -210,6 +213,7 @@ static int s_editorInstancesCount = 0;
 {
     if (   self.project
         && ![self isExample]
+        && ([AppController sharedController].isFullVersion || self.sourceCodeTextView.text.countLines <= EditorDemoMaxLines)
         && ![self.sourceCodeTextView.text isEqualToString:self.project.sourceCode])
     {
         [ModelManager sharedManager].debugSaveCount++;
@@ -221,7 +225,20 @@ static int s_editorInstancesCount = 0;
 {
     if ([self isExample])
     {
-        [self showInfo:@"Changes in example programs will not be saved."];
+        __weak EditorViewController *weakSelf = self;
+        [self showInfo:@"Changes in example programs will not be saved.\nMake a copy?" block:^{
+            [weakSelf onDuplicateTapped];
+        }];
+    }
+    else if (![AppController sharedController].isFullVersion)
+    {
+        if (self.sourceCodeTextView.text.countLines > EditorDemoMaxLines)
+        {
+            __weak EditorViewController *weakSelf = self;
+            [self showInfo:@"Changes in long programs will not be saved.\nShow information about full version?" block:^{
+                [weakSelf performSegueWithIdentifier:@"Upgrade" sender:weakSelf];
+            }];
+        }
     }
     return YES;
 }
@@ -410,6 +427,20 @@ static int s_editorInstancesCount = 0;
     {
         [self showAlertWithTitle:@"This program is empty" message:@"Please write something!" block:nil];
     }
+    else if (![AppController sharedController].isFullVersion && self.sourceCodeTextView.text.countLines > EditorDemoMaxLines)
+    {
+        EditorViewController __weak *weakSelf = self;
+        
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Please upgrade to full version!"
+                                                                       message:[NSString stringWithFormat:@"The free version can only share programs with up to %d lines.", EditorDemoMaxLines]
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+        [alert addAction:[UIAlertAction actionWithTitle:@"More Info" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [weakSelf performSegueWithIdentifier:@"Upgrade" sender:weakSelf];
+        }]];
+        [self presentViewController:alert animated:YES completion:nil];
+    }
     else
     {
         [self saveProject];
@@ -553,9 +584,10 @@ static int s_editorInstancesCount = 0;
 
 #pragma mark - Info bar
 
-- (void)showInfo:(NSString *)text
+- (void)showInfo:(NSString *)text block:(InfoBlock)block
 {
     self.infoLabel.text = text;
+    self.infoBlock = block;
     
     if (self.infoViewConstraint.constant != 0.0)
     {
@@ -571,6 +603,8 @@ static int s_editorInstancesCount = 0;
 
 - (void)hideInfo
 {
+    self.infoBlock = nil;
+    
     if (self.infoViewConstraint.constant == 0.0)
     {
         [self.view layoutIfNeeded];
@@ -587,31 +621,20 @@ static int s_editorInstancesCount = 0;
     }
 }
 
+- (IBAction)onInfoTapped:(id)sender
+{
+    if (self.infoBlock)
+    {
+        self.infoBlock();
+    }
+}
+
 #pragma mark - Compile and run
 
 - (void)runProgram
 {
     NSString *sourceCode = self.sourceCodeTextView.text.uppercaseString;
     NSString *transferSourceCode = [EditorTextView transferText];
-    
-    if (   ![AppController sharedController].isFullVersion
-        && !self.project.isDefault.boolValue
-        && sourceCode.countLines > EditorDemoMaxLines)
-    {
-        EditorViewController __weak *weakSelf = self;
-        
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Please upgrade to full version!"
-                                                                       message:[NSString stringWithFormat:@"The free version can only run programs with up to %d lines.", EditorDemoMaxLines]
-                                                                preferredStyle:UIAlertControllerStyleAlert];
-        
-        [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
-        [alert addAction:[UIAlertAction actionWithTitle:@"More Info" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            [weakSelf performSegueWithIdentifier:@"Upgrade" sender:weakSelf];
-        }]];
-        [self presentViewController:alert animated:YES completion:nil];
-
-        return;
-    }
     
     NSArray *transferDataNodes;
     

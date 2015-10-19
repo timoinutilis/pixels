@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="oli-IW-NHE">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="15A284" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="oli-IW-NHE">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" text="PRINT &quot;HELLO&quot;" translatesAutoresizingMaskIntoConstraints="NO" id="SjB-QF-tvR" customClass="EditorTextView">
-                                <rect key="frame" x="0.0" y="66" width="480" height="190"/>
+                                <rect key="frame" x="0.0" y="88" width="480" height="168"/>
                                 <animations/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <color key="tintColor" red="0.96470588239999999" green="0.96470588239999999" blue="0.96470588239999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -30,22 +30,34 @@
                                 </variation>
                             </textView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WCW-HT-wOK" userLabel="Info View">
-                                <rect key="frame" x="0.0" y="44" width="480" height="22"/>
+                                <rect key="frame" x="0.0" y="44" width="480" height="44"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c04-Mh-rcv">
-                                        <rect key="frame" x="8" y="3" width="464" height="16"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c04-Mh-rcv">
+                                        <rect key="frame" x="8" y="3" width="464" height="38"/>
                                         <animations/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AMv-Sl-9Ff">
+                                        <rect key="frame" x="0.0" y="0.0" width="480" height="44"/>
+                                        <animations/>
+                                        <connections>
+                                            <action selector="onInfoTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="aML-Wg-SRS"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <animations/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="AMv-Sl-9Ff" secondAttribute="trailing" id="AGU-cI-vcG"/>
+                                    <constraint firstItem="AMv-Sl-9Ff" firstAttribute="leading" secondItem="WCW-HT-wOK" secondAttribute="leading" id="Bky-wD-t2z"/>
                                     <constraint firstAttribute="trailing" secondItem="c04-Mh-rcv" secondAttribute="trailing" constant="8" id="GVG-gj-Vqg"/>
                                     <constraint firstItem="c04-Mh-rcv" firstAttribute="leading" secondItem="WCW-HT-wOK" secondAttribute="leading" constant="8" id="anT-t2-7LC"/>
+                                    <constraint firstItem="AMv-Sl-9Ff" firstAttribute="top" secondItem="WCW-HT-wOK" secondAttribute="top" id="fUs-zz-wTK"/>
+                                    <constraint firstAttribute="height" constant="44" id="jLc-KQ-6z2"/>
                                     <constraint firstItem="c04-Mh-rcv" firstAttribute="top" secondItem="WCW-HT-wOK" secondAttribute="top" constant="3" id="oFj-dY-qSI"/>
+                                    <constraint firstAttribute="bottom" secondItem="AMv-Sl-9Ff" secondAttribute="bottom" id="oI3-vk-bH6"/>
                                     <constraint firstAttribute="bottom" secondItem="c04-Mh-rcv" secondAttribute="bottom" constant="3" id="yjP-XL-mYP"/>
                                 </constraints>
                             </view>
@@ -168,6 +180,7 @@ The upgrade is valid for all your devices and without time limit.</string>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
+                                <animations/>
                                 <constraints>
                                     <constraint firstItem="yqV-0v-CbY" firstAttribute="centerX" secondItem="dvn-eA-KIe" secondAttribute="centerX" id="0aa-pb-SYY"/>
                                     <constraint firstItem="0Cm-eG-Zxe" firstAttribute="centerY" secondItem="yqV-0v-CbY" secondAttribute="centerY" id="6OM-5u-Kjl"/>
@@ -673,6 +686,7 @@ Inutilis Software, 2015</string>
                                 <sections/>
                             </tableView>
                         </subviews>
+                        <animations/>
                         <color key="backgroundColor" red="0.96470588239999999" green="0.96470588239999999" blue="0.96470588239999999" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="077-Dd-baa" firstAttribute="top" secondItem="HlN-bZ-esy" secondAttribute="bottom" id="5J6-Xn-fYB"/>
