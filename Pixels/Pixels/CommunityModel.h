@@ -48,5 +48,6 @@ typedef NS_ENUM(NSInteger, StatsType) {
 - (LCCFollow *)followWithUser:(LCCUser *)user;
 - (NSArray *)arrayWithFollowedUsers;
 - (void)countPost:(LCCPost *)post type:(StatsType)type;
+- (void)trackEvent:(NSString *)name forPost:(LCCPost *)post;
 
 @end

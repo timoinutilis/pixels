@@ -5,6 +5,22 @@ var Count = Parse.Object.extend("Count");
 var PostStats = Parse.Object.extend("PostStats");
 
 
+function getAppVersion(request) {
+  var appVersion = 0;
+  if (request.installationId) {
+    // get app version for installation
+    var query = new Parse.Query(Parse.Installation);
+    query.equalTo('installationId', request.installationId);
+    query.first().then(function(installationObject) {
+      appVersion = parseInt(installationObject.get('appVersion'));
+    }, function(error) {
+      console.error("getAppVersion: " + error.message);
+    });
+  }
+  return appVersion;
+}
+
+// obsolete since app version 19 (4.0)
 function increasePostStats(post, key) {
   var stats = post.get("stats");
   if (!stats) {
@@ -17,9 +33,9 @@ function increasePostStats(post, key) {
   return stats.save();
 }
 
-/*
 Parse.Cloud.beforeSave("Post", function(request, response) {
 
+  // create Stats object if not there yet
   if (!request.object.get("stats")) {
     var stats = new PostStats();
     request.object.set("stats", stats);
@@ -33,7 +49,7 @@ Parse.Cloud.beforeSave("Post", function(request, response) {
   }
 
 });
-*/
+
 Parse.Cloud.beforeDelete("Post", function(request, response) {
 
   var postsQuery = new Parse.Query(Post);
@@ -99,6 +115,7 @@ Parse.Cloud.beforeDelete("Post", function(request, response) {
 
 Parse.Cloud.afterSave("Comment", function(request) {
 
+  var appVersion = getAppVersion(request);
   var post = request.object.get('post');
   var user = request.object.get('user');
   var text = request.object.get('text');
@@ -109,7 +126,9 @@ Parse.Cloud.afterSave("Comment", function(request) {
 
   post.fetch().then(function() {
 
-    return increasePostStats(post, "numComments");
+    if (appVersion != 0 && appVersion < 19) {
+      return increasePostStats(post, "numComments");
+    }
 
   }).then(function() {
 
@@ -186,22 +205,28 @@ Parse.Cloud.afterSave("Comment", function(request) {
 
 });
 
+
 Parse.Cloud.afterSave("Count", function(request) {
 
-  var post = request.object.get('post');
-  var type = request.object.get('type');
+  var appVersion = getAppVersion(request);
 
-  var incKey;
-  if (type == 1) {
-    incKey = "numLikes";
-  } else if (type == 2) {
-    incKey = "numDownloads";
+  if (appVersion != 0 && appVersion < 19) {
+
+    var post = request.object.get('post');
+    var type = request.object.get('type');
+
+    var incKey;
+    if (type == 1) {
+      incKey = "numLikes";
+    } else if (type == 2) {
+      incKey = "numDownloads";
+    }
+
+    post.fetch().then(function() {
+
+      return increasePostStats(post, incKey);
+
+    });
   }
-
-  post.fetch().then(function() {
-
-    return increasePostStats(post, incKey);
-
-  });
 
 });

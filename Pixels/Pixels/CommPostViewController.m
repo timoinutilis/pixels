@@ -464,17 +464,29 @@ typedef NS_ENUM(NSInteger, CellTag) {
     {
         [self.view endEditing:YES];
         
+        [self.activityIndicator increaseActivity];
+        
+        UIButton *button = (UIButton *)sender;
+        button.enabled = NO;
+        
+        // Comment
         LCCComment *comment = [LCCComment object];
         comment.user = (LCCUser *)[PFUser currentUser];
         comment.post = self.post;
         comment.text = commentText;
         
-        UIButton *button = (UIButton *)sender;
+        // Stats
+        if (!self.post.stats)
+        {
+            self.post.stats = [LCCPostStats object];
+        }
+        [self.post.stats incrementKey:@"numComments"];
         
-        [self.activityIndicator increaseActivity];
-        button.enabled = NO;
+        // UI Notification
+        [[NSNotificationCenter defaultCenter] postNotificationName:PostCounterChangeNotification object:self userInfo:@{@"postId":self.post.objectId, @"type":@(StatsTypeComment)}];
         
-        [comment saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        // Save to server
+        [PFObject saveAllInBackground:@[comment, self.post.stats] block:^(BOOL succeeded, NSError * _Nullable error) {
             
             [self.activityIndicator decreaseActivity];
             
@@ -488,15 +500,15 @@ typedef NS_ENUM(NSInteger, CellTag) {
                 if (self.comments.count == 1)
                 {
                     // first comment (need to refresh headers)
-                    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationTop];
+                    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
                 }
                 else
                 {
                     // later comment
-                    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
+                    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
                 }
                 
-                [[CommunityModel sharedInstance] countPost:self.post type:StatsTypeComment];
+                [[CommunityModel sharedInstance] trackEvent:@"comment" forPost:self.post];
                 
                 [[AppController sharedController] registerForNotifications];
                 

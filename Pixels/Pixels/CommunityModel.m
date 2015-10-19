@@ -205,79 +205,61 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
 
 - (void)countPost:(LCCPost *)post type:(StatsType)type
 {
-    // local stuff...
-    
-    /* TODO bad: parse saves changes without asking!!
-    if (post.stats && [post.stats isDataAvailable])
-    {
-        // modify stats locally but DON'T save it, Cloud Code is handling it.
-        switch (type)
-        {
-            case StatsTypeLike:
-                post.stats.numLikes++;
-                break;
-            case StatsTypeDownload:
-                post.stats.numDownloads++;
-                break;
-            case StatsTypeComment:
-                post.stats.numComments++;
-                break;
-        }
-    }
-    */
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:PostCounterChangeNotification object:self userInfo:@{@"postId":post.objectId, @"type":@(type)}];
-    
-    // server stuff...
-    
     LCCCountType countType = LCCCountTypeUndefined;
     NSString *event = nil;
+    
+    if (!post.stats)
+    {
+        post.stats = [LCCPostStats object];
+    }
     
     switch (type)
     {
         case StatsTypeLike:
+            [post.stats incrementKey:@"numLikes"];
             countType = LCCCountTypeLike;
             event = @"like";
             break;
-            
         case StatsTypeDownload:
+            [post.stats incrementKey:@"numDownloads"];
             countType = LCCCountTypeDownload;
             event = @"get_program";
             break;
-            
-        case StatsTypeComment:
-            countType = LCCCountTypeUndefined;
-            event = @"comment";
-            break;
+        default:
+            [NSException raise:@"InvalidType" format:@"Invalid type, comments use other method!"];
     }
     
-    if (event)
-    {
-        NSDictionary *dimensions = @{@"user": [PFUser currentUser] ? @"registered" : @"guest",
-                                     @"app": ([AppController sharedController].isFullVersion) ? @"full version" : @"free",
-                                     @"category": [post categoryString]};
+    // UI Notification
+    [[NSNotificationCenter defaultCenter] postNotificationName:PostCounterChangeNotification object:self userInfo:@{@"postId":post.objectId, @"type":@(type)}];
+    
+    // Save to server
+    LCCCount *count = [LCCCount object];
+    count.post = post;
+    count.user = (LCCUser *)[PFUser currentUser];
+    count.type = countType;
+    
+    [PFObject saveAllInBackground:@[count, post.stats] block:^(BOOL succeeded, NSError * _Nullable error) {
         
-        [PFAnalytics trackEvent:event dimensions:dimensions];
-    }
+        if (succeeded)
+        {
+            [self trackEvent:event forPost:post];
+            [PFQuery clearAllCachedResults];
+        }
+        else if (error)
+        {
+            NSLog(@"Error: %@", error.description);
+        }
+        
+    }];
+}
 
-    if (countType != LCCCountTypeUndefined)
-    {
-        LCCCount *count = [LCCCount object];
-        count.post = post;
-        count.user = (LCCUser *)[PFUser currentUser];
-        count.type = countType;
-        
-        [count saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            if (succeeded)
-            {
-                [PFQuery clearAllCachedResults];
-            }
-            else if (error)
-            {
-                NSLog(@"Error: %@", error.description);
-            }
-        }];
-    }
+- (void)trackEvent:(NSString *)name forPost:(LCCPost *)post
+{
+    NSDictionary *dimensions = @{@"user": [PFUser currentUser] ? @"registered" : @"guest",
+                                 @"app": ([AppController sharedController].isFullVersion) ? @"full version" : @"free",
+                                 @"category": [post categoryString]};
+    
+    [PFAnalytics trackEvent:name dimensions:dimensions];
 }
 
 @end
