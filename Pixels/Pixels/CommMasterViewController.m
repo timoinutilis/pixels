@@ -22,7 +22,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
     CellTagFollowing
 };
 
-@interface CommMasterViewController () <UITraitEnvironment>
+@interface CommMasterViewController ()
 
 @property NSIndexPath *newsIndexPath;
 @property NSIndexPath *currentSelection;
@@ -34,12 +34,6 @@ typedef NS_ENUM(NSInteger, CellTag) {
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-}
-
-- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
-{
-    [super traitCollectionDidChange:previousTraitCollection];
-    self.clearsSelectionOnViewWillAppear = (self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact);
 }
 
 - (void)viewDidLoad
@@ -61,9 +55,15 @@ typedef NS_ENUM(NSInteger, CellTag) {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:FollowsChangeNotification object:nil];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    self.clearsSelectionOnViewWillAppear = self.splitViewController.collapsed;
+    [super viewWillAppear:animated];
+}
+
 - (void)showCurrentSelection
 {
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
+    if (!self.splitViewController.collapsed)
     {
         [self.tableView selectRowAtIndexPath:self.currentSelection animated:NO scrollPosition:UITableViewScrollPositionNone];
     }
@@ -76,7 +76,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
     {
         // show news
         self.currentSelection = self.newsIndexPath;
-        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
+        if (!self.splitViewController.collapsed)
         {
             [self.tableView selectRowAtIndexPath:self.currentSelection animated:NO scrollPosition:UITableViewScrollPositionNone];
             [self performSegueWithIdentifier:@"Detail" sender:self];
