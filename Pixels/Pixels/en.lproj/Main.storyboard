@@ -900,7 +900,7 @@ Inutilis Software, 2015</string>
             </objects>
             <point key="canvasLocation" x="1782" y="1692"/>
         </scene>
-        <!--Programs-->
+        <!--My Programs-->
         <scene sceneID="3mJ-o1-cJC">
             <objects>
                 <viewController id="Xni-Pq-CRZ" customClass="ExplorerViewController" sceneMemberID="viewController">
@@ -982,7 +982,7 @@ Inutilis Software, 2015</string>
                         </constraints>
                     </view>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" title="Programs" id="qaN-Hc-taS"/>
+                    <navigationItem key="navigationItem" title="My Programs" id="qaN-Hc-taS"/>
                     <connections>
                         <outlet property="collectionView" destination="mgK-pS-p2l" id="7gJ-is-fsu"/>
                     </connections>
