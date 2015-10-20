@@ -35,6 +35,8 @@ NSString *EditorTextView_transferText;
     UIMenuController *menu = [UIMenuController sharedMenuController];
     menu.menuItems = @[
                        [[UIMenuItem alloc] initWithTitle:@"Help" action:@selector(help:)],
+                       [[UIMenuItem alloc] initWithTitle:@"Indent <" action:@selector(indentLeft:)],
+                       [[UIMenuItem alloc] initWithTitle:@"Indent >" action:@selector(indentRight:)],
                        [[UIMenuItem alloc] initWithTitle:@"Copy to Transfer" action:@selector(transferCopy:)],
                        [[UIMenuItem alloc] initWithTitle:@"Paste from Transfer" action:@selector(transferPaste:)]
                        ];
@@ -89,6 +91,11 @@ NSString *EditorTextView_transferText;
     {
         return self.selectedRange.length > 0 && self.selectedRange.length <= 20;
     }
+    else if (   action == @selector(indentRight:)
+             || action == @selector(indentLeft:) )
+    {
+        return YES;
+    }
     else if (   action == @selector(copy:)
              || action == @selector(paste:)
              || action == @selector(cut:)
@@ -117,6 +124,63 @@ NSString *EditorTextView_transferText;
 - (void)help:(id)sender
 {
     [self.editorDelegate editorTextView:self didSelectHelpWithRange:self.selectedRange];
+}
+
+- (void)indentRight:(id)sender
+{
+    [self indentToRight:YES];
+}
+
+- (void)indentLeft:(id)sender
+{
+    [self indentToRight:NO];
+}
+
+- (void)indentToRight:(BOOL)right
+{
+    NSRange originalRange = [self.text lineRangeForRange:self.selectedRange];
+    NSRange finalRange = originalRange;
+    NSMutableString *subtext = [[self.text substringWithRange:originalRange] mutableCopy];
+    NSInteger pos = 0;
+    while (pos < subtext.length)
+    {
+        if (right)
+        {
+            [subtext insertString:@"  " atIndex:pos];
+            finalRange.length += 2;
+        }
+        else
+        {
+            NSInteger num = 0;
+            for (NSInteger i = 0; i < 2; i++)
+            {
+                if ([subtext characterAtIndex:(pos + i)] == ' ')
+                {
+                    num++;
+                }
+            }
+            if (num > 0)
+            {
+                [subtext replaceCharactersInRange:NSMakeRange(pos, num) withString:@""];
+                finalRange.length -= num;
+            }
+        }
+        
+        NSRange lineRange = [subtext lineRangeForRange:NSMakeRange(pos, 0)];
+        pos += lineRange.length;
+    }
+    self.text = [self.text stringByReplacingCharactersInRange:originalRange withString:subtext];
+
+    // selection and menu
+    if (finalRange.location + finalRange.length < self.text.length)
+    {
+        finalRange.length--;
+    }
+    self.selectedRange = finalRange;
+    CGRect rect = [self firstRectForRange:self.selectedTextRange];
+    UIMenuController *menu = [UIMenuController sharedMenuController];
+    [menu setTargetRect:rect inView:self];
+    [menu setMenuVisible:YES animated:NO];
 }
 
 @end
