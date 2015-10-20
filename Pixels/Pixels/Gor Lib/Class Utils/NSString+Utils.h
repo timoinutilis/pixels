@@ -12,6 +12,7 @@
 
 - (NSString *)substringWithLineAtIndex:(NSUInteger)index;
 - (NSUInteger)countLines;
+- (NSUInteger)countChar:(unichar)character;
 - (NSString *)stringWithMaxWords:(int)maxWords;
 
 @end

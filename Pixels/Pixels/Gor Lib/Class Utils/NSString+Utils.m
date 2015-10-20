@@ -40,6 +40,19 @@
     return numberOfLines;
 }
 
+- (NSUInteger)countChar:(unichar)character
+{
+    NSUInteger number = 0;
+    for (NSUInteger pos = 0; pos < self.length; pos++)
+    {
+        if ([self characterAtIndex:pos] == character)
+        {
+            number++;
+        }
+    }
+    return number;
+}
+
 - (NSString *)stringWithMaxWords:(int)maxWords
 {
     NSArray *parts = [self componentsSeparatedByString:@" "];

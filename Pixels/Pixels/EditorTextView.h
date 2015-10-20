@@ -12,7 +12,6 @@
 
 @interface EditorTextView : UITextView
 
-@property BOOL pastable;
 @property (readonly) UIToolbar *keyboardToolbar;
 @property (weak) id<EditorTextViewDelegate> editorDelegate;
 

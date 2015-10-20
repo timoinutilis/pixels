@@ -33,6 +33,10 @@ NSString *const CoachMarkIDStart = @"CoachMarkIDStart";
 NSString *const CoachMarkIDShare = @"CoachMarkIDShare";
 NSString *const CoachMarkIDHelp = @"CoachMarkIDHelp";
 
+NSString *const InfoIDExample = @"InfoIDExample";
+NSString *const InfoIDLongProgram = @"InfoIDLongProgram";
+NSString *const InfoIDPaste = @"InfoIDPaste";
+
 static int s_editorInstancesCount = 0;
 
 typedef void(^InfoBlock)(void);
@@ -50,7 +54,9 @@ typedef void(^InfoBlock)(void);
 @property BOOL wasEditedSinceOpened;
 @property BOOL wasEditedSinceLastRun;
 @property CGRect keyboardRect;
+@property NSInteger numLines;
 @property (strong) InfoBlock infoBlock;
+@property NSString *infoId;
 
 @end
 
@@ -82,10 +88,6 @@ typedef void(^InfoBlock)(void);
     self.navigationItem.title = self.project.name;
     
     self.sourceCodeTextView.text = self.project.sourceCode ? self.project.sourceCode : @"";
-    if (![AppController sharedController].isFullVersion)
-    {
-        self.sourceCodeTextView.pastable = NO;
-    }
     self.sourceCodeTextView.layoutManager.allowsNonContiguousLayout = NO;
     self.sourceCodeTextView.delegate = self;
     self.sourceCodeTextView.editorDelegate = self;
@@ -107,6 +109,8 @@ typedef void(^InfoBlock)(void);
     self.infoView.hidden = YES;
     
     self.keyboardRect = CGRectZero;
+    
+    self.numLines = self.sourceCodeTextView.text.countLines;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -225,21 +229,57 @@ typedef void(^InfoBlock)(void);
 {
     if ([self isExample])
     {
-        __weak EditorViewController *weakSelf = self;
-        [self showInfo:@"Changes in example programs will not be saved.\nMake a copy?" block:^{
-            [weakSelf onDuplicateTapped];
-        }];
-    }
-    else if (![AppController sharedController].isFullVersion)
-    {
-        if (self.sourceCodeTextView.text.countLines > EditorDemoMaxLines)
+        if (self.infoId != InfoIDExample)
         {
             __weak EditorViewController *weakSelf = self;
-            [self showInfo:@"Changes in long programs will not be saved.\nShow information about full version?" block:^{
-                [weakSelf performSegueWithIdentifier:@"Upgrade" sender:weakSelf];
+            [self showInfo:@"Changes in example programs will not be saved.\nMake a copy?" infoId:InfoIDExample block:^{
+                [weakSelf onDuplicateTapped];
             }];
         }
     }
+    return YES;
+}
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    NSString *oldText = [self.sourceCodeTextView.text substringWithRange:range];
+    NSInteger oldTextLineBreaks = [oldText countChar:'\n'];
+    NSInteger newTextLineBreaks = [text countChar:'\n'];
+    NSInteger newNumLines = self.numLines - oldTextLineBreaks + newTextLineBreaks;
+    
+    if (![AppController sharedController].isFullVersion)
+    {
+        __weak EditorViewController *weakSelf = self;
+        if (text.length > 1 && newNumLines > EditorDemoMaxLines)
+        {
+            [self showInfo:@"Cannot paste into long programs.\nShow information about full version?" infoId:InfoIDPaste block:^{
+                [weakSelf performSegueWithIdentifier:@"Upgrade" sender:weakSelf];
+            }];
+            return NO;
+        }
+        
+        if (self.infoId != InfoIDLongProgram && ![self isExample] && newNumLines > EditorDemoMaxLines)
+        {
+            [self showInfo:@"Changes in long programs will not be saved.\nShow information about full version?" infoId:InfoIDLongProgram block:^{
+                [weakSelf performSegueWithIdentifier:@"Upgrade" sender:weakSelf];
+            }];
+        }
+        else if ([self isExample])
+        {
+            if (self.infoId != InfoIDExample)
+            {
+                [self showInfo:@"Changes in example programs will not be saved.\nMake a copy?" infoId:InfoIDExample block:^{
+                    [weakSelf onDuplicateTapped];
+                }];
+            }
+        }
+        else if (newNumLines <= EditorDemoMaxLines || self.infoId == InfoIDPaste)
+        {
+            [self hideInfo];
+        }
+    }
+    
+    self.numLines = newNumLines;
     return YES;
 }
 
@@ -584,13 +624,14 @@ typedef void(^InfoBlock)(void);
 
 #pragma mark - Info bar
 
-- (void)showInfo:(NSString *)text block:(InfoBlock)block
+- (void)showInfo:(NSString *)text infoId:(NSString *)infoId block:(InfoBlock)block
 {
-    self.infoLabel.text = text;
     self.infoBlock = block;
+    self.infoId = infoId;
     
     if (self.infoViewConstraint.constant != 0.0)
     {
+        self.infoLabel.text = text;
         [self.view layoutIfNeeded];
         self.infoView.hidden = NO;
         self.infoViewConstraint.constant = 0.0;
@@ -599,11 +640,18 @@ typedef void(^InfoBlock)(void);
             [self.view layoutIfNeeded];
         }];
     }
+    else
+    {
+        [UIView transitionWithView:self.infoView duration:0.3 options:UIViewAnimationOptionTransitionFlipFromBottom animations:^{
+            self.infoLabel.text = text;
+        } completion:nil];
+    }
 }
 
 - (void)hideInfo
 {
     self.infoBlock = nil;
+    self.infoId = nil;
     
     if (self.infoViewConstraint.constant == 0.0)
     {
