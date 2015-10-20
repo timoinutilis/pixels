@@ -115,6 +115,7 @@ typedef void(^InfoBlock)(void);
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willSaveData:) name:ModelManagerWillSaveDataNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didUpgrade:) name:UpgradeNotification object:nil];
 }
 
 - (void)dealloc
@@ -122,6 +123,7 @@ typedef void(^InfoBlock)(void);
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:ModelManagerWillSaveDataNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UpgradeNotification object:nil];
     
     s_editorInstancesCount--;
 }
@@ -222,6 +224,14 @@ typedef void(^InfoBlock)(void);
     {
         [ModelManager sharedManager].debugSaveCount++;
         self.project.sourceCode = self.sourceCodeTextView.text.uppercaseString;
+    }
+}
+
+- (void)didUpgrade:(NSNotification *)notification
+{
+    if (self.infoId && self.infoId != InfoIDExample)
+    {
+        [self hideInfo];
     }
 }
 

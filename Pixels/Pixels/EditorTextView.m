@@ -108,7 +108,10 @@ NSString *EditorTextView_transferText;
 
 - (void)transferPaste:(id)sender
 {
-    [self insertText:[EditorTextView transferText]];
+    if (!self.delegate || [self.delegate textView:self shouldChangeTextInRange:self.selectedRange replacementText:[EditorTextView transferText]])
+    {
+        [self insertText:[EditorTextView transferText]];
+    }
 }
 
 - (void)help:(id)sender

@@ -12,6 +12,7 @@
 #import "NotificationView.h"
 #import "NSMutableDictionary+Utils.h"
 #import "HelpContent.h"
+#import "TabBarController.h"
 
 NSString *const FullVersionProductID = @"fullversion";
 
@@ -21,6 +22,7 @@ NSString *const ErrorKey = @"Error";
 NSString *const PurchaseStateNotification = @"PurchaseStateNotification";
 NSString *const NewsNotification = @"NewsNotification";
 NSString *const ShowPostNotification = @"ShowPostNotification";
+NSString *const UpgradeNotification = @"UpgradeNotification";
 
 NSString *const InfoIDNews = @"InfoIDNews";
 
@@ -60,13 +62,18 @@ NSString *const InfoIDNews = @"InfoIDNews";
     NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
     [storage setBool:YES forKey:FullVersionProductID];
     [storage synchronize];
+    [[NSNotificationCenter defaultCenter] postNotificationName:UpgradeNotification object:self];
 }
 
 - (void)showAlertWithTitle:(NSString *)title message:(NSString *)message
 {
-    UIViewController *vc = ((UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController).visibleViewController;
-
-    UIAlertController* alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+    UIViewController *vc = self.tabBarController.selectedViewController;
+    if (vc.presentedViewController)
+    {
+        vc = vc.presentedViewController;
+    }
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
     
     [vc presentViewController:alert animated:YES completion:nil];

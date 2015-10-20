@@ -19,6 +19,7 @@ typedef NS_ENUM(NSInteger, PurchaseState) {
 extern NSString *const PurchaseStateNotification;
 extern NSString *const NewsNotification;
 extern NSString *const ShowPostNotification;
+extern NSString *const UpgradeNotification;
 
 @class TabBarController, HelpContent;
 

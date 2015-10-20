@@ -18,6 +18,7 @@ typedef NS_ENUM(NSInteger, TabIndex) {
 @interface TabBarController : UIViewController
 
 @property (nonatomic) NSInteger selectedIndex;
+@property (nonatomic, readonly) UIViewController *selectedViewController;
 
 - (void)showExplorerAnimated:(BOOL)animated;
 - (void)showHelpForChapter:(NSString *)chapter;
