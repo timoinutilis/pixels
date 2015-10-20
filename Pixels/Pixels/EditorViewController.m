@@ -55,6 +55,7 @@ typedef void(^InfoBlock)(void);
 @property BOOL wasEditedSinceLastRun;
 @property CGRect keyboardRect;
 @property NSInteger numLines;
+@property NSString *spacesToInsert;
 @property (strong) InfoBlock infoBlock;
 @property NSString *infoId;
 
@@ -250,6 +251,12 @@ typedef void(^InfoBlock)(void);
     return YES;
 }
 
+- (void)textViewDidBeginEditing:(UITextView *)textView
+{
+    self.wasEditedSinceOpened = YES;
+    self.wasEditedSinceLastRun = YES;
+}
+
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     NSString *oldText = [self.sourceCodeTextView.text substringWithRange:range];
@@ -290,13 +297,34 @@ typedef void(^InfoBlock)(void);
     }
     
     self.numLines = newNumLines;
+    
+    // check for indent
+    self.spacesToInsert = nil;
+    if ([text isEqualToString:@"\n"])
+    {
+        NSRange lineRange = [textView.text lineRangeForRange:textView.selectedRange];
+        for (NSInteger i = 0; i < lineRange.length; i++)
+        {
+            if ([textView.text characterAtIndex:(lineRange.location + i)] != ' ')
+            {
+                lineRange.length = i;
+                self.spacesToInsert = [textView.text substringWithRange:lineRange];
+                break;
+            }
+        }
+    }
     return YES;
 }
 
-- (void)textViewDidBeginEditing:(UITextView *)textView
+- (void)textViewDidChange:(UITextView *)textView
 {
-    self.wasEditedSinceOpened = YES;
-    self.wasEditedSinceLastRun = YES;
+    // indent
+    if (self.spacesToInsert)
+    {
+        NSString *spaces = self.spacesToInsert;
+        self.spacesToInsert = nil;
+        [textView insertText:spaces];
+    }
 }
 
 - (void)onRunTapped:(id)sender
