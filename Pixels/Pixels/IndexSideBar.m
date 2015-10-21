@@ -10,9 +10,12 @@
 #import "NSString+Utils.h"
 #import "AppStyle.h"
 
+static const CGFloat MARGIN = 3.0;
+
 @interface IndexSideBar()
 @property NSInteger numLines;
-@property NSArray *markedLines;
+@property NSArray *markers;
+@property NSInteger oldLine;
 @end
 
 @implementation IndexSideBar
@@ -28,27 +31,21 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
     
     CGFloat width = self.bounds.size.width;
-    CGFloat height = self.bounds.size.height - 2.0 - 3.0;
+    CGFloat height = self.bounds.size.height - 2.0 - 2 * MARGIN;
     
-    CGRect markRect = CGRectMake(3.0, 0.0, width - 6.0, 2.0);
+    CGRect markRect = CGRectMake(MARGIN, 0.0, width - 2 * MARGIN, 2.0);
     CGContextSetFillColorWithColor(context, [AppStyle tintColor].CGColor);
-    for (NSNumber *number in self.markedLines)
+    for (IndexMarker *marker in self.markers)
     {
-        markRect.origin.y = floor(3.0 + number.floatValue * height / self.numLines);
+        markRect.origin.y = floor(MARGIN + marker.line * height / self.numLines);
         CGContextFillRect(context, markRect);
     }
-}
-
-- (void)setTextView:(UITextView *)textView
-{
-    _textView = textView;
-    [self update];
 }
 
 - (void)update
 {
     NSString *text = self.textView.text;
-    NSMutableArray *marks = [NSMutableArray array];
+    NSMutableArray *markers = [NSMutableArray array];
     
     NSUInteger numberOfLines, index, stringLength = [text length];
     for (index = 0, numberOfLines = 0; index < stringLength; numberOfLines++)
@@ -67,7 +64,10 @@
                 findRange = [text rangeOfString:@"REM " options:0 range:lineRange];
                 if (findRange.location == NSNotFound)
                 {
-                    [marks addObject:@(numberOfLines)];
+                    IndexMarker *marker = [[IndexMarker alloc] init];
+                    marker.line = numberOfLines;
+                    marker.range = lineRange;
+                    [markers addObject:marker];
                 }
             }
         }
@@ -77,7 +77,7 @@
     }
     
     self.numLines = numberOfLines;
-    self.markedLines = marks;
+    self.markers = markers;
     [self setNeedsDisplay];
 }
 
@@ -105,10 +105,55 @@
 
 - (void)touchedAtY:(CGFloat)touchY
 {
-    CGFloat row = (touchY - 22.0) / (self.bounds.size.height - 44.0);
-    if (row < 0.0) row = 0.0;
-    if (row > 1.0) row = 1.0;
-    self.textView.contentOffset = CGPointMake(0, floor(row * MAX(0.0, self.textView.contentSize.height - self.textView.bounds.size.height)));
+    CGFloat factor = (touchY - 22.0) / (self.bounds.size.height - 44.0);
+    if (factor < 0.0) factor = 0.0;
+    if (factor > 1.0) factor = 1.0;
+    
+    NSInteger line = floor(factor * self.numLines);
+    
+    if (line != self.oldLine)
+    {
+        IndexMarker *bestMarker = nil;
+        NSInteger bestDist = self.numLines;
+        NSInteger dist;
+        for (IndexMarker *marker in self.markers)
+        {
+            dist = ABS(marker.line - line);
+            if (!bestMarker || dist < bestDist)
+            {
+                bestMarker = marker;
+                bestDist = dist;
+            }
+        }
+        
+        CGFloat maxOffset = MAX(0.0, self.textView.contentSize.height - self.textView.bounds.size.height);
+        CGFloat height = self.bounds.size.height - 2 * MARGIN;
+        
+        if (bestMarker)
+        {
+            CGFloat markerY = (bestMarker.line / (CGFloat)self.numLines) * height;
+            if (ABS(touchY - markerY) > 44.0)
+            {
+                bestMarker = nil;
+            }
+        }
+        
+        if (bestMarker)
+        {
+            CGRect rect = [self.textView.layoutManager boundingRectForGlyphRange:bestMarker.range inTextContainer:self.textView.textContainer];
+            [self.textView setContentOffset:CGPointMake(0, MIN(rect.origin.y, maxOffset)) animated:NO];
+        }
+        else
+        {
+            [self.textView setContentOffset:CGPointMake(0, floor(factor * maxOffset)) animated:NO];
+        }
+        
+        self.oldLine = line;
+    }
 }
 
+@end
+
+
+@implementation IndexMarker
 @end

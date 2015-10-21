@@ -10,8 +10,14 @@
 
 @interface IndexSideBar : UIControl
 
-@property (nonatomic, weak) UITextView *textView;
+@property (weak) UITextView *textView;
 
 - (void)update;
 
+@end
+
+
+@interface IndexMarker : NSObject
+@property NSInteger line;
+@property NSRange range;
 @end

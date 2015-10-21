@@ -52,12 +52,14 @@ typedef void(^InfoBlock)(void);
 @property (weak, nonatomic) IBOutlet UILabel *infoLabel;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *infoViewConstraint;
 @property (weak, nonatomic) IBOutlet IndexSideBar *indexSideBar;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *indexSideBarConstraint;
 
 @property BOOL wasEditedSinceOpened;
 @property BOOL wasEditedSinceLastRun;
 @property CGRect keyboardRect;
 @property NSInteger numLines;
 @property NSString *spacesToInsert;
+@property BOOL shouldUpdateSideBar;
 @property (strong) InfoBlock infoBlock;
 @property NSString *infoId;
 
@@ -136,13 +138,13 @@ typedef void(^InfoBlock)(void);
 - (void)viewWillAppear:(BOOL)animated
 {
     [self updateEditorInsets];
-    [self.indexSideBar update];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     
+    [self.indexSideBar update];
     [self.sourceCodeTextView flashScrollIndicators];
     
     AppController *app = [AppController sharedController];
@@ -214,6 +216,7 @@ typedef void(^InfoBlock)(void);
     }
     self.sourceCodeTextView.contentInset = insets;
     self.sourceCodeTextView.scrollIndicatorInsets = insets;
+    self.indexSideBarConstraint.constant = -insets.bottom;
 }
 
 - (void)saveProject
@@ -264,7 +267,7 @@ typedef void(^InfoBlock)(void);
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-    NSString *oldText = [self.sourceCodeTextView.text substringWithRange:range];
+    NSString *oldText = [textView.text substringWithRange:range];
     NSInteger oldTextLineBreaks = [oldText countChar:'\n'];
     NSInteger newTextLineBreaks = [text countChar:'\n'];
     NSInteger newNumLines = self.numLines - oldTextLineBreaks + newTextLineBreaks;
@@ -318,6 +321,13 @@ typedef void(^InfoBlock)(void);
             }
         }
     }
+    
+    // check for new or deleted label
+    if (   [text rangeOfString:@":"].location != NSNotFound
+        || (range.length > 0 && [oldText rangeOfString:@":"].location != NSNotFound) )
+    {
+        self.shouldUpdateSideBar = YES;
+    }
     return YES;
 }
 
@@ -329,6 +339,13 @@ typedef void(^InfoBlock)(void);
         NSString *spaces = self.spacesToInsert;
         self.spacesToInsert = nil;
         [textView insertText:spaces];
+    }
+    
+    // side bar
+    if (self.shouldUpdateSideBar)
+    {
+        self.shouldUpdateSideBar = NO;
+        [self.indexSideBar update];
     }
 }
 

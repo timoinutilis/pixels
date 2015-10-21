@@ -69,7 +69,7 @@ NSString *EditorTextView_transferText;
 
 - (void)onSpecialKeyTapped:(UIBarButtonItem *)button
 {
-    [self insertText:button.title];
+    [self insertCheckedText:button.title];
 }
 
 - (void)onKeyboardDoneTapped:(UIBarButtonItem *)button
@@ -115,10 +115,7 @@ NSString *EditorTextView_transferText;
 
 - (void)transferPaste:(id)sender
 {
-    if (!self.delegate || [self.delegate textView:self shouldChangeTextInRange:self.selectedRange replacementText:[EditorTextView transferText]])
-    {
-        [self insertText:[EditorTextView transferText]];
-    }
+    [self insertCheckedText:[EditorTextView transferText]];
 }
 
 - (void)help:(id)sender
@@ -186,6 +183,14 @@ NSString *EditorTextView_transferText;
     UIMenuController *menu = [UIMenuController sharedMenuController];
     [menu setTargetRect:rect inView:self];
     [menu setMenuVisible:YES animated:NO];
+}
+
+- (void)insertCheckedText:(NSString *)text
+{
+    if (!self.delegate || [self.delegate textView:self shouldChangeTextInRange:self.selectedRange replacementText:text])
+    {
+        [self insertText:text];
+    }
 }
 
 @end
