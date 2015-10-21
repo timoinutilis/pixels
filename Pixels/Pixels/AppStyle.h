@@ -19,5 +19,6 @@
 + (UIColor *)brightColor;
 + (UIColor *)editorColor;
 + (UIColor *)warningColor;
++ (UIColor *)sideBarColor;
 
 @end

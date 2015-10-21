@@ -27,6 +27,7 @@
 #import "TabBarController.h"
 #import "UITextView+Utils.h"
 #import "HelpContent.h"
+#import "IndexSideBar.h"
 
 int const EditorDemoMaxLines = 24;
 NSString *const CoachMarkIDStart = @"CoachMarkIDStart";
@@ -50,6 +51,7 @@ typedef void(^InfoBlock)(void);
 @property (weak, nonatomic) IBOutlet UIView *infoView;
 @property (weak, nonatomic) IBOutlet UILabel *infoLabel;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *infoViewConstraint;
+@property (weak, nonatomic) IBOutlet IndexSideBar *indexSideBar;
 
 @property BOOL wasEditedSinceOpened;
 @property BOOL wasEditedSinceLastRun;
@@ -109,6 +111,8 @@ typedef void(^InfoBlock)(void);
     self.infoViewConstraint.constant = -self.infoView.bounds.size.height;
     self.infoView.hidden = YES;
     
+    self.indexSideBar.textView = self.sourceCodeTextView;
+    
     self.keyboardRect = CGRectZero;
     
     self.numLines = self.sourceCodeTextView.text.countLines;
@@ -132,6 +136,7 @@ typedef void(^InfoBlock)(void);
 - (void)viewWillAppear:(BOOL)animated
 {
     [self updateEditorInsets];
+    [self.indexSideBar update];
 }
 
 - (void)viewDidAppear:(BOOL)animated

@@ -85,4 +85,9 @@
     return [UIColor colorWithHex:0xF0573C alpha:1.0f];
 }
 
++ (UIColor *)sideBarColor
+{
+    return [UIColor colorWithHex:0x87888a alpha:0.2f];
+}
+
 @end

@@ -38,6 +38,8 @@
 		925C28191B092BD9007AC515 /* DayCodeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 925C28181B092BD9007AC515 /* DayCodeManager.m */; };
 		925C281F1B092CA4007AC515 /* NSDate+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 925C281E1B092CA4007AC515 /* NSDate+Utils.m */; };
 		926086321A5E8560006C5523 /* Runnable.m in Sources */ = {isa = PBXBuildFile; fileRef = 926086311A5E8560006C5523 /* Runnable.m */; };
+		92612CE41BD7A5F600370C82 /* IndexSideBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 92612CE31BD7A5F600370C82 /* IndexSideBar.m */; settings = {ASSET_TAGS = (); }; };
+		92612CE51BD7A5F600370C82 /* IndexSideBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 92612CE31BD7A5F600370C82 /* IndexSideBar.m */; settings = {ASSET_TAGS = (); }; };
 		926864211AA5E50900F305B9 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 926864201AA5E50900F305B9 /* StoreKit.framework */; };
 		926864241AA607A000F305B9 /* UpgradeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 926864231AA607A000F305B9 /* UpgradeViewController.m */; };
 		926864271AA6087300F305B9 /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 926864261AA6087300F305B9 /* AppController.m */; };
@@ -312,6 +314,8 @@
 		925C281E1B092CA4007AC515 /* NSDate+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDate+Utils.m"; path = "Class Utils/NSDate+Utils.m"; sourceTree = "<group>"; };
 		926086301A5E8560006C5523 /* Runnable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Runnable.h; sourceTree = "<group>"; };
 		926086311A5E8560006C5523 /* Runnable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Runnable.m; sourceTree = "<group>"; };
+		92612CE21BD7A5F600370C82 /* IndexSideBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IndexSideBar.h; sourceTree = "<group>"; };
+		92612CE31BD7A5F600370C82 /* IndexSideBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IndexSideBar.m; sourceTree = "<group>"; };
 		926864201AA5E50900F305B9 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		926864221AA607A000F305B9 /* UpgradeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpgradeViewController.h; sourceTree = "<group>"; };
 		926864231AA607A000F305B9 /* UpgradeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpgradeViewController.m; sourceTree = "<group>"; };
@@ -586,6 +590,8 @@
 				92E1AF951B6A49E8000B1B0D /* NotificationView.m */,
 				92D6AD401BC29C4A001E5EED /* SearchToolbar.h */,
 				92D6AD411BC29C4A001E5EED /* SearchToolbar.m */,
+				92612CE21BD7A5F600370C82 /* IndexSideBar.h */,
+				92612CE31BD7A5F600370C82 /* IndexSideBar.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1123,6 +1129,7 @@
 				92A0EC0D1A56DA1F0051D74C /* Model.xcdatamodeld in Sources */,
 				929BCF111BB14800005F1DBD /* AFSecurityPolicy.m in Sources */,
 				9204EF681A4C397300B8C29C /* HelpTextViewController.m in Sources */,
+				92612CE41BD7A5F600370C82 /* IndexSideBar.m in Sources */,
 				926864271AA6087300F305B9 /* AppController.m in Sources */,
 				925C281F1B092CA4007AC515 /* NSDate+Utils.m in Sources */,
 				92E36D1F1ADD679D00C16CBE /* GORLabel.m in Sources */,
@@ -1231,6 +1238,7 @@
 				929BCF4A1BB14A1B005F1DBD /* Model.xcdatamodeld in Sources */,
 				929BCF4B1BB14A1B005F1DBD /* AFSecurityPolicy.m in Sources */,
 				929BCF4C1BB14A1B005F1DBD /* HelpTextViewController.m in Sources */,
+				92612CE51BD7A5F600370C82 /* IndexSideBar.m in Sources */,
 				929BCF4D1BB14A1B005F1DBD /* AppController.m in Sources */,
 				929BCF4E1BB14A1B005F1DBD /* NSDate+Utils.m in Sources */,
 				929BCF4F1BB14A1B005F1DBD /* GORLabel.m in Sources */,

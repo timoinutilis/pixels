@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" text="PRINT &quot;HELLO&quot;" translatesAutoresizingMaskIntoConstraints="NO" id="SjB-QF-tvR" customClass="EditorTextView">
-                                <rect key="frame" x="0.0" y="88" width="480" height="168"/>
+                                <rect key="frame" x="0.0" y="84" width="480" height="172"/>
                                 <animations/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <color key="tintColor" red="0.96470588239999999" green="0.96470588239999999" blue="0.96470588239999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -30,17 +30,17 @@
                                 </variation>
                             </textView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WCW-HT-wOK" userLabel="Info View">
-                                <rect key="frame" x="0.0" y="44" width="480" height="44"/>
+                                <rect key="frame" x="0.0" y="44" width="480" height="40"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c04-Mh-rcv">
-                                        <rect key="frame" x="8" y="3" width="464" height="38"/>
+                                        <rect key="frame" x="8" y="3" width="464" height="34"/>
                                         <animations/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AMv-Sl-9Ff">
-                                        <rect key="frame" x="0.0" y="0.0" width="480" height="44"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="480" height="40"/>
                                         <animations/>
                                         <connections>
                                             <action selector="onInfoTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="aML-Wg-SRS"/>
@@ -55,7 +55,7 @@
                                     <constraint firstAttribute="trailing" secondItem="c04-Mh-rcv" secondAttribute="trailing" constant="8" id="GVG-gj-Vqg"/>
                                     <constraint firstItem="c04-Mh-rcv" firstAttribute="leading" secondItem="WCW-HT-wOK" secondAttribute="leading" constant="8" id="anT-t2-7LC"/>
                                     <constraint firstItem="AMv-Sl-9Ff" firstAttribute="top" secondItem="WCW-HT-wOK" secondAttribute="top" id="fUs-zz-wTK"/>
-                                    <constraint firstAttribute="height" constant="44" id="jLc-KQ-6z2"/>
+                                    <constraint firstAttribute="height" constant="40" id="jLc-KQ-6z2"/>
                                     <constraint firstItem="c04-Mh-rcv" firstAttribute="top" secondItem="WCW-HT-wOK" secondAttribute="top" constant="3" id="oFj-dY-qSI"/>
                                     <constraint firstAttribute="bottom" secondItem="AMv-Sl-9Ff" secondAttribute="bottom" id="oI3-vk-bH6"/>
                                     <constraint firstAttribute="bottom" secondItem="c04-Mh-rcv" secondAttribute="bottom" constant="3" id="yjP-XL-mYP"/>
@@ -66,12 +66,20 @@
                                 <animations/>
                                 <items/>
                             </toolbar>
+                            <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Li9-mY-tbX" customClass="IndexSideBar">
+                                <rect key="frame" x="458" y="84" width="22" height="172"/>
+                                <animations/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="22" id="amw-3n-hIz"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="WCW-HT-wOK" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="28J-oT-hHb"/>
                             <constraint firstAttribute="trailing" secondItem="dQG-Tl-hCV" secondAttribute="trailing" id="3mg-Oj-JJZ"/>
+                            <constraint firstItem="Li9-mY-tbX" firstAttribute="top" secondItem="SjB-QF-tvR" secondAttribute="top" id="8KR-rX-vfA"/>
                             <constraint firstItem="SjB-QF-tvR" firstAttribute="top" secondItem="WCW-HT-wOK" secondAttribute="bottom" id="CfV-1H-Sta"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="SjB-QF-tvR" secondAttribute="bottom" id="E73-rc-dsw"/>
                             <constraint firstItem="SjB-QF-tvR" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="HdZ-qd-903"/>
@@ -80,6 +88,8 @@
                             <constraint firstAttribute="trailing" secondItem="SjB-QF-tvR" secondAttribute="trailing" id="MHR-FO-uGb"/>
                             <constraint firstAttribute="trailing" secondItem="WCW-HT-wOK" secondAttribute="trailing" id="TIw-ib-zBT"/>
                             <constraint firstItem="dQG-Tl-hCV" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="WP6-2I-z0N"/>
+                            <constraint firstItem="Li9-mY-tbX" firstAttribute="bottom" secondItem="SjB-QF-tvR" secondAttribute="bottom" id="YTC-ne-kNv"/>
+                            <constraint firstItem="Li9-mY-tbX" firstAttribute="trailing" secondItem="SjB-QF-tvR" secondAttribute="trailing" id="scr-bY-g6G"/>
                         </constraints>
                     </view>
                     <toolbarItems/>
@@ -87,6 +97,7 @@
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
+                        <outlet property="indexSideBar" destination="Li9-mY-tbX" id="J3r-KJ-Mxf"/>
                         <outlet property="infoLabel" destination="c04-Mh-rcv" id="CIj-6o-l8D"/>
                         <outlet property="infoView" destination="WCW-HT-wOK" id="0CL-AH-8lo"/>
                         <outlet property="infoViewConstraint" destination="Hk1-9L-Zq3" id="sRZ-VX-uG6"/>
