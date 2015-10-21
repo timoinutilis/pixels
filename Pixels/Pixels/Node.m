@@ -2049,7 +2049,7 @@ NSString *const TRANSFER = @"TRANSFER";
     switch (self.type)
     {
         case TTypeSymRnd:
-            result = arc4random() / ((float)UINT32_MAX + 1.0); rand();
+            result = arc4random() / ((float)UINT32_MAX + 1.0);
             break;
         case TTypeSymHit: // sprite collision, not maths at all
             result = runner.lastSpriteHit;

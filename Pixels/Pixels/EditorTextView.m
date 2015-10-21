@@ -152,11 +152,16 @@ NSString *EditorTextView_transferText;
         else
         {
             NSInteger num = 0;
-            for (NSInteger i = 0; i < 2; i++)
+            for (NSInteger ci = pos; ci < pos + 2 && ci < subtext.length; ci++)
             {
-                if ([subtext characterAtIndex:(pos + i)] == ' ')
+                unichar character = [subtext characterAtIndex:ci];
+                if (character == ' ')
                 {
                     num++;
+                }
+                else if (character == '\n')
+                {
+                    break;
                 }
             }
             if (num > 0)
