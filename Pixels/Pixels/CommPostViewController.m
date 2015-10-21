@@ -34,6 +34,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
 @property WriteCommentCell *writeCommentCell;
 @property ExtendedActivityIndicatorView *activityIndicator;
 @property BOOL wasDeleted;
+@property BOOL isLoadingComments;
 @end
 
 @implementation CommPostViewController
@@ -248,6 +249,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
 - (void)loadCommentsForceReload:(BOOL)forceReload
 {
     self.comments = [NSMutableArray array];
+    self.isLoadingComments = YES;
     
     PFQuery *query = [PFQuery queryWithClassName:[LCCComment parseClassName]];
     [query whereKey:@"post" equalTo:self.post];
@@ -260,21 +262,23 @@ typedef NS_ENUM(NSInteger, CellTag) {
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         
         [self.activityIndicator decreaseActivity];
+        self.isLoadingComments = NO;
         if (objects)
         {
             self.comments = [NSMutableArray arrayWithArray:objects];
-            if (forceReload)
-            {
-                [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
-            }
-            else
-            {
-                [self.tableView reloadData];
-            }
         }
         else if (error)
         {
             [self showAlertWithTitle:@"Could not load comments." message:error.userInfo[@"error"] block:nil];
+        }
+        
+        if (forceReload)
+        {
+            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
+        else
+        {
+            [self.tableView reloadData];
         }
         [self.refreshControl endRefreshing];
         
@@ -586,7 +590,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
     }
     else if (section == 1)
     {
-        return (self.comments.count > 0) ? @"Comments" : @"No Comments Yet";
+        return (self.isLoadingComments) ? @"Loading Comments..." : (self.comments.count > 0) ? @"Comments" : @"No Comments Yet";
     }
     else if (section == 2)
     {
