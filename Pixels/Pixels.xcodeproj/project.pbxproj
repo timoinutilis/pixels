@@ -573,8 +573,6 @@
 				92EDC4411A54701D007824A5 /* Gamepad.m */,
 				92B60FE11AC024250011233B /* GameButton.h */,
 				92B60FE21AC024250011233B /* GameButton.m */,
-				921B234A1A9E3DA800C45AFA /* EditorTextView.h */,
-				921B234B1A9E3DA800C45AFA /* EditorTextView.m */,
 				920E681B1AB731620038994A /* CoachMarkView.h */,
 				920E681C1AB731620038994A /* CoachMarkView.m */,
 				920E681E1AB7317E0038994A /* CoachMarkView.xib */,
@@ -588,10 +586,12 @@
 				9215D7781B37361100A65E55 /* StandardTableViewCell.m */,
 				92E1AF941B6A49E8000B1B0D /* NotificationView.h */,
 				92E1AF951B6A49E8000B1B0D /* NotificationView.m */,
-				92D6AD401BC29C4A001E5EED /* SearchToolbar.h */,
-				92D6AD411BC29C4A001E5EED /* SearchToolbar.m */,
+				921B234A1A9E3DA800C45AFA /* EditorTextView.h */,
+				921B234B1A9E3DA800C45AFA /* EditorTextView.m */,
 				92612CE21BD7A5F600370C82 /* IndexSideBar.h */,
 				92612CE31BD7A5F600370C82 /* IndexSideBar.m */,
+				92D6AD401BC29C4A001E5EED /* SearchToolbar.h */,
+				92D6AD411BC29C4A001E5EED /* SearchToolbar.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";

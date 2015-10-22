@@ -16,6 +16,7 @@ static const CGFloat MARGIN = 3.0;
 @property NSInteger numLines;
 @property NSArray *markers;
 @property NSInteger oldLine;
+@property UIView *highlight;
 @end
 
 @implementation IndexSideBar
@@ -24,6 +25,10 @@ static const CGFloat MARGIN = 3.0;
 {
     self.backgroundColor = [AppStyle sideBarColor];
     self.alpha = 0.5;
+    
+    self.highlight = [[UIView alloc] init];
+    self.highlight.backgroundColor = [AppStyle tintColor];
+    self.highlight.alpha = 0.25;
 }
 
 - (void)drawRect:(CGRect)rect
@@ -97,10 +102,12 @@ static const CGFloat MARGIN = 3.0;
 
 - (void)endTrackingWithTouch:(nullable UITouch *)touch withEvent:(nullable UIEvent *)event
 {
+    [self unhighlight];
 }
 
 - (void)cancelTrackingWithEvent:(nullable UIEvent *)event
 {
+    [self unhighlight];
 }
 
 - (void)touchedAtY:(CGFloat)touchY
@@ -126,13 +133,14 @@ static const CGFloat MARGIN = 3.0;
             }
         }
         
-        CGFloat maxOffset = MAX(0.0, self.textView.contentSize.height - self.textView.bounds.size.height);
+        CGFloat visibleHeight = self.textView.bounds.size.height - self.textView.contentInset.bottom;
+        CGFloat maxOffset = MAX(0.0, self.textView.contentSize.height - visibleHeight);
         CGFloat height = self.bounds.size.height - 2 * MARGIN;
         
         if (bestMarker)
         {
             CGFloat markerY = (bestMarker.line / (CGFloat)self.numLines) * height;
-            if (ABS(touchY - markerY) > 44.0)
+            if (ABS(touchY - markerY) > 22.0)
             {
                 bestMarker = nil;
             }
@@ -141,14 +149,31 @@ static const CGFloat MARGIN = 3.0;
         if (bestMarker)
         {
             CGRect rect = [self.textView.layoutManager boundingRectForGlyphRange:bestMarker.range inTextContainer:self.textView.textContainer];
-            [self.textView setContentOffset:CGPointMake(0, MIN(rect.origin.y, maxOffset)) animated:NO];
+            rect.origin.y += self.textView.textContainerInset.top;
+            CGFloat lineCenterY = rect.origin.y + rect.size.height * 0.5;
+            [self.textView setContentOffset:CGPointMake(0, MAX(MIN(floor(lineCenterY - visibleHeight * 0.5), maxOffset), 0.0)) animated:NO];
+            
+            self.highlight.frame = rect;
+            if (!self.highlight.superview)
+            {
+                [self.textView addSubview:self.highlight];
+            }
         }
         else
         {
             [self.textView setContentOffset:CGPointMake(0, floor(factor * maxOffset)) animated:NO];
+            [self unhighlight];
         }
         
         self.oldLine = line;
+    }
+}
+
+- (void)unhighlight
+{
+    if (self.highlight.superview)
+    {
+        [self.highlight removeFromSuperview];
     }
 }
 
