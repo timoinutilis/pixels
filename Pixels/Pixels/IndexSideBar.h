@@ -20,4 +20,5 @@
 @interface IndexMarker : NSObject
 @property NSInteger line;
 @property NSRange range;
+@property CGFloat currentBarY;
 @end

@@ -15,7 +15,7 @@ static const CGFloat MARGIN = 3.0;
 @interface IndexSideBar()
 @property NSInteger numLines;
 @property NSArray *markers;
-@property NSInteger oldLine;
+@property IndexMarker *oldMarker;
 @property UIView *highlight;
 @end
 
@@ -36,15 +36,26 @@ static const CGFloat MARGIN = 3.0;
     CGContextRef context = UIGraphicsGetCurrentContext();
     
     CGFloat width = self.bounds.size.width;
-    CGFloat height = self.bounds.size.height - 2.0 - 2 * MARGIN;
     
     CGRect markRect = CGRectMake(MARGIN, 0.0, width - 2 * MARGIN, 2.0);
     CGContextSetFillColorWithColor(context, [AppStyle tintColor].CGColor);
     for (IndexMarker *marker in self.markers)
     {
-        markRect.origin.y = floor(MARGIN + marker.line * height / self.numLines);
+        markRect.origin.y = floor(marker.currentBarY);
         CGContextFillRect(context, markRect);
     }
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+
+    CGFloat height = self.bounds.size.height - 2.0 - 2 * MARGIN;
+    for (IndexMarker *marker in self.markers)
+    {
+        marker.currentBarY = MARGIN + marker.line * height / self.numLines;
+    }
+    [self setNeedsDisplay];
 }
 
 - (void)update
@@ -83,7 +94,7 @@ static const CGFloat MARGIN = 3.0;
     
     self.numLines = numberOfLines;
     self.markers = markers;
-    [self setNeedsDisplay];
+    [self setNeedsLayout];
 }
 
 - (BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(nullable UIEvent *)event
@@ -102,70 +113,67 @@ static const CGFloat MARGIN = 3.0;
 
 - (void)endTrackingWithTouch:(nullable UITouch *)touch withEvent:(nullable UIEvent *)event
 {
+    self.oldMarker = nil;
     [self unhighlight];
 }
 
 - (void)cancelTrackingWithEvent:(nullable UIEvent *)event
 {
+    self.oldMarker = nil;
     [self unhighlight];
 }
 
 - (void)touchedAtY:(CGFloat)touchY
 {
-    CGFloat factor = (touchY - 22.0) / (self.bounds.size.height - 44.0);
-    if (factor < 0.0) factor = 0.0;
-    if (factor > 1.0) factor = 1.0;
-    
-    NSInteger line = floor(factor * self.numLines);
-    
-    if (line != self.oldLine)
+    IndexMarker *bestMarker = nil;
+    CGFloat bestDist = self.bounds.size.height;
+    CGFloat dist;
+    for (IndexMarker *marker in self.markers)
     {
-        IndexMarker *bestMarker = nil;
-        NSInteger bestDist = self.numLines;
-        NSInteger dist;
-        for (IndexMarker *marker in self.markers)
+        dist = ABS(marker.currentBarY - touchY);
+        if (dist < 22.0 && (!bestMarker || dist < bestDist))
         {
-            dist = ABS(marker.line - line);
-            if (!bestMarker || dist < bestDist)
-            {
-                bestMarker = marker;
-                bestDist = dist;
-            }
+            bestMarker = marker;
+            bestDist = dist;
         }
-        
-        CGFloat visibleHeight = self.textView.bounds.size.height - self.textView.contentInset.bottom;
-        CGFloat maxOffset = MAX(0.0, self.textView.contentSize.height - visibleHeight);
-        CGFloat height = self.bounds.size.height - 2 * MARGIN;
-        
-        if (bestMarker)
-        {
-            CGFloat markerY = (bestMarker.line / (CGFloat)self.numLines) * height;
-            if (ABS(touchY - markerY) > 22.0)
-            {
-                bestMarker = nil;
-            }
-        }
-        
-        if (bestMarker)
+    }
+    
+    CGFloat visibleHeight = self.textView.bounds.size.height - self.textView.contentInset.bottom;
+    CGFloat maxOffset = MAX(0.0, self.textView.contentSize.height - visibleHeight);
+    
+    CGFloat scrollCenterY = -1.0;
+    if (bestMarker)
+    {
+        if (bestMarker != self.oldMarker)
         {
             CGRect rect = [self.textView.layoutManager boundingRectForGlyphRange:bestMarker.range inTextContainer:self.textView.textContainer];
             rect.origin.y += self.textView.textContainerInset.top;
-            CGFloat lineCenterY = rect.origin.y + rect.size.height * 0.5;
-            [self.textView setContentOffset:CGPointMake(0, MAX(MIN(floor(lineCenterY - visibleHeight * 0.5), maxOffset), 0.0)) animated:NO];
-            
+            scrollCenterY = rect.origin.y + rect.size.height * 0.5;
+
             self.highlight.frame = rect;
             if (!self.highlight.superview)
             {
                 [self.textView addSubview:self.highlight];
             }
+            
+            self.oldMarker = bestMarker;
         }
-        else
-        {
-            [self.textView setContentOffset:CGPointMake(0, floor(factor * maxOffset)) animated:NO];
-            [self unhighlight];
-        }
+    }
+    else
+    {
+        [self unhighlight];
+        self.oldMarker = nil;
         
-        self.oldLine = line;
+        CGFloat factor = (touchY - 22.0) / (self.bounds.size.height - 44.0);
+        if (factor < 0.0) factor = 0.0;
+        if (factor > 1.0) factor = 1.0;
+        
+        scrollCenterY = factor * self.textView.contentSize.height;
+    }
+    
+    if (scrollCenterY != -1.0)
+    {
+        [self.textView setContentOffset:CGPointMake(0, MAX(MIN(floor(scrollCenterY - visibleHeight * 0.5), maxOffset), 0.0)) animated:NO];
     }
 }
 
