@@ -194,7 +194,7 @@ static const CGFloat MARGIN = 3.0;
 - (void)showLabels
 {
     self.labels = [NSMutableArray arrayWithCapacity:self.markers.count];
-    CGFloat lastBottom = 0.0;
+    CGFloat lastBottom = 2.0;
     for (IndexMarker *marker in self.markers)
     {
         if (marker.currentBarY > lastBottom)
@@ -202,7 +202,7 @@ static const CGFloat MARGIN = 3.0;
             UILabel *label = [[UILabel alloc] init];
             label.userInteractionEnabled = NO;
             label.backgroundColor = [AppStyle barColor];
-            label.layer.cornerRadius = 4.0;
+            label.layer.cornerRadius = 2.0;
             label.clipsToBounds = YES;
             label.textColor = [AppStyle brightColor];
             label.font = [UIFont systemFontOfSize:11];
@@ -210,8 +210,8 @@ static const CGFloat MARGIN = 3.0;
             [label sizeToFit];
             
             CGRect frame = label.frame;
-            frame.origin.x = -frame.size.width - 2.0;
-            frame.origin.y = MAX(marker.currentBarY - frame.size.height * 0.5, lastBottom);
+            frame.origin.x = round(-frame.size.width - 24.0);
+            frame.origin.y = round(MAX(marker.currentBarY - frame.size.height * 0.5, lastBottom));
             label.frame = [self.superview convertRect:frame fromView:self];
             lastBottom = frame.origin.y + frame.size.height + 1.0;
             
