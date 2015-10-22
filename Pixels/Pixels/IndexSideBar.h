@@ -18,6 +18,7 @@
 
 
 @interface IndexMarker : NSObject
+@property NSString *label;
 @property NSInteger line;
 @property NSRange range;
 @property CGFloat currentBarY;

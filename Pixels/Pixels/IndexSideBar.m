@@ -17,6 +17,7 @@ static const CGFloat MARGIN = 3.0;
 @property NSArray *markers;
 @property IndexMarker *oldMarker;
 @property UIView *highlight;
+@property NSMutableArray *labels;
 @end
 
 @implementation IndexSideBar
@@ -36,9 +37,10 @@ static const CGFloat MARGIN = 3.0;
     CGContextRef context = UIGraphicsGetCurrentContext();
     
     CGFloat width = self.bounds.size.width;
+    UIColor *rectColor = [AppStyle tintColor];
     
     CGRect markRect = CGRectMake(MARGIN, 0.0, width - 2 * MARGIN, 2.0);
-    CGContextSetFillColorWithColor(context, [AppStyle tintColor].CGColor);
+    CGContextSetFillColorWithColor(context, rectColor.CGColor);
     for (IndexMarker *marker in self.markers)
     {
         markRect.origin.y = floor(marker.currentBarY);
@@ -77,10 +79,11 @@ static const CGFloat MARGIN = 3.0;
             if (findRange.location == NSNotFound)
             {
                 // ignore REMs
-                findRange = [text rangeOfString:@"REM " options:0 range:lineRange];
+                findRange = [text rangeOfString:@"REM " options:NSCaseInsensitiveSearch range:lineRange];
                 if (findRange.location == NSNotFound)
                 {
                     IndexMarker *marker = [[IndexMarker alloc] init];
+                    marker.label = [[text substringWithRange:lineRange] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
                     marker.line = numberOfLines;
                     marker.range = lineRange;
                     [markers addObject:marker];
@@ -99,6 +102,7 @@ static const CGFloat MARGIN = 3.0;
 
 - (BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(nullable UIEvent *)event
 {
+    [self showLabels];
     CGPoint point = [touch locationInView:self];
     [self touchedAtY:point.y];
     return YES;
@@ -115,12 +119,14 @@ static const CGFloat MARGIN = 3.0;
 {
     self.oldMarker = nil;
     [self unhighlight];
+    [self hideLabels];
 }
 
 - (void)cancelTrackingWithEvent:(nullable UIEvent *)event
 {
     self.oldMarker = nil;
     [self unhighlight];
+    [self hideLabels];
 }
 
 - (void)touchedAtY:(CGFloat)touchY
@@ -183,6 +189,45 @@ static const CGFloat MARGIN = 3.0;
     {
         [self.highlight removeFromSuperview];
     }
+}
+
+- (void)showLabels
+{
+    self.labels = [NSMutableArray arrayWithCapacity:self.markers.count];
+    CGFloat lastBottom = 0.0;
+    for (IndexMarker *marker in self.markers)
+    {
+        if (marker.currentBarY > lastBottom)
+        {
+            UILabel *label = [[UILabel alloc] init];
+            label.userInteractionEnabled = NO;
+            label.backgroundColor = [AppStyle barColor];
+            label.layer.cornerRadius = 4.0;
+            label.clipsToBounds = YES;
+            label.textColor = [AppStyle brightColor];
+            label.font = [UIFont systemFontOfSize:11];
+            label.text = marker.label;
+            [label sizeToFit];
+            
+            CGRect frame = label.frame;
+            frame.origin.x = -frame.size.width - 2.0;
+            frame.origin.y = MAX(marker.currentBarY - frame.size.height * 0.5, lastBottom);
+            label.frame = [self.superview convertRect:frame fromView:self];
+            lastBottom = frame.origin.y + frame.size.height + 1.0;
+            
+            [self.superview addSubview:label];
+            [self.labels addObject:label];
+        }
+    }
+}
+
+- (void)hideLabels
+{
+    for (UILabel *label in self.labels)
+    {
+        [label removeFromSuperview];
+    }
+    self.labels = nil;
 }
 
 @end
