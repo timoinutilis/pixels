@@ -156,6 +156,7 @@ typedef void(^InfoBlock)(void);
         // Recorded Video!
         app.replayPreviewViewController.previewControllerDelegate = self;
         app.replayPreviewViewController.popoverPresentationController.barButtonItem = self.projectItem;
+        app.replayPreviewViewController.modalInPopover = YES;
         [self presentViewController:app.replayPreviewViewController animated:YES completion:nil];
         app.replayPreviewViewController = nil;
     }

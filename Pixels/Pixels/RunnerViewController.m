@@ -45,6 +45,7 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTop;
 
+@property BOOL didAppearAlready;
 @property (nonatomic) BOOL isFullscreen;
 @property (nonatomic) BOOL soundEnabled;
 @property Runner *runner;
@@ -52,6 +53,7 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
 @property (nonatomic) BOOL isPaused;
 @property GCController *gameController;
 @property BOOL dismissWhenFinished;
+@property double audioVolume;
 
 @end
 
@@ -60,6 +62,8 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.audioVolume = 1.0;
     
     [self setGamepadModeWithPlayers:0];
     
@@ -107,17 +111,28 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
 {
     [super viewDidAppear:animated];
     
-    [self hideExitButtonAfterDelay];
-    
-    if (self.runnable.recordingMode != RecordingModeNone)
+    if (!self.didAppearAlready)
     {
-        [[RPScreenRecorder sharedRecorder] startRecordingWithMicrophoneEnabled:(self.runnable.recordingMode == RecordingModeScreenAndMic) handler:^(NSError * _Nullable error) {
+        self.didAppearAlready = YES;
+        
+        [self hideExitButtonAfterDelay];
+        
+        if (self.runnable.recordingMode != RecordingModeNone)
+        {
+            if (self.runnable.recordingMode == RecordingModeScreenAndMic)
+            {
+                // less volume when recording voice
+                self.audioVolume = 0.25;
+                self.runner.audioPlayer.volume = self.audioVolume;
+            }
+            [[RPScreenRecorder sharedRecorder] startRecordingWithMicrophoneEnabled:(self.runnable.recordingMode == RecordingModeScreenAndMic) handler:^(NSError * _Nullable error) {
+                [self run];
+            }];
+        }
+        else
+        {
             [self run];
-        }];
-    }
-    else
-    {
-        [self run];
+        }
     }
 }
 
@@ -421,7 +436,7 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
     }
     else
     {
-        self.runner.audioPlayer.volume = self.soundEnabled ? 1.0 : 0.0;
+        self.runner.audioPlayer.volume = self.soundEnabled ? self.audioVolume : 0.0;
     }
 }
 
@@ -447,7 +462,7 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
     UIImage *image = [UIImage imageNamed:(soundEnabled ? @"sound_on" : @"sound_off")];
     [self.soundButton setImage:image forState:UIControlStateNormal];
     
-    self.runner.audioPlayer.volume = soundEnabled ? 1.0 : 0.0;
+    self.runner.audioPlayer.volume = soundEnabled ? self.audioVolume : 0.0;
 }
 
 - (void)runnerLog:(NSString *)message
