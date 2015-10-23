@@ -223,6 +223,8 @@
 		92A0EC0D1A56DA1F0051D74C /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 92A0EC0B1A56DA1F0051D74C /* Model.xcdatamodeld */; };
 		92ACDC3A1B359AED009252D6 /* BackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92ACDC391B359AED009252D6 /* BackgroundView.m */; };
 		92ACDC3D1B359C7A009252D6 /* TextLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 92ACDC3C1B359C7A009252D6 /* TextLabel.m */; };
+		92B4BF801BDA47F0000EB8FD /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92B4BF7F1BDA47F0000EB8FD /* ReplayKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		92B4BF811BDA47FF000EB8FD /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92B4BF7F1BDA47F0000EB8FD /* ReplayKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		92B60FE31AC024250011233B /* GameButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 92B60FE21AC024250011233B /* GameButton.m */; };
 		92B7A5331AA8C71000B6CA81 /* AudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 92B7A5321AA8C71000B6CA81 /* AudioPlayer.m */; };
 		92B956FE1BBD6CD500699BFF /* TabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92B956FD1BBD6CD500699BFF /* TabBarController.m */; };
@@ -436,6 +438,7 @@
 		92ACDC391B359AED009252D6 /* BackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BackgroundView.m; sourceTree = "<group>"; };
 		92ACDC3B1B359C7A009252D6 /* TextLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextLabel.h; sourceTree = "<group>"; };
 		92ACDC3C1B359C7A009252D6 /* TextLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextLabel.m; sourceTree = "<group>"; };
+		92B4BF7F1BDA47F0000EB8FD /* ReplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReplayKit.framework; path = System/Library/Frameworks/ReplayKit.framework; sourceTree = SDKROOT; };
 		92B60FE11AC024250011233B /* GameButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameButton.h; sourceTree = "<group>"; };
 		92B60FE21AC024250011233B /* GameButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameButton.m; sourceTree = "<group>"; };
 		92B7A5311AA8C71000B6CA81 /* AudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioPlayer.h; sourceTree = "<group>"; };
@@ -497,6 +500,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				92B4BF801BDA47F0000EB8FD /* ReplayKit.framework in Frameworks */,
 				929BCEF81BB1442F005F1DBD /* libz.tbd in Frameworks */,
 				929BCEF61BB143A0005F1DBD /* libsqlite3.tbd in Frameworks */,
 				928445FF1B012CF700203974 /* SystemConfiguration.framework in Frameworks */,
@@ -517,6 +521,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				92B4BF811BDA47FF000EB8FD /* ReplayKit.framework in Frameworks */,
 				929BCF791BB14A1B005F1DBD /* libz.tbd in Frameworks */,
 				929BCF7A1BB14A1B005F1DBD /* libsqlite3.tbd in Frameworks */,
 				929BCF7B1BB14A1B005F1DBD /* SystemConfiguration.framework in Frameworks */,
@@ -796,6 +801,7 @@
 		928446041B012D2A00203974 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				92B4BF7F1BDA47F0000EB8FD /* ReplayKit.framework */,
 				929BCEF71BB1442F005F1DBD /* libz.tbd */,
 				929BCEF51BB143A0005F1DBD /* libsqlite3.tbd */,
 				929BCEF11BB142FC005F1DBD /* Bolts.framework */,

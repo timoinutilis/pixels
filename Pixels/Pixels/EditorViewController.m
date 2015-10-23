@@ -28,6 +28,7 @@
 #import "UITextView+Utils.h"
 #import "HelpContent.h"
 #import "IndexSideBar.h"
+#import <ReplayKit/ReplayKit.h>
 
 int const EditorDemoMaxLines = 24;
 NSString *const CoachMarkIDStart = @"CoachMarkIDStart";
@@ -43,7 +44,7 @@ static int s_editorInstancesCount = 0;
 typedef void(^InfoBlock)(void);
 
 
-@interface EditorViewController () <SearchToolbarDelegate, EditorTextViewDelegate, UITextViewDelegate>
+@interface EditorViewController () <SearchToolbarDelegate, EditorTextViewDelegate, UITextViewDelegate, RPPreviewViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet EditorTextView *sourceCodeTextView;
 @property (weak, nonatomic) IBOutlet SearchToolbar *searchToolbar;
@@ -53,6 +54,8 @@ typedef void(^InfoBlock)(void);
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *infoViewConstraint;
 @property (weak, nonatomic) IBOutlet IndexSideBar *indexSideBar;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *indexSideBarConstraint;
+
+@property UIBarButtonItem *projectItem;
 
 @property BOOL wasEditedSinceOpened;
 @property BOOL wasEditedSinceLastRun;
@@ -78,11 +81,11 @@ typedef void(^InfoBlock)(void);
     }
     
     UIBarButtonItem *startItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"start"] style:UIBarButtonItemStylePlain target:self action:@selector(onRunTapped:)];
-    UIBarButtonItem *projectItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"share"] style:UIBarButtonItemStylePlain target:self action:@selector(onProjectTapped:)];
+    self.projectItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"share"] style:UIBarButtonItemStylePlain target:self action:@selector(onProjectTapped:)];
     UIBarButtonItem *searchItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search"] style:UIBarButtonItemStylePlain target:self action:@selector(onSearchTapped:)];
     UIBarButtonItem *feedbackItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"feedback"] style:UIBarButtonItemStylePlain target:self action:@selector(onFeedbackTapped:)];
     
-    self.navigationItem.rightBarButtonItems = @[startItem, searchItem, feedbackItem, projectItem];
+    self.navigationItem.rightBarButtonItems = @[startItem, searchItem, feedbackItem, self.projectItem];
     
     self.view.backgroundColor = [AppStyle editorColor];
     self.sourceCodeTextView.backgroundColor = [AppStyle editorColor];
@@ -148,7 +151,15 @@ typedef void(^InfoBlock)(void);
     [self.sourceCodeTextView flashScrollIndicators];
     
     AppController *app = [AppController sharedController];
-    if (app.shouldShowTransferAlert)
+    if (app.replayPreviewViewController)
+    {
+        // Recorded Video!
+        app.replayPreviewViewController.previewControllerDelegate = self;
+        app.replayPreviewViewController.popoverPresentationController.barButtonItem = self.projectItem;
+        [self presentViewController:app.replayPreviewViewController animated:YES completion:nil];
+        app.replayPreviewViewController = nil;
+    }
+    else if (app.shouldShowTransferAlert)
     {
         app.shouldShowTransferAlert = NO;
         
@@ -188,6 +199,13 @@ typedef void(^InfoBlock)(void);
 {
     [super viewWillDisappear:animated];
     [self saveProject];
+}
+
+- (void)previewControllerDidFinish:(RPPreviewViewController *)previewController
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self dismissViewControllerAnimated:YES completion:nil];
+    });
 }
 
 - (void)keyboardWillShow:(NSNotification *)notification
@@ -357,7 +375,7 @@ typedef void(^InfoBlock)(void);
 
 - (void)onRunTapped:(id)sender
 {
-    [self runProgram];
+    [self runProgramWithRecordingMode:RecordingModeNone];
 }
 
 - (void)onSearchTapped:(id)sender
@@ -399,7 +417,12 @@ typedef void(^InfoBlock)(void);
         [weakSelf onShareTapped:sender community:NO];
     }];
     [alert addAction:shareMenuAction];
-
+    
+    UIAlertAction *videoMenuAction = [UIAlertAction actionWithTitle:@"Record Video" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        [weakSelf onRecordVideoTapped:sender];
+    }];
+    [alert addAction:videoMenuAction];
+    
     UIAlertAction *renameAction = [UIAlertAction actionWithTitle:@"Rename" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
         [weakSelf onRenameTapped];
     }];
@@ -566,6 +589,38 @@ typedef void(^InfoBlock)(void);
             activityVC.popoverPresentationController.barButtonItem = sender;
             [self presentViewController:activityVC animated:YES completion:nil];
         }
+    }
+}
+
+- (void)onRecordVideoTapped:(id)sender
+{
+    if (![RPScreenRecorder class])
+    {
+        [self showAlertWithTitle:@"Recording is not available" message:@"Please update your device to iOS 9 or higher!" block:nil];
+    }
+    else if (![RPScreenRecorder sharedRecorder].available)
+    {
+        [self showAlertWithTitle:@"Recording is not available" message:@"Your device doesn't support screen recording or the recorder is currently in use." block:nil];
+    }
+    else
+    {
+        __weak EditorViewController *weakSelf = self;
+        
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Do you also want to record an audio commentary?"
+                                                                       message:nil
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alert addAction:[UIAlertAction actionWithTitle:@"Record Screen & Microphone" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [weakSelf runProgramWithRecordingMode:RecordingModeScreenAndMic];
+        }]];
+        
+        [alert addAction:[UIAlertAction actionWithTitle:@"Record Screen Only" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [weakSelf runProgramWithRecordingMode:RecordingModeScreen];
+        }]];
+
+        [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+        
+        [self presentViewController:alert animated:YES completion:nil];
     }
 }
 
@@ -745,7 +800,7 @@ typedef void(^InfoBlock)(void);
 
 #pragma mark - Compile and run
 
-- (void)runProgram
+- (void)runProgramWithRecordingMode:(RecordingMode)recordingMode
 {
     NSString *sourceCode = self.sourceCodeTextView.text.uppercaseString;
     NSString *transferSourceCode = [EditorTextView transferText];
@@ -767,6 +822,7 @@ typedef void(^InfoBlock)(void);
     if (runnable)
     {
         runnable.transferDataNodes = transferDataNodes;
+        runnable.recordingMode = recordingMode;
         [self run:runnable];
     }
     else if (error)

@@ -7,6 +7,7 @@
 //
 
 #import "RunnerViewController.h"
+#import "RunnerDelegate.h"
 #import "Runner.h"
 #import "RendererView.h"
 #import "Project.h"
@@ -19,13 +20,15 @@
 #import "CoachMarkView.h"
 #import "Runnable.h"
 #import "VariableManager.h"
+#import "UIViewController+LowResCoder.h"
 #import <GameController/GameController.h>
+#import <ReplayKit/ReplayKit.h>
 
 NSString *const UserDefaultsFullscreenKey = @"fullscreen";
 NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
 NSString *const UserDefaultsPersistentKey = @"persistent";
 
-@interface RunnerViewController ()
+@interface RunnerViewController () <RunnerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *containerView;
 @property (weak, nonatomic) IBOutlet UIButton *exitButton;
@@ -104,8 +107,18 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
 {
     [super viewDidAppear:animated];
     
-    [self run];
     [self hideExitButtonAfterDelay];
+    
+    if (self.runnable.recordingMode != RecordingModeNone)
+    {
+        [[RPScreenRecorder sharedRecorder] startRecordingWithMicrophoneEnabled:(self.runnable.recordingMode == RecordingModeScreenAndMic) handler:^(NSError * _Nullable error) {
+            [self run];
+        }];
+    }
+    else
+    {
+        [self run];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -269,7 +282,7 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
             dispatch_async(dispatch_get_main_queue(), ^{
                 UIAlertController* alert = [UIAlertController alertControllerWithTitle:runner.error.localizedDescription message:line preferredStyle:UIAlertControllerStyleAlert];
                 [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                    [weakSelf.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+                    [weakSelf finish];
                 }]];
                 [self presentViewController:alert animated:YES completion:nil];
             });
@@ -306,7 +319,7 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
         if (self.dismissWhenFinished)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+                [self finish];
             });
         }
         
@@ -319,6 +332,33 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
     if (self.isPaused)
     {
         self.isPaused = NO;
+    }
+}
+
+- (void)finish
+{
+    if (self.runnable.recordingMode != RecordingModeNone && [RPScreenRecorder sharedRecorder].recording)
+    {
+        __weak RunnerViewController *weakSelf = self;
+        [[RPScreenRecorder sharedRecorder] stopRecordingWithHandler:^(RPPreviewViewController * _Nullable previewViewController, NSError * _Nullable error) {
+            
+            if (error)
+            {
+                [weakSelf showAlertWithTitle:@"Could not record video" message:error.localizedDescription block:^{
+                    [weakSelf.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+                }];
+            }
+            else
+            {
+                [AppController sharedController].replayPreviewViewController = previewViewController;
+                [weakSelf.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+            }
+            
+        }];
+    }
+    else
+    {
+        [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
     }
 }
 

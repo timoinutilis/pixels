@@ -21,7 +21,7 @@ extern NSString *const NewsNotification;
 extern NSString *const ShowPostNotification;
 extern NSString *const UpgradeNotification;
 
-@class TabBarController, HelpContent;
+@class TabBarController, HelpContent, RPPreviewViewController;
 
 @interface AppController : NSObject <SKProductsRequestDelegate, SKPaymentTransactionObserver>
 
@@ -36,6 +36,7 @@ extern NSString *const UpgradeNotification;
 @property BOOL shouldShowTransferAlert;
 @property (nonatomic) NSInteger numNews;
 @property NSString *shouldShowPostId;
+@property RPPreviewViewController *replayPreviewViewController;
 
 + (AppController *)sharedController;
 

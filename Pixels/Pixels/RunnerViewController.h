@@ -7,11 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "RunnerDelegate.h"
 
 @class Project, Runnable;
 
-@interface RunnerViewController : UIViewController <RunnerDelegate>
+@interface RunnerViewController : UIViewController
 
 @property Project *project;
 @property Runnable *runnable;

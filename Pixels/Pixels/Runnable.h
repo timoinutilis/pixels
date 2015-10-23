@@ -13,6 +13,12 @@ typedef NS_ENUM(NSInteger, PrePass) {
     PrePassCheckSemantic
 };
 
+typedef NS_ENUM(NSInteger, RecordingMode) {
+    RecordingModeNone,
+    RecordingModeScreen,
+    RecordingModeScreenAndMic
+};
+
 @interface Runnable : NSObject
 
 @property (readonly) NSArray *nodes;
@@ -21,6 +27,7 @@ typedef NS_ENUM(NSInteger, PrePass) {
 @property NSArray *transferDataNodes;
 @property BOOL usesGamepad;
 @property BOOL usesSound;
+@property RecordingMode recordingMode;
 @property (nonatomic) NSError *error;
 
 - (instancetype)initWithNodes:(NSArray *)nodes;
