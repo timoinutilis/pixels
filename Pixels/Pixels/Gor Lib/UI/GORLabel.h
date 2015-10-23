@@ -10,4 +10,6 @@
 
 @interface GORLabel : UILabel
 
+@property UIEdgeInsets insets;
+
 @end

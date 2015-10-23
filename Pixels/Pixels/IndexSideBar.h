@@ -11,6 +11,7 @@
 @interface IndexSideBar : UIControl
 
 @property (weak) UITextView *textView;
+@property BOOL shouldUpdateOnTouch;
 
 - (void)update;
 

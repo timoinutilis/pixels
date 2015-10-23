@@ -344,8 +344,14 @@ typedef void(^InfoBlock)(void);
     // side bar
     if (self.shouldUpdateSideBar)
     {
+        // immediate update
         self.shouldUpdateSideBar = NO;
         [self.indexSideBar update];
+    }
+    else
+    {
+        // update later
+        self.indexSideBar.shouldUpdateOnTouch = YES;
     }
 }
 

@@ -10,19 +10,11 @@
 
 @implementation GORLabel
 
-- (void)setBounds:(CGRect)bounds
+- (CGRect)textRectForBounds:(CGRect)bounds limitedToNumberOfLines:(NSInteger)numberOfLines
 {
-    [super setBounds:bounds];
-    
-    // If this is a multiline label, need to make sure
-    // preferredMaxLayoutWidth always matches the frame width
-    // (i.e. orientation change can mess this up)
-    
-    if (self.numberOfLines == 0 && bounds.size.width != self.preferredMaxLayoutWidth)
-    {
-        self.preferredMaxLayoutWidth = self.bounds.size.width;
-        [self setNeedsUpdateConstraints];
-    }
+    CGRect rect = [super textRectForBounds:bounds limitedToNumberOfLines:numberOfLines];
+    rect = UIEdgeInsetsInsetRect(rect, self.insets);
+    return rect;
 }
 
 @end

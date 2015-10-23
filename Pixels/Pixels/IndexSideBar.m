@@ -9,6 +9,7 @@
 #import "IndexSideBar.h"
 #import "NSString+Utils.h"
 #import "AppStyle.h"
+#import "GORLabel.h"
 
 static const CGFloat MARGIN = 3.0;
 
@@ -97,11 +98,16 @@ static const CGFloat MARGIN = 3.0;
     
     self.numLines = numberOfLines;
     self.markers = markers;
+    self.shouldUpdateOnTouch = NO;
     [self setNeedsLayout];
 }
 
 - (BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(nullable UIEvent *)event
 {
+    if (self.shouldUpdateOnTouch)
+    {
+        [self update];
+    }
     [self showLabels];
     CGPoint point = [touch locationInView:self];
     [self touchedAtY:point.y];
@@ -156,6 +162,7 @@ static const CGFloat MARGIN = 3.0;
             rect.origin.y += self.textView.textContainerInset.top;
             scrollCenterY = rect.origin.y + rect.size.height * 0.5;
 
+            rect.size.width -= 22.0;
             self.highlight.frame = rect;
             if (!self.highlight.superview)
             {
@@ -199,18 +206,20 @@ static const CGFloat MARGIN = 3.0;
     {
         if (marker.currentBarY > lastBottom)
         {
-            UILabel *label = [[UILabel alloc] init];
+            GORLabel *label = [[GORLabel alloc] init];
             label.userInteractionEnabled = NO;
             label.backgroundColor = [AppStyle barColor];
-            label.layer.cornerRadius = 2.0;
+            label.insets = UIEdgeInsetsMake(0, -4.0, 0, -4.0);
+            label.layer.cornerRadius = 4.0;
             label.clipsToBounds = YES;
             label.textColor = [AppStyle brightColor];
             label.font = [UIFont systemFontOfSize:11];
+            label.textAlignment = NSTextAlignmentCenter;
             label.text = marker.label;
             [label sizeToFit];
             
             CGRect frame = label.frame;
-            frame.origin.x = round(-frame.size.width - 24.0);
+            frame.origin.x = ceil(-frame.size.width - 24.0);
             frame.origin.y = round(MAX(marker.currentBarY - frame.size.height * 0.5, lastBottom));
             label.frame = [self.superview convertRect:frame fromView:self];
             lastBottom = frame.origin.y + frame.size.height + 1.0;
@@ -223,7 +232,7 @@ static const CGFloat MARGIN = 3.0;
 
 - (void)hideLabels
 {
-    for (UILabel *label in self.labels)
+    for (GORLabel *label in self.labels)
     {
         [label removeFromSuperview];
     }
