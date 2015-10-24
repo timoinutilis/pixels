@@ -155,10 +155,8 @@ typedef void(^InfoBlock)(void);
     {
         // Recorded Video!
         app.replayPreviewViewController.previewControllerDelegate = self;
-        app.replayPreviewViewController.popoverPresentationController.barButtonItem = self.projectItem;
-        app.replayPreviewViewController.modalInPopover = YES;
+        app.replayPreviewViewController.modalPresentationStyle = UIModalPresentationFullScreen;
         [self presentViewController:app.replayPreviewViewController animated:YES completion:nil];
-        app.replayPreviewViewController = nil;
     }
     else if (app.shouldShowTransferAlert)
     {
@@ -200,13 +198,6 @@ typedef void(^InfoBlock)(void);
 {
     [super viewWillDisappear:animated];
     [self saveProject];
-}
-
-- (void)previewControllerDidFinish:(RPPreviewViewController *)previewController
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self dismissViewControllerAnimated:YES completion:nil];
-    });
 }
 
 - (void)keyboardWillShow:(NSNotification *)notification
@@ -623,6 +614,14 @@ typedef void(^InfoBlock)(void);
         
         [self presentViewController:alert animated:YES completion:nil];
     }
+}
+
+- (void)previewControllerDidFinish:(RPPreviewViewController *)previewController
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self dismissViewControllerAnimated:YES completion:nil];
+        [AppController sharedController].replayPreviewViewController = nil;
+    });
 }
 
 #pragma mark - Search and Replace
