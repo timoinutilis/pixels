@@ -1592,9 +1592,6 @@ NSString *const TRANSFER = @"TRANSFER";
         return nil;
     }
     
-    // audio system will start if not started before
-    [runner.audioPlayer start];
-    
     if (duration.intValue == 0)
     {
         // set voice immediately

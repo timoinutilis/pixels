@@ -115,6 +115,8 @@ static double PitchToFrequency(int pitch);
         AVAudioSession* session = [AVAudioSession sharedInstance];
         [session setCategory:AVAudioSessionCategoryAmbient error:nil];
         [session setPreferredSampleRate:_player.sampleRate error:nil];
+        [session setActive:YES error:nil];
+        
         _player.sampleRate = session.sampleRate;
         _dataFormat.mSampleRate = session.sampleRate;
         

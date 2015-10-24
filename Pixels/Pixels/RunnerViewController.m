@@ -115,6 +115,11 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
     {
         self.didAppearAlready = YES;
         
+        if (self.runnable.usesSound)
+        {
+            [self.runner.audioPlayer start];
+        }
+        
         [self hideExitButtonAfterDelay];
         
         if (self.runnable.recordingMode != RecordingModeNone)

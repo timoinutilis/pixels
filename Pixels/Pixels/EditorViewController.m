@@ -601,14 +601,14 @@ typedef void(^InfoBlock)(void);
     }
     else if (![RPScreenRecorder sharedRecorder].available)
     {
-        [self showAlertWithTitle:@"Recording is not available" message:@"Your device doesn't support screen recording or the recorder is currently in use." block:nil];
+        [self showAlertWithTitle:@"Recording is not available" message:@"Your device doesn't support screen recording or the recorder is currently not usable." block:nil];
     }
     else
     {
         __weak EditorViewController *weakSelf = self;
         
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Do you also want to record an audio commentary?"
-                                                                       message:nil
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Video Recording"
+                                                                       message:@"Please make videos in landscape orientation and in fullscreen mode whenever possible."
                                                                 preferredStyle:UIAlertControllerStyleAlert];
         
         [alert addAction:[UIAlertAction actionWithTitle:@"Record Screen & Microphone" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
