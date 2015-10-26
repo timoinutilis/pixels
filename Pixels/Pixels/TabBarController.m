@@ -15,7 +15,6 @@
 @interface TabBarController () <UITabBarDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *containerView;
-@property (weak, nonatomic) IBOutlet UITabBar *tabBar;
 
 @property NSArray *viewControllers;
 @property (nonatomic) UIViewController *selectedViewController;

@@ -17,6 +17,8 @@ typedef NS_ENUM(NSInteger, TabIndex) {
 
 @interface TabBarController : UIViewController
 
+@property (weak, nonatomic) IBOutlet UITabBar *tabBar;
+
 @property (nonatomic) NSInteger selectedIndex;
 @property (nonatomic, readonly) UIViewController *selectedViewController;
 

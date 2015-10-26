@@ -93,7 +93,9 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
         if ([app isUnshownInfoID:CoachMarkIDAdd])
         {
             [app onShowInfoID:CoachMarkIDAdd];
-            [[CoachMarkView create] showWithText:@"Tap the Plus button to create your first own program!" image:@"coach_add" container:self.navigationController.view complete:nil];
+            CoachMarkView *coachMark = [[CoachMarkView alloc] initWithText:@"Tap the Plus button to create your first own program!" complete:nil];
+            [coachMark setTargetNavBar:self.navigationController.navigationBar itemIndex:0];
+            [coachMark show];
         }
     }
     

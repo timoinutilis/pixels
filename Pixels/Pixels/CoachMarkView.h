@@ -10,9 +10,12 @@
 
 @interface CoachMarkView : UIView
 
-+ (CoachMarkView *)create;
+- (instancetype)initWithText:(NSString *)text complete:(void (^)())block;
 
-- (void)showWithText:(NSString *)text image:(NSString *)imageName container:(UIView *)container complete:(void (^)())block;
+- (void)setTargetNavBar:(UINavigationBar *)navBar itemIndex:(int)index;
+- (void)setTargetTabBar:(UITabBar *)tabBar itemIndex:(int)index;
+
+- (void)show;
 - (void)hide;
 
 @end

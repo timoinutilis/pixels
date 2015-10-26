@@ -7,37 +7,75 @@
 //
 
 #import "CoachMarkView.h"
+#import "RadialGradientView.h"
+#import "AppController.h"
+#import "TabBarController.h"
 
 @interface CoachMarkView ()
 
-@property (weak, nonatomic) IBOutlet UILabel *label;
-@property (weak, nonatomic) IBOutlet UIImageView *imageView;
+@property RadialGradientView *radialGradientView;
+@property UILabel *label;
 
 @property (strong) void (^block)();
+@property (weak) UINavigationBar *targetNavBar;
+@property (weak) UITabBar *targetTabBar;
+@property int targetItemIndex;
 
 @end
 
 @implementation CoachMarkView
 
-+ (CoachMarkView *)create
+- (instancetype)initWithText:(NSString *)text complete:(void (^)())block
 {
-    NSArray *views = [[NSBundle mainBundle] loadNibNamed:@"CoachMarkView" owner:self options:nil];
-    CoachMarkView *view = (CoachMarkView *)views[0];
-    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
-    view.frame = window.bounds;
-    return view;
+    if (self = [super initWithFrame:CGRectMake(0, 0, 320, 320)])
+    {
+        self.block = block;
+        
+        RadialGradientView *rgView = [[RadialGradientView alloc] initWithFrame:self.bounds];
+        rgView.alpha = 0.7;
+        rgView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        [self addSubview:rgView];
+        self.radialGradientView = rgView;
+        
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
+        label.textColor = [UIColor whiteColor];
+        label.font = [UIFont boldSystemFontOfSize:24];
+        label.numberOfLines = 0;
+        label.lineBreakMode = NSLineBreakByWordWrapping;
+        label.textAlignment = NSTextAlignmentCenter;
+        label.text = text;
+        label.center = self.center;
+        label.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+        [self addSubview:label];
+        self.label = label;
+        
+        UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTap:)];
+        [self addGestureRecognizer:gesture];
+    }
+    return self;
 }
 
-- (void)showWithText:(NSString *)text image:(NSString *)imageName container:(UIView *)container complete:(void (^)())block
+- (void)setTargetNavBar:(UINavigationBar *)navBar itemIndex:(int)index
 {
-    self.block = block;
-    
-    self.label.text = text;
-    self.imageView.image = [UIImage imageNamed:imageName];
+    self.targetNavBar = navBar;
+    self.targetItemIndex = index;
+}
 
+- (void)setTargetTabBar:(UITabBar *)tabBar itemIndex:(int)index
+{
+    self.targetTabBar = tabBar;
+    self.targetItemIndex = index;
+}
+
+- (void)show
+{
     self.alpha = 0.0;
-    [container addSubview:self];
     
+    UIView *container = [AppController sharedController].tabBarController.view;
+    [container addSubview:self];
+    self.frame = container.bounds;
+    self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+
     [self layoutIfNeeded];
     
     [UIView animateWithDuration:1.0 animations:^{
@@ -59,7 +97,38 @@
     }];
 }
 
-- (IBAction)onTap:(id)sender
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    self.radialGradientView.point = [self targetCenter];
+}
+
+- (CGPoint)targetCenter
+{
+    if (self.targetTabBar)
+    {
+        CGRect rect = self.targetTabBar.frame;
+        if (self.targetTabBar.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular)
+        {
+            CGFloat itemWidth = 110.0;
+            return CGPointMake((rect.size.width - (self.targetItemIndex * itemWidth)) * 0.5, rect.origin.y + rect.size.height * 0.5);
+        }
+        else
+        {
+            CGFloat itemWidth = rect.size.width / self.targetTabBar.items.count;
+            return CGPointMake((self.targetItemIndex + 0.5) * itemWidth, rect.origin.y + rect.size.height * 0.5);
+        }
+    }
+    else
+    {
+        CGRect rect = self.targetNavBar.frame;
+        return CGPointMake(rect.size.width - 25 - self.targetItemIndex * 50, rect.origin.y + rect.size.height * 0.5);
+    }
+    return CGPointZero;
+}
+
+- (void)onTap:(id)sender
 {
     [self hide];
 }

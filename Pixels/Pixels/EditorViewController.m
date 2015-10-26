@@ -170,10 +170,12 @@ typedef void(^InfoBlock)(void);
     }
     else if (self.project.isDefault.boolValue)
     {
-        if ([app isUnshownInfoID:CoachMarkIDStart])
+//        if ([app isUnshownInfoID:CoachMarkIDStart])
         {
             [app onShowInfoID:CoachMarkIDStart];
-            [[CoachMarkView create] showWithText:@"Tap the Start button to run this program!" image:@"coach_start" container:self.navigationController.view complete:nil];
+            CoachMarkView *coachMark = [[CoachMarkView alloc] initWithText:@"Tap the Play button to run this program!" complete:nil];
+            [coachMark setTargetNavBar:self.navigationController.navigationBar itemIndex:0];
+            [coachMark show];
         }
     }
     else if (!self.project.isDefault.boolValue && self.wasEditedSinceOpened && self.sourceCodeTextView.text.length >= 200)
@@ -181,7 +183,9 @@ typedef void(^InfoBlock)(void);
         if ([app isUnshownInfoID:CoachMarkIDShare])
         {
             [app onShowInfoID:CoachMarkIDShare];
-            [[CoachMarkView create] showWithText:@"Are you happy with your program? Share it with the community!" image:@"coach_share" container:self.navigationController.view complete:nil];
+            CoachMarkView *coachMark = [[CoachMarkView alloc] initWithText:@"Are you happy with your program? Share it with the community!" complete:nil];
+            [coachMark setTargetNavBar:self.navigationController.navigationBar itemIndex:3];
+            [coachMark show];
         }
     }
     else if ([self.sourceCodeTextView.text isEqualToString:@""])
@@ -189,7 +193,9 @@ typedef void(^InfoBlock)(void);
         if ([app isUnshownInfoID:CoachMarkIDHelp])
         {
             [app onShowInfoID:CoachMarkIDHelp];
-            [[CoachMarkView create] showWithText:@"Tap the Help button to learn how to create your own programs!" image:@"coach_help" container:self.navigationController.view complete:nil];
+            CoachMarkView *coachMark = [[CoachMarkView alloc] initWithText:@"Go to the Help tab to learn how to create your own programs!" complete:nil];
+            [coachMark setTargetTabBar:[AppController sharedController].tabBarController.tabBar itemIndex:1];
+            [coachMark show];
         }
     }
 }

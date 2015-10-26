@@ -13,7 +13,6 @@
 		920822031A4DABB8005B7862 /* HelpContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 920822021A4DABB8005B7862 /* HelpContent.m */; };
 		920E5E5E1B1324FE00071C6A /* LCCFollow.m in Sources */ = {isa = PBXBuildFile; fileRef = 920E5E5D1B1324FE00071C6A /* LCCFollow.m */; };
 		920E681D1AB731620038994A /* CoachMarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 920E681C1AB731620038994A /* CoachMarkView.m */; };
-		920E681F1AB7317E0038994A /* CoachMarkView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 920E681E1AB7317E0038994A /* CoachMarkView.xib */; };
 		920E68221AB74CDA0038994A /* SplashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 920E68211AB74CDA0038994A /* SplashViewController.m */; };
 		9215D7791B37361100A65E55 /* StandardTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9215D7781B37361100A65E55 /* StandardTableViewCell.m */; };
 		921B234C1A9E3DA800C45AFA /* EditorTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 921B234B1A9E3DA800C45AFA /* EditorTextView.m */; };
@@ -40,6 +39,8 @@
 		926086321A5E8560006C5523 /* Runnable.m in Sources */ = {isa = PBXBuildFile; fileRef = 926086311A5E8560006C5523 /* Runnable.m */; };
 		92612CE41BD7A5F600370C82 /* IndexSideBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 92612CE31BD7A5F600370C82 /* IndexSideBar.m */; };
 		92612CE51BD7A5F600370C82 /* IndexSideBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 92612CE31BD7A5F600370C82 /* IndexSideBar.m */; };
+		9265C9131BDEB1F40011759E /* RadialGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9265C9121BDEB1F40011759E /* RadialGradientView.m */; };
+		9265C9141BDEB1F40011759E /* RadialGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9265C9121BDEB1F40011759E /* RadialGradientView.m */; };
 		926864211AA5E50900F305B9 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 926864201AA5E50900F305B9 /* StoreKit.framework */; };
 		926864241AA607A000F305B9 /* UpgradeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 926864231AA607A000F305B9 /* UpgradeViewController.m */; };
 		926864271AA6087300F305B9 /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 926864261AA6087300F305B9 /* AppController.m */; };
@@ -216,7 +217,6 @@
 		929BCF881BB14A1B005F1DBD /* manual.html in Resources */ = {isa = PBXBuildFile; fileRef = 9204EF691A4C430300B8C29C /* manual.html */; };
 		929BCF891BB14A1B005F1DBD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9276F3961A1D289C0060E909 /* Main.storyboard */; };
 		929BCF8A1BB14A1B005F1DBD /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9276F39B1A1D289C0060E909 /* LaunchScreen.xib */; };
-		929BCF8B1BB14A1B005F1DBD /* CoachMarkView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 920E681E1AB7317E0038994A /* CoachMarkView.xib */; };
 		929BCF8C1BB14A1B005F1DBD /* Default Projects in Resources */ = {isa = PBXBuildFile; fileRef = 9248A6AF1A7A641D00FD5656 /* Default Projects */; };
 		929BCF8D1BB14A1B005F1DBD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9276F3991A1D289C0060E909 /* Images.xcassets */; };
 		929BCF8E1BB14A1B005F1DBD /* Help.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 927334971A2A456900C89AF0 /* Help.storyboard */; };
@@ -269,7 +269,6 @@
 		920E5E5D1B1324FE00071C6A /* LCCFollow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCFollow.m; sourceTree = "<group>"; };
 		920E681B1AB731620038994A /* CoachMarkView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoachMarkView.h; sourceTree = "<group>"; };
 		920E681C1AB731620038994A /* CoachMarkView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoachMarkView.m; sourceTree = "<group>"; };
-		920E681E1AB7317E0038994A /* CoachMarkView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CoachMarkView.xib; sourceTree = "<group>"; };
 		920E68201AB74CDA0038994A /* SplashViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplashViewController.h; sourceTree = "<group>"; };
 		920E68211AB74CDA0038994A /* SplashViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SplashViewController.m; sourceTree = "<group>"; };
 		9215D7771B37361100A65E55 /* StandardTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StandardTableViewCell.h; sourceTree = "<group>"; };
@@ -318,6 +317,8 @@
 		926086311A5E8560006C5523 /* Runnable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Runnable.m; sourceTree = "<group>"; };
 		92612CE21BD7A5F600370C82 /* IndexSideBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IndexSideBar.h; sourceTree = "<group>"; };
 		92612CE31BD7A5F600370C82 /* IndexSideBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IndexSideBar.m; sourceTree = "<group>"; };
+		9265C9111BDEB1F40011759E /* RadialGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RadialGradientView.h; sourceTree = "<group>"; };
+		9265C9121BDEB1F40011759E /* RadialGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RadialGradientView.m; sourceTree = "<group>"; };
 		926864201AA5E50900F305B9 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		926864221AA607A000F305B9 /* UpgradeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpgradeViewController.h; sourceTree = "<group>"; };
 		926864231AA607A000F305B9 /* UpgradeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpgradeViewController.m; sourceTree = "<group>"; };
@@ -580,7 +581,8 @@
 				92B60FE21AC024250011233B /* GameButton.m */,
 				920E681B1AB731620038994A /* CoachMarkView.h */,
 				920E681C1AB731620038994A /* CoachMarkView.m */,
-				920E681E1AB7317E0038994A /* CoachMarkView.xib */,
+				9265C9111BDEB1F40011759E /* RadialGradientView.h */,
+				9265C9121BDEB1F40011759E /* RadialGradientView.m */,
 				9293D46B1B219BCC009A156B /* ExtendedActivityIndicatorView.h */,
 				9293D46C1B219BCC009A156B /* ExtendedActivityIndicatorView.m */,
 				92ACDC381B359AED009252D6 /* BackgroundView.h */,
@@ -1007,7 +1009,7 @@
 		9276F3811A1D289C0060E909 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = "Inutilis Software";
 				TargetAttributes = {
 					9276F3881A1D289C0060E909 = {
@@ -1059,7 +1061,6 @@
 				9204EF6A1A4C430300B8C29C /* manual.html in Resources */,
 				9276F3981A1D289C0060E909 /* Main.storyboard in Resources */,
 				9276F39D1A1D289C0060E909 /* LaunchScreen.xib in Resources */,
-				920E681F1AB7317E0038994A /* CoachMarkView.xib in Resources */,
 				9248A6B01A7A641D00FD5656 /* Default Projects in Resources */,
 				9276F39A1A1D289C0060E909 /* Images.xcassets in Resources */,
 				927334981A2A456900C89AF0 /* Help.storyboard in Resources */,
@@ -1074,7 +1075,6 @@
 				929BCF881BB14A1B005F1DBD /* manual.html in Resources */,
 				929BCF891BB14A1B005F1DBD /* Main.storyboard in Resources */,
 				929BCF8A1BB14A1B005F1DBD /* LaunchScreen.xib in Resources */,
-				929BCF8B1BB14A1B005F1DBD /* CoachMarkView.xib in Resources */,
 				929BCF8C1BB14A1B005F1DBD /* Default Projects in Resources */,
 				929BCF8D1BB14A1B005F1DBD /* Images.xcassets in Resources */,
 				929BCF8E1BB14A1B005F1DBD /* Help.storyboard in Resources */,
@@ -1091,6 +1091,7 @@
 				92884F201B0F25B30032623D /* SDWebImageManager.m in Sources */,
 				92884F211B0F25B30032623D /* SDWebImagePrefetcher.m in Sources */,
 				92C081191B0DD9490006331B /* CommLogInViewController.m in Sources */,
+				9265C9131BDEB1F40011759E /* RadialGradientView.m in Sources */,
 				9245076E1B2B839C006956F1 /* NSError+LowResCoder.m in Sources */,
 				92E53DF61A5B3A1D00FE9F91 /* GORTableViewController.m in Sources */,
 				92884F1A1B0F25B30032623D /* NSData+ImageContentType.m in Sources */,
@@ -1200,6 +1201,7 @@
 				929BCF181BB14A1B005F1DBD /* SDWebImageManager.m in Sources */,
 				929BCF191BB14A1B005F1DBD /* SDWebImagePrefetcher.m in Sources */,
 				929BCF1A1BB14A1B005F1DBD /* CommLogInViewController.m in Sources */,
+				9265C9141BDEB1F40011759E /* RadialGradientView.m in Sources */,
 				929BCF1B1BB14A1B005F1DBD /* NSError+LowResCoder.m in Sources */,
 				929BCF1C1BB14A1B005F1DBD /* GORTableViewController.m in Sources */,
 				929BCF1D1BB14A1B005F1DBD /* NSData+ImageContentType.m in Sources */,
@@ -1417,6 +1419,7 @@
 				INFOPLIST_FILE = Pixels/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.inutilis.ios.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1437,6 +1440,7 @@
 				INFOPLIST_FILE = Pixels/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.inutilis.ios.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1460,6 +1464,7 @@
 				INFOPLIST_FILE = Pixels/Info_dev.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.inutilis.ios.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1483,6 +1488,7 @@
 				INFOPLIST_FILE = Pixels/Info_dev.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.inutilis.ios.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
