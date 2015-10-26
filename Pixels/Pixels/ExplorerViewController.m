@@ -31,7 +31,7 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 {
     [super viewDidLoad];
     
-    UIBarButtonItem *addItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"add"] style:UIBarButtonItemStylePlain target:self action:@selector(onAddTapped:)];
+    UIBarButtonItem *addItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(onAddTapped:)];
     
     self.navigationItem.rightBarButtonItems = @[addItem];
     
