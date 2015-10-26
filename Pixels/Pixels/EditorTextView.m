@@ -12,6 +12,7 @@ NSString *EditorTextView_transferText;
 
 @interface EditorTextView ()
 @property UIToolbar *keyboardToolbar;
+@property NSArray *keys;
 @end
 
 @implementation EditorTextView
@@ -30,7 +31,16 @@ NSString *EditorTextView_transferText;
 {
     [super awakeFromNib];
     
-    [self initKeyboardToolbar];
+    self.keys = @[@"=", @"<", @">", @"+", @"-", @"*", @"/", @"(", @")", @"\"", @"$", @":"];
+    
+    if ([UITextInputAssistantItem class] && self.inputAssistantItem)
+    {
+        [self initShortcutsBar];
+    }
+    else
+    {
+        [self initKeyboardToolbar];
+    }
 
     UIMenuController *menu = [UIMenuController sharedMenuController];
     menu.menuItems = @[
@@ -46,9 +56,8 @@ NSString *EditorTextView_transferText;
 {
     self.keyboardToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
     
-    NSArray *keys = @[@"=", @"<", @">", @"+", @"-", @"*", @"/", @"(", @")", @"\"", @"$", @":"];
     NSMutableArray *buttons = [NSMutableArray array];
-    for (NSString *key in keys)
+    for (NSString *key in self.keys)
     {
         UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithTitle:key style:UIBarButtonItemStylePlain target:self action:@selector(onSpecialKeyTapped:)];
         [buttons addObject:button];
@@ -65,6 +74,20 @@ NSString *EditorTextView_transferText;
     
     self.keyboardToolbar.items = buttons;
     self.inputAccessoryView = self.keyboardToolbar;
+}
+
+- (void)initShortcutsBar
+{
+    NSMutableArray *buttons = [NSMutableArray array];
+    for (NSString *key in self.keys)
+    {
+        UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithTitle:key style:UIBarButtonItemStylePlain target:self action:@selector(onSpecialKeyTapped:)];
+        [buttons addObject:button];
+    }
+    
+    UIBarButtonItemGroup *group = [[UIBarButtonItemGroup alloc] initWithBarButtonItems:buttons representativeItem:nil];
+    self.inputAssistantItem.trailingBarButtonGroups = @[group];
+    self.inputAssistantItem.allowsHidingShortcuts = NO;
 }
 
 - (void)onSpecialKeyTapped:(UIBarButtonItem *)button
