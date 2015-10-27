@@ -387,7 +387,7 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
     self.dismissWhenFinished = YES;
     if (self.runner.isFinished)
     {
-        [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+        [self finish];
     }
     else
     {
