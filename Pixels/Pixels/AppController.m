@@ -24,8 +24,6 @@ NSString *const NewsNotification = @"NewsNotification";
 NSString *const ShowPostNotification = @"ShowPostNotification";
 NSString *const UpgradeNotification = @"UpgradeNotification";
 
-NSString *const InfoIDNews = @"InfoIDNews";
-
 
 @implementation AppController
 
@@ -222,13 +220,6 @@ NSString *const InfoIDNews = @"InfoIDNews";
 {
     PFInstallation *installation = [PFInstallation currentInstallation];
     NSInteger numNews = installation.badge;
-    
-    // show news badge on first start
-    if (numNews == 0 && [self isUnshownInfoID:InfoIDNews])
-    {
-        numNews = 1;
-    }
-    
     return numNews;
 }
 
@@ -243,7 +234,6 @@ NSString *const InfoIDNews = @"InfoIDNews";
             [installation saveEventually];
         }
         
-        [self onShowInfoID:InfoIDNews];
         [[NSNotificationCenter defaultCenter] postNotificationName:NewsNotification object:self];
     }
 }

@@ -20,6 +20,7 @@
 @property (weak) UINavigationBar *targetNavBar;
 @property (weak) UITabBar *targetTabBar;
 @property int targetItemIndex;
+@property BOOL isHiding;
 
 @end
 
@@ -85,22 +86,25 @@
 
 - (void)hide
 {
-    [UIView animateWithDuration:0.3 animations:^{
-        self.alpha = 0.0;
-    } completion:^(BOOL finished) {
-        if (self.block)
-        {
-            self.block();
-            self.block = nil;
-        }
-        [self removeFromSuperview];
-    }];
+    if (!self.isHiding)
+    {
+        self.isHiding = YES;
+        [UIView animateWithDuration:0.3 animations:^{
+            self.alpha = 0.0;
+        } completion:^(BOOL finished) {
+            if (self.block)
+            {
+                self.block();
+                self.block = nil;
+            }
+            [self removeFromSuperview];
+        }];
+    }
 }
 
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    
     self.radialGradientView.point = [self targetCenter];
 }
 
@@ -131,6 +135,18 @@
 - (void)onTap:(id)sender
 {
     [self hide];
+}
+
+- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
+{
+    CGPoint target = [self targetCenter];
+    if (ABS(point.x - target.x) < 44 && ABS(point.y - target.y) < 44)
+    {
+        self.userInteractionEnabled = NO;
+        [self hide];
+        return NO;
+    }
+    return [super pointInside:point withEvent:event];
 }
 
 @end

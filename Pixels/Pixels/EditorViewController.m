@@ -170,7 +170,7 @@ typedef void(^InfoBlock)(void);
     }
     else if (self.project.isDefault.boolValue)
     {
-//        if ([app isUnshownInfoID:CoachMarkIDStart])
+        if ([app isUnshownInfoID:CoachMarkIDStart])
         {
             [app onShowInfoID:CoachMarkIDStart];
             CoachMarkView *coachMark = [[CoachMarkView alloc] initWithText:@"Tap the Play button to run this program!" complete:nil];

@@ -24,12 +24,25 @@
     CGContextRef cx = UIGraphicsGetCurrentContext();
     
     CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB();
+
+    CGFloat radius = 150.0;
+    
+    CGRect radiusRect = CGRectMake(_point.x - radius, _point.y - radius, radius * 2.0, radius * 2.0);
+    
+    CGContextSaveGState(cx);
+    CGContextAddRect(cx, self.bounds);
+    CGContextAddRect(cx, radiusRect);
+    CGContextEOClip(cx);
+    CGContextFillRect(cx, self.bounds);
+    CGContextRestoreGState(cx);
+    
     
     CGFloat comps[] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0};
-    CGFloat locs[] = {0.1, 0.2};
+    CGFloat locs[] = {0.1, 0.5};
     CGGradientRef g = CGGradientCreateWithColorComponents(space, comps, locs, 2);
     
-    CGContextDrawRadialGradient(cx, g, _point, 0.0f, _point, MAX(self.bounds.size.width, self.bounds.size.height), 0);
+    CGContextClipToRect(cx, radiusRect);
+    CGContextDrawRadialGradient(cx, g, _point, 0.0f, _point, radius * 2.0, 0);
     
     CGGradientRelease(g);
     CGColorSpaceRetain(space);
