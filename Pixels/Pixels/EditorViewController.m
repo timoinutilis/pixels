@@ -406,7 +406,7 @@ typedef void(^InfoBlock)(void);
     
     __weak EditorViewController *weakSelf = self;
 
-    UIAlertAction *shareCommAction = [UIAlertAction actionWithTitle:@"Publish in Community" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+    UIAlertAction *shareCommAction = [UIAlertAction actionWithTitle:@"Share with Community" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
         [weakSelf onShareTapped:sender community:YES];
     }];
     [alert addAction:shareCommAction];
@@ -529,7 +529,7 @@ typedef void(^InfoBlock)(void);
 {
     if (!self.project.postId)
     {
-        [self showAlertWithTitle:@"This program is not connected to any post in the community." message:nil block:nil];
+        [self showAlertWithTitle:@"Feedback is available for downloaded or shared programs only." message:nil block:nil];
     }
     else
     {

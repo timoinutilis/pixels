@@ -140,7 +140,7 @@
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7qu-NE-hxH" customClass="TextLabel">
                                         <rect key="frame" x="0.0" y="173" width="476" height="41"/>
                                         <animations/>
-                                        <string key="text">In the full version there is no size limit for programs.
+                                        <string key="text">In the full version there is no size limit for your own programs.
 The upgrade is valid for all your devices and without time limit.</string>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="highlightedColor"/>
@@ -747,7 +747,7 @@ Inutilis Software, 2015</string>
             </objects>
             <point key="canvasLocation" x="350" y="1152"/>
         </scene>
-        <!--Publish in Community-->
+        <!--Share with Community-->
         <scene sceneID="bmj-RF-7ax">
             <objects>
                 <tableViewController storyboardIdentifier="ShareView" modalPresentationStyle="formSheet" id="u7G-9d-dgL" customClass="ShareViewController" sceneMemberID="viewController">
@@ -903,7 +903,7 @@ Inutilis Software, 2015</string>
                             <outlet property="delegate" destination="u7G-9d-dgL" id="igC-KT-ofg"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Publish in Community" id="ble-yo-hgv">
+                    <navigationItem key="navigationItem" title="Share with Community" id="ble-yo-hgv">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Pjk-qX-0wW">
                             <connections>
                                 <action selector="onCancelTapped:" destination="u7G-9d-dgL" id="JKe-1Q-LVm"/>

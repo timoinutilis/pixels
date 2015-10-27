@@ -514,11 +514,11 @@ static NSString *const SectionPosts = @"Posts";
             CommInfoCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommInfoCell" forIndexPath:indexPath];
             if ([PFUser currentUser])
             {
-                cell.infoTextLabel.text = @"Here you see official news, featured programs, and posts of all the users you follow.";
+                cell.infoTextLabel.text = @"Here you see featured programs, official news, and posts of all the users you follow.";
             }
             else
             {
-                cell.infoTextLabel.text = @"Here you see official news and featured programs. Log in to follow more users!";
+                cell.infoTextLabel.text = @"Here you see featured programs and official news. Log in to follow more users!";
             }
             return cell;
         }
