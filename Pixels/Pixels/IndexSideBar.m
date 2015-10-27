@@ -10,6 +10,8 @@
 #import "NSString+Utils.h"
 #import "AppStyle.h"
 #import "GORLabel.h"
+#import "Scanner.h"
+#import "Token.h"
 
 static const CGFloat MARGIN = 3.0;
 
@@ -64,9 +66,12 @@ static const CGFloat MARGIN = 3.0;
 - (void)update
 {
     NSString *text = self.textView.text;
+    NSUInteger stringLength = text.length;
     NSMutableArray *markers = [NSMutableArray array];
     
-    NSUInteger numberOfLines, index, stringLength = [text length];
+    Scanner *scanner = [[Scanner alloc] init];
+    
+    NSUInteger numberOfLines, index;
     for (index = 0, numberOfLines = 0; index < stringLength; numberOfLines++)
     {
         NSRange lineRange = [text lineRangeForRange:NSMakeRange(index, 0)];
@@ -75,13 +80,13 @@ static const CGFloat MARGIN = 3.0;
         NSRange findRange = [text rangeOfString:@":" options:0 range:lineRange];
         if (findRange.location != NSNotFound)
         {
-            // ignore BASIC strings
-            findRange = [text rangeOfString:@"\"" options:0 range:lineRange];
-            if (findRange.location == NSNotFound)
+            NSString *textLine = [text substringWithRange:lineRange];
+            NSArray *tokens = [scanner tokenizeText:textLine];
+            if (tokens && tokens.count >= 2)
             {
-                // ignore REMs
-                findRange = [text rangeOfString:@"REM " options:NSCaseInsensitiveSearch range:lineRange];
-                if (findRange.location == NSNotFound)
+                Token *token1 = tokens[0];
+                Token *token2 = tokens[1];
+                if (token1.type == TTypeIdentifier && token2.type == TTypeSymColon)
                 {
                     IndexMarker *marker = [[IndexMarker alloc] init];
                     marker.label = [[text substringWithRange:lineRange] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];

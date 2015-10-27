@@ -162,6 +162,10 @@ NSString *EditorTextView_transferText;
     NSRange finalRange = originalRange;
     NSMutableString *subtext = [[self.text substringWithRange:originalRange] mutableCopy];
     NSInteger pos = 0;
+    
+    NSCharacterSet *spacesSet = [NSCharacterSet whitespaceCharacterSet];
+    NSCharacterSet *newlineSet = [NSCharacterSet newlineCharacterSet];
+    
     while (pos < subtext.length)
     {
         if (right)
@@ -175,11 +179,11 @@ NSString *EditorTextView_transferText;
             for (NSInteger ci = pos; ci < pos + 2 && ci < subtext.length; ci++)
             {
                 unichar character = [subtext characterAtIndex:ci];
-                if (character == ' ')
+                if ([spacesSet characterIsMember:character])
                 {
                     num++;
                 }
-                else if (character == '\n')
+                else if ([newlineSet characterIsMember:character])
                 {
                     break;
                 }
@@ -195,6 +199,7 @@ NSString *EditorTextView_transferText;
         pos += lineRange.length;
     }
     self.text = [self.text stringByReplacingCharactersInRange:originalRange withString:subtext];
+    [self.delegate textViewDidChange:self];
 
     // selection and menu
     if (finalRange.location + finalRange.length < self.text.length)
