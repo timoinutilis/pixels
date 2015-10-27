@@ -15,6 +15,7 @@
 
 @property RadialGradientView *radialGradientView;
 @property UILabel *label;
+@property UIImageView *pointerImageView;
 
 @property (strong) void (^block)();
 @property (weak) UINavigationBar *targetNavBar;
@@ -45,10 +46,16 @@
         label.lineBreakMode = NSLineBreakByWordWrapping;
         label.textAlignment = NSTextAlignmentCenter;
         label.text = text;
+        label.userInteractionEnabled = NO;
         label.center = self.center;
         label.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         [self addSubview:label];
         self.label = label;
+        
+        UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"coach_pointer"]];
+        imageView.userInteractionEnabled = NO;
+        [self addSubview:imageView];
+        self.pointerImageView = imageView;
         
         UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTap:)];
         [self addGestureRecognizer:gesture];
@@ -105,7 +112,21 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    self.radialGradientView.point = [self targetCenter];
+    
+    CGPoint targetCenter = [self targetCenter];
+    self.radialGradientView.point = targetCenter;
+    
+    if (targetCenter.y < self.bounds.size.height * 0.5)
+    {
+        self.pointerImageView.transform = CGAffineTransformMakeScale(1.0, 1.0);
+        targetCenter.y += 78.0;
+    }
+    else
+    {
+        self.pointerImageView.transform = CGAffineTransformMakeScale(1.0, -1.0);
+        targetCenter.y -= 78.0;
+    }
+    self.pointerImageView.center = targetCenter;
 }
 
 - (CGPoint)targetCenter
