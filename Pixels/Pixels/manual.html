@@ -748,22 +748,25 @@ SOUND 0,54,12
 <p>Sprites are graphical objects with 8x8 pixels and 3 colors (plus a transparent background color). They are shown on an own layer and don't affect the normal graphic layer used for drawing. They can be moved and animated very easily, that's why they are perfect for game objects. Sprites are not designed with the normal graphic commands, but they are defined by bitmaps. LowRes Coder can show up to 16 sprites at once.</p>
 
 <h3 id="_DEFSPRITE" name="DEF SPRITE,DEF,SPRITE">DEF SPRITE</h3>
-<pre>DEF SPRITE image,data</pre>
-<p>Defines a sprite image and stores it as number <i>image</i>. Possible values range from 0 to 63. <i>data</i> is the name of an array (without index numbers) which has 16 elements and contains the bitmap data. Usually these arrays are loaded from DATA commands, like this:</p>
+<pre>DEF SPRITE image,data[,c1,c2,c3]</pre>
+<p>Defines a sprite image and stores it as number <i>image</i>. Possible values range from 0 to 63. <i>data</i> is the name of an array (without index numbers) which has 16 elements and contains the bitmap data. The optional parameters <i>c1, c2</i> and <i>c3</i> are used to set the default color palette for the given sprite. If these parameters are omitted, the colors are: 1, 2, 3. Usually the data array and colors are loaded from DATA lines, like this:</p>
 <pre class="exm">
 DIM ARR(15)
 FOR I=0 TO 15
   READ ARR(I)
 NEXT I
-DEF SPRITE 0,ARR
+READ C0,C1,C2,C3
+DEF SPRITE 0,ARR,C1,C2,C3
 SPRITE 0,10,10,0
 SPRITE 1,20,20,0
 SPRITE 2,30,30,0
 DATA 5,80,21,84,105,105,105,105
 DATA 85,85,127,253,31,244,5,80
+DATA 0,8,11,6
 </pre>
-<p>Don't be scared of the numbers, you can use the included program Sprite Designer to draw your images and transfer them to source code.</p>
-<p>Here is a little explanation of the format: The numbers in the data array are bytes. A sprite has 8x8 pixels and each pixel has two bits to define the color, that makes two bytes per line. Lines are stored from top to bottom, so in the end we have 16 bytes.</p>
+<p>Don't be scared of the numbers, you can use the included program <i>Easy Sprite Designer</i> to draw your images and transfer them to source code.</p>
+<p>Here is a little explanation of the format: The numbers in the data array are bytes. A sprite has 8x8 pixels and each pixel has two bits to define the color, that makes two bytes per line. Lines are stored from top to bottom, so in the end we have 16 bytes. The following 4 values are simply the used colors. The first one is read but not used, as the sprite background is always transparent.</p>
+<p></p>
 
 <h3 id="_SPRITE" name="SPRITE">SPRITE</h3>
 <pre>SPRITE number,[x],[y],[image]</pre>
@@ -784,7 +787,7 @@ SPRITE 0,,,1
 
 <h3 id="_SPRITEPALETTE" name="SPRITE PALETTE,SPRITE,PALETTE">SPRITE PALETTE</h3>
 <pre>SPRITE PALETTE number,[c1],[c2],[c3]</pre>
-<p>Sets the colors <i>c1, c2,</i> and <i>c3</i> for a sprite. Although a sprite image can only have three colors, each sprite on the screen can have its own color palette. See the available color numbers of the COLOR command. Single color parameters can be omitted to keep the current values of the sprite.</p>
+<p>By default a sprite will appear in its standard colors set by DEF SPRITE. With SPRITE PALETTE you can change the colors for each sprite on the screen separately. See the available color numbers of the COLOR command. Single color parameters can be omitted to keep the current values of the sprite. If a color is set to -1, the sprite's default color is used.</p>
 <pre class="exm">
 REM ORANGE, WHITE, RED
 SPRITE PALETTE 0,7,1,4
