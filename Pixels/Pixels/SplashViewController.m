@@ -112,21 +112,13 @@
 
 - (void)showApp
 {
-//    UIView *splashView = self.view;
-
     UIViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"AppStart"];
-    [UIApplication sharedApplication].keyWindow.rootViewController = vc;
-/*    [vc.view addSubview:splashView];
+    id <UIApplicationDelegate> appDelegate = [[UIApplication sharedApplication] delegate];
+    appDelegate.window.rootViewController = vc;
     
-    [UIView animateWithDuration:0.3 animations:^{
-        
-        splashView.alpha = 0.0;
-        
-    } completion:^(BOOL finished) {
-        
-        [splashView removeFromSuperview];
-        
-    }];*/
+    [UIView transitionWithView:appDelegate.window duration:0.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        appDelegate.window.rootViewController = vc;
+    } completion:nil];
 }
 
 @end
