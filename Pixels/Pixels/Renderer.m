@@ -45,9 +45,9 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
         for (int i = 0; i < RendererNumSprites; i++)
         {
             Sprite *sprite = &_sprites[i];
-            sprite->colors[0] = 1;
-            sprite->colors[1] = 2;
-            sprite->colors[2] = 3;
+            sprite->colors[0] = -1;
+            sprite->colors[1] = -1;
+            sprite->colors[2] = -1;
         }
     }
     return self;
@@ -537,10 +537,20 @@ uint8_t getSpritePixel(SpriteDef *def, int x, int y)
                 if (localX >= 0 && localY >= 0 && localX < RendererSpriteSize && localY < RendererSpriteSize)
                 {
                     SpriteDef *def = &_spriteDefs[sprite->image];
-                    uint8_t color = getSpritePixel(def, localX, localY);
-                    if (color > 0)
+                    uint8_t pixel = getSpritePixel(def, localX, localY);
+                    if (pixel > 0)
                     {
-                        colorIndex = sprite->colors[color - 1];
+                        int8_t spriteColorIndex = sprite->colors[pixel - 1];
+                        if (spriteColorIndex >= 0)
+                        {
+                            // use sprite palette
+                            colorIndex = spriteColorIndex;
+                        }
+                        else
+                        {
+                            // use sprite def palette
+                            colorIndex = def->colors[pixel - 1];
+                        }
                         break;
                     }
                 }

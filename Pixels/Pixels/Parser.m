@@ -809,6 +809,15 @@
     node.imageExpression = [self acceptExpression];
     [self accept:TTypeSymComma];
     node.dataVariable = [self acceptVariable];
+    if ([self acceptOptionalComma])
+    {
+        node.color1Expression = [self acceptExpression];
+        [self accept:TTypeSymComma];
+        node.color2Expression = [self acceptExpression];
+        [self accept:TTypeSymComma];
+        node.color3Expression = [self acceptExpression];
+    }
+    
     return node;
 }
 

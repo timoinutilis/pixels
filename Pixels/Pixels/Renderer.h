@@ -13,11 +13,12 @@ typedef struct Sprite {
     float x;
     float y;
     int image;
-    uint8_t colors[3];
+    int8_t colors[3];
 } Sprite;
 
 typedef struct SpriteDef {
     uint16_t data[8];
+    uint8_t colors[3];
 } SpriteDef;
 
 extern int const RendererSize;

@@ -193,6 +193,9 @@
 @interface DefSpriteNode : Node
 @property Node *imageExpression;
 @property VariableNode *dataVariable;
+@property Node *color1Expression;
+@property Node *color2Expression;
+@property Node *color3Expression;
 @end
 
 @interface SpritePaletteNode : Node

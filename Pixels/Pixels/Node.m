@@ -1081,6 +1081,9 @@ NSString *const TRANSFER = @"TRANSFER";
 {
     [self.imageExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
     [self.dataVariable prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.color1Expression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.color2Expression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.color3Expression prepareWithRunnable:runnable pass:pass canBeString:NO];
 }
 
 - (id)evaluateWithRunner:(Runner *)runner
@@ -1104,6 +1107,24 @@ NSString *const TRANSFER = @"TRANSFER";
         int val1 = [arrayVariable intAtOffset:(i << 1)] & 0xFF;
         int val2 = [arrayVariable intAtOffset:(i << 1) + 1] & 0xFF;
         def->data[i] = (val1 << 8) | val2;
+    }
+    
+    if (self.color1Expression)
+    {
+        Number *color1 = [self.color1Expression evaluateNumberWithRunner:runner min:0 max:RendererNumColors - 1];
+        def->colors[0] = color1.intValue;
+        
+        Number *color2 = [self.color2Expression evaluateNumberWithRunner:runner min:0 max:RendererNumColors - 1];
+        def->colors[1] = color2.intValue;
+        
+        Number *color3 = [self.color3Expression evaluateNumberWithRunner:runner min:0 max:RendererNumColors - 1];
+        def->colors[2] = color3.intValue;
+    }
+    else
+    {
+        def->colors[0] = 1;
+        def->colors[1] = 2;
+        def->colors[2] = 3;
     }
     
     [runner next];
@@ -1135,17 +1156,17 @@ NSString *const TRANSFER = @"TRANSFER";
     Sprite *sprite = [runner.renderer spriteAtIndex:n.intValue];
     if (self.color1Expression)
     {
-        Number *color1 = [self.color1Expression evaluateNumberWithRunner:runner min:0 max:RendererNumColors - 1];
+        Number *color1 = [self.color1Expression evaluateNumberWithRunner:runner min:-1 max:RendererNumColors - 1];
         sprite->colors[0] = color1.intValue;
     }
     if (self.color2Expression)
     {
-        Number *color2 = [self.color2Expression evaluateNumberWithRunner:runner min:0 max:RendererNumColors - 1];
+        Number *color2 = [self.color2Expression evaluateNumberWithRunner:runner min:-1 max:RendererNumColors - 1];
         sprite->colors[1] = color2.intValue;
     }
     if (self.color3Expression)
     {
-        Number *color3 = [self.color3Expression evaluateNumberWithRunner:runner min:0 max:RendererNumColors - 1];
+        Number *color3 = [self.color3Expression evaluateNumberWithRunner:runner min:-1 max:RendererNumColors - 1];
         sprite->colors[2] = color3.intValue;
     }
     
