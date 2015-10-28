@@ -140,7 +140,7 @@
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7qu-NE-hxH" customClass="TextLabel">
                                         <rect key="frame" x="0.0" y="173" width="476" height="41"/>
                                         <animations/>
-                                        <string key="text">In the full version there is no size limit for your own programs.
+                                        <string key="text">In the full version there is no size limit for programs.
 The upgrade is valid for all your devices and without time limit.</string>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="highlightedColor"/>

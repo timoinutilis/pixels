@@ -119,12 +119,12 @@
     if (targetCenter.y < self.bounds.size.height * 0.5)
     {
         self.pointerImageView.transform = CGAffineTransformMakeScale(1.0, 1.0);
-        targetCenter.y += 78.0;
+        targetCenter.y += 60.0;
     }
     else
     {
         self.pointerImageView.transform = CGAffineTransformMakeScale(1.0, -1.0);
-        targetCenter.y -= 78.0;
+        targetCenter.y -= 64.0;
     }
     self.pointerImageView.center = targetCenter;
 }
