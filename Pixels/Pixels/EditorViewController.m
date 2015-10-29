@@ -57,6 +57,7 @@ typedef void(^InfoBlock)(void);
 
 @property UIBarButtonItem *projectItem;
 
+@property BOOL didAppearAlready;
 @property BOOL wasEditedSinceOpened;
 @property BOOL wasEditedSinceLastRun;
 @property CGRect keyboardRect;
@@ -105,16 +106,12 @@ typedef void(^InfoBlock)(void);
     self.sourceCodeTextView.keyboardToolbar.barStyle = UIBarStyleBlack;
     
     self.searchToolbar.searchDelegate = self;
-    self.searchToolbarConstraint.constant = -self.searchToolbar.bounds.size.height;
-    self.searchToolbar.hidden = YES;
     
     self.infoView.backgroundColor = [AppStyle warningColor];
     self.infoView.layer.shadowRadius = 1.0;
     self.infoView.layer.shadowOpacity = 1.0;
     self.infoView.layer.shadowOffset = CGSizeMake(0.0, 1.0);
     self.infoLabel.textColor = [AppStyle brightColor];
-    self.infoViewConstraint.constant = -self.infoView.bounds.size.height;
-    self.infoView.hidden = YES;
     
     self.indexSideBar.textView = self.sourceCodeTextView;
     
@@ -140,6 +137,20 @@ typedef void(^InfoBlock)(void);
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    if (!self.didAppearAlready)
+    {
+        self.didAppearAlready = YES;
+        
+        // hide search bar
+        [self.view layoutIfNeeded];
+        self.searchToolbarConstraint.constant = -self.searchToolbar.bounds.size.height;
+        self.searchToolbar.hidden = YES;
+        
+        // hide info bar
+        self.infoViewConstraint.constant = -self.infoView.bounds.size.height;
+        self.infoView.hidden = YES;
+        [self.view layoutIfNeeded];
+    }
     [self updateEditorInsets];
 }
 
