@@ -10,7 +10,7 @@
 
 @class Project;
 
-@interface ExplorerViewController : UIViewController <UICollectionViewDelegate, UICollectionViewDataSource>
+@interface ExplorerViewController : UIViewController
 
 @end
 

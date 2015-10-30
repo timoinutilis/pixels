@@ -12,10 +12,12 @@
 #import "AppController.h"
 #import "CoachMarkView.h"
 #import "UIViewController+LowResCoder.h"
+#import "UICollectionView+Draggable.h"
+#import "DraggableCollectionViewFlowLayout.h"
 
 NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 
-@interface ExplorerViewController () <UITraitEnvironment>
+@interface ExplorerViewController ()  <UICollectionViewDelegate, UICollectionViewDataSource_Draggable, UITraitEnvironment>
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 
@@ -37,6 +39,13 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     
     self.collectionView.dataSource = self;
     self.collectionView.delegate = self;
+    self.collectionView.draggable = YES;
+    
+    DraggableCollectionViewFlowLayout *layout = (DraggableCollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
+    layout.itemSize = CGSizeMake(140, 140);
+    layout.minimumInteritemSpacing = 0;
+    layout.minimumLineSpacing = 10;
+    layout.sectionInset = UIEdgeInsetsMake(20, 20, 20, 20);
     
     [[ModelManager sharedManager] createDefaultProjects];
     [self loadProjects];
@@ -184,6 +193,27 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     ExplorerProjectCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ProjectCell" forIndexPath:indexPath];
     cell.project = self.projects[indexPath.item];
     return cell;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView moveItemAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
+{
+    Project *project = self.projects[fromIndexPath.item];
+    [self.projects removeObjectAtIndex:fromIndexPath.item];
+    [self.projects insertObject:project atIndex:toIndexPath.item];
+}
+
+- (BOOL)collectionView:(UICollectionView *)collectionView canMoveItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
+}
+
+- (BOOL)collectionView:(UICollectionView *)collectionView canMoveItemAtIndexPath:(NSIndexPath *)indexPath toIndexPath:(NSIndexPath *)toIndexPath
+{
+    return YES;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didMoveItemAtIndexPath:(NSIndexPath *)indexPath toIndexPath:(NSIndexPath *)toIndexPath
+{
 }
 
 #pragma mark <UICollectionViewDelegate>

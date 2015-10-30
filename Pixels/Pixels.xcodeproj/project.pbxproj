@@ -252,6 +252,14 @@
 		92E53DF61A5B3A1D00FE9F91 /* GORTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E53DF11A5B3A1D00FE9F91 /* GORTableViewController.m */; };
 		92E53DF71A5B3A1D00FE9F91 /* GORTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E53DF31A5B3A1D00FE9F91 /* GORTextView.m */; };
 		92E53DFA1A5B3AC200FE9F91 /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E53DF91A5B3AC200FE9F91 /* ShareViewController.m */; };
+		92EC21241BE399B500072BE4 /* LSCollectionViewHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 92EC21181BE399B500072BE4 /* LSCollectionViewHelper.m */; };
+		92EC21251BE399B500072BE4 /* LSCollectionViewHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 92EC21181BE399B500072BE4 /* LSCollectionViewHelper.m */; };
+		92EC21261BE399B500072BE4 /* LSCollectionViewLayoutHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 92EC211A1BE399B500072BE4 /* LSCollectionViewLayoutHelper.m */; };
+		92EC21271BE399B500072BE4 /* LSCollectionViewLayoutHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 92EC211A1BE399B500072BE4 /* LSCollectionViewLayoutHelper.m */; };
+		92EC21281BE399B500072BE4 /* DraggableCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 92EC211D1BE399B500072BE4 /* DraggableCollectionViewFlowLayout.m */; };
+		92EC21291BE399B500072BE4 /* DraggableCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 92EC211D1BE399B500072BE4 /* DraggableCollectionViewFlowLayout.m */; };
+		92EC212E1BE399B500072BE4 /* UICollectionView+Draggable.m in Sources */ = {isa = PBXBuildFile; fileRef = 92EC21211BE399B500072BE4 /* UICollectionView+Draggable.m */; };
+		92EC212F1BE399B500072BE4 /* UICollectionView+Draggable.m in Sources */ = {isa = PBXBuildFile; fileRef = 92EC21211BE399B500072BE4 /* UICollectionView+Draggable.m */; };
 		92EDC4421A54701D007824A5 /* Gamepad.m in Sources */ = {isa = PBXBuildFile; fileRef = 92EDC4411A54701D007824A5 /* Gamepad.m */; };
 		92F0C36A1B3EAF0B00000646 /* GORCycleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F0C3691B3EAF0B00000646 /* GORCycleManager.m */; };
 		92F0C36D1B3EBF6D00000646 /* Compiler.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F0C36C1B3EBF6D00000646 /* Compiler.m */; };
@@ -488,6 +496,16 @@
 		92E53DF31A5B3A1D00FE9F91 /* GORTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GORTextView.m; sourceTree = "<group>"; };
 		92E53DF81A5B3AC200FE9F91 /* ShareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShareViewController.h; sourceTree = "<group>"; };
 		92E53DF91A5B3AC200FE9F91 /* ShareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShareViewController.m; sourceTree = "<group>"; };
+		92EC21171BE399B500072BE4 /* LSCollectionViewHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSCollectionViewHelper.h; sourceTree = "<group>"; };
+		92EC21181BE399B500072BE4 /* LSCollectionViewHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSCollectionViewHelper.m; sourceTree = "<group>"; };
+		92EC21191BE399B500072BE4 /* LSCollectionViewLayoutHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSCollectionViewLayoutHelper.h; sourceTree = "<group>"; };
+		92EC211A1BE399B500072BE4 /* LSCollectionViewLayoutHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSCollectionViewLayoutHelper.m; sourceTree = "<group>"; };
+		92EC211C1BE399B500072BE4 /* DraggableCollectionViewFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DraggableCollectionViewFlowLayout.h; sourceTree = "<group>"; };
+		92EC211D1BE399B500072BE4 /* DraggableCollectionViewFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DraggableCollectionViewFlowLayout.m; sourceTree = "<group>"; };
+		92EC21201BE399B500072BE4 /* UICollectionView+Draggable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UICollectionView+Draggable.h"; sourceTree = "<group>"; };
+		92EC21211BE399B500072BE4 /* UICollectionView+Draggable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UICollectionView+Draggable.m"; sourceTree = "<group>"; };
+		92EC21221BE399B500072BE4 /* UICollectionViewDataSource_Draggable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICollectionViewDataSource_Draggable.h; sourceTree = "<group>"; };
+		92EC21231BE399B500072BE4 /* UICollectionViewLayout_Warpable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICollectionViewLayout_Warpable.h; sourceTree = "<group>"; };
 		92EDC4401A54701D007824A5 /* Gamepad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Gamepad.h; sourceTree = "<group>"; };
 		92EDC4411A54701D007824A5 /* Gamepad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Gamepad.m; sourceTree = "<group>"; };
 		92F0C3681B3EAF0B00000646 /* GORCycleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GORCycleManager.h; sourceTree = "<group>"; };
@@ -739,6 +757,7 @@
 				9204EF6B1A4C431400B8C29C /* Assets */,
 				92884EF71B0F25B30032623D /* SDWebImage */,
 				929BCEF91BB14800005F1DBD /* AFNetworking */,
+				92EC21151BE399B500072BE4 /* DraggableCollectionView */,
 				92E53DEA1A5B3A1D00FE9F91 /* Gor Lib */,
 				928E5CF01B27735200D7CD6F /* App */,
 				92C081161B0DCD640006331B /* Community Model */,
@@ -966,6 +985,39 @@
 			path = UI;
 			sourceTree = "<group>";
 		};
+		92EC21151BE399B500072BE4 /* DraggableCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				92EC21161BE399B500072BE4 /* Helpers */,
+				92EC211B1BE399B500072BE4 /* Layout */,
+				92EC21201BE399B500072BE4 /* UICollectionView+Draggable.h */,
+				92EC21211BE399B500072BE4 /* UICollectionView+Draggable.m */,
+				92EC21221BE399B500072BE4 /* UICollectionViewDataSource_Draggable.h */,
+				92EC21231BE399B500072BE4 /* UICollectionViewLayout_Warpable.h */,
+			);
+			path = DraggableCollectionView;
+			sourceTree = "<group>";
+		};
+		92EC21161BE399B500072BE4 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				92EC21171BE399B500072BE4 /* LSCollectionViewHelper.h */,
+				92EC21181BE399B500072BE4 /* LSCollectionViewHelper.m */,
+				92EC21191BE399B500072BE4 /* LSCollectionViewLayoutHelper.h */,
+				92EC211A1BE399B500072BE4 /* LSCollectionViewLayoutHelper.m */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		92EC211B1BE399B500072BE4 /* Layout */ = {
+			isa = PBXGroup;
+			children = (
+				92EC211C1BE399B500072BE4 /* DraggableCollectionViewFlowLayout.h */,
+				92EC211D1BE399B500072BE4 /* DraggableCollectionViewFlowLayout.m */,
+			);
+			path = Layout;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1104,6 +1156,7 @@
 				925C28191B092BD9007AC515 /* DayCodeManager.m in Sources */,
 				924F83301B0B5BDF00B96C91 /* CommDetailViewController.m in Sources */,
 				92E36D191ADD294E00C16CBE /* UIColor+Utils.m in Sources */,
+				92EC21281BE399B500072BE4 /* DraggableCollectionViewFlowLayout.m in Sources */,
 				92C081151B0DCD5F0006331B /* LCCUser.m in Sources */,
 				92884F2E1B0F33850032623D /* LCCComment.m in Sources */,
 				92ACDC3A1B359AED009252D6 /* BackgroundView.m in Sources */,
@@ -1126,6 +1179,7 @@
 				929BCF131BB14800005F1DBD /* AFURLRequestSerialization.m in Sources */,
 				92B957021BBD912400699BFF /* HelpSplitViewController.m in Sources */,
 				92E53DF71A5B3A1D00FE9F91 /* GORTextView.m in Sources */,
+				92EC212E1BE399B500072BE4 /* UICollectionView+Draggable.m in Sources */,
 				9276F3921A1D289C0060E909 /* AppDelegate.m in Sources */,
 				92C0815A1B0E021A0006331B /* CommPostViewController.m in Sources */,
 				92D2C2021B13442A00539BA6 /* CommUsersViewController.m in Sources */,
@@ -1153,6 +1207,7 @@
 				92D518B91A6975C10000F917 /* AboutViewController.m in Sources */,
 				9251440F1B92044100C9D254 /* VariableManager.m in Sources */,
 				92884F221B0F25B30032623D /* UIButton+WebCache.m in Sources */,
+				92EC21241BE399B500072BE4 /* LSCollectionViewHelper.m in Sources */,
 				929BCF0F1BB14800005F1DBD /* AFHTTPSessionManager.m in Sources */,
 				92B956FE1BBD6CD500699BFF /* TabBarController.m in Sources */,
 				92884F251B0F25B30032623D /* UIImage+WebP.m in Sources */,
@@ -1186,6 +1241,7 @@
 				92C98F421A20F2F000215AE9 /* Node.m in Sources */,
 				926C72C71A2B579E00448EAB /* RunnerViewController.m in Sources */,
 				92E53DFA1A5B3AC200FE9F91 /* ShareViewController.m in Sources */,
+				92EC21261BE399B500072BE4 /* LSCollectionViewLayoutHelper.m in Sources */,
 				926864241AA607A000F305B9 /* UpgradeViewController.m in Sources */,
 				92C0811C1B0DDCDB0006331B /* CommunityModel.m in Sources */,
 				925935A41B1B7E4F001CE0B1 /* UIViewController+CommUtils.m in Sources */,
@@ -1214,6 +1270,7 @@
 				929BCF241BB14A1B005F1DBD /* DayCodeManager.m in Sources */,
 				929BCF251BB14A1B005F1DBD /* CommDetailViewController.m in Sources */,
 				929BCF261BB14A1B005F1DBD /* UIColor+Utils.m in Sources */,
+				92EC21291BE399B500072BE4 /* DraggableCollectionViewFlowLayout.m in Sources */,
 				929BCF271BB14A1B005F1DBD /* LCCUser.m in Sources */,
 				929BCF281BB14A1B005F1DBD /* LCCComment.m in Sources */,
 				929BCF291BB14A1B005F1DBD /* BackgroundView.m in Sources */,
@@ -1236,6 +1293,7 @@
 				929BCF391BB14A1B005F1DBD /* AFURLRequestSerialization.m in Sources */,
 				92B957031BBD912400699BFF /* HelpSplitViewController.m in Sources */,
 				929BCF3A1BB14A1B005F1DBD /* GORTextView.m in Sources */,
+				92EC212F1BE399B500072BE4 /* UICollectionView+Draggable.m in Sources */,
 				929BCF3B1BB14A1B005F1DBD /* AppDelegate.m in Sources */,
 				929BCF3C1BB14A1B005F1DBD /* CommPostViewController.m in Sources */,
 				929BCF3D1BB14A1B005F1DBD /* CommUsersViewController.m in Sources */,
@@ -1263,6 +1321,7 @@
 				929BCF521BB14A1B005F1DBD /* AboutViewController.m in Sources */,
 				929BCF531BB14A1B005F1DBD /* VariableManager.m in Sources */,
 				929BCF541BB14A1B005F1DBD /* UIButton+WebCache.m in Sources */,
+				92EC21251BE399B500072BE4 /* LSCollectionViewHelper.m in Sources */,
 				929BCF551BB14A1B005F1DBD /* AFHTTPSessionManager.m in Sources */,
 				92B956FF1BBD6CD500699BFF /* TabBarController.m in Sources */,
 				929BCF561BB14A1B005F1DBD /* UIImage+WebP.m in Sources */,
@@ -1296,6 +1355,7 @@
 				929BCF711BB14A1B005F1DBD /* Node.m in Sources */,
 				929BCF721BB14A1B005F1DBD /* RunnerViewController.m in Sources */,
 				929BCF731BB14A1B005F1DBD /* ShareViewController.m in Sources */,
+				92EC21271BE399B500072BE4 /* LSCollectionViewLayoutHelper.m in Sources */,
 				929BCF741BB14A1B005F1DBD /* UpgradeViewController.m in Sources */,
 				929BCF751BB14A1B005F1DBD /* CommunityModel.m in Sources */,
 				929BCF761BB14A1B005F1DBD /* UIViewController+CommUtils.m in Sources */,
