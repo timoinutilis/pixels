@@ -30,6 +30,8 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
 @interface LSCollectionViewHelper ()
 {
     NSIndexPath *lastIndexPath;
+    CGPoint lastPoint;
+    NSIndexPath *folderIndexPath;
     UIImageView *mockCell;
     CGPoint mockCenter;
     CGPoint fingerTranslation;
@@ -152,7 +154,7 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
     return NO;
 }
 
-- (NSIndexPath *)indexPathForItemClosestToPoint:(CGPoint)point
+- (NSIndexPath *)indexPathForItemClosestToPoint:(CGPoint)point itemPointRef:(CGPoint *)itemPointRef
 {
     NSArray *layoutAttrsInRect;
     NSInteger closestDist = NSIntegerMax;
@@ -168,10 +170,11 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
     for (UICollectionViewLayoutAttributes *layoutAttr in layoutAttrsInRect) {
         CGFloat xd = layoutAttr.center.x - point.x;
         CGFloat yd = layoutAttr.center.y - point.y;
-        NSInteger dist = sqrtf(xd*xd + yd*yd);
+        NSInteger dist = xd*xd + yd*yd;
         if (dist < closestDist) {
             closestDist = dist;
             indexPath = layoutAttr.indexPath;
+            *itemPointRef = layoutAttr.center;
         }
     }
     
@@ -199,13 +202,13 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
             yd = layoutAttr.frame.origin.y - point.y;
         }
         
-        NSInteger dist = sqrtf(xd*xd + yd*yd);
+        NSInteger dist = xd*xd + yd*yd;
         if (dist < closestDist) {
             closestDist = dist;
             indexPath = layoutAttr.indexPath;
+            *itemPointRef = layoutAttr.center;
         }
     }
-    
     return indexPath;
 }
 
@@ -218,7 +221,8 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
         return;
     }
     
-    NSIndexPath *indexPath = [self indexPathForItemClosestToPoint:[sender locationInView:self.collectionView]];
+    CGPoint closestPoint;
+    NSIndexPath *indexPath = [self indexPathForItemClosestToPoint:[sender locationInView:self.collectionView] itemPointRef:&closestPoint];
     
     switch (sender.state) {
         case UIGestureRecognizerStateBegan: {
@@ -247,6 +251,7 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
             
             // Start warping
             lastIndexPath = indexPath;
+            lastPoint = closestPoint;
             self.layoutHelper.fromIndexPath = indexPath;
             self.layoutHelper.hideIndexPath = indexPath;
             self.layoutHelper.toIndexPath = indexPath;
@@ -262,28 +267,53 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
             NSIndexPath *toIndexPath = self.layoutHelper.toIndexPath;
             // Tell the data source to move the item
             id<UICollectionViewDataSource_Draggable> dataSource = (id<UICollectionViewDataSource_Draggable>)self.collectionView.dataSource;
-            [dataSource collectionView:self.collectionView moveItemAtIndexPath:fromIndexPath toIndexPath:toIndexPath];
-           
-            // Move the item
-            [self.collectionView performBatchUpdates:^{
-                [self.collectionView moveItemAtIndexPath:fromIndexPath toIndexPath:toIndexPath];
-                self.layoutHelper.fromIndexPath = nil;
-                self.layoutHelper.toIndexPath = nil;
-            } completion:^(BOOL finished) {
-                if (finished) {
-                    if ([dataSource respondsToSelector:@selector(collectionView:didMoveItemAtIndexPath:toIndexPath:)]) {
-                        [dataSource collectionView:self.collectionView didMoveItemAtIndexPath:fromIndexPath toIndexPath:toIndexPath];
+            if (folderIndexPath)
+            {
+                // move into folder
+                [dataSource collectionView:self.collectionView moveItemAtIndexPath:fromIndexPath intoItemAtIndexPath:folderIndexPath];
+                
+                // Remove the item
+                [self.collectionView performBatchUpdates:^{
+                    [self.collectionView deleteItemsAtIndexPaths:@[fromIndexPath]];
+                    self.layoutHelper.fromIndexPath = nil;
+                    self.layoutHelper.toIndexPath = nil;
+                } completion:nil];
+            }
+            else
+            {
+                // move to another position
+                [dataSource collectionView:self.collectionView moveItemAtIndexPath:fromIndexPath toIndexPath:toIndexPath];
+
+                // Move the item
+                [self.collectionView performBatchUpdates:^{
+                    [self.collectionView moveItemAtIndexPath:fromIndexPath toIndexPath:toIndexPath];
+                    self.layoutHelper.fromIndexPath = nil;
+                    self.layoutHelper.toIndexPath = nil;
+                } completion:^(BOOL finished) {
+                    if (finished) {
+                        if ([dataSource respondsToSelector:@selector(collectionView:didMoveItemAtIndexPath:toIndexPath:)]) {
+                            [dataSource collectionView:self.collectionView didMoveItemAtIndexPath:fromIndexPath toIndexPath:toIndexPath];
+                        }
                     }
-                }
-            }];
+                }];
+            }
+           
             
             // Switch mock for cell
-            UICollectionViewLayoutAttributes *layoutAttributes = [self.collectionView layoutAttributesForItemAtIndexPath:self.layoutHelper.hideIndexPath];
+            NSIndexPath *mockTargetIndexPath = folderIndexPath ? folderIndexPath : self.layoutHelper.hideIndexPath;
+            UICollectionViewLayoutAttributes *layoutAttributes = [self.collectionView layoutAttributesForItemAtIndexPath:mockTargetIndexPath];
             [UIView
              animateWithDuration:0.3
              animations:^{
                  mockCell.center = layoutAttributes.center;
-                 mockCell.transform = CGAffineTransformMakeScale(1.f, 1.f);
+                 if (folderIndexPath)
+                 {
+                     mockCell.transform = CGAffineTransformMakeScale(0.01f, 0.01f);
+                 }
+                 else
+                 {
+                     mockCell.transform = CGAffineTransformMakeScale(1.f, 1.f);
+                 }
              }
              completion:^(BOOL finished) {
                  [mockCell removeFromSuperview];
@@ -295,6 +325,7 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
             // Reset
             [self invalidatesScrollTimer];
             lastIndexPath = nil;
+            folderIndexPath = nil;
         } break;
         default: break;
     }
@@ -363,8 +394,39 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
         
         // Warp item to finger location
         CGPoint point = [sender locationInView:self.collectionView];
-        NSIndexPath *indexPath = [self indexPathForItemClosestToPoint:point];
-        [self warpToIndexPath:indexPath];
+
+        CGFloat xd = lastPoint.x - point.x;
+        CGFloat yd = lastPoint.y - point.y;
+        CGFloat dist = xd*xd + yd*yd;
+        
+        CGPoint itemPoint;
+        NSIndexPath *indexPath = [self indexPathForItemClosestToPoint:point itemPointRef:&itemPoint];
+        if (dist / (140.0 * 140.0) >= 1.5)
+        {
+            folderIndexPath = nil;
+            lastPoint = itemPoint;
+            [self warpToIndexPath:indexPath];
+        }
+        else
+        {
+            BOOL canMoveInto = YES;
+            if (   [self.collectionView.dataSource respondsToSelector:@selector(collectionView:canMoveIntoItemAtIndexPath:)]
+                && [(id<UICollectionViewDataSource_Draggable>)self.collectionView.dataSource collectionView:self.collectionView
+                                                                                 canMoveIntoItemAtIndexPath:indexPath] == NO)
+            {
+                canMoveInto = NO;
+            }
+            
+            if (canMoveInto)
+            {
+                NSLog(@"folder!");
+                folderIndexPath = indexPath;
+            }
+            else
+            {
+                folderIndexPath = nil;
+            }
+        }
     }
 }
 
@@ -416,7 +478,7 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
     self.collectionView.contentOffset = _CGPointAdd(contentOffset, translation);
     
     // Warp items while scrolling
-    NSIndexPath *indexPath = [self indexPathForItemClosestToPoint:mockCell.center];
+    NSIndexPath *indexPath = [self indexPathForItemClosestToPoint:mockCell.center itemPointRef:&lastPoint];
     [self warpToIndexPath:indexPath];
 }
 

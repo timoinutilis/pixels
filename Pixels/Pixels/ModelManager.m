@@ -183,6 +183,18 @@ NSString *const ModelManagerDidAddProjectNotification = @"ModelManagerDidAddProj
     return project;
 }
 
+- (Project *)createNewFolder
+{
+    Project *project = [NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:self.managedObjectContext];
+    project.name = @"Unnamed Folder";
+    project.createdAt = [NSDate date];
+    project.isFolder = @YES;
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:ModelManagerDidAddProjectNotification object:self userInfo:@{@"project": project}];
+    
+    return project;
+}
+
 - (void)deleteProject:(Project *)project
 {
     [self.managedObjectContext deleteObject:project];

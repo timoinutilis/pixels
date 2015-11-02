@@ -33,9 +33,10 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 {
     [super viewDidLoad];
     
-    UIBarButtonItem *addItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(onAddTapped:)];
+    UIBarButtonItem *addProjectItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(onAddProjectTapped:)];
+    UIBarButtonItem *addFolderItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(onAddFolderTapped:)];
     
-    self.navigationItem.rightBarButtonItems = @[addItem];
+    self.navigationItem.rightBarButtonItems = @[addProjectItem, addFolderItem];
     
     self.collectionView.dataSource = self;
     self.collectionView.delegate = self;
@@ -138,11 +139,17 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     self.addedProject = notification.userInfo[@"project"];
 }
 
-- (void)onAddTapped:(id)sender
+- (void)onAddProjectTapped:(id)sender
 {
     [[AppController sharedController] onShowInfoID:CoachMarkIDAdd];
     
     [[ModelManager sharedManager] createNewProject];
+    [self showAddedProject];
+}
+
+- (void)onAddFolderTapped:(id)sender
+{
+    [[ModelManager sharedManager] createNewFolder];
     [self showAddedProject];
 }
 
@@ -214,6 +221,17 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 
 - (void)collectionView:(UICollectionView *)collectionView didMoveItemAtIndexPath:(NSIndexPath *)indexPath toIndexPath:(NSIndexPath *)toIndexPath
 {
+}
+
+- (BOOL)collectionView:(UICollectionView *)collectionView canMoveIntoItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    Project *project = self.projects[indexPath.item];
+    return project.isFolder.boolValue;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView moveItemAtIndexPath:(NSIndexPath *)fromIndexPath intoItemAtIndexPath:(NSIndexPath *)intoIndexPath
+{
+    [self.projects removeObjectAtIndex:fromIndexPath.item];
 }
 
 #pragma mark <UICollectionViewDelegate>

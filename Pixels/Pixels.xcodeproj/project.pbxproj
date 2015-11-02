@@ -14,9 +14,12 @@
 		920E5E5E1B1324FE00071C6A /* LCCFollow.m in Sources */ = {isa = PBXBuildFile; fileRef = 920E5E5D1B1324FE00071C6A /* LCCFollow.m */; };
 		920E681D1AB731620038994A /* CoachMarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 920E681C1AB731620038994A /* CoachMarkView.m */; };
 		920E68221AB74CDA0038994A /* SplashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 920E68211AB74CDA0038994A /* SplashViewController.m */; };
+		920F55E71BE7D1DF00ABBE1E /* Project+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 920F55E41BE7D1DF00ABBE1E /* Project+CoreDataProperties.m */; };
+		920F55E81BE7D1DF00ABBE1E /* Project+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 920F55E41BE7D1DF00ABBE1E /* Project+CoreDataProperties.m */; };
+		920F55E91BE7D1DF00ABBE1E /* Project.m in Sources */ = {isa = PBXBuildFile; fileRef = 920F55E61BE7D1DF00ABBE1E /* Project.m */; };
+		920F55EA1BE7D1DF00ABBE1E /* Project.m in Sources */ = {isa = PBXBuildFile; fileRef = 920F55E61BE7D1DF00ABBE1E /* Project.m */; };
 		9215D7791B37361100A65E55 /* StandardTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9215D7781B37361100A65E55 /* StandardTableViewCell.m */; };
 		921B234C1A9E3DA800C45AFA /* EditorTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 921B234B1A9E3DA800C45AFA /* EditorTextView.m */; };
-		922A77461AA46CCB004EE2CA /* Project.m in Sources */ = {isa = PBXBuildFile; fileRef = 922A77451AA46CCB004EE2CA /* Project.m */; };
 		9231159F1A444A6B00624201 /* RendererView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9231159E1A444A6B00624201 /* RendererView.m */; };
 		923115A21A444AA800624201 /* Renderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 923115A11A444AA800624201 /* Renderer.m */; };
 		9232FA0D1B860CF80082DDF1 /* NumberPool.m in Sources */ = {isa = PBXBuildFile; fileRef = 9232FA0C1B860CF80082DDF1 /* NumberPool.m */; };
@@ -178,7 +181,6 @@
 		929BCF5F1BB14A1B005F1DBD /* HelpContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 920822021A4DABB8005B7862 /* HelpContent.m */; };
 		929BCF601BB14A1B005F1DBD /* Runnable.m in Sources */ = {isa = PBXBuildFile; fileRef = 926086311A5E8560006C5523 /* Runnable.m */; };
 		929BCF611BB14A1B005F1DBD /* AFURLConnectionOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 929BCF061BB14800005F1DBD /* AFURLConnectionOperation.m */; };
-		929BCF621BB14A1B005F1DBD /* Project.m in Sources */ = {isa = PBXBuildFile; fileRef = 922A77451AA46CCB004EE2CA /* Project.m */; };
 		929BCF631BB14A1B005F1DBD /* CoachMarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 920E681C1AB731620038994A /* CoachMarkView.m */; };
 		929BCF641BB14A1B005F1DBD /* NotificationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E1AF951B6A49E8000B1B0D /* NotificationView.m */; };
 		929BCF651BB14A1B005F1DBD /* LCCPostStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 9254DF5F1B628A3C00774E98 /* LCCPostStats.m */; };
@@ -279,12 +281,15 @@
 		920E681C1AB731620038994A /* CoachMarkView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoachMarkView.m; sourceTree = "<group>"; };
 		920E68201AB74CDA0038994A /* SplashViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplashViewController.h; sourceTree = "<group>"; };
 		920E68211AB74CDA0038994A /* SplashViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SplashViewController.m; sourceTree = "<group>"; };
+		920F55DE1BE7CD6000ABBE1E /* Model 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 4.xcdatamodel"; sourceTree = "<group>"; };
+		920F55E31BE7D1DF00ABBE1E /* Project+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Project+CoreDataProperties.h"; sourceTree = "<group>"; };
+		920F55E41BE7D1DF00ABBE1E /* Project+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Project+CoreDataProperties.m"; sourceTree = "<group>"; };
+		920F55E51BE7D1DF00ABBE1E /* Project.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Project.h; sourceTree = "<group>"; };
+		920F55E61BE7D1DF00ABBE1E /* Project.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Project.m; sourceTree = "<group>"; };
 		9215D7771B37361100A65E55 /* StandardTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StandardTableViewCell.h; sourceTree = "<group>"; };
 		9215D7781B37361100A65E55 /* StandardTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StandardTableViewCell.m; sourceTree = "<group>"; };
 		921B234A1A9E3DA800C45AFA /* EditorTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditorTextView.h; sourceTree = "<group>"; };
 		921B234B1A9E3DA800C45AFA /* EditorTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditorTextView.m; sourceTree = "<group>"; };
-		922A77441AA46CCB004EE2CA /* Project.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Project.h; sourceTree = "<group>"; };
-		922A77451AA46CCB004EE2CA /* Project.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Project.m; sourceTree = "<group>"; };
 		9231159D1A444A6B00624201 /* RendererView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RendererView.h; sourceTree = "<group>"; };
 		9231159E1A444A6B00624201 /* RendererView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RendererView.m; sourceTree = "<group>"; };
 		923115A01A444AA800624201 /* Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
@@ -668,9 +673,11 @@
 		927333F01A2A3E4600C89AF0 /* Core Data */ = {
 			isa = PBXGroup;
 			children = (
+				920F55E31BE7D1DF00ABBE1E /* Project+CoreDataProperties.h */,
+				920F55E41BE7D1DF00ABBE1E /* Project+CoreDataProperties.m */,
+				920F55E51BE7D1DF00ABBE1E /* Project.h */,
+				920F55E61BE7D1DF00ABBE1E /* Project.m */,
 				92A0EC0B1A56DA1F0051D74C /* Model.xcdatamodeld */,
-				922A77441AA46CCB004EE2CA /* Project.h */,
-				922A77451AA46CCB004EE2CA /* Project.m */,
 				9273349E1A2A499B00C89AF0 /* ModelManager.h */,
 				9273349F1A2A499B00C89AF0 /* ModelManager.m */,
 			);
@@ -1179,6 +1186,7 @@
 				929BCF131BB14800005F1DBD /* AFURLRequestSerialization.m in Sources */,
 				92B957021BBD912400699BFF /* HelpSplitViewController.m in Sources */,
 				92E53DF71A5B3A1D00FE9F91 /* GORTextView.m in Sources */,
+				920F55E91BE7D1DF00ABBE1E /* Project.m in Sources */,
 				92EC212E1BE399B500072BE4 /* UICollectionView+Draggable.m in Sources */,
 				9276F3921A1D289C0060E909 /* AppDelegate.m in Sources */,
 				92C0815A1B0E021A0006331B /* CommPostViewController.m in Sources */,
@@ -1203,6 +1211,7 @@
 				925C281F1B092CA4007AC515 /* NSDate+Utils.m in Sources */,
 				92E36D1F1ADD679D00C16CBE /* GORLabel.m in Sources */,
 				92884F1F1B0F25B30032623D /* SDWebImageDownloaderOperation.m in Sources */,
+				920F55E71BE7D1DF00ABBE1E /* Project+CoreDataProperties.m in Sources */,
 				9276F38F1A1D289C0060E909 /* main.m in Sources */,
 				92D518B91A6975C10000F917 /* AboutViewController.m in Sources */,
 				9251440F1B92044100C9D254 /* VariableManager.m in Sources */,
@@ -1223,7 +1232,6 @@
 				920822031A4DABB8005B7862 /* HelpContent.m in Sources */,
 				926086321A5E8560006C5523 /* Runnable.m in Sources */,
 				929BCF121BB14800005F1DBD /* AFURLConnectionOperation.m in Sources */,
-				922A77461AA46CCB004EE2CA /* Project.m in Sources */,
 				920E681D1AB731620038994A /* CoachMarkView.m in Sources */,
 				92E1AF961B6A49E8000B1B0D /* NotificationView.m in Sources */,
 				9254DF601B628A3C00774E98 /* LCCPostStats.m in Sources */,
@@ -1293,6 +1301,7 @@
 				929BCF391BB14A1B005F1DBD /* AFURLRequestSerialization.m in Sources */,
 				92B957031BBD912400699BFF /* HelpSplitViewController.m in Sources */,
 				929BCF3A1BB14A1B005F1DBD /* GORTextView.m in Sources */,
+				920F55EA1BE7D1DF00ABBE1E /* Project.m in Sources */,
 				92EC212F1BE399B500072BE4 /* UICollectionView+Draggable.m in Sources */,
 				929BCF3B1BB14A1B005F1DBD /* AppDelegate.m in Sources */,
 				929BCF3C1BB14A1B005F1DBD /* CommPostViewController.m in Sources */,
@@ -1317,6 +1326,7 @@
 				929BCF4E1BB14A1B005F1DBD /* NSDate+Utils.m in Sources */,
 				929BCF4F1BB14A1B005F1DBD /* GORLabel.m in Sources */,
 				929BCF501BB14A1B005F1DBD /* SDWebImageDownloaderOperation.m in Sources */,
+				920F55E81BE7D1DF00ABBE1E /* Project+CoreDataProperties.m in Sources */,
 				929BCF511BB14A1B005F1DBD /* main.m in Sources */,
 				929BCF521BB14A1B005F1DBD /* AboutViewController.m in Sources */,
 				929BCF531BB14A1B005F1DBD /* VariableManager.m in Sources */,
@@ -1337,7 +1347,6 @@
 				929BCF5F1BB14A1B005F1DBD /* HelpContent.m in Sources */,
 				929BCF601BB14A1B005F1DBD /* Runnable.m in Sources */,
 				929BCF611BB14A1B005F1DBD /* AFURLConnectionOperation.m in Sources */,
-				929BCF621BB14A1B005F1DBD /* Project.m in Sources */,
 				929BCF631BB14A1B005F1DBD /* CoachMarkView.m in Sources */,
 				929BCF641BB14A1B005F1DBD /* NotificationView.m in Sources */,
 				929BCF651BB14A1B005F1DBD /* LCCPostStats.m in Sources */,
@@ -1591,11 +1600,12 @@
 		92A0EC0B1A56DA1F0051D74C /* Model.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				920F55DE1BE7CD6000ABBE1E /* Model 4.xcdatamodel */,
 				928DBBA51B52918400C5EBCC /* Model 3.xcdatamodel */,
 				92A0EC0E1A56DA630051D74C /* Model 2.xcdatamodel */,
 				92A0EC0C1A56DA1F0051D74C /* Model.xcdatamodel */,
 			);
-			currentVersion = 928DBBA51B52918400C5EBCC /* Model 3.xcdatamodel */;
+			currentVersion = 920F55DE1BE7CD6000ABBE1E /* Model 4.xcdatamodel */;
 			path = Model.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

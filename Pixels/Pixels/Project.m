@@ -2,21 +2,14 @@
 //  Project.m
 //  Pixels
 //
-//  Created by Timo Kloss on 2/3/15.
-//  Copyright (c) 2015 Inutilis Software. All rights reserved.
+//  Created by Timo Kloss on 2/11/15.
+//  Copyright © 2015 Inutilis Software. All rights reserved.
 //
 
 #import "Project.h"
 
-
 @implementation Project
 
-@dynamic createdAt;
-@dynamic iconData;
-@dynamic isDefault;
-@dynamic name;
-@dynamic scale;
-@dynamic sourceCode;
-@dynamic postId;
+// Insert code here to add functionality to your managed object subclass
 
 @end
