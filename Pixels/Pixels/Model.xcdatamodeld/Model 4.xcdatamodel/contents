@@ -7,6 +7,7 @@
         <attribute name="isFolder" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="isIconLocked" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="order" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="postId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="programDescription" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="programType" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
@@ -15,6 +16,6 @@
         <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Project" inverseName="children" inverseEntity="Project" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Project" positionX="0" positionY="0" width="128" height="225"/>
+        <element name="Project" positionX="0" positionY="0" width="128" height="240"/>
     </elements>
 </model>

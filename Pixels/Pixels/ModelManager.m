@@ -222,6 +222,28 @@ NSString *const ModelManagerDidMoveProjectNotification = @"ModelManagerDidMovePr
     return newProject;
 }
 
+- (void)moveProject:(Project *)project toFolder:(Project *)folder
+{
+    project.parent = folder;
+    if (folder)
+    {
+        // folder
+        project.order = @(folder.children.count);
+    }
+    else
+    {
+        // root
+        NSError *error;
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Project"];
+        request.predicate = [NSPredicate predicateWithFormat:@"parent == nil"];
+        NSUInteger numRootProjects = [[ModelManager sharedManager].managedObjectContext countForFetchRequest:request error:&error];
+        
+        project.order = @(numRootProjects);
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:ModelManagerDidMoveProjectNotification object:self userInfo:@{@"project": project}];
+
+}
+
 - (BOOL)hasProjectWithPostId:(NSString *)postId
 {
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Project"];

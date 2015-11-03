@@ -2,7 +2,7 @@
 //  Project+CoreDataProperties.h
 //  Pixels
 //
-//  Created by Timo Kloss on 2/11/15.
+//  Created by Timo Kloss on 3/11/15.
 //  Copyright © 2015 Inutilis Software. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -18,15 +18,16 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSDate *createdAt;
 @property (nullable, nonatomic, retain) NSData *iconData;
 @property (nullable, nonatomic, retain) NSNumber *isDefault;
+@property (nullable, nonatomic, retain) NSNumber *isFolder;
+@property (nullable, nonatomic, retain) NSNumber *isIconLocked;
 @property (nullable, nonatomic, retain) NSString *name;
 @property (nullable, nonatomic, retain) NSString *postId;
-@property (nullable, nonatomic, retain) NSString *sourceCode;
-@property (nullable, nonatomic, retain) NSNumber *isFolder;
-@property (nullable, nonatomic, retain) NSNumber *programType;
 @property (nullable, nonatomic, retain) NSString *programDescription;
-@property (nullable, nonatomic, retain) NSNumber *isIconLocked;
-@property (nullable, nonatomic, retain) Project *parent;
+@property (nullable, nonatomic, retain) NSNumber *programType;
+@property (nullable, nonatomic, retain) NSString *sourceCode;
+@property (nullable, nonatomic, retain) NSNumber *order;
 @property (nullable, nonatomic, retain) NSSet<Project *> *children;
+@property (nullable, nonatomic, retain) Project *parent;
 
 @end
 

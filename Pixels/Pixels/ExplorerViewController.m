@@ -125,11 +125,15 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 
 - (void)loadProjects
 {
+    NSArray *sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"order" ascending:YES],
+                                 [NSSortDescriptor sortDescriptorWithKey:@"createdAt" ascending:YES]];
+
     if (self.folder)
     {
         // user projects in folder
         
         self.projects = [NSMutableArray arrayWithArray:self.folder.children.allObjects];
+        [self.projects sortUsingDescriptors:sortDescriptors];
         [self.projects insertObject:[NSNull null] atIndex:0];
     }
     else
@@ -139,7 +143,7 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
         NSError *error;
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Project"];
         request.predicate = [NSPredicate predicateWithFormat:@"parent == nil"];
-        request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"createdAt" ascending:YES]];
+        request.sortDescriptors = sortDescriptors;
         
         // default projects
         NSArray *defaultProjects = [[ModelManager sharedManager].temporaryContext executeFetchRequest:request error:&error];
@@ -257,13 +261,12 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     [self.projects removeObjectAtIndex:fromIndexPath.item];
     if ((id)folder == [NSNull null])
     {
-        project.parent = self.folder.parent;
+        [[ModelManager sharedManager] moveProject:project toFolder:self.folder.parent];
     }
     else
     {
-        [folder addChildrenObject:project];
+        [[ModelManager sharedManager] moveProject:project toFolder:folder];
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:ModelManagerDidMoveProjectNotification object:self userInfo:@{@"project": project}];
 }
 
 #pragma mark <UICollectionViewDelegate>

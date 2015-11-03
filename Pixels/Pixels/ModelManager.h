@@ -32,6 +32,7 @@ extern NSString *const ModelManagerDidMoveProjectNotification;
 - (Project *)createNewFolderInFolder:(Project *)folder;
 - (void)deleteProject:(Project *)project;
 - (Project *)duplicateProject:(Project *)project sourceCode:(NSString *)sourceCode;
+- (void)moveProject:(Project *)project toFolder:(Project *)folder;
 - (BOOL)hasProjectWithPostId:(NSString *)postId;
 
 @end
