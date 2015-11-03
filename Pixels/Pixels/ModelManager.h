@@ -11,6 +11,7 @@
 
 extern NSString *const ModelManagerWillSaveDataNotification;
 extern NSString *const ModelManagerDidAddProjectNotification;
+extern NSString *const ModelManagerDidMoveProjectNotification;
 
 @interface ModelManager : NSObject
 

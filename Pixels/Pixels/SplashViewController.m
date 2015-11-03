@@ -8,6 +8,7 @@
 
 #import "SplashViewController.h"
 #import "AudioPlayer.h"
+#import "ModelManager.h"
 
 @interface SplashViewController ()
 
@@ -56,6 +57,8 @@
             [self playSound];
             
         } completion:^(BOOL finished) {
+            
+            [[ModelManager sharedManager] createDefaultProjects];
             
             self.animationDone = YES;
             [self checkComplete];

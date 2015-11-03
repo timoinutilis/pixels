@@ -31,7 +31,8 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
 {
     NSIndexPath *lastIndexPath;
     CGPoint lastPoint;
-    NSIndexPath *folderIndexPath;
+    NSIndexPath *folderDataIndexPath;
+    NSIndexPath *folderVisualIndexPath;
     UIImageView *mockCell;
     CGPoint mockCenter;
     CGPoint fingerTranslation;
@@ -267,10 +268,10 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
             NSIndexPath *toIndexPath = self.layoutHelper.toIndexPath;
             // Tell the data source to move the item
             id<UICollectionViewDataSource_Draggable> dataSource = (id<UICollectionViewDataSource_Draggable>)self.collectionView.dataSource;
-            if (folderIndexPath)
+            if (folderDataIndexPath)
             {
                 // move into folder
-                [dataSource collectionView:self.collectionView moveItemAtIndexPath:fromIndexPath intoItemAtIndexPath:folderIndexPath];
+                [dataSource collectionView:self.collectionView moveItemAtIndexPath:fromIndexPath intoItemAtIndexPath:folderDataIndexPath];
                 
                 // Remove the item
                 [self.collectionView performBatchUpdates:^{
@@ -300,13 +301,13 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
            
             
             // Switch mock for cell
-            NSIndexPath *mockTargetIndexPath = folderIndexPath ? folderIndexPath : self.layoutHelper.hideIndexPath;
+            NSIndexPath *mockTargetIndexPath = folderVisualIndexPath ? folderVisualIndexPath : self.layoutHelper.hideIndexPath;
             UICollectionViewLayoutAttributes *layoutAttributes = [self.collectionView layoutAttributesForItemAtIndexPath:mockTargetIndexPath];
             [UIView
              animateWithDuration:0.3
              animations:^{
                  mockCell.center = layoutAttributes.center;
-                 if (folderIndexPath)
+                 if (folderVisualIndexPath)
                  {
                      mockCell.transform = CGAffineTransformMakeScale(0.01f, 0.01f);
                  }
@@ -325,7 +326,8 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
             // Reset
             [self invalidatesScrollTimer];
             lastIndexPath = nil;
-            folderIndexPath = nil;
+            folderDataIndexPath = nil;
+            folderVisualIndexPath = nil;
         } break;
         default: break;
     }
@@ -403,28 +405,57 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
         NSIndexPath *indexPath = [self indexPathForItemClosestToPoint:point itemPointRef:&itemPoint];
         if (dist / (140.0 * 140.0) >= 1.5)
         {
-            folderIndexPath = nil;
+            folderDataIndexPath = nil;
+            folderVisualIndexPath = nil;
             lastPoint = itemPoint;
             [self warpToIndexPath:indexPath];
         }
         else
         {
+            NSIndexPath *dataIndexPath = indexPath;
+            NSIndexPath *visualIndexPath = indexPath;
             BOOL canMoveInto = YES;
-            if (   [self.collectionView.dataSource respondsToSelector:@selector(collectionView:canMoveIntoItemAtIndexPath:)]
-                && [(id<UICollectionViewDataSource_Draggable>)self.collectionView.dataSource collectionView:self.collectionView
-                                                                                 canMoveIntoItemAtIndexPath:indexPath] == NO)
+            if ([indexPath isEqual:self.layoutHelper.toIndexPath])
             {
                 canMoveInto = NO;
+            }
+            else
+            {
+                NSInteger dataItemIndex = indexPath.item;
+                NSInteger visualItemIndex = indexPath.item;
+                if (   self.layoutHelper.fromIndexPath.item <= indexPath.item
+                    && self.layoutHelper.toIndexPath.item > indexPath.item)
+                {
+                    dataItemIndex++;
+                }
+                else if (   self.layoutHelper.fromIndexPath.item >= indexPath.item
+                         && self.layoutHelper.toIndexPath.item < indexPath.item)
+                {
+                    dataItemIndex--;
+                }
+                if (self.layoutHelper.toIndexPath.item < indexPath.item)
+                {
+                    visualItemIndex--;
+                }
+                dataIndexPath = [NSIndexPath indexPathForItem:dataItemIndex inSection:indexPath.section];
+                visualIndexPath = [NSIndexPath indexPathForItem:visualItemIndex inSection:indexPath.section];
+                id<UICollectionViewDataSource_Draggable> dataSource = (id<UICollectionViewDataSource_Draggable>)self.collectionView.dataSource;
+                if (   [dataSource respondsToSelector:@selector(collectionView:canMoveItemAtIndexPath:intoItemAtIndexPath:)]
+                    && [dataSource collectionView:self.collectionView canMoveItemAtIndexPath:self.layoutHelper.fromIndexPath intoItemAtIndexPath:dataIndexPath] == NO)
+                {
+                    canMoveInto = NO;
+                }
             }
             
             if (canMoveInto)
             {
-                NSLog(@"folder!");
-                folderIndexPath = indexPath;
+                folderDataIndexPath = dataIndexPath;
+                folderVisualIndexPath = visualIndexPath;
             }
             else
             {
-                folderIndexPath = nil;
+                folderDataIndexPath = nil;
+                folderVisualIndexPath = nil;
             }
         }
     }

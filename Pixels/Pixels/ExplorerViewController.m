@@ -53,15 +53,16 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
         self.title = self.folder.name;
     }
     
-    [[ModelManager sharedManager] createDefaultProjects];
     [self loadProjects];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didAddProject:) name:ModelManagerDidAddProjectNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didMoveProject:) name:ModelManagerDidMoveProjectNotification object:nil];
 }
 
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:ModelManagerDidAddProjectNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:ModelManagerDidMoveProjectNotification object:nil];
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
@@ -129,6 +130,7 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
         // user projects in folder
         
         self.projects = [NSMutableArray arrayWithArray:self.folder.children.allObjects];
+        [self.projects insertObject:[NSNull null] atIndex:0];
     }
     else
     {
@@ -136,6 +138,7 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
         
         NSError *error;
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Project"];
+        request.predicate = [NSPredicate predicateWithFormat:@"parent == nil"];
         request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"createdAt" ascending:YES]];
         
         // default projects
@@ -156,6 +159,16 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     if (project.parent == self.folder)
     {
         self.addedProject = project;
+    }
+}
+
+- (void)didMoveProject:(NSNotification *)notification
+{
+    Project *project = notification.userInfo[@"project"];
+    if (project.parent == self.folder)
+    {
+        [self.projects addObject:project];
+        [self.collectionView reloadData];
     }
 }
 
@@ -214,22 +227,27 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 
 - (BOOL)collectionView:(UICollectionView *)collectionView canMoveItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return YES;
+    Project *project = self.projects[indexPath.item];
+    return (id)project != [NSNull null];
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView canMoveItemAtIndexPath:(NSIndexPath *)indexPath toIndexPath:(NSIndexPath *)toIndexPath
 {
-    return YES;
+    Project *project1 = self.projects[indexPath.item];
+    Project *project2 = self.projects[toIndexPath.item];
+    return !project1.isDefault.boolValue && (id)project2 != [NSNull null] && !project2.isDefault.boolValue;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didMoveItemAtIndexPath:(NSIndexPath *)indexPath toIndexPath:(NSIndexPath *)toIndexPath
 {
 }
 
-- (BOOL)collectionView:(UICollectionView *)collectionView canMoveIntoItemAtIndexPath:(NSIndexPath *)indexPath
+- (BOOL)collectionView:(UICollectionView *)collectionView canMoveItemAtIndexPath:(NSIndexPath *)indexPath intoItemAtIndexPath:(NSIndexPath *)intoIndexPath
 {
-    Project *project = self.projects[indexPath.item];
-    return project.isFolder.boolValue;
+    Project *project1 = self.projects[indexPath.item];
+    Project *project2 = self.projects[intoIndexPath.item];
+    return !project1.isDefault.boolValue
+        && ((id)project2 == [NSNull null] || (project2.isFolder.boolValue && !project2.isDefault.boolValue));
 }
 
 - (void)collectionView:(UICollectionView *)collectionView moveItemAtIndexPath:(NSIndexPath *)fromIndexPath intoItemAtIndexPath:(NSIndexPath *)intoIndexPath
@@ -237,7 +255,15 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     Project *project = self.projects[fromIndexPath.item];
     Project *folder = self.projects[intoIndexPath.item];
     [self.projects removeObjectAtIndex:fromIndexPath.item];
-    [folder addChildrenObject:project];
+    if ((id)folder == [NSNull null])
+    {
+        project.parent = self.folder.parent;
+    }
+    else
+    {
+        [folder addChildrenObject:project];
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:ModelManagerDidMoveProjectNotification object:self userInfo:@{@"project": project}];
 }
 
 #pragma mark <UICollectionViewDelegate>
@@ -245,21 +271,29 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     Project *project = self.projects[indexPath.item];
-    self.lastSelectedProject = project;
-    
-    if (project.isFolder.boolValue)
+    if ((id)project == [NSNull null])
     {
-        ExplorerViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"ExplorerView"];
-        vc.folder = project;
-        [self.navigationController pushViewController:vc animated:YES];
+        // parent folder
+        [self.navigationController popViewControllerAnimated:YES];
     }
     else
     {
-        [[AppController sharedController] onProgramOpened];
+        self.lastSelectedProject = project;
         
-        EditorViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"EditorView"];
-        vc.project = project;
-        [self.navigationController pushViewController:vc animated:YES];
+        if (project.isFolder.boolValue)
+        {
+            ExplorerViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"ExplorerView"];
+            vc.folder = project;
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+        else
+        {
+            [[AppController sharedController] onProgramOpened];
+            
+            EditorViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"EditorView"];
+            vc.project = project;
+            [self.navigationController pushViewController:vc animated:YES];
+        }
     }
 }
 
@@ -311,7 +345,6 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.nameLabel.text = @"Project Name";
     CALayer *imageLayer = self.previewImageView.layer;
     imageLayer.cornerRadius = 20;
     imageLayer.masksToBounds = YES;
@@ -325,16 +358,26 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 
 - (void)update
 {
-    self.nameLabel.text = self.project.name.uppercaseString;
-    self.starImageView.hidden = !self.project.isDefault.boolValue;
-    if (self.project.iconData)
+    if ((id)self.project == [NSNull null])
     {
-        UIImage *image = [UIImage imageWithData:self.project.iconData];
-        self.previewImageView.image = image;
+        // parent folder
+        self.nameLabel.text = @"PARENT FOLDER";
+        self.starImageView.hidden = YES;
+        self.previewImageView.image = [UIImage imageNamed:@"icon_project"];
     }
     else
     {
-        self.previewImageView.image = [UIImage imageNamed:@"icon_project"];
+        self.nameLabel.text = self.project.name.uppercaseString;
+        self.starImageView.hidden = !self.project.isDefault.boolValue;
+        if (self.project.iconData)
+        {
+            UIImage *image = [UIImage imageWithData:self.project.iconData];
+            self.previewImageView.image = image;
+        }
+        else
+        {
+            self.previewImageView.image = [UIImage imageNamed:@"icon_project"];
+        }
     }
 }
 

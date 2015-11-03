@@ -11,6 +11,7 @@
 
 NSString *const ModelManagerWillSaveDataNotification = @"ModelManagerWillSaveDataNotification";
 NSString *const ModelManagerDidAddProjectNotification = @"ModelManagerDidAddProjectNotification";
+NSString *const ModelManagerDidMoveProjectNotification = @"ModelManagerDidMoveProjectNotification";
 
 @interface ModelManager ()
 
