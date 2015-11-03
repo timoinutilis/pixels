@@ -11,7 +11,7 @@
 @class Project;
 
 @interface ExplorerViewController : UIViewController
-
+@property Project *folder;
 @end
 
 @interface ExplorerProjectCell : UICollectionViewCell

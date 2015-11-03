@@ -172,23 +172,31 @@ NSString *const ModelManagerDidAddProjectNotification = @"ModelManagerDidAddProj
     }
 }
 
-- (Project *)createNewProject
+- (Project *)createNewProjectInFolder:(Project *)folder
 {
     Project *project = [NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:self.managedObjectContext];
     project.name = @"Unnamed Program";
     project.createdAt = [NSDate date];
+    if (folder)
+    {
+        project.parent = folder;
+    }
     
     [[NSNotificationCenter defaultCenter] postNotificationName:ModelManagerDidAddProjectNotification object:self userInfo:@{@"project": project}];
     
     return project;
 }
 
-- (Project *)createNewFolder
+- (Project *)createNewFolderInFolder:(Project *)folder
 {
     Project *project = [NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:self.managedObjectContext];
     project.name = @"Unnamed Folder";
     project.createdAt = [NSDate date];
     project.isFolder = @YES;
+    if (folder)
+    {
+        project.parent = folder;
+    }
     
     [[NSNotificationCenter defaultCenter] postNotificationName:ModelManagerDidAddProjectNotification object:self userInfo:@{@"project": project}];
     

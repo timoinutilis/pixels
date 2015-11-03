@@ -48,6 +48,11 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     layout.minimumLineSpacing = 10;
     layout.sectionInset = UIEdgeInsetsMake(20, 20, 20, 20);
     
+    if (self.folder)
+    {
+        self.title = self.folder.name;
+    }
+    
     [[ModelManager sharedManager] createDefaultProjects];
     [self loadProjects];
     
@@ -119,37 +124,52 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 
 - (void)loadProjects
 {
-    NSError *error;
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Project"];
-    request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"createdAt" ascending:YES]];
-    
-    // default projects
-    NSArray *defaultProjects = [[ModelManager sharedManager].temporaryContext executeFetchRequest:request error:&error];
-    self.projects = [NSMutableArray arrayWithArray:defaultProjects];
-    
-    // user projects
-    NSArray *userProjects = [[ModelManager sharedManager].managedObjectContext executeFetchRequest:request error:&error];
-    [self.projects addObjectsFromArray:userProjects];
+    if (self.folder)
+    {
+        // user projects in folder
+        
+        self.projects = [NSMutableArray arrayWithArray:self.folder.children.allObjects];
+    }
+    else
+    {
+        // root folder
+        
+        NSError *error;
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Project"];
+        request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"createdAt" ascending:YES]];
+        
+        // default projects
+        NSArray *defaultProjects = [[ModelManager sharedManager].temporaryContext executeFetchRequest:request error:&error];
+        self.projects = [NSMutableArray arrayWithArray:defaultProjects];
+        
+        // user projects
+        NSArray *userProjects = [[ModelManager sharedManager].managedObjectContext executeFetchRequest:request error:&error];
+        [self.projects addObjectsFromArray:userProjects];
+    }
     
     [self.collectionView reloadData];
 }
 
 - (void)didAddProject:(NSNotification *)notification
 {
-    self.addedProject = notification.userInfo[@"project"];
+    Project *project = notification.userInfo[@"project"];
+    if (project.parent == self.folder)
+    {
+        self.addedProject = project;
+    }
 }
 
 - (void)onAddProjectTapped:(id)sender
 {
     [[AppController sharedController] onShowInfoID:CoachMarkIDAdd];
     
-    [[ModelManager sharedManager] createNewProject];
+    [[ModelManager sharedManager] createNewProjectInFolder:self.folder];
     [self showAddedProject];
 }
 
 - (void)onAddFolderTapped:(id)sender
 {
-    [[ModelManager sharedManager] createNewFolder];
+    [[ModelManager sharedManager] createNewFolderInFolder:self.folder];
     [self showAddedProject];
 }
 
@@ -163,23 +183,6 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
         [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionBottom animated:YES];
         
         self.addedProject = nil;
-    }
-}
-
-#pragma mark - Navigation
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if ([segue.identifier isEqualToString:@"Editor"])
-    {
-        EditorViewController *vc = segue.destinationViewController;
-        NSArray *indexPaths = self.collectionView.indexPathsForSelectedItems;
-        ExplorerProjectCell *cell = (ExplorerProjectCell *)[self.collectionView cellForItemAtIndexPath:indexPaths[0]];
-        vc.project = cell.project;
-        
-        self.lastSelectedProject = cell.project;
-        
-        [[AppController sharedController] onProgramOpened];
     }
 }
 
@@ -231,10 +234,34 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 
 - (void)collectionView:(UICollectionView *)collectionView moveItemAtIndexPath:(NSIndexPath *)fromIndexPath intoItemAtIndexPath:(NSIndexPath *)intoIndexPath
 {
+    Project *project = self.projects[fromIndexPath.item];
+    Project *folder = self.projects[intoIndexPath.item];
     [self.projects removeObjectAtIndex:fromIndexPath.item];
+    [folder addChildrenObject:project];
 }
 
 #pragma mark <UICollectionViewDelegate>
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    Project *project = self.projects[indexPath.item];
+    self.lastSelectedProject = project;
+    
+    if (project.isFolder.boolValue)
+    {
+        ExplorerViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"ExplorerView"];
+        vc.folder = project;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    else
+    {
+        [[AppController sharedController] onProgramOpened];
+        
+        EditorViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"EditorView"];
+        vc.project = project;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+}
 
 /*
 // Uncomment this method to specify if the specified item should be highlighted during tracking

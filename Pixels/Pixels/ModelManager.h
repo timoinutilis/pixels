@@ -27,8 +27,8 @@ extern NSString *const ModelManagerDidAddProjectNotification;
 - (NSURL *)applicationDocumentsDirectory;
 
 - (void)createDefaultProjects;
-- (Project *)createNewProject;
-- (Project *)createNewFolder;
+- (Project *)createNewProjectInFolder:(Project *)folder;
+- (Project *)createNewFolderInFolder:(Project *)folder;
 - (void)deleteProject:(Project *)project;
 - (Project *)duplicateProject:(Project *)project sourceCode:(NSString *)sourceCode;
 - (BOOL)hasProjectWithPostId:(NSString *)postId;
