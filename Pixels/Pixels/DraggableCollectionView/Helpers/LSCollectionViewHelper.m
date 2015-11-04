@@ -30,7 +30,6 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
 @interface LSCollectionViewHelper ()
 {
     NSIndexPath *lastIndexPath;
-    CGPoint lastPoint;
     NSIndexPath *folderDataIndexPath;
     NSIndexPath *folderVisualIndexPath;
     UIImageView *mockCell;
@@ -155,7 +154,7 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
     return NO;
 }
 
-- (NSIndexPath *)indexPathForItemClosestToPoint:(CGPoint)point itemPointRef:(CGPoint *)itemPointRef
+- (NSIndexPath *)indexPathForItemClosestToPoint:(CGPoint)point itemRectRef:(CGRect *)itemRectRef
 {
     NSArray *layoutAttrsInRect;
     NSInteger closestDist = NSIntegerMax;
@@ -175,7 +174,10 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
         if (dist < closestDist) {
             closestDist = dist;
             indexPath = layoutAttr.indexPath;
-            *itemPointRef = layoutAttr.center;
+            if (itemRectRef)
+            {
+                *itemRectRef = layoutAttr.frame;
+            }
         }
     }
     
@@ -207,7 +209,10 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
         if (dist < closestDist) {
             closestDist = dist;
             indexPath = layoutAttr.indexPath;
-            *itemPointRef = layoutAttr.center;
+            if (itemRectRef)
+            {
+                *itemRectRef = layoutAttr.frame;
+            }
         }
     }
     return indexPath;
@@ -222,8 +227,8 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
         return;
     }
     
-    CGPoint closestPoint;
-    NSIndexPath *indexPath = [self indexPathForItemClosestToPoint:[sender locationInView:self.collectionView] itemPointRef:&closestPoint];
+    CGRect closestFrame;
+    NSIndexPath *indexPath = [self indexPathForItemClosestToPoint:[sender locationInView:self.collectionView] itemRectRef:&closestFrame];
     
     switch (sender.state) {
         case UIGestureRecognizerStateBegan: {
@@ -252,7 +257,6 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
             
             // Start warping
             lastIndexPath = indexPath;
-            lastPoint = closestPoint;
             self.layoutHelper.fromIndexPath = indexPath;
             self.layoutHelper.hideIndexPath = indexPath;
             self.layoutHelper.toIndexPath = indexPath;
@@ -398,21 +402,25 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
             return;
         }
         
+        CGPoint velocity = [sender velocityInView:self.collectionView];
+        BOOL isFast = (velocity.x * velocity.x + velocity.y * velocity.y > 140.0 * 140.0);
+        
         // Warp item to finger location
         CGPoint point = [sender locationInView:self.collectionView];
-
-        CGFloat xd = lastPoint.x - point.x;
-        CGFloat yd = lastPoint.y - point.y;
-        CGFloat dist = xd*xd + yd*yd;
         
         NSIndexPath *oldFolderDataIndexPath = folderDataIndexPath;
-        CGPoint itemPoint;
-        NSIndexPath *indexPath = [self indexPathForItemClosestToPoint:point itemPointRef:&itemPoint];
-        if (dist / (140.0 * 140.0) >= 1.5)
+        CGRect itemFrame;
+        NSIndexPath *indexPath = [self indexPathForItemClosestToPoint:point itemRectRef:&itemFrame];
+        
+        CGRect innerItemFrame = itemFrame;
+        innerItemFrame.size.width -= 42.0;
+        innerItemFrame.size.height -= 42.0;
+        innerItemFrame.origin.x += 21.0;
+        
+        if (!isFast && !CGRectContainsPoint(innerItemFrame, point))
         {
             folderDataIndexPath = nil;
             folderVisualIndexPath = nil;
-            lastPoint = itemPoint;
             [self warpToIndexPath:indexPath];
         }
         else
@@ -535,8 +543,8 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
     self.collectionView.contentOffset = _CGPointAdd(contentOffset, translation);
     
     // Warp items while scrolling
-    NSIndexPath *indexPath = [self indexPathForItemClosestToPoint:mockCell.center itemPointRef:&lastPoint];
-    [self warpToIndexPath:indexPath];
+//    NSIndexPath *indexPath = [self indexPathForItemClosestToPoint:mockCell.center itemRectRef:nil];
+//    [self warpToIndexPath:indexPath];
 }
 
 @end
