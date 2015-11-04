@@ -263,6 +263,10 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
             if(self.layoutHelper.fromIndexPath == nil) {
                 return;
             }
+            if (folderDataIndexPath)
+            {
+                [self highlightCellAtIndexPath:folderDataIndexPath enabled:NO];
+            }
             // Need these for later, but need to nil out layoutHelper's references sooner
             NSIndexPath *fromIndexPath = self.layoutHelper.fromIndexPath;
             NSIndexPath *toIndexPath = self.layoutHelper.toIndexPath;
@@ -401,6 +405,7 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
         CGFloat yd = lastPoint.y - point.y;
         CGFloat dist = xd*xd + yd*yd;
         
+        NSIndexPath *oldFolderDataIndexPath = folderDataIndexPath;
         CGPoint itemPoint;
         NSIndexPath *indexPath = [self indexPathForItemClosestToPoint:point itemPointRef:&itemPoint];
         if (dist / (140.0 * 140.0) >= 1.5)
@@ -458,6 +463,27 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
                 folderVisualIndexPath = nil;
             }
         }
+        
+        if (folderDataIndexPath != oldFolderDataIndexPath)
+        {
+            if (oldFolderDataIndexPath)
+            {
+                [self highlightCellAtIndexPath:oldFolderDataIndexPath enabled:NO];
+            }
+            if (folderDataIndexPath)
+            {
+                [self highlightCellAtIndexPath:folderDataIndexPath enabled:YES];
+            }
+        }
+    }
+}
+
+- (void)highlightCellAtIndexPath:(NSIndexPath *)indexPath enabled:(BOOL)enabled
+{
+    id<UICollectionViewDataSource_Draggable> dataSource = (id<UICollectionViewDataSource_Draggable>)self.collectionView.dataSource;
+    if ([dataSource respondsToSelector:@selector(collectionView:highlightItemAtIndexPath:enabled:)])
+    {
+        [dataSource collectionView:self.collectionView highlightItemAtIndexPath:indexPath enabled:enabled];
     }
 }
 

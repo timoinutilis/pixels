@@ -14,6 +14,7 @@
 #import "UIViewController+LowResCoder.h"
 #import "UICollectionView+Draggable.h"
 #import "DraggableCollectionViewFlowLayout.h"
+#import "AppStyle.h"
 
 NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 
@@ -219,8 +220,10 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    ExplorerProjectCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ProjectCell" forIndexPath:indexPath];
-    cell.project = self.projects[indexPath.item];
+    Project *project = self.projects[indexPath.item];
+    NSString *reuseIdentifier = ((id)project != [NSNull null] && project.folderType.integerValue == FolderTypeNone) ? @"ProjectCell" : @"FolderCell";
+    ExplorerProjectCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+    cell.project = project;
     return cell;
 }
 
@@ -275,7 +278,16 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     {
         // to selected folder
         [[ModelManager sharedManager] moveProject:project toFolder:folder];
+        
+        ExplorerProjectCell *cell = (ExplorerProjectCell *)[collectionView cellForItemAtIndexPath:intoIndexPath];
+        [cell updateFolderContent];
     }
+}
+
+- (void)collectionView:(UICollectionView *)collectionView highlightItemAtIndexPath:(NSIndexPath *)indexPath enabled:(BOOL)enabled
+{
+    ExplorerProjectCell *cell = (ExplorerProjectCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    cell.highlightedFolder = enabled;
 }
 
 #pragma mark <UICollectionViewDelegate>
@@ -348,6 +360,7 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 
 @interface ExplorerProjectCell ()
 @property (weak, nonatomic) IBOutlet UIImageView *previewImageView;
+@property (weak, nonatomic) IBOutlet UIView *folderView;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *starImageView;
 @end
@@ -357,7 +370,7 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    CALayer *imageLayer = self.previewImageView.layer;
+    CALayer *imageLayer = self.previewImageView ? self.previewImageView.layer : self.folderView.layer;
     imageLayer.cornerRadius = 20;
     imageLayer.masksToBounds = YES;
 }
@@ -375,20 +388,80 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
         // parent folder
         self.nameLabel.text = @"PARENT FOLDER";
         self.starImageView.hidden = YES;
-        self.previewImageView.image = [UIImage imageNamed:@"icon_project"];
+        [self clearFolderContent];
     }
     else
     {
         self.nameLabel.text = self.project.name.uppercaseString;
         self.starImageView.hidden = !self.project.isDefault.boolValue;
-        if (self.project.iconData)
+        if (self.folderView)
         {
+            // preview content of folder
+            [self updateFolderContent];
+        }
+        else if (self.project.iconData)
+        {
+            // program thumb
             UIImage *image = [UIImage imageWithData:self.project.iconData];
             self.previewImageView.image = image;
         }
         else
         {
+            // program default icon
             self.previewImageView.image = [UIImage imageNamed:@"icon_project"];
+        }
+    }
+}
+
+- (void)clearFolderContent
+{
+    for (UIView *subview in self.folderView.subviews)
+    {
+        [subview removeFromSuperview];
+    }
+}
+
+- (void)updateFolderContent
+{
+    [self clearFolderContent];
+    NSMutableArray *images = [NSMutableArray array];
+    for (Project *childProject in self.project.children)
+    {
+        if (childProject.folderType.integerValue == FolderTypeNone)
+        {
+            UIImage *image;
+            if (childProject.iconData)
+            {
+                image = [UIImage imageWithData:childProject.iconData];
+            }
+            else
+            {
+                image = [UIImage imageNamed:@"icon_project"];
+            }
+            [images addObject:image];
+        }
+        if (images.count == 9)
+        {
+            break;
+        }
+    }
+    CGRect rect = CGRectMake(16, 16, 16, 16);
+    for (int i = 0; i < images.count; i++)
+    {
+        UIImage *image = images[i];
+        UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+        imageView.layer.cornerRadius = 4.0;
+        imageView.layer.masksToBounds = YES;
+        imageView.frame = rect;
+        [self.folderView addSubview:imageView];
+        if (i % 3 == 2)
+        {
+            rect.origin.x = 16.0;
+            rect.origin.y += 24.0;
+        }
+        else
+        {
+            rect.origin.x += 24.0;
         }
     }
 }
@@ -396,7 +469,30 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 - (void)setHighlighted:(BOOL)highlighted
 {
     super.highlighted = highlighted;
-    self.previewImageView.alpha = highlighted ? 0.5 : 1.0;
+    CGFloat alpha = highlighted ? 0.5 : 1.0;
+    if (self.previewImageView)
+    {
+        self.previewImageView.alpha = alpha;
+    }
+    else
+    {
+        self.folderView.alpha = alpha;
+    }
+}
+
+- (void)setHighlightedFolder:(BOOL)highlightedFolder
+{
+    _highlightedFolder = highlightedFolder;
+    CALayer *layer = self.folderView.layer;
+    if (highlightedFolder)
+    {
+        layer.borderColor = [AppStyle darkTintColor].CGColor;
+        layer.borderWidth = 4.0;
+    }
+    else
+    {
+        layer.borderWidth = 0.0;
+    }
 }
 
 @end

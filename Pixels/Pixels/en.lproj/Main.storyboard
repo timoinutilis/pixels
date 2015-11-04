@@ -991,6 +991,53 @@ Inutilis Software, 2015</string>
                                             <outlet property="starImageView" destination="liv-zd-RbV" id="XHh-qG-Lat"/>
                                         </connections>
                                     </collectionViewCell>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="FolderCell" id="7me-Ui-7ff" customClass="ExplorerProjectCell">
+                                        <rect key="frame" x="153" y="0.0" width="140" height="140"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="140" height="140"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="(Folder Name)" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="TU6-sw-ZCd" customClass="TextLabel">
+                                                    <rect key="frame" x="8" y="102" width="124" height="17"/>
+                                                    <animations/>
+                                                    <fontDescription key="fontDescription" name="Menlo-Regular" family="Menlo" pointSize="14"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UBu-4K-4uE">
+                                                    <rect key="frame" x="22" y="0.0" width="96" height="96"/>
+                                                    <animations/>
+                                                    <color key="backgroundColor" red="0.79607843137254897" green="0.80392156862745101" blue="0.81960784313725488" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="96" id="NEO-Re-k47"/>
+                                                        <constraint firstAttribute="width" constant="96" id="U4z-KN-tKU"/>
+                                                    </constraints>
+                                                </view>
+                                                <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star" translatesAutoresizingMaskIntoConstraints="NO" id="cbG-7Z-OPe">
+                                                    <rect key="frame" x="8" y="0.0" width="28" height="28"/>
+                                                    <animations/>
+                                                </imageView>
+                                            </subviews>
+                                            <animations/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <animations/>
+                                        <constraints>
+                                            <constraint firstItem="TU6-sw-ZCd" firstAttribute="top" secondItem="UBu-4K-4uE" secondAttribute="bottom" constant="6" id="Icj-h3-fsb"/>
+                                            <constraint firstItem="TU6-sw-ZCd" firstAttribute="leading" secondItem="7me-Ui-7ff" secondAttribute="leading" constant="8" id="NLd-lM-off"/>
+                                            <constraint firstAttribute="trailing" secondItem="TU6-sw-ZCd" secondAttribute="trailing" constant="8" id="RMQ-Jy-Cl1"/>
+                                            <constraint firstItem="cbG-7Z-OPe" firstAttribute="leading" secondItem="UBu-4K-4uE" secondAttribute="leading" constant="-14" id="Uex-MQ-o8r"/>
+                                            <constraint firstItem="cbG-7Z-OPe" firstAttribute="top" secondItem="7me-Ui-7ff" secondAttribute="top" id="pJf-IC-Nbu"/>
+                                            <constraint firstItem="UBu-4K-4uE" firstAttribute="centerX" secondItem="7me-Ui-7ff" secondAttribute="centerX" id="wMU-hc-BYT"/>
+                                            <constraint firstItem="UBu-4K-4uE" firstAttribute="top" secondItem="7me-Ui-7ff" secondAttribute="top" id="xgN-NQ-zJP"/>
+                                        </constraints>
+                                        <size key="customSize" width="140" height="140"/>
+                                        <connections>
+                                            <outlet property="folderView" destination="UBu-4K-4uE" id="gVG-OF-iww"/>
+                                            <outlet property="nameLabel" destination="TU6-sw-ZCd" id="axx-yT-PWb"/>
+                                            <outlet property="starImageView" destination="cbG-7Z-OPe" id="qPM-Bn-epS"/>
+                                        </connections>
+                                    </collectionViewCell>
                                 </cells>
                             </collectionView>
                         </subviews>

@@ -16,5 +16,7 @@
 
 @interface ExplorerProjectCell : UICollectionViewCell
 @property (nonatomic) Project *project;
+@property (nonatomic) BOOL highlightedFolder;
 - (void)update;
+- (void)updateFolderContent;
 @end

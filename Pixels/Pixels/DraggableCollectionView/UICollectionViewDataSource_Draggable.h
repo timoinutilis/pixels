@@ -21,5 +21,6 @@
 
 - (BOOL)collectionView:(UICollectionView *)collectionView canMoveItemAtIndexPath:(NSIndexPath *)indexPath intoItemAtIndexPath:(NSIndexPath *)intoIndexPath;
 - (void)collectionView:(UICollectionView *)collectionView moveItemAtIndexPath:(NSIndexPath *)fromIndexPath intoItemAtIndexPath:(NSIndexPath *)intoIndexPath;
+- (void)collectionView:(UICollectionView *)collectionView highlightItemAtIndexPath:(NSIndexPath *)indexPath enabled:(BOOL)enabled;
 
 @end
