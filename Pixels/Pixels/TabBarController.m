@@ -151,10 +151,7 @@
 {
     self.selectedIndex = TabIndexExplorer;
     UINavigationController *nav = (UINavigationController *)_selectedViewController;
-    if (![nav.topViewController isKindOfClass:[ExplorerViewController class]])
-    {
-        [nav popViewControllerAnimated:animated];
-    }
+    [nav popToRootViewControllerAnimated:animated];
 }
 
 - (void)showHelpForChapter:(NSString *)chapter

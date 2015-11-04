@@ -35,7 +35,7 @@ const NSTimeInterval MAX_CACHE_AGE = 1 * 60 * 60;
 
 - (void)addProgramOfPost:(LCCPost *)post
 {
-    Project *project = [[ModelManager sharedManager] createNewProjectInFolder:nil];
+    Project *project = [[ModelManager sharedManager] createNewProjectInFolder:[ModelManager sharedManager].rootFolder];
     project.name = post.title;
     project.sourceCode = [post sourceCode];
     project.postId = post.objectId;
