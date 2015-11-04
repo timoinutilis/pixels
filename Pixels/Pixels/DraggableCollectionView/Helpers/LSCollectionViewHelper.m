@@ -55,7 +55,7 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
                              options:0
                              context:&kObservingCollectionViewLayoutContext];
         _scrollingEdgeInsets = UIEdgeInsetsMake(50.0f, 50.0f, 50.0f, 50.0f);
-        _scrollingSpeed = 300.f;
+        _scrollingSpeed = 600.f;
         
         _longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc]
                                        initWithTarget:self
@@ -130,6 +130,12 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
     if (timer == nil) {
         timer = [CADisplayLink displayLinkWithTarget:self selector:@selector(handleScroll:)];
         [timer addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
+    }
+    if (folderDataIndexPath)
+    {
+        [self highlightCellAtIndexPath:folderDataIndexPath enabled:NO];
+        folderDataIndexPath = nil;
+        folderVisualIndexPath = nil;
     }
 }
 
@@ -417,17 +423,12 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
         innerItemFrame.size.height -= 42.0;
         innerItemFrame.origin.x += 21.0;
         
-        if (!isFast && !CGRectContainsPoint(innerItemFrame, point))
-        {
-            folderDataIndexPath = nil;
-            folderVisualIndexPath = nil;
-            [self warpToIndexPath:indexPath];
-        }
-        else
+        BOOL canMoveInto = NO;
+        if (CGRectContainsPoint(innerItemFrame, point))
         {
             NSIndexPath *dataIndexPath = indexPath;
             NSIndexPath *visualIndexPath = indexPath;
-            BOOL canMoveInto = YES;
+            canMoveInto = YES;
             if ([indexPath isEqual:self.layoutHelper.toIndexPath])
             {
                 canMoveInto = NO;
@@ -472,6 +473,13 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
             }
         }
         
+        if (!isFast && !canMoveInto)
+        {
+            folderDataIndexPath = nil;
+            folderVisualIndexPath = nil;
+            [self warpToIndexPath:indexPath];
+        }
+        
         if (folderDataIndexPath != oldFolderDataIndexPath)
         {
             if (oldFolderDataIndexPath)
@@ -483,6 +491,7 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
                 [self highlightCellAtIndexPath:folderDataIndexPath enabled:YES];
             }
         }
+        
     }
 }
 
@@ -541,10 +550,6 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
     mockCenter  = _CGPointAdd(mockCenter, translation);
     mockCell.center = _CGPointAdd(mockCenter, fingerTranslation);
     self.collectionView.contentOffset = _CGPointAdd(contentOffset, translation);
-    
-    // Warp items while scrolling
-//    NSIndexPath *indexPath = [self indexPathForItemClosestToPoint:mockCell.center itemRectRef:nil];
-//    [self warpToIndexPath:indexPath];
 }
 
 @end
