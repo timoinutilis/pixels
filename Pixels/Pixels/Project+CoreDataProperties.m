@@ -2,7 +2,7 @@
 //  Project+CoreDataProperties.m
 //  Pixels
 //
-//  Created by Timo Kloss on 3/11/15.
+//  Created by Timo Kloss on 4/11/15.
 //  Copyright © 2015 Inutilis Software. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -16,14 +16,13 @@
 @dynamic createdAt;
 @dynamic iconData;
 @dynamic isDefault;
-@dynamic isFolder;
 @dynamic isIconLocked;
 @dynamic name;
 @dynamic postId;
 @dynamic programDescription;
 @dynamic programType;
 @dynamic sourceCode;
-@dynamic order;
+@dynamic folderType;
 @dynamic children;
 @dynamic parent;
 

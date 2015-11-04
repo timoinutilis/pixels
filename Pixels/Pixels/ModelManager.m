@@ -36,6 +36,7 @@ NSString *const ModelManagerDidMoveProjectNotification = @"ModelManagerDidMovePr
 @synthesize temporaryContext = _temporaryContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
+@synthesize rootFolder = _rootFolder;
 
 - (NSURL *)applicationDocumentsDirectory
 {
@@ -152,6 +153,56 @@ NSString *const ModelManagerDidMoveProjectNotification = @"ModelManagerDidMovePr
 
 #pragma mark - stuff
 
+- (Project *)rootFolder
+{
+    if (!_rootFolder)
+    {
+        NSError *error = nil;
+
+        // check for existing root folder
+        NSFetchRequest *rootRequest = [NSFetchRequest fetchRequestWithEntityName:@"Project"];
+        rootRequest.predicate = [NSPredicate predicateWithFormat:@"folderType == %@", @(FolderTypeRoot)];
+        NSArray *rootFolders = [self.managedObjectContext executeFetchRequest:rootRequest error:&error];
+        
+        if (error)
+        {
+            NSLog(@"rootFolder error: %@", error.localizedDescription);
+            return nil;
+        }
+        
+        if (rootFolders.count > 0)
+        {
+            // use existing root folder
+            _rootFolder = rootFolders.firstObject;
+        }
+        
+        if (!_rootFolder)
+        {
+            // create root folder
+            _rootFolder = [NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:self.managedObjectContext];
+            _rootFolder.createdAt = [NSDate date];
+            _rootFolder.folderType = @(FolderTypeRoot);
+        }
+        
+        if (_rootFolder.children.count == 0)
+        {
+            // add projects without parent to root folder
+            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Project"];
+            request.predicate = [NSPredicate predicateWithFormat:@"parent == nil && folderType != %@", @(FolderTypeRoot)];
+            request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"createdAt" ascending:YES]];
+            
+            NSArray *userProjects = [self.managedObjectContext executeFetchRequest:request error:&error];
+            for (Project *userProject in userProjects)
+            {
+                userProject.parent = _rootFolder;
+            }
+        }
+        
+        [self saveContext];
+    }
+    return _rootFolder;
+}
+
 - (void)createDefaultProjects
 {
     NSError *error;
@@ -178,10 +229,8 @@ NSString *const ModelManagerDidMoveProjectNotification = @"ModelManagerDidMovePr
     Project *project = [NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:self.managedObjectContext];
     project.name = @"Unnamed Program";
     project.createdAt = [NSDate date];
-    if (folder)
-    {
-        project.parent = folder;
-    }
+    project.folderType = @(FolderTypeNone);
+    project.parent = folder;
     
     [[NSNotificationCenter defaultCenter] postNotificationName:ModelManagerDidAddProjectNotification object:self userInfo:@{@"project": project}];
     
@@ -193,11 +242,8 @@ NSString *const ModelManagerDidMoveProjectNotification = @"ModelManagerDidMovePr
     Project *project = [NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:self.managedObjectContext];
     project.name = @"Unnamed Folder";
     project.createdAt = [NSDate date];
-    project.isFolder = @YES;
-    if (folder)
-    {
-        project.parent = folder;
-    }
+    project.folderType = @(FolderTypeNormal);
+    project.parent = folder;
     
     [[NSNotificationCenter defaultCenter] postNotificationName:ModelManagerDidAddProjectNotification object:self userInfo:@{@"project": project}];
     
@@ -216,6 +262,7 @@ NSString *const ModelManagerDidMoveProjectNotification = @"ModelManagerDidMovePr
     newProject.iconData = project.iconData;
     newProject.sourceCode = sourceCode ? sourceCode : project.sourceCode;
     newProject.createdAt = [NSDate date];
+    newProject.parent = project.parent;
     
     [[NSNotificationCenter defaultCenter] postNotificationName:ModelManagerDidAddProjectNotification object:self userInfo:@{@"project": newProject}];
     
@@ -225,23 +272,8 @@ NSString *const ModelManagerDidMoveProjectNotification = @"ModelManagerDidMovePr
 - (void)moveProject:(Project *)project toFolder:(Project *)folder
 {
     project.parent = folder;
-    if (folder)
-    {
-        // folder
-        project.order = @(folder.children.count);
-    }
-    else
-    {
-        // root
-        NSError *error;
-        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Project"];
-        request.predicate = [NSPredicate predicateWithFormat:@"parent == nil"];
-        NSUInteger numRootProjects = [[ModelManager sharedManager].managedObjectContext countForFetchRequest:request error:&error];
-        
-        project.order = @(numRootProjects);
-    }
     [[NSNotificationCenter defaultCenter] postNotificationName:ModelManagerDidMoveProjectNotification object:self userInfo:@{@"project": project}];
-
+    [self saveContext];
 }
 
 - (BOOL)hasProjectWithPostId:(NSString *)postId

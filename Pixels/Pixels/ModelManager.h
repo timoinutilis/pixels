@@ -20,6 +20,8 @@ extern NSString *const ModelManagerDidMoveProjectNotification;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
+@property (nonatomic, readonly) Project *rootFolder;
+
 @property NSInteger debugSaveCount;
 
 + (ModelManager *)sharedManager;

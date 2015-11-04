@@ -60,6 +60,9 @@
             
             [[ModelManager sharedManager] createDefaultProjects];
             
+            // prepare root folder (maybe it needs to be created)
+            [[ModelManager sharedManager] rootFolder];
+            
             self.animationDone = YES;
             [self checkComplete];
         }];

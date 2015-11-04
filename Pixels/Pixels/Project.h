@@ -9,6 +9,12 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+typedef NS_ENUM(NSInteger, FolderType) {
+    FolderTypeNone,
+    FolderTypeNormal,
+    FolderTypeRoot
+};
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface Project : NSManagedObject

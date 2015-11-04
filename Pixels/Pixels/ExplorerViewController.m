@@ -24,6 +24,7 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 @property NSMutableArray *projects;
 @property Project *addedProject;
 @property Project *lastSelectedProject;
+@property NSInteger firstUserProjectIndex;
 
 @end
 
@@ -51,6 +52,10 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     if (self.folder)
     {
         self.title = self.folder.name;
+    }
+    else
+    {
+        self.folder = [ModelManager sharedManager].rootFolder;
     }
     
     [self loadProjects];
@@ -125,33 +130,30 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 
 - (void)loadProjects
 {
-    NSArray *sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"order" ascending:YES],
-                                 [NSSortDescriptor sortDescriptorWithKey:@"createdAt" ascending:YES]];
-
-    if (self.folder)
+    if (self.folder.folderType.integerValue == FolderTypeRoot)
     {
-        // user projects in folder
+        // default projects
+        NSError *error;
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Project"];
+        request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"createdAt" ascending:YES]];
+        NSArray *defaultProjects = [[ModelManager sharedManager].temporaryContext executeFetchRequest:request error:&error];
         
-        self.projects = [NSMutableArray arrayWithArray:self.folder.children.allObjects];
-        [self.projects sortUsingDescriptors:sortDescriptors];
-        [self.projects insertObject:[NSNull null] atIndex:0];
+        self.projects = [NSMutableArray arrayWithArray:defaultProjects];
+        
+        // add user projects
+        [self.projects addObjectsFromArray:self.folder.children.array];
+        
+        self.firstUserProjectIndex = defaultProjects.count;
     }
     else
     {
-        // root folder
-        
-        NSError *error;
-        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Project"];
-        request.predicate = [NSPredicate predicateWithFormat:@"parent == nil"];
-        request.sortDescriptors = sortDescriptors;
-        
-        // default projects
-        NSArray *defaultProjects = [[ModelManager sharedManager].temporaryContext executeFetchRequest:request error:&error];
-        self.projects = [NSMutableArray arrayWithArray:defaultProjects];
-        
         // user projects
-        NSArray *userProjects = [[ModelManager sharedManager].managedObjectContext executeFetchRequest:request error:&error];
-        [self.projects addObjectsFromArray:userProjects];
+        self.projects = [NSMutableArray arrayWithArray:self.folder.children.array];
+        
+        // parent folder represented by Null
+        [self.projects insertObject:[NSNull null] atIndex:0];
+        
+        self.firstUserProjectIndex = 1;
     }
     
     [self.collectionView reloadData];
@@ -227,6 +229,11 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     Project *project = self.projects[fromIndexPath.item];
     [self.projects removeObjectAtIndex:fromIndexPath.item];
     [self.projects insertObject:project atIndex:toIndexPath.item];
+    
+    NSMutableOrderedSet *childrenCopy = [self.folder.children mutableCopy];
+    [childrenCopy removeObjectAtIndex:fromIndexPath.item - self.firstUserProjectIndex];
+    [childrenCopy insertObject:project atIndex:toIndexPath.item - self.firstUserProjectIndex];
+    self.folder.children = childrenCopy;
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView canMoveItemAtIndexPath:(NSIndexPath *)indexPath
@@ -251,7 +258,7 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     Project *project1 = self.projects[indexPath.item];
     Project *project2 = self.projects[intoIndexPath.item];
     return !project1.isDefault.boolValue
-        && ((id)project2 == [NSNull null] || (project2.isFolder.boolValue && !project2.isDefault.boolValue));
+        && ((id)project2 == [NSNull null] || (project2.folderType.integerValue == FolderTypeNormal && !project2.isDefault.boolValue));
 }
 
 - (void)collectionView:(UICollectionView *)collectionView moveItemAtIndexPath:(NSIndexPath *)fromIndexPath intoItemAtIndexPath:(NSIndexPath *)intoIndexPath
@@ -261,10 +268,12 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     [self.projects removeObjectAtIndex:fromIndexPath.item];
     if ((id)folder == [NSNull null])
     {
+        // to parent folder
         [[ModelManager sharedManager] moveProject:project toFolder:self.folder.parent];
     }
     else
     {
+        // to selected folder
         [[ModelManager sharedManager] moveProject:project toFolder:folder];
     }
 }
@@ -283,7 +292,7 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     {
         self.lastSelectedProject = project;
         
-        if (project.isFolder.boolValue)
+        if (project.folderType.integerValue == FolderTypeNormal)
         {
             ExplorerViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"ExplorerView"];
             vc.folder = project;
