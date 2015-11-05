@@ -518,28 +518,28 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
             }
             [images addObject:image];
         }
-        if (images.count == 9)
+        if (images.count == 4)
         {
             break;
         }
     }
-    CGRect rect = CGRectMake(16, 16, 16, 16);
+    CGRect rect = CGRectMake(13, 13, 32, 32);
     for (int i = 0; i < images.count; i++)
     {
         UIImage *image = images[i];
         UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-        imageView.layer.cornerRadius = 4.0;
+        imageView.layer.cornerRadius = 6.0;
         imageView.layer.masksToBounds = YES;
         imageView.frame = rect;
         [self.folderView addSubview:imageView];
-        if (i % 3 == 2)
+        if (i % 2 == 1)
         {
-            rect.origin.x = 16.0;
-            rect.origin.y += 24.0;
+            rect.origin.x = 13.0;
+            rect.origin.y += 38.0;
         }
         else
         {
-            rect.origin.x += 24.0;
+            rect.origin.x += 38.0;
         }
     }
 }
