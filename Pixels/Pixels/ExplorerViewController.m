@@ -137,6 +137,7 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
         // default projects
         NSError *error;
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Project"];
+        request.predicate = [NSPredicate predicateWithFormat:@"parent == nil"];
         request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"createdAt" ascending:YES]];
         NSArray *defaultProjects = [[ModelManager sharedManager].temporaryContext executeFetchRequest:request error:&error];
         
@@ -190,34 +191,41 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 
 - (void)onActionTapped:(id)sender
 {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    
-    __weak ExplorerViewController *weakSelf = self;
-    
-    BOOL isNormalFolder = (self.folder.folderType.integerValue == FolderTypeNormal);
-    
-    UIAlertAction *addAction = [UIAlertAction actionWithTitle:@"Add Folder" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-        [weakSelf onAddFolderTapped];
-    }];
-    [alert addAction:addAction];
-    
-    UIAlertAction *renameAction = [UIAlertAction actionWithTitle:@"Rename this Folder" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-        [weakSelf onRenameFolderTapped];
-    }];
-    renameAction.enabled = isNormalFolder;
-    [alert addAction:renameAction];
-    
-    UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:@"Delete this Folder" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
-        [weakSelf onDeleteFolderTapped];
-    }];
-    deleteAction.enabled = isNormalFolder;
-    [alert addAction:deleteAction];
-    
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
-    [alert addAction:cancelAction];
-    
-    alert.popoverPresentationController.barButtonItem = sender;
-    [self presentViewController:alert animated:YES completion:nil];
+    if (self.folder.isDefault.boolValue)
+    {
+        [self showAlertWithTitle:@"Example folders cannot be changed." message:nil block:nil];
+    }
+    else
+    {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+        
+        __weak ExplorerViewController *weakSelf = self;
+        
+        BOOL isNormalFolder = (self.folder.folderType.integerValue == FolderTypeNormal);
+        
+        UIAlertAction *addAction = [UIAlertAction actionWithTitle:@"Add Folder" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+            [weakSelf onAddFolderTapped];
+        }];
+        [alert addAction:addAction];
+        
+        UIAlertAction *renameAction = [UIAlertAction actionWithTitle:@"Rename this Folder" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+            [weakSelf onRenameFolderTapped];
+        }];
+        renameAction.enabled = isNormalFolder;
+        [alert addAction:renameAction];
+        
+        UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:@"Delete this Folder" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
+            [weakSelf onDeleteFolderTapped];
+        }];
+        deleteAction.enabled = isNormalFolder;
+        [alert addAction:deleteAction];
+        
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+        [alert addAction:cancelAction];
+        
+        alert.popoverPresentationController.barButtonItem = sender;
+        [self presentViewController:alert animated:YES completion:nil];
+    }
 }
 
 - (void)onAddFolderTapped

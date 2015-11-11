@@ -294,7 +294,7 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
                     self.layoutHelper.toIndexPath = nil;
                 } completion:nil];
             }
-            else
+            else if (![toIndexPath isEqual:fromIndexPath])
             {
                 // move to another position
                 [dataSource collectionView:self.collectionView moveItemAtIndexPath:fromIndexPath toIndexPath:toIndexPath];

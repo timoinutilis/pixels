@@ -203,6 +203,27 @@ NSString *const ModelManagerDidMoveProjectNotification = @"ModelManagerDidMovePr
     return _rootFolder;
 }
 
+- (Project *)defaultFolderWithName:(NSString *)name
+{
+    NSError *error;
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Project"];
+    request.predicate = [NSPredicate predicateWithFormat:@"folderType == %@ && name == %@", @(FolderTypeNormal), name];
+    NSArray *folders = [self.temporaryContext executeFetchRequest:request error:&error];
+    if (folders.count > 0)
+    {
+        // return existing folder
+        return folders.firstObject;
+    }
+    
+    // create new folder
+    Project *project = [NSEntityDescription insertNewObjectForEntityForName:@"Project" inManagedObjectContext:self.temporaryContext];
+    project.isDefault = @YES;
+    project.name = name;
+    project.createdAt = [NSDate date];
+    project.folderType = @(FolderTypeNormal);
+    return project;
+}
+
 - (void)createDefaultProjects
 {
     NSError *error;
@@ -221,6 +242,12 @@ NSString *const ModelManagerDidMoveProjectNotification = @"ModelManagerDidMovePr
         NSString *iconName = jsonProject[@"icon"];
         NSURL *iconUrl = [[NSBundle mainBundle] URLForResource:iconName withExtension:@"png" subdirectory:@"Default Projects"];
         project.iconData = [NSData dataWithContentsOfURL:iconUrl];
+        
+        NSString *folderName = jsonProject[@"folder"];
+        if (folderName)
+        {
+            project.parent = [self defaultFolderWithName:folderName];
+        }
     }
 }
 

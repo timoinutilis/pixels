@@ -37,16 +37,19 @@
  {
     "name": "Hello",
     "sourceCode": "REM SHOWS TEXT WITH EFFECT\n\nDO\n  CLS 0\n\n  REM DRAWS SOME PIXELS IN A LINE\n  COLOR 1\n  FOR A=1 TO 20\n    PLOT RND*64,31\n  NEXT\n\n  REM DRAWS TEXT WITH RANDOM COLOR\n  COLOR RND*16\n  TEXT 31,29,\"HELLO\",1\n\n  WAIT 0.1\nLOOP\n",
-    "icon": "hello"
+    "icon": "hello",
+    "folder": "Simple Examples"
  },
  {
     "name": "Pixels",
     "sourceCode": "REM DRAWS RANDOM PIXELS AND SCROLLS\n\nCLS 2\nDO\n  REM SCROLLS TO THE LEFT\n  SCROLL 0,0 TO 63,63,-1,0\n\n  REM FILLS THE RIGHT SIDE WITH NEW PIXELS\n  FOR A=0 TO 63\n    COLOR RND*4\n    PLOT 63,A\n  NEXT A\n\n  WAIT 0.1\nLOOP\n",
-    "icon": "pixels"
+    "icon": "pixels",
+    "folder": "Simple Examples"
  },
  {
     "name": "Palette",
     "sourceCode": "REM SHOWS ALL AVAILABLE COLORS\n\nFOR A=0 TO 15\n  COLOR A\n  BAR A*4,0 TO A*4+3,63\nNEXT A\n",
-    "icon": "palette"
+    "icon": "palette",
+    "folder": "Simple Examples"
  }
 ]
