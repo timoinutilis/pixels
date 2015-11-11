@@ -36,7 +36,7 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     [super viewDidLoad];
     
     UIBarButtonItem *addProjectItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(onAddProjectTapped:)];
-    UIBarButtonItem *actionItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(onActionTapped:)];
+    UIBarButtonItem *actionItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"folder"] style:UIBarButtonItemStylePlain target:self action:@selector(onActionTapped:)];
 
     
     self.navigationItem.rightBarButtonItems = @[addProjectItem, actionItem];
@@ -475,6 +475,11 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
         self.nameLabel.text = @"PARENT FOLDER";
         self.starImageView.hidden = YES;
         [self clearFolderContent];
+        
+        UIImageView *iconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"parentfolder"]];
+        CGSize folderSize = self.folderView.bounds.size;
+        iconView.center = CGPointMake(folderSize.width * 0.5, folderSize.height * 0.5);
+        [self.folderView addSubview:iconView];
     }
     else
     {
@@ -531,23 +536,33 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
             break;
         }
     }
-    CGRect rect = CGRectMake(13, 13, 32, 32);
-    for (int i = 0; i < images.count; i++)
+    if (images.count == 0)
     {
-        UIImage *image = images[i];
-        UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-        imageView.layer.cornerRadius = 6.0;
-        imageView.layer.masksToBounds = YES;
-        imageView.frame = rect;
-        [self.folderView addSubview:imageView];
-        if (i % 2 == 1)
+        UIImageView *iconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"emptyfolder"]];
+        CGSize folderSize = self.folderView.bounds.size;
+        iconView.center = CGPointMake(folderSize.width * 0.5, folderSize.height * 0.5);
+        [self.folderView addSubview:iconView];
+    }
+    else
+    {
+        CGRect rect = CGRectMake(13, 13, 32, 32);
+        for (int i = 0; i < images.count; i++)
         {
-            rect.origin.x = 13.0;
-            rect.origin.y += 38.0;
-        }
-        else
-        {
-            rect.origin.x += 38.0;
+            UIImage *image = images[i];
+            UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+            imageView.layer.cornerRadius = 6.0;
+            imageView.layer.masksToBounds = YES;
+            imageView.frame = rect;
+            [self.folderView addSubview:imageView];
+            if (i % 2 == 1)
+            {
+                rect.origin.x = 13.0;
+                rect.origin.y += 38.0;
+            }
+            else
+            {
+                rect.origin.x += 38.0;
+            }
         }
     }
 }

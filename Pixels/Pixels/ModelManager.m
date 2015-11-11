@@ -248,6 +248,12 @@ NSString *const ModelManagerDidMoveProjectNotification = @"ModelManagerDidMovePr
         {
             project.parent = [self defaultFolderWithName:folderName];
         }
+
+        NSString *postId = jsonProject[@"postId"];
+        if (postId)
+        {
+            project.postId = postId;
+        }
     }
 }
 
@@ -307,8 +313,17 @@ NSString *const ModelManagerDidMoveProjectNotification = @"ModelManagerDidMovePr
 {
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Project"];
     fetchRequest.predicate = [NSPredicate predicateWithFormat:@"postId == %@", postId];
-    NSArray *objects = [self.managedObjectContext executeFetchRequest:fetchRequest error:nil];
-    return (objects.count > 0);
+    
+    // own projects
+    NSUInteger numObjects = [self.managedObjectContext countForFetchRequest:fetchRequest error:nil];
+    if (numObjects > 0)
+    {
+        return YES;
+    }
+    
+    // default projects
+    numObjects = [self.temporaryContext countForFetchRequest:fetchRequest error:nil];
+    return (numObjects > 0);
 }
 
 @end
