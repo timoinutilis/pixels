@@ -15,6 +15,8 @@
 #import "UICollectionView+Draggable.h"
 #import "DraggableCollectionViewFlowLayout.h"
 #import "AppStyle.h"
+#import "SDImageCache.h"
+#import "UIImage+Utils.h"
 
 NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 
@@ -486,6 +488,7 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
         UIImageView *iconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"parentfolder"]];
         CGSize folderSize = self.folderView.bounds.size;
         iconView.center = CGPointMake(folderSize.width * 0.5, folderSize.height * 0.5);
+        iconView.contentMode = UIViewContentModeCenter;
         [self.folderView addSubview:iconView];
     }
     else
@@ -497,16 +500,9 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
             // preview content of folder
             [self updateFolderContent];
         }
-        else if (self.project.iconData)
-        {
-            // program thumb
-            UIImage *image = [UIImage imageWithData:self.project.iconData];
-            self.previewImageView.image = image;
-        }
         else
         {
-            // program default icon
-            self.previewImageView.image = [UIImage imageNamed:@"icon_project"];
+            self.previewImageView.image = [self imageWithSize:self.previewImageView.bounds.size forProject:self.project];
         }
     }
 }
@@ -521,21 +517,16 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 
 - (void)updateFolderContent
 {
+    CGRect smallIconRect = CGRectMake(13, 13, 32, 32);
+
     [self clearFolderContent];
+    
     NSMutableArray *images = [NSMutableArray array];
     for (Project *childProject in self.project.children)
     {
         if (childProject.folderType.integerValue == FolderTypeNone)
         {
-            UIImage *image;
-            if (childProject.iconData)
-            {
-                image = [UIImage imageWithData:childProject.iconData];
-            }
-            else
-            {
-                image = [UIImage imageNamed:@"icon_project"];
-            }
+            UIImage *image = [self imageWithSize:smallIconRect.size forProject:childProject];
             [images addObject:image];
         }
         if (images.count == 4)
@@ -547,28 +538,29 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     {
         UIImageView *iconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"emptyfolder"]];
         CGSize folderSize = self.folderView.bounds.size;
+        iconView.contentMode = UIViewContentModeCenter;
         iconView.center = CGPointMake(folderSize.width * 0.5, folderSize.height * 0.5);
         [self.folderView addSubview:iconView];
     }
     else
     {
-        CGRect rect = CGRectMake(13, 13, 32, 32);
         for (int i = 0; i < images.count; i++)
         {
             UIImage *image = images[i];
             UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
             imageView.layer.cornerRadius = 6.0;
             imageView.layer.masksToBounds = YES;
-            imageView.frame = rect;
+            imageView.frame = smallIconRect;
+            imageView.contentMode = UIViewContentModeCenter;
             [self.folderView addSubview:imageView];
             if (i % 2 == 1)
             {
-                rect.origin.x = 13.0;
-                rect.origin.y += 38.0;
+                smallIconRect.origin.x = 13.0;
+                smallIconRect.origin.y += 38.0;
             }
             else
             {
-                rect.origin.x += 38.0;
+                smallIconRect.origin.x += 38.0;
             }
         }
     }
@@ -601,6 +593,31 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     {
         layer.borderWidth = 0.0;
     }
+}
+
+- (UIImage *)imageWithSize:(CGSize)size forProject:(Project *)project
+{
+    NSString *key = [NSString stringWithFormat:@"%f_%dx%d", project.createdAt.timeIntervalSinceReferenceDate, (int)size.width, (int)size.height];
+    SDImageCache *cache = [SDImageCache sharedImageCache];
+    
+    UIImage *image = [cache imageFromMemoryCacheForKey:key];
+    
+    if (!image)
+    {
+        if (project.iconData)
+        {
+            // program thumb
+            image = [UIImage imageWithData:project.iconData];
+        }
+        else
+        {
+            // program default icon
+            image = [UIImage imageNamed:@"icon_project"];
+        }
+        image = [image imageWithSize:size];
+        [cache storeImage:image forKey:key toDisk:NO];
+    }
+    return image;
 }
 
 @end

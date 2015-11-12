@@ -945,7 +945,7 @@ Inutilis Software, 2015</string>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <collectionViewLayout key="collectionViewLayout" id="yMs-ac-1j6" customClass="DraggableCollectionViewFlowLayout"/>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ProjectCell" id="4E0-sW-TxH" customClass="ExplorerProjectCell">
+                                    <collectionViewCell opaque="NO" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ProjectCell" id="4E0-sW-TxH" customClass="ExplorerProjectCell">
                                         <rect key="frame" x="0.0" y="0.0" width="140" height="140"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -958,15 +958,11 @@ Inutilis Software, 2015</string>
                                                     <fontDescription key="fontDescription" name="Menlo-Regular" family="Menlo" pointSize="14"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView opaque="NO" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="KyM-fJ-oxW">
+                                                <imageView opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KyM-fJ-oxW">
                                                     <rect key="frame" x="22" y="0.0" width="96" height="96"/>
                                                     <animations/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="96" id="O8p-mV-w9U"/>
-                                                        <constraint firstAttribute="height" constant="96" id="XEI-vC-UAh"/>
-                                                    </constraints>
                                                 </imageView>
-                                                <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star" translatesAutoresizingMaskIntoConstraints="NO" id="liv-zd-RbV">
+                                                <imageView opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="star" translatesAutoresizingMaskIntoConstraints="NO" id="liv-zd-RbV">
                                                     <rect key="frame" x="8" y="0.0" width="28" height="28"/>
                                                     <animations/>
                                                 </imageView>
@@ -977,12 +973,8 @@ Inutilis Software, 2015</string>
                                         <animations/>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="Y0e-d8-avy" secondAttribute="trailing" constant="8" id="1dL-Gb-n2V"/>
+                                            <constraint firstItem="Y0e-d8-avy" firstAttribute="top" secondItem="4E0-sW-TxH" secondAttribute="top" constant="102" id="L06-z2-G8E"/>
                                             <constraint firstItem="Y0e-d8-avy" firstAttribute="leading" secondItem="4E0-sW-TxH" secondAttribute="leading" constant="8" id="MX0-w1-pYk"/>
-                                            <constraint firstItem="KyM-fJ-oxW" firstAttribute="leading" secondItem="liv-zd-RbV" secondAttribute="leading" constant="14" id="O5s-gW-TZS"/>
-                                            <constraint firstItem="KyM-fJ-oxW" firstAttribute="top" secondItem="4E0-sW-TxH" secondAttribute="top" id="hiE-g6-4xK"/>
-                                            <constraint firstItem="liv-zd-RbV" firstAttribute="top" secondItem="4E0-sW-TxH" secondAttribute="top" id="jgu-sm-YDu"/>
-                                            <constraint firstItem="Y0e-d8-avy" firstAttribute="top" secondItem="KyM-fJ-oxW" secondAttribute="bottom" constant="6" id="pth-cL-JpO"/>
-                                            <constraint firstAttribute="centerX" secondItem="KyM-fJ-oxW" secondAttribute="centerX" id="sX8-hW-Egw"/>
                                         </constraints>
                                         <size key="customSize" width="140" height="140"/>
                                         <connections>
@@ -991,7 +983,7 @@ Inutilis Software, 2015</string>
                                             <outlet property="starImageView" destination="liv-zd-RbV" id="XHh-qG-Lat"/>
                                         </connections>
                                     </collectionViewCell>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="FolderCell" id="7me-Ui-7ff" customClass="ExplorerProjectCell">
+                                    <collectionViewCell opaque="NO" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="FolderCell" id="7me-Ui-7ff" customClass="ExplorerProjectCell">
                                         <rect key="frame" x="153" y="0.0" width="140" height="140"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -1004,16 +996,12 @@ Inutilis Software, 2015</string>
                                                     <fontDescription key="fontDescription" name="Menlo-Regular" family="Menlo" pointSize="14"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UBu-4K-4uE">
+                                                <view opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UBu-4K-4uE">
                                                     <rect key="frame" x="22" y="0.0" width="96" height="96"/>
                                                     <animations/>
                                                     <color key="backgroundColor" red="0.79607843137254897" green="0.80392156862745101" blue="0.81960784313725488" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="96" id="NEO-Re-k47"/>
-                                                        <constraint firstAttribute="width" constant="96" id="U4z-KN-tKU"/>
-                                                    </constraints>
                                                 </view>
-                                                <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star" translatesAutoresizingMaskIntoConstraints="NO" id="cbG-7Z-OPe">
+                                                <imageView opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="star" translatesAutoresizingMaskIntoConstraints="NO" id="cbG-7Z-OPe">
                                                     <rect key="frame" x="8" y="0.0" width="28" height="28"/>
                                                     <animations/>
                                                 </imageView>
@@ -1023,13 +1011,9 @@ Inutilis Software, 2015</string>
                                         </view>
                                         <animations/>
                                         <constraints>
-                                            <constraint firstItem="TU6-sw-ZCd" firstAttribute="top" secondItem="UBu-4K-4uE" secondAttribute="bottom" constant="6" id="Icj-h3-fsb"/>
                                             <constraint firstItem="TU6-sw-ZCd" firstAttribute="leading" secondItem="7me-Ui-7ff" secondAttribute="leading" constant="8" id="NLd-lM-off"/>
                                             <constraint firstAttribute="trailing" secondItem="TU6-sw-ZCd" secondAttribute="trailing" constant="8" id="RMQ-Jy-Cl1"/>
-                                            <constraint firstItem="cbG-7Z-OPe" firstAttribute="leading" secondItem="UBu-4K-4uE" secondAttribute="leading" constant="-14" id="Uex-MQ-o8r"/>
-                                            <constraint firstItem="cbG-7Z-OPe" firstAttribute="top" secondItem="7me-Ui-7ff" secondAttribute="top" id="pJf-IC-Nbu"/>
-                                            <constraint firstItem="UBu-4K-4uE" firstAttribute="centerX" secondItem="7me-Ui-7ff" secondAttribute="centerX" id="wMU-hc-BYT"/>
-                                            <constraint firstItem="UBu-4K-4uE" firstAttribute="top" secondItem="7me-Ui-7ff" secondAttribute="top" id="xgN-NQ-zJP"/>
+                                            <constraint firstItem="TU6-sw-ZCd" firstAttribute="top" secondItem="7me-Ui-7ff" secondAttribute="top" constant="102" id="n3f-L5-Nud"/>
                                         </constraints>
                                         <size key="customSize" width="140" height="140"/>
                                         <connections>
