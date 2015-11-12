@@ -496,7 +496,16 @@ typedef void(^InfoBlock)(void);
     [alert addAction:[UIAlertAction actionWithTitle:@"Duplicate" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
         [[ModelManager sharedManager] duplicateProject:weakSelf.project sourceCode:weakSelf.sourceCodeTextView.text];
         [[ModelManager sharedManager] saveContext];
-        [weakSelf.navigationController popViewControllerAnimated:YES];
+        if (weakSelf.project.isDefault.boolValue)
+        {
+            // default projects are duplicated to the root folder
+            [weakSelf.navigationController popToRootViewControllerAnimated:YES];
+        }
+        else
+        {
+            // others just go to the current folder
+            [weakSelf.navigationController popViewControllerAnimated:YES];
+        }
     }]];
     
     [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];

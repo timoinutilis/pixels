@@ -183,10 +183,17 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 
 - (void)onAddProjectTapped:(id)sender
 {
-    [[AppController sharedController] onShowInfoID:CoachMarkIDAdd];
-    
-    [[ModelManager sharedManager] createNewProjectInFolder:self.folder];
-    [self showAddedProject];
+    if (self.folder.isDefault.boolValue)
+    {
+        [self showAlertWithTitle:@"Cannot add programs to example folders." message:nil block:nil];
+    }
+    else
+    {
+        [[AppController sharedController] onShowInfoID:CoachMarkIDAdd];
+        
+        [[ModelManager sharedManager] createNewProjectInFolder:self.folder];
+        [self showAddedProject];
+    }
 }
 
 - (void)onActionTapped:(id)sender

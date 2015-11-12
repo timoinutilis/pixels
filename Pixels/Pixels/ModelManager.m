@@ -295,7 +295,14 @@ NSString *const ModelManagerDidMoveProjectNotification = @"ModelManagerDidMovePr
     newProject.iconData = project.iconData;
     newProject.sourceCode = sourceCode ? sourceCode : project.sourceCode;
     newProject.createdAt = [NSDate date];
-    newProject.parent = project.parent;
+    if (project.isDefault.boolValue)
+    {
+        newProject.parent = self.rootFolder;
+    }
+    else
+    {
+        newProject.parent = project.parent;
+    }
     
     [[NSNotificationCenter defaultCenter] postNotificationName:ModelManagerDidAddProjectNotification object:self userInfo:@{@"project": newProject}];
     

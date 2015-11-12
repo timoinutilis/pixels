@@ -248,7 +248,6 @@ typedef NS_ENUM(NSInteger, CellTag) {
 
 - (void)loadCommentsForceReload:(BOOL)forceReload
 {
-    self.comments = [NSMutableArray array];
     self.isLoadingComments = YES;
     
     PFQuery *query = [PFQuery queryWithClassName:[LCCComment parseClassName]];
@@ -269,6 +268,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
         }
         else if (error)
         {
+            self.comments = [NSMutableArray array];
             [self showAlertWithTitle:@"Could not load comments." message:error.userInfo[@"error"] block:nil];
         }
         
