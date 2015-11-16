@@ -236,6 +236,10 @@ PRINT "BYE"
 <pre>v=FALSE</pre>
 <p>FALSE is equal to 0.</p>
 
+<h3 id="_TIMER" name="TIMER">=TIMER</h3>
+<pre>v=TIMER</pre>
+<p>TIMER returns the time passed since LowRes Coder was started in seconds. The value is a decimal, so time can be measured with high precision.</p>
+
 <h1 id="Graphics">Graphics</h1>
 
 <p>LowRes Coder runs your programs on a virtual screen with 64x64 pixels and 16 colors. With the following commands you can draw on this screen.</p>
@@ -1083,6 +1087,7 @@ CLS,
 COLOR,
 COS,
 DATA,
+DATE$,
 DEF,
 DIM,
 DO,
@@ -1159,7 +1164,8 @@ TAP,
 TEMPO*,
 TEXT,
 THEN,
-TIMER*,
+TIME$,
+TIMER,
 TO,
 TRACE*,
 TRUE,

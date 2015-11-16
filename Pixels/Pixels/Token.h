@@ -100,6 +100,8 @@ typedef NS_ENUM(NSInteger, TType) {
     TTypeSymMin,
     TTypeSymMax,
     TTypeSymTimer,
+    TTypeSymTime,
+    TTypeSymDate,
     
     // Constants
     TTypeSymTrue,

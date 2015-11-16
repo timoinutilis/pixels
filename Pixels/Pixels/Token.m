@@ -102,6 +102,9 @@
         case TTypeSymTap: return @"TAP";
         case TTypeSymMin: return @"MIN";
         case TTypeSymMax: return @"MAX";
+        case TTypeSymTimer: return @"TIMER";
+        case TTypeSymTime: return @"TIME$";
+        case TTypeSymDate: return @"DATE$";
         
         case TTypeSymTrue: return @"TRUE";
         case TTypeSymFalse: return @"FALSE";
@@ -143,7 +146,6 @@
         case TTypeSymRandomize: return @"RANDOMIZE";
         case TTypeSymBank: return @"BANK";
         case TTypeSymFont: return @"FONT";
-        case TTypeSymTimer: return @"TIMER";
         case TTypeSymTempo: return @"TEMPO";
         case TTypeSymTrace: return @"TRACE";
         case TTypeSymHeight: return @"HEIGHT";

@@ -1415,6 +1415,13 @@
             return node;
         }
 
+        case TTypeSymDate:
+        case TTypeSymTime: {
+            String0Node *node = [[String0Node alloc] init];
+            node.type = self.token.type;
+            [self accept:self.token.type];
+            return node;
+        }
         case TTypeSymLeftS: {
             LeftSNode *node = [[LeftSNode alloc] init];
             [self accept:TTypeSymLeftS];

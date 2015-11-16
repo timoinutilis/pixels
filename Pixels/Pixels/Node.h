@@ -345,6 +345,10 @@
 @property Node *yExpression;
 @end
 
+@interface String0Node : Node
+@property TType type;
+@end
+
 @interface LeftSNode : Node
 @property Node *stringExpression;
 @property Node *numberExpression;

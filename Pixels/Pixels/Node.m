@@ -2192,6 +2192,40 @@ NSString *const TRANSFER = @"TRANSFER";
 
 
 
+@implementation String0Node
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    NSString *result = nil;
+    switch (self.type)
+    {
+        case TTypeSymDate: {
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            dateFormatter.dateFormat = @"MM-dd-yyyy";
+            result = [dateFormatter stringFromDate:[NSDate date]];
+            break;
+        }
+        case TTypeSymTime: {
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            dateFormatter.dateFormat = @"HH:mm:ss";
+            result = [dateFormatter stringFromDate:[NSDate date]];
+            break;
+        }
+        default:
+            break;
+    }
+    return result;
+}
+
+- (BOOL)returnsString
+{
+    return YES;
+}
+
+@end
+
+
+
 @implementation LeftSNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
