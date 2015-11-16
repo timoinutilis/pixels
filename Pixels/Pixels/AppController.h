@@ -37,6 +37,7 @@ extern NSString *const UpgradeNotification;
 @property (nonatomic) NSInteger numNews;
 @property NSString *shouldShowPostId;
 @property RPPreviewViewController *replayPreviewViewController;
+@property (readonly) CFAbsoluteTime bootTime;
 
 + (AppController *)sharedController;
 

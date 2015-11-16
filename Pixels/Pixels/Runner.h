@@ -29,6 +29,7 @@
 @property int lastSpriteHit;
 @property BOOL buttonATapped;
 @property BOOL buttonBTapped;
+@property CFAbsoluteTime bootTime;
 
 - (instancetype)initWithRunnable:(Runnable *)runnable;
 - (BOOL)isFinished;

@@ -2069,8 +2069,11 @@ NSString *const TRANSFER = @"TRANSFER";
         case TTypeSymRnd:
             result = arc4random() / ((float)UINT32_MAX + 1.0);
             break;
-        case TTypeSymHit: // sprite collision, not maths at all
+        case TTypeSymHit:
             result = runner.lastSpriteHit;
+            break;
+        case TTypeSymTimer:
+            result = CFAbsoluteTimeGetCurrent() - runner.bootTime;
             break;
         default:
             break;

@@ -69,6 +69,7 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
     
     self.runner = [[Runner alloc] initWithRunnable:self.runnable];
     self.runner.delegate = self;
+    self.runner.bootTime = [AppController sharedController].bootTime;
     self.rendererView.renderer = self.runner.renderer;
     
     self.pausedLabel.hidden = YES;

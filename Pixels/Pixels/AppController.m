@@ -45,6 +45,8 @@ NSString *const UpgradeNotification = @"UpgradeNotification";
         
         NSURL *url = [[NSBundle mainBundle] URLForResource:@"manual" withExtension:@"html"];
         _helpContent = [[HelpContent alloc] initWithURL:url];
+        
+        _bootTime = CFAbsoluteTimeGetCurrent();
     }
     return self;
 }

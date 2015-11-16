@@ -1364,7 +1364,8 @@
             }
         }
         case TTypeSymHit:
-        case TTypeSymRnd: {
+        case TTypeSymRnd:
+        case TTypeSymTimer: {
             Maths0Node *node = [[Maths0Node alloc] init];
             node.type = self.token.type;
             [self accept:self.token.type];
