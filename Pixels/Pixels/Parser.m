@@ -217,6 +217,9 @@
         case TTypeSymSwap:
             node = [self acceptSwap];
             break;
+        case TTypeSymRandomize:
+            node = [self acceptRandomize];
+            break;
         case TTypeSymWhile:
             node = [self acceptWhileWend];
             break;
@@ -385,6 +388,7 @@
         case TTypeSymGet:
         case TTypeSymPut:
         case TTypeSymPalette:
+        case TTypeSymRandomize:
             return YES;
         
         case TTypeSymEnd: {
@@ -511,6 +515,14 @@
     node.variable1 = [self acceptVariable];
     [self accept:TTypeSymComma];
     node.variable2 = [self acceptVariable];
+    return node;
+}
+
+- (Node *)acceptRandomize
+{
+    RandomizeNode *node = [[RandomizeNode alloc] init];
+    [self accept:TTypeSymRandomize];
+    node.expression = [self acceptExpression];
     return node;
 }
 

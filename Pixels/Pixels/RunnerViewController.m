@@ -279,7 +279,10 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
     dispatch_async(queue, ^{
         
         Runner *runner = self.runner;
-
+        
+        // fix random seed
+        srandom(0);
+        
         while (!runner.isFinished && !runner.error)
         {
             if (self.isPaused)

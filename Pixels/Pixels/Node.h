@@ -94,6 +94,10 @@
 @property VariableNode *variable2;
 @end
 
+@interface RandomizeNode : Node
+@property Node *expression;
+@end
+
 @interface RepeatUntilNode : Node
 @property Node *condition;
 @property NSArray *commands;

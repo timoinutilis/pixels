@@ -69,6 +69,7 @@
         case TTypeSymPause: return @"PAUSE";
         case TTypeSymPersist: return @"PERSIST";
         case TTypeSymSwap: return @"SWAP";
+        case TTypeSymRandomize: return @"RANDOMIZE";
         
         case TTypeSymUp: return @"UP";
         case TTypeSymDown: return @"DOWN";
@@ -143,7 +144,6 @@
         case TTypeSymScreen: return @"SCREEN";
         case TTypeSymPeek: return @"PEEK";
         case TTypeSymPoke: return @"POKE";
-        case TTypeSymRandomize: return @"RANDOMIZE";
         case TTypeSymBank: return @"BANK";
         case TTypeSymFont: return @"FONT";
         case TTypeSymTempo: return @"TEMPO";

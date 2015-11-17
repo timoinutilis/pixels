@@ -523,6 +523,29 @@ NSString *const TRANSFER = @"TRANSFER";
 
 
 
+@implementation RandomizeNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.expression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    Number *value = [self.expression evaluateWithRunner:runner];
+    if (runner.error)
+    {
+        return nil;
+    }
+    srandom(value.intValue);
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
 @implementation RepeatUntilNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
@@ -2067,7 +2090,7 @@ NSString *const TRANSFER = @"TRANSFER";
     switch (self.type)
     {
         case TTypeSymRnd:
-            result = arc4random() / ((float)UINT32_MAX + 1.0);
+            result = random() / ((float)RAND_MAX + 1.0);
             break;
         case TTypeSymHit:
             result = runner.lastSpriteHit;
@@ -2201,7 +2224,7 @@ NSString *const TRANSFER = @"TRANSFER";
     {
         case TTypeSymDate: {
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-            dateFormatter.dateFormat = @"MM-dd-yyyy";
+            dateFormatter.dateFormat = @"yyyy-MM-dd";
             result = [dateFormatter stringFromDate:[NSDate date]];
             break;
         }

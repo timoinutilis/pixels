@@ -236,6 +236,20 @@ PRINT "BYE"
 <pre>v=FALSE</pre>
 <p>FALSE is equal to 0.</p>
 
+<h3 id="_DATE" name="DATE$">=DATE$</h3>
+<pre>s$=DATE$</pre>
+<p>DATE$ returns the current date in the format yyyy-mm-dd.</p>
+<pre class="exm">
+PRINT DATE$
+</pre>
+
+<h3 id="_TIME" name="TIME$">=TIME$</h3>
+<pre>s$=TIME$</pre>
+<p>TIME$ returns the current time in the format hh:mm:ss.</p>
+<pre class="exm">
+PRINT TIME$
+</pre>
+
 <h3 id="_TIMER" name="TIMER">=TIMER</h3>
 <pre>v=TIMER</pre>
 <p>TIMER returns the time passed since LowRes Coder was started in seconds. The value is a decimal, so time can be measured with high precision.</p>
@@ -922,57 +936,55 @@ REM >>FF
 
 <p>LowRes Coder has all maths functions of the classic BASIC programming language, and some more.</p>
 
-<h3 id="_ABS" name="ABS">=ABS</h3>
-<pre>v=ABS(x)</pre>
-<p>The absolute value of <i>x</i>.</p>
+<h2 id="_Trigonometric-functions">Trigonometric functions</h2>
 
-<h3 id="_ATN" name="ATN">=ATN</h3>
-<pre>v=ATN(x)</pre>
-<p>The arctangent of <i>x</i> in radians, i.e. the angle whose tangent is <i>x</i>. The range of the function is -(PI/2) &lt; ATN(X) &lt; (PI/2).</p>
-
-<h3 id="_COS" name="COS">=COS</h3>
-<pre>v=COS(x)</pre>
-<p>The cosine of <i>x</i>, where <i>x</i> is in radians.</p>
-
-<h3 id="_EXP" name="EXP">=EXP</h3>
-<pre>v=EXP(x)</pre>
-<p>The exponential of <i>x</i>, i.e. the value of the base of natural logarithms (e = 2,71828...) raised to the power <i>x</i>.</p>
-
-<h3 id="_INT" name="INT">=INT</h3>
-<pre>v=INT(x)</pre>
-<p>The largest integer not greater than <i>x</i>; e.g. INT(1.3) = 1 and INT(-1.3) = -2.</p>
-
-<h3 id="_LOG" name="LOG">=LOG</h3>
-<pre>v=LOG(x)</pre>
-<p>The natural logarithm of <i>x</i>; <i>x</i> must be greater than zero.</p>
-
-<h3 id="_RND" name="RND">=RND</h3>
-<pre>v=RND</pre>
-<p>The next number in a sequence of random numbers uniformly distributed in the range 0 &lt;= RND &lt; 1. A typical use for integer numbers looks like this:</p>
-<pre class="exm">
-V=INT(RND*16)
-</pre>
-<p>This will return an integer number from 0 to 15 (INT rounds down and RND is always less than 1.0).</p>
-
-<h3 id="_SGN" name="SGN">=SGN</h3>
-<pre>v=SGN(x)</pre>
-<p>The sign of <i>x</i>: -1 if <i>x</i> &lt; 0, 0 if <i>x</i> = 0 and +1 if <i>x</i> &gt; 0.</p>
+<h3 id="_PI" name="PI">=PI</h3>
+<pre>v=PI</pre>
+<p>PI is the ratio of the circumference of a circle to its diameter: 3.1415926535...</p>
 
 <h3 id="_SIN" name="SIN">=SIN</h3>
 <pre>v=SIN(x)</pre>
 <p>The sine of <i>x</i>, where <i>x</i> is in radians.</p>
 
-<h3 id="_SQR" name="SQR">=SQR</h3>
-<pre>v=SQR(x)</pre>
-<p>The nonnegative square root of <i>x</i>; <i>x</i> must be nonnegative.</p>
+<h3 id="_COS" name="COS">=COS</h3>
+<pre>v=COS(x)</pre>
+<p>The cosine of <i>x</i>, where <i>x</i> is in radians.</p>
 
 <h3 id="_TAN" name="TAN">=TAN</h3>
 <pre>v=TAN(x)</pre>
 <p>The tangent of <i>x</i>, where <i>x</i> is in radians.</p>
 
-<h3 id="_PI" name="PI">=PI</h3>
-<pre>v=PI</pre>
-<p>PI is the ratio of the circumference of a circle to its diameter: 3.1415926535...</p>
+<h3 id="_ATN" name="ATN">=ATN</h3>
+<pre>v=ATN(x)</pre>
+<p>The arctangent of <i>x</i> in radians, i.e. the angle whose tangent is <i>x</i>. The range of the function is -(PI/2) &lt; ATN(X) &lt; (PI/2).</p>
+
+<h2 id="_Standard-mathematical-functions">Standard mathematical functions</h2>
+
+<h3 id="_ABS" name="ABS">=ABS</h3>
+<pre>v=ABS(x)</pre>
+<p>The absolute value of <i>x</i>.</p>
+
+<h3 id="_SGN" name="SGN">=SGN</h3>
+<pre>v=SGN(x)</pre>
+<p>The sign of <i>x</i>: -1 if <i>x</i> &lt; 0, 0 if <i>x</i> = 0 and +1 if <i>x</i> &gt; 0.</p>
+
+<h3 id="_INT" name="INT">=INT</h3>
+<pre>v=INT(x)</pre>
+<p>The largest integer not greater than <i>x</i>; e.g. INT(1.3) = 1 and INT(-1.3) = -2.</p>
+
+<h3 id="_EXP" name="EXP">=EXP</h3>
+<pre>v=EXP(x)</pre>
+<p>The exponential of <i>x</i>, i.e. the value of the base of natural logarithms (e = 2,71828...) raised to the power <i>x</i>.</p>
+
+<h3 id="_LOG" name="LOG">=LOG</h3>
+<pre>v=LOG(x)</pre>
+<p>The natural logarithm of <i>x</i>; <i>x</i> must be greater than zero.</p>
+
+<h3 id="_SQR" name="SQR">=SQR</h3>
+<pre>v=SQR(x)</pre>
+<p>The nonnegative square root of <i>x</i>; <i>x</i> must be nonnegative.</p>
+
+<h2 id="_Manipulating-numbers">Manipulating numbers</h2>
 
 <h3 id="_MIN" name="MIN">=MIN</h3>
 <pre>v=MIN(x,y)</pre>
@@ -992,6 +1004,21 @@ SWAP A,B
 PRINT A
 PRINT B
 </pre>
+
+<h2 id="_Creating-random-sequences">Creating random sequences</h2>
+
+<h3 id="_RND" name="RND">=RND</h3>
+<pre>v=RND</pre>
+<p>The next number in a sequence of random numbers uniformly distributed in the range 0 &lt;= RND &lt; 1. A typical use for integer numbers looks like this:</p>
+<pre class="exm">
+    V=INT(RND*16)
+</pre>
+<p>This will return an integer number from 0 to 15 (INT rounds down and RND is always less than 1.0).</p>
+
+<h3 id="_RANDOMIZE" name="RANDOMIZE">RANDOMIZE</h3>
+<pre>RANDOMIZE x</pre>
+<p>TODO</p>
+
 
 <h1 id="Data">Data and transfer</h1>
 
@@ -1138,7 +1165,7 @@ POINT,
 POKE*,
 PRINT,
 PUT,
-RANDOMIZE*,
+RANDOMIZE,
 READ,
 REM,
 REPEAT,
