@@ -1841,6 +1841,106 @@ NSString *const TRANSFER = @"TRANSFER";
 
 
 
+@implementation LeftSCommandNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    if (pass == PrePassCheckSemantic && !self.stringVariable.returnsString)
+    {
+        runnable.error = [NSError typeMismatchErrorWithNode:self];
+        return;
+    }
+    [self.stringVariable prepareWithRunnable:runnable pass:pass];
+    [self.numberExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.srcStringExpression prepareWithRunnable:runnable pass:pass canBeString:YES];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    //TODO
+    
+    if (runner.error)
+    {
+        return nil;
+    }
+    
+    //TODO
+    
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
+@implementation RightSCommandNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    if (pass == PrePassCheckSemantic && !self.stringVariable.returnsString)
+    {
+        runnable.error = [NSError typeMismatchErrorWithNode:self];
+        return;
+    }
+    [self.stringVariable prepareWithRunnable:runnable pass:pass];
+    [self.numberExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.srcStringExpression prepareWithRunnable:runnable pass:pass canBeString:YES];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    //TODO
+    
+    if (runner.error)
+    {
+        return nil;
+    }
+    
+    //TODO
+    
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
+@implementation MidCommandNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    if (pass == PrePassCheckSemantic && !self.stringVariable.returnsString)
+    {
+        runnable.error = [NSError typeMismatchErrorWithNode:self];
+        return;
+    }
+    [self.stringVariable prepareWithRunnable:runnable pass:pass];
+    [self.positionExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.numberExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.srcStringExpression prepareWithRunnable:runnable pass:pass canBeString:YES];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    //TODO
+    
+    if (runner.error)
+    {
+        return nil;
+    }
+    
+    //TODO
+    
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
 @implementation DirectionPadNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
