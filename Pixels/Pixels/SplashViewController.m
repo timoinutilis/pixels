@@ -9,6 +9,7 @@
 #import "SplashViewController.h"
 #import "AudioPlayer.h"
 #import "ModelManager.h"
+#import "AppStyle.h"
 
 @interface SplashViewController ()
 
@@ -26,9 +27,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     
-    UIWindow* window = [UIApplication sharedApplication].windows.firstObject;
+    self.label.textColor = [AppStyle tintColor];
+    
+    UIWindow *window = [UIApplication sharedApplication].windows.firstObject;
     
     self.label.transform = CGAffineTransformMakeTranslation(0, window.frame.size.height * -0.5f - 35.0f - 12.0f);
     self.logoImageView.transform = CGAffineTransformMakeTranslation(0, 20);
