@@ -1152,10 +1152,8 @@
     [self accept:TTypeSymLeftS];
     [self accept:TTypeSymBracketOpen];
     node.stringVariable = [self acceptVariable];
-    if ([self acceptOptionalComma])
-    {
-        node.numberExpression = [self acceptExpression];
-    }
+    [self accept:TTypeSymComma];
+    node.numberExpression = [self acceptExpression];
     [self accept:TTypeSymBracketClose];
     [self accept:TTypeSymOpEq];
     node.srcStringExpression = [self acceptExpression];
@@ -1168,10 +1166,8 @@
     [self accept:TTypeSymRightS];
     [self accept:TTypeSymBracketOpen];
     node.stringVariable = [self acceptVariable];
-    if ([self acceptOptionalComma])
-    {
-        node.numberExpression = [self acceptExpression];
-    }
+    [self accept:TTypeSymComma];
+    node.numberExpression = [self acceptExpression];
     [self accept:TTypeSymBracketClose];
     [self accept:TTypeSymOpEq];
     node.srcStringExpression = [self acceptExpression];
@@ -1186,10 +1182,8 @@
     node.stringVariable = [self acceptVariable];
     [self accept:TTypeSymComma];
     node.positionExpression = [self acceptExpression];
-    if ([self acceptOptionalComma])
-    {
-        node.numberExpression = [self acceptExpression];
-    }
+    [self accept:TTypeSymComma];
+    node.numberExpression = [self acceptExpression];
     [self accept:TTypeSymBracketClose];
     [self accept:TTypeSymOpEq];
     node.srcStringExpression = [self acceptExpression];
