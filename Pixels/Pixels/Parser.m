@@ -336,6 +336,15 @@
         case TTypeSymPut:
             node = [self acceptPut];
             break;
+        case TTypeSymLeftS:
+            node = [self acceptLeftS];
+            break;
+        case TTypeSymRightS:
+            node = [self acceptRightS];
+            break;
+        case TTypeSymMid:
+            node = [self acceptMid];
+            break;
         default: {
             self.error = [NSError programErrorWithCode:LRCErrorCodeParse reason:@"Expected command" token:self.token];
             return nil;
@@ -1134,6 +1143,50 @@
             node.transparencyExpression = expression;
         }
     }
+    return node;
+}
+
+- (Node *)acceptLeftS
+{
+    LeftSCommandNode *node = [[LeftSCommandNode alloc] init];
+    [self accept:TTypeSymLeftS];
+    [self accept:TTypeSymBracketOpen];
+    node.stringVariable = [self acceptVariable];
+    [self accept:TTypeSymComma];
+    node.numberExpression = [self acceptExpression];
+    [self accept:TTypeSymBracketClose];
+    [self accept:TTypeSymOpEq];
+    node.srcStringExpression = [self acceptExpression];
+    return node;
+}
+
+- (Node *)acceptRightS
+{
+    RightSCommandNode *node = [[RightSCommandNode alloc] init];
+    [self accept:TTypeSymRightS];
+    [self accept:TTypeSymBracketOpen];
+    node.stringVariable = [self acceptVariable];
+    [self accept:TTypeSymComma];
+    node.numberExpression = [self acceptExpression];
+    [self accept:TTypeSymBracketClose];
+    [self accept:TTypeSymOpEq];
+    node.srcStringExpression = [self acceptExpression];
+    return node;
+}
+
+- (Node *)acceptMid
+{
+    MidCommandNode *node = [[MidCommandNode alloc] init];
+    [self accept:TTypeSymMid];
+    [self accept:TTypeSymBracketOpen];
+    node.stringVariable = [self acceptVariable];
+    [self accept:TTypeSymComma];
+    node.positionExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.numberExpression = [self acceptExpression];
+    [self accept:TTypeSymBracketClose];
+    [self accept:TTypeSymOpEq];
+    node.srcStringExpression = [self acceptExpression];
     return node;
 }
 

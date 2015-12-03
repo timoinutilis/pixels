@@ -303,6 +303,25 @@
 @property Node *transparencyExpression;
 @end
 
+@interface LeftSCommandNode : Node
+@property VariableNode *stringVariable;
+@property Node *numberExpression;
+@property Node *srcStringExpression;
+@end
+
+@interface RightSCommandNode : Node
+@property VariableNode *stringVariable;
+@property Node *numberExpression;
+@property Node *srcStringExpression;
+@end
+
+@interface MidCommandNode : Node
+@property VariableNode *stringVariable;
+@property Node *positionExpression;
+@property Node *numberExpression;
+@property Node *srcStringExpression;
+@end
+
 @interface DirectionPadNode : Node
 @property TType type;
 @property Node *portExpression;

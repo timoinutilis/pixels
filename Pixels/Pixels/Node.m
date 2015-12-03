@@ -48,6 +48,17 @@ NSString *const TRANSFER = @"TRANSFER";
     return number;
 }
 
+- (Number *)evaluateNumberWithRunner:(Runner *)runner min:(int)min
+{
+    Number *number = [self evaluateWithRunner:runner];
+    if (number && number.intValue < min)
+    {
+        runner.error = [NSError invalidParameterErrorWithNode:self value:number.intValue];
+        return nil;
+    }
+    return number;
+}
+
 - (void)endOfLoopWithRunner:(Runner *)runner
 {
 }
@@ -1841,6 +1852,155 @@ NSString *const TRANSFER = @"TRANSFER";
 
 
 
+@implementation LeftSCommandNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    if (pass == PrePassCheckSemantic && !self.stringVariable.returnsString)
+    {
+        runnable.error = [NSError typeMismatchErrorWithNode:self];
+        return;
+    }
+    [self.stringVariable prepareWithRunnable:runnable pass:pass];
+    [self.numberExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.srcStringExpression prepareWithRunnable:runnable pass:pass canBeString:YES];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    NSString *targetString = [runner.variables valueOfVariable:self.stringVariable];
+    Number *number = [self.numberExpression evaluateNumberWithRunner:runner min:0];
+    NSString *srcString = [self.srcStringExpression evaluateWithRunner:runner];
+    if (runner.error)
+    {
+        return nil;
+    }
+    
+    NSInteger numChars = number.intValue;
+    if (numChars > srcString.length || numChars > targetString.length)
+    {
+        numChars = MIN(srcString.length, targetString.length);
+    }
+    if (srcString.length > numChars)
+    {
+        srcString = [srcString substringToIndex:numChars];
+    }
+    
+    NSMutableString *result = targetString.mutableCopy;
+    [result replaceCharactersInRange:NSMakeRange(0, numChars) withString:srcString];
+    [runner.variables setValue:result forVariable:self.stringVariable];
+    
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
+@implementation RightSCommandNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    if (pass == PrePassCheckSemantic && !self.stringVariable.returnsString)
+    {
+        runnable.error = [NSError typeMismatchErrorWithNode:self];
+        return;
+    }
+    [self.stringVariable prepareWithRunnable:runnable pass:pass];
+    [self.numberExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.srcStringExpression prepareWithRunnable:runnable pass:pass canBeString:YES];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    NSString *targetString = [runner.variables valueOfVariable:self.stringVariable];
+    Number *number = [self.numberExpression evaluateNumberWithRunner:runner min:0];
+    NSString *srcString = [self.srcStringExpression evaluateWithRunner:runner];
+    if (runner.error)
+    {
+        return nil;
+    }
+    
+    NSInteger numChars = number.intValue;
+    if (numChars > srcString.length || numChars > targetString.length)
+    {
+        numChars = MIN(srcString.length, targetString.length);
+    }
+    if (srcString.length > numChars)
+    {
+        srcString = [srcString substringFromIndex:(srcString.length - numChars)];
+    }
+    
+    NSMutableString *result = targetString.mutableCopy;
+    [result replaceCharactersInRange:NSMakeRange((targetString.length - numChars), numChars) withString:srcString];
+    [runner.variables setValue:result forVariable:self.stringVariable];
+    
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
+@implementation MidCommandNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    if (pass == PrePassCheckSemantic && !self.stringVariable.returnsString)
+    {
+        runnable.error = [NSError typeMismatchErrorWithNode:self];
+        return;
+    }
+    [self.stringVariable prepareWithRunnable:runnable pass:pass];
+    [self.positionExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.numberExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.srcStringExpression prepareWithRunnable:runnable pass:pass canBeString:YES];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    NSString *targetString = [runner.variables valueOfVariable:self.stringVariable];
+    Number *position = [self.positionExpression evaluateNumberWithRunner:runner min:1];
+    Number *number = [self.numberExpression evaluateNumberWithRunner:runner min:0];
+    NSString *srcString = [self.srcStringExpression evaluateWithRunner:runner];
+    if (runner.error)
+    {
+        return nil;
+    }
+    
+    NSInteger startIndex = position.intValue - 1;
+    if (startIndex < targetString.length)
+    {
+        NSInteger numChars = number.intValue;
+        if (numChars > srcString.length)
+        {
+            numChars = srcString.length;
+        }
+        if (numChars > targetString.length - startIndex)
+        {
+            numChars = targetString.length - startIndex;
+        }
+        
+        if (srcString.length > numChars)
+        {
+            srcString = [srcString substringToIndex:numChars];
+        }
+        
+        NSMutableString *result = targetString.mutableCopy;
+        [result replaceCharactersInRange:NSMakeRange(startIndex, numChars) withString:srcString];
+        [runner.variables setValue:result forVariable:self.stringVariable];
+    }
+    
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
 @implementation DirectionPadNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
@@ -2260,17 +2420,12 @@ NSString *const TRANSFER = @"TRANSFER";
 - (id)evaluateWithRunner:(Runner *)runner
 {
     NSString *string = [[self.stringExpression evaluateWithRunner:runner] description];
-    Number *number = [self.numberExpression evaluateWithRunner:runner];
+    Number *number = [self.numberExpression evaluateNumberWithRunner:runner min:0];
     if (runner.error)
     {
         return nil;
     }
     
-    if (number.intValue < 0)
-    {
-        runner.error = [NSError invalidParameterErrorWithNode:self value:number.intValue];
-        return nil;
-    }
     if (number.intValue >= string.length)
     {
         return string;
@@ -2298,18 +2453,13 @@ NSString *const TRANSFER = @"TRANSFER";
 - (id)evaluateWithRunner:(Runner *)runner
 {
     NSString *string = [[self.stringExpression evaluateWithRunner:runner] description];
-    Number *number = [self.numberExpression evaluateWithRunner:runner];
+    Number *number = [self.numberExpression evaluateNumberWithRunner:runner min:0];
     if (runner.error)
     {
         return nil;
     }
     
     NSUInteger len = string.length;
-    if (number.intValue < 0)
-    {
-        runner.error = [NSError invalidParameterErrorWithNode:self value:number.intValue];
-        return nil;
-    }
     if (number.intValue >= len)
     {
         return string;
@@ -2338,33 +2488,24 @@ NSString *const TRANSFER = @"TRANSFER";
 - (id)evaluateWithRunner:(Runner *)runner
 {
     NSString *string = [[self.stringExpression evaluateWithRunner:runner] description];
-    Number *position = [self.positionExpression evaluateWithRunner:runner];
-    Number *number = [self.numberExpression evaluateWithRunner:runner];
+    Number *position = [self.positionExpression evaluateNumberWithRunner:runner min:1];
+    Number *number = [self.numberExpression evaluateNumberWithRunner:runner min:0];
     if (runner.error)
     {
         return nil;
     }
     
     NSUInteger len = string.length;
-    if (position.intValue < 1)
-    {
-        runner.error = [NSError invalidParameterErrorWithNode:self value:position.intValue];
-        return nil;
-    }
-    if (number.intValue < 1)
-    {
-        runner.error = [NSError invalidParameterErrorWithNode:self value:number.intValue];
-        return nil;
-    }
-    if (position.intValue - 1 > len)
+    NSInteger startIndex = position.intValue - 1;
+    if (startIndex > len)
     {
         return @"";
     }
-    if (position.intValue - 1 + number.intValue > len)
+    if (startIndex + number.intValue > len)
     {
-        return [string substringFromIndex:position.intValue - 1];
+        return [string substringFromIndex:startIndex];
     }
-    return [string substringWithRange:NSMakeRange(position.intValue - 1, number.intValue)];
+    return [string substringWithRange:NSMakeRange(startIndex, number.intValue)];
 }
 
 - (BOOL)returnsString
@@ -2389,19 +2530,13 @@ NSString *const TRANSFER = @"TRANSFER";
 {
     NSString *string = [[self.stringExpression evaluateWithRunner:runner] description];
     NSString *search = [[self.searchExpression evaluateWithRunner:runner] description];
-    Number *position = [self.positionExpression evaluateWithRunner:runner];
+    Number *position = [self.positionExpression evaluateNumberWithRunner:runner min:1];
     if (runner.error)
     {
         return nil;
     }
     
     NSUInteger len = string.length;
-    
-    if (position.intValue < 1)
-    {
-        runner.error = [NSError invalidParameterErrorWithNode:self value:position.intValue];
-        return nil;
-    }
     if (position.intValue > len)
     {
         return [runner.numberPool numberWithValue:0];
