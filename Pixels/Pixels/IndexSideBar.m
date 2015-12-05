@@ -54,7 +54,12 @@ static const CGFloat MARGIN = 3.0;
 - (void)layoutSubviews
 {
     [super layoutSubviews];
+    
+    [self updateBarPositions];
+}
 
+- (void)updateBarPositions
+{
     CGFloat height = self.bounds.size.height - 2.0 - 2 * MARGIN;
     for (IndexMarker *marker in self.markers)
     {
@@ -104,7 +109,7 @@ static const CGFloat MARGIN = 3.0;
     self.numLines = numberOfLines;
     self.markers = markers;
     self.shouldUpdateOnTouch = NO;
-    [self setNeedsLayout];
+    [self updateBarPositions];
 }
 
 - (BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(nullable UIEvent *)event
