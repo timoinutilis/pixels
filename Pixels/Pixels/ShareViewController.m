@@ -16,6 +16,7 @@
 #import "Compiler.h"
 #import "NSString+Utils.h"
 #import "AppController.h"
+#import "ModelManager.h"
 
 @interface ShareViewController ()
 
@@ -84,11 +85,15 @@
     [self setHeaderTitle:@"Write a Description" section:3];
     
     self.descriptionCell = [self.tableView dequeueReusableCellWithIdentifier:@"ShareTextViewCell"];
+    if (self.project.programDescription)
+    {
+        self.descriptionCell.textView.text = self.project.programDescription;
+    }
     [self addCell:self.descriptionCell];
     
     [self updateLogin:nil];
     
-    self.selectedCategory = LCCPostCategoryUndefined;
+    self.selectedCategory = (self.project.programType) ? self.project.programType.intValue : LCCPostCategoryUndefined;
     
     self.cycleManager = [[GORCycleManager alloc] initWithFields:@[self.titleCell.textField, self.descriptionCell.textView]];
     
@@ -121,6 +126,21 @@
             }];
         }
     }
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    if (   self.descriptionCell.textView.text.length > 0
+        && (!self.project.programDescription || ![self.descriptionCell.textView.text isEqualToString:self.project.programDescription]) )
+    {
+        self.project.programDescription = self.descriptionCell.textView.text;
+    }
+    if (self.selectedCategory != LCCPostTypeUndefined && self.selectedCategory != self.project.programType.intValue)
+    {
+        self.project.programType = @(self.selectedCategory);
+    }
+    [[ModelManager sharedManager] saveContext];
 }
 
 - (void)setSelectedCategory:(LCCPostCategory)selectedCategory

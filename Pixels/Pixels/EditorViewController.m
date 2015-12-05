@@ -729,7 +729,8 @@ typedef void(^InfoBlock)(void);
 
 - (void)editorTextView:(EditorTextView *)editorTextView didSelectHelpWithRange:(NSRange)range
 {
-    if ([editorTextView.text characterAtIndex:range.location + range.length] == '$')
+    NSInteger nextIndex = range.location + range.length;
+    if (nextIndex < editorTextView.text.length && [editorTextView.text characterAtIndex:nextIndex] == '$')
     {
         // include "$"
         range.length++;
