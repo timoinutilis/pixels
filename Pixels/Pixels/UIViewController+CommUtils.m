@@ -35,7 +35,7 @@ const NSTimeInterval MAX_CACHE_AGE = 1 * 60 * 60;
 
 - (void)addProgramOfPost:(LCCPost *)post
 {
-    Project *project = [[ModelManager sharedManager] createNewProjectInFolder:[ModelManager sharedManager].rootFolder];
+    Project *project = [[ModelManager sharedManager] createNewProjectInFolder:[ModelManager sharedManager].currentDownloadFolder];
     project.name = post.title;
     project.sourceCode = [post sourceCode];
     project.postId = post.objectId;
@@ -45,15 +45,17 @@ const NSTimeInterval MAX_CACHE_AGE = 1 * 60 * 60;
         [[CommunityModel sharedInstance] countPost:post type:StatsTypeDownload];
     }
     
+    BOOL root = (project.parent == [ModelManager sharedManager].rootFolder);
+    
     if ([self isModal])
     {
         [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
-            [[AppController sharedController].tabBarController showExplorerAnimated:YES];
+            [[AppController sharedController].tabBarController showExplorerAnimated:YES root:root];
         }];
     }
     else
     {
-        [[AppController sharedController].tabBarController showExplorerAnimated:NO];
+        [[AppController sharedController].tabBarController showExplorerAnimated:NO root:root];
     }
 }
 

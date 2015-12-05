@@ -15,7 +15,6 @@ NSString *const ModelManagerDidMoveProjectNotification = @"ModelManagerDidMovePr
 
 @interface ModelManager ()
 
-
 @end
 
 @implementation ModelManager
@@ -331,6 +330,18 @@ NSString *const ModelManagerDidMoveProjectNotification = @"ModelManagerDidMovePr
     // default projects
     numObjects = [self.temporaryContext countForFetchRequest:fetchRequest error:nil];
     return (numObjects > 0);
+}
+
+- (void)setCurrentFolder:(Project *)folder
+{
+    if (!folder || folder.isDefault.boolValue)
+    {
+        _currentDownloadFolder = self.rootFolder;
+    }
+    else
+    {
+        _currentDownloadFolder = folder;
+    }
 }
 
 @end

@@ -147,11 +147,21 @@
     }
 }
 
-- (void)showExplorerAnimated:(BOOL)animated
+- (void)showExplorerAnimated:(BOOL)animated root:(BOOL)root
 {
     self.selectedIndex = TabIndexExplorer;
     UINavigationController *nav = (UINavigationController *)_selectedViewController;
-    [nav popToRootViewControllerAnimated:animated];
+    if (root)
+    {
+        [nav popToRootViewControllerAnimated:animated];
+    }
+    else
+    {
+        if (![nav.topViewController isKindOfClass:[ExplorerViewController class]])
+        {
+            [nav popViewControllerAnimated:animated];
+        }
+    }
 }
 
 - (void)showHelpForChapter:(NSString *)chapter

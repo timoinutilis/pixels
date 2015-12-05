@@ -88,6 +88,9 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    [[ModelManager sharedManager] setCurrentFolder:self.folder];
+    
     if (self.lastSelectedProject)
     {
         if (self.lastSelectedProject.isDeleted || !self.lastSelectedProject.managedObjectContext)

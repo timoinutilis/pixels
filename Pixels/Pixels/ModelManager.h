@@ -21,6 +21,7 @@ extern NSString *const ModelManagerDidMoveProjectNotification;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 @property (nonatomic, readonly) Project *rootFolder;
+@property (nonatomic, readonly) Project *currentDownloadFolder;
 
 @property NSInteger debugSaveCount;
 
@@ -36,5 +37,6 @@ extern NSString *const ModelManagerDidMoveProjectNotification;
 - (Project *)duplicateProject:(Project *)project sourceCode:(NSString *)sourceCode;
 - (void)moveProject:(Project *)project toFolder:(Project *)folder;
 - (BOOL)hasProjectWithPostId:(NSString *)postId;
+- (void)setCurrentFolder:(Project *)folder;
 
 @end

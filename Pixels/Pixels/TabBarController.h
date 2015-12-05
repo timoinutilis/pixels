@@ -22,7 +22,7 @@ typedef NS_ENUM(NSInteger, TabIndex) {
 @property (nonatomic) NSInteger selectedIndex;
 @property (nonatomic, readonly) UIViewController *selectedViewController;
 
-- (void)showExplorerAnimated:(BOOL)animated;
+- (void)showExplorerAnimated:(BOOL)animated root:(BOOL)root;
 - (void)showHelpForChapter:(NSString *)chapter;
 
 @end
