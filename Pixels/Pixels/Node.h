@@ -14,7 +14,7 @@
 
 @interface Node : NSObject
 
-@property Token *token;
+@property (nonatomic) Token *token;
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass;
 - (id)evaluateWithRunner:(Runner *)runner;
@@ -24,407 +24,407 @@
 @end
 
 @interface NumberNode : Node
-@property float value;
+@property (nonatomic) float value;
 - (instancetype)initWithValue:(float)value;
 @end
 
 @interface StringNode : Node
-@property NSString *value;
+@property (nonatomic) NSString *value;
 - (instancetype)initWithValue:(NSString *)value;
 @end
 
 @interface VariableNode : Node
-@property NSString *identifier;
-@property BOOL isString;
-@property NSArray *indexExpressions;
+@property (nonatomic) NSString *identifier;
+@property (nonatomic) BOOL isString;
+@property (nonatomic) NSArray *indexExpressions;
 - (NSArray *)indexesWithRunner:(Runner *)runner isDim:(BOOL)isDim;
 @end
 
 @interface LabelNode : Node
-@property NSString *identifier;
+@property (nonatomic) NSString *identifier;
 @end
 
 @interface IfNode : Node
-@property Node *condition;
-@property NSArray *commands;
-@property NSArray *elseCommands;
+@property (nonatomic) Node *condition;
+@property (nonatomic) NSArray *commands;
+@property (nonatomic) NSArray *elseCommands;
 @end
 
 @interface GotoNode : Node
-@property NSString *label;
+@property (nonatomic) NSString *label;
 @end
 
 @interface GosubNode : Node
-@property NSString *label;
+@property (nonatomic) NSString *label;
 @end
 
 @interface ReturnNode : Node
-@property NSString *label;
+@property (nonatomic) NSString *label;
 @end
 
 @interface PrintNode : Node
-@property Node *expression;
+@property (nonatomic) Node *expression;
 @end
 
 @interface ForNextNode : Node
-@property VariableNode *variable;
-@property VariableNode *matchingVariable;
-@property Node *startExpression;
-@property Node *endExpression;
-@property Node *stepExpression;
-@property NSArray *commands;
+@property (nonatomic) VariableNode *variable;
+@property (nonatomic) VariableNode *matchingVariable;
+@property (nonatomic) Node *startExpression;
+@property (nonatomic) Node *endExpression;
+@property (nonatomic) Node *stepExpression;
+@property (nonatomic) NSArray *commands;
 @end
 
 @interface LetNode : Node
-@property VariableNode *variable;
-@property Node *expression;
+@property (nonatomic) VariableNode *variable;
+@property (nonatomic) Node *expression;
 @end
 
 @interface DimNode : Node
-@property NSArray *variableNodes;
-@property BOOL persist;
+@property (nonatomic) NSArray *variableNodes;
+@property (nonatomic) BOOL persist;
 @end
 
 @interface PersistNode : Node
-@property NSArray *variableNodes;
+@property (nonatomic) NSArray *variableNodes;
 @end
 
 @interface SwapNode : Node
-@property VariableNode *variable1;
-@property VariableNode *variable2;
+@property (nonatomic) VariableNode *variable1;
+@property (nonatomic) VariableNode *variable2;
 @end
 
 @interface RandomizeNode : Node
-@property Node *expression;
+@property (nonatomic) Node *expression;
 @end
 
 @interface RepeatUntilNode : Node
-@property Node *condition;
-@property NSArray *commands;
+@property (nonatomic) Node *condition;
+@property (nonatomic) NSArray *commands;
 @end
 
 @interface WhileWendNode : Node
-@property Node *condition;
-@property NSArray *commands;
+@property (nonatomic) Node *condition;
+@property (nonatomic) NSArray *commands;
 @end
 
 @interface DoLoopNode : Node
-@property NSArray *commands;
+@property (nonatomic) NSArray *commands;
 @end
 
 @interface ExitNode : Node
 @end
 
 @interface WaitNode : Node
-@property Node *time;
-@property BOOL tap;
+@property (nonatomic) Node *time;
+@property (nonatomic) BOOL tap;
 @end
 
 @interface EndNode : Node
 @end
 
 @interface GamepadNode : Node
-@property Node *playersExpression;
+@property (nonatomic) Node *playersExpression;
 @end
 
 @interface ColorNode : Node
-@property Node *color;
+@property (nonatomic) Node *color;
 @end
 
 @interface ClsNode : Node
-@property Node *color;
+@property (nonatomic) Node *color;
 @end
 
 @interface PlotNode : Node
-@property Node *xExpression;
-@property Node *yExpression;
+@property (nonatomic) Node *xExpression;
+@property (nonatomic) Node *yExpression;
 @end
 
 @interface LineNode : Node
-@property Node *fromXExpression;
-@property Node *fromYExpression;
-@property Node *toXExpression;
-@property Node *toYExpression;
+@property (nonatomic) Node *fromXExpression;
+@property (nonatomic) Node *fromYExpression;
+@property (nonatomic) Node *toXExpression;
+@property (nonatomic) Node *toYExpression;
 @end
 
 @interface BoxNode : Node
-@property Node *fromXExpression;
-@property Node *fromYExpression;
-@property Node *toXExpression;
-@property Node *toYExpression;
-@property BOOL fill;
+@property (nonatomic) Node *fromXExpression;
+@property (nonatomic) Node *fromYExpression;
+@property (nonatomic) Node *toXExpression;
+@property (nonatomic) Node *toYExpression;
+@property (nonatomic) BOOL fill;
 @end
 
 @interface CircleNode : Node
-@property Node *xExpression;
-@property Node *yExpression;
-@property Node *radiusXExpression;
-@property Node *radiusYExpression;
-@property BOOL fill;
+@property (nonatomic) Node *xExpression;
+@property (nonatomic) Node *yExpression;
+@property (nonatomic) Node *radiusXExpression;
+@property (nonatomic) Node *radiusYExpression;
+@property (nonatomic) BOOL fill;
 @end
 
 @interface ScrollNode : Node
-@property Node *fromXExpression;
-@property Node *fromYExpression;
-@property Node *toXExpression;
-@property Node *toYExpression;
-@property Node *deltaXExpression;
-@property Node *deltaYExpression;
+@property (nonatomic) Node *fromXExpression;
+@property (nonatomic) Node *fromYExpression;
+@property (nonatomic) Node *toXExpression;
+@property (nonatomic) Node *toYExpression;
+@property (nonatomic) Node *deltaXExpression;
+@property (nonatomic) Node *deltaYExpression;
 @end
 
 @interface TextNode : Node
-@property Node *valueExpression;
-@property Node *xExpression;
-@property Node *yExpression;
-@property Node *alignExpression;
+@property (nonatomic) Node *valueExpression;
+@property (nonatomic) Node *xExpression;
+@property (nonatomic) Node *yExpression;
+@property (nonatomic) Node *alignExpression;
 @end
 
 @interface PaintNode : Node
-@property Node *xExpression;
-@property Node *yExpression;
+@property (nonatomic) Node *xExpression;
+@property (nonatomic) Node *yExpression;
 @end
 
 @interface PaletteNode : Node
-@property BOOL clear;
-@property Node *nExpression;
-@property Node *valueExpression;
+@property (nonatomic) BOOL clear;
+@property (nonatomic) Node *nExpression;
+@property (nonatomic) Node *valueExpression;
 @end
 
 @interface PaletteFuncNode : Node
-@property Node *nExpression;
+@property (nonatomic) Node *nExpression;
 @end
 
 @interface DefSpriteNode : Node
-@property Node *imageExpression;
-@property VariableNode *dataVariable;
-@property Node *color1Expression;
-@property Node *color2Expression;
-@property Node *color3Expression;
+@property (nonatomic) Node *imageExpression;
+@property (nonatomic) VariableNode *dataVariable;
+@property (nonatomic) Node *color1Expression;
+@property (nonatomic) Node *color2Expression;
+@property (nonatomic) Node *color3Expression;
 @end
 
 @interface SpritePaletteNode : Node
-@property Node *nExpression;
-@property Node *color1Expression;
-@property Node *color2Expression;
-@property Node *color3Expression;
+@property (nonatomic) Node *nExpression;
+@property (nonatomic) Node *color1Expression;
+@property (nonatomic) Node *color2Expression;
+@property (nonatomic) Node *color3Expression;
 @end
 
 @interface SpriteNode : Node
-@property Node *nExpression;
-@property Node *xExpression;
-@property Node *yExpression;
-@property Node *imageExpression;
+@property (nonatomic) Node *nExpression;
+@property (nonatomic) Node *xExpression;
+@property (nonatomic) Node *yExpression;
+@property (nonatomic) Node *imageExpression;
 @end
 
 @interface SpriteOffNode : Node
-@property Node *nExpression;
+@property (nonatomic) Node *nExpression;
 @end
 
 @interface DataNode : Node
-@property NSArray *constants;
+@property (nonatomic) NSArray *constants;
 @end
 
 @interface ReadNode : Node
-@property NSArray *variables;
+@property (nonatomic) NSArray *variables;
 @end
 
 @interface RestoreNode : Node
-@property NSString *label;
+@property (nonatomic) NSString *label;
 @end
 
 @interface WriteBaseNode : Node
-@property NSMutableArray *strings;
+@property (nonatomic) NSMutableArray *strings;
 - (void)addValue:(id)value;
 - (void)writeDataLineWithRunner:(Runner *)runner;
 @end
 
 @interface WriteNode : WriteBaseNode
-@property NSArray *valueExpressions;
-@property BOOL clear;
+@property (nonatomic) NSArray *valueExpressions;
+@property (nonatomic) BOOL clear;
 @end
 
 @interface WriteDimNode : WriteBaseNode
-@property VariableNode *variable;
-@property Node *columnsExpression;
+@property (nonatomic) VariableNode *variable;
+@property (nonatomic) Node *columnsExpression;
 @end
 
 @interface OnXGotoNode : Node
-@property TType xType;
-@property NSString *label;
+@property (nonatomic) TType xType;
+@property (nonatomic) NSString *label;
 @end
 
 @interface DefSoundNode : Node
-@property Node *nExpression;
-@property Node *waveExpression;
-@property Node *pulseWidthExpression;
-@property Node *maxTimeExpression;
+@property (nonatomic) Node *nExpression;
+@property (nonatomic) Node *waveExpression;
+@property (nonatomic) Node *pulseWidthExpression;
+@property (nonatomic) Node *maxTimeExpression;
 @end
 
 @interface DefSoundLineNode : Node
-@property Node *nExpression;
-@property Node *bendTimeExpression;
-@property Node *pitchBendExpression;
-@property Node *pulseBendExpression;
+@property (nonatomic) Node *nExpression;
+@property (nonatomic) Node *bendTimeExpression;
+@property (nonatomic) Node *pitchBendExpression;
+@property (nonatomic) Node *pulseBendExpression;
 @end
 
 @interface SoundNode : Node
-@property Node *voiceExpression;
-@property Node *pitchExpression;
-@property Node *durationExpression;
-@property Node *defExpression;
+@property (nonatomic) Node *voiceExpression;
+@property (nonatomic) Node *pitchExpression;
+@property (nonatomic) Node *durationExpression;
+@property (nonatomic) Node *defExpression;
 @end
 
 @interface SoundOffNode : Node
-@property Node *voiceExpression;
+@property (nonatomic) Node *voiceExpression;
 @end
 
 @interface SoundEndNode : Node
-@property Node *voiceExpression;
+@property (nonatomic) Node *voiceExpression;
 @end
 
 @interface LayerNode : Node
-@property Node *nExpression;
+@property (nonatomic) Node *nExpression;
 @end
 
 @interface GetNode : Node
-@property Node *fromXExpression;
-@property Node *fromYExpression;
-@property Node *toXExpression;
-@property Node *toYExpression;
+@property (nonatomic) Node *fromXExpression;
+@property (nonatomic) Node *fromYExpression;
+@property (nonatomic) Node *toXExpression;
+@property (nonatomic) Node *toYExpression;
 @end
 
 @interface PutNode : Node
-@property Node *xExpression;
-@property Node *yExpression;
-@property Node *srcXExpression;
-@property Node *srcYExpression;
-@property Node *srcWidthExpression;
-@property Node *srcHeightExpression;
-@property Node *transparencyExpression;
+@property (nonatomic) Node *xExpression;
+@property (nonatomic) Node *yExpression;
+@property (nonatomic) Node *srcXExpression;
+@property (nonatomic) Node *srcYExpression;
+@property (nonatomic) Node *srcWidthExpression;
+@property (nonatomic) Node *srcHeightExpression;
+@property (nonatomic) Node *transparencyExpression;
 @end
 
 @interface LeftSCommandNode : Node
-@property VariableNode *stringVariable;
-@property Node *numberExpression;
-@property Node *srcStringExpression;
+@property (nonatomic) VariableNode *stringVariable;
+@property (nonatomic) Node *numberExpression;
+@property (nonatomic) Node *srcStringExpression;
 @end
 
 @interface RightSCommandNode : Node
-@property VariableNode *stringVariable;
-@property Node *numberExpression;
-@property Node *srcStringExpression;
+@property (nonatomic) VariableNode *stringVariable;
+@property (nonatomic) Node *numberExpression;
+@property (nonatomic) Node *srcStringExpression;
 @end
 
 @interface MidCommandNode : Node
-@property VariableNode *stringVariable;
-@property Node *positionExpression;
-@property Node *numberExpression;
-@property Node *srcStringExpression;
+@property (nonatomic) VariableNode *stringVariable;
+@property (nonatomic) Node *positionExpression;
+@property (nonatomic) Node *numberExpression;
+@property (nonatomic) Node *srcStringExpression;
 @end
 
 @interface DirectionPadNode : Node
-@property TType type;
-@property Node *portExpression;
+@property (nonatomic) TType type;
+@property (nonatomic) Node *portExpression;
 @end
 
 @interface ButtonNode : Node
-@property Node *portExpression;
-@property Node *buttonExpression;
-@property BOOL tap;
+@property (nonatomic) Node *portExpression;
+@property (nonatomic) Node *buttonExpression;
+@property (nonatomic) BOOL tap;
 @end
 
 @interface PointNode : Node
-@property Node *xExpression;
-@property Node *yExpression;
+@property (nonatomic) Node *xExpression;
+@property (nonatomic) Node *yExpression;
 @end
 
 @interface TextWidthNode : Node
-@property Node *valueExpression;
+@property (nonatomic) Node *valueExpression;
 @end
 
 @interface SpriteValueNode : Node
-@property unichar type;
-@property Node *nExpression;
+@property (nonatomic) unichar type;
+@property (nonatomic) Node *nExpression;
 @end
 
 @interface SpriteHitNode : Node
-@property Node *nExpression;
-@property Node *otherNExpression;
-@property Node *lastNExpression;
+@property (nonatomic) Node *nExpression;
+@property (nonatomic) Node *otherNExpression;
+@property (nonatomic) Node *lastNExpression;
 @end
 
 @interface Maths0Node : Node
-@property TType type;
+@property (nonatomic) TType type;
 @end
 
 @interface Maths1Node : Node
-@property TType type;
-@property Node *xExpression;
+@property (nonatomic) TType type;
+@property (nonatomic) Node *xExpression;
 @end
 
 @interface Maths2Node : Node
-@property TType type;
-@property Node *xExpression;
-@property Node *yExpression;
+@property (nonatomic) TType type;
+@property (nonatomic) Node *xExpression;
+@property (nonatomic) Node *yExpression;
 @end
 
 @interface String0Node : Node
-@property TType type;
+@property (nonatomic) TType type;
 @end
 
 @interface LeftSNode : Node
-@property Node *stringExpression;
-@property Node *numberExpression;
+@property (nonatomic) Node *stringExpression;
+@property (nonatomic) Node *numberExpression;
 @end
 
 @interface RightSNode : Node
-@property Node *stringExpression;
-@property Node *numberExpression;
+@property (nonatomic) Node *stringExpression;
+@property (nonatomic) Node *numberExpression;
 @end
 
 @interface MidNode : Node
-@property Node *stringExpression;
-@property Node *positionExpression;
-@property Node *numberExpression;
+@property (nonatomic) Node *stringExpression;
+@property (nonatomic) Node *positionExpression;
+@property (nonatomic) Node *numberExpression;
 @end
 
 @interface InstrNode : Node
-@property Node *stringExpression;
-@property Node *searchExpression;
-@property Node *positionExpression;
+@property (nonatomic) Node *stringExpression;
+@property (nonatomic) Node *searchExpression;
+@property (nonatomic) Node *positionExpression;
 @end
 
 @interface ChrNode : Node
-@property Node *asciiExpression;
+@property (nonatomic) Node *asciiExpression;
 @end
 
 @interface AscNode : Node
-@property Node *stringExpression;
+@property (nonatomic) Node *stringExpression;
 @end
 
 @interface LenNode : Node
-@property Node *stringExpression;
+@property (nonatomic) Node *stringExpression;
 @end
 
 @interface ValNode : Node
-@property Node *stringExpression;
+@property (nonatomic) Node *stringExpression;
 @end
 
 @interface StrNode : Node
-@property Node *numberExpression;
+@property (nonatomic) Node *numberExpression;
 @end
 
 @interface HexNode : Node
-@property Node *numberExpression;
+@property (nonatomic) Node *numberExpression;
 @end
 
 @interface Operator2Node : Node
-@property TType type;
-@property Node *leftExpression;
-@property Node *rightExpression;
+@property (nonatomic) TType type;
+@property (nonatomic) Node *leftExpression;
+@property (nonatomic) Node *rightExpression;
 @end
 
 @interface Operator1Node : Node
-@property TType type;
-@property Node *expression;
+@property (nonatomic) TType type;
+@property (nonatomic) Node *expression;
 @end

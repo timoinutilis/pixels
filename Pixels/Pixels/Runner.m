@@ -24,6 +24,7 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
 @property NSMutableArray *gosubStack;
 @property BOOL dataTransferEnabled;
 @property NSTimeInterval timeWhenOnEndStarted;
+@property BOOL pauseJumpRequested;
 @end
 
 @implementation Runner
@@ -82,6 +83,15 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
     }
     else
     {
+        if (self.pauseJumpRequested)
+        {
+            self.pauseJumpRequested = NO;
+            if (self.currentOnPauseGoto)
+            {
+                [self gotoLabel:self.currentOnPauseGoto.label isGosub:NO atToken:self.currentOnPauseGoto.token];
+            }
+        }
+        
         Sequence *sequence = self.sequencesStack.lastObject;
         if (sequence.nodes.count > 0)
         {
@@ -223,7 +233,7 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
 {
     if (self.currentOnPauseGoto)
     {
-        [self gotoLabel:self.currentOnPauseGoto.label isGosub:NO atToken:self.currentOnPauseGoto.token];
+        self.pauseJumpRequested = YES;
         return YES;
     }
     return NO;
@@ -293,7 +303,7 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
         {
             stop = block();
         }
-    } while (time > 0 && (!self.endRequested || self.timeWhenOnEndStarted > 0) && !stop);
+    } while (time > 0 && !self.pauseJumpRequested && (!self.endRequested || self.timeWhenOnEndStarted > 0) && !stop);
 }
 
 @end

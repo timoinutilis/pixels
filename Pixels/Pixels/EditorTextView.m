@@ -33,7 +33,7 @@ NSString *EditorTextView_transferText;
     
     self.keys = @[@"=", @"<", @">", @"+", @"-", @"*", @"/", @"(", @")", @"\"", @"$", @":"];
     
-    if ([UITextInputAssistantItem class] && self.inputAssistantItem)
+    if ([UITextInputAssistantItem class] && [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
     {
         [self initShortcutsBar];
     }
