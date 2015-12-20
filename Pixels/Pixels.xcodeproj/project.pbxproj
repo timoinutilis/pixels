@@ -60,6 +60,8 @@
 		9276F39A1A1D289C0060E909 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9276F3991A1D289C0060E909 /* Images.xcassets */; };
 		9276F39D1A1D289C0060E909 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9276F39B1A1D289C0060E909 /* LaunchScreen.xib */; };
 		9276F3B41A1D29BF0060E909 /* Scanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 9276F3B31A1D29BF0060E909 /* Scanner.m */; };
+		927CF5A61C271F3E00C38BB5 /* BorderedButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 927CF5A51C271F3E00C38BB5 /* BorderedButton.m */; };
+		927CF5A71C271F3E00C38BB5 /* BorderedButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 927CF5A51C271F3E00C38BB5 /* BorderedButton.m */; };
 		927D345B1B1CB0D700967AE7 /* CommEditUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 927D345A1B1CB0D700967AE7 /* CommEditUserViewController.m */; };
 		928445F11B012CAE00203974 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 928445F01B012CAE00203974 /* AudioToolbox.framework */; };
 		928445F31B012CB800203974 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 928445F21B012CB800203974 /* CFNetwork.framework */; };
@@ -361,6 +363,8 @@
 		9276F3A81A1D289C0060E909 /* PixelsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PixelsTests.m; sourceTree = "<group>"; };
 		9276F3B21A1D29BF0060E909 /* Scanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scanner.h; sourceTree = "<group>"; };
 		9276F3B31A1D29BF0060E909 /* Scanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Scanner.m; sourceTree = "<group>"; };
+		927CF5A41C271F3E00C38BB5 /* BorderedButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BorderedButton.h; sourceTree = "<group>"; };
+		927CF5A51C271F3E00C38BB5 /* BorderedButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BorderedButton.m; sourceTree = "<group>"; };
 		927D34591B1CB0D700967AE7 /* CommEditUserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommEditUserViewController.h; sourceTree = "<group>"; };
 		927D345A1B1CB0D700967AE7 /* CommEditUserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommEditUserViewController.m; sourceTree = "<group>"; };
 		927E2FC81A72586E006C9B9C /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -626,6 +630,8 @@
 				92612CE31BD7A5F600370C82 /* IndexSideBar.m */,
 				92D6AD401BC29C4A001E5EED /* SearchToolbar.h */,
 				92D6AD411BC29C4A001E5EED /* SearchToolbar.m */,
+				927CF5A41C271F3E00C38BB5 /* BorderedButton.h */,
+				927CF5A51C271F3E00C38BB5 /* BorderedButton.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1199,6 +1205,7 @@
 				92884F191B0F25B30032623D /* MKAnnotationView+WebCache.m in Sources */,
 				9276F3B41A1D29BF0060E909 /* Scanner.m in Sources */,
 				92EDC4421A54701D007824A5 /* Gamepad.m in Sources */,
+				927CF5A61C271F3E00C38BB5 /* BorderedButton.m in Sources */,
 				927D345B1B1CB0D700967AE7 /* CommEditUserViewController.m in Sources */,
 				92E36D1C1ADD2D4300C16CBE /* AppStyle.m in Sources */,
 				925A01A91A1E67F900A321E6 /* Parser.m in Sources */,
@@ -1281,6 +1288,7 @@
 				929BCF221BB14A1B005F1DBD /* AFURLResponseSerialization.m in Sources */,
 				929BCF231BB14A1B005F1DBD /* TextLabel.m in Sources */,
 				929BCF241BB14A1B005F1DBD /* DayCodeManager.m in Sources */,
+				927CF5A71C271F3E00C38BB5 /* BorderedButton.m in Sources */,
 				929BCF251BB14A1B005F1DBD /* CommDetailViewController.m in Sources */,
 				929BCF261BB14A1B005F1DBD /* UIColor+Utils.m in Sources */,
 				92EC21291BE399B500072BE4 /* DraggableCollectionViewFlowLayout.m in Sources */,

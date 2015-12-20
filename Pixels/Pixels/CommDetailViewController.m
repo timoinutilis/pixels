@@ -38,9 +38,11 @@ static NSString *const SectionPosts = @"Posts";
 @property NSArray *sections;
 @property CommProfileCell *profileCell;
 @property CommWriteStatusCell *writeStatusCell;
+@property CommFilterCell *filterCell;
 @property ExtendedActivityIndicatorView *activityIndicator;
 @property BOOL userNeedsUpdate;
 @property BOOL showsUserUpdateActivity;
+@property LCCPostCategory filterCategory;
 
 @end
 
@@ -85,6 +87,7 @@ static NSString *const SectionPosts = @"Posts";
     
     self.writeStatusCell = [self.tableView dequeueReusableCellWithIdentifier:@"CommWriteStatusCell"];
     self.profileCell = [self.tableView dequeueReusableCellWithIdentifier:@"CommProfileCell"];
+    self.filterCell = [self.tableView dequeueReusableCellWithIdentifier:@"CommFilterCell"];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onFollowsChanged:) name:FollowsChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserChanged:) name:CurrentUserChangeNotification object:nil];
@@ -236,6 +239,10 @@ static NSString *const SectionPosts = @"Posts";
             {
                 PFQuery *query = [PFQuery queryWithClassName:[LCCPost parseClassName]];
                 [query whereKey:@"user" containedIn:followedUsers];
+                if (self.filterCategory != LCCPostCategoryUndefined)
+                {
+                    [query whereKey:@"category" equalTo:@(self.filterCategory)];
+                }
                 [query includeKey:@"sharedPost"];
                 [query includeKey:@"user"];
                 [query includeKey:@"stats"];
@@ -280,6 +287,10 @@ static NSString *const SectionPosts = @"Posts";
             
             PFQuery *query = [PFQuery queryWithClassName:[LCCPost parseClassName]];
             [query whereKey:@"user" equalTo:self.user];
+            if (self.filterCategory != LCCPostCategoryUndefined)
+            {
+                [query whereKey:@"category" equalTo:@(self.filterCategory)];
+            }
             [query includeKey:@"sharedPost"];
             [query includeKey:@"user"];
             [query includeKey:@"stats"];
@@ -427,6 +438,19 @@ static NSString *const SectionPosts = @"Posts";
     }
 }
 
+- (IBAction)onFilterChanged:(id)sender
+{
+    switch (self.filterCell.segmentedControl.selectedSegmentIndex)
+    {
+        case 0: self.filterCategory = LCCPostCategoryUndefined; break;
+        case 1: self.filterCategory = LCCPostCategoryGame; break;
+        case 2: self.filterCategory = LCCPostCategoryTool; break;
+        case 3: self.filterCategory = LCCPostCategoryDemo; break;
+        case 4: self.filterCategory = LCCPostCategoryStatus; break;
+    }
+    [self updateDataForceReload:NO];
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -454,7 +478,7 @@ static NSString *const SectionPosts = @"Posts";
     }
     else if (sectionId == SectionPosts)
     {
-        return self.posts.count;
+        return self.posts.count + 1; // posts + filter
     }
     return 0;
 }
@@ -529,13 +553,20 @@ static NSString *const SectionPosts = @"Posts";
     }
     else if (sectionId == SectionPosts)
     {
-        LCCPost *post = self.posts[indexPath.row];
-        NSString *cellType = (post.type == LCCPostTypeStatus) ? @"StatusCell" : @"ProgramCell";
-        CommPostCell *cell = [tableView dequeueReusableCellWithIdentifier:cellType forIndexPath:indexPath];
-        cell.showName = (self.mode == CommListModeNews);
-        cell.post = post;
-        cell.tag = CellTagPost;
-        return cell;
+        if (indexPath.row == 0)
+        {
+            return self.filterCell;
+        }
+        else
+        {
+            LCCPost *post = self.posts[indexPath.row - 1];
+            NSString *cellType = (post.type == LCCPostTypeStatus) ? @"StatusCell" : @"ProgramCell";
+            CommPostCell *cell = [tableView dequeueReusableCellWithIdentifier:cellType forIndexPath:indexPath];
+            cell.showName = (self.mode == CommListModeNews);
+            cell.post = post;
+            cell.tag = CellTagPost;
+            return cell;
+        }
     }
     return nil;
 }
@@ -560,7 +591,7 @@ static NSString *const SectionPosts = @"Posts";
         }
         case CellTagPost: {
             CommPostViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"CommPostView"];
-            LCCPost *post = self.posts[indexPath.row];
+            LCCPost *post = self.posts[indexPath.row - 1];
             if (post.type == LCCPostTypeShare)
             {
                 post.sharedPost.stats = post.stats;
@@ -699,6 +730,9 @@ static NSString *const SectionPosts = @"Posts";
     self.cycleManager = [[GORCycleManager alloc] initWithFields:@[self.titleTextField, self.textView]];
 }
 
+@end
+
+@implementation CommFilterCell
 @end
 
 @interface CommPostCell()

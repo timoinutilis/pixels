@@ -40,6 +40,10 @@ typedef NS_ENUM(NSInteger, CommListMode) {
 @property (weak, nonatomic) IBOutlet UILabel *detailPlaceholderLabel;
 @end
 
+@interface CommFilterCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
+@end
+
 @interface CommPostCell : UITableViewCell
 @property BOOL showName;
 @property (nonatomic) LCCPost *post;
