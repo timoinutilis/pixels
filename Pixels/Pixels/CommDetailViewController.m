@@ -30,6 +30,8 @@ static NSString *const SectionInfo = @"Info";
 static NSString *const SectionPostStatus = @"PostStatus";
 static NSString *const SectionPosts = @"Posts";
 
+static const NSInteger LIMIT = 10;
+
 @interface CommDetailViewController ()
 
 @property LCCUser *user;
@@ -38,11 +40,12 @@ static NSString *const SectionPosts = @"Posts";
 @property NSArray *sections;
 @property CommProfileCell *profileCell;
 @property CommWriteStatusCell *writeStatusCell;
-@property CommFilterCell *filterCell;
 @property ExtendedActivityIndicatorView *activityIndicator;
 @property BOOL userNeedsUpdate;
 @property BOOL showsUserUpdateActivity;
 @property LCCPostCategory filterCategory;
+@property BOOL hasMorePosts;
+@property BOOL isLoadingMore;
 
 @end
 
@@ -87,7 +90,6 @@ static NSString *const SectionPosts = @"Posts";
     
     self.writeStatusCell = [self.tableView dequeueReusableCellWithIdentifier:@"CommWriteStatusCell"];
     self.profileCell = [self.tableView dequeueReusableCellWithIdentifier:@"CommProfileCell"];
-    self.filterCell = [self.tableView dequeueReusableCellWithIdentifier:@"CommFilterCell"];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onFollowsChanged:) name:FollowsChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserChanged:) name:CurrentUserChangeNotification object:nil];
@@ -247,6 +249,7 @@ static NSString *const SectionPosts = @"Posts";
                 [query includeKey:@"user"];
                 [query includeKey:@"stats"];
                 [query orderByDescending:@"createdAt"];
+                query.limit = LIMIT;
                 query.cachePolicy = forceReload ? kPFCachePolicyNetworkOnly : kPFCachePolicyCacheElseNetwork;
                 query.maxCacheAge = MAX_CACHE_AGE;
                 
@@ -257,6 +260,7 @@ static NSString *const SectionPosts = @"Posts";
                     if (objects)
                     {
                         self.posts = [self filteredNewsWithPosts:objects];
+                        self.hasMorePosts = (objects.count == LIMIT);
                         if (forceReload)
                         {
                             [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:self.sections.count - 1] withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -295,6 +299,7 @@ static NSString *const SectionPosts = @"Posts";
             [query includeKey:@"user"];
             [query includeKey:@"stats"];
             [query orderByDescending:@"createdAt"];
+            query.limit = LIMIT;
             query.cachePolicy = forceReload ? kPFCachePolicyNetworkOnly : kPFCachePolicyCacheElseNetwork;;
             query.maxCacheAge = MAX_CACHE_AGE;
             
@@ -305,6 +310,7 @@ static NSString *const SectionPosts = @"Posts";
                 if (objects)
                 {
                     self.posts = [NSMutableArray arrayWithArray:objects];
+                    self.hasMorePosts = (objects.count == LIMIT);
                     if (forceReload)
                     {
                         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:self.sections.count - 1] withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -438,9 +444,9 @@ static NSString *const SectionPosts = @"Posts";
     }
 }
 
-- (IBAction)onFilterChanged:(id)sender
+- (IBAction)onFilterChanged:(UISegmentedControl *)sender
 {
-    switch (self.filterCell.segmentedControl.selectedSegmentIndex)
+    switch (sender.selectedSegmentIndex)
     {
         case 0: self.filterCategory = LCCPostCategoryUndefined; break;
         case 1: self.filterCategory = LCCPostCategoryGame; break;
@@ -478,7 +484,12 @@ static NSString *const SectionPosts = @"Posts";
     }
     else if (sectionId == SectionPosts)
     {
-        return self.posts.count + 1; // posts + filter
+        NSInteger num = self.posts.count + 1; // posts + filter
+        if (self.hasMorePosts)
+        {
+            num++; // "Loading more..." cell
+        }
+        return num;
     }
     return 0;
 }
@@ -555,7 +566,14 @@ static NSString *const SectionPosts = @"Posts";
     {
         if (indexPath.row == 0)
         {
-            return self.filterCell;
+            CommFilterCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommFilterCell" forIndexPath:indexPath];
+            cell.postCategory = self.filterCategory;
+            return cell;
+        }
+        else if (indexPath.row - 1 == self.posts.count)
+        {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"LoadingMoreCell" forIndexPath:indexPath];
+            return cell;
         }
         else
         {
@@ -604,6 +622,15 @@ static NSString *const SectionPosts = @"Posts";
             [self.navigationController pushViewController:vc animated:YES];
             break;
         }
+    }
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if (   self.hasMorePosts && !self.isLoadingMore
+        && scrollView.contentOffset.y >= scrollView.contentSize.height - scrollView.bounds.size.height - 80.0)
+    {
+        NSLog(@"more!");
     }
 }
 
@@ -733,6 +760,29 @@ static NSString *const SectionPosts = @"Posts";
 @end
 
 @implementation CommFilterCell
+
+- (void)setPostCategory:(LCCPostCategory)postCategory
+{
+    switch (postCategory)
+    {
+        case LCCPostCategoryUndefined:
+            self.segmentedControl.selectedSegmentIndex = 0;
+            break;
+        case LCCPostCategoryGame:
+            self.segmentedControl.selectedSegmentIndex = 1;
+            break;
+        case LCCPostCategoryTool:
+            self.segmentedControl.selectedSegmentIndex = 2;
+            break;
+        case LCCPostCategoryDemo:
+            self.segmentedControl.selectedSegmentIndex = 3;
+            break;
+        case LCCPostCategoryStatus:
+            self.segmentedControl.selectedSegmentIndex = 4;
+            break;
+    }
+}
+
 @end
 
 @interface CommPostCell()

@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "GORTextView.h"
+#import "LCCPost.h"
 
-@class LCCUser, LCCPost;
+@class LCCUser;
 
 typedef NS_ENUM(NSInteger, CommListMode) {
     CommListModeUndefined = 0,
@@ -42,6 +43,7 @@ typedef NS_ENUM(NSInteger, CommListMode) {
 
 @interface CommFilterCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
+- (void) setPostCategory:(LCCPostCategory)postCategory;
 @end
 
 @interface CommPostCell : UITableViewCell
