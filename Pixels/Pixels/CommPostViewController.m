@@ -61,7 +61,6 @@ typedef NS_ENUM(NSInteger, CellTag) {
     self.navigationItem.rightBarButtonItems = items;
 
     self.tableView.rowHeight = UITableViewAutomaticDimension;
-    self.tableView.estimatedRowHeight = 62;
     
     if (!SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"9.0"))
     {
@@ -551,7 +550,24 @@ typedef NS_ENUM(NSInteger, CellTag) {
     }];
 }
 
-#pragma mark - Table view data source
+#pragma mark - Table view
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 0 && indexPath.row == 0)
+    {
+        return 259;
+    }
+    else if (indexPath.section == 1)
+    {
+        return 91;
+    }
+    else if (indexPath.section == 2)
+    {
+        return 126;
+    }
+    return 44;
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {

@@ -44,8 +44,9 @@ static const NSInteger LIMIT = 10;
 @property BOOL userNeedsUpdate;
 @property BOOL showsUserUpdateActivity;
 @property LCCPostCategory filterCategory;
+@property PFQuery *currentQuery;
 @property BOOL hasMorePosts;
-@property BOOL isLoadingMore;
+@property BOOL isLoading;
 
 @end
 
@@ -75,7 +76,6 @@ static const NSInteger LIMIT = 10;
         self.navigationItem.rightBarButtonItems = @[activityItem];
     }
     
-    self.tableView.estimatedRowHeight = 72;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     
     if (!SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"9.0"))
@@ -239,44 +239,9 @@ static const NSInteger LIMIT = 10;
             NSArray *followedUsers = [[CommunityModel sharedInstance] arrayWithFollowedUsers];
             if (followedUsers.count > 0)
             {
-                PFQuery *query = [PFQuery queryWithClassName:[LCCPost parseClassName]];
-                [query whereKey:@"user" containedIn:followedUsers];
-                if (self.filterCategory != LCCPostCategoryUndefined)
-                {
-                    [query whereKey:@"category" equalTo:@(self.filterCategory)];
-                }
-                [query includeKey:@"sharedPost"];
-                [query includeKey:@"user"];
-                [query includeKey:@"stats"];
-                [query orderByDescending:@"createdAt"];
-                query.limit = LIMIT;
-                query.cachePolicy = forceReload ? kPFCachePolicyNetworkOnly : kPFCachePolicyCacheElseNetwork;
-                query.maxCacheAge = MAX_CACHE_AGE;
-                
-                [self.activityIndicator increaseActivity];
-                [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-                    
-                    [self.activityIndicator decreaseActivity];
-                    if (objects)
-                    {
-                        self.posts = [self filteredNewsWithPosts:objects];
-                        self.hasMorePosts = (objects.count == LIMIT);
-                        if (forceReload)
-                        {
-                            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:self.sections.count - 1] withRowAnimation:UITableViewRowAnimationAutomatic];
-                        }
-                        else
-                        {
-                            [self.tableView reloadData];
-                        }
-                    }
-                    else if (error)
-                    {
-                        [self showAlertWithTitle:@"Could not load news" message:error.userInfo[@"error"] block:nil];
-                    }
-                    [self.refreshControl endRefreshing];
-                    
-                }];
+                self.currentQuery = [self createQueryWithForceReload:forceReload];
+                [self.currentQuery whereKey:@"user" containedIn:followedUsers];
+                [self loadCurrentQuery];
             }
             else
             {
@@ -289,49 +254,77 @@ static const NSInteger LIMIT = 10;
             self.title = self.user.username;
             self.sections = [self.user isMe] ? @[SectionInfo, SectionPostStatus, SectionPosts] : @[SectionInfo, SectionPosts];
             
-            PFQuery *query = [PFQuery queryWithClassName:[LCCPost parseClassName]];
-            [query whereKey:@"user" equalTo:self.user];
-            if (self.filterCategory != LCCPostCategoryUndefined)
-            {
-                [query whereKey:@"category" equalTo:@(self.filterCategory)];
-            }
-            [query includeKey:@"sharedPost"];
-            [query includeKey:@"user"];
-            [query includeKey:@"stats"];
-            [query orderByDescending:@"createdAt"];
-            query.limit = LIMIT;
-            query.cachePolicy = forceReload ? kPFCachePolicyNetworkOnly : kPFCachePolicyCacheElseNetwork;;
-            query.maxCacheAge = MAX_CACHE_AGE;
-            
-            [self.activityIndicator increaseActivity];
-            [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-                
-                [self.activityIndicator decreaseActivity];
-                if (objects)
-                {
-                    self.posts = [NSMutableArray arrayWithArray:objects];
-                    self.hasMorePosts = (objects.count == LIMIT);
-                    if (forceReload)
-                    {
-                        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:self.sections.count - 1] withRowAnimation:UITableViewRowAnimationAutomatic];
-                    }
-                    else
-                    {
-                        [self.tableView reloadData];
-                    }
-                }
-                else if (error)
-                {
-                    [self showAlertWithTitle:@"Could not load posts" message:error.userInfo[@"error"] block:nil];
-                }
-                [self.refreshControl endRefreshing];
-                
-            }];
+            self.currentQuery = [self createQueryWithForceReload:forceReload];
+            [self.currentQuery whereKey:@"user" equalTo:self.user];
+            [self loadCurrentQuery];
             break;
         }
         case CommListModeUndefined:
             break;
     }
+}
+
+- (PFQuery *)createQueryWithForceReload:(BOOL)forceReload
+{
+    PFQuery *query = [PFQuery queryWithClassName:[LCCPost parseClassName]];
+    if (self.filterCategory != LCCPostCategoryUndefined)
+    {
+        [query whereKey:@"category" equalTo:@(self.filterCategory)];
+    }
+    [query includeKey:@"sharedPost"];
+    [query includeKey:@"user"];
+    [query includeKey:@"stats"];
+    [query orderByDescending:@"createdAt"];
+    query.limit = LIMIT;
+    query.cachePolicy = forceReload ? kPFCachePolicyNetworkOnly : kPFCachePolicyCacheElseNetwork;;
+    query.maxCacheAge = MAX_CACHE_AGE;
+    return query;
+}
+
+- (void)loadCurrentQuery
+{
+    self.isLoading = YES;
+    BOOL forcedReload = (self.currentQuery.cachePolicy == kPFCachePolicyNetworkOnly);
+    BOOL add = (self.currentQuery.skip > 0);
+    [self.activityIndicator increaseActivity];
+    [self.currentQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        
+        [self.activityIndicator decreaseActivity];
+        if (objects)
+        {
+            if (add)
+            {
+                [self.posts addObjectsFromArray:objects];
+            }
+            else
+            {
+                self.posts = [NSMutableArray arrayWithArray:objects];
+            }
+            
+            if (self.mode == CommListModeNews)
+            {
+                self.posts = [self filteredNewsWithPosts:self.posts];
+            }
+            
+            self.hasMorePosts = (objects.count == LIMIT);
+            self.currentQuery.skip += LIMIT; // for next load
+            if (forcedReload && !add)
+            {
+                [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:self.sections.count - 1] withRowAnimation:UITableViewRowAnimationAutomatic];
+            }
+            else
+            {
+                [self.tableView reloadData];
+            }
+        }
+        else if (error)
+        {
+            [self showAlertWithTitle:@"Could not load posts" message:error.userInfo[@"error"] block:nil];
+        }
+        [self.refreshControl endRefreshing];
+        self.isLoading = NO;
+        
+    }];
 }
 
 - (NSMutableArray *)filteredNewsWithPosts:(NSArray *)objects
@@ -425,7 +418,7 @@ static const NSInteger LIMIT = 10;
                 self.writeStatusCell.textView.text = @"";
                 
                 [self.posts insertObject:post atIndex:0];
-                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:2];
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:2];
                 [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
                 
                 NSDictionary *dimensions = @{@"category": [post categoryString],
@@ -457,7 +450,25 @@ static const NSInteger LIMIT = 10;
     [self updateDataForceReload:NO];
 }
 
-#pragma mark - Table view data source
+#pragma mark - Table view
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSString *sectionId = self.sections[indexPath.section];
+    if (sectionId == SectionInfo && indexPath.row == 0)
+    {
+        return 122;
+    }
+    else if (sectionId == SectionPostStatus)
+    {
+        return 132;
+    }
+    else if (sectionId == SectionPosts)
+    {
+        return 84;
+    }
+    return 44;
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -627,10 +638,10 @@ static const NSInteger LIMIT = 10;
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if (   self.hasMorePosts && !self.isLoadingMore
+    if (   self.hasMorePosts && !self.isLoading
         && scrollView.contentOffset.y >= scrollView.contentSize.height - scrollView.bounds.size.height - 80.0)
     {
-        NSLog(@"more!");
+        [self loadCurrentQuery];
     }
 }
 
