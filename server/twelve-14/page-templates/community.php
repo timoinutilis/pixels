@@ -67,7 +67,6 @@ get_header(); ?>
 			<form method="GET" action="lowrescoder://">
 				<input type="hidden" name="lccpost" value="<?php echo $lccPost->getObjectId(); ?>">
 				<input type="submit" value="Open in App">
-				(Button requires LowRes Coder 3.2)
 			</form>
 		</p>
 
