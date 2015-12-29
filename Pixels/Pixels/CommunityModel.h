@@ -14,12 +14,15 @@
 #import "LCCFollow.h"
 #import "LCCCount.h"
 #import "LCCPostStats.h"
+#import "LCCNotification.h"
 
 extern NSString *const CurrentUserChangeNotification;
 extern NSString *const FollowsChangeNotification;
 extern NSString *const PostDeleteNotification;
 extern NSString *const PostCounterChangeNotification;
 extern NSString *const UserUpdateNotification;
+extern NSString *const NotificationsUpdateNotification;
+extern NSString *const NotificationsNumChangeNotification;
 
 extern NSString *const UserDefaultsLogInKey;
 
@@ -33,6 +36,9 @@ typedef NS_ENUM(NSInteger, StatsType) {
 
 @property (readonly) NSMutableArray *follows;
 @property (readonly) BOOL isUpdatingUser;
+@property (readonly) NSArray <LCCNotification *> *notifications;
+@property (readonly) BOOL isUpdatingNotifications;
+@property (readonly, nonatomic) NSInteger numNewNotifications;
 
 + (CommunityModel *)sharedInstance;
 + (void)registerSubclasses;
@@ -49,5 +55,8 @@ typedef NS_ENUM(NSInteger, StatsType) {
 - (NSArray *)arrayWithFollowedUsers;
 - (void)countPost:(LCCPost *)post type:(StatsType)type;
 - (void)trackEvent:(NSString *)name forPost:(LCCPost *)post;
+
+- (void)loadNotifications;
+- (void)onOpenNotifications;
 
 @end

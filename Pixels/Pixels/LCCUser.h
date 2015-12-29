@@ -14,6 +14,7 @@ extern NSString *const LowResNewsUserIDKey;
 
 @property (retain) NSString *about;
 @property (retain) NSDate *lastPostDate;
+@property (retain) NSDate *notificationsOpenedDate;
 
 - (BOOL)isMe;
 - (BOOL)isNewsUser;

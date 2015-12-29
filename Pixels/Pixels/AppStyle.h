@@ -15,6 +15,7 @@
 + (UIColor *)barColor;
 + (UIColor *)tintColor;
 + (UIColor *)darkTintColor;
++ (UIColor *)brightTintColor;
 + (UIColor *)darkColor;
 + (UIColor *)brightColor;
 + (UIColor *)editorColor;

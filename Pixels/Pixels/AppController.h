@@ -17,7 +17,6 @@ typedef NS_ENUM(NSInteger, PurchaseState) {
 };
 
 extern NSString *const PurchaseStateNotification;
-extern NSString *const NewsNotification;
 extern NSString *const ShowPostNotification;
 extern NSString *const UpgradeNotification;
 
@@ -34,7 +33,6 @@ extern NSString *const UpgradeNotification;
 @property (readonly) SKProduct *fullVersionProduct;
 @property (readonly) NSInteger numProgramsOpened;
 @property BOOL shouldShowTransferAlert;
-@property (nonatomic) NSInteger numNews;
 @property NSString *shouldShowPostId;
 @property RPPreviewViewController *replayPreviewViewController;
 @property (readonly) CFAbsoluteTime bootTime;

@@ -65,6 +65,11 @@
     return [UIColor colorWithHex:0x05ad96 alpha:1.0f];
 }
 
++ (UIColor *)brightTintColor
+{
+    return [UIColor colorWithHex:0xb8f4ec alpha:1.0f];
+}
+
 + (UIColor *)darkColor
 {
     return [UIColor colorWithHex:0x000222 alpha:1.0f];

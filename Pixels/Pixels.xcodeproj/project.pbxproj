@@ -239,6 +239,10 @@
 		92C081541B0DF1900006331B /* LCCPost.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C081531B0DF1900006331B /* LCCPost.m */; };
 		92C0815A1B0E021A0006331B /* CommPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C081591B0E021A0006331B /* CommPostViewController.m */; };
 		92C135D31B81D95100E9F5A4 /* NSMutableDictionary+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C135D21B81D95100E9F5A4 /* NSMutableDictionary+Utils.m */; };
+		92C6C9111C2DC2440030D8AA /* NotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C6C9101C2DC2440030D8AA /* NotificationsViewController.m */; };
+		92C6C9121C2DC2440030D8AA /* NotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C6C9101C2DC2440030D8AA /* NotificationsViewController.m */; };
+		92C6C9151C2DC4BC0030D8AA /* LCCNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C6C9141C2DC4BC0030D8AA /* LCCNotification.m */; };
+		92C6C9161C2DC4BC0030D8AA /* LCCNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C6C9141C2DC4BC0030D8AA /* LCCNotification.m */; };
 		92C98F421A20F2F000215AE9 /* Node.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C98F411A20F2F000215AE9 /* Node.m */; };
 		92D2C2021B13442A00539BA6 /* CommUsersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D2C2011B13442A00539BA6 /* CommUsersViewController.m */; };
 		92D518B91A6975C10000F917 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D518B81A6975C10000F917 /* AboutViewController.m */; };
@@ -475,6 +479,10 @@
 		92C081591B0E021A0006331B /* CommPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommPostViewController.m; sourceTree = "<group>"; };
 		92C135D11B81D95100E9F5A4 /* NSMutableDictionary+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSMutableDictionary+Utils.h"; path = "Class Utils/NSMutableDictionary+Utils.h"; sourceTree = "<group>"; };
 		92C135D21B81D95100E9F5A4 /* NSMutableDictionary+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSMutableDictionary+Utils.m"; path = "Class Utils/NSMutableDictionary+Utils.m"; sourceTree = "<group>"; };
+		92C6C90F1C2DC2440030D8AA /* NotificationsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationsViewController.h; sourceTree = "<group>"; };
+		92C6C9101C2DC2440030D8AA /* NotificationsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationsViewController.m; sourceTree = "<group>"; };
+		92C6C9131C2DC4BC0030D8AA /* LCCNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCNotification.h; sourceTree = "<group>"; };
+		92C6C9141C2DC4BC0030D8AA /* LCCNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCNotification.m; sourceTree = "<group>"; };
 		92C98F401A20F2F000215AE9 /* Node.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Node.h; sourceTree = "<group>"; };
 		92C98F411A20F2F000215AE9 /* Node.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Node.m; sourceTree = "<group>"; };
 		92D2C2001B13442A00539BA6 /* CommUsersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommUsersViewController.h; sourceTree = "<group>"; };
@@ -672,6 +680,8 @@
 				92884F2A1B0F307F0032623D /* CommSourceCodeViewController.m */,
 				92D2C2001B13442A00539BA6 /* CommUsersViewController.h */,
 				92D2C2011B13442A00539BA6 /* CommUsersViewController.m */,
+				92C6C90F1C2DC2440030D8AA /* NotificationsViewController.h */,
+				92C6C9101C2DC2440030D8AA /* NotificationsViewController.m */,
 				927D34591B1CB0D700967AE7 /* CommEditUserViewController.h */,
 				927D345A1B1CB0D700967AE7 /* CommEditUserViewController.m */,
 				92C081171B0DD9490006331B /* CommLogInViewController.h */,
@@ -957,6 +967,8 @@
 				925935A61B1B80C9001CE0B1 /* LCCCount.m */,
 				9254DF5E1B628A3C00774E98 /* LCCPostStats.h */,
 				9254DF5F1B628A3C00774E98 /* LCCPostStats.m */,
+				92C6C9131C2DC4BC0030D8AA /* LCCNotification.h */,
+				92C6C9141C2DC4BC0030D8AA /* LCCNotification.m */,
 			);
 			name = "Community Model";
 			sourceTree = "<group>";
@@ -1201,6 +1213,7 @@
 				9276F3921A1D289C0060E909 /* AppDelegate.m in Sources */,
 				92C0815A1B0E021A0006331B /* CommPostViewController.m in Sources */,
 				92D2C2021B13442A00539BA6 /* CommUsersViewController.m in Sources */,
+				92C6C9111C2DC2440030D8AA /* NotificationsViewController.m in Sources */,
 				92B60FE31AC024250011233B /* GameButton.m in Sources */,
 				92884F191B0F25B30032623D /* MKAnnotationView+WebCache.m in Sources */,
 				9276F3B41A1D29BF0060E909 /* Scanner.m in Sources */,
@@ -1209,6 +1222,7 @@
 				927D345B1B1CB0D700967AE7 /* CommEditUserViewController.m in Sources */,
 				92E36D1C1ADD2D4300C16CBE /* AppStyle.m in Sources */,
 				925A01A91A1E67F900A321E6 /* Parser.m in Sources */,
+				92C6C9151C2DC4BC0030D8AA /* LCCNotification.m in Sources */,
 				92F0C36D1B3EBF6D00000646 /* Compiler.m in Sources */,
 				9293D46D1B219BCC009A156B /* ExtendedActivityIndicatorView.m in Sources */,
 				924F832C1B0B5B6E00B96C91 /* CommMasterViewController.m in Sources */,
@@ -1293,6 +1307,7 @@
 				929BCF261BB14A1B005F1DBD /* UIColor+Utils.m in Sources */,
 				92EC21291BE399B500072BE4 /* DraggableCollectionViewFlowLayout.m in Sources */,
 				929BCF271BB14A1B005F1DBD /* LCCUser.m in Sources */,
+				92C6C9121C2DC2440030D8AA /* NotificationsViewController.m in Sources */,
 				929BCF281BB14A1B005F1DBD /* LCCComment.m in Sources */,
 				929BCF291BB14A1B005F1DBD /* BackgroundView.m in Sources */,
 				929BCF2A1BB14A1B005F1DBD /* Token.m in Sources */,
@@ -1364,6 +1379,7 @@
 				929BCF651BB14A1B005F1DBD /* LCCPostStats.m in Sources */,
 				929BCF661BB14A1B005F1DBD /* AFHTTPRequestOperationManager.m in Sources */,
 				929BCF671BB14A1B005F1DBD /* LCCCount.m in Sources */,
+				92C6C9161C2DC4BC0030D8AA /* LCCNotification.m in Sources */,
 				929BCF681BB14A1B005F1DBD /* Runner.m in Sources */,
 				929BCF691BB14A1B005F1DBD /* GORMenuTableViewController.m in Sources */,
 				929BCF6A1BB14A1B005F1DBD /* AudioPlayer.m in Sources */,

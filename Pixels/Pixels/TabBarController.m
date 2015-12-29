@@ -11,6 +11,7 @@
 #import "ExplorerViewController.h"
 #import "CommSplitViewController.h"
 #import "AppController.h"
+#import "CommunityModel.h"
 
 @interface TabBarController () <UITabBarDelegate>
 
@@ -52,13 +53,13 @@
     
     self.selectedIndex = 0;
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newsChanged:) name:NewsNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationsNumChanged:) name:NotificationsNumChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkShowPost:) name:ShowPostNotification object:nil];
 }
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:NewsNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:NotificationsNumChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:ShowPostNotification object:nil];
 }
 
@@ -105,18 +106,18 @@
     self.selectedViewController = self.viewControllers[_selectedIndex];
 }
 
-- (void)newsChanged:(NSNotification *)notification
+- (void)notificationsNumChanged:(NSNotification *)notification
 {
     [self updateCommunityBadge];
 }
 
 - (void)updateCommunityBadge
 {
-    NSInteger numNews = [AppController sharedController].numNews;
+    NSInteger num = [CommunityModel sharedInstance].numNewNotifications;
     UITabBarItem *item = self.tabBar.items[TabIndexCommunity];
-    if (numNews > 0)
+    if (num > 0)
     {
-        item.badgeValue = @(numNews).stringValue;
+        item.badgeValue = @(num).stringValue;
     }
     else
     {

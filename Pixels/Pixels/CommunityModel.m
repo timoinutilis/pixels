@@ -14,6 +14,8 @@ NSString *const FollowsChangeNotification = @"FollowsChangeNotification";
 NSString *const PostDeleteNotification = @"PostDeleteNotification";
 NSString *const PostCounterChangeNotification = @"PostCounterChangeNotification";
 NSString *const UserUpdateNotification = @"UserUpdateNotification";
+NSString *const NotificationsUpdateNotification = @"NotificationsUpdateNotification";
+NSString *const NotificationsNumChangeNotification = @"NotificationsNumChangeNotification";
 
 NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
 
@@ -38,20 +40,24 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
     [LCCFollow registerSubclass];
     [LCCCount registerSubclass];
     [LCCPostStats registerSubclass];
+    [LCCNotification registerSubclass];
 }
 
 - (void)onLoggedIn
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:CurrentUserChangeNotification object:self];
     [self updateCurrentUser];
+    [self loadNotifications];
 }
 
 - (void)onLoggedOut
 {
     [self.follows removeAllObjects];
+    _notifications = nil;
     
     [[NSNotificationCenter defaultCenter] postNotificationName:CurrentUserChangeNotification object:self];
     [self updateCurrentUser];
+    [self updateNewNotifications];
 }
 
 - (void)onUserDataChanged
@@ -260,6 +266,72 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
                                  @"category": [post categoryString]};
     
     [PFAnalytics trackEvent:name dimensions:dimensions];
+}
+
+- (void)loadNotifications
+{
+    if ([PFUser currentUser])
+    {
+        _isUpdatingNotifications = YES;
+        [[NSNotificationCenter defaultCenter] postNotificationName:NotificationsUpdateNotification object:self];
+        
+        PFQuery *query = [PFQuery queryWithClassName:[LCCNotification parseClassName]];
+        [query whereKey:@"recipient" equalTo:[PFUser currentUser]];
+        [query includeKey:@"sender"];
+        [query includeKey:@"post"];
+        [query orderByDescending:@"createdAt"];
+        query.cachePolicy = kPFCachePolicyNetworkOnly;
+        
+        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            
+            if (objects)
+            {
+                _notifications = objects;
+            }
+            _isUpdatingNotifications = NO;
+            [[NSNotificationCenter defaultCenter] postNotificationName:NotificationsUpdateNotification object:self];
+            [self updateNewNotifications];
+            
+        }];
+    }
+}
+
+- (void)updateNewNotifications
+{
+    NSInteger num = 0;
+    LCCUser *user = (LCCUser *)[PFUser currentUser];
+    if (user)
+    {
+        NSDate *date = user.notificationsOpenedDate ? user.notificationsOpenedDate : [NSDate distantPast];
+        for (LCCNotification *notification in self.notifications)
+        {
+            if (notification.createdAt.timeIntervalSinceReferenceDate > date.timeIntervalSinceReferenceDate)
+            {
+                num++;
+            }
+        }
+    }
+    
+    if (num != _numNewNotifications)
+    {
+        _numNewNotifications = num;
+        [[NSNotificationCenter defaultCenter] postNotificationName:NotificationsNumChangeNotification object:self];
+    }
+}
+
+- (void)onOpenNotifications
+{
+    LCCUser *user = (LCCUser *)[PFUser currentUser];
+    if (user && self.notifications.count > 0)
+    {
+        LCCNotification *newestNotification = self.notifications.firstObject;
+        if (newestNotification.createdAt.timeIntervalSinceReferenceDate > user.notificationsOpenedDate.timeIntervalSinceReferenceDate)
+        {
+            user.notificationsOpenedDate = newestNotification.createdAt;
+            [user saveInBackground];
+            [self updateNewNotifications];
+        }
+    }
 }
 
 @end

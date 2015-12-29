@@ -3,7 +3,9 @@ var Program = Parse.Object.extend("Program");
 var Comment = Parse.Object.extend("Comment");
 var Count = Parse.Object.extend("Count");
 var PostStats = Parse.Object.extend("PostStats");
+var Notification = Parse.Object.extend("Notification");
 
+var NotificationTypeComment = 0;
 
 function getAppVersion(request) {
   var promise = new Parse.Promise();
@@ -129,7 +131,6 @@ Parse.Cloud.afterSave("Comment", function(request) {
   post.fetch().then(function() {
 
     return getAppVersion(request).then(function(appVersion) {
-      console.log("appVersion " + appVersion);
       if (appVersion != 0 && appVersion < 19) {
         return increasePostStats(post, "numComments");
       }
@@ -169,8 +170,45 @@ Parse.Cloud.afterSave("Comment", function(request) {
               }
             }
 
+            var notifications = [];
+            for (var i = 0; i < commenters.length; i++) {
+              var notification = new Notification();
+              notification.set("type", NotificationTypeComment);
+              notification.set("sender", user);
+              notification.set("recipient", commenters[i]);
+              notification.set("post", post);
+              notifications.push(notification);
+            }
+
+            return Parse.Object.saveAll(notifications).then(function() {
+              var pushQuery = new Parse.Query(Parse.Installation);
+              pushQuery.containedIn('user', commenters);
+
+              return Parse.Push.send({
+                where: pushQuery,
+                data: {
+                  alert: alertText,
+                  badge: "Increment",
+                  lrcPostId: post.id
+                }
+              });
+            });
+
+          });
+
+        } else {
+          // commented on other post, notify post owner
+
+          var notification = new Notification();
+          notification.set("type", NotificationTypeComment);
+          notification.set("sender", user);
+          notification.set("recipient", postOwner);
+          notification.set("post", post);
+
+          return notification.save().then(function() {
+
             var pushQuery = new Parse.Query(Parse.Installation);
-            pushQuery.containedIn('user', commenters);
+            pushQuery.equalTo('user', postOwner);
 
             return Parse.Push.send({
               where: pushQuery,
@@ -180,25 +218,11 @@ Parse.Cloud.afterSave("Comment", function(request) {
                 lrcPostId: post.id
               }
             });
-          });
 
-        } else {
-          // commented on other post, notify post owner
-
-          var pushQuery = new Parse.Query(Parse.Installation);
-          pushQuery.equalTo('user', postOwner);
-
-          return Parse.Push.send({
-            where: pushQuery,
-            data: {
-              alert: alertText,
-              badge: "Increment",
-              lrcPostId: post.id
-            }
           });
         }
+
       });
-    
     }
 
   }, function(error) {

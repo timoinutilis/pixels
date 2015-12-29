@@ -17,6 +17,7 @@
 typedef NS_ENUM(NSInteger, CellTag) {
     CellTagNews,
     CellTagAccount,
+    CellTagNotifications,
     CellTagLogIn,
     CellTagLogOut,
     CellTagFollowing
@@ -42,6 +43,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserChanged:) name:CurrentUserChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onFollowsChanged:) name:FollowsChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNotificationsNumChanged:) name:NotificationsNumChangeNotification object:nil];
     
     self.newsIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     self.currentSelection = self.newsIndexPath;
@@ -53,6 +55,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:CurrentUserChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:FollowsChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:NotificationsNumChangeNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -94,6 +97,11 @@ typedef NS_ENUM(NSInteger, CellTag) {
     [self showCurrentSelection];
 }
 
+- (void)onNotificationsNumChanged:(NSNotification *)notification
+{
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -118,7 +126,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
 {
     if (section == 0)
     {
-        return 1;
+        return [PFUser currentUser] ? 2 : 1;
     }
     else if (section == 1)
     {
@@ -138,9 +146,26 @@ typedef NS_ENUM(NSInteger, CellTag) {
     
     if (indexPath.section == 0)
     {
-        cell = [tableView dequeueReusableCellWithIdentifier:@"MenuCell" forIndexPath:indexPath];
-        cell.textLabel.text = @"News";
-        cell.tag = CellTagNews;
+        if (indexPath.row == 0)
+        {
+            cell = [tableView dequeueReusableCellWithIdentifier:@"MenuCell" forIndexPath:indexPath];
+            cell.textLabel.text = @"News";
+            cell.tag = CellTagNews;
+        }
+        else if (indexPath.row == 1)
+        {
+            cell = [tableView dequeueReusableCellWithIdentifier:@"NotificationsCell" forIndexPath:indexPath];
+            NSInteger num = [CommunityModel sharedInstance].numNewNotifications;
+            if (num > 0)
+            {
+                cell.textLabel.text = [NSString stringWithFormat:@"Notifications (%ld)", (long)num];
+            }
+            else
+            {
+                cell.textLabel.text = @"Notifications";
+            }
+            cell.tag = CellTagNotifications;
+        }
     }
     else if (indexPath.section == 1)
     {

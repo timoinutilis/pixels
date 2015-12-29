@@ -33,9 +33,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    // reset app icon badge
-    [AppController sharedController].numNews = 0;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -65,9 +62,6 @@
         
         UINavigationController *nav = (UINavigationController *)self.viewControllers.lastObject;
         [nav pushViewController:vc animated:YES];
-        
-        // reset app icon badge
-        [AppController sharedController].numNews = 0;
     }
 }
 

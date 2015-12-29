@@ -20,7 +20,6 @@ NSString *const NumProgramsOpenedKey = @"NumProgramsOpened";
 NSString *const ErrorKey = @"Error";
 
 NSString *const PurchaseStateNotification = @"PurchaseStateNotification";
-NSString *const NewsNotification = @"NewsNotification";
 NSString *const ShowPostNotification = @"ShowPostNotification";
 NSString *const UpgradeNotification = @"UpgradeNotification";
 
@@ -218,28 +217,6 @@ NSString *const UpgradeNotification = @"UpgradeNotification";
     [application registerForRemoteNotifications];
 }
 
-- (NSInteger)numNews
-{
-    PFInstallation *installation = [PFInstallation currentInstallation];
-    NSInteger numNews = installation.badge;
-    return numNews;
-}
-
-- (void)setNumNews:(NSInteger)numNews
-{
-    if (numNews != self.numNews)
-    {
-        PFInstallation *installation = [PFInstallation currentInstallation];
-        if (numNews != installation.badge)
-        {
-            installation.badge = numNews;
-            [installation saveEventually];
-        }
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:NewsNotification object:self];
-    }
-}
-
 - (void)storeError:(NSError *)error message:(NSString *)message
 {
     NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
@@ -265,10 +242,9 @@ NSString *const UpgradeNotification = @"UpgradeNotification";
     NSString *alertText = aps[@"alert"];
     NSNumber *badge = aps[@"badge"];
     
-    if (badge)
+    if (badge) //TODO check with new notifications
     {
         [UIApplication sharedApplication].applicationIconBadgeNumber = badge.integerValue;
-        [[NSNotificationCenter defaultCenter] postNotificationName:NewsNotification object:self];
     }
     
     [PFQuery clearAllCachedResults];
