@@ -291,7 +291,6 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
             
             if (objects)
             {
-                NSLog(@"read %d notifications", (int)objects.count);
                 if (_notifications)
                 {
                     [_notifications insertObjects:objects atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, objects.count)]];

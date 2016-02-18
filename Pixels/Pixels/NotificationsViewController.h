@@ -8,6 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+@class LCCNotification;
+
 @interface NotificationsViewController : UITableViewController
 
+@end
+
+@interface NotificationCell : UITableViewCell
+@property (nonatomic) LCCNotification *notification;
+@property (nonatomic) BOOL isUnread;
 @end

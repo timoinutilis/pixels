@@ -30,7 +30,7 @@ static NSString *const SectionInfo = @"Info";
 static NSString *const SectionPostStatus = @"PostStatus";
 static NSString *const SectionPosts = @"Posts";
 
-static const NSInteger LIMIT = 10;
+static const NSInteger LIMIT = 50;
 
 @interface CommDetailViewController ()
 

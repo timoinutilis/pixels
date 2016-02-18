@@ -26,6 +26,13 @@ typedef NS_ENUM(NSInteger, CellTag) {
     CellTagComment
 };
 
+typedef NS_ENUM(NSInteger, Section) {
+    SectionTitle,
+    SectionComments,
+    SectionWriteComment,
+    Section_count
+};
+
 @interface CommPostViewController ()
 @property LCCPost *post;
 @property NSMutableArray *comments;
@@ -554,15 +561,15 @@ typedef NS_ENUM(NSInteger, CellTag) {
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0 && indexPath.row == 0)
+    if (indexPath.section == SectionTitle && indexPath.row == 0)
     {
         return 259;
     }
-    else if (indexPath.section == 1)
+    else if (indexPath.section == SectionComments)
     {
         return 91;
     }
-    else if (indexPath.section == 2)
+    else if (indexPath.section == SectionWriteComment)
     {
         return 126;
     }
@@ -572,13 +579,13 @@ typedef NS_ENUM(NSInteger, CellTag) {
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return ([self.post isDataAvailable] ? 3 : 0);
+    return ([self.post isDataAvailable] ? Section_count : 0);
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    if (section == 0)
+    if (section == SectionTitle)
     {
         NSInteger num = (self.post.type == LCCPostTypeProgram ? 3 : 2);
         if ([self.post.user isMe])
@@ -587,11 +594,11 @@ typedef NS_ENUM(NSInteger, CellTag) {
         }
         return num;
     }
-    else if (section == 1)
+    else if (section == SectionComments)
     {
         return self.comments.count;
     }
-    else if (section == 2)
+    else if (section == SectionWriteComment)
     {
         return 1;
     }
@@ -600,15 +607,15 @@ typedef NS_ENUM(NSInteger, CellTag) {
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (section == 0)
+    if (section == SectionTitle)
     {
         return (self.post.type == LCCPostTypeProgram ? [self.post categoryString] : @"Status Update");
     }
-    else if (section == 1)
+    else if (section == SectionComments)
     {
         return (self.isLoadingComments) ? @"Loading Comments..." : (self.comments.count > 0) ? @"Comments" : @"No Comments Yet";
     }
-    else if (section == 2)
+    else if (section == SectionWriteComment)
     {
         NSString *name = ([PFUser currentUser] ? [PFUser currentUser].username : @"Guest");
         return [NSString stringWithFormat:@"Write a Comment (as %@)", name];
@@ -618,7 +625,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0)
+    if (indexPath.section == SectionTitle)
     {
         if (indexPath.row == 0)
         {
@@ -647,7 +654,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
             return cell;
         }
     }
-    else if (indexPath.section == 1)
+    else if (indexPath.section == SectionComments)
     {
         LCCComment *comment = self.comments[indexPath.row];
         CommentCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommentCell" forIndexPath:indexPath];
@@ -671,7 +678,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
         cell.dateLabel.text = [NSString stringWithFormat:@"%@ - %@", name, [NSDateFormatter localizedStringFromDate:comment.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle]];
         return cell;
     }
-    else if (indexPath.section == 2)
+    else if (indexPath.section == SectionWriteComment)
     {
         return self.writeCommentCell;
     }

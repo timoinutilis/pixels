@@ -38,6 +38,9 @@
 {
     [super viewDidLoad];
     
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = 63;
+    
     UIBarButtonItem *activityItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
     self.navigationItem.rightBarButtonItem = activityItem;
     
@@ -96,40 +99,11 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"NotificationCell" forIndexPath:indexPath];
+    NotificationCell *cell = [tableView dequeueReusableCellWithIdentifier:@"NotificationCell" forIndexPath:indexPath];
     
     LCCNotification *notification = self.notifications[indexPath.row];
-    
-    NSString *text;
-    NSString *name = (notification.sender != nil) ? notification.sender.username : @"A guest";
-    switch (notification.type)
-    {
-        case LCCNotificationTypeComment:
-            text = [NSString stringWithFormat:@"%@ commented on '%@'", name, notification.post.title];
-            break;
-
-        case LCCNotificationTypeLike:
-            text = [NSString stringWithFormat:@"%@ likes '%@'", name, notification.post.title];
-            break;
-
-        case LCCNotificationTypeShare:
-            text = [NSString stringWithFormat:@"%@ shared '%@'", name, notification.post.title];
-            break;
-
-        case LCCNotificationTypeFollow:
-            text = [NSString stringWithFormat:@"%@ follows you", name];
-            break;
-            
-        default:
-            text = @"Unknown notification";
-            break;
-    }
-    
-    BOOL unread = (notification.createdAt.timeIntervalSinceReferenceDate > self.unreadDate.timeIntervalSinceReferenceDate);
-    
-    cell.textLabel.text = text;
-    cell.detailTextLabel.text = [NSDateFormatter localizedStringFromDate:notification.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
-    cell.backgroundColor = unread ? [AppStyle brightTintColor] : [AppStyle brightColor];
+    cell.notification = notification;
+    cell.isUnread = (notification.createdAt.timeIntervalSinceReferenceDate > self.unreadDate.timeIntervalSinceReferenceDate);
     
     return cell;
 }
@@ -160,6 +134,63 @@
             [tableView deselectRowAtIndexPath:indexPath animated:YES];
             break;
     }
+}
+
+@end
+
+
+@interface NotificationCell()
+@property (weak, nonatomic) IBOutlet UITextView *textView;
+@property (weak, nonatomic) IBOutlet UILabel *dateLabel;
+@end
+
+@implementation NotificationCell
+
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    self.textView.textContainer.lineFragmentPadding = 0;
+    self.textView.textContainerInset = UIEdgeInsetsZero;
+}
+
+- (void)setNotification:(LCCNotification *)notification
+{
+    _notification = notification;
+    
+    NSString *text;
+    NSString *name = (notification.sender != nil) ? notification.sender.username : @"A guest";
+    switch (notification.type)
+    {
+        case LCCNotificationTypeComment:
+            text = [NSString stringWithFormat:@"%@ commented on '%@'", name, notification.post.title];
+            break;
+            
+        case LCCNotificationTypeLike:
+            text = [NSString stringWithFormat:@"%@ likes '%@'", name, notification.post.title];
+            break;
+            
+        case LCCNotificationTypeShare:
+            text = [NSString stringWithFormat:@"%@ shared '%@'", name, notification.post.title];
+            break;
+            
+        case LCCNotificationTypeFollow:
+            text = [NSString stringWithFormat:@"%@ follows you", name];
+            break;
+            
+        default:
+            text = @"Unknown notification";
+            break;
+    }
+    
+    self.textView.text = text;
+    self.textView.font = [UIFont systemFontOfSize:16];
+    self.dateLabel.text = [NSDateFormatter localizedStringFromDate:notification.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
+}
+
+- (void)setIsUnread:(BOOL)isUnread
+{
+    _isUnread = isUnread;
+    self.backgroundColor = isUnread ? [AppStyle brightTintColor] : [AppStyle brightColor];
 }
 
 @end
