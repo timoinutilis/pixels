@@ -214,7 +214,6 @@ NSString *const UpgradeNotification = @"UpgradeNotification";
     UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
     UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes categories:nil];
     [application registerUserNotificationSettings:settings];
-    [application registerForRemoteNotifications];
 }
 
 - (void)storeError:(NSError *)error message:(NSString *)message
@@ -240,12 +239,6 @@ NSString *const UpgradeNotification = @"UpgradeNotification";
     NSString *postId = userInfo[@"lrcPostId"];
     NSDictionary *aps = userInfo[@"aps"];
     NSString *alertText = aps[@"alert"];
-    NSNumber *badge = aps[@"badge"];
-    
-    if (badge) //TODO check with new notifications
-    {
-        [UIApplication sharedApplication].applicationIconBadgeNumber = badge.integerValue;
-    }
     
     [PFQuery clearAllCachedResults];
     

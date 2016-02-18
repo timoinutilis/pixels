@@ -11,6 +11,7 @@
 #import "UIViewController+LowResCoder.h"
 #import "UIViewController+CommUtils.h"
 #import "CommPostViewController.h"
+#import "CommDetailViewController.h"
 #import "AppStyle.h"
 
 @interface NotificationsViewController ()
@@ -100,10 +101,23 @@
     LCCNotification *notification = self.notifications[indexPath.row];
     
     NSString *text;
+    NSString *name = (notification.sender != nil) ? notification.sender.username : @"A guest";
     switch (notification.type)
     {
         case LCCNotificationTypeComment:
-            text = [NSString stringWithFormat:@"%@ commented on '%@'", notification.sender.username, notification.post.title];
+            text = [NSString stringWithFormat:@"%@ commented on '%@'", name, notification.post.title];
+            break;
+
+        case LCCNotificationTypeLike:
+            text = [NSString stringWithFormat:@"%@ likes '%@'", name, notification.post.title];
+            break;
+
+        case LCCNotificationTypeShare:
+            text = [NSString stringWithFormat:@"%@ shared '%@'", name, notification.post.title];
+            break;
+
+        case LCCNotificationTypeFollow:
+            text = [NSString stringWithFormat:@"%@ follows you", name];
             break;
             
         default:
@@ -133,6 +147,15 @@
             break;
         }
             
+        case LCCNotificationTypeLike:
+        case LCCNotificationTypeShare:
+        case LCCNotificationTypeFollow: {
+            CommDetailViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"CommDetailView"];
+            [vc setUser:notification.sender mode:CommListModeProfile];
+            [self.navigationController pushViewController:vc animated:YES];
+            break;
+        }
+        
         default:
             [tableView deselectRowAtIndexPath:indexPath animated:YES];
             break;

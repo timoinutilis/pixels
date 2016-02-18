@@ -270,7 +270,7 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
 
 - (void)loadNotifications
 {
-    if ([PFUser currentUser])
+    if ([PFUser currentUser] && !self.isUpdatingNotifications)
     {
         _isUpdatingNotifications = YES;
         [[NSNotificationCenter defaultCenter] postNotificationName:NotificationsUpdateNotification object:self];
@@ -280,13 +280,26 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
         [query includeKey:@"sender"];
         [query includeKey:@"post"];
         [query orderByDescending:@"createdAt"];
+        if (_notifications.count > 0)
+        {
+            LCCNotification *lastNotification = _notifications.firstObject;
+            [query whereKey:@"createdAt" greaterThan:lastNotification.createdAt];
+        }
         query.cachePolicy = kPFCachePolicyNetworkOnly;
         
         [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
             
             if (objects)
             {
-                _notifications = objects;
+                NSLog(@"read %d notifications", (int)objects.count);
+                if (_notifications)
+                {
+                    [_notifications insertObjects:objects atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, objects.count)]];
+                }
+                else
+                {
+                    _notifications = objects.mutableCopy;
+                }
             }
             _isUpdatingNotifications = NO;
             [[NSNotificationCenter defaultCenter] postNotificationName:NotificationsUpdateNotification object:self];

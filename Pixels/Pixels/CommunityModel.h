@@ -36,7 +36,7 @@ typedef NS_ENUM(NSInteger, StatsType) {
 
 @property (readonly) NSMutableArray *follows;
 @property (readonly) BOOL isUpdatingUser;
-@property (readonly) NSArray <LCCNotification *> *notifications;
+@property (readonly) NSMutableArray <LCCNotification *> *notifications;
 @property (readonly) BOOL isUpdatingNotifications;
 @property (readonly, nonatomic) NSInteger numNewNotifications;
 

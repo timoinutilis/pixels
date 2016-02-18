@@ -6,51 +6,42 @@ var PostStats = Parse.Object.extend("PostStats");
 var Notification = Parse.Object.extend("Notification");
 
 var NotificationTypeComment = 0;
+var NotificationTypeLike = 1;
+var NotificationTypeShare = 2;
+var NotificationTypeFollow = 3;
 
-function getAppVersion(request) {
-  var promise = new Parse.Promise();
-  if (request.installationId) {
-    var query = new Parse.Query(Parse.Installation);
-    query.equalTo('installationId', request.installationId);
-    query.first({'useMasterKey': true}).then(function(result) {
-      var appVersion = parseInt(result.get('appVersion'));
-      promise.resolve(appVersion);
+var CountTypeLike = 1;
+var CountTypeDownload = 2;
+
+var PostTypeProgram = 1;
+var PostTypeStatus = 2;
+var PostTypeShare = 3;
+
+
+Parse.Cloud.afterSave("Post", function(request) {
+
+  var user = request.object.get('user');
+  var type = request.object.get('type');
+  var sharedPost = request.object.get('sharedPost');
+
+  if (type == PostTypeShare) {
+
+    sharedPost.fetch().then(function() {
+
+      var notification = new Notification();
+      notification.set("type", NotificationTypeShare);
+      notification.set("sender", user);
+      notification.set("recipient", sharedPost.get('user'));
+      notification.set("post", sharedPost);
+      notification.save();
+
     }, function(error) {
-      console.error("getAppVersion: " + error.message);
-      promise.resolve(0);
+
+      // there was some error.
+      console.error("afterSave(Post): " + error.message);
+
     });
-  } else {
-    promise.resolve(0);
-  }
-  return promise;
-}
 
-// obsolete since app version 19 (4.0)
-function increasePostStats(post, key) {
-  var stats = post.get("stats");
-  if (!stats) {
-    stats = new PostStats();
-    stats.increment(key);
-    post.set("stats", stats);
-    return post.save();
-  }
-  stats.increment(key);
-  return stats.save();
-}
-
-Parse.Cloud.beforeSave("Post", function(request, response) {
-
-  // create Stats object if not there yet
-  if (!request.object.get("stats")) {
-    var stats = new PostStats();
-    request.object.set("stats", stats);
-    stats.save().then(function () {
-      response.success();
-    }, function (error) {
-      response.error("beforeSave(Post): " + error.message);
-    });
-  } else {
-    response.success();
   }
 
 });
@@ -129,14 +120,6 @@ Parse.Cloud.afterSave("Comment", function(request) {
   }
 
   post.fetch().then(function() {
-
-    return getAppVersion(request).then(function(appVersion) {
-      if (appVersion != 0 && appVersion < 19) {
-        return increasePostStats(post, "numComments");
-      }
-    });
-
-  }).then(function() {
 
     if (user) {
 
@@ -237,27 +220,42 @@ Parse.Cloud.afterSave("Comment", function(request) {
 
 Parse.Cloud.afterSave("Count", function(request) {
 
-  getAppVersion(request).then(function(appVersion) {
+    var type = request.object.get('type');
+    var user = request.object.get('user');
+    var post = request.object.get('post');
 
-    console.log("appVersion " + appVersion);
-    if (appVersion != 0 && appVersion < 19) {
-
-      var post = request.object.get('post');
-      var type = request.object.get('type');
-
-      var incKey;
-      if (type == 1) {
-        incKey = "numLikes";
-      } else if (type == 2) {
-        incKey = "numDownloads";
-      }
+    if (type == CountTypeLike) {
 
       post.fetch().then(function() {
 
-        return increasePostStats(post, incKey);
+        var notification = new Notification();
+        notification.set("type", NotificationTypeLike);
+        notification.set("sender", user);
+        notification.set("recipient", post.get('user'));
+        notification.set("post", post);
+        return notification.save();
+
+      }, function(error) {
+
+        // there was some error.
+        console.error("afterSave(Count): " + error.message);
 
       });
+      
     }
-  });
+
+});
+
+
+Parse.Cloud.afterSave("Follow", function(request) {
+
+  var user = request.object.get('user');
+  var followsUser = request.object.get('followsUser');
+
+  var notification = new Notification();
+  notification.set("type", NotificationTypeFollow);
+  notification.set("sender", user);
+  notification.set("recipient", followsUser);
+  notification.save();
 
 });

@@ -9,7 +9,10 @@
 #import <Parse/Parse.h>
 
 typedef NS_ENUM(NSInteger, LCCNotificationType) {
-    LCCNotificationTypeComment
+    LCCNotificationTypeComment,
+    LCCNotificationTypeLike,
+    LCCNotificationTypeShare,
+    LCCNotificationTypeFollow
 };
 
 @class LCCUser, LCCPost;
