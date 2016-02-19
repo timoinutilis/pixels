@@ -190,7 +190,16 @@
 - (void)setIsUnread:(BOOL)isUnread
 {
     _isUnread = isUnread;
-    self.backgroundColor = isUnread ? [AppStyle brightTintColor] : [AppStyle brightColor];
+    if (isUnread)
+    {
+        self.backgroundColor = [AppStyle brightTintColor];
+        self.textView.backgroundColor = [AppStyle brightTintColor];
+    }
+    else
+    {
+        self.backgroundColor = [AppStyle brightColor];
+        self.textView.backgroundColor = [AppStyle brightColor];
+    }
 }
 
 @end

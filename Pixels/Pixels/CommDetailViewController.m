@@ -450,6 +450,30 @@ static const NSInteger LIMIT = 50;
     [self updateDataForceReload:NO];
 }
 
+- (void)deletePost:(LCCPost *)post indexPath:(NSIndexPath *)indexPath
+{
+    [self.activityIndicator increaseActivity];
+    self.view.userInteractionEnabled = NO;
+    
+    [post deleteInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+        
+        [self.activityIndicator decreaseActivity];
+        self.view.userInteractionEnabled = YES;
+        
+        if (succeeded)
+        {
+            [self.posts removeObject:post];
+            [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [PFQuery clearAllCachedResults];
+        }
+        else if (error)
+        {
+            [self showAlertWithTitle:@"Could not delete post." message:error.userInfo[@"error"] block:nil];
+        }
+        
+    }];
+}
+
 #pragma mark - Table view
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -633,6 +657,32 @@ static const NSInteger LIMIT = 50;
             [self.navigationController pushViewController:vc animated:YES];
             break;
         }
+    }
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSString *sectionId = self.sections[indexPath.section];
+    if (sectionId == SectionPosts && indexPath.row > 0)
+    {
+        LCCUser *user = (LCCUser *)[PFUser currentUser];
+        LCCPost *post = self.posts[indexPath.row - 1];
+        
+        if ([user isNewsUser] && post.type == LCCPostTypeShare && [post.user isMe])
+        {
+            return UITableViewCellEditingStyleDelete;
+        }
+    }
+    return UITableViewCellEditingStyleNone;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSString *sectionId = self.sections[indexPath.section];
+    if (sectionId == SectionPosts && indexPath.row > 0)
+    {
+        LCCPost *post = self.posts[indexPath.row - 1];
+        [self deletePost:post indexPath:indexPath];
     }
 }
 
