@@ -801,36 +801,49 @@
                                     </subviews>
                                 </tableViewCellContentView>
                             </tableViewCell>
-                            <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="CommentCell" rowHeight="91" id="gXP-zJ-Qos" customClass="CommentCell">
+                            <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="CommentCell" rowHeight="91" id="gXP-zJ-Qos" customClass="CommentCell">
                                 <rect key="frame" x="0.0" y="582" width="320" height="91"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" tableViewCell="gXP-zJ-Qos" id="PwZ-dw-rh7">
-                                    <rect key="frame" x="0.0" y="0.0" width="287" height="90"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="90"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" text="Text" translatesAutoresizingMaskIntoConstraints="NO" id="g1w-gs-Ym7">
-                                            <rect key="frame" x="15" y="10" width="264" height="49"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                        </textView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" verticalCompressionResistancePriority="749" text="00/00/2050" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ar0-tt-yim" customClass="TextLabel">
-                                            <rect key="frame" x="15" y="67" width="64" height="14"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="749" text="00/00/2050" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ar0-tt-yim">
+                                            <rect key="frame" x="241" y="12" width="64" height="14"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ULI-cw-dES">
+                                            <rect key="frame" x="15" y="4" width="38" height="29"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <state key="normal" title="Name"/>
+                                            <connections>
+                                                <action selector="onNameTapped:" destination="gXP-zJ-Qos" eventType="touchUpInside" id="fmr-aq-nil"/>
+                                            </connections>
+                                        </button>
+                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" text="Text" translatesAutoresizingMaskIntoConstraints="NO" id="g1w-gs-Ym7">
+                                            <rect key="frame" x="15" y="33" width="290" height="46"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                            <dataDetectorType key="dataDetectorTypes" link="YES"/>
+                                        </textView>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="ar0-tt-yim" firstAttribute="leading" secondItem="PwZ-dw-rh7" secondAttribute="leadingMargin" id="Iq1-Mp-3t2"/>
-                                        <constraint firstItem="g1w-gs-Ym7" firstAttribute="trailing" secondItem="PwZ-dw-rh7" secondAttribute="trailingMargin" id="WY8-Nm-YPW"/>
-                                        <constraint firstItem="ar0-tt-yim" firstAttribute="top" secondItem="g1w-gs-Ym7" secondAttribute="bottom" constant="8" id="ZwU-Fe-Nc8"/>
-                                        <constraint firstItem="g1w-gs-Ym7" firstAttribute="top" secondItem="PwZ-dw-rh7" secondAttribute="topMargin" id="esE-so-auy"/>
-                                        <constraint firstItem="g1w-gs-Ym7" firstAttribute="leading" secondItem="PwZ-dw-rh7" secondAttribute="leadingMargin" id="iey-K9-7HF"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="ar0-tt-yim" secondAttribute="bottom" id="u55-0H-Klj"/>
+                                        <constraint firstItem="g1w-gs-Ym7" firstAttribute="top" secondItem="ULI-cw-dES" secondAttribute="bottom" id="2h4-O1-6Xu"/>
+                                        <constraint firstItem="ar0-tt-yim" firstAttribute="centerY" secondItem="ULI-cw-dES" secondAttribute="centerY" id="MZt-mD-x48"/>
+                                        <constraint firstItem="g1w-gs-Ym7" firstAttribute="leading" secondItem="PwZ-dw-rh7" secondAttribute="leadingMargin" id="OfR-tK-jJg"/>
+                                        <constraint firstItem="ar0-tt-yim" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="ULI-cw-dES" secondAttribute="trailing" priority="749" constant="8" id="Pqb-ux-OYC"/>
+                                        <constraint firstItem="ar0-tt-yim" firstAttribute="trailing" secondItem="PwZ-dw-rh7" secondAttribute="trailingMargin" id="cHu-67-r2B"/>
+                                        <constraint firstItem="ULI-cw-dES" firstAttribute="top" secondItem="PwZ-dw-rh7" secondAttribute="top" constant="4" id="eKh-kI-mX9"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="g1w-gs-Ym7" secondAttribute="bottom" constant="2" id="l2P-Fu-OIy"/>
+                                        <constraint firstItem="g1w-gs-Ym7" firstAttribute="trailing" secondItem="PwZ-dw-rh7" secondAttribute="trailingMargin" id="or7-pA-YwW"/>
+                                        <constraint firstItem="ULI-cw-dES" firstAttribute="leading" secondItem="PwZ-dw-rh7" secondAttribute="leadingMargin" id="yRo-l9-qV5"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="dateLabel" destination="ar0-tt-yim" id="8Du-HL-x7E"/>
+                                    <outlet property="nameButton" destination="ULI-cw-dES" id="fiZ-Uh-hKY"/>
                                     <outlet property="textView" destination="g1w-gs-Ym7" id="pd6-xw-Wtl"/>
                                 </connections>
                             </tableViewCell>

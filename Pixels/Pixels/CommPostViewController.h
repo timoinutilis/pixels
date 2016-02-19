@@ -13,7 +13,7 @@ typedef NS_ENUM(NSInteger, CommPostMode) {
     CommPostModePost
 };
 
-@class LCCPost;
+@class LCCPost, LCCComment;
 
 @interface CommPostViewController : UITableViewController
 
@@ -33,8 +33,8 @@ typedef NS_ENUM(NSInteger, CommPostMode) {
 @end
 
 @interface CommentCell : UITableViewCell
-@property (weak, nonatomic) IBOutlet UITextView *textView;
-@property (weak, nonatomic) IBOutlet UILabel *dateLabel;
+@property (weak) CommPostViewController *delegate;
+@property (nonatomic) LCCComment *comment;
 @end
 
 @interface WriteCommentCell : UITableViewCell

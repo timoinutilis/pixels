@@ -22,8 +22,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
     CellTagNoAction,
     CellTagSourceCode,
     CellTagPostAuthor,
-    CellTagDelete,
-    CellTagComment
+    CellTagDelete
 };
 
 typedef NS_ENUM(NSInteger, Section) {
@@ -557,6 +556,13 @@ typedef NS_ENUM(NSInteger, Section) {
     }];
 }
 
+- (void)showUser:(LCCUser *)user
+{
+    CommDetailViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"CommDetailView"];
+    [vc setUser:user mode:CommListModeProfile];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
 #pragma mark - Table view
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -567,7 +573,7 @@ typedef NS_ENUM(NSInteger, Section) {
     }
     else if (indexPath.section == SectionComments)
     {
-        return 91;
+        return 66;
     }
     else if (indexPath.section == SectionWriteComment)
     {
@@ -656,26 +662,9 @@ typedef NS_ENUM(NSInteger, Section) {
     }
     else if (indexPath.section == SectionComments)
     {
-        LCCComment *comment = self.comments[indexPath.row];
         CommentCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommentCell" forIndexPath:indexPath];
-        cell.textView.text = comment.text;
-        
-        NSString *name;
-        if (comment.user)
-        {
-            name = comment.user.username;
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            cell.selectionStyle = UITableViewCellSelectionStyleDefault;
-            cell.tag = CellTagComment;
-        }
-        else
-        {
-            name = @"Guest";
-            cell.accessoryType = UITableViewCellAccessoryNone;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.tag = CellTagNoAction;
-        }
-        cell.dateLabel.text = [NSString stringWithFormat:@"%@ - %@", name, [NSDateFormatter localizedStringFromDate:comment.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle]];
+        cell.delegate = self;
+        cell.comment = self.comments[indexPath.row];
         return cell;
     }
     else if (indexPath.section == SectionWriteComment)
@@ -708,9 +697,7 @@ typedef NS_ENUM(NSInteger, Section) {
         case CellTagPostAuthor: {
             if ([self.post.user isDataAvailable])
             {
-                CommDetailViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"CommDetailView"];
-                [vc setUser:self.post.user mode:CommListModeProfile];
-                [self.navigationController pushViewController:vc animated:YES];
+                [self showUser:self.post.user];
             }
             else
             {
@@ -731,12 +718,6 @@ typedef NS_ENUM(NSInteger, Section) {
             [self presentViewController:alert animated:YES completion:nil];
             [tableView deselectRowAtIndexPath:indexPath animated:YES];
             break;
-        }
-        case CellTagComment: {
-            LCCComment *comment = self.comments[indexPath.row];
-            CommDetailViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"CommDetailView"];
-            [vc setUser:comment.user mode:CommListModeProfile];
-            [self.navigationController pushViewController:vc animated:YES];
         }
         default:
             break;
@@ -836,6 +817,13 @@ typedef NS_ENUM(NSInteger, Section) {
 
 @end
 
+
+@interface CommentCell()
+@property (weak, nonatomic) IBOutlet UIButton *nameButton;
+@property (weak, nonatomic) IBOutlet UITextView *textView;
+@property (weak, nonatomic) IBOutlet UILabel *dateLabel;
+@end
+
 @implementation CommentCell
 
 - (void)awakeFromNib
@@ -843,6 +831,29 @@ typedef NS_ENUM(NSInteger, Section) {
     [super awakeFromNib];
     self.textView.textContainer.lineFragmentPadding = 0;
     self.textView.textContainerInset = UIEdgeInsetsZero;
+    self.tag = CellTagNoAction;
+}
+
+- (void)setComment:(LCCComment *)comment
+{
+    _comment = comment;
+    if (comment.user)
+    {
+        [self.nameButton setTitle:comment.user.username forState:UIControlStateNormal];
+        self.nameButton.enabled = YES;
+    }
+    else
+    {
+        [self.nameButton setTitle:@"Guest" forState:UIControlStateNormal];
+        self.nameButton.enabled = NO;
+    }
+    self.dateLabel.text = [NSDateFormatter localizedStringFromDate:comment.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
+    self.textView.text = comment.text;
+}
+
+- (IBAction)onNameTapped:(id)sender
+{
+    [self.delegate showUser:self.comment.user];
 }
 
 @end
