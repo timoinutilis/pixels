@@ -312,6 +312,7 @@ static const NSInteger LIMIT = 50;
             self.currentQuery.skip += LIMIT; // for next load
             if (forcedReload && !add)
             {
+                [self updateVisiblePosts];
                 [self.tableView reloadDataAnimatedWithOldArray:oldPosts newArray:self.posts inSection:self.sections.count - 1 offset:1];
             }
             else
@@ -327,6 +328,25 @@ static const NSInteger LIMIT = 50;
         self.isLoading = NO;
         
     }];
+}
+
+- (void)updateVisiblePosts
+{
+    NSArray *cells = self.tableView.visibleCells;
+    for (CommPostCell *cell in cells)
+    {
+        if ([cell isKindOfClass:[CommPostCell class]])
+        {
+            for (LCCPost *post in self.posts)
+            {
+                if ([post.objectId isEqualToString:cell.post.objectId])
+                {
+                    [cell setStats:post.stats];
+                    break;
+                }
+            }
+        }
+    }
 }
 
 - (NSMutableArray *)filteredNewsWithPosts:(NSArray *)objects
@@ -891,34 +911,39 @@ static const NSInteger LIMIT = 50;
     [infos addObject:date];
     self.dateLabel.text = [infos componentsJoinedByString:@" - "];
     
-    if ([post.stats isDataAvailable])
+    [self setStats:post.stats];
+    
+    if (self.iconImageView)
     {
-        NSString *likesWord = post.stats.numLikes == 1 ? @"Like" : @"Likes";
-        NSString *downloadsWord = post.stats.numDownloads == 1 ? @"Download" : @"Downloads";
-        NSString *commentsWord = post.stats.numComments == 1 ? @"Comment" : @"Comments";
+        [self.iconImageView sd_setImageWithURL:[NSURL URLWithString:post.image.url]];
+    }
+}
+
+- (void)setStats:(LCCPostStats *)stats
+{
+    if ([stats isDataAvailable])
+    {
+        NSString *likesWord = stats.numLikes == 1 ? @"Like" : @"Likes";
+        NSString *downloadsWord = stats.numDownloads == 1 ? @"Download" : @"Downloads";
+        NSString *commentsWord = stats.numComments == 1 ? @"Comment" : @"Comments";
         
-        if (post.category == LCCPostCategoryStatus)
+        if (self.post.category == LCCPostCategoryStatus)
         {
             self.statsLabel.text = [NSString stringWithFormat:@"%d %@, %d %@",
-                                    post.stats.numLikes, likesWord,
-                                    post.stats.numComments, commentsWord];
+                                    stats.numLikes, likesWord,
+                                    stats.numComments, commentsWord];
         }
         else
         {
             self.statsLabel.text = [NSString stringWithFormat:@"%d %@, %d %@, %d %@",
-                                    post.stats.numLikes, likesWord,
-                                    post.stats.numDownloads, downloadsWord,
-                                    post.stats.numComments, commentsWord];
+                                    stats.numLikes, likesWord,
+                                    stats.numDownloads, downloadsWord,
+                                    stats.numComments, commentsWord];
         }
     }
     else
     {
         self.statsLabel.text = @" ";
-    }
-    
-    if (self.iconImageView)
-    {
-        [self.iconImageView sd_setImageWithURL:[NSURL URLWithString:post.image.url]];
     }
 }
 
