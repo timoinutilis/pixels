@@ -18,6 +18,7 @@
 #import "ExtendedActivityIndicatorView.h"
 #import "AppController.h"
 #import "GORCycleManager.h"
+#import "UITableView+Parse.h"
 
 typedef NS_ENUM(NSInteger, CellTag) {
     CellTagNoAction,
@@ -286,6 +287,7 @@ static const NSInteger LIMIT = 50;
     self.isLoading = YES;
     BOOL forcedReload = (self.currentQuery.cachePolicy == kPFCachePolicyNetworkOnly);
     BOOL add = (self.currentQuery.skip > 0);
+    NSArray *oldPosts = self.posts.copy;
     [self.activityIndicator increaseActivity];
     [self.currentQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         
@@ -310,7 +312,7 @@ static const NSInteger LIMIT = 50;
             self.currentQuery.skip += LIMIT; // for next load
             if (forcedReload && !add)
             {
-                [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:self.sections.count - 1] withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self.tableView reloadDataAnimatedWithOldArray:oldPosts newArray:self.posts inSection:self.sections.count - 1 offset:1];
             }
             else
             {

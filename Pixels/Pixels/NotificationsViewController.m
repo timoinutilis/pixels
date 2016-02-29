@@ -13,6 +13,7 @@
 #import "CommPostViewController.h"
 #import "CommDetailViewController.h"
 #import "AppStyle.h"
+#import "UITableView+Parse.h"
 
 @interface NotificationsViewController ()
 
@@ -46,7 +47,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNotificationsChanged:) name:NotificationsUpdateNotification object:nil];
     
-    self.notifications = [CommunityModel sharedInstance].notifications;
+    self.notifications = [CommunityModel sharedInstance].notifications.copy;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -71,8 +72,9 @@
     else
     {
         [self.activityIndicator stopAnimating];
-        self.notifications = [CommunityModel sharedInstance].notifications;
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+        NSArray *oldNotifications = self.notifications;
+        self.notifications = [CommunityModel sharedInstance].notifications.copy;
+        [self.tableView reloadDataAnimatedWithOldArray:oldNotifications newArray:self.notifications inSection:0 offset:0];
         [self.refreshControl endRefreshing];
         
         self.unreadDate = ((LCCUser *)[PFUser currentUser]).notificationsOpenedDate;
@@ -183,7 +185,6 @@
     }
     
     self.textView.text = text;
-    self.textView.font = [UIFont systemFontOfSize:16];
     self.dateLabel.text = [NSDateFormatter localizedStringFromDate:notification.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
 }
 
@@ -192,13 +193,11 @@
     _isUnread = isUnread;
     if (isUnread)
     {
-        self.backgroundColor = [AppStyle brightTintColor];
-        self.textView.backgroundColor = [AppStyle brightTintColor];
+        self.textView.font = [UIFont boldSystemFontOfSize:16];
     }
     else
     {
-        self.backgroundColor = [AppStyle brightColor];
-        self.textView.backgroundColor = [AppStyle brightColor];
+        self.textView.font = [UIFont systemFontOfSize:16];
     }
 }
 

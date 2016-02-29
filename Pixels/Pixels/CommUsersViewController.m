@@ -12,6 +12,7 @@
 #import "ExtendedActivityIndicatorView.h"
 #import "UIViewController+LowResCoder.h"
 #import "UIViewController+CommUtils.h"
+#import "UITableView+Parse.h"
 
 @interface CommUsersViewController ()
 
@@ -56,6 +57,8 @@
     self.mode = mode;
     
     [self updateDataForceReload:NO];
+    
+    self.title = (self.mode == CommUsersModeFollowers) ? @"Followers" : @"Following";
 }
 
 - (IBAction)onRefreshPulled:(id)sender
@@ -70,91 +73,62 @@
 
 - (void)updateDataForceReload:(BOOL)forceReload
 {
-    switch (self.mode)
+    NSArray *oldUsers = self.users.copy;
+    
+    PFQuery *query = [PFQuery queryWithClassName:[LCCFollow parseClassName]];
+    if (self.mode == CommUsersModeFollowers)
     {
-        case CommUsersModeFollowers: {
-            self.title = @"Followers";
-            
-            PFQuery *query = [PFQuery queryWithClassName:[LCCFollow parseClassName]];
-            [query whereKey:@"followsUser" equalTo:self.user];
-            [query includeKey:@"user"];
-            [query orderByDescending:@"createdAt"];
-            query.cachePolicy = forceReload ? kPFCachePolicyNetworkOnly : kPFCachePolicyCacheElseNetwork;
-            query.maxCacheAge = MAX_CACHE_AGE;
-            
-            [self.activityIndicator increaseActivity];
-            [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-                
-                [self.activityIndicator decreaseActivity];
-                if (objects)
-                {
-                    self.users = [NSMutableArray arrayWithCapacity:objects.count];
-                    for (LCCFollow *follow in objects)
-                    {
-                        [self.users addObject:follow.user];
-                    }
-                    if (forceReload)
-                    {
-                        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
-                    }
-                    else
-                    {
-                        [self.tableView reloadData];
-                    }
-                }
-                else if (error)
-                {
-                    [self showAlertWithTitle:@"Could not load users" message:error.userInfo[@"error"] block:nil];
-                }
-                [self.refreshControl endRefreshing];
-                
-            }];
-            break;
-        }
-        case CommUsersModeFollowing: {
-            self.title = @"Following";
-
-            PFQuery *query = [PFQuery queryWithClassName:[LCCFollow parseClassName]];
-            [query whereKey:@"user" equalTo:self.user];
-            [query includeKey:@"followsUser"];
-            [query orderByDescending:@"createdAt"];
-            query.cachePolicy = forceReload ? kPFCachePolicyNetworkOnly : kPFCachePolicyCacheElseNetwork;
-            query.maxCacheAge = MAX_CACHE_AGE;
-            
-            BOOL wasCached = query.hasCachedResult && !forceReload;
-            
-            [self.activityIndicator increaseActivity];
-            [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-                
-                [self.activityIndicator decreaseActivity];
-                if (objects)
-                {
-                    self.users = [NSMutableArray arrayWithCapacity:objects.count];
-                    for (LCCFollow *follow in objects)
-                    {
-                        [self.users addObject:follow.followsUser];
-                    }
-                    if (wasCached)
-                    {
-                        [self.tableView reloadData];
-                    }
-                    else
-                    {
-                        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
-                    }
-                }
-                else if (error)
-                {
-                    [self showAlertWithTitle:@"Could not load users" message:error.userInfo[@"error"] block:nil];
-                }
-                [self.refreshControl endRefreshing];
-                
-            }];
-            break;
-        }
-        case CommUsersModeUndefined:
-            break;
+        [query whereKey:@"followsUser" equalTo:self.user];
+        [query includeKey:@"user"];
     }
+    else
+    {
+        [query whereKey:@"user" equalTo:self.user];
+        [query includeKey:@"followsUser"];
+    }
+    [query orderByDescending:@"createdAt"];
+    query.cachePolicy = forceReload ? kPFCachePolicyNetworkOnly : kPFCachePolicyCacheElseNetwork;
+    query.maxCacheAge = MAX_CACHE_AGE;
+    
+    [self.activityIndicator increaseActivity];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        
+        [self.activityIndicator decreaseActivity];
+        if (objects)
+        {
+            self.users = [NSMutableArray arrayWithCapacity:objects.count];
+            
+            if (self.mode == CommUsersModeFollowers)
+            {
+                for (LCCFollow *follow in objects)
+                {
+                    [self.users addObject:follow.user];
+                }
+            }
+            else
+            {
+                for (LCCFollow *follow in objects)
+                {
+                    [self.users addObject:follow.followsUser];
+                }
+            }
+            
+            if (forceReload)
+            {
+                [self.tableView reloadDataAnimatedWithOldArray:oldUsers newArray:self.users inSection:0 offset:0];
+            }
+            else
+            {
+                [self.tableView reloadData];
+            }
+        }
+        else if (error)
+        {
+            [self showAlertWithTitle:@"Could not load users" message:error.userInfo[@"error"] block:nil];
+        }
+        [self.refreshControl endRefreshing];
+        
+    }];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

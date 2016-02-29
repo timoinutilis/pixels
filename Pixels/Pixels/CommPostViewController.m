@@ -17,6 +17,7 @@
 #import "ExtendedActivityIndicatorView.h"
 #import "NSString+Utils.h"
 #import "AppController.h"
+#import "UITableView+Parse.h"
 
 typedef NS_ENUM(NSInteger, CellTag) {
     CellTagNoAction,
@@ -262,6 +263,8 @@ typedef NS_ENUM(NSInteger, Section) {
     query.cachePolicy = forceReload ? kPFCachePolicyNetworkOnly : kPFCachePolicyCacheElseNetwork;
     query.maxCacheAge = MAX_CACHE_AGE;
     
+    NSArray *oldComments = self.comments.copy;
+    
     [self.activityIndicator increaseActivity];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         
@@ -279,7 +282,7 @@ typedef NS_ENUM(NSInteger, Section) {
         
         if (forceReload)
         {
-            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self.tableView reloadDataAnimatedWithOldArray:oldComments newArray:self.comments inSection:SectionComments offset:0];
         }
         else
         {

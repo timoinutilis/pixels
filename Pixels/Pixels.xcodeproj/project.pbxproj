@@ -244,6 +244,8 @@
 		92C6C9151C2DC4BC0030D8AA /* LCCNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C6C9141C2DC4BC0030D8AA /* LCCNotification.m */; };
 		92C6C9161C2DC4BC0030D8AA /* LCCNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C6C9141C2DC4BC0030D8AA /* LCCNotification.m */; };
 		92C98F421A20F2F000215AE9 /* Node.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C98F411A20F2F000215AE9 /* Node.m */; };
+		92D1F2A11C7CDDD40087FF8F /* UITableView+Parse.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D1F2A01C7CDDD40087FF8F /* UITableView+Parse.m */; };
+		92D1F2A21C7CDDD40087FF8F /* UITableView+Parse.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D1F2A01C7CDDD40087FF8F /* UITableView+Parse.m */; };
 		92D2C2021B13442A00539BA6 /* CommUsersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D2C2011B13442A00539BA6 /* CommUsersViewController.m */; };
 		92D518B91A6975C10000F917 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D518B81A6975C10000F917 /* AboutViewController.m */; };
 		92D6AD421BC29C4A001E5EED /* SearchToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 92D6AD411BC29C4A001E5EED /* SearchToolbar.m */; };
@@ -485,6 +487,8 @@
 		92C6C9141C2DC4BC0030D8AA /* LCCNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCNotification.m; sourceTree = "<group>"; };
 		92C98F401A20F2F000215AE9 /* Node.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Node.h; sourceTree = "<group>"; };
 		92C98F411A20F2F000215AE9 /* Node.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Node.m; sourceTree = "<group>"; };
+		92D1F29F1C7CDDD40087FF8F /* UITableView+Parse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+Parse.h"; sourceTree = "<group>"; };
+		92D1F2A01C7CDDD40087FF8F /* UITableView+Parse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+Parse.m"; sourceTree = "<group>"; };
 		92D2C2001B13442A00539BA6 /* CommUsersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommUsersViewController.h; sourceTree = "<group>"; };
 		92D2C2011B13442A00539BA6 /* CommUsersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommUsersViewController.m; sourceTree = "<group>"; };
 		92D518B71A6975C10000F917 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
@@ -709,6 +713,8 @@
 			children = (
 				926A6A161B1C929D00A85412 /* UIViewController+LowResCoder.h */,
 				926A6A171B1C929D00A85412 /* UIViewController+LowResCoder.m */,
+				92D1F29F1C7CDDD40087FF8F /* UITableView+Parse.h */,
+				92D1F2A01C7CDDD40087FF8F /* UITableView+Parse.m */,
 				927334991A2A457A00C89AF0 /* Main */,
 				9273349A1A2A458100C89AF0 /* Help */,
 				924F832D1B0B5B7800B96C91 /* Community */,
@@ -1206,6 +1212,7 @@
 				920E5E5E1B1324FE00071C6A /* LCCFollow.m in Sources */,
 				92884F2B1B0F307F0032623D /* CommSourceCodeViewController.m in Sources */,
 				929BCF131BB14800005F1DBD /* AFURLRequestSerialization.m in Sources */,
+				92D1F2A11C7CDDD40087FF8F /* UITableView+Parse.m in Sources */,
 				92B957021BBD912400699BFF /* HelpSplitViewController.m in Sources */,
 				92E53DF71A5B3A1D00FE9F91 /* GORTextView.m in Sources */,
 				920F55E91BE7D1DF00ABBE1E /* Project.m in Sources */,
@@ -1315,6 +1322,7 @@
 				929BCF2C1BB14A1B005F1DBD /* UIImage+MultiFormat.m in Sources */,
 				929BCF2D1BB14A1B005F1DBD /* UIImageView+HighlightedWebCache.m in Sources */,
 				929BCF2E1BB14A1B005F1DBD /* UIViewController+LowResCoder.m in Sources */,
+				92D1F2A21C7CDDD40087FF8F /* UITableView+Parse.m in Sources */,
 				929BCF2F1BB14A1B005F1DBD /* ActivityItemSource.m in Sources */,
 				929BCF301BB14A1B005F1DBD /* UIImage+GIF.m in Sources */,
 				929BCF311BB14A1B005F1DBD /* LCCProgram.m in Sources */,
