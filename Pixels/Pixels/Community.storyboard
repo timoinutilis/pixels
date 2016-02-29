@@ -718,6 +718,15 @@
                                                 <action selector="onLikeTapped:" destination="gW4-UF-hxM" eventType="touchUpInside" id="Nbv-gc-tIM"/>
                                             </connections>
                                         </button>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Njz-JT-CWn" customClass="BorderedButton">
+                                            <rect key="frame" x="265" y="145" width="40" height="30"/>
+                                            <state key="normal" title="Share">
+                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="onShareTapped:" destination="gW4-UF-hxM" eventType="touchUpInside" id="7Xu-og-d8B"/>
+                                            </connections>
+                                        </button>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="..." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lJr-EB-0vc" customClass="TextLabel">
                                             <rect key="frame" x="53" y="151" width="13" height="18"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
@@ -743,7 +752,9 @@
                                         </textView>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstItem="Njz-JT-CWn" firstAttribute="baseline" secondItem="uGU-lq-EKP" secondAttribute="baseline" id="46Q-zm-GAm"/>
                                         <constraint firstItem="uqv-4Z-KPJ" firstAttribute="trailing" secondItem="GK1-4b-TQJ" secondAttribute="trailingMargin" id="6Ai-uL-gDe"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="Njz-JT-CWn" secondAttribute="trailing" id="82L-En-KmE"/>
                                         <constraint firstItem="lJr-EB-0vc" firstAttribute="leading" secondItem="uGU-lq-EKP" secondAttribute="trailing" constant="8" id="8B1-5v-6o3"/>
                                         <constraint firstItem="lJr-EB-0vc" firstAttribute="baseline" secondItem="uGU-lq-EKP" secondAttribute="baseline" id="BnR-fR-Yx9"/>
                                         <constraint firstItem="GLR-jn-Yxy" firstAttribute="leading" secondItem="GK1-4b-TQJ" secondAttribute="leadingMargin" id="E1B-KS-b9e"/>
@@ -763,6 +774,7 @@
                                     <outlet property="detailTextView" destination="GLR-jn-Yxy" id="gMA-st-FxS"/>
                                     <outlet property="likeButton" destination="uGU-lq-EKP" id="eXV-G5-KCI"/>
                                     <outlet property="likeCountLabel" destination="lJr-EB-0vc" id="WSg-GX-zmW"/>
+                                    <outlet property="shareButton" destination="Njz-JT-CWn" id="xAE-08-dTA"/>
                                     <outlet property="titleTextView" destination="uqv-4Z-KPJ" id="cTh-oz-gAg"/>
                                 </connections>
                             </tableViewCell>

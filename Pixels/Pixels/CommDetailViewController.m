@@ -635,7 +635,8 @@ static const NSInteger LIMIT = 50;
         else
         {
             LCCPost *post = self.posts[indexPath.row - 1];
-            NSString *cellType = (post.type == LCCPostTypeStatus) ? @"StatusCell" : @"ProgramCell";
+            LCCPost *targetPost = post.sharedPost ? post.sharedPost : post;
+            NSString *cellType = (targetPost.type == LCCPostTypeStatus) ? @"StatusCell" : @"ProgramCell";
             CommPostCell *cell = [tableView dequeueReusableCellWithIdentifier:cellType forIndexPath:indexPath];
             cell.showName = (self.mode == CommListModeNews);
             cell.post = post;
