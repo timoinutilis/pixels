@@ -28,6 +28,7 @@
 #import "UITextView+Utils.h"
 #import "HelpContent.h"
 #import "IndexSideBar.h"
+#import "ProjectSettingsViewController.h"
 #import <ReplayKit/ReplayKit.h>
 
 int const EditorDemoMaxLines = 24;
@@ -432,7 +433,7 @@ typedef void(^InfoBlock)(void);
     }];
     [alert addAction:videoMenuAction];
     
-    UIAlertAction *renameAction = [UIAlertAction actionWithTitle:@"Rename" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+    UIAlertAction *renameAction = [UIAlertAction actionWithTitle:@"Rename / Change Icon" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
         [weakSelf onRenameTapped];
     }];
     [alert addAction:renameAction];
@@ -523,6 +524,14 @@ typedef void(^InfoBlock)(void);
     }
     else
     {
+        ProjectSettingsViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"ProjectSettingsView"];
+        vc.project = self.project;
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+        nav.modalPresentationStyle = vc.modalPresentationStyle;
+        nav.modalTransitionStyle = vc.modalTransitionStyle;
+        [self presentViewController:nav animated:YES completion:nil];
+        
+        /*
         EditorViewController __weak *weakSelf = self;
         
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Please enter new program name!" message:nil preferredStyle:UIAlertControllerStyleAlert];
@@ -542,6 +551,7 @@ typedef void(^InfoBlock)(void);
         [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
         
         [self presentViewController:alert animated:YES completion:nil];
+         */
     }
 }
 

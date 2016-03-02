@@ -17,11 +17,12 @@
 #import "NSString+Utils.h"
 #import "AppController.h"
 #import "ModelManager.h"
+#import "TextFieldTableViewCell.h"
 
 @interface ShareViewController ()
 
 @property ShareHeaderCell *headerCell;
-@property ShareTextFieldCell *titleCell;
+@property TextFieldTableViewCell *titleCell;
 @property ShareTextViewCell *descriptionCell;
 @property ShareActionCell *loginCell;
 @property UITableViewCell *categoryGameCell;
@@ -342,12 +343,7 @@
     layer.cornerRadius = 6;
     layer.borderWidth = 0.5;
     layer.borderColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.25].CGColor;
-
 }
-
-@end
-
-@implementation ShareTextFieldCell
 
 @end
 

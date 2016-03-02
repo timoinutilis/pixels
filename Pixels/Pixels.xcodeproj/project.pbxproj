@@ -53,6 +53,10 @@
 		927334981A2A456900C89AF0 /* Help.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 927334971A2A456900C89AF0 /* Help.storyboard */; };
 		9273349D1A2A478700C89AF0 /* HelpTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9273349C1A2A478700C89AF0 /* HelpTableViewController.m */; };
 		927334A01A2A499B00C89AF0 /* ModelManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9273349F1A2A499B00C89AF0 /* ModelManager.m */; };
+		92751E931C85D44600E73A6C /* TextFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 92751E921C85D44500E73A6C /* TextFieldTableViewCell.m */; };
+		92751E941C85D44600E73A6C /* TextFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 92751E921C85D44500E73A6C /* TextFieldTableViewCell.m */; };
+		92751E971C85D86400E73A6C /* ProjectSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92751E961C85D86400E73A6C /* ProjectSettingsViewController.m */; };
+		92751E981C85D86400E73A6C /* ProjectSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92751E961C85D86400E73A6C /* ProjectSettingsViewController.m */; };
 		9276F38F1A1D289C0060E909 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9276F38E1A1D289C0060E909 /* main.m */; };
 		9276F3921A1D289C0060E909 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9276F3911A1D289C0060E909 /* AppDelegate.m */; };
 		9276F3951A1D289C0060E909 /* EditorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9276F3941A1D289C0060E909 /* EditorViewController.m */; };
@@ -357,6 +361,10 @@
 		9273349C1A2A478700C89AF0 /* HelpTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpTableViewController.m; sourceTree = "<group>"; };
 		9273349E1A2A499B00C89AF0 /* ModelManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModelManager.h; sourceTree = "<group>"; };
 		9273349F1A2A499B00C89AF0 /* ModelManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModelManager.m; sourceTree = "<group>"; };
+		92751E911C85D44500E73A6C /* TextFieldTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextFieldTableViewCell.h; sourceTree = "<group>"; };
+		92751E921C85D44500E73A6C /* TextFieldTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextFieldTableViewCell.m; sourceTree = "<group>"; };
+		92751E951C85D86400E73A6C /* ProjectSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectSettingsViewController.h; sourceTree = "<group>"; };
+		92751E961C85D86400E73A6C /* ProjectSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectSettingsViewController.m; sourceTree = "<group>"; };
 		9276F3891A1D289C0060E909 /* LowRes Coder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LowRes Coder.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9276F38D1A1D289C0060E909 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9276F38E1A1D289C0060E909 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -644,6 +652,8 @@
 				92D6AD411BC29C4A001E5EED /* SearchToolbar.m */,
 				927CF5A41C271F3E00C38BB5 /* BorderedButton.h */,
 				927CF5A51C271F3E00C38BB5 /* BorderedButton.m */,
+				92751E911C85D44500E73A6C /* TextFieldTableViewCell.h */,
+				92751E921C85D44500E73A6C /* TextFieldTableViewCell.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -743,6 +753,8 @@
 				92D518B81A6975C10000F917 /* AboutViewController.m */,
 				926864221AA607A000F305B9 /* UpgradeViewController.h */,
 				926864231AA607A000F305B9 /* UpgradeViewController.m */,
+				92751E951C85D86400E73A6C /* ProjectSettingsViewController.h */,
+				92751E961C85D86400E73A6C /* ProjectSettingsViewController.m */,
 			);
 			name = Main;
 			sourceTree = "<group>";
@@ -1200,6 +1212,7 @@
 				9204C1F21A6B458200A0123C /* NSString+Utils.m in Sources */,
 				92884F241B0F25B30032623D /* UIImage+MultiFormat.m in Sources */,
 				92884F261B0F25B30032623D /* UIImageView+HighlightedWebCache.m in Sources */,
+				92751E971C85D86400E73A6C /* ProjectSettingsViewController.m in Sources */,
 				926A6A181B1C929D00A85412 /* UIViewController+LowResCoder.m in Sources */,
 				92E2B8AA1A52F08D00D0DF29 /* ActivityItemSource.m in Sources */,
 				92884F231B0F25B30032623D /* UIImage+GIF.m in Sources */,
@@ -1276,6 +1289,7 @@
 				929BCF0D1BB14800005F1DBD /* AFHTTPRequestOperation.m in Sources */,
 				92884F1B1B0F25B30032623D /* SDImageCache.m in Sources */,
 				921B234C1A9E3DA800C45AFA /* EditorTextView.m in Sources */,
+				92751E931C85D44600E73A6C /* TextFieldTableViewCell.m in Sources */,
 				9231159F1A444A6B00624201 /* RendererView.m in Sources */,
 				92F0C36A1B3EAF0B00000646 /* GORCycleManager.m in Sources */,
 				92C98F421A20F2F000215AE9 /* Node.m in Sources */,
@@ -1296,6 +1310,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				929BCF181BB14A1B005F1DBD /* SDWebImageManager.m in Sources */,
+				92751E981C85D86400E73A6C /* ProjectSettingsViewController.m in Sources */,
 				929BCF191BB14A1B005F1DBD /* SDWebImagePrefetcher.m in Sources */,
 				929BCF1A1BB14A1B005F1DBD /* CommLogInViewController.m in Sources */,
 				9265C9141BDEB1F40011759E /* RadialGradientView.m in Sources */,
@@ -1358,6 +1373,7 @@
 				929BCF4C1BB14A1B005F1DBD /* HelpTextViewController.m in Sources */,
 				92612CE51BD7A5F600370C82 /* IndexSideBar.m in Sources */,
 				929BCF4D1BB14A1B005F1DBD /* AppController.m in Sources */,
+				92751E941C85D44600E73A6C /* TextFieldTableViewCell.m in Sources */,
 				929BCF4E1BB14A1B005F1DBD /* NSDate+Utils.m in Sources */,
 				929BCF4F1BB14A1B005F1DBD /* GORLabel.m in Sources */,
 				929BCF501BB14A1B005F1DBD /* SDWebImageDownloaderOperation.m in Sources */,

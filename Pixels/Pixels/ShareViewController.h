@@ -32,10 +32,6 @@
 
 @end
 
-@interface ShareTextFieldCell : UITableViewCell
-@property (weak, nonatomic) IBOutlet UITextField *textField;
-@end
-
 @interface ShareActionCell : UITableViewCell
 
 @end
