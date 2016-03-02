@@ -45,7 +45,7 @@ static int s_editorInstancesCount = 0;
 typedef void(^InfoBlock)(void);
 
 
-@interface EditorViewController () <SearchToolbarDelegate, EditorTextViewDelegate, UITextViewDelegate, RPPreviewViewControllerDelegate>
+@interface EditorViewController () <SearchToolbarDelegate, EditorTextViewDelegate, UITextViewDelegate, RPPreviewViewControllerDelegate, ProjectSettingsDelegate>
 
 @property (weak, nonatomic) IBOutlet EditorTextView *sourceCodeTextView;
 @property (weak, nonatomic) IBOutlet SearchToolbar *searchToolbar;
@@ -433,10 +433,10 @@ typedef void(^InfoBlock)(void);
     }];
     [alert addAction:videoMenuAction];
     
-    UIAlertAction *renameAction = [UIAlertAction actionWithTitle:@"Rename / Change Icon" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-        [weakSelf onRenameTapped];
+    UIAlertAction *settingsAction = [UIAlertAction actionWithTitle:@"Rename / Settings..." style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        [weakSelf onSettingsTapped];
     }];
-    [alert addAction:renameAction];
+    [alert addAction:settingsAction];
 
     UIAlertAction *duplicateAction = [UIAlertAction actionWithTitle:@"Duplicate" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
         [weakSelf onDuplicateTapped];
@@ -514,45 +514,29 @@ typedef void(^InfoBlock)(void);
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-- (void)onRenameTapped
+- (void)onSettingsTapped
 {
     if (self.project.isDefault.boolValue)
     {
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Example programs cannot be renamed." message:nil preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Settings of example programs cannot be changed." message:nil preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
         [self presentViewController:alert animated:YES completion:nil];
     }
     else
     {
         ProjectSettingsViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"ProjectSettingsView"];
+        vc.delegate = self;
         vc.project = self.project;
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
         nav.modalPresentationStyle = vc.modalPresentationStyle;
         nav.modalTransitionStyle = vc.modalTransitionStyle;
         [self presentViewController:nav animated:YES completion:nil];
-        
-        /*
-        EditorViewController __weak *weakSelf = self;
-        
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Please enter new program name!" message:nil preferredStyle:UIAlertControllerStyleAlert];
-
-        [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
-            textField.text = weakSelf.project.name;
-            textField.clearButtonMode = UITextFieldViewModeAlways;
-            textField.autocapitalizationType = UITextAutocapitalizationTypeWords;
-        }];
-        
-        [alert addAction:[UIAlertAction actionWithTitle:@"Rename" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-            weakSelf.project.name = ((UITextField *)alert.textFields[0]).text;
-            weakSelf.navigationItem.title = weakSelf.project.name;
-            [weakSelf saveProject];
-        }]];
-        
-        [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
-        
-        [self presentViewController:alert animated:YES completion:nil];
-         */
     }
+}
+
+- (void)projectSettingsDidChange
+{
+    self.navigationItem.title = self.project.name;
 }
 
 - (void)onFeedbackTapped:(id)sender

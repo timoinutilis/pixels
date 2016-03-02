@@ -17,20 +17,54 @@ typedef NS_ENUM(NSInteger, Section) {
     Section_count
 };
 
-@interface ProjectSettingsViewController()
-@property BOOL updateIconAutomatically;
+@interface ProjectSettingsViewController() <UITextFieldDelegate, UICollectionViewDelegate>
+@property NSString *name;
+@property BOOL isIconLocked;
+@property UIImage *iconImage;
 @end
 
 @implementation ProjectSettingsViewController
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.name = self.project.name;
+    self.isIconLocked = self.project.isIconLocked.boolValue;
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self.view endEditing:YES];
+}
+
 - (IBAction)onDoneTapped:(id)sender
 {
+    self.project.name = self.name;
+    self.project.isIconLocked = @(self.isIconLocked);
+    if (self.iconImage && self.isIconLocked)
+    {
+        self.project.iconData = UIImagePNGRepresentation(self.iconImage);
+    }
+    [[ModelManager sharedManager] saveContext];
+    [self.delegate projectSettingsDidChange];
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (IBAction)onCancelTapped:(id)sender
 {
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField endEditing:YES];
+    return YES;
+}
+
+- (IBAction)onNameChanged:(UITextField *)textField
+{
+    self.name = textField.text;
 }
 
 #pragma mark - Table View
@@ -73,10 +107,19 @@ typedef NS_ENUM(NSInteger, Section) {
             return @"Name";
             
         case SectionIconMode:
-            return @"Icon Mode";
+            return @"Icon";
             
         case SectionIconSelector:
-            return @"Choose a Snapshot";
+            return @"Select Icon from Snapshots";
+    }
+    return nil;
+}
+
+- (nullable NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+{
+    if (section == SectionIconSelector)
+    {
+        return @"These snapshots are from the last run of your program. Run it again to get new ones!";
     }
     return nil;
 }
@@ -87,7 +130,8 @@ typedef NS_ENUM(NSInteger, Section) {
     {
         case SectionName: {
             TextFieldTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TextField" forIndexPath:indexPath];
-            cell.textField.text = self.project.name;
+            cell.textField.delegate = self;
+            cell.textField.text = self.name;
             return cell;
         }
         
@@ -96,12 +140,12 @@ typedef NS_ENUM(NSInteger, Section) {
             if (indexPath.row == 0)
             {
                 cell.textLabel.text = @"Update Automatically";
-                cell.accessoryType = self.updateIconAutomatically ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+                cell.accessoryType = !self.isIconLocked ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
             }
             else if (indexPath.row == 1)
             {
-                cell.textLabel.text = @"Choose from Snapshots";
-                cell.accessoryType = !self.updateIconAutomatically ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+                cell.textLabel.text = @"Keep Current";
+                cell.accessoryType = self.isIconLocked ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
             }
             return cell;
         }
@@ -109,8 +153,8 @@ typedef NS_ENUM(NSInteger, Section) {
         case SectionIconSelector:
         {
             IconSelectorTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"IconSelector" forIndexPath:indexPath];
-            UIImage *image = [UIImage imageWithData:self.project.iconData];
-            cell.images = @[image];
+            cell.images = self.project.temporarySnapshots;
+            cell.collectionView.delegate = self;
             return cell;
         }
     }
@@ -121,7 +165,7 @@ typedef NS_ENUM(NSInteger, Section) {
 {
     if (indexPath.section == SectionIconMode)
     {
-        self.updateIconAutomatically = (indexPath.row == 0);
+        self.isIconLocked = (indexPath.row == 1);
         [self updateIconModeCells];
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
@@ -132,17 +176,25 @@ typedef NS_ENUM(NSInteger, Section) {
     UITableViewCell *cell;
     
     cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:SectionIconMode]];
-    cell.accessoryType = self.updateIconAutomatically ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+    cell.accessoryType = !self.isIconLocked ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
 
     cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:SectionIconMode]];
-    cell.accessoryType = !self.updateIconAutomatically ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+    cell.accessoryType = self.isIconLocked ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+}
+
+#pragma mark - Icon Collection View
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    self.iconImage = self.project.temporarySnapshots[indexPath.item];
+    self.isIconLocked = YES;
+    [self updateIconModeCells];
 }
 
 @end
 
 
-@interface IconSelectorTableViewCell() <UICollectionViewDataSource, UICollectionViewDelegate>
-@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+@interface IconSelectorTableViewCell() <UICollectionViewDataSource>
 @end
 
 @implementation IconSelectorTableViewCell
@@ -150,7 +202,6 @@ typedef NS_ENUM(NSInteger, Section) {
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
 }
 
@@ -195,6 +246,22 @@ typedef NS_ENUM(NSInteger, Section) {
 {
     _image = image;
     self.imageView.image = image;
+}
+
+- (void)setSelected:(BOOL)selected
+{
+    [super setSelected:selected];
+    CALayer *layer = self.imageView.layer;
+    if (selected)
+    {
+        layer.borderWidth = 4;
+        layer.borderColor = self.tintColor.CGColor;
+    }
+    else
+    {
+        layer.borderWidth = 0.5;
+        layer.borderColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.25].CGColor;
+    }
 }
 
 @end

@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
+#import <UIKit/UIKit.h>
 
 typedef NS_ENUM(NSInteger, FolderType) {
     FolderTypeNone,
@@ -19,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface Project : NSManagedObject
 
-// Insert code here to declare functionality of your managed object subclass
+@property NSArray <UIImage *> *temporarySnapshots;
 
 @end
 

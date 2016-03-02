@@ -13,9 +13,10 @@
 @interface RendererView : UIView
 
 @property Renderer *renderer;
-@property BOOL shouldMakeThumbnail;
+@property BOOL shouldMakeSnapshots;
 
 - (void)updateSnapshots;
 - (UIImage *)imageFromBestSnapshot;
+- (NSArray <UIImage *> *)imagesFromSnapshots:(int)amount;
 
 @end

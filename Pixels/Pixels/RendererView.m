@@ -21,13 +21,13 @@
 
 - (void)updateSnapshots
 {
-    if (self.shouldMakeThumbnail && CFAbsoluteTimeGetCurrent() - self.lastSnapshotTime >= 1)
+    if (self.shouldMakeSnapshots && CFAbsoluteTimeGetCurrent() - self.lastSnapshotTime >= 1)
     {
         [self makeSnapshot];
         self.lastSnapshotTime = CFAbsoluteTimeGetCurrent();
         if (self.snapshots.count >= 120)
         {
-            self.shouldMakeThumbnail = NO;
+            self.shouldMakeSnapshots = NO;
         }
     }
 }
@@ -129,7 +129,7 @@
 
 - (UIImage *)imageFromBestSnapshot
 {
-    UIImage *thumb = nil;
+    UIImage *image = nil;
     if (self.snapshots)
     {
         // find best snapshot
@@ -153,15 +153,37 @@
         best = self.snapshots[self.snapshots.count / 2];
         
         // create image
-        CGSize size = CGSizeMake(self.renderer.size * 2, self.renderer.size * 2);
-        UIGraphicsBeginImageContextWithOptions(size, YES, 1.0);
-        [self renderWithSize:size data:best];
-        thumb = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
+        image = [self imageWithSnapshot:best];
     }
     
-    self.shouldMakeThumbnail = NO;
-    return thumb;
+    self.shouldMakeSnapshots = NO;
+    return image;
+}
+
+- (NSArray <UIImage *> *)imagesFromSnapshots:(int)amount
+{
+    if (self.snapshots)
+    {
+        NSMutableArray *images = [NSMutableArray arrayWithCapacity:amount];
+        float step = (float)self.snapshots.count / amount;
+        int i = 0;
+        while (i < self.snapshots.count)
+        {
+            NSData *data = self.snapshots[i];
+            if ([self snapshotNotEmpty:data])
+            {
+                UIImage *image = [self imageWithSnapshot:data];
+                [images addObject:image];
+                i = ceilf(i + step);
+            }
+            else
+            {
+                i++;
+            }
+        }
+        return images;
+    }
+    return nil;
 }
 
 - (int)qualityOfSnapshot:(NSData *)data
@@ -179,6 +201,32 @@
         }
     }
     return changes;
+}
+
+- (BOOL)snapshotNotEmpty:(NSData *)data
+{
+    int size = self.renderer.size;
+    int numPixels = size * size;
+    uint32_t *pixelData = (uint32_t *)data.bytes;
+    
+    for (int i = 1; i < numPixels; i++)
+    {
+        if (pixelData[i] != pixelData[i-1])
+        {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+- (UIImage *)imageWithSnapshot:(NSData *)data
+{
+    CGSize size = CGSizeMake(self.renderer.size * 2, self.renderer.size * 2);
+    UIGraphicsBeginImageContextWithOptions(size, YES, 1.0);
+    [self renderWithSize:size data:data];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
 }
 
 @end

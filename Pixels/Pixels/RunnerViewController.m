@@ -271,8 +271,8 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
 
 - (void)run
 {
-    // don't change thumbnails for example projects
-    self.rendererView.shouldMakeThumbnail = !self.project.isDefault.boolValue && (self.project.iconData == nil || self.wasEditedSinceLastRun);
+    // don't change icons for example projects
+    self.rendererView.shouldMakeSnapshots = !self.project.isDefault.boolValue;// && (self.project.iconData == nil || self.wasEditedSinceLastRun);
     
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     
@@ -316,12 +316,16 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
         
         [self updateRendererView];
         
-        // thumbnail
-        UIImage *thumb = [self.rendererView imageFromBestSnapshot];
-        if (thumb)
+        // snapshots
+        if (self.project.iconData == nil || (self.wasEditedSinceLastRun && !self.project.isIconLocked.boolValue))
         {
-            self.project.iconData = UIImagePNGRepresentation(thumb);
+            UIImage *image = [self.rendererView imageFromBestSnapshot];
+            if (image)
+            {
+                self.project.iconData = UIImagePNGRepresentation(image);
+            }
         }
+        self.project.temporarySnapshots = [self.rendererView imagesFromSnapshots:10];
         
         // transfer
         if (runner.transferStrings.count > 0)
