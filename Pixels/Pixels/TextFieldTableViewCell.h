@@ -11,5 +11,6 @@
 @interface TextFieldTableViewCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UITextField *textField;
+@property (weak, nonatomic) IBOutlet UIImageView *iconImageView;
 
 @end

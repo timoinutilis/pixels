@@ -132,25 +132,22 @@
     UIImage *image = nil;
     if (self.snapshots)
     {
-        // find best snapshot
-        NSData *best;
-        /*
-        int bestQuality = -1;
-        NSUInteger first = self.snapshots.count * 0.3;
-        NSUInteger last = MAX(1.0, ceil(self.snapshots.count * 0.7));
-        for (NSUInteger i = first; i < last; i++)
-        {
-            NSData *snapshot = self.snapshots[i];
-            int quality = [self qualityOfSnapshot:snapshot];
-            if (quality > bestQuality)
-            {
-                best = snapshot;
-                bestQuality = quality;
-            }
-        }*/
+        // find non empty snapshot from the middle
+        int index = (int)(self.snapshots.count / 2);
+        NSData *best = self.snapshots[index];
         
-        // just use the one in the middle
-        best = self.snapshots[self.snapshots.count / 2];
+        if (![self snapshotIsOkay:best])
+        {
+            while (index + 1 < self.snapshots.count)
+            {
+                index++;
+                if ([self snapshotIsOkay:self.snapshots[index]])
+                {
+                    best = self.snapshots[index];
+                    break;
+                }
+            }
+        }
         
         // create image
         image = [self imageWithSnapshot:best];
@@ -170,16 +167,16 @@
         while (i < self.snapshots.count)
         {
             NSData *data = self.snapshots[i];
-            if ([self snapshotNotEmpty:data])
+//            if ([self snapshotIsOkay:data])
             {
                 UIImage *image = [self imageWithSnapshot:data];
                 [images addObject:image];
                 i = ceilf(i + step);
             }
-            else
-            {
-                i++;
-            }
+//            else
+//            {
+//                i++;
+//            }
         }
         return images;
     }
@@ -203,7 +200,7 @@
     return changes;
 }
 
-- (BOOL)snapshotNotEmpty:(NSData *)data
+- (BOOL)snapshotIsOkay:(NSData *)data
 {
     int size = self.renderer.size;
     int numPixels = size * size;

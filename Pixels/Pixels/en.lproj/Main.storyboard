@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="oli-IW-NHE">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="oli-IW-NHE">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
@@ -868,35 +868,45 @@ Inutilis Software, 2015-2016</string>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="TextField" id="1b5-M9-yjr" customClass="TextFieldTableViewCell">
-                                <rect key="frame" x="0.0" y="114" width="320" height="44"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="TextField" rowHeight="88" id="1b5-M9-yjr" customClass="TextFieldTableViewCell">
+                                <rect key="frame" x="0.0" y="114" width="320" height="88"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" tableViewCell="1b5-M9-yjr" id="ge8-WD-79p">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="87"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Nn0-lf-EaH">
-                                            <rect key="frame" x="15" y="0.0" width="290" height="43"/>
+                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Program Name" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Nn0-lf-EaH">
+                                            <rect key="frame" x="87" y="0.0" width="218" height="87"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                             <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no"/>
                                             <connections>
                                                 <action selector="onNameChanged:" destination="f40-WL-P0y" eventType="editingChanged" id="jQ1-rN-oIs"/>
                                             </connections>
                                         </textField>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="cfG-uI-Cu2">
+                                            <rect key="frame" x="15" y="12" width="64" height="64"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="64" id="6TB-Sb-rCL"/>
+                                                <constraint firstAttribute="width" constant="64" id="rbe-Cf-WS4"/>
+                                            </constraints>
+                                        </imageView>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstItem="cfG-uI-Cu2" firstAttribute="centerY" secondItem="ge8-WD-79p" secondAttribute="centerY" id="0aI-Jn-4iv"/>
                                         <constraint firstAttribute="bottom" secondItem="Nn0-lf-EaH" secondAttribute="bottom" id="Ba5-Ab-pRp"/>
-                                        <constraint firstItem="Nn0-lf-EaH" firstAttribute="leading" secondItem="ge8-WD-79p" secondAttribute="leadingMargin" id="MwD-qX-OuC"/>
+                                        <constraint firstItem="Nn0-lf-EaH" firstAttribute="leading" secondItem="cfG-uI-Cu2" secondAttribute="trailing" constant="8" id="M3d-xK-7bx"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="Nn0-lf-EaH" secondAttribute="trailing" id="QaG-Cp-uCy"/>
                                         <constraint firstItem="Nn0-lf-EaH" firstAttribute="top" secondItem="ge8-WD-79p" secondAttribute="top" id="ZLA-8A-0iv"/>
+                                        <constraint firstItem="cfG-uI-Cu2" firstAttribute="leading" secondItem="ge8-WD-79p" secondAttribute="leadingMargin" id="e6w-MX-CP1"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="iconImageView" destination="cfG-uI-Cu2" id="D8L-Jz-IYD"/>
                                     <outlet property="textField" destination="Nn0-lf-EaH" id="Z09-8Z-EZf"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Basic" textLabel="SoV-b2-41H" style="IBUITableViewCellStyleDefault" id="Y1R-Sd-pl4">
-                                <rect key="frame" x="0.0" y="158" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="202" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" tableViewCell="Y1R-Sd-pl4" id="hkN-KM-Wl8">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -913,7 +923,7 @@ Inutilis Software, 2015-2016</string>
                                 </tableViewCellContentView>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="IconSelector" rowHeight="88" id="dyd-w8-nol" customClass="IconSelectorTableViewCell">
-                                <rect key="frame" x="0.0" y="202" width="320" height="88"/>
+                                <rect key="frame" x="0.0" y="246" width="320" height="88"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" tableViewCell="dyd-w8-nol" id="LJm-aQ-0LZ">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="87"/>

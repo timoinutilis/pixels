@@ -325,7 +325,7 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
                 self.project.iconData = UIImagePNGRepresentation(image);
             }
         }
-        self.project.temporarySnapshots = [self.rendererView imagesFromSnapshots:10];
+        self.project.temporarySnapshots = [self.rendererView imagesFromSnapshots:20];
         
         // transfer
         if (runner.transferStrings.count > 0)

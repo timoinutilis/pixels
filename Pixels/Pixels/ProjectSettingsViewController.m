@@ -42,7 +42,7 @@ typedef NS_ENUM(NSInteger, Section) {
 {
     self.project.name = self.name;
     self.project.isIconLocked = @(self.isIconLocked);
-    if (self.iconImage && self.isIconLocked)
+    if (self.iconImage)
     {
         self.project.iconData = UIImagePNGRepresentation(self.iconImage);
     }
@@ -67,11 +67,25 @@ typedef NS_ENUM(NSInteger, Section) {
     self.name = textField.text;
 }
 
+- (UIImage *)currentIconImage
+{
+    if (self.iconImage)
+    {
+        return self.iconImage;
+    }
+    if (self.project.iconData)
+    {
+        return [UIImage imageWithData:self.project.iconData];
+    }
+    return [UIImage imageNamed:@"icon_project"];
+}
+
 #pragma mark - Table View
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == SectionIconSelector)
+    if (   indexPath.section == SectionName
+        || indexPath.section == SectionIconSelector)
     {
         return 88;
     }
@@ -103,11 +117,8 @@ typedef NS_ENUM(NSInteger, Section) {
 {
     switch (section)
     {
-        case SectionName:
-            return @"Name";
-            
         case SectionIconMode:
-            return @"Icon";
+            return @"Icon Mode";
             
         case SectionIconSelector:
             return @"Select Icon from Snapshots";
@@ -132,6 +143,7 @@ typedef NS_ENUM(NSInteger, Section) {
             TextFieldTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TextField" forIndexPath:indexPath];
             cell.textField.delegate = self;
             cell.textField.text = self.name;
+            cell.iconImageView.image = [self currentIconImage];
             return cell;
         }
         
@@ -168,11 +180,17 @@ typedef NS_ENUM(NSInteger, Section) {
         self.isIconLocked = (indexPath.row == 1);
         [self updateIconModeCells];
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        [self.view endEditing:YES];
     }
 }
 
 - (void)updateIconModeCells
 {
+    // icon
+    TextFieldTableViewCell *textFieldCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:SectionName]];
+    textFieldCell.iconImageView.image = [self currentIconImage];
+    
+    // mode
     UITableViewCell *cell;
     
     cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:SectionIconMode]];
@@ -248,20 +266,9 @@ typedef NS_ENUM(NSInteger, Section) {
     self.imageView.image = image;
 }
 
-- (void)setSelected:(BOOL)selected
+- (void)setHighlighted:(BOOL)highlighted
 {
-    [super setSelected:selected];
-    CALayer *layer = self.imageView.layer;
-    if (selected)
-    {
-        layer.borderWidth = 4;
-        layer.borderColor = self.tintColor.CGColor;
-    }
-    else
-    {
-        layer.borderWidth = 0.5;
-        layer.borderColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.25].CGColor;
-    }
+    [super setHighlighted:highlighted];
+    self.imageView.alpha = highlighted ? 0.5 : 1.0;
 }
-
 @end
