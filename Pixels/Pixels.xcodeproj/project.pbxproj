@@ -47,6 +47,8 @@
 		926864211AA5E50900F305B9 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 926864201AA5E50900F305B9 /* StoreKit.framework */; };
 		926864241AA607A000F305B9 /* UpgradeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 926864231AA607A000F305B9 /* UpgradeViewController.m */; };
 		926864271AA6087300F305B9 /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 926864261AA6087300F305B9 /* AppController.m */; };
+		92694C681C9704EE00837C2B /* OpenGLRendererView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92694C671C9704EE00837C2B /* OpenGLRendererView.m */; };
+		92694C691C9704EE00837C2B /* OpenGLRendererView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92694C671C9704EE00837C2B /* OpenGLRendererView.m */; };
 		926A6A181B1C929D00A85412 /* UIViewController+LowResCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 926A6A171B1C929D00A85412 /* UIViewController+LowResCoder.m */; };
 		926C72C71A2B579E00448EAB /* RunnerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 926C72C61A2B579E00448EAB /* RunnerViewController.m */; };
 		9272C1491A1DE2D000E97957 /* Token.m in Sources */ = {isa = PBXBuildFile; fileRef = 9272C1481A1DE2D000E97957 /* Token.m */; };
@@ -349,6 +351,8 @@
 		926864231AA607A000F305B9 /* UpgradeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpgradeViewController.m; sourceTree = "<group>"; };
 		926864251AA6087300F305B9 /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppController.h; sourceTree = "<group>"; };
 		926864261AA6087300F305B9 /* AppController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppController.m; sourceTree = "<group>"; };
+		92694C661C9704EE00837C2B /* OpenGLRendererView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLRendererView.h; sourceTree = "<group>"; };
+		92694C671C9704EE00837C2B /* OpenGLRendererView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenGLRendererView.m; sourceTree = "<group>"; };
 		926A6A161B1C929D00A85412 /* UIViewController+LowResCoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+LowResCoder.h"; sourceTree = "<group>"; };
 		926A6A171B1C929D00A85412 /* UIViewController+LowResCoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+LowResCoder.m"; sourceTree = "<group>"; };
 		926C72C51A2B579E00448EAB /* RunnerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RunnerViewController.h; sourceTree = "<group>"; };
@@ -626,6 +630,8 @@
 			children = (
 				9231159D1A444A6B00624201 /* RendererView.h */,
 				9231159E1A444A6B00624201 /* RendererView.m */,
+				92694C661C9704EE00837C2B /* OpenGLRendererView.h */,
+				92694C671C9704EE00837C2B /* OpenGLRendererView.m */,
 				92EDC4401A54701D007824A5 /* Gamepad.h */,
 				92EDC4411A54701D007824A5 /* Gamepad.m */,
 				92B60FE11AC024250011233B /* GameButton.h */,
@@ -1277,6 +1283,7 @@
 				920822031A4DABB8005B7862 /* HelpContent.m in Sources */,
 				926086321A5E8560006C5523 /* Runnable.m in Sources */,
 				929BCF121BB14800005F1DBD /* AFURLConnectionOperation.m in Sources */,
+				92694C681C9704EE00837C2B /* OpenGLRendererView.m in Sources */,
 				920E681D1AB731620038994A /* CoachMarkView.m in Sources */,
 				92E1AF961B6A49E8000B1B0D /* NotificationView.m in Sources */,
 				9254DF601B628A3C00774E98 /* LCCPostStats.m in Sources */,
@@ -1343,6 +1350,7 @@
 				929BCF311BB14A1B005F1DBD /* LCCProgram.m in Sources */,
 				929BCF321BB14A1B005F1DBD /* SDWebImageDecoder.m in Sources */,
 				929BCF331BB14A1B005F1DBD /* GORScrollViewDelegate.m in Sources */,
+				92694C691C9704EE00837C2B /* OpenGLRendererView.m in Sources */,
 				929BCF341BB14A1B005F1DBD /* StandardTableViewCell.m in Sources */,
 				929BCF351BB14A1B005F1DBD /* SDWebImageCompat.m in Sources */,
 				929BCF361BB14A1B005F1DBD /* LCCPost.m in Sources */,

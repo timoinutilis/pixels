@@ -9,7 +9,7 @@
 #import "RunnerViewController.h"
 #import "RunnerDelegate.h"
 #import "Runner.h"
-#import "RendererView.h"
+#import "OpenGLRendererView.h"
 #import "Project.h"
 #import "Gamepad.h"
 #import "NSError+LowResCoder.h"
@@ -34,7 +34,7 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
 @property (weak, nonatomic) IBOutlet UIButton *exitButton;
 @property (weak, nonatomic) IBOutlet UIButton *zoomButton;
 @property (weak, nonatomic) IBOutlet UIButton *soundButton;
-@property (weak, nonatomic) IBOutlet RendererView *rendererView;
+@property (weak, nonatomic) IBOutlet OpenGLRendererView *rendererView;
 @property (weak, nonatomic) IBOutlet UIButton *pauseButton;
 @property (weak, nonatomic) IBOutlet UIButton *buttonA;
 @property (weak, nonatomic) IBOutlet UIButton *buttonB;
@@ -272,7 +272,7 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
 - (void)run
 {
     // don't change icons for example projects
-    self.rendererView.shouldMakeSnapshots = !self.project.isDefault.boolValue;// && (self.project.iconData == nil || self.wasEditedSinceLastRun);
+//    self.rendererView.shouldMakeSnapshots = !self.project.isDefault.boolValue;// && (self.project.iconData == nil || self.wasEditedSinceLastRun);
     
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     
@@ -315,7 +315,7 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
         }
         
         [self updateRendererView];
-        
+/*
         // snapshots
         if (self.project.iconData == nil || (self.wasEditedSinceLastRun && !self.project.isIconLocked.boolValue))
         {
@@ -326,7 +326,7 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
             }
         }
         self.project.temporarySnapshots = [self.rendererView imagesFromSnapshots:20];
-        
+*/
         // transfer
         if (runner.transferStrings.count > 0)
         {
@@ -485,7 +485,7 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
 
 - (void)updateRendererView
 {
-    [self.rendererView updateSnapshots];
+//    [self.rendererView updateSnapshots];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.rendererView setNeedsDisplay];
     });
