@@ -43,6 +43,10 @@ const GLubyte Indices[] = {
 {
     [super awakeFromNib];
     
+    int rendererSize = 64;
+    
+    _textureData = (GLubyte *)calloc(rendererSize * rendererSize * 3, sizeof(GLubyte));
+    
     self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
     
     [EAGLContext setCurrentContext:self.context];
@@ -61,7 +65,6 @@ const GLubyte Indices[] = {
     glBindTexture(GL_TEXTURE_2D, _texName);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-//    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 128, 128, 0, GL_RGB, GL_UNSIGNED_BYTE, _textureData);
     
     self.effect.texture2d0.name = _texName;
     self.effect.texture2d1.enabled = GL_FALSE;
@@ -79,18 +82,25 @@ const GLubyte Indices[] = {
 
 - (void)renderTextureData
 {
-    _textureData = (GLubyte *) calloc(128*128*3, sizeof(GLubyte));
-    for (int i = 0; i < 128*128*3; i+=3)
+    int rendererSize = 64;
+    int i = 0;
+    for (int y = 0; y < rendererSize; y++)
     {
-        GLubyte r = rand() & 0xFF;
-        _textureData[i] = r;
-        _textureData[i+1] = r;
-        _textureData[i+2] = r;
+        for (int x = 0; x < rendererSize; x++)
+        {
+            uint32_t color = [self.renderer screenColorAtX:x Y:y];
+            _textureData[i++] = (color >> 16) & 0xFF;
+            _textureData[i++] = (color >> 8) & 0xFF;
+            _textureData[i++] = (color) & 0xFF;
+            
+        }
     }
 }
 
 - (void)drawRect:(CGRect)rect
 {
+    int rendererSize = 64;
+    
     [self renderTextureData];
     
     glClearColor(1.0, 0.0, 0.0, 1.0);
@@ -98,7 +108,7 @@ const GLubyte Indices[] = {
     
     [self.effect prepareToDraw];
     
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 128, 128, 0, GL_RGB, GL_UNSIGNED_BYTE, _textureData);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, rendererSize, rendererSize, 0, GL_RGB, GL_UNSIGNED_BYTE, _textureData);
     
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
