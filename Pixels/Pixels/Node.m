@@ -764,6 +764,7 @@ NSString *const TRANSFER = @"TRANSFER";
 @end
 
 
+
 @implementation ColorNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
@@ -780,6 +781,30 @@ NSString *const TRANSFER = @"TRANSFER";
     }
     
     runner.renderer.colorIndex = value.intValue;
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
+@implementation ScreenNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.modeExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    Number *mode = [self.modeExpression evaluateNumberWithRunner:runner min:0 max:4];
+    if (runner.error)
+    {
+        return nil;
+    }
+    
+    runner.renderer.screenMode = mode.intValue;
     [runner next];
     return nil;
 }

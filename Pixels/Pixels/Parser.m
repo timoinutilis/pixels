@@ -241,6 +241,9 @@
         case TTypeSymGamepad:
             node = [self acceptGamepad];
             break;
+        case TTypeSymScreen:
+            node = [self acceptScreen];
+            break;
         case TTypeSymColor:
             node = [self acceptColor];
             break;
@@ -376,6 +379,7 @@
         case TTypeSymPersist:
         case TTypeSymSwap:
         case TTypeSymWait:
+        case TTypeSymScreen:
         case TTypeSymColor:
         case TTypeSymCls:
         case TTypeSymPlot:
@@ -691,6 +695,14 @@
     GamepadNode *node = [[GamepadNode alloc] init];
     [self accept:TTypeSymGamepad];
     node.playersExpression = [self acceptExpression];
+    return node;
+}
+
+- (Node *)acceptScreen
+{
+    ScreenNode *node = [[ScreenNode alloc] init];
+    [self accept:TTypeSymScreen];
+    node.modeExpression = [self acceptExpression];
     return node;
 }
 

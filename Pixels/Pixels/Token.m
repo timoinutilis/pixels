@@ -38,6 +38,7 @@
         case TTypeSymLoop: return @"LOOP";
         case TTypeSymExit: return @"EXIT";
         case TTypeSymWait: return @"WAIT";
+        case TTypeSymScreen: return @"SCREEN";
         case TTypeSymColor: return @"COLOR";
         case TTypeSymCls: return @"CLS";
         case TTypeSymPlot: return @"PLOT";
@@ -141,7 +142,6 @@
         case TTypeSymCall: return @"CALL";
         case TTypeSymShared: return @"SHARED";
         case TTypeSymUbound: return @"UBOUND";
-        case TTypeSymScreen: return @"SCREEN";
         case TTypeSymPeek: return @"PEEK";
         case TTypeSymPoke: return @"POKE";
         case TTypeSymBank: return @"BANK";

@@ -21,7 +21,6 @@ typedef struct SpriteDef {
     uint8_t colors[3];
 } SpriteDef;
 
-extern int const RendererSize;
 extern int const RendererNumColors;
 extern int const RendererNumLayers;
 extern int const RendererNumSprites;
@@ -31,9 +30,10 @@ extern int const RendererSpriteSize;
 
 @interface Renderer : NSObject
 
-@property (readonly) int size;
-@property int colorIndex;
-@property int layerIndex;
+@property (nonatomic) int screenMode;
+@property (nonatomic, readonly) int size;
+@property (nonatomic) int colorIndex;
+@property (nonatomic) int layerIndex;
 
 - (void)initPalette;
 - (int)paletteAtIndex:(int)index;

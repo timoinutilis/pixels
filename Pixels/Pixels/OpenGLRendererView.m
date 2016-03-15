@@ -27,9 +27,7 @@ const GLubyte Indices[] = {
 };
 
 @interface OpenGLRendererView()
-
 @property (nonatomic) GLKBaseEffect *effect;
-
 @end
 
 @implementation OpenGLRendererView {
@@ -37,15 +35,12 @@ const GLubyte Indices[] = {
     GLuint _indexBuffer;
     GLuint _texName;
     GLubyte *_textureData;
+    int _currentSize;
 }
 
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    
-    int rendererSize = 64;
-    
-    _textureData = (GLubyte *)calloc(rendererSize * rendererSize * 3, sizeof(GLubyte));
     
     self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
     
@@ -76,31 +71,44 @@ const GLubyte Indices[] = {
     
     glDeleteBuffers(1, &_vertexBuffer);
     glDeleteBuffers(1, &_indexBuffer);
+    glDeleteTextures(1, &_texName);
     
-    free(_textureData);
+    if (_textureData)
+    {
+        free(_textureData);
+    }
 }
 
 - (void)renderTextureData
 {
-    int rendererSize = 64;
-    int i = 0;
-    for (int y = 0; y < rendererSize; y++)
+    if (self.renderer.size != _currentSize)
     {
-        for (int x = 0; x < rendererSize; x++)
+        if (_textureData)
+        {
+            free(_textureData);
+        }
+        _currentSize = self.renderer.size;
+        _textureData = (GLubyte *)calloc(_currentSize * _currentSize * 3, sizeof(GLubyte));
+    }
+    
+    GLubyte *dataByte = _textureData;
+    for (int y = 0; y < _currentSize; y++)
+    {
+        for (int x = 0; x < _currentSize; x++)
         {
             uint32_t color = [self.renderer screenColorAtX:x Y:y];
-            _textureData[i++] = (color >> 16) & 0xFF;
-            _textureData[i++] = (color >> 8) & 0xFF;
-            _textureData[i++] = (color) & 0xFF;
-            
+            *dataByte = (color >> 16) & 0xFF;
+            ++dataByte;
+            *dataByte = (color >> 8) & 0xFF;
+            ++dataByte;
+            *dataByte = (color) & 0xFF;
+            ++dataByte;
         }
     }
 }
 
 - (void)drawRect:(CGRect)rect
 {
-    int rendererSize = 64;
-    
     [self renderTextureData];
     
     glClearColor(1.0, 0.0, 0.0, 1.0);
@@ -108,7 +116,7 @@ const GLubyte Indices[] = {
     
     [self.effect prepareToDraw];
     
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, rendererSize, rendererSize, 0, GL_RGB, GL_UNSIGNED_BYTE, _textureData);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _currentSize, _currentSize, 0, GL_RGB, GL_UNSIGNED_BYTE, _textureData);
     
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);

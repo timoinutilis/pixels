@@ -127,6 +127,10 @@
 @property (nonatomic) Node *playersExpression;
 @end
 
+@interface ScreenNode : Node
+@property (nonatomic) Node *modeExpression;
+@end
+
 @interface ColorNode : Node
 @property (nonatomic) Node *color;
 @end
