@@ -28,6 +28,9 @@ const GLubyte Indices[] = {
 
 @interface OpenGLRendererView()
 @property (nonatomic) GLKBaseEffect *effect;
+@property (nonatomic) NSMutableArray *snapshots;
+@property (nonatomic) CFAbsoluteTime lastSnapshotTime;
+@property (nonatomic) CIContext *ciContext;
 @end
 
 @implementation OpenGLRendererView {
@@ -38,9 +41,18 @@ const GLubyte Indices[] = {
     int _currentSize;
 }
 
-- (void)awakeFromNib
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
-    [super awakeFromNib];
+    if (self = [super initWithCoder:aDecoder])
+    {
+        [self commonInit];
+    }
+    return self;
+}
+
+- (void)commonInit
+{
+    self.ciContext = [CIContext contextWithOptions:nil];
     
     self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
     
@@ -127,6 +139,132 @@ const GLubyte Indices[] = {
     glVertexAttribPointer(GLKVertexAttribTexCoord0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid *) offsetof(Vertex, TexCoord));
 
     glDrawElements(GL_TRIANGLES, sizeof(Indices)/sizeof(Indices[0]), GL_UNSIGNED_BYTE, 0);
+}
+
+#pragma mark - Snapshots
+
+- (void)updateSnapshots
+{
+    if (self.shouldMakeSnapshots && CFAbsoluteTimeGetCurrent() - self.lastSnapshotTime >= 1)
+    {
+        [self makeSnapshot];
+        self.lastSnapshotTime = CFAbsoluteTimeGetCurrent();
+        if (self.snapshots.count >= 120)
+        {
+            self.shouldMakeSnapshots = NO;
+        }
+    }
+}
+
+- (void)makeSnapshot
+{
+    if (self.renderer)
+    {
+        int size = self.renderer.size;
+        
+        int numPixels = size * size;
+        uint32_t data[numPixels];
+        
+        for (int y = 0; y < size; y++)
+        {
+            for (int x = 0; x < size; x++)
+            {
+                data[y * size + x] = [self.renderer screenColorAtX:x Y:y] | 0xFF000000;
+            }
+        }
+        
+        if (!self.snapshots)
+        {
+            self.snapshots = [NSMutableArray array];
+        }
+        NSData *snapshotData = [NSData dataWithBytes:data length:(numPixels * 4)];
+        [self.snapshots addObject:snapshotData];
+    }
+}
+
+- (UIImage *)imageFromBestSnapshot
+{
+    UIImage *image = nil;
+    if (self.snapshots)
+    {
+        // find non empty snapshot from the middle
+        int index = (int)(self.snapshots.count / 2);
+        NSData *best = self.snapshots[index];
+        
+        if (![self snapshotIsOkay:best])
+        {
+            while (index + 1 < self.snapshots.count)
+            {
+                index++;
+                if ([self snapshotIsOkay:self.snapshots[index]])
+                {
+                    best = self.snapshots[index];
+                    break;
+                }
+            }
+        }
+        
+        // create image
+        image = [self imageWithSnapshot:best];
+    }
+    
+    self.shouldMakeSnapshots = NO;
+    return image;
+}
+
+- (NSArray <UIImage *> *)imagesFromSnapshots:(int)amount
+{
+    if (self.snapshots)
+    {
+        NSMutableArray *images = [NSMutableArray arrayWithCapacity:amount];
+        float step = (float)self.snapshots.count / amount;
+        int i = 0;
+        while (i < self.snapshots.count)
+        {
+            NSData *data = self.snapshots[i];
+            UIImage *image = [self imageWithSnapshot:data];
+            [images addObject:image];
+            i = ceilf(i + step);
+        }
+        return images;
+    }
+    return nil;
+}
+
+- (BOOL)snapshotIsOkay:(NSData *)data
+{
+    int size = self.renderer.size;
+    int numPixels = size * size;
+    uint32_t *pixelData = (uint32_t *)data.bytes;
+    
+    for (int i = 1; i < numPixels; i++)
+    {
+        if (pixelData[i] != pixelData[i-1])
+        {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+- (UIImage *)imageWithSnapshot:(NSData *)data
+{
+    int rendererSize = sqrtf(data.length / sizeof(uint32_t));
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    
+    CIImage *ciImage = [CIImage imageWithBitmapData:data
+                                        bytesPerRow:rendererSize * sizeof(uint32_t)
+                                               size:CGSizeMake(rendererSize, rendererSize)
+                                             format:kCIFormatBGRA8
+                                         colorSpace:colorSpace];
+    
+    CGImageRef cgImage = [self.ciContext createCGImage:ciImage fromRect:[ciImage extent]];
+    UIImage *image = [UIImage imageWithCGImage:cgImage];
+    
+    CGImageRelease(cgImage);
+    CGColorSpaceRelease(colorSpace);
+    
+    return image;
 }
 
 @end

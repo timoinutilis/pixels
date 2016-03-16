@@ -14,5 +14,10 @@
 @interface OpenGLRendererView : GLKView
 
 @property Renderer *renderer;
+@property BOOL shouldMakeSnapshots;
+
+- (void)updateSnapshots;
+- (UIImage *)imageFromBestSnapshot;
+- (NSArray <UIImage *> *)imagesFromSnapshots:(int)amount;
 
 @end
