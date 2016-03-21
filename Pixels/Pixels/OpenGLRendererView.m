@@ -93,13 +93,13 @@ const GLubyte Indices[] = {
 
 - (void)renderTextureData
 {
-    if (self.renderer.size != _currentSize)
+    if (self.renderer.displaySize != _currentSize)
     {
         if (_textureData)
         {
             free(_textureData);
         }
-        _currentSize = self.renderer.size;
+        _currentSize = self.renderer.displaySize;
         _textureData = (GLubyte *)calloc(_currentSize * _currentSize * 3, sizeof(GLubyte));
     }
     
@@ -160,7 +160,7 @@ const GLubyte Indices[] = {
 {
     if (self.renderer)
     {
-        int size = self.renderer.size;
+        int size = self.renderer.displaySize;
         
         int numPixels = size * size;
         uint32_t data[numPixels];
@@ -233,8 +233,8 @@ const GLubyte Indices[] = {
 
 - (BOOL)snapshotIsOkay:(NSData *)data
 {
-    int size = self.renderer.size;
-    int numPixels = size * size;
+    int rendererSize = [self rendererSizeForSnapshot:data];
+    int numPixels = rendererSize * rendererSize;
     uint32_t *pixelData = (uint32_t *)data.bytes;
     
     for (int i = 1; i < numPixels; i++)
@@ -249,7 +249,7 @@ const GLubyte Indices[] = {
 
 - (UIImage *)imageWithSnapshot:(NSData *)data
 {
-    int rendererSize = sqrtf(data.length / sizeof(uint32_t));
+    int rendererSize = [self rendererSizeForSnapshot:data];
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     
     CIImage *ciImage = [CIImage imageWithBitmapData:data
@@ -265,6 +265,11 @@ const GLubyte Indices[] = {
     CGColorSpaceRelease(colorSpace);
     
     return image;
+}
+
+- (int)rendererSizeForSnapshot:(NSData *)data
+{
+    return sqrtf(data.length / sizeof(uint32_t));
 }
 
 @end

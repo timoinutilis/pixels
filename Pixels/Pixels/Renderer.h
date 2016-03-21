@@ -21,8 +21,23 @@ typedef struct SpriteDef {
     uint8_t colors[3];
 } SpriteDef;
 
+typedef struct Screen {
+    int width;
+    int height;
+    int displayX;
+    int displayY;
+    int displayWidth;
+    int displayHeight;
+    int offsetX;
+    int offsetY;
+    BOOL transparent;
+    uint32_t palette[16]; // RendererNumColors
+    uint8_t *pixelBuffer;
+} Screen;
+
+extern int const RendererMaxScreenSize;
 extern int const RendererNumColors;
-extern int const RendererNumLayers;
+extern int const RendererNumScreens;
 extern int const RendererNumSprites;
 extern int const RendererNumSpriteDefs;
 extern int const RendererSpriteSize;
@@ -30,11 +45,15 @@ extern int const RendererSpriteSize;
 
 @interface Renderer : NSObject
 
-@property (nonatomic) int screenMode;
-@property (nonatomic, readonly) int size;
+@property (nonatomic) int displayMode;
+@property (nonatomic, readonly) int displaySize;
 @property (nonatomic) int colorIndex;
-@property (nonatomic) int layerIndex;
+@property (nonatomic) int screenIndex;
+@property (nonatomic, readonly) Screen *currentScreen;
 
+- (Screen *)screenAtIndex:(int)index;
+- (void)openScreen:(int)index width:(int)width height:(int)height;
+- (void)closeScreen:(int)index;
 - (void)initPalette;
 - (int)paletteAtIndex:(int)index;
 - (void)setPalette:(int)color atIndex:(int)index;

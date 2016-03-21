@@ -318,13 +318,13 @@ NSString *const TRANSFER = @"TRANSFER";
     {
         NSString *text = [value description];
         int fontHeight = 6;
-        int screenSize = runner.renderer.size;
-        int maxLines = screenSize / fontHeight - 1;
+        Screen *screen = runner.renderer.currentScreen;
+        int maxLines = screen->height / fontHeight - 1;
         [runner.renderer drawText:text x:0 y:runner.printLine * fontHeight];
         runner.printLine++;
         if (runner.printLine > maxLines)
         {
-            [runner.renderer scrollFromX:0 Y:0 toX:screenSize Y:screenSize deltaX:0 Y:-fontHeight];
+            [runner.renderer scrollFromX:0 Y:0 toX:screen->width Y:screen->height deltaX:0 Y:-fontHeight];
             runner.printLine = maxLines;
         }
         [runner.delegate updateRendererView];
@@ -804,7 +804,7 @@ NSString *const TRANSFER = @"TRANSFER";
         return nil;
     }
     
-    runner.renderer.screenMode = mode.intValue;
+    runner.renderer.displayMode = mode.intValue;
     [runner next];
     return nil;
 }
@@ -1776,13 +1776,13 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    Number *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumLayers - 1];
+    Number *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumScreens - 1];
     if (runner.error)
     {
         return nil;
     }
     
-    runner.renderer.layerIndex = n.intValue;
+    runner.renderer.screenIndex = n.intValue;
     
     [runner next];
     return nil;
@@ -1804,12 +1804,14 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    int maxPixel = runner.renderer.size - 1;
+    Screen *screen = runner.renderer.currentScreen;
+    int maxX = screen->width - 1;
+    int maxY = screen->height - 1;
     
-    Number *fromX = [self.fromXExpression evaluateNumberWithRunner:runner min:0 max:maxPixel];
-    Number *fromY = [self.fromYExpression evaluateNumberWithRunner:runner min:0 max:maxPixel];
-    Number *toX = [self.toXExpression evaluateNumberWithRunner:runner min:0 max:maxPixel];
-    Number *toY = [self.toYExpression evaluateNumberWithRunner:runner min:0 max:maxPixel];
+    Number *fromX = [self.fromXExpression evaluateNumberWithRunner:runner min:0 max:maxX];
+    Number *fromY = [self.fromYExpression evaluateNumberWithRunner:runner min:0 max:maxY];
+    Number *toX = [self.toXExpression evaluateNumberWithRunner:runner min:0 max:maxX];
+    Number *toY = [self.toYExpression evaluateNumberWithRunner:runner min:0 max:maxY];
     if (runner.error)
     {
         return nil;
@@ -1851,11 +1853,10 @@ NSString *const TRANSFER = @"TRANSFER";
     
     if (self.srcXExpression)
     {
-        int maxSize = runner.renderer.size;
-        Number *srcX = [self.srcXExpression evaluateNumberWithRunner:runner min:0 max:maxSize - 1];
-        Number *srcY = [self.srcYExpression evaluateNumberWithRunner:runner min:0 max:maxSize - 1];
-        Number *srcW = [self.srcWidthExpression evaluateNumberWithRunner:runner min:0 max:maxSize];
-        Number *srcH = [self.srcHeightExpression evaluateNumberWithRunner:runner min:0 max:maxSize];
+        Number *srcX = [self.srcXExpression evaluateNumberWithRunner:runner min:0 max:RendererMaxScreenSize - 1];
+        Number *srcY = [self.srcYExpression evaluateNumberWithRunner:runner min:0 max:RendererMaxScreenSize - 1];
+        Number *srcW = [self.srcWidthExpression evaluateNumberWithRunner:runner min:0 max:RendererMaxScreenSize];
+        Number *srcH = [self.srcHeightExpression evaluateNumberWithRunner:runner min:0 max:RendererMaxScreenSize];
         
         if (runner.error)
         {
