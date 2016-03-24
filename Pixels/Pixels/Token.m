@@ -71,7 +71,11 @@
         case TTypeSymPersist: return @"PERSIST";
         case TTypeSymSwap: return @"SWAP";
         case TTypeSymRandomize: return @"RANDOMIZE";
-        
+        case TTypeSymOpen: return @"OPEN";
+        case TTypeSymClose: return @"CLOSE";
+        case TTypeSymOffset: return @"OFFSET";
+        case TTypeSymDisplay: return @"DISPLAY";
+
         case TTypeSymUp: return @"UP";
         case TTypeSymDown: return @"DOWN";
         case TTypeSymLeft: return @"LEFT";

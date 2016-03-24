@@ -39,9 +39,8 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
     {
         // default screen configuration
         self.displayMode = 3; // 64x64
-        [self openScreen:0 width:64 height:64];
-        [self openScreen:1 width:64 height:64];
-        _screens[1].transparent = TRUE;
+        [self openScreen:0 width:64 height:64 renderMode:0];
+        [self openScreen:1 width:64 height:64 renderMode:1];
         
         self.colorIndex = 1;
         self.screenIndex = 0;
@@ -72,7 +71,7 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
     return &_screens[index];
 }
 
-- (void)openScreen:(int)index width:(int)width height:(int)height
+- (void)openScreen:(int)index width:(int)width height:(int)height renderMode:(int)renderMode
 {
     Screen *screen = &_screens[index];
     screen->width = width;
@@ -83,7 +82,7 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
     screen->displayHeight = height;
     screen->offsetX = 0;
     screen->offsetY = 0;
-    screen->transparent = FALSE;
+    screen->renderMode = renderMode;
     
     screen->pixelBuffer = calloc(width * height, sizeof(uint8_t));
     
@@ -102,7 +101,7 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
     screen->displayHeight = 0;
     screen->offsetX = 0;
     screen->offsetY = 0;
-    screen->transparent = FALSE;
+    screen->renderMode = 0;
     
     free(screen->pixelBuffer);
     screen->pixelBuffer = NULL;
@@ -144,6 +143,7 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
 
 - (void)setDisplayMode:(int)displayMode
 {
+    [self closeScreens];
     _displayMode = displayMode;
     _displaySize = pow(2, displayMode + 3);
 }
@@ -625,7 +625,10 @@ uint8_t getSpritePixel(SpriteDef *def, int x, int y)
                 {
                     colorIndex = screen->pixelBuffer[localY * screen->width + localX];
                 }
-                return screen->palette[colorIndex];
+                if (screen->renderMode == 0 || colorIndex > 0)
+                {
+                    return screen->palette[colorIndex];
+                }
             }
         }
     }

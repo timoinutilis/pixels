@@ -241,9 +241,33 @@
         case TTypeSymGamepad:
             node = [self acceptGamepad];
             break;
-        case TTypeSymScreen:
-            node = [self acceptScreen];
+        case TTypeSymDisplay:
+            node = [self acceptDisplay];
             break;
+        case TTypeSymScreen: {
+            Token *next = [self nextToken];
+            if (next.type == TTypeSymOpen)
+            {
+                node = [self acceptScreenOpen];
+            }
+            else if (next.type == TTypeSymClose)
+            {
+                node = [self acceptScreenClose];
+            }
+            else if (next.type == TTypeSymDisplay)
+            {
+                node = [self acceptScreenDisplay];
+            }
+            else if (next.type == TTypeSymOffset)
+            {
+                node = [self acceptScreenOffset];
+            }
+            else
+            {
+                node = [self acceptScreen];
+            }
+            break;
+        }
         case TTypeSymColor:
             node = [self acceptColor];
             break;
@@ -327,8 +351,8 @@
             }
             break;
         }
-        case TTypeSymLayer:
-            node = [self acceptLayer];
+        case TTypeSymLayer: // obsolete, now called Screen
+            node = [self acceptScreen];
             break;
         case TTypeSymPaint:
             node = [self acceptPaint];
@@ -698,11 +722,80 @@
     return node;
 }
 
+- (Node *)acceptDisplay
+{
+    DisplayNode *node = [[DisplayNode alloc] init];
+    [self accept:TTypeSymDisplay];
+    node.modeExpression = [self acceptExpression];
+    return node;
+}
+
+- (Node *)acceptScreenOpen
+{
+    ScreenOpenNode *node = [[ScreenOpenNode alloc] init];
+    [self accept:TTypeSymScreen];
+    [self accept:TTypeSymOpen];
+    node.nExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.widthExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.heightExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.renderModeExpression = [self acceptExpression];
+    return node;
+}
+
+- (Node *)acceptScreenClose
+{
+    ScreenCloseNode *node = [[ScreenCloseNode alloc] init];
+    [self accept:TTypeSymScreen];
+    [self accept:TTypeSymClose];
+    node.nExpression = [self acceptExpression];
+    return node;
+}
+
+- (Node *)acceptScreenOffset
+{
+    ScreenOffsetNode *node = [[ScreenOffsetNode alloc] init];
+    [self accept:TTypeSymScreen];
+    [self accept:TTypeSymOffset];
+    node.nExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.xExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.yExpression = [self acceptExpression];
+    return node;
+}
+
+- (Node *)acceptScreenDisplay
+{
+    ScreenDisplayNode *node = [[ScreenDisplayNode alloc] init];
+    [self accept:TTypeSymScreen];
+    [self accept:TTypeSymDisplay];
+    node.nExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.xExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.yExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.widthExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.heightExpression = [self acceptExpression];
+    return node;
+}
+
 - (Node *)acceptScreen
 {
     ScreenNode *node = [[ScreenNode alloc] init];
-    [self accept:TTypeSymScreen];
-    node.modeExpression = [self acceptExpression];
+    if (self.token.type == TTypeSymLayer)
+    {
+        [self accept:TTypeSymLayer];
+    }
+    else
+    {
+        [self accept:TTypeSymScreen];
+    }
+    node.nExpression = [self acceptExpression];
     return node;
 }
 
@@ -1086,14 +1179,6 @@
     SoundOffNode *node = [[SoundOffNode alloc] init];
     [self accept:TTypeSymSound and:TTypeSymOff];
     node.voiceExpression = [self acceptOptionalExpression];
-    return node;
-}
-
-- (Node *)acceptLayer
-{
-    LayerNode *node = [[LayerNode alloc] init];
-    [self accept:TTypeSymLayer];
-    node.nExpression = [self acceptExpression];
     return node;
 }
 

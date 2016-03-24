@@ -67,6 +67,10 @@ typedef NS_ENUM(NSInteger, TType) {
     TTypeSymPersist,
     TTypeSymSwap,
     TTypeSymRandomize,
+    TTypeSymOpen,
+    TTypeSymClose,
+    TTypeSymOffset,
+    TTypeSymDisplay,
     
     // Functions
     TTypeSymUp,

@@ -30,7 +30,7 @@ typedef struct Screen {
     int displayHeight;
     int offsetX;
     int offsetY;
-    BOOL transparent;
+    int renderMode;
     uint32_t palette[16]; // RendererNumColors
     uint8_t *pixelBuffer;
 } Screen;
@@ -52,7 +52,7 @@ extern int const RendererSpriteSize;
 @property (nonatomic, readonly) Screen *currentScreen;
 
 - (Screen *)screenAtIndex:(int)index;
-- (void)openScreen:(int)index width:(int)width height:(int)height;
+- (void)openScreen:(int)index width:(int)width height:(int)height renderMode:(int)renderMode;
 - (void)closeScreen:(int)index;
 - (void)initPalette;
 - (int)paletteAtIndex:(int)index;
