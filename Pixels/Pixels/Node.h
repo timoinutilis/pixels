@@ -253,6 +253,12 @@
 @property (nonatomic) Node *nExpression;
 @end
 
+@interface SpriteScreenNode : Node
+@property (nonatomic) Node *screenExpression;
+@property (nonatomic) Node *spriteFromExpression;
+@property (nonatomic) Node *spriteToExpression;
+@end
+
 @interface DataNode : Node
 @property (nonatomic) NSArray *constants;
 @end

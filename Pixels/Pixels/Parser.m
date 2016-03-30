@@ -333,6 +333,10 @@
             {
                 node = [self acceptSpriteOff];
             }
+            else if (next.type == TTypeSymScreen)
+            {
+                node = [self acceptSpriteScreen];
+            }
             else
             {
                 node = [self acceptSprite];
@@ -733,8 +737,7 @@
 - (Node *)acceptScreenOpen
 {
     ScreenOpenNode *node = [[ScreenOpenNode alloc] init];
-    [self accept:TTypeSymScreen];
-    [self accept:TTypeSymOpen];
+    [self accept:TTypeSymScreen and:TTypeSymOpen];
     node.nExpression = [self acceptExpression];
     [self accept:TTypeSymComma];
     node.widthExpression = [self acceptExpression];
@@ -748,8 +751,7 @@
 - (Node *)acceptScreenClose
 {
     ScreenCloseNode *node = [[ScreenCloseNode alloc] init];
-    [self accept:TTypeSymScreen];
-    [self accept:TTypeSymClose];
+    [self accept:TTypeSymScreen and:TTypeSymClose];
     node.nExpression = [self acceptExpression];
     return node;
 }
@@ -757,8 +759,7 @@
 - (Node *)acceptScreenOffset
 {
     ScreenOffsetNode *node = [[ScreenOffsetNode alloc] init];
-    [self accept:TTypeSymScreen];
-    [self accept:TTypeSymOffset];
+    [self accept:TTypeSymScreen and:TTypeSymOffset];
     node.nExpression = [self acceptExpression];
     [self accept:TTypeSymComma];
     node.xExpression = [self acceptExpression];
@@ -770,8 +771,7 @@
 - (Node *)acceptScreenDisplay
 {
     ScreenDisplayNode *node = [[ScreenDisplayNode alloc] init];
-    [self accept:TTypeSymScreen];
-    [self accept:TTypeSymDisplay];
+    [self accept:TTypeSymScreen and:TTypeSymDisplay];
     node.nExpression = [self acceptExpression];
     [self accept:TTypeSymComma];
     node.xExpression = [self acceptExpression];
@@ -990,6 +990,25 @@
     SpriteOffNode *node = [[SpriteOffNode alloc] init];
     [self accept:TTypeSymSprite and:TTypeSymOff];
     node.nExpression = [self acceptOptionalExpression];
+    return node;
+}
+
+- (Node *)acceptSpriteScreen
+{
+    SpriteScreenNode *node = [[SpriteScreenNode alloc] init];
+    [self accept:TTypeSymSprite and:TTypeSymScreen];
+    node.screenExpression = [self acceptExpression];
+    if (self.token.type == TTypeSymComma)
+    {
+        [self accept:TTypeSymComma];
+        node.spriteFromExpression = [self acceptExpression];
+        if (self.token.type == TTypeSymTo)
+        {
+            [self accept:TTypeSymTo];
+            node.spriteToExpression = [self acceptExpression];
+        }
+    }
+
     return node;
 }
 

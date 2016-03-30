@@ -14,6 +14,7 @@ typedef struct Sprite {
     float y;
     int image;
     int8_t colors[3];
+    int screen;
 } Sprite;
 
 typedef struct SpriteDef {
