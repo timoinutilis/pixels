@@ -804,8 +804,8 @@ NSString *const TRANSFER = @"TRANSFER";
 - (id)evaluateWithRunner:(Runner *)runner
 {
     Number *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumScreens - 1];
-    Number *width = [self.widthExpression evaluateNumberWithRunner:runner min:8 max:RendererMaxScreenSize];
-    Number *height = [self.heightExpression evaluateNumberWithRunner:runner min:8 max:RendererMaxScreenSize];
+    Number *width = [self.widthExpression evaluateNumberWithRunner:runner min:1 max:RendererMaxScreenSize];
+    Number *height = [self.heightExpression evaluateNumberWithRunner:runner min:1 max:RendererMaxScreenSize];
     Number *renderMode = [self.renderModeExpression evaluateNumberWithRunner:runner min:0 max:1];
     if (runner.error)
     {
@@ -878,9 +878,9 @@ NSString *const TRANSFER = @"TRANSFER";
         runner.error = [NSError screenNotOpenedErrorWithNode:self];
         return nil;
     }
-
-    screen->offsetX = x.intValue;
-    screen->offsetY = y.intValue;
+    
+    if (x) screen->offsetX = x.intValue;
+    if (y) screen->offsetY = y.intValue;
     
     [runner next];
     return nil;
@@ -920,10 +920,10 @@ NSString *const TRANSFER = @"TRANSFER";
         return nil;
     }
     
-    screen->displayX = x.intValue;
-    screen->displayY = y.intValue;
-    screen->displayWidth = width.intValue;
-    screen->displayHeight = height.intValue;
+    if (x) screen->displayX = x.intValue;
+    if (y) screen->displayY = y.intValue;
+    if (width) screen->displayWidth = width.intValue;
+    if (height) screen->displayHeight = height.intValue;
     
     [runner next];
     return nil;

@@ -33,6 +33,8 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
     SpriteDef _spriteDefs[RendererNumSpriteDefs];
     int _copyWidth;
     int _copyHeight;
+    int _currentMaxScreenIndex;
+    int _currentMaxSpriteIndex;
 }
 
 - (instancetype)init
@@ -98,6 +100,7 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
     screen->pixelBuffer = calloc(width * height, sizeof(uint8_t));
     
     _screenIndex = index;
+    _currentMaxScreenIndex = MAX(_currentMaxScreenIndex, index);
     [self initPalette];
 }
 
@@ -132,6 +135,7 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
             [self closeScreen:i];
         }
     }
+    _currentMaxScreenIndex = 0;
 }
 
 - (void)initPalette
@@ -589,6 +593,7 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
 
 - (Sprite *)spriteAtIndex:(int)index
 {
+    _currentMaxSpriteIndex = MAX(_currentMaxSpriteIndex, index);
     return &_sprites[index];
 }
 
@@ -643,7 +648,7 @@ uint8_t getSpritePixel(SpriteDef *def, int x, int y)
     int screenIndex = 0;
     
     // screens
-    for (int i = RendererNumScreens - 1; i >= 0 ; i--)
+    for (int i = _currentMaxScreenIndex; i >= 0 ; i--)
     {
         Screen *screen = &_screens[i];
         if (screen->pixelBuffer)
@@ -670,7 +675,7 @@ uint8_t getSpritePixel(SpriteDef *def, int x, int y)
     }
     
     // sprites
-    for (int i = 0; i < RendererNumSprites; i++)
+    for (int i = 0; i <= _currentMaxSpriteIndex; i++)
     {
         Sprite *sprite = &_sprites[i];
         if (sprite->visible && sprite->screen >= screenIndex)

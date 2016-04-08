@@ -761,10 +761,14 @@
     ScreenOffsetNode *node = [[ScreenOffsetNode alloc] init];
     [self accept:TTypeSymScreen and:TTypeSymOffset];
     node.nExpression = [self acceptExpression];
-    [self accept:TTypeSymComma];
-    node.xExpression = [self acceptExpression];
-    [self accept:TTypeSymComma];
-    node.yExpression = [self acceptExpression];
+    if ([self acceptOptionalComma])
+    {
+        node.xExpression = [self acceptOptionalExpression];
+        if ([self acceptOptionalComma])
+        {
+            node.yExpression = [self acceptOptionalExpression];
+        }
+    }
     return node;
 }
 
@@ -773,14 +777,22 @@
     ScreenDisplayNode *node = [[ScreenDisplayNode alloc] init];
     [self accept:TTypeSymScreen and:TTypeSymDisplay];
     node.nExpression = [self acceptExpression];
-    [self accept:TTypeSymComma];
-    node.xExpression = [self acceptExpression];
-    [self accept:TTypeSymComma];
-    node.yExpression = [self acceptExpression];
-    [self accept:TTypeSymComma];
-    node.widthExpression = [self acceptExpression];
-    [self accept:TTypeSymComma];
-    node.heightExpression = [self acceptExpression];
+    if ([self acceptOptionalComma])
+    {
+        node.xExpression = [self acceptOptionalExpression];
+        if ([self acceptOptionalComma])
+        {
+            node.yExpression = [self acceptOptionalExpression];
+            if ([self acceptOptionalComma])
+            {
+                node.widthExpression = [self acceptOptionalExpression];
+                if ([self acceptOptionalComma])
+                {
+                    node.heightExpression = [self acceptOptionalExpression];
+                }
+            }
+        }
+    }
     return node;
 }
 
