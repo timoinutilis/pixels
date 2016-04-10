@@ -20,7 +20,6 @@
 		920F55EA1BE7D1DF00ABBE1E /* Project.m in Sources */ = {isa = PBXBuildFile; fileRef = 920F55E61BE7D1DF00ABBE1E /* Project.m */; };
 		9215D7791B37361100A65E55 /* StandardTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9215D7781B37361100A65E55 /* StandardTableViewCell.m */; };
 		921B234C1A9E3DA800C45AFA /* EditorTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 921B234B1A9E3DA800C45AFA /* EditorTextView.m */; };
-		9231159F1A444A6B00624201 /* RendererView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9231159E1A444A6B00624201 /* RendererView.m */; };
 		923115A21A444AA800624201 /* Renderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 923115A11A444AA800624201 /* Renderer.m */; };
 		9232FA0D1B860CF80082DDF1 /* NumberPool.m in Sources */ = {isa = PBXBuildFile; fileRef = 9232FA0C1B860CF80082DDF1 /* NumberPool.m */; };
 		9245076E1B2B839C006956F1 /* NSError+LowResCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 9245076D1B2B839C006956F1 /* NSError+LowResCoder.m */; };
@@ -47,6 +46,8 @@
 		926864211AA5E50900F305B9 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 926864201AA5E50900F305B9 /* StoreKit.framework */; };
 		926864241AA607A000F305B9 /* UpgradeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 926864231AA607A000F305B9 /* UpgradeViewController.m */; };
 		926864271AA6087300F305B9 /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 926864261AA6087300F305B9 /* AppController.m */; };
+		92694C681C9704EE00837C2B /* OpenGLRendererView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92694C671C9704EE00837C2B /* OpenGLRendererView.m */; };
+		92694C691C9704EE00837C2B /* OpenGLRendererView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92694C671C9704EE00837C2B /* OpenGLRendererView.m */; };
 		926A6A181B1C929D00A85412 /* UIViewController+LowResCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 926A6A171B1C929D00A85412 /* UIViewController+LowResCoder.m */; };
 		926C72C71A2B579E00448EAB /* RunnerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 926C72C61A2B579E00448EAB /* RunnerViewController.m */; };
 		9272C1491A1DE2D000E97957 /* Token.m in Sources */ = {isa = PBXBuildFile; fileRef = 9272C1481A1DE2D000E97957 /* Token.m */; };
@@ -197,7 +198,6 @@
 		929BCF6C1BB14A1B005F1DBD /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 929BCEFB1BB14800005F1DBD /* AFHTTPRequestOperation.m */; };
 		929BCF6D1BB14A1B005F1DBD /* SDImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 92884EFD1B0F25B30032623D /* SDImageCache.m */; };
 		929BCF6E1BB14A1B005F1DBD /* EditorTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 921B234B1A9E3DA800C45AFA /* EditorTextView.m */; };
-		929BCF6F1BB14A1B005F1DBD /* RendererView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9231159E1A444A6B00624201 /* RendererView.m */; };
 		929BCF701BB14A1B005F1DBD /* GORCycleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F0C3691B3EAF0B00000646 /* GORCycleManager.m */; };
 		929BCF711BB14A1B005F1DBD /* Node.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C98F411A20F2F000215AE9 /* Node.m */; };
 		929BCF721BB14A1B005F1DBD /* RunnerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 926C72C61A2B579E00448EAB /* RunnerViewController.m */; };
@@ -302,8 +302,6 @@
 		9215D7781B37361100A65E55 /* StandardTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StandardTableViewCell.m; sourceTree = "<group>"; };
 		921B234A1A9E3DA800C45AFA /* EditorTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditorTextView.h; sourceTree = "<group>"; };
 		921B234B1A9E3DA800C45AFA /* EditorTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditorTextView.m; sourceTree = "<group>"; };
-		9231159D1A444A6B00624201 /* RendererView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RendererView.h; sourceTree = "<group>"; };
-		9231159E1A444A6B00624201 /* RendererView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RendererView.m; sourceTree = "<group>"; };
 		923115A01A444AA800624201 /* Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
 		923115A11A444AA800624201 /* Renderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Renderer.m; sourceTree = "<group>"; };
 		9232FA0B1B860CF80082DDF1 /* NumberPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NumberPool.h; sourceTree = "<group>"; };
@@ -349,6 +347,8 @@
 		926864231AA607A000F305B9 /* UpgradeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpgradeViewController.m; sourceTree = "<group>"; };
 		926864251AA6087300F305B9 /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppController.h; sourceTree = "<group>"; };
 		926864261AA6087300F305B9 /* AppController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppController.m; sourceTree = "<group>"; };
+		92694C661C9704EE00837C2B /* OpenGLRendererView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLRendererView.h; sourceTree = "<group>"; };
+		92694C671C9704EE00837C2B /* OpenGLRendererView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenGLRendererView.m; sourceTree = "<group>"; };
 		926A6A161B1C929D00A85412 /* UIViewController+LowResCoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+LowResCoder.h"; sourceTree = "<group>"; };
 		926A6A171B1C929D00A85412 /* UIViewController+LowResCoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+LowResCoder.m"; sourceTree = "<group>"; };
 		926C72C51A2B579E00448EAB /* RunnerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RunnerViewController.h; sourceTree = "<group>"; };
@@ -624,8 +624,8 @@
 		9231159C1A444A4100624201 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				9231159D1A444A6B00624201 /* RendererView.h */,
-				9231159E1A444A6B00624201 /* RendererView.m */,
+				92694C661C9704EE00837C2B /* OpenGLRendererView.h */,
+				92694C671C9704EE00837C2B /* OpenGLRendererView.m */,
 				92EDC4401A54701D007824A5 /* Gamepad.h */,
 				92EDC4411A54701D007824A5 /* Gamepad.m */,
 				92B60FE11AC024250011233B /* GameButton.h */,
@@ -1277,6 +1277,7 @@
 				920822031A4DABB8005B7862 /* HelpContent.m in Sources */,
 				926086321A5E8560006C5523 /* Runnable.m in Sources */,
 				929BCF121BB14800005F1DBD /* AFURLConnectionOperation.m in Sources */,
+				92694C681C9704EE00837C2B /* OpenGLRendererView.m in Sources */,
 				920E681D1AB731620038994A /* CoachMarkView.m in Sources */,
 				92E1AF961B6A49E8000B1B0D /* NotificationView.m in Sources */,
 				9254DF601B628A3C00774E98 /* LCCPostStats.m in Sources */,
@@ -1290,7 +1291,6 @@
 				92884F1B1B0F25B30032623D /* SDImageCache.m in Sources */,
 				921B234C1A9E3DA800C45AFA /* EditorTextView.m in Sources */,
 				92751E931C85D44600E73A6C /* TextFieldTableViewCell.m in Sources */,
-				9231159F1A444A6B00624201 /* RendererView.m in Sources */,
 				92F0C36A1B3EAF0B00000646 /* GORCycleManager.m in Sources */,
 				92C98F421A20F2F000215AE9 /* Node.m in Sources */,
 				926C72C71A2B579E00448EAB /* RunnerViewController.m in Sources */,
@@ -1343,6 +1343,7 @@
 				929BCF311BB14A1B005F1DBD /* LCCProgram.m in Sources */,
 				929BCF321BB14A1B005F1DBD /* SDWebImageDecoder.m in Sources */,
 				929BCF331BB14A1B005F1DBD /* GORScrollViewDelegate.m in Sources */,
+				92694C691C9704EE00837C2B /* OpenGLRendererView.m in Sources */,
 				929BCF341BB14A1B005F1DBD /* StandardTableViewCell.m in Sources */,
 				929BCF351BB14A1B005F1DBD /* SDWebImageCompat.m in Sources */,
 				929BCF361BB14A1B005F1DBD /* LCCPost.m in Sources */,
@@ -1411,7 +1412,6 @@
 				929BCF6C1BB14A1B005F1DBD /* AFHTTPRequestOperation.m in Sources */,
 				929BCF6D1BB14A1B005F1DBD /* SDImageCache.m in Sources */,
 				929BCF6E1BB14A1B005F1DBD /* EditorTextView.m in Sources */,
-				929BCF6F1BB14A1B005F1DBD /* RendererView.m in Sources */,
 				929BCF701BB14A1B005F1DBD /* GORCycleManager.m in Sources */,
 				929BCF711BB14A1B005F1DBD /* Node.m in Sources */,
 				929BCF721BB14A1B005F1DBD /* RunnerViewController.m in Sources */,

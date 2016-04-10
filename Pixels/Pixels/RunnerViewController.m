@@ -9,7 +9,7 @@
 #import "RunnerViewController.h"
 #import "RunnerDelegate.h"
 #import "Runner.h"
-#import "RendererView.h"
+#import "OpenGLRendererView.h"
 #import "Project.h"
 #import "Gamepad.h"
 #import "NSError+LowResCoder.h"
@@ -34,7 +34,7 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
 @property (weak, nonatomic) IBOutlet UIButton *exitButton;
 @property (weak, nonatomic) IBOutlet UIButton *zoomButton;
 @property (weak, nonatomic) IBOutlet UIButton *soundButton;
-@property (weak, nonatomic) IBOutlet RendererView *rendererView;
+@property (weak, nonatomic) IBOutlet OpenGLRendererView *rendererView;
 @property (weak, nonatomic) IBOutlet UIButton *pauseButton;
 @property (weak, nonatomic) IBOutlet UIButton *buttonA;
 @property (weak, nonatomic) IBOutlet UIButton *buttonB;

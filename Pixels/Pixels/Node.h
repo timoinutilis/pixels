@@ -127,6 +127,39 @@
 @property (nonatomic) Node *playersExpression;
 @end
 
+@interface DisplayNode : Node
+@property (nonatomic) Node *modeExpression;
+@end
+
+@interface ScreenOpenNode : Node
+@property (nonatomic) Node *nExpression;
+@property (nonatomic) Node *widthExpression;
+@property (nonatomic) Node *heightExpression;
+@property (nonatomic) Node *renderModeExpression;
+@end
+
+@interface ScreenCloseNode : Node
+@property (nonatomic) Node *nExpression;
+@end
+
+@interface ScreenOffsetNode : Node
+@property (nonatomic) Node *nExpression;
+@property (nonatomic) Node *xExpression;
+@property (nonatomic) Node *yExpression;
+@end
+
+@interface ScreenDisplayNode : Node
+@property (nonatomic) Node *nExpression;
+@property (nonatomic) Node *xExpression;
+@property (nonatomic) Node *yExpression;
+@property (nonatomic) Node *widthExpression;
+@property (nonatomic) Node *heightExpression;
+@end
+
+@interface ScreenNode : Node
+@property (nonatomic) Node *nExpression;
+@end
+
 @interface ColorNode : Node
 @property (nonatomic) Node *color;
 @end
@@ -220,6 +253,12 @@
 @property (nonatomic) Node *nExpression;
 @end
 
+@interface SpriteScreenNode : Node
+@property (nonatomic) Node *screenExpression;
+@property (nonatomic) Node *spriteFromExpression;
+@property (nonatomic) Node *spriteToExpression;
+@end
+
 @interface DataNode : Node
 @property (nonatomic) NSArray *constants;
 @end
@@ -280,10 +319,6 @@
 
 @interface SoundEndNode : Node
 @property (nonatomic) Node *voiceExpression;
-@end
-
-@interface LayerNode : Node
-@property (nonatomic) Node *nExpression;
 @end
 
 @interface GetNode : Node

@@ -31,6 +31,7 @@ typedef NS_ENUM(NSInteger, LRCErrorCode) {
 + (NSError *)invalidParameterErrorWithNode:(Node *)node value:(float)value;
 + (NSError *)undefinedLabelErrorWithNode:(Node *)node label:(NSString *)label;
 + (NSError *)divisionByZeroErrorWithNode:(Node *)node;
++ (NSError *)screenNotOpenedErrorWithNode:(Node *)node;
 
 - (NSUInteger)programPosition;
 

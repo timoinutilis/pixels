@@ -38,6 +38,7 @@
         case TTypeSymLoop: return @"LOOP";
         case TTypeSymExit: return @"EXIT";
         case TTypeSymWait: return @"WAIT";
+        case TTypeSymScreen: return @"SCREEN";
         case TTypeSymColor: return @"COLOR";
         case TTypeSymCls: return @"CLS";
         case TTypeSymPlot: return @"PLOT";
@@ -70,7 +71,11 @@
         case TTypeSymPersist: return @"PERSIST";
         case TTypeSymSwap: return @"SWAP";
         case TTypeSymRandomize: return @"RANDOMIZE";
-        
+        case TTypeSymOpen: return @"OPEN";
+        case TTypeSymClose: return @"CLOSE";
+        case TTypeSymOffset: return @"OFFSET";
+        case TTypeSymDisplay: return @"DISPLAY";
+
         case TTypeSymUp: return @"UP";
         case TTypeSymDown: return @"DOWN";
         case TTypeSymLeft: return @"LEFT";
@@ -141,7 +146,6 @@
         case TTypeSymCall: return @"CALL";
         case TTypeSymShared: return @"SHARED";
         case TTypeSymUbound: return @"UBOUND";
-        case TTypeSymScreen: return @"SCREEN";
         case TTypeSymPeek: return @"PEEK";
         case TTypeSymPoke: return @"POKE";
         case TTypeSymBank: return @"BANK";
