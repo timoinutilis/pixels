@@ -129,6 +129,7 @@
 
 @interface DisplayNode : Node
 @property (nonatomic) Node *modeExpression;
+@property (nonatomic) BOOL sharedPalette;
 @end
 
 @interface ScreenOpenNode : Node
@@ -386,6 +387,11 @@
 @property (nonatomic) Node *nExpression;
 @property (nonatomic) Node *otherNExpression;
 @property (nonatomic) Node *lastNExpression;
+@end
+
+@interface ScreenHitNode : Node
+@property (nonatomic) Node *screenExpression;
+@property (nonatomic) Node *spriteExpression;
 @end
 
 @interface Maths0Node : Node

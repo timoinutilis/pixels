@@ -731,6 +731,11 @@
     DisplayNode *node = [[DisplayNode alloc] init];
     [self accept:TTypeSymDisplay];
     node.modeExpression = [self acceptExpression];
+    if (self.token.type == TTypeSymShared)
+    {
+        [self accept:TTypeSymShared];
+        node.sharedPalette = YES;
+    }
     return node;
 }
 
@@ -1555,6 +1560,16 @@
                 [self accept:TTypeSymBracketClose];
                 return node;
             }
+        }
+        case TTypeSymScreen: {
+            ScreenHitNode *node = [[ScreenHitNode alloc] init];
+            [self accept:TTypeSymScreen and:TTypeSymHit];
+            [self accept:TTypeSymBracketOpen];
+            node.screenExpression = [self acceptExpression];
+            [self accept:TTypeSymComma];
+            node.spriteExpression = [self acceptExpression];
+            [self accept:TTypeSymBracketClose];
+            return node;
         }
         case TTypeSymHit:
         case TTypeSymRnd:

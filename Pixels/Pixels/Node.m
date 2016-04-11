@@ -784,6 +784,7 @@ NSString *const TRANSFER = @"TRANSFER";
     }
     
     runner.renderer.displayMode = mode.intValue;
+    runner.renderer.sharedPalette = self.sharedPalette;
     [runner next];
     return nil;
 }
@@ -1276,7 +1277,7 @@ NSString *const TRANSFER = @"TRANSFER";
             return nil;
         }
         
-        [runner.renderer setPalette:value.intValue atIndex:n.intValue];
+        [runner.renderer setColor:value.intValue atIndex:n.intValue];
     }
     [runner next];
     return nil;
@@ -1301,7 +1302,7 @@ NSString *const TRANSFER = @"TRANSFER";
         return nil;
     }
     
-    int value = [runner.renderer paletteAtIndex:n.intValue];
+    int value = [runner.renderer colorAtIndex:n.intValue];
     return [runner.numberPool numberWithValue:value];
 }
 
@@ -2351,7 +2352,7 @@ NSString *const TRANSFER = @"TRANSFER";
         return nil;
     }
     
-    return [runner.numberPool numberWithValue:([runner.renderer colorAtX:x.intValue Y:y.intValue])];
+    return [runner.numberPool numberWithValue:([runner.renderer colorIndexAtX:x.intValue Y:y.intValue])];
 }
 
 @end
@@ -2460,6 +2461,40 @@ NSString *const TRANSFER = @"TRANSFER";
         }
     }
     
+    return [runner.numberPool numberWithValue:0];
+}
+
+@end
+
+
+
+@implementation ScreenHitNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.screenExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.spriteExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    Number *screen = [self.screenExpression evaluateNumberWithRunner:runner min:0 max:RendererNumScreens - 1];
+    Number *sprite = [self.spriteExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSprites - 1];
+    if (runner.error)
+    {
+        return nil;
+    }
+
+    if ([runner.renderer screenAtIndex:screen.intValue]->pixelBuffer == NULL)
+    {
+        runner.error = [NSError screenNotOpenedErrorWithNode:self];
+        return nil;
+    }
+    
+    if ([runner.renderer checkCollisionBetweenSprite:sprite.intValue andScreen:screen.intValue])
+    {
+        return [runner.numberPool numberWithValue:-1];
+    }
     return [runner.numberPool numberWithValue:0];
 }
 

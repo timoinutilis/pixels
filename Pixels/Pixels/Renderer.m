@@ -28,6 +28,7 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
 
 @implementation Renderer {
     Screen _screens[RendererNumScreens];
+    uint32_t _palettes[RendererNumScreens][RendererNumColors];
     uint8_t _copyBuffer[RendererMaxScreenSize][RendererMaxScreenSize];
     Sprite _sprites[RendererNumSprites];
     SpriteDef _spriteDefs[RendererNumSpriteDefs];
@@ -43,6 +44,7 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
     {
         // default screen configuration
         self.displayMode = 3; // 64x64
+        self.sharedPalette = YES;
         [self openScreen:0 width:64 height:64 renderMode:0];
         [self openScreen:1 width:64 height:64 renderMode:RendererFlagTransparent];
         
@@ -63,6 +65,22 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
 - (void)dealloc
 {
     [self closeScreens];
+}
+
+- (void)setDisplayMode:(int)displayMode
+{
+    [self closeScreens];
+    _displayMode = displayMode;
+    _displaySize = pow(2, displayMode + 3);
+}
+
+- (void)setSharedPalette:(BOOL)sharedPalette
+{
+    _sharedPalette = sharedPalette;
+    if (sharedPalette)
+    {
+        [self initPalette];
+    }
 }
 
 - (Screen *)currentScreen
@@ -101,7 +119,10 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
     
     _screenIndex = index;
     _currentMaxScreenIndex = MAX(_currentMaxScreenIndex, index);
-    [self initPalette];
+    if (!_sharedPalette)
+    {
+        [self initPalette];
+    }
 }
 
 - (void)closeScreen:(int)index
@@ -140,38 +161,45 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
 
 - (void)initPalette
 {
-    if (_screenIndex == -1) return;
-    Screen *screen = &_screens[_screenIndex];
+    int paletteIndex = 0;
+    if (!_sharedPalette)
+    {
+        if (_screenIndex == -1) return;
+        paletteIndex = _screenIndex;
+    }
     for (int i = 0; i < RendererNumColors; i++)
     {
-        screen->palette[i] = ColorPalette[i];
+        _palettes[paletteIndex][i] = ColorPalette[i];
     }
 }
 
-- (int)paletteAtIndex:(int)index
+- (int)colorAtIndex:(int)index
 {
-    if (_screenIndex == -1) return 0;
-    int color = _screens[_screenIndex].palette[index];
+    int paletteIndex = 0;
+    if (!_sharedPalette)
+    {
+        if (_screenIndex == -1) return 0;
+        paletteIndex = _screenIndex;
+    }
+    int color = _palettes[paletteIndex][index];
     return ((color >> 18) & 0x30) | ((color >> 12) & 0x0C) | ((color >> 6) & 0x03);
 }
 
-- (void)setPalette:(int)color atIndex:(int)index
+- (void)setColor:(int)color atIndex:(int)index
 {
-    if (_screenIndex == -1) return;
+    int paletteIndex = 0;
+    if (!_sharedPalette)
+    {
+        if (_screenIndex == -1) return;
+        paletteIndex = _screenIndex;
+    }
     int r = (color >> 4) & 0x03;
     int g = (color >> 2) & 0x03;
     int b = color & 0x03;
-    _screens[_screenIndex].palette[index] = r * 0x550000 | g * 0x5500 | b * 0x55;
+    _palettes[paletteIndex][index] = r * 0x550000 | g * 0x5500 | b * 0x55;
 }
 
-- (void)setDisplayMode:(int)displayMode
-{
-    [self closeScreens];
-    _displayMode = displayMode;
-    _displaySize = pow(2, displayMode + 3);
-}
-
-- (int)colorAtX:(int)x Y:(int)y
+- (int)colorIndexAtX:(int)x Y:(int)y
 {
     if (_screenIndex == -1) return 0;
     Screen *screen = &_screens[_screenIndex];
@@ -408,7 +436,7 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
 - (void)floodFillX:(int)x Y:(int)y
 {
     if (_screenIndex == -1) return;
-    int oldColor = [self colorAtX:x Y:y];
+    int oldColor = [self colorIndexAtX:x Y:y];
     int newColor = _colorIndex;
     
     if (oldColor == newColor || oldColor == -1) return;
@@ -642,6 +670,39 @@ uint8_t getSpritePixel(SpriteDef *def, int x, int y)
     return NO;
 }
 
+- (BOOL)checkCollisionBetweenSprite:(int)spriteIndex andScreen:(int)screenIndex
+{
+    Sprite *sprite = &_sprites[spriteIndex];
+    Screen *screen = &_screens[screenIndex];
+    if (sprite->visible && screen->pixelBuffer)
+    {
+        int diffX = screen->displayX - screen->offsetX - floorf(sprite->x);
+        int diffY = screen->displayY - screen->offsetY - floorf(sprite->y);
+        if (   diffX < RendererSpriteSize && diffX > -screen->width
+            && diffY < RendererSpriteSize && diffY > -screen->height)
+        {
+            SpriteDef *def = &_spriteDefs[sprite->image];
+            uint8_t *pixelBuffer = screen->pixelBuffer;
+            int screenWidth = screen->width;
+            int minX = MAX(0, diffX);
+            int minY = MAX(0, diffY);
+            int maxX = MIN(RendererSpriteSize, screen->width + diffX);
+            int maxY = MIN(RendererSpriteSize, screen->height + diffY);
+            for (int y = minY; y < maxY; y++)
+            {
+                for (int x = minX; x < maxX; x++)
+                {
+                    if (getSpritePixel(def, x, y) > 0 && pixelBuffer[(y - diffY) * screenWidth + (x - diffX)] > 0)
+                    {
+                        return YES;
+                    }
+                }
+            }
+        }
+    }
+    return NO;
+}
+
 - (uint32_t)screenColorAtX:(int)x Y:(int)y
 {
     uint8_t colorIndex = 0;
@@ -699,6 +760,7 @@ uint8_t getSpritePixel(SpriteDef *def, int x, int y)
                         // use sprite def palette
                         colorIndex = def->colors[pixel - 1];
                     }
+                    screenIndex = sprite->screen;
                     break;
                 }
             }
@@ -706,7 +768,11 @@ uint8_t getSpritePixel(SpriteDef *def, int x, int y)
     }
     
     // final color
-    return _screens[screenIndex].palette[colorIndex];
+    if (_sharedPalette)
+    {
+        return _palettes[0][colorIndex];
+    }
+    return _palettes[screenIndex][colorIndex];
 }
 
 @end

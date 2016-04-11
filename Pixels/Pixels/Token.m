@@ -75,7 +75,8 @@
         case TTypeSymClose: return @"CLOSE";
         case TTypeSymOffset: return @"OFFSET";
         case TTypeSymDisplay: return @"DISPLAY";
-
+        case TTypeSymShared: return @"SHARED";
+        
         case TTypeSymUp: return @"UP";
         case TTypeSymDown: return @"DOWN";
         case TTypeSymLeft: return @"LEFT";
@@ -144,7 +145,6 @@
         case TTypeSymInput: return @"INPUT";
         case TTypeSymSub: return @"SUB";
         case TTypeSymCall: return @"CALL";
-        case TTypeSymShared: return @"SHARED";
         case TTypeSymUbound: return @"UBOUND";
         case TTypeSymPeek: return @"PEEK";
         case TTypeSymPoke: return @"POKE";

@@ -32,7 +32,6 @@ typedef struct Screen {
     int offsetX;
     int offsetY;
     int renderMode;
-    uint32_t palette[16]; // RendererNumColors
     uint8_t *pixelBuffer;
 } Screen;
 
@@ -48,6 +47,7 @@ extern int const RendererSpriteSize;
 
 @property (nonatomic) int displayMode;
 @property (nonatomic, readonly) int displaySize;
+@property (nonatomic) BOOL sharedPalette;
 @property (nonatomic) int colorIndex;
 @property (nonatomic) int screenIndex;
 @property (nonatomic, readonly) Screen *currentScreen;
@@ -56,9 +56,9 @@ extern int const RendererSpriteSize;
 - (void)openScreen:(int)index width:(int)width height:(int)height renderMode:(int)renderMode;
 - (void)closeScreen:(int)index;
 - (void)initPalette;
-- (int)paletteAtIndex:(int)index;
-- (void)setPalette:(int)color atIndex:(int)index;
-- (int)colorAtX:(int)x Y:(int)y;
+- (int)colorAtIndex:(int)index;
+- (void)setColor:(int)color atIndex:(int)index;
+- (int)colorIndexAtX:(int)x Y:(int)y;
 - (void)clearWithColorIndex:(int)colorIndex;
 - (void)plotX:(int)x Y:(int)y;
 - (void)drawFromX:(int)fromX Y:(int)fromY toX:(int)toX Y:(int)toY;
@@ -75,6 +75,7 @@ extern int const RendererSpriteSize;
 - (Sprite *)spriteAtIndex:(int)index;
 - (SpriteDef *)spriteDefAtIndex:(int)index;
 - (BOOL)checkCollisionBetweenSprite:(int)index1 andSprite:(int)index2;
+- (BOOL)checkCollisionBetweenSprite:(int)spriteIndex andScreen:(int)screenIndex;
 
 - (uint32_t)screenColorAtX:(int)x Y:(int)y;
 

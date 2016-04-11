@@ -791,7 +791,7 @@ SPRITE 0,,,1
 
 <h3 id="_SPRITEPALETTE" name="SPRITE PALETTE,SPRITE,PALETTE">SPRITE PALETTE</h3>
 <pre>SPRITE PALETTE number,[c1],[c2],[c3]</pre>
-<p>By default a sprite will appear in its standard colors set by DEF SPRITE. With SPRITE PALETTE you can change the colors for each sprite on the screen separately. See the available color numbers of the COLOR command. Single color parameters can be omitted to keep the current values of the sprite. If a color is set to -1, the sprite's default color is used.</p>
+<p>By default a sprite will appear in its standard colors set by DEF SPRITE. With SPRITE PALETTE you can change the colors for each visible sprite separately. See the available color numbers of the COLOR command. Single color parameters can be omitted to keep the current values of the sprite. If a color is set to -1, the sprite's default color is used.</p>
 <pre class="exm">
 REM ORANGE, WHITE, RED
 SPRITE PALETTE 0,7,1,4
@@ -828,11 +828,11 @@ END IF
 
 <h1 id="Screens">Screens</h1>
 
-<p>A screen can be explained as a visible canvas to draw on. LowRes Coder can show up to 4 screens at once! Each screen can have an own size, they can even be bigger than the visible size and you can scroll their content easily. There is a mode to show a screen with a transparent background color, so you can use them like layers and even create impressive paralax scrolling effects. Also each screen has its own color palette, so for example you can use different colors for the background and for the foreground.</p>
-<p>By default LowRes Coder creates two screens with a resolution of 64x64 pixels. Screen 0 is the main screen and screen 1 is a transparent layer on top of it.</p>
+<p>A screen can be explained as a visible canvas to draw on. LowRes Coder can show up to 4 screens at once! Each screen can have an own size, they can even be bigger than the visible size and you can scroll their content easily. There is a mode to show a screen with a transparent background color, so you can use them like layers and even create impressive paralax scrolling effects. Also each screen can have its own color palette, so for example you can use different colors for the background and for the foreground.</p>
+<p>By default LowRes Coder creates two screens with a resolution of 64x64 pixels and a shared color palette. Screen 0 is the main screen and screen 1 is a transparent layer on top of it.</p>
 
 <h3 id="_DISPLAY" name="DISPLAY">DISPLAY</h3>
-<pre>DISPLAY mode</pre>
+<pre>DISPLAY mode [SHARED]</pre>
 <p>DISPLAY sets the display resolution. When you call it all currently opened screens get closed (including the two default screens), so you will have to open any needed screen with SCREEN OPEN. Available options for <i>mode</i> are:</p>
 <table>
   <tr><th>Mode</th><th>Display Resolution</th></tr>
@@ -842,6 +842,7 @@ END IF
   <tr><td>3</td><td>64x64</td></tr>
   <tr><td>4</td><td>128x128</td></tr>
 </table>
+<p>By adding the SHARED keyword, all screens will share the same color palette. Otherwise each screen will have its own.
 
 <h3 id="_SCREENOPEN" name="SCREEN OPEN,SCREEN,OPEN">SCREEN OPEN</h3>
 <pre>SCREEN OPEN number,width,height,mode</pre>
@@ -922,6 +923,10 @@ SPRITE SCREEN 1,7
 REM ASSIGN SPRITES 0 TO 7 TO SCREEN 1
 SPRITE SCREEN 1,0 TO 7
 </pre>
+
+<h3 id="_SCREENHIT" name="SCREEN HIT,SCREEN,HIT">=SCREEN HIT</h3>
+<pre>v=SCREEN HIT(screen,sprite)</pre>
+<p>Returns TRUE if <i>screen</i> collides with <i>sprite</i>.</p>
 
 <h1 id="String-functions">String functions</h1>
 
