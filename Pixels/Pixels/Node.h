@@ -213,6 +213,10 @@
 @property (nonatomic) Node *alignExpression;
 @end
 
+@interface FontNode : Node
+@property (nonatomic) Node *fontExpression;
+@end
+
 @interface PaintNode : Node
 @property (nonatomic) Node *xExpression;
 @property (nonatomic) Node *yExpression;

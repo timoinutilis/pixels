@@ -293,6 +293,9 @@
         case TTypeSymText:
             node = [self acceptText];
             break;
+        case TTypeSymFont:
+            node = [self acceptFont];
+            break;
         case TTypeSymPalette:
             node = [self acceptPalette];
             break;
@@ -408,6 +411,7 @@
         case TTypeSymSwap:
         case TTypeSymWait:
         case TTypeSymScreen:
+        case TTypeSymDisplay:
         case TTypeSymColor:
         case TTypeSymCls:
         case TTypeSymPlot:
@@ -417,6 +421,7 @@
         case TTypeSymCircle:
         case TTypeSymScroll:
         case TTypeSymText:
+        case TTypeSymFont:
         case TTypeSymGamepad:
         case TTypeSymData:
         case TTypeSymRead:
@@ -924,6 +929,14 @@
         [self accept:TTypeSymComma];
         node.alignExpression = [self acceptExpression];
     }
+    return node;
+}
+
+- (Node *)acceptFont
+{
+    FontNode *node = [[FontNode alloc] init];
+    [self accept:TTypeSymFont];
+    node.fontExpression = [self acceptExpression];
     return node;
 }
 

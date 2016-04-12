@@ -7,6 +7,7 @@
 //
 
 #import "Renderer.h"
+#import "Fonts.h"
 
 int const RendererMaxScreenSize = 512;
 int const RendererNumColors = 16;
@@ -14,17 +15,18 @@ int const RendererNumScreens = 4;
 int const RendererNumSprites = 64;
 int const RendererNumSpriteDefs = 64;
 int const RendererSpriteSize = 8;
+int const RendererNumFonts = 4;
 
 int const RendererFlagTransparent = 0x01;
 
 uint32_t const ColorPalette[16] = {0x000000, 0xffffff, 0xaaaaaa, 0x555555, 0xff0000, 0x550000, 0xaa5500, 0xffaa00, 0xffff00, 0x00aa00, 0x005500, 0x00aaff, 0x0000ff, 0x0000aa, 0xff00ff, 0xaa00aa};
 
-uint8_t FontData[256] = {
-    0x17, 0x0, 0x3, 0x0, 0x3, 0x0, 0xA, 0x1F, 0xA, 0x1F, 0xA, 0x0, 0x12, 0x15, 0x1F, 0x15, 0x9, 0x0, 0x19, 0x4, 0x13, 0x0, 0x1A, 0x15, 0x12, 0x8, 0x0, 0x3, 0x0, 0xE, 0x11, 0x0, 0x11, 0xE, 0x0, 0x15, 0xE, 0xE, 0x15, 0x0, 0x4, 0xE, 0x4, 0x0, 0x18, 0x0, 0x4, 0x4, 0x4, 0x0, 0x10, 0x0, 0x18, 0x4, 0x3, 0x0, 0x1F, 0x11, 0x1F, 0x0, 0x12, 0x1F, 0x10, 0x0, 0x1D, 0x15, 0x17, 0x0, 0x15, 0x15, 0x1F, 0x0, 0x7, 0x4, 0x1F, 0x0, 0x17, 0x15, 0x1D, 0x0, 0x1F, 0x15, 0x1D, 0x0, 0x1, 0x1, 0x1F, 0x0, 0x1F, 0x15, 0x1F, 0x0, 0x17, 0x15, 0x1F, 0x0, 0xA, 0x0, 0x1A, 0x0, 0x4, 0xA, 0x11, 0x0, 0xA, 0xA, 0xA, 0x0, 0x11, 0xA, 0x4, 0x0, 0x1, 0x15, 0x2, 0x0, 0xE, 0x11, 0x17, 0x6, 0x0, 0x1E, 0x5, 0x1E, 0x0, 0x1F, 0x15, 0xA, 0x0, 0xE, 0x11, 0x11, 0x0, 0x1F, 0x11, 0xE, 0x0, 0x1F, 0x15, 0x11, 0x0, 0x1F, 0x5, 0x1, 0x0, 0xE, 0x11, 0x1D, 0x0, 0x1F, 0x4, 0x1F, 0x0, 0x1F, 0x0, 0x11, 0x11, 0xF, 0x0, 0x1F, 0x4, 0x1B, 0x0, 0x1F, 0x10, 0x10, 0x0, 0x1F, 0x2, 0x4, 0x2, 0x1F, 0x0, 0x1F, 0x2, 0x4, 0x1F, 0x0, 0xE, 0x11, 0xE, 0x0, 0x1F, 0x5, 0x2, 0x0, 0xE, 0x11, 0x1E, 0x0, 0x1F, 0x5, 0x1A, 0x0, 0x12, 0x15, 0x9, 0x0, 0x1, 0x1F, 0x1, 0x0, 0xF, 0x10, 0x10, 0xF, 0x0, 0x7, 0x8, 0x10, 0xF, 0x0, 0x1F, 0x8, 0x4, 0x8, 0x1F, 0x0, 0x1B, 0x4, 0x1B, 0x0, 0x3, 0x1C, 0x3, 0x0, 0x19, 0x15, 0x13, 0x0
-};
-uint8_t FontX[256] = {0, 2, 6, 12, 18, 22, 27, 29, 32, 35, 40, 44, 46, 50, 52, 56, 60, 64, 68, 72, 76, 80, 84, 88, 92, 96, 98, 100, 104, 108, 112, 116, 121, 125, 129, 133, 137, 141, 145, 149, 153, 155, 159, 163, 167, 173, 178, 182, 186, 190, 194, 198, 202, 207, 212, 218, 222, 226};
-uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 2, 2, 4, 4, 4, 4, 5, 4, 4, 4, 4, 4, 4, 4, 4, 2, 4, 4, 4, 6, 5, 4, 4, 4, 4, 4, 4, 5, 5, 6, 4, 4, 4};
-
+typedef struct Font {
+    uint8_t *data;
+    int *x;
+    int *width;
+    int height;
+} Font;
 
 @implementation Renderer {
     Screen _screens[RendererNumScreens];
@@ -32,6 +34,7 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
     uint8_t _copyBuffer[RendererMaxScreenSize][RendererMaxScreenSize];
     Sprite _sprites[RendererNumSprites];
     SpriteDef _spriteDefs[RendererNumSpriteDefs];
+    Font _fonts[RendererNumFonts];
     int _copyWidth;
     int _copyHeight;
     int _currentMaxScreenIndex;
@@ -58,6 +61,26 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
             sprite->colors[1] = -1;
             sprite->colors[2] = -1;
         }
+        
+        _fonts[0].data = Font0Data;
+        _fonts[0].x = Font0X;
+        _fonts[0].width = Font0Width;
+        _fonts[0].height = 6;
+        
+        _fonts[1].data = Font1Data;
+        _fonts[1].x = Font1X;
+        _fonts[1].width = Font1Width;
+        _fonts[1].height = 6;
+        
+        _fonts[2].data = Font2Data;
+        _fonts[2].x = Font2X;
+        _fonts[2].width = Font2Width;
+        _fonts[2].height = 8;
+        
+        _fonts[3].data = Font3Data;
+        _fonts[3].x = Font3X;
+        _fonts[3].width = Font3Width;
+        _fonts[3].height = 8;
     }
     return self;
 }
@@ -219,6 +242,7 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
     {
         pixelBuffer[i] = colorIndex;
     }
+    screen->printY = 0;
 }
 
 - (void)plotX:(int)x Y:(int)y
@@ -567,35 +591,30 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
 - (void)drawText:(NSString *)text x:(int)x y:(int)y
 {
     if (_screenIndex == -1) return;
+    Font *font = &_fonts[_fontIndex];
     for (NSUInteger index = 0; index < text.length; index++)
     {
         unichar currentChar = [text characterAtIndex:index];
-        if (currentChar == ' ')
+        NSUInteger charIndex = currentChar - 32;
+        int charLeftX = font->x[charIndex];
+        int charWidth = font->width[charIndex];
+        uint8_t *data = font->data;
+        
+        int screenWidth = _screens[_screenIndex].width;
+        for (int charX = 0; charX < charWidth; charX++)
         {
-            x += 3;
-        }
-        else
-        {
-            NSUInteger fontIndex = currentChar - 33;
-            int charLeftX = FontX[fontIndex];
-            int charWidth = FontWidth[fontIndex];
-            
-            int screenWidth = _screens[_screenIndex].width;
-            for (int charX = 0; charX < charWidth; charX++)
+            if (x >= 0 && x < screenWidth)
             {
-                if (x >= 0 && x < screenWidth)
+                uint8_t rowBits = data[charLeftX + charX];
+                for (int charY = 0; charY < 8; charY++)
                 {
-                    uint8_t rowBits = FontData[charLeftX + charX];
-                    for (int charY = 0; charY < 8; charY++)
+                    if (rowBits & (1<<charY))
                     {
-                        if (rowBits & (1<<charY))
-                        {
-                            [self plotX:x Y:y+charY];
-                        }
+                        [self plotX:x Y:y+charY];
                     }
                 }
-                x++;
             }
+            x++;
         }
     };
 }
@@ -603,20 +622,35 @@ uint8_t FontWidth[256] = {2, 4, 6, 6, 4, 5, 2, 3, 3, 5, 4, 2, 4, 2, 4, 4, 4, 4, 
 - (int)widthForText:(NSString *)text
 {
     int width = 0;
+    int *charWidths = _fonts[_fontIndex].width;
     for (NSUInteger index = 0; index < text.length; index++)
     {
         unichar currentChar = [text characterAtIndex:index];
-        if (currentChar == ' ')
-        {
-            width += 3;
-        }
-        else
-        {
-            NSUInteger fontIndex = currentChar - 33;
-            width += FontWidth[fontIndex];
-        }
+        NSUInteger charIndex = currentChar - 32;
+        width += charWidths[charIndex];
     }
     return width;
+}
+
+- (void)print:(NSString *)text
+{
+    if (_screenIndex == -1) return;
+    Screen *screen = &_screens[_screenIndex];
+    int fontHeight = _fonts[_fontIndex].height;
+    [self drawText:text x:0 y:screen->printY];
+    
+    if (screen->printY >= screen->height - 2 * fontHeight)
+    {
+        [self scrollFromX:0 Y:0 toX:screen->width - 1 Y:screen->height - 1 deltaX:0 Y:-fontHeight];
+/*        int color = _colorIndex;
+        _colorIndex = 0;
+        [self fillBoxFromX:0 Y:screen->height - fontHeight + 1 toX:screen->width - 1 Y:screen->height - 1];
+        _colorIndex = color;*/
+    }
+    else
+    {
+        screen->printY += fontHeight;
+    }
 }
 
 - (Sprite *)spriteAtIndex:(int)index

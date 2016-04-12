@@ -50,12 +50,19 @@ int main(int argc, const char * argv[])
                         
                         const UInt8 *bytes = CFDataGetBytePtr(imageData);
                         size_t bytesPerRow = CGImageGetBytesPerRow(image);
-                        int lastX = 0;
+                        int lastMarker = -1;
                         
                         for (CFIndex x = 0; x < width; x++)
                         {
+                            int marker = bytes[(height - 1) * bytesPerRow + (x<<2)];
+                            if (marker != lastMarker)
+                            {
+                                [charsX addObject:@(x)];
+                                lastMarker = marker;
+                            }
+                            
                             int rowBits = 0;
-                            for (CFIndex y = 0; y < height; y++)
+                            for (CFIndex y = 0; y < height - 1; y++)
                             {
                                 UInt8 pixel = bytes[y * bytesPerRow + (x<<2)];
                                 if (pixel > 127)
@@ -64,17 +71,12 @@ int main(int argc, const char * argv[])
                                 }
                             }
                             printf("0x%X, ", rowBits);
-                            
-                            if (rowBits == 0)
-                            {
-                                [charsX addObject:@(lastX)];
-                                lastX = (int)x + 1;
-                            }
                         }
+                        [charsX addObject:@(width)];
                         
                         printf("\n");
                         
-                        for (int i = 0; i < charsX.count; i++)
+                        for (int i = 0; i < charsX.count - 1; i++)
                         {
                             NSNumber *number = charsX[i];
                             printf("%d, ", number.intValue);

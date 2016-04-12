@@ -543,6 +543,7 @@
 		92F788851BF4B2C400F6996B /* UIImage+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Utils.m"; path = "Class Utils/UIImage+Utils.m"; sourceTree = "<group>"; };
 		92F788861BF4B2C400F6996B /* UITextView+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UITextView+Utils.h"; path = "Class Utils/UITextView+Utils.h"; sourceTree = "<group>"; };
 		92F788871BF4B2C400F6996B /* UITextView+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UITextView+Utils.m"; path = "Class Utils/UITextView+Utils.m"; sourceTree = "<group>"; };
+		92FEE40C1CBD39EB00B22452 /* Fonts.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Fonts.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -672,6 +673,7 @@
 				9232FA0C1B860CF80082DDF1 /* NumberPool.m */,
 				9251440D1B92044100C9D254 /* VariableManager.h */,
 				9251440E1B92044100C9D254 /* VariableManager.m */,
+				92FEE40C1CBD39EB00B22452 /* Fonts.h */,
 			);
 			name = Runtime;
 			sourceTree = "<group>";

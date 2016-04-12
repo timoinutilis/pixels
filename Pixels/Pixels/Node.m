@@ -317,21 +317,9 @@ NSString *const TRANSFER = @"TRANSFER";
     if (runner.delegate)
     {
         NSString *text = [value description];
-        int fontHeight = 6;
-        Screen *screen = runner.renderer.currentScreen;
-        if (screen)
-        {
-            int maxLines = screen->height / fontHeight - 1;
-            [runner.renderer drawText:text x:0 y:runner.printLine * fontHeight];
-            runner.printLine++;
-            if (runner.printLine > maxLines)
-            {
-                [runner.renderer scrollFromX:0 Y:0 toX:screen->width Y:screen->height deltaX:0 Y:-fontHeight];
-                runner.printLine = maxLines;
-            }
-            [runner.delegate updateRendererView];
-            [runner wait:0.1 stopBlock:nil];
-        }
+        [runner.renderer print:text];
+        [runner.delegate updateRendererView];
+        [runner wait:0.1 stopBlock:nil];
     }
     [runner next];
     return nil;
@@ -1010,7 +998,6 @@ NSString *const TRANSFER = @"TRANSFER";
     }
     
     [runner.renderer clearWithColorIndex:c];
-    runner.printLine = 0;
     [runner next];
     return nil;
 }
@@ -1220,6 +1207,30 @@ NSString *const TRANSFER = @"TRANSFER";
         }
     }
     [runner.renderer drawText:text x:xPos y:y.intValue];
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
+@implementation FontNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.fontExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    Number *font = [self.fontExpression evaluateNumberWithRunner:runner min:0 max:RendererNumFonts - 1];
+    if (runner.error)
+    {
+        return nil;
+    }
+    
+    runner.renderer.fontIndex = font.intValue;
     [runner next];
     return nil;
 }

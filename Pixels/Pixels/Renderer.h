@@ -33,6 +33,7 @@ typedef struct Screen {
     int offsetY;
     int renderMode;
     uint8_t *pixelBuffer;
+    int printY;
 } Screen;
 
 extern int const RendererMaxScreenSize;
@@ -41,6 +42,7 @@ extern int const RendererNumScreens;
 extern int const RendererNumSprites;
 extern int const RendererNumSpriteDefs;
 extern int const RendererSpriteSize;
+extern int const RendererNumFonts;
 
 
 @interface Renderer : NSObject
@@ -51,6 +53,7 @@ extern int const RendererSpriteSize;
 @property (nonatomic) int colorIndex;
 @property (nonatomic) int screenIndex;
 @property (nonatomic, readonly) Screen *currentScreen;
+@property (nonatomic) int fontIndex;
 
 - (Screen *)screenAtIndex:(int)index;
 - (void)openScreen:(int)index width:(int)width height:(int)height renderMode:(int)renderMode;
@@ -72,6 +75,7 @@ extern int const RendererSpriteSize;
 - (void)putScreenX:(int)x Y:(int)y srcX:(int)srcX srcY:(int)srcY srcWidth:(int)srcWidth srcHeight:(int)srcHeight transparency:(int)transparency;
 - (void)drawText:(NSString *)text x:(int)x y:(int)y;
 - (int)widthForText:(NSString *)text;
+- (void)print:(NSString *)text;
 - (Sprite *)spriteAtIndex:(int)index;
 - (SpriteDef *)spriteDefAtIndex:(int)index;
 - (BOOL)checkCollisionBetweenSprite:(int)index1 andSprite:(int)index2;

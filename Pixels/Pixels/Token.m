@@ -76,6 +76,7 @@
         case TTypeSymOffset: return @"OFFSET";
         case TTypeSymDisplay: return @"DISPLAY";
         case TTypeSymShared: return @"SHARED";
+        case TTypeSymFont: return @"FONT";
         
         case TTypeSymUp: return @"UP";
         case TTypeSymDown: return @"DOWN";
@@ -149,7 +150,6 @@
         case TTypeSymPeek: return @"PEEK";
         case TTypeSymPoke: return @"POKE";
         case TTypeSymBank: return @"BANK";
-        case TTypeSymFont: return @"FONT";
         case TTypeSymTempo: return @"TEMPO";
         case TTypeSymTrace: return @"TRACE";
         case TTypeSymHeight: return @"HEIGHT";

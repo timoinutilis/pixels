@@ -17,7 +17,6 @@
 @property (nonatomic) NSError *error;
 @property Renderer *renderer;
 @property AudioPlayer *audioPlayer;
-@property int printLine;
 @property NSUInteger dataNodeIndex;
 @property NSUInteger dataConstantIndex;
 @property (readonly) VariableManager *variables;
