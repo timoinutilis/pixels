@@ -385,6 +385,22 @@ WHILE X&lt;63
 WEND
 </pre>
 
+<h3 id="_FONT" name="FONT">FONT</h3>
+<pre>FONT n</pre>
+<p>LowRes Coder includes 4 different fonts. FONT sets the current font for TEXT, TEXT WIDTH and PRINT. <i>n</i> must be a value from the following table:</p>
+<table>
+    <tr><td>0</td><td>6p proportional (default)</td></tr>
+    <tr><td>1</td><td>6p 4x6 fixed-width</td></tr>
+    <tr><td>2</td><td>8p proportional</td></tr>
+    <tr><td>3</td><td>8p 8x8 fixed-width</td></tr>
+</table>
+<pre class="exm">
+FOR I=0 TO 3
+  FONT I
+  PRINT "EXAMPLE " + I
+NEXT I
+</pre>
+
 <h3 id="_SCROLL" name="SCROLL">SCROLL</h3>
 <pre>SCROLL x1,y1 TO x2,y2,dx,dy</pre>
 <p>SCROLL moves the rectangular screen area between <i>x1,y1</i> and <i>x2,y2</i> horizontally by <i>dx</i> and vertically by <i>dy</i> pixels.</p>
