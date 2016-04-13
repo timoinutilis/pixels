@@ -51,7 +51,6 @@ typedef struct Font {
         [self openScreen:0 width:64 height:64 renderMode:0];
         [self openScreen:1 width:64 height:64 renderMode:RendererFlagTransparent];
         
-        self.colorIndex = 1;
         self.screenIndex = 0;
         
         for (int i = 0; i < RendererNumSprites; i++)
@@ -137,6 +136,9 @@ typedef struct Font {
     screen->offsetX = 0;
     screen->offsetY = 0;
     screen->renderMode = renderMode;
+    screen->colorIndex = 1;
+    screen->bgColorIndex = 0;
+    screen->fontIndex = 0;
     
     screen->pixelBuffer = calloc(width * height, sizeof(uint8_t));
     
@@ -243,6 +245,7 @@ typedef struct Font {
         pixelBuffer[i] = colorIndex;
     }
     screen->printY = 0;
+    screen->bgColorIndex = colorIndex;
 }
 
 - (void)plotX:(int)x Y:(int)y
@@ -251,7 +254,7 @@ typedef struct Font {
     Screen *screen = &_screens[_screenIndex];
     if (x >= 0 && x < screen->width && y >= 0 && y < screen->height)
     {
-        screen->pixelBuffer[y * screen->width + x] = _colorIndex;
+        screen->pixelBuffer[y * screen->width + x] = screen->colorIndex;
     }
 }
 
@@ -333,6 +336,7 @@ typedef struct Font {
     Screen *screen = &_screens[_screenIndex];
     int screenWidth = screen->width;
     int screenHeight = screen->height;
+    int colorIndex = screen->colorIndex;
     if (toX >= 0 && toY >= 0 && fromX < screenWidth && fromY < screenHeight)
     {
         if (fromX < 0) fromX = 0;
@@ -345,13 +349,13 @@ typedef struct Font {
         {
             for (int x = fromX; x <= toX; x++)
             {
-                pixelBuffer[y * screenWidth + x] = _colorIndex;
+                pixelBuffer[y * screenWidth + x] = colorIndex;
             }
         }
     }
 }
 
-- (void)scrollFromX:(int)fromX Y:(int)fromY toX:(int)toX Y:(int)toY deltaX:(int)deltaX Y:(int)deltaY
+- (void)scrollFromX:(int)fromX Y:(int)fromY toX:(int)toX Y:(int)toY deltaX:(int)deltaX Y:(int)deltaY refill:(BOOL)refill
 {
     if (_screenIndex == -1) return;
     if (fromX > toX)
@@ -382,9 +386,18 @@ typedef struct Font {
             {
                 int x = (deltaX > 0) ? toX - ox : fromX + ox;
                 int y = (deltaY > 0) ? toY - oy : fromY + oy;
-                int getX = MAX(fromX, MIN(toX, x - deltaX));
-                int getY = MAX(fromY, MIN(toY, y - deltaY));
-                pixelBuffer[y * screenWidth + x] = pixelBuffer[getY * screenWidth + getX];
+                int getX = x - deltaX;
+                int getY = y - deltaY;
+                if (refill && (getX < fromX || getX > toX || getY < fromY || getY > toY))
+                {
+                    pixelBuffer[y * screenWidth + x] = screen->bgColorIndex;
+                }
+                else
+                {
+                    getX = MAX(fromX, MIN(toX, getX));
+                    getY = MAX(fromY, MIN(toY, getY));
+                    pixelBuffer[y * screenWidth + x] = pixelBuffer[getY * screenWidth + getX];
+                }
             }
         }
     }
@@ -460,12 +473,12 @@ typedef struct Font {
 - (void)floodFillX:(int)x Y:(int)y
 {
     if (_screenIndex == -1) return;
+    Screen *screen = &_screens[_screenIndex];
     int oldColor = [self colorIndexAtX:x Y:y];
-    int newColor = _colorIndex;
+    int newColor = screen->colorIndex;
     
     if (oldColor == newColor || oldColor == -1) return;
     
-    Screen *screen = &_screens[_screenIndex];
     int w = screen->width;
     int h = screen->height;
     uint8_t *pixelBuffer = screen->pixelBuffer;
@@ -591,7 +604,8 @@ typedef struct Font {
 - (void)drawText:(NSString *)text x:(int)x y:(int)y
 {
     if (_screenIndex == -1) return;
-    Font *font = &_fonts[_fontIndex];
+    Screen *screen = &_screens[_screenIndex];
+    Font *font = &_fonts[screen->fontIndex];
     for (NSUInteger index = 0; index < text.length; index++)
     {
         unichar currentChar = [text characterAtIndex:index];
@@ -600,7 +614,7 @@ typedef struct Font {
         int charWidth = font->width[charIndex];
         uint8_t *data = font->data;
         
-        int screenWidth = _screens[_screenIndex].width;
+        int screenWidth = screen->width;
         for (int charX = 0; charX < charWidth; charX++)
         {
             if (x >= 0 && x < screenWidth)
@@ -621,8 +635,9 @@ typedef struct Font {
 
 - (int)widthForText:(NSString *)text
 {
+    if (_screenIndex == -1) return 0;
     int width = 0;
-    int *charWidths = _fonts[_fontIndex].width;
+    int *charWidths = _fonts[_screens[_screenIndex].fontIndex].width;
     for (NSUInteger index = 0; index < text.length; index++)
     {
         unichar currentChar = [text characterAtIndex:index];
@@ -636,16 +651,12 @@ typedef struct Font {
 {
     if (_screenIndex == -1) return;
     Screen *screen = &_screens[_screenIndex];
-    int fontHeight = _fonts[_fontIndex].height;
+    int fontHeight = _fonts[screen->fontIndex].height;
     [self drawText:text x:0 y:screen->printY];
     
-    if (screen->printY >= screen->height - 2 * fontHeight)
+    if (screen->printY > screen->height - 2 * fontHeight)
     {
-        [self scrollFromX:0 Y:0 toX:screen->width - 1 Y:screen->height - 1 deltaX:0 Y:-fontHeight];
-/*        int color = _colorIndex;
-        _colorIndex = 0;
-        [self fillBoxFromX:0 Y:screen->height - fontHeight + 1 toX:screen->width - 1 Y:screen->height - 1];
-        _colorIndex = color;*/
+        [self scrollFromX:0 Y:0 toX:screen->width - 1 Y:screen->printY + fontHeight deltaX:0 Y:-fontHeight refill:YES];
     }
     else
     {

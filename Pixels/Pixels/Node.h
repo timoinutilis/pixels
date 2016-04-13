@@ -204,6 +204,7 @@
 @property (nonatomic) Node *toYExpression;
 @property (nonatomic) Node *deltaXExpression;
 @property (nonatomic) Node *deltaYExpression;
+@property (nonatomic) BOOL refill;
 @end
 
 @interface TextNode : Node

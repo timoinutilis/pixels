@@ -968,7 +968,11 @@ NSString *const TRANSFER = @"TRANSFER";
         return nil;
     }
     
-    runner.renderer.colorIndex = value.intValue;
+    Screen *screen = runner.renderer.currentScreen;
+    if (screen)
+    {
+        screen->colorIndex = value.intValue;
+    }
     [runner next];
     return nil;
 }
@@ -1161,7 +1165,7 @@ NSString *const TRANSFER = @"TRANSFER";
         return nil;
     }
     
-    [runner.renderer scrollFromX:fromX.intValue Y:fromY.intValue toX:toX.intValue Y:toY.intValue deltaX:deltaX.intValue Y:deltaY.intValue];
+    [runner.renderer scrollFromX:fromX.intValue Y:fromY.intValue toX:toX.intValue Y:toY.intValue deltaX:deltaX.intValue Y:deltaY.intValue refill:self.refill];
     [runner next];
     return nil;
 }
@@ -1230,7 +1234,11 @@ NSString *const TRANSFER = @"TRANSFER";
         return nil;
     }
     
-    runner.renderer.fontIndex = font.intValue;
+    Screen *screen = runner.renderer.currentScreen;
+    if (screen)
+    {
+        screen->fontIndex = font.intValue;
+    }
     [runner next];
     return nil;
 }

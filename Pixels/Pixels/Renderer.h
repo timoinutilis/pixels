@@ -33,6 +33,9 @@ typedef struct Screen {
     int offsetY;
     int renderMode;
     uint8_t *pixelBuffer;
+    int colorIndex;
+    int bgColorIndex;
+    int fontIndex;
     int printY;
 } Screen;
 
@@ -50,10 +53,8 @@ extern int const RendererNumFonts;
 @property (nonatomic) int displayMode;
 @property (nonatomic, readonly) int displaySize;
 @property (nonatomic) BOOL sharedPalette;
-@property (nonatomic) int colorIndex;
 @property (nonatomic) int screenIndex;
 @property (nonatomic, readonly) Screen *currentScreen;
-@property (nonatomic) int fontIndex;
 
 - (Screen *)screenAtIndex:(int)index;
 - (void)openScreen:(int)index width:(int)width height:(int)height renderMode:(int)renderMode;
@@ -67,7 +68,7 @@ extern int const RendererNumFonts;
 - (void)drawFromX:(int)fromX Y:(int)fromY toX:(int)toX Y:(int)toY;
 - (void)drawBoxFromX:(int)fromX Y:(int)fromY toX:(int)toX Y:(int)toY;
 - (void)fillBoxFromX:(int)fromX Y:(int)fromY toX:(int)toX Y:(int)toY;
-- (void)scrollFromX:(int)fromX Y:(int)fromY toX:(int)toX Y:(int)toY deltaX:(int)deltaX Y:(int)deltaY;
+- (void)scrollFromX:(int)fromX Y:(int)fromY toX:(int)toX Y:(int)toY deltaX:(int)deltaX Y:(int)deltaY refill:(BOOL)refill;
 - (void)drawCircleX:(int)centerX Y:(int)centerY radius:(int)radius;
 - (void)fillCircleX:(int)centerX Y:(int)centerY radius:(int)radius;
 - (void)floodFillX:(int)x Y:(int)y;

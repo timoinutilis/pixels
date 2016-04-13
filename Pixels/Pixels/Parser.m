@@ -912,6 +912,11 @@
     node.deltaXExpression = [self acceptExpression];
     [self accept:TTypeSymComma];
     node.deltaYExpression = [self acceptExpression];
+    if (self.token.type == TTypeSymClear)
+    {
+        [self accept:TTypeSymClear];
+        node.refill = YES;
+    }
     return node;
 }
 

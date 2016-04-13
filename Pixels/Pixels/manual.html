@@ -192,12 +192,11 @@ GOTO TESTLABEL
 
 <h3 id="_PRINT" name="PRINT">PRINT</h3>
 <pre>PRINT value</pre>
-<p>PRINT writes <i>value</i> on the screen, where <i>value</i> can be also a string or any expression. This is a simplified version of PRINT in the classic BASIC language and exists basically for testing. In a normal graphics based program you should prefer the TEXT command.</p>
+<p>PRINT writes <i>value</i> on the screen, where <i>value</i> can be also a string or any expression. Each printed text will appear in a new line and the screen will scroll when the bottom is reached (see CLS). In graphics based programs you should prefer the TEXT command.</p>
 <pre class="exm">
 PRINT "HELLO"
 PRINT 2+2
 </pre>
-
 
 <h3 id="_INPUT" name="INPUT">INPUT</h3>
 <p>In the classic BASIC language, this command is the main way of getting user input by the keyboard. As LowRes Coder doesn't support keyboard, this command does not exist here.</p>
@@ -281,7 +280,7 @@ NEXT I
 
 <h3 id="_CLS" name="CLS">CLS</h3>
 <pre>CLS [color]</pre>
-<p>CLS clears and fills the whole screen with <i>color</i>. Check the color table of the COLOR command.</p>
+<p>CLS clears and fills the whole screen with <i>color</i> (0 by default). Check the color table of the COLOR command. This also sets the background color (used for scrolling in SCROLL and PRINT).</p>
 <pre class="exm">
 FOR I=0 TO 15
   CLS I
@@ -402,12 +401,12 @@ NEXT I
 </pre>
 
 <h3 id="_SCROLL" name="SCROLL">SCROLL</h3>
-<pre>SCROLL x1,y1 TO x2,y2,dx,dy</pre>
-<p>SCROLL moves the rectangular screen area between <i>x1,y1</i> and <i>x2,y2</i> horizontally by <i>dx</i> and vertically by <i>dy</i> pixels.</p>
+<pre>SCROLL x1,y1 TO x2,y2,dx,dy [CLEAR]</pre>
+<p>SCROLL moves the rectangular screen area between <i>x1,y1</i> and <i>x2,y2</i> horizontally by <i>dx</i> and vertically by <i>dy</i> pixels. By default it will "smear" the colors from the borders. If the CLEAR keyword is added, new border areas are cleared with the current background color (see CLS).</p>
 <pre class="exm">
 DO
   PLOT RND*63,1+RND*63
-  SCROLL 0,0 TO 63,63,-2,1
+  SCROLL 0,0 TO 63,63,-2,1 CLEAR
   WAIT 0.04
 LOOP
 </pre>
