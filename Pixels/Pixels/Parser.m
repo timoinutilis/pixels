@@ -825,7 +825,15 @@
 {
     ColorNode *node = [[ColorNode alloc] init];
     [self accept:TTypeSymColor];
-    node.color = [self acceptExpression];
+    node.color = [self acceptOptionalExpression];
+    if ([self acceptOptionalComma])
+    {
+        node.bgColor = [self acceptOptionalExpression];
+        if ([self acceptOptionalComma])
+        {
+            node.borderColor = [self acceptOptionalExpression];
+        }
+    }
     return node;
 }
 

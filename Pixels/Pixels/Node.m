@@ -958,11 +958,15 @@ NSString *const TRANSFER = @"TRANSFER";
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
 {
     [self.color prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.bgColor prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.borderColor prepareWithRunnable:runnable pass:pass canBeString:NO];
 }
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    Number *value = [self.color evaluateNumberWithRunner:runner min:0 max:RendererNumColors - 1];
+    Number *color = [self.color evaluateNumberWithRunner:runner min:0 max:RendererNumColors - 1];
+    Number *bgColor = [self.bgColor evaluateNumberWithRunner:runner min:0 max:RendererNumColors - 1];
+    Number *borderColor = [self.borderColor evaluateNumberWithRunner:runner min:0 max:RendererNumColors - 1];
     if (runner.error)
     {
         return nil;
@@ -971,7 +975,9 @@ NSString *const TRANSFER = @"TRANSFER";
     Screen *screen = runner.renderer.currentScreen;
     if (screen)
     {
-        screen->colorIndex = value.intValue;
+        if (color) screen->colorIndex = color.intValue;
+        if (bgColor) screen->bgColorIndex = bgColor.intValue;
+        if (borderColor) screen->borderColorIndex = borderColor.intValue;
     }
     [runner next];
     return nil;
@@ -990,7 +996,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    int c = 0;
+    int c = -1;
     if (self.color)
     {
         Number *color = [self.color evaluateNumberWithRunner:runner min:0 max:RendererNumColors - 1];

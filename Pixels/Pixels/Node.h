@@ -163,6 +163,8 @@
 
 @interface ColorNode : Node
 @property (nonatomic) Node *color;
+@property (nonatomic) Node *bgColor;
+@property (nonatomic) Node *borderColor;
 @end
 
 @interface ClsNode : Node

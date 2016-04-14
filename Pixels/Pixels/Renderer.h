@@ -35,6 +35,7 @@ typedef struct Screen {
     uint8_t *pixelBuffer;
     int colorIndex;
     int bgColorIndex;
+    int borderColorIndex;
     int fontIndex;
     int printY;
 } Screen;

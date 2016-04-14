@@ -239,13 +239,16 @@ typedef struct Font {
 {
     if (_screenIndex == -1) return;
     Screen *screen = &_screens[_screenIndex];
+    if (colorIndex == -1)
+    {
+        colorIndex = screen->bgColorIndex;
+    }
     uint8_t *pixelBuffer = screen->pixelBuffer;
     for (int i = screen->width * screen->height - 1; i >= 0; i--)
     {
         pixelBuffer[i] = colorIndex;
     }
     screen->printY = 0;
-    screen->bgColorIndex = colorIndex;
 }
 
 - (void)plotX:(int)x Y:(int)y
@@ -605,32 +608,53 @@ typedef struct Font {
 {
     if (_screenIndex == -1) return;
     Screen *screen = &_screens[_screenIndex];
+    [self drawText:text screen:screen color:screen->colorIndex x:x y:y start:0 wrap:NO bg:NO];
+}
+
+
+- (int)drawText:(NSString *)text screen:(Screen *)screen color:(int)colorIndex x:(int)x y:(int)y start:(int)start wrap:(BOOL)wrap bg:(BOOL)bg
+{
     Font *font = &_fonts[screen->fontIndex];
-    for (NSUInteger index = 0; index < text.length; index++)
+    int fontHeight = font->height;
+    uint8_t *fontData = font->data;
+    int screenWidth = screen->width;
+    for (int index = start; index < text.length; index++)
     {
         unichar currentChar = [text characterAtIndex:index];
         NSUInteger charIndex = currentChar - 32;
         int charLeftX = font->x[charIndex];
         int charWidth = font->width[charIndex];
-        uint8_t *data = font->data;
         
-        int screenWidth = screen->width;
+        if (wrap && x + charWidth > screenWidth)
+        {
+            return index;
+        }
+        
         for (int charX = 0; charX < charWidth; charX++)
         {
             if (x >= 0 && x < screenWidth)
             {
-                uint8_t rowBits = data[charLeftX + charX];
-                for (int charY = 0; charY < 8; charY++)
+                uint8_t rowBits = fontData[charLeftX + charX];
+                for (int charY = 0; charY < fontHeight; charY++)
                 {
-                    if (rowBits & (1<<charY))
+                    int pY = y+charY;
+                    if (pY >= 0 && pY < screen->height)
                     {
-                        [self plotX:x Y:y+charY];
+                        if (rowBits & (1<<charY))
+                        {
+                            screen->pixelBuffer[pY * screen->width + x] = colorIndex;
+                        }
+                        else if (bg)
+                        {
+                            screen->pixelBuffer[pY * screen->width + x] = screen->bgColorIndex;
+                        }
                     }
                 }
             }
             x++;
         }
     };
+    return 0;
 }
 
 - (int)widthForText:(NSString *)text
@@ -652,16 +676,22 @@ typedef struct Font {
     if (_screenIndex == -1) return;
     Screen *screen = &_screens[_screenIndex];
     int fontHeight = _fonts[screen->fontIndex].height;
-    [self drawText:text x:0 y:screen->printY];
     
-    if (screen->printY > screen->height - 2 * fontHeight)
+    int index = 0;
+    do
     {
-        [self scrollFromX:0 Y:0 toX:screen->width - 1 Y:screen->printY + fontHeight deltaX:0 Y:-fontHeight refill:YES];
+        index = [self drawText:text screen:screen color:screen->colorIndex x:0 y:screen->printY start:index wrap:YES bg:YES];
+        
+        if (screen->printY > screen->height - 2 * fontHeight)
+        {
+            [self scrollFromX:0 Y:0 toX:screen->width - 1 Y:screen->printY + fontHeight - 1 deltaX:0 Y:-fontHeight refill:YES];
+        }
+        else
+        {
+            screen->printY += fontHeight;
+        }
     }
-    else
-    {
-        screen->printY += fontHeight;
-    }
+    while (index > 0);
 }
 
 - (Sprite *)spriteAtIndex:(int)index
