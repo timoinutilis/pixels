@@ -138,6 +138,7 @@ typedef struct Font {
     screen->renderMode = renderMode;
     screen->colorIndex = 1;
     screen->bgColorIndex = 0;
+    screen->borderColorIndex = 3;
     screen->fontIndex = 0;
     
     screen->pixelBuffer = calloc(width * height, sizeof(uint8_t));
@@ -604,10 +605,24 @@ typedef struct Font {
     }
 }
 
-- (void)drawText:(NSString *)text x:(int)x y:(int)y
+- (void)drawText:(NSString *)text x:(int)x y:(int)y outline:(int)outline
 {
     if (_screenIndex == -1) return;
     Screen *screen = &_screens[_screenIndex];
+    if (outline >= 1)
+    {
+        [self drawText:text screen:screen color:screen->borderColorIndex x:x y:y-1 start:0 wrap:NO bg:NO];
+        [self drawText:text screen:screen color:screen->borderColorIndex x:x y:y+1 start:0 wrap:NO bg:NO];
+        [self drawText:text screen:screen color:screen->borderColorIndex x:x-1 y:y start:0 wrap:NO bg:NO];
+        [self drawText:text screen:screen color:screen->borderColorIndex x:x+1 y:y start:0 wrap:NO bg:NO];
+        if (outline >= 2)
+        {
+            [self drawText:text screen:screen color:screen->borderColorIndex x:x-1 y:y-1 start:0 wrap:NO bg:NO];
+            [self drawText:text screen:screen color:screen->borderColorIndex x:x-1 y:y+1 start:0 wrap:NO bg:NO];
+            [self drawText:text screen:screen color:screen->borderColorIndex x:x+1 y:y-1 start:0 wrap:NO bg:NO];
+            [self drawText:text screen:screen color:screen->borderColorIndex x:x+1 y:y+1 start:0 wrap:NO bg:NO];
+        }
+    }
     [self drawText:text screen:screen color:screen->colorIndex x:x y:y start:0 wrap:NO bg:NO];
 }
 

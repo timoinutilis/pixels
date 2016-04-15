@@ -192,7 +192,7 @@ GOTO TESTLABEL
 
 <h3 id="_PRINT" name="PRINT">PRINT</h3>
 <pre>PRINT value</pre>
-<p>PRINT writes <i>value</i> on the screen, where <i>value</i> can be also a string or any expression. Each printed text will appear in a new line and the screen will scroll when the bottom is reached (see CLS). In graphics based programs you should prefer the TEXT command.</p>
+<p>PRINT writes <i>value</i> on the screen, where <i>value</i> can be also a string or any expression. Each printed text will appear in a new line and the screen will scroll when the bottom is reached. In graphics based programs you should prefer the TEXT command.</p>
 <pre class="exm">
 PRINT "HELLO"
 PRINT 2+2
@@ -258,8 +258,8 @@ PRINT TIME$
 <p>LowRes Coder runs your programs on a virtual screen with 64x64 pixels (by default) and 16 colors. Check the chapter "Screens" for information about different resolutions and more options. With the following commands you can draw on LowRes Coder's screen.</p>
 
 <h3 id="_COLOR" name="COLOR">COLOR</h3>
-<pre>COLOR index</pre>
-<p>COLOR sets the current drawing color, where <i>index</i> can have the following values:</p>
+<pre>COLOR [color],[background],[border]</pre>
+<p>COLOR sets the current drawing color (for most graphical commands), the background color (for CLS) and the border color (for TEXT). Any parameter can be omitted to keep the current value. Possible values are:</p>
 <table>
 <tr><td>0</td><td>black</td><td>8</td><td>yellow</td></tr>
 <tr><td>1</td><td>white</td><td>9</td><td>green</td></tr>
@@ -280,7 +280,7 @@ NEXT I
 
 <h3 id="_CLS" name="CLS">CLS</h3>
 <pre>CLS [color]</pre>
-<p>CLS clears and fills the whole screen with <i>color</i> (0 by default). Check the color table of the COLOR command. This also sets the background color (used for scrolling in SCROLL and PRINT).</p>
+<p>CLS clears and fills the whole screen with <i>color</i>. Check the color table of the COLOR command. If the parameter is omitted, the screen is cleared with the current background color.</p>
 <pre class="exm">
 FOR I=0 TO 15
   CLS I
@@ -360,7 +360,7 @@ PAINT 3,42
 </pre>
 
 <h3 id="_TEXT" name="TEXT">TEXT</h3>
-<pre>TEXT x,y,text$[,align]</pre>
+<pre>TEXT x,y,text$[,align[,outline]]</pre>
 <p>TEXT draws the string <i>text$</i> at the coordinates <i>x,y</i>. Note that <i>text$</i> can also be a number, it will be converted automatically into a string.</p>
 <pre class="exm">TEXT 0,0,"HELLO"</pre>
 <p>With the optional parameter <i>align</i> the text can be drawn in different ways:</p>
@@ -370,6 +370,12 @@ PAINT 3,42
 <tr><td>2</td><td>Right aligned</td></tr>
 </table>
 <pre class="exm">TEXT 32,0,"CENTERED TEXT",1</pre>
+<p>The are different modes to draw an outline with the current border color:</p>
+<table>
+    <tr><td>0</td><td>No outline (default)</td></tr>
+    <tr><td>1</td><td>Normal outline</td></tr>
+    <tr><td>2</td><td>Strong outline</td></tr>
+</table>
 
 <h3 id="_TEXTWIDTH" name="TEXT WIDTH,TEXT,WIDTH">=TEXT WIDTH</h3>
 <pre>v=TEXT WIDTH(text$)</pre>
@@ -402,7 +408,7 @@ NEXT I
 
 <h3 id="_SCROLL" name="SCROLL">SCROLL</h3>
 <pre>SCROLL x1,y1 TO x2,y2,dx,dy [CLEAR]</pre>
-<p>SCROLL moves the rectangular screen area between <i>x1,y1</i> and <i>x2,y2</i> horizontally by <i>dx</i> and vertically by <i>dy</i> pixels. By default it will "smear" the colors from the borders. If the CLEAR keyword is added, new border areas are cleared with the current background color (see CLS).</p>
+<p>SCROLL moves the rectangular screen area between <i>x1,y1</i> and <i>x2,y2</i> horizontally by <i>dx</i> and vertically by <i>dy</i> pixels. By default it will "smear" the colors from the borders. If the CLEAR keyword is added, new border areas are cleared with the current background color.</p>
 <pre class="exm">
 DO
   PLOT RND*63,1+RND*63
@@ -550,7 +556,7 @@ NEXT I
 <pre class="exm">
 FOR X=0 TO 5
   FOR Y=0 TO 5
-    CLS 0
+    CLS
     PLOT X,Y
     WAIT 0.1
   NEXT Y
@@ -1258,7 +1264,7 @@ END,
 EXIT,
 EXP,
 FALSE,
-FONT*,
+FONT,
 FOR,
 GAMEPAD,
 GET,
@@ -1308,7 +1314,7 @@ RETURN,
 RIGHT,
 RIGHT$,
 RND,
-SCREEN*,
+SCREEN,
 SCROLL,
 SGN,
 SHARED*,

@@ -214,6 +214,7 @@
 @property (nonatomic) Node *xExpression;
 @property (nonatomic) Node *yExpression;
 @property (nonatomic) Node *alignExpression;
+@property (nonatomic) Node *outlineExpression;
 @end
 
 @interface FontNode : Node

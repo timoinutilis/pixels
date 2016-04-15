@@ -937,10 +937,13 @@
     node.yExpression = [self acceptExpression];
     [self accept:TTypeSymComma];
     node.valueExpression = [self acceptExpression];
-    if (self.token.type == TTypeSymComma)
+    if ([self acceptOptionalComma])
     {
-        [self accept:TTypeSymComma];
         node.alignExpression = [self acceptExpression];
+        if ([self acceptOptionalComma])
+        {
+            node.outlineExpression = [self acceptExpression];
+        }
     }
     return node;
 }

@@ -33,7 +33,13 @@
 
 - (UIImage *)imageWithSize:(CGSize)size
 {
+    return [self imageWithSize:size quality:kCGInterpolationDefault];
+}
+
+- (UIImage *)imageWithSize:(CGSize)size quality:(CGInterpolationQuality)quality
+{
     UIGraphicsBeginImageContextWithOptions(size, YES, 0.0);
+    CGContextSetInterpolationQuality(UIGraphicsGetCurrentContext(), kCGInterpolationNone);
     [self drawInRect:CGRectMake(0.0f, 0.0f, size.width, size.height)];
     UIImage *scaledImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();

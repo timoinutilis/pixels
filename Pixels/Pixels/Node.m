@@ -1188,6 +1188,7 @@ NSString *const TRANSFER = @"TRANSFER";
     [self.xExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
     [self.yExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
     [self.alignExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.outlineExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
 }
 
 - (id)evaluateWithRunner:(Runner *)runner
@@ -1195,7 +1196,8 @@ NSString *const TRANSFER = @"TRANSFER";
     id value = [self.valueExpression evaluateWithRunner:runner];
     Number *x = [self.xExpression evaluateWithRunner:runner];
     Number *y = [self.yExpression evaluateWithRunner:runner];
-    Number *align = [self.alignExpression evaluateWithRunner:runner];
+    Number *align = [self.alignExpression evaluateNumberWithRunner:runner min:0 max:2];
+    Number *outline = [self.outlineExpression evaluateNumberWithRunner:runner min:0 max:2];
     if (runner.error)
     {
         return nil;
@@ -1216,7 +1218,7 @@ NSString *const TRANSFER = @"TRANSFER";
             xPos -= width;
         }
     }
-    [runner.renderer drawText:text x:xPos y:y.intValue];
+    [runner.renderer drawText:text x:xPos y:y.intValue outline:outline.intValue];
     [runner next];
     return nil;
 }

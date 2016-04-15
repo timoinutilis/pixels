@@ -75,7 +75,7 @@ extern int const RendererNumFonts;
 - (void)floodFillX:(int)x Y:(int)y;
 - (void)getScreenFromX:(int)fromX Y:(int)fromY toX:(int)toX Y:(int)toY;
 - (void)putScreenX:(int)x Y:(int)y srcX:(int)srcX srcY:(int)srcY srcWidth:(int)srcWidth srcHeight:(int)srcHeight transparency:(int)transparency;
-- (void)drawText:(NSString *)text x:(int)x y:(int)y;
+- (void)drawText:(NSString *)text x:(int)x y:(int)y outline:(int)outline;
 - (int)widthForText:(NSString *)text;
 - (void)print:(NSString *)text;
 - (Sprite *)spriteAtIndex:(int)index;

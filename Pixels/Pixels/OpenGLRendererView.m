@@ -8,6 +8,7 @@
 
 #import "OpenGLRendererView.h"
 #import "Renderer.h"
+#import "UIImage+Utils.h"
 
 typedef struct {
     float Position[3];
@@ -260,6 +261,7 @@ const GLubyte Indices[] = {
     
     CGImageRef cgImage = [self.ciContext createCGImage:ciImage fromRect:[ciImage extent]];
     UIImage *image = [UIImage imageWithCGImage:cgImage];
+    image = [image imageWithSize:CGSizeMake(128, 128) quality:kCGInterpolationNone];
     
     CGImageRelease(cgImage);
     CGColorSpaceRelease(colorSpace);
