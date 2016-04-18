@@ -332,6 +332,10 @@
             {
                 node = [self acceptSpritePalette];
             }
+            else if (next.type == TTypeSymScale)
+            {
+                node = [self acceptSpriteScale];
+            }
             else if (next.type == TTypeSymOff)
             {
                 node = [self acceptSpriteOff];
@@ -1008,6 +1012,18 @@
             node.color3Expression = [self acceptOptionalExpression];
         }
     }
+    return node;
+}
+
+- (Node *)acceptSpriteScale
+{
+    SpriteScaleNode *node = [[SpriteScaleNode alloc] init];
+    [self accept:TTypeSymSprite and:TTypeSymScale];
+    node.nExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.xExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.yExpression = [self acceptExpression];
     return node;
 }
 

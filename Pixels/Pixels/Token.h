@@ -73,6 +73,7 @@ typedef NS_ENUM(NSInteger, TType) {
     TTypeSymDisplay,
     TTypeSymShared,
     TTypeSymFont,
+    TTypeSymScale,
     
     // Functions
     TTypeSymUp,
@@ -153,6 +154,7 @@ typedef NS_ENUM(NSInteger, TType) {
     TTypeSymTempo,
     TTypeSymTrace,
     TTypeSymHeight,
+    TTypeSymTile,
 
     TType_count
 };

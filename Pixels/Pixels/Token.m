@@ -77,6 +77,7 @@
         case TTypeSymDisplay: return @"DISPLAY";
         case TTypeSymShared: return @"SHARED";
         case TTypeSymFont: return @"FONT";
+        case TTypeSymScale: return @"SCALE";
         
         case TTypeSymUp: return @"UP";
         case TTypeSymDown: return @"DOWN";
@@ -153,6 +154,7 @@
         case TTypeSymTempo: return @"TEMPO";
         case TTypeSymTrace: return @"TRACE";
         case TTypeSymHeight: return @"HEIGHT";
+        case TTypeSymTile: return @"TILE";
             
         case TType_count: return nil;
     }

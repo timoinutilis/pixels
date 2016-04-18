@@ -1440,6 +1440,37 @@ NSString *const TRANSFER = @"TRANSFER";
 
 
 
+@implementation SpriteScaleNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.nExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.xExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.yExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    Number *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSprites - 1];
+    Number *x = [self.xExpression evaluateNumberWithRunner:runner min:0 max:2];
+    Number *y = [self.yExpression evaluateNumberWithRunner:runner min:0 max:2];
+    if (runner.error)
+    {
+        return nil;
+    }
+    
+    Sprite *sprite = [runner.renderer spriteAtIndex:n.intValue];
+    sprite->scaleX = x.intValue;
+    sprite->scaleY = y.intValue;
+    
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
 @implementation SpriteNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass

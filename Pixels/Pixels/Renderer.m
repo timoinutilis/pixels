@@ -743,22 +743,28 @@ uint8_t getSpritePixel(SpriteDef *def, int x, int y)
         Sprite *sprite2 = &_sprites[index2];
         if (sprite1->visible && sprite2->visible)
         {
-            int diffX = floorf(sprite2->x) - floorf(sprite1->x);
-            int diffY = floorf(sprite2->y) - floorf(sprite1->y);
-            if (ABS(diffX) < RendererSpriteSize && ABS(diffY) < RendererSpriteSize)
+            if (   sprite1->x + (RendererSpriteSize << sprite1->scaleX) > sprite2->x
+                && sprite1->y + (RendererSpriteSize << sprite1->scaleY) > sprite2->y
+                && sprite1->x < sprite2->x + (RendererSpriteSize << sprite2->scaleX)
+                && sprite1->y < sprite2->y + (RendererSpriteSize << sprite2->scaleY)
+                )
             {
+                int diffX = floorf(sprite2->x) - floorf(sprite1->x);
+                int diffY = floorf(sprite2->y) - floorf(sprite1->y);
+                
                 SpriteDef *def1 = &_spriteDefs[sprite1->image];
                 SpriteDef *def2 = &_spriteDefs[sprite2->image];
                 
                 int minX = MAX(0, diffX);
                 int minY = MAX(0, diffY);
-                int maxX = MIN(RendererSpriteSize, RendererSpriteSize + diffX);
-                int maxY = MIN(RendererSpriteSize, RendererSpriteSize + diffY);
+                int maxX = MIN(RendererSpriteSize << sprite1->scaleX, (RendererSpriteSize << sprite2->scaleX) + diffX);
+                int maxY = MIN(RendererSpriteSize << sprite1->scaleY, (RendererSpriteSize << sprite2->scaleY) + diffY);
                 for (int y = minY; y < maxY; y++)
                 {
                     for (int x = minX; x < maxX; x++)
                     {
-                        if (getSpritePixel(def1, x, y) > 0 && getSpritePixel(def2, x - diffX, y - diffY) > 0)
+                        if (   getSpritePixel(def1, x >> sprite1->scaleX, y >> sprite1->scaleY) > 0
+                            && getSpritePixel(def2, (x - diffX) >> sprite2->scaleX, (y - diffY) >> sprite2->scaleY) > 0)
                         {
                             return YES;
                         }
@@ -778,21 +784,21 @@ uint8_t getSpritePixel(SpriteDef *def, int x, int y)
     {
         int diffX = screen->displayX - screen->offsetX - floorf(sprite->x);
         int diffY = screen->displayY - screen->offsetY - floorf(sprite->y);
-        if (   diffX < RendererSpriteSize && diffX > -screen->width
-            && diffY < RendererSpriteSize && diffY > -screen->height)
+        if (   diffX < (RendererSpriteSize << sprite->scaleX) && diffX > -screen->width
+            && diffY < (RendererSpriteSize << sprite->scaleY) && diffY > -screen->height)
         {
             SpriteDef *def = &_spriteDefs[sprite->image];
             uint8_t *pixelBuffer = screen->pixelBuffer;
             int screenWidth = screen->width;
             int minX = MAX(0, diffX);
             int minY = MAX(0, diffY);
-            int maxX = MIN(RendererSpriteSize, screen->width + diffX);
-            int maxY = MIN(RendererSpriteSize, screen->height + diffY);
+            int maxX = MIN(RendererSpriteSize << sprite->scaleX, screen->width + diffX);
+            int maxY = MIN(RendererSpriteSize << sprite->scaleY, screen->height + diffY);
             for (int y = minY; y < maxY; y++)
             {
                 for (int x = minX; x < maxX; x++)
                 {
-                    if (getSpritePixel(def, x, y) > 0 && pixelBuffer[(y - diffY) * screenWidth + (x - diffX)] > 0)
+                    if (getSpritePixel(def, x >> sprite->scaleX, y >> sprite->scaleY) > 0 && pixelBuffer[(y - diffY) * screenWidth + (x - diffX)] > 0)
                     {
                         return YES;
                     }
@@ -841,8 +847,8 @@ uint8_t getSpritePixel(SpriteDef *def, int x, int y)
         Sprite *sprite = &_sprites[i];
         if (sprite->visible && sprite->screen >= screenIndex)
         {
-            int localX = x - (int)floorf(sprite->x);
-            int localY = y - (int)floorf(sprite->y);
+            int localX = (x - (int)floorf(sprite->x)) >> sprite->scaleX;
+            int localY = (y - (int)floorf(sprite->y)) >> sprite->scaleY;
             if (localX >= 0 && localY >= 0 && localX < RendererSpriteSize && localY < RendererSpriteSize)
             {
                 SpriteDef *def = &_spriteDefs[sprite->image];

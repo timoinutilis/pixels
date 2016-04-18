@@ -13,6 +13,8 @@ typedef struct Sprite {
     float x;
     float y;
     int image;
+    int scaleX;
+    int scaleY;
     int8_t colors[3];
     int screen;
 } Sprite;

@@ -251,6 +251,12 @@
 @property (nonatomic) Node *color3Expression;
 @end
 
+@interface SpriteScaleNode : Node
+@property (nonatomic) Node *nExpression;
+@property (nonatomic) Node *xExpression;
+@property (nonatomic) Node *yExpression;
+@end
+
 @interface SpriteNode : Node
 @property (nonatomic) Node *nExpression;
 @property (nonatomic) Node *xExpression;
