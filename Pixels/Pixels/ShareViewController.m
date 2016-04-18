@@ -337,14 +337,14 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.headerLabel.text = @"Post this program to your community profile! If we like it, we will feature it in the LowRes Coder news!";
+    self.textView.textContainer.lineFragmentPadding = 0;
+    self.textView.textContainerInset = UIEdgeInsetsZero;
+    self.textView.text = @"Post this program to your community profile! If we like it, we will feature it in the LowRes Coder news!";
     CALayer *layer = self.iconImageView.layer;
     layer.masksToBounds = YES;
-    layer.cornerRadius = 6;
+    layer.cornerRadius = 3;
     layer.borderWidth = 0.5;
     layer.borderColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.25].CGColor;
-    layer.minificationFilter = kCAFilterNearest;
-    layer.magnificationFilter = kCAFilterNearest;
 }
 
 @end

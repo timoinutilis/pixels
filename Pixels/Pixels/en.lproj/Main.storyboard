@@ -713,31 +713,33 @@ Inutilis Software, 2015-2016</string>
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="96"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="(text)" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="192" translatesAutoresizingMaskIntoConstraints="NO" id="gnl-rd-zYM" customClass="TextLabel">
-                                            <rect key="frame" x="111" y="10" width="194" height="77"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bHI-XD-ggP">
-                                            <rect key="frame" x="15" y="8" width="80" height="80"/>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="bHI-XD-ggP">
+                                            <rect key="frame" x="15" y="10" width="64" height="64"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="80" id="IFW-Ts-NuH"/>
-                                                <constraint firstAttribute="width" constant="80" id="oeE-xe-fv3"/>
+                                                <constraint firstAttribute="height" constant="64" id="IFW-Ts-NuH"/>
+                                                <constraint firstAttribute="width" constant="64" id="oeE-xe-fv3"/>
                                             </constraints>
                                         </imageView>
+                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" text="Text" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="2Xw-vU-cQs">
+                                            <rect key="frame" x="87" y="10" width="218" height="77"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                        </textView>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstAttribute="centerY" secondItem="bHI-XD-ggP" secondAttribute="centerY" id="HxM-Bl-SzT"/>
-                                        <constraint firstItem="gnl-rd-zYM" firstAttribute="top" secondItem="AQT-b1-zre" secondAttribute="topMargin" id="cGP-kf-c0G"/>
+                                        <constraint firstItem="2Xw-vU-cQs" firstAttribute="bottom" secondItem="AQT-b1-zre" secondAttribute="bottomMargin" priority="750" id="AwZ-cm-DC0"/>
                                         <constraint firstItem="bHI-XD-ggP" firstAttribute="leading" secondItem="AQT-b1-zre" secondAttribute="leadingMargin" id="gtv-gT-zPs"/>
-                                        <constraint firstItem="gnl-rd-zYM" firstAttribute="leading" secondItem="bHI-XD-ggP" secondAttribute="trailing" constant="16" id="mr1-0q-LbJ"/>
-                                        <constraint firstItem="gnl-rd-zYM" firstAttribute="bottom" secondItem="AQT-b1-zre" secondAttribute="bottomMargin" id="xIc-wa-q7K"/>
-                                        <constraint firstItem="gnl-rd-zYM" firstAttribute="trailing" secondItem="AQT-b1-zre" secondAttribute="trailingMargin" id="z1Z-Hx-IbQ"/>
+                                        <constraint firstItem="2Xw-vU-cQs" firstAttribute="trailing" secondItem="AQT-b1-zre" secondAttribute="trailingMargin" id="ioV-ob-nec"/>
+                                        <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="bHI-XD-ggP" secondAttribute="bottom" id="kxY-Q9-mgY"/>
+                                        <constraint firstItem="2Xw-vU-cQs" firstAttribute="leading" secondItem="bHI-XD-ggP" secondAttribute="trailing" constant="8" id="tHw-XC-30t"/>
+                                        <constraint firstItem="2Xw-vU-cQs" firstAttribute="top" secondItem="AQT-b1-zre" secondAttribute="topMargin" id="vWv-AF-N43"/>
+                                        <constraint firstItem="bHI-XD-ggP" firstAttribute="top" secondItem="AQT-b1-zre" secondAttribute="topMargin" id="yck-Be-qtv"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="headerLabel" destination="gnl-rd-zYM" id="fMn-7A-hMj"/>
                                     <outlet property="iconImageView" destination="bHI-XD-ggP" id="AkC-BK-PfQ"/>
+                                    <outlet property="textView" destination="2Xw-vU-cQs" id="Q0x-iC-T3Q"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="ShareTextViewCell" rowHeight="200" id="Pqo-SX-TRF" customClass="ShareTextViewCell">

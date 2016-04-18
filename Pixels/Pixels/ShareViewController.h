@@ -28,7 +28,7 @@
 @interface ShareHeaderCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UIImageView *iconImageView;
-@property (weak, nonatomic) IBOutlet UILabel *headerLabel;
+@property (weak, nonatomic) IBOutlet UITextView *textView;
 
 @end
 

@@ -636,37 +636,44 @@ typedef struct Font {
     for (int index = start; index < text.length; index++)
     {
         unichar currentChar = [text characterAtIndex:index];
-        NSUInteger charIndex = currentChar - 32;
-        int charLeftX = font->x[charIndex];
-        int charWidth = font->width[charIndex];
-        
-        if (wrap && x + charWidth > screenWidth)
+        if (currentChar >= 32)
         {
-            return index;
-        }
-        
-        for (int charX = 0; charX < charWidth; charX++)
-        {
-            if (x >= 0 && x < screenWidth)
+            NSUInteger charIndex = currentChar - 32;
+            int charLeftX = font->x[charIndex];
+            int charWidth = font->width[charIndex];
+            
+            if (wrap && x + charWidth > screenWidth)
             {
-                uint8_t rowBits = fontData[charLeftX + charX];
-                for (int charY = 0; charY < fontHeight; charY++)
+                return index;
+            }
+            
+            for (int charX = 0; charX < charWidth; charX++)
+            {
+                if (x >= 0 && x < screenWidth)
                 {
-                    int pY = y+charY;
-                    if (pY >= 0 && pY < screen->height)
+                    uint8_t rowBits = fontData[charLeftX + charX];
+                    for (int charY = 0; charY < fontHeight; charY++)
                     {
-                        if (rowBits & (1<<charY))
+                        int pY = y+charY;
+                        if (pY >= 0 && pY < screen->height)
                         {
-                            screen->pixelBuffer[pY * screen->width + x] = colorIndex;
-                        }
-                        else if (bg)
-                        {
-                            screen->pixelBuffer[pY * screen->width + x] = screen->bgColorIndex;
+                            if (rowBits & (1<<charY))
+                            {
+                                screen->pixelBuffer[pY * screen->width + x] = colorIndex;
+                            }
+                            else if (bg)
+                            {
+                                screen->pixelBuffer[pY * screen->width + x] = screen->bgColorIndex;
+                            }
                         }
                     }
                 }
+                x++;
             }
-            x++;
+        }
+        else if (wrap && (currentChar == '\n' || currentChar == '\r'))
+        {
+            return index + 1;
         }
     };
     return 0;
@@ -680,8 +687,11 @@ typedef struct Font {
     for (NSUInteger index = 0; index < text.length; index++)
     {
         unichar currentChar = [text characterAtIndex:index];
-        NSUInteger charIndex = currentChar - 32;
-        width += charWidths[charIndex];
+        if (currentChar >= 32)
+        {
+            NSUInteger charIndex = currentChar - 32;
+            width += charWidths[charIndex];
+        }
     }
     return width;
 }

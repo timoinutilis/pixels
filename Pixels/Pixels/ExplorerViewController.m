@@ -469,8 +469,6 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     CALayer *imageLayer = self.previewImageView ? self.previewImageView.layer : self.folderView.layer;
     imageLayer.cornerRadius = 20;
     imageLayer.masksToBounds = YES;
-    self.previewImageView.layer.minificationFilter = kCAFilterNearest;
-    self.previewImageView.layer.magnificationFilter = kCAFilterNearest;
 }
 
 - (void)setProject:(Project *)project
@@ -552,8 +550,6 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
             imageView.layer.cornerRadius = 6.0;
             imageView.layer.masksToBounds = YES;
             imageView.frame = smallIconRect;
-            imageView.layer.minificationFilter = kCAFilterNearest;
-            imageView.layer.magnificationFilter = kCAFilterNearest;
 
             [self.folderView addSubview:imageView];
             if (i % 2 == 1)
