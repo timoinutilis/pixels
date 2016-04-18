@@ -332,9 +332,9 @@
             {
                 node = [self acceptSpritePalette];
             }
-            else if (next.type == TTypeSymScale)
+            else if (next.type == TTypeSymZoom)
             {
-                node = [self acceptSpriteScale];
+                node = [self acceptSpriteZoom];
             }
             else if (next.type == TTypeSymOff)
             {
@@ -1015,10 +1015,10 @@
     return node;
 }
 
-- (Node *)acceptSpriteScale
+- (Node *)acceptSpriteZoom
 {
     SpriteScaleNode *node = [[SpriteScaleNode alloc] init];
-    [self accept:TTypeSymSprite and:TTypeSymScale];
+    [self accept:TTypeSymSprite and:TTypeSymZoom];
     node.nExpression = [self acceptExpression];
     [self accept:TTypeSymComma];
     node.xExpression = [self acceptExpression];

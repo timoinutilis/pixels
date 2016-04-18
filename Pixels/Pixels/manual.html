@@ -820,6 +820,15 @@ REM CHANGE ONLY COLOR 3
 SPRITE PALETTE 0,,,5
 </pre>
 
+<h3 id="_SPRITEZOOM" name="SPRITE ZOOM,SPRITE,ZOOM">SPRITE ZOOM</h3>
+<pre>SPRITE ZOOM number,x,y</pre>
+<p>Changes the zoom of the sprite with the given <i>number</i>. <i>x</i> is the horizontal zoom, and <i>y</i> the vertical. Possible values are:</p>
+<table>
+    <tr><td>0</td><td>Original size</td></tr>
+    <tr><td>1</td><td>2x zoom</td></tr>
+    <tr><td>2</td><td>4x zoom</td></tr>
+</table>
+
 <h3 id="_SPRITEXYI" name="SPRITE X,SPRITE Y,SPRITE I,SPRITE,X,Y,I">=SPRITE X/Y/I</h3>
 <pre>x=SPRITE X(number)</pre>
 <pre>y=SPRITE Y(number)</pre>
@@ -1234,7 +1243,7 @@ WRITE DIM ARR,4
 <pre>WRITE CLEAR</pre>
 <p>Clears the transfer memory.</p>
 
-<h1 id="Reserved-keywords" name="BANK,CALL,FONT,HEIGHT,INPUT,PEEK,POKE,SCREEN,SHARED,SUB,TEMPO,TRACE,UBOUND">Reserved keywords</h1>
+<h1 id="Reserved-keywords" name="BANK,CALL,HEIGHT,INPUT,PEEK,POKE,SUB,TEMPO,TRACE,UBOUND">Reserved keywords</h1>
 <p>This is a list of all reserved keywords. They cannot be used as variable or label names.<p>
 <p>* Keywords with an asterisk have no function yet, but are reserved for future versions of LowRes Coder.</p>
 <p>
@@ -1317,7 +1326,7 @@ RND,
 SCREEN,
 SCROLL,
 SGN,
-SHARED*,
+SHARED,
 SIN,
 SOUND,
 SPRITE,
@@ -1331,6 +1340,7 @@ TAP,
 TEMPO*,
 TEXT,
 THEN,
+TILE*,
 TIME$,
 TIMER,
 TO,
@@ -1345,7 +1355,8 @@ WEND,
 WHILE,
 WIDTH,
 WRITE,
-XOR
+XOR,
+ZOOM
 </p>
 
 </body>

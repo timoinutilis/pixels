@@ -77,7 +77,7 @@
         case TTypeSymDisplay: return @"DISPLAY";
         case TTypeSymShared: return @"SHARED";
         case TTypeSymFont: return @"FONT";
-        case TTypeSymScale: return @"SCALE";
+        case TTypeSymZoom: return @"ZOOM";
         
         case TTypeSymUp: return @"UP";
         case TTypeSymDown: return @"DOWN";
