@@ -343,6 +343,8 @@
     layer.cornerRadius = 6;
     layer.borderWidth = 0.5;
     layer.borderColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.25].CGColor;
+    layer.minificationFilter = kCAFilterNearest;
+    layer.magnificationFilter = kCAFilterNearest;
 }
 
 @end

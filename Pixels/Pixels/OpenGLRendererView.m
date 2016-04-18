@@ -261,7 +261,7 @@ const GLubyte Indices[] = {
     
     CGImageRef cgImage = [self.ciContext createCGImage:ciImage fromRect:[ciImage extent]];
     UIImage *image = [UIImage imageWithCGImage:cgImage];
-    image = [image imageWithSize:CGSizeMake(128, 128) quality:kCGInterpolationNone];
+    image = [image imageWithSize:CGSizeMake(128, 128) scale:1.0 quality:kCGInterpolationNone];
     
     CGImageRelease(cgImage);
     CGColorSpaceRelease(colorSpace);

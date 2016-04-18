@@ -20,6 +20,8 @@
 		920F55EA1BE7D1DF00ABBE1E /* Project.m in Sources */ = {isa = PBXBuildFile; fileRef = 920F55E61BE7D1DF00ABBE1E /* Project.m */; };
 		9215D7791B37361100A65E55 /* StandardTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9215D7781B37361100A65E55 /* StandardTableViewCell.m */; };
 		921B234C1A9E3DA800C45AFA /* EditorTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 921B234B1A9E3DA800C45AFA /* EditorTextView.m */; };
+		9230D0621CC4F71100EF6E52 /* UIImage+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F788851BF4B2C400F6996B /* UIImage+Utils.m */; };
+		9230D0631CC4F71700EF6E52 /* UITextView+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F788871BF4B2C400F6996B /* UITextView+Utils.m */; };
 		923115A21A444AA800624201 /* Renderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 923115A11A444AA800624201 /* Renderer.m */; };
 		9232FA0D1B860CF80082DDF1 /* NumberPool.m in Sources */ = {isa = PBXBuildFile; fileRef = 9232FA0C1B860CF80082DDF1 /* NumberPool.m */; };
 		9245076E1B2B839C006956F1 /* NSError+LowResCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 9245076D1B2B839C006956F1 /* NSError+LowResCoder.m */; };
@@ -1344,6 +1346,7 @@
 				929BCF301BB14A1B005F1DBD /* UIImage+GIF.m in Sources */,
 				929BCF311BB14A1B005F1DBD /* LCCProgram.m in Sources */,
 				929BCF321BB14A1B005F1DBD /* SDWebImageDecoder.m in Sources */,
+				9230D0621CC4F71100EF6E52 /* UIImage+Utils.m in Sources */,
 				929BCF331BB14A1B005F1DBD /* GORScrollViewDelegate.m in Sources */,
 				92694C691C9704EE00837C2B /* OpenGLRendererView.m in Sources */,
 				929BCF341BB14A1B005F1DBD /* StandardTableViewCell.m in Sources */,
@@ -1373,6 +1376,7 @@
 				929BCF491BB14A1B005F1DBD /* CommSplitViewController.m in Sources */,
 				929BCF4A1BB14A1B005F1DBD /* Model.xcdatamodeld in Sources */,
 				929BCF4B1BB14A1B005F1DBD /* AFSecurityPolicy.m in Sources */,
+				9230D0631CC4F71700EF6E52 /* UITextView+Utils.m in Sources */,
 				929BCF4C1BB14A1B005F1DBD /* HelpTextViewController.m in Sources */,
 				92612CE51BD7A5F600370C82 /* IndexSideBar.m in Sources */,
 				929BCF4D1BB14A1B005F1DBD /* AppController.m in Sources */,

@@ -12,7 +12,7 @@
 
 - (UIImage *)imageWithMaxWidth:(CGFloat)maxWidth maxHeight:(CGFloat)maxHeight fill:(BOOL)fill;
 - (UIImage *)imageWithSize:(CGSize)size;
-- (UIImage *)imageWithSize:(CGSize)size quality:(CGInterpolationQuality)quality;
+- (UIImage *)imageWithSize:(CGSize)size scale:(CGFloat)scale quality:(CGInterpolationQuality)quality;
 - (UIImage *)imageAsTemplate;
 
 @end

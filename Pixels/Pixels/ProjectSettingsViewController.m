@@ -117,6 +117,9 @@ typedef NS_ENUM(NSInteger, Section) {
 {
     switch (section)
     {
+        case SectionName:
+            return @"Program Name";
+
         case SectionIconMode:
             return @"Icon Mode";
             
