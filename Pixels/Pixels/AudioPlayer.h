@@ -44,6 +44,6 @@ extern int const AudioNumSoundDefs;
 - (SoundNote *)nextNoteForVoice:(int)voice;
 - (void)resetVoice:(int)voice;
 - (void)setVoice:(int)voiceIndex pitch:(int)pitch soundDef:(int)def;
-- (BOOL)voiceIsPlayingQueue:(int)voiceIndex;
+- (int)queueLengthOfVoice:(int)voiceIndex;
 
 @end

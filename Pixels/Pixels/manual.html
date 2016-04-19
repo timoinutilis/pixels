@@ -731,18 +731,19 @@ SOUND 0,61,24,0
 <pre>SOUND OFF [voice]</pre>
 <p>Stops the sound of <i>voice</i> and clears its queue. If the <i>voice</i> parameter is omitted, all voices will be stopped.</p>
 
-<h3 id="_SOUNDEND" name="SOUND END,SOUND,END">=SOUND END</h3>
-<pre>v=SOUND END[(voice)]</pre>
-<p>This function returns TRUE, if the queue of the given <i>voice</i> is empty. A queue is already empty when its last sound is still playing. If the parameter is omitted, all voices are checked.</p>
+<h3 id="_SOUNDLEN" name="SOUND LEN,SOUND,LEN">=SOUND LEN</h3>
+<pre>v=SOUND LEN[(voice)]</pre>
+<p>This function returns the number of notes in the queue of the given <i>voice</i>. The currently playing sound is already removed from the queue. If the parameter is omitted, all voices are checked and the highest value is returned.</p>
 <pre class="exm">
 DO
-  IF SOUND END THEN
-    SOUND 0,49,12,1
+  IF SOUND LEN=0 THEN
+    SOUND 0,49,12
     SOUND 0,53,12
     SOUND 0,56,12
-    SOUND 0,61,24,0
-    SOUND 0,0,12
+    SOUND 0,61,24
   END IF
+  CLS
+  TEXT 0,0,SOUND LEN
   WAIT 0.1
 LOOP
 </pre>
@@ -1283,8 +1284,23 @@ PUT 40,40,11,6,10,5
 </pre>
 <p><i>This command is obsolete. Use GET BLOCK and PUT BLOCK instead.</i></p>
 
+<h3 id="_SOUNDEND" name="SOUND END,SOUND,END">=SOUND END</h3>
+<pre>v=SOUND END[(voice)]</pre>
+<p>This function returns TRUE, if the queue of the given <i>voice</i> is empty. A queue is already empty when its last sound is still playing. If the parameter is omitted, all voices are checked.</p>
+<pre class="exm">
+DO
+  IF SOUND END THEN
+    SOUND 0,49,12
+    SOUND 0,53,12
+    SOUND 0,56,12
+    SOUND 0,61,24
+  END IF
+  WAIT 0.1
+LOOP
+</pre>
+<p><i>This function is obsolete. Use SOUND LEN instead.</i></p>
 
-<h1 id="Reserved-keywords" name="BANK,CALL,HEIGHT,INPUT,PEEK,POKE,SUB,TEMPO,TRACE,UBOUND">Reserved keywords</h1>
+<h1 id="Reserved-keywords" name="BANK,CALL,HEIGHT,INPUT,PEEK,POKE,SUB,TEMPO,TILE,TRACE,UBOUND">Reserved keywords</h1>
 <p>This is a list of all reserved keywords. They cannot be used as variable or label names.<p>
 <p>* Keywords with an asterisk have no function yet, but are reserved for future versions of LowRes Coder.</p>
 <p>
@@ -1294,12 +1310,14 @@ ASC,
 ATN,
 BANK*,
 BAR,
+BLOCK,
 BOX,
 BUTTON,
 CALL*,
 CHR$,
 CIRCLE,
 CLEAR,
+CLOSE,
 CLS,
 COLOR,
 COS,
@@ -1307,6 +1325,7 @@ DATA,
 DATE$,
 DEF,
 DIM,
+DISPLAY,
 DO,
 DOWN,
 ELSE,
@@ -1342,7 +1361,9 @@ MOD,
 NEXT,
 NOT,
 OFF,
+OFFSET,
 ON,
+OPEN,
 OR,
 PAINT,
 PALETTE,

@@ -1701,16 +1701,32 @@
             return node;
         }
         case TTypeSymSound: {
-            SoundEndNode *node = [[SoundEndNode alloc] init];
             [self accept:TTypeSymSound];
-            [self accept:TTypeSymEnd];
-            if (self.token.type == TTypeSymBracketOpen)
+            if (self.token.type == TTypeSymEnd)
             {
-                [self accept:TTypeSymBracketOpen];
-                node.voiceExpression = [self acceptExpression];
-                [self accept:TTypeSymBracketClose];
+                SoundEndNode *node = [[SoundEndNode alloc] init];
+                [self accept:TTypeSymEnd];
+                if (self.token.type == TTypeSymBracketOpen)
+                {
+                    [self accept:TTypeSymBracketOpen];
+                    node.voiceExpression = [self acceptExpression];
+                    [self accept:TTypeSymBracketClose];
+                }
+                return node;
             }
-            return node;
+            else
+            {
+                SoundLenNode *node = [[SoundLenNode alloc] init];
+                [self accept:TTypeSymLen];
+                if (self.token.type == TTypeSymBracketOpen)
+                {
+                    [self accept:TTypeSymBracketOpen];
+                    node.voiceExpression = [self acceptExpression];
+                    [self accept:TTypeSymBracketClose];
+                }
+                return node;
+            }
+            break;
         }
         case TTypeSymAbs:
         case TTypeSymAtn:

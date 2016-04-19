@@ -2059,13 +2059,13 @@ NSString *const TRANSFER = @"TRANSFER";
             return nil;
         }
         
-        isPlaying = [runner.audioPlayer voiceIsPlayingQueue:voice.intValue];
+        isPlaying = ([runner.audioPlayer queueLengthOfVoice:voice.intValue] > 0);
     }
     else
     {
         for (int i = 0; i < AudioNumVoices; i++)
         {
-            if ([runner.audioPlayer voiceIsPlayingQueue:i])
+            if ([runner.audioPlayer queueLengthOfVoice:i] > 0)
             {
                 isPlaying = YES;
                 break;
@@ -2073,6 +2073,44 @@ NSString *const TRANSFER = @"TRANSFER";
         }
     }
     return [runner.numberPool numberWithValue:(isPlaying ? 0 : -1)]; // opposite result => isPlaying != soundEnd
+}
+
+@end
+
+
+
+@implementation SoundLenNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.voiceExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    Number *voice = [self.voiceExpression evaluateNumberWithRunner:runner min:0 max:AudioNumVoices - 1];
+    if (runner.error)
+    {
+        return nil;
+    }
+    
+    int len = 0;
+    if (self.voiceExpression)
+    {
+        len = [runner.audioPlayer queueLengthOfVoice:voice.intValue];
+    }
+    else
+    {
+        for (int i = 0; i < AudioNumVoices; i++)
+        {
+            int voiceLen = [runner.audioPlayer queueLengthOfVoice:i];
+            if (voiceLen > len)
+            {
+                len = voiceLen;
+            }
+        }
+    }
+    return [runner.numberPool numberWithValue:len];
 }
 
 @end

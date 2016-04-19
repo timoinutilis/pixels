@@ -194,10 +194,15 @@ static double PitchToFrequency(int pitch);
     voice->gateTime = 0.0;
 }
 
-- (BOOL)voiceIsPlayingQueue:(int)voiceIndex
+- (int)queueLengthOfVoice:(int)voiceIndex
 {
     AudioSequence *sequence = &_player.sequences[voiceIndex];
-    return sequence->readIndex != sequence->writeIndex;
+    int len = sequence->writeIndex - sequence->readIndex;
+    if (len < 0)
+    {
+        len += AudioSequenceBufSize;
+    }
+    return len;
 }
 
 - (void)setVolume:(double)volume
