@@ -368,12 +368,30 @@
         case TTypeSymPaint:
             node = [self acceptPaint];
             break;
-        case TTypeSymGet:
-            node = [self acceptGet];
+        case TTypeSymGet: {
+            Token *next = [self nextToken];
+            if (next.type == TTypeSymBlock)
+            {
+                node = [self acceptGetBlock];
+            }
+            else
+            {
+                node = [self acceptGet]; // obsolete
+            }
             break;
-        case TTypeSymPut:
-            node = [self acceptPut];
+        }
+        case TTypeSymPut: {
+            Token *next = [self nextToken];
+            if (next.type == TTypeSymBlock)
+            {
+                node = [self acceptPutBlock];
+            }
+            else
+            {
+                node = [self acceptPut]; // obsolete
+            }
             break;
+        }
         case TTypeSymLeftS:
             node = [self acceptLeftS];
             break;
@@ -1320,6 +1338,38 @@
             // PUT with transparency but without source rectangle
             node.transparencyExpression = expression;
         }
+    }
+    return node;
+}
+
+- (Node *)acceptGetBlock
+{
+    GetBlockNode *node = [[GetBlockNode alloc] init];
+    [self accept:TTypeSymGet and:TTypeSymBlock];
+    node.nExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.fromXExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.fromYExpression = [self acceptExpression];
+    [self accept:TTypeSymTo];
+    node.toXExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.toYExpression = [self acceptExpression];
+    return node;
+}
+
+- (Node *)acceptPutBlock
+{
+    PutBlockNode *node = [[PutBlockNode alloc] init];
+    [self accept:TTypeSymPut and:TTypeSymBlock];
+    node.nExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.xExpression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.yExpression = [self acceptExpression];
+    if ([self acceptOptionalComma])
+    {
+        node.maskExpression = [self acceptExpression];
     }
     return node;
 }

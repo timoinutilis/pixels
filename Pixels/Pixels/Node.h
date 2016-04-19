@@ -353,6 +353,21 @@
 @property (nonatomic) Node *transparencyExpression;
 @end
 
+@interface GetBlockNode : Node
+@property (nonatomic) Node *nExpression;
+@property (nonatomic) Node *fromXExpression;
+@property (nonatomic) Node *fromYExpression;
+@property (nonatomic) Node *toXExpression;
+@property (nonatomic) Node *toYExpression;
+@end
+
+@interface PutBlockNode : Node
+@property (nonatomic) Node *nExpression;
+@property (nonatomic) Node *xExpression;
+@property (nonatomic) Node *yExpression;
+@property (nonatomic) Node *maskExpression;
+@end
+
 @interface LeftSCommandNode : Node
 @property (nonatomic) VariableNode *stringVariable;
 @property (nonatomic) Node *numberExpression;

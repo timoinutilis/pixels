@@ -417,23 +417,28 @@ DO
 LOOP
 </pre>
 
-<h3 id="_GET" name="GET">GET</h3>
-<pre>GET x1,y1 TO x2,y2</pre>
-<p>Copies the rectangular screen area between <i>x1,y1</i> and <i>x2,y2</i> to a buffer. Use the PUT command to draw it on the screen.</p>
+<h3 id="_GETBLOCK" name="GET BLOCK,GET,BLOCK">GET BLOCK</h3>
+<pre>GET BLOCK number,x1,y1 TO x2,y2</pre>
+<p>Copies the rectangular screen area between <i>x1,y1</i> and <i>x2,y2</i> to a block buffer with the given <i>number</i>. Possible numbers range from 0 to 63. Use the PUT BLOCK command to draw it on the screen.</p>
 
-<h3 id="_PUT" name="PUT">PUT</h3>
-<pre>PUT x,y[,sx,sy,sw,sh[,transparency]]</pre>
-<pre>PUT x,y[,transparency]</pre>
-<p>Draws the screen area copied by the GET command on the screen at the coordinates <i>x,y</i>. By default the complete copied area will be drawn. With the additional parameters you can draw a smaller part of the source image. With <i>sx</i> and <i>sy</i> you specify the top left corner of the source image, <i>sw</i> is the width and <i>sh</i> the height. If <i>transparency</i> is given and different from -1, the image is drawn with <i>transparency</i> as transparent color.</p>
+<h3 id="_PUTBLOCK" name="PUT BLOCK,PUT,BLOCK">PUT BLOCK</h3>
+<pre>PUT BLOCK number,x,y[,mask]</pre>
+<p>Draws a block buffer copied by the GET BLOCK command on the screen at the coordinates <i>x,y</i>. The optional <i>mask</i> parameter can have two values:</p>
+<table>
+<tr><th>Mask</th><th>Description</th></tr>
+<tr><td>0</td><td>Block is drawn opaque (default)</td></tr>
+<tr><td>1</td><td>Block is drawn with color 0 transparent</td></tr>
+</table>
 <pre class="exm">
-COLOR 4
-BAR 10,10 TO 30,20
-COLOR 8
-BAR 12,12 TO 28,18
-GET 10,10 TO 30,20
-PUT 15,25
-PUT 20,40,0,0,10,5
-PUT 40,40,11,6,10,5
+COLOR 7
+CIRCLE 16,16,16 PAINT
+COLOR 6
+CIRCLE 16,16,16
+GET BLOCK 0,0,0 TO 32,32
+DO
+  PUT BLOCK 0,RND*32,RND*32,1
+  WAIT 0.1
+LOOP
 </pre>
 
 <h3 id="_PALETTE" name="PALETTE">PALETTE</h3>
@@ -892,9 +897,8 @@ TEXT 64,64,"THIS IS HI-RES!",1
 <pre>SCREEN CLOSE number</pre>
 <p>Deletes the screen with the given <i>number</i>. If it was the current screen, following graphical commands won't have any effect until you open or set another current screen.</p>
 
-<h3 id="_SCREEN" name="SCREEN,LAYER">SCREEN (old: LAYER)</h3>
+<h3 id="_SCREEN" name="SCREEN">SCREEN</h3>
 <pre>SCREEN number</pre>
-<pre>LAYER number (old command name)</pre>
 <p>Use this command to select the current screen. All following graphical commands render on the selected screen. By default LowRes Coder opens two screens: Screen 0 is the main screen and screen 1 is a transparent layer on top of it.</p>
 <pre class="exm">
 SCREEN 1
@@ -1242,6 +1246,35 @@ WRITE DIM ARR,4
 <h3 id="_WRITECLEAR" name="WRITE CLEAR,WRITE,CLEAR">WRITE CLEAR</h3>
 <pre>WRITE CLEAR</pre>
 <p>Clears the transfer memory.</p>
+
+<h1 id="Obsolete">Obsolete Commands</h1>
+<p>These commands are still available for compatibility with older programs, but they should be avoided in new programs. Use the recommended alternatives instead.</p>
+
+<h3 id="_LAYER" name="LAYER">LAYER</h3>
+<pre>LAYER number</pre>
+<p><i>This command is obsolete. Use SCREEN instead. Its function did not change, but it's part of the screens system now, so it was renamed.</i></p>
+
+<h3 id="_GET" name="GET">GET</h3>
+<pre>GET x1,y1 TO x2,y2</pre>
+<p>Copies the rectangular screen area between <i>x1,y1</i> and <i>x2,y2</i> to a buffer. Use the PUT command to draw it on the screen.</p>
+<p><i>This command is obsolete. Use GET BLOCK and PUT BLOCK instead.</i></p>
+
+<h3 id="_PUT" name="PUT">PUT</h3>
+<pre>PUT x,y[,sx,sy,sw,sh[,transparency]]</pre>
+<pre>PUT x,y[,transparency]</pre>
+<p>Draws the screen area copied by the GET command on the screen at the coordinates <i>x,y</i>. By default the complete copied area will be drawn. With the additional parameters you can draw a smaller part of the source image. With <i>sx</i> and <i>sy</i> you specify the top left corner of the source image, <i>sw</i> is the width and <i>sh</i> the height. If <i>transparency</i> is given and different from -1, the image is drawn with <i>transparency</i> as transparent color.</p>
+<pre class="exm">
+COLOR 4
+BAR 10,10 TO 30,20
+COLOR 8
+BAR 12,12 TO 28,18
+GET 10,10 TO 30,20
+PUT 15,25
+PUT 20,40,0,0,10,5
+PUT 40,40,11,6,10,5
+</pre>
+<p><i>This command is obsolete. Use GET BLOCK and PUT BLOCK instead.</i></p>
+
 
 <h1 id="Reserved-keywords" name="BANK,CALL,HEIGHT,INPUT,PEEK,POKE,SUB,TEMPO,TRACE,UBOUND">Reserved keywords</h1>
 <p>This is a list of all reserved keywords. They cannot be used as variable or label names.<p>

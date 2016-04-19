@@ -16,6 +16,7 @@ int const RendererNumSprites = 64;
 int const RendererNumSpriteDefs = 64;
 int const RendererSpriteSize = 8;
 int const RendererNumFonts = 4;
+int const RendererNumBlocks = 64;
 
 int const RendererFlagTransparent = 0x01;
 
@@ -35,6 +36,7 @@ typedef struct Font {
     Sprite _sprites[RendererNumSprites];
     SpriteDef _spriteDefs[RendererNumSpriteDefs];
     Font _fonts[RendererNumFonts];
+    Block _blocks[RendererNumBlocks];
     int _copyWidth;
     int _copyHeight;
     int _currentMaxScreenIndex;
@@ -86,6 +88,7 @@ typedef struct Font {
 
 - (void)dealloc
 {
+    [self freeAllBlocks];
     [self closeScreens];
 }
 
@@ -602,6 +605,96 @@ typedef struct Font {
                 }
             }
         }
+    }
+}
+
+- (void)getBlock:(int)index fromX:(int)fromX Y:(int)fromY toX:(int)toX Y:(int)toY
+{
+    [self freeBlock:index];
+    if (_screenIndex == -1) return;
+    if (fromX > toX)
+    {
+        int value = toX; toX = fromX; fromX = value;
+    }
+    if (fromY > toY)
+    {
+        int value = toY; toY = fromY; fromY = value;
+    }
+    
+    int blockWidth = toX - fromX + 1;
+    int blockHeight = toY - fromY + 1;
+    uint8_t *blockBuffer = calloc(blockWidth * blockHeight, sizeof(uint8_t));
+    
+    Screen *screen = &_screens[_screenIndex];
+    int screenWidth = screen->width;
+    uint8_t *pixelBuffer = screen->pixelBuffer;
+    
+    for (int y = fromY; y <= toY; y++)
+    {
+        for (int x = fromX; x <= toX; x++)
+        {
+            blockBuffer[(y - fromY) * blockWidth + (x - fromX)] = pixelBuffer[y * screenWidth + x];
+        }
+    }
+    
+    Block *block = &_blocks[index];
+    block->width = blockWidth;
+    block->height = blockHeight;
+    block->pixelBuffer = blockBuffer;
+}
+
+- (void)putBlock:(int)index X:(int)x Y:(int)y mask:(BOOL)mask
+{
+    if (_screenIndex == -1) return;
+    
+    Block *block = &_blocks[index];
+    if (block->pixelBuffer)
+    {
+        int blockWidth = block->width;
+        int blockHeight = block->height;
+        uint8_t *blockBuffer = block->pixelBuffer;
+        
+        Screen *screen = &_screens[_screenIndex];
+        int screenWidth = screen->width;
+        int screenHeight = screen->height;
+        uint8_t *pixelBuffer = screen->pixelBuffer;
+        
+        for (int oy = 0; oy < blockHeight; oy++)
+        {
+            int py = oy + y;
+            for (int ox = 0; ox < blockWidth; ox++)
+            {
+                int px = ox + x;
+                if (px >= 0 && py >= 0 && px < screenWidth && py < screenHeight)
+                {
+                    uint8_t color = blockBuffer[oy * blockWidth + ox];
+                    if (mask == 0 || color != 0)
+                    {
+                        pixelBuffer[py * screenWidth + px] = color;
+                    }
+                }
+            }
+        }
+    }
+}
+
+- (void)freeBlock:(int)index
+{
+    Block *block = &_blocks[index];
+    if (block->pixelBuffer)
+    {
+        free(block->pixelBuffer);
+        block->pixelBuffer = NULL;
+    }
+    block->width = 0;
+    block->height = 0;
+}
+
+- (void)freeAllBlocks
+{
+    for (int i = 0; i < RendererNumBlocks; i++)
+    {
+        [self freeBlock:i];
     }
 }
 

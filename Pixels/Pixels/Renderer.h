@@ -42,6 +42,12 @@ typedef struct Screen {
     int printY;
 } Screen;
 
+typedef struct Block {
+    int width;
+    int height;
+    uint8_t *pixelBuffer;
+} Block;
+
 extern int const RendererMaxScreenSize;
 extern int const RendererNumColors;
 extern int const RendererNumScreens;
@@ -49,6 +55,7 @@ extern int const RendererNumSprites;
 extern int const RendererNumSpriteDefs;
 extern int const RendererSpriteSize;
 extern int const RendererNumFonts;
+extern int const RendererNumBlocks;
 
 
 @interface Renderer : NSObject
@@ -77,6 +84,10 @@ extern int const RendererNumFonts;
 - (void)floodFillX:(int)x Y:(int)y;
 - (void)getScreenFromX:(int)fromX Y:(int)fromY toX:(int)toX Y:(int)toY;
 - (void)putScreenX:(int)x Y:(int)y srcX:(int)srcX srcY:(int)srcY srcWidth:(int)srcWidth srcHeight:(int)srcHeight transparency:(int)transparency;
+- (void)getBlock:(int)index fromX:(int)fromX Y:(int)fromY toX:(int)toX Y:(int)toY;
+- (void)putBlock:(int)index X:(int)x Y:(int)y mask:(BOOL)mask;
+- (void)freeBlock:(int)index;
+- (void)freeAllBlocks;
 - (void)drawText:(NSString *)text x:(int)x y:(int)y outline:(int)outline;
 - (int)widthForText:(NSString *)text;
 - (void)print:(NSString *)text;

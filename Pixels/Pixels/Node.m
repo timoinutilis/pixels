@@ -2101,7 +2101,6 @@ NSString *const TRANSFER = @"TRANSFER";
     Number *x = [self.xExpression evaluateWithRunner:runner];
     Number *y = [self.yExpression evaluateWithRunner:runner];
     Number *trans = [self.transparencyExpression evaluateNumberWithRunner:runner min:-1 max:RendererNumColors - 1];
-    
     if (runner.error)
     {
         return nil;
@@ -2127,6 +2126,77 @@ NSString *const TRANSFER = @"TRANSFER";
     {
         [runner.renderer putScreenX:x.intValue Y:y.intValue srcX:0 srcY:0 srcWidth:0 srcHeight:0 transparency:transInt];
     }
+    
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
+@implementation GetBlockNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.nExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.fromXExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.fromYExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.toXExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.toYExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    Screen *screen = runner.renderer.currentScreen;
+    if (screen)
+    {
+        int maxX = screen->width - 1;
+        int maxY = screen->height - 1;
+        
+        Number *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumBlocks - 1];
+        Number *fromX = [self.fromXExpression evaluateNumberWithRunner:runner min:0 max:maxX];
+        Number *fromY = [self.fromYExpression evaluateNumberWithRunner:runner min:0 max:maxY];
+        Number *toX = [self.toXExpression evaluateNumberWithRunner:runner min:0 max:maxX];
+        Number *toY = [self.toYExpression evaluateNumberWithRunner:runner min:0 max:maxY];
+        if (runner.error)
+        {
+            return nil;
+        }
+        
+        [runner.renderer getBlock:n.intValue fromX:fromX.intValue Y:fromY.intValue toX:toX.intValue Y:toY.intValue];
+    }
+    
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
+@implementation PutBlockNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.nExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.xExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.yExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.maskExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    Number *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumBlocks - 1];
+    Number *x = [self.xExpression evaluateWithRunner:runner];
+    Number *y = [self.yExpression evaluateWithRunner:runner];
+    Number *mask = [self.maskExpression evaluateNumberWithRunner:runner min:0 max:1];
+    if (runner.error)
+    {
+        return nil;
+    }
+    
+    [runner.renderer putBlock:n.intValue X:x.intValue Y:y.intValue mask:(mask.intValue == 1)];
     
     [runner next];
     return nil;
