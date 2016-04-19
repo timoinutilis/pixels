@@ -203,13 +203,23 @@ PRINT 2+2
 
 <h3 id="_WAIT" name="WAIT,TAP">WAIT</h3>
 <pre>WAIT seconds [TAP]</pre>
-<p>WAIT pauses the execution of the program for the time set by the <i>seconds</i> parameter. The shortes wait time is 0.04 seconds. If you add the TAP keyword, the waiting will be interrupted by any tap on a gamepad button (including the direction-pad).</p>
+<p>WAIT pauses the execution of the program for the time set by the <i>seconds</i> parameter. The shortes wait time is 0.04 seconds. If you add the TAP keyword, the waiting will be interrupted by any tap on a gamepad button (including the direction-pad). This is useful if you have a slow loop, but you want immediate reactions to user inputs.</p>
 <p>This command has an important side effect: It updates the display. If you draw something in a loop, you won't see it until you call WAIT (or the program ends).</p>
 <pre class="exm">
 FOR X=0 TO 63
   PLOT X,31
   WAIT 0.1
 NEXT X
+</pre>
+
+<h3 id="_WAITBUTTON" name="WAIT BUTTON,WAIT,BUTTON">WAIT BUTTON</h3>
+<pre>WAIT BUTTON</pre>
+<p>Pauses the execution of the program until button A or B gets pressed and released (or it is already pressed and gets released). Use this for example after your game's title screen or a menu, so that the program enters its next part without any button pressed.</p>
+<pre class="exm">
+GAMEPAD 1
+PRINT "PRESS BUTTON!"
+WAIT BUTTON
+PRINT "THANKS!"
 </pre>
 
 <h3 id="_END" name="END">END</h3>

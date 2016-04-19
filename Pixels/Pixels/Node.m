@@ -717,6 +717,32 @@ NSString *const TRANSFER = @"TRANSFER";
 
 
 
+@implementation WaitButtonNode
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    [runner.delegate updateRendererView];
+    
+    __block BOOL oldPressed = [runner.delegate isButtonDown:ButtonTypeA] || [runner.delegate isButtonDown:ButtonTypeB];
+    
+    [runner wait:86400 stopBlock:^BOOL{
+        BOOL pressed = [runner.delegate isButtonDown:ButtonTypeA] || [runner.delegate isButtonDown:ButtonTypeB];
+        if (!pressed && oldPressed)
+        {
+            return YES;
+        }
+        oldPressed = pressed;
+        return NO;
+    }];
+    
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
 @implementation EndNode
 
 - (id)evaluateWithRunner:(Runner *)runner

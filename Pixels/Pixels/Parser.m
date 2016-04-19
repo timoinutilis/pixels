@@ -232,9 +232,18 @@
         case TTypeSymExit:
             node = [self acceptExit];
             break;
-        case TTypeSymWait:
-            node = [self acceptWait];
+        case TTypeSymWait: {
+            Token *next = [self nextToken];
+            if (next.type == TTypeSymButton)
+            {
+                node = [self acceptWaitButton];
+            }
+            else
+            {
+                node = [self acceptWait];
+            }
             break;
+        }
         case TTypeSymEnd:
             node = [self acceptEnd];
             break;
@@ -743,6 +752,13 @@
         node.tap = YES;
         [self accept:TTypeSymTap];
     }
+    return node;
+}
+
+- (Node *)acceptWaitButton
+{
+    WaitButtonNode *node = [[WaitButtonNode alloc] init];
+    [self accept:TTypeSymWait and:TTypeSymButton];
     return node;
 }
 

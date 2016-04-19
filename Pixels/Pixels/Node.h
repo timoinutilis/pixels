@@ -120,6 +120,9 @@
 @property (nonatomic) BOOL tap;
 @end
 
+@interface WaitButtonNode : Node
+@end
+
 @interface EndNode : Node
 @end
 
