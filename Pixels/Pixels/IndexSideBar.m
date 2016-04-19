@@ -212,28 +212,43 @@ static const CGFloat MARGIN = 3.0;
 {
     self.labels = [NSMutableArray arrayWithCapacity:self.markers.count];
     CGFloat lastBottom = 2.0;
+    CGFloat lastX = 0.0;
+    CGFloat lastY = 0.0;
     for (IndexMarker *marker in self.markers)
     {
+        GORLabel *label = [[GORLabel alloc] init];
+        label.userInteractionEnabled = NO;
+        label.backgroundColor = [AppStyle barColor];
+        label.insets = UIEdgeInsetsMake(0, -4.0, 0, -4.0);
+        label.layer.cornerRadius = 4.0;
+        label.clipsToBounds = YES;
+        label.textColor = [AppStyle brightColor];
+        label.font = [UIFont systemFontOfSize:11];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.text = marker.label;
+        [label sizeToFit];
+
+        CGRect frame = label.frame;
+        BOOL isFirstInLine = NO;
         if (marker.currentBarY > lastBottom)
         {
-            GORLabel *label = [[GORLabel alloc] init];
-            label.userInteractionEnabled = NO;
-            label.backgroundColor = [AppStyle barColor];
-            label.insets = UIEdgeInsetsMake(0, -4.0, 0, -4.0);
-            label.layer.cornerRadius = 4.0;
-            label.clipsToBounds = YES;
-            label.textColor = [AppStyle brightColor];
-            label.font = [UIFont systemFontOfSize:11];
-            label.textAlignment = NSTextAlignmentCenter;
-            label.text = marker.label;
-            [label sizeToFit];
-            
-            CGRect frame = label.frame;
             frame.origin.x = ceil(-frame.size.width - 24.0);
             frame.origin.y = round(MAX(marker.currentBarY - frame.size.height * 0.5, lastBottom));
-            label.frame = [self.superview convertRect:frame fromView:self];
-            lastBottom = frame.origin.y + frame.size.height + 1.0;
-            
+            isFirstInLine = YES;
+        }
+        else
+        {
+            frame.origin.x = floor(lastX - frame.size.width);
+            frame.origin.y = round(lastY);
+        }
+        
+        label.frame = [self.superview convertRect:frame fromView:self];
+        lastX = frame.origin.x - 1.0;
+        lastY = frame.origin.y;
+        lastBottom = frame.origin.y + frame.size.height + 1.0;
+        
+        if (isFirstInLine || label.frame.origin.x >= 100.0)
+        {
             [self.superview addSubview:label];
             [self.labels addObject:label];
         }
