@@ -946,6 +946,14 @@ DO
 LOOP
 </pre>
 
+<h3 id="_SCREENOFF" name="SCREEN OFF,SCREEN,OFF">SCREEN OFF</h3>
+<pre>SCREEN OFF number</pre>
+<p>Hides the given screen without losing its contents. It's still possible to draw on it and it can be shown again with SCREEN ON.</p>
+
+<h3 id="_SCREENON" name="SCREEN ON,SCREEN,ON">SCREEN ON</h3>
+<pre>SCREEN ON number</pre>
+<p>Shows a screen which was previously hidden by the SCREEN OFF command.</p>
+
 <h3 id="_SPRITESCREEN" name="SPRITE SCREEN,SPRITE,SCREEN">SPRITE SCREEN</h3>
 <pre>SPRITE SCREEN screen[,sprite [TO last]]</pre>
 <p>By default all sprites are shown on screen 0. This means they use the colors of that screen and they will be covered by all screens with higher numbers. However, positions of sprites are always independent from the screen position and offset. With the command SPRITE SCREEN you can set the screen for each sprite.</p>

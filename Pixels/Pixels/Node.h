@@ -157,6 +157,11 @@
 @property (nonatomic) Node *heightExpression;
 @end
 
+@interface ScreenOnOffNode : Node
+@property (nonatomic) Node *nExpression;
+@property (nonatomic) BOOL visible;
+@end
+
 @interface ScreenNode : Node
 @property (nonatomic) Node *nExpression;
 @end

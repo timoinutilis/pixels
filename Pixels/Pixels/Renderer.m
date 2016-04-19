@@ -130,6 +130,7 @@ typedef struct Font {
         free(screen->pixelBuffer);
         screen->pixelBuffer = NULL;
     }
+    screen->visible = YES;
     screen->width = width;
     screen->height = height;
     screen->displayX = 0;
@@ -157,6 +158,7 @@ typedef struct Font {
 - (void)closeScreen:(int)index
 {
     Screen *screen = &_screens[index];
+    screen->visible = NO;
     screen->width = 0;
     screen->height = 0;
     screen->displayX = 0;
@@ -873,7 +875,7 @@ uint8_t getSpritePixel(SpriteDef *def, int x, int y)
 {
     Sprite *sprite = &_sprites[spriteIndex];
     Screen *screen = &_screens[screenIndex];
-    if (sprite->visible && screen->pixelBuffer)
+    if (sprite->visible && screen->visible)
     {
         int diffX = screen->displayX - screen->offsetX - floorf(sprite->x);
         int diffY = screen->displayY - screen->offsetY - floorf(sprite->y);
@@ -911,7 +913,7 @@ uint8_t getSpritePixel(SpriteDef *def, int x, int y)
     for (int i = _currentMaxScreenIndex; i >= 0 ; i--)
     {
         Screen *screen = &_screens[i];
-        if (screen->pixelBuffer)
+        if (screen->visible)
         {
             int localX = x - screen->displayX;
             int localY = y - screen->displayY;

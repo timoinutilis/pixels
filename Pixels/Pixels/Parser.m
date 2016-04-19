@@ -262,6 +262,14 @@
             {
                 node = [self acceptScreenOffset];
             }
+            else if (next.type == TTypeSymOff)
+            {
+                node = [self acceptScreenOff];
+            }
+            else if (next.type == TTypeSymOn)
+            {
+                node = [self acceptScreenOn];
+            }
             else
             {
                 node = [self acceptScreen];
@@ -825,6 +833,24 @@
             }
         }
     }
+    return node;
+}
+
+- (Node *)acceptScreenOff
+{
+    ScreenOnOffNode *node = [[ScreenOnOffNode alloc] init];
+    [self accept:TTypeSymScreen and:TTypeSymOff];
+    node.nExpression = [self acceptExpression];
+    node.visible = NO;
+    return node;
+}
+
+- (Node *)acceptScreenOn
+{
+    ScreenOnOffNode *node = [[ScreenOnOffNode alloc] init];
+    [self accept:TTypeSymScreen and:TTypeSymOn];
+    node.nExpression = [self acceptExpression];
+    node.visible = YES;
     return node;
 }
 

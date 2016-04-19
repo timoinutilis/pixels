@@ -25,6 +25,7 @@ typedef struct SpriteDef {
 } SpriteDef;
 
 typedef struct Screen {
+    BOOL visible;
     int width;
     int height;
     int displayX;

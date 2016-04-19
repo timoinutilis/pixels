@@ -922,6 +922,38 @@ NSString *const TRANSFER = @"TRANSFER";
 
 
 
+@implementation ScreenOnOffNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.nExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    Number *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumScreens - 1];
+    if (runner.error)
+    {
+        return nil;
+    }
+    
+    Screen *screen = [runner.renderer screenAtIndex:n.intValue];
+    if (screen->pixelBuffer == NULL)
+    {
+        runner.error = [NSError screenNotOpenedErrorWithNode:self];
+        return nil;
+    }
+    
+    screen->visible = self.visible;
+    
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
 @implementation ScreenNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
