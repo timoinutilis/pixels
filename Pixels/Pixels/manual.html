@@ -114,7 +114,7 @@ PRINT ARR(0)
 <pre class="exm">PRINT (10+2)*(5-8/4+5)^2</pre>
 
 <h2 id="_Relational-operations" name="=,&lt;&gt;,&lt;,&gt;,&lt;=,&gt;=">Relational operations</h2>
-<p>Relational operators are used to compare two values. The result of the comparison is either "true" (-1) or "false" (0).</p>
+<p>Relational operators are used to compare two values. The result of the comparison is either TRUE (-1) or FALSE (0).</p>
 <table>
     <tr><th>Operator</th><th>Relation tested</th><th>Expression</th></tr>
     <tr><td>=</td><td>Equality</td><td>A=B</td></tr>
@@ -124,6 +124,7 @@ PRINT ARR(0)
     <tr><td>&lt;=</td><td>Less than or equal to</td><td>A&lt;=B</td></tr>
     <tr><td>&gt;=</td><td>Greater than or equal to</td><td>A&gt;=B</td></tr>
 </table>
+<p>LowRes Coder can not only compare numbers, but also strings. They are compared alphabetically (according to the characters' ASCII values).</p>
 
 <h2 id="_Logical-operations" name="NOT,AND,OR,XOR">Logical operations</h2>
 <p>The results of the following operations are binary (bit by bit).</p>
@@ -148,9 +149,9 @@ PRINT ARR(0)
     <tr><td></td><td>false</td><td>true</td><td>true</td></tr>
     <tr><td></td><td>false</td><td>false</td><td>false</td></tr>
 </table>
-<p>As in BASIC "true" is -1 (all bits set) and "false" is 0 (no bit set), these operators can be used for logical expressions...</p>
+<p>These operators can be used for logical expressions...</p>
 <pre class="exm">IF A=0 OR B=1 THEN PRINT "OK"</pre>
-<p>...and also for bit manipulations:</p>
+<p>...but also for bit manipulations:</p>
 <pre class="exm">
 A=15 OR 256
 PRINT A

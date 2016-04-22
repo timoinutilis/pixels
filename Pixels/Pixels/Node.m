@@ -3210,6 +3210,10 @@ NSString *const TRANSFER = @"TRANSFER";
                 
             case TTypeSymOpEq:
             case TTypeSymOpUneq:
+            case TTypeSymOpGr:
+            case TTypeSymOpLe:
+            case TTypeSymOpGrEq:
+            case TTypeSymOpLeEq:
                 if (leftReturnsString != rightReturnsString)
                 {
                     runnable.error = [NSError typeMismatchErrorWithNode:self];
@@ -3300,36 +3304,70 @@ NSString *const TRANSFER = @"TRANSFER";
             return [runner.numberPool numberWithValue:result];
         }
         case TTypeSymOpEq:
-        case TTypeSymOpUneq: {
-            BOOL result;
+        case TTypeSymOpUneq:
+        case TTypeSymOpGr:
+        case TTypeSymOpLe:
+        case TTypeSymOpGrEq:
+        case TTypeSymOpLeEq: {
+            BOOL result = NO;
+            TType type = self.type;
             if (leftIsString && rightIsString)
             {
-                result = [leftValue isEqualToString:rightValue];
+                NSComparisonResult compResult = [(NSString *)leftValue compare:(NSString *)rightValue];
+                if (type == TTypeSymOpEq)
+                {
+                    result = (compResult == NSOrderedSame);
+                }
+                else if (type == TTypeSymOpUneq)
+                {
+                    result = (compResult != NSOrderedSame);
+                }
+                else if (type == TTypeSymOpGr)
+                {
+                    result = (compResult == NSOrderedDescending);
+                }
+                else if (type == TTypeSymOpLe)
+                {
+                    result = (compResult == NSOrderedAscending);
+                }
+                else if (type == TTypeSymOpGrEq)
+                {
+                    result = (compResult >= NSOrderedSame);
+                }
+                else if (type == TTypeSymOpLeEq)
+                {
+                    result = (compResult <= NSOrderedSame);
+                }
             }
             else
             {
-                result = ((Number *)leftValue).floatValue == ((Number *)rightValue).floatValue;
+                float val1 = ((Number *)leftValue).floatValue;
+                float val2 = ((Number *)rightValue).floatValue;
+                if (type == TTypeSymOpEq)
+                {
+                    result = (val1 == val2);
+                }
+                else if (type == TTypeSymOpUneq)
+                {
+                    result = (val1 != val2);
+                }
+                else if (type == TTypeSymOpGr)
+                {
+                    result = (val1 > val2);
+                }
+                else if (type == TTypeSymOpLe)
+                {
+                    result = (val1 < val2);
+                }
+                else if (type == TTypeSymOpGrEq)
+                {
+                    result = (val1 >= val2);
+                }
+                else if (type == TTypeSymOpLeEq)
+                {
+                    result = (val1 <= val2);
+                }
             }
-            if (self.type == TTypeSymOpUneq)
-            {
-                result = !result;
-            }
-            return [runner.numberPool numberWithValue:(result ? -1 : 0)];
-        }
-        case TTypeSymOpGr: {
-            BOOL result = ((Number *)leftValue).floatValue > ((Number *)rightValue).floatValue;
-            return [runner.numberPool numberWithValue:(result ? -1 : 0)];
-        }
-        case TTypeSymOpLe: {
-            BOOL result = ((Number *)leftValue).floatValue < ((Number *)rightValue).floatValue;
-            return [runner.numberPool numberWithValue:(result ? -1 : 0)];
-        }
-        case TTypeSymOpGrEq: {
-            BOOL result = ((Number *)leftValue).floatValue >= ((Number *)rightValue).floatValue;
-            return [runner.numberPool numberWithValue:(result ? -1 : 0)];
-        }
-        case TTypeSymOpLeEq: {
-            BOOL result = ((Number *)leftValue).floatValue <= ((Number *)rightValue).floatValue;
             return [runner.numberPool numberWithValue:(result ? -1 : 0)];
         }
         default: {
