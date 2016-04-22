@@ -1245,7 +1245,7 @@ DATA "SIX"
 
 <h3 id="_WRITE" name="WRITE">WRITE</h3>
 <pre>WRITE list</pre>
-<p>Writes values to the transfer memory, which can be pasted into your source code. <i>list</i> can be any number of values or expressions, separated by commas. Each call to WRITE will add one DATA command with all its values to the transfer memory.</p>
+<p>Writes values to the transfer memory, which can be pasted into your source code. <i>list</i> can be any number of values or expressions, separated by commas. Each call to WRITE will add one DATA command with all its values to the transfer memory (can be changed with WRITE WIDTH).</p>
 <pre class="exm">
 FOR A=1 TO 5
   WRITE A,"HI",A*5
@@ -1270,6 +1270,17 @@ WRITE DIM ARR,4
 <h3 id="_WRITECLEAR" name="WRITE CLEAR,WRITE,CLEAR">WRITE CLEAR</h3>
 <pre>WRITE CLEAR</pre>
 <p>Clears the transfer memory.</p>
+
+<h3 id="_WRITEWIDTH" name="WRITE WIDTH,WRITE,WIDTH">WRITE WIDTH</h3>
+<pre>WRITE WIDTH columns</pre>
+<p>Changes the number of values per DATA line for the WRITE command (not WRITE DIM) to <i>columns</i>. The maximum value is 16. If <i>columns</i> is 0 (default), each WRITE command creates one DATA command.</p>
+<pre class="exm">
+WRITE WIDTH 6
+FOR I=1 TO 30
+  WRITE I
+NEXT I
+</pre>
+<p>After running this example program, the transfer memory will contain 5 DATA commands each with 6 constants.</p>
 
 <h1 id="Obsolete">Obsolete Commands</h1>
 <p>These commands are still available for compatibility with older programs, but they should be avoided in new programs. Use the recommended alternatives instead.</p>

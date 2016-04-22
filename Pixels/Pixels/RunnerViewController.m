@@ -328,9 +328,9 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
         self.project.temporarySnapshots = [self.rendererView imagesFromSnapshots:20];
         
         // transfer
-        if (runner.transferStrings.count > 0)
+        NSString *transfer = [runner transferResult];
+        if (transfer)
         {
-            NSString *transfer = [runner.transferStrings componentsJoinedByString:@"\n"];
             [EditorTextView setTransferText:transfer];
             [AppController sharedController].shouldShowTransferAlert = YES;
         }

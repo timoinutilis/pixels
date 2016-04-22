@@ -13,7 +13,7 @@ typedef NS_ENUM(NSInteger, TType) {
     TTypeNumber,
     TTypeIdentifier,
     
-    // Commands
+    // Commands/Functions
     TTypeSymRem,
     TTypeSymIf,
     TTypeSymThen,
@@ -75,8 +75,6 @@ typedef NS_ENUM(NSInteger, TType) {
     TTypeSymFont,
     TTypeSymZoom,
     TTypeSymBlock,
-    
-    // Functions
     TTypeSymUp,
     TTypeSymDown,
     TTypeSymLeft,

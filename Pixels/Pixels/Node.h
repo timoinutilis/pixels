@@ -294,19 +294,17 @@
 @property (nonatomic) NSString *label;
 @end
 
-@interface WriteBaseNode : Node
-@property (nonatomic) NSMutableArray *strings;
-- (void)addValue:(id)value;
-- (void)writeDataLineWithRunner:(Runner *)runner;
-@end
-
-@interface WriteNode : WriteBaseNode
+@interface WriteNode : Node
 @property (nonatomic) NSArray *valueExpressions;
 @property (nonatomic) BOOL clear;
 @end
 
-@interface WriteDimNode : WriteBaseNode
+@interface WriteDimNode : Node
 @property (nonatomic) VariableNode *variable;
+@property (nonatomic) Node *columnsExpression;
+@end
+
+@interface WriteWidthNode : Node
 @property (nonatomic) Node *columnsExpression;
 @end
 

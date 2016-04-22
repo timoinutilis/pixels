@@ -21,13 +21,14 @@
 @property NSUInteger dataConstantIndex;
 @property (readonly) VariableManager *variables;
 @property (readonly) NumberPool *numberPool;
-@property (readonly) NSMutableArray *transferStrings;
+@property (readonly) NSMutableArray <NSMutableArray <NSString *> *> *transferLines;
 @property OnXGotoNode *currentOnEndGoto;
 @property OnXGotoNode *currentOnPauseGoto;
 @property BOOL endRequested;
 @property int lastSpriteHit;
 @property BOOL buttonATapped;
 @property BOOL buttonBTapped;
+@property (nonatomic) int writeMaxCount;
 @property CFAbsoluteTime bootTime;
 
 - (instancetype)initWithRunnable:(Runnable *)runnable;
@@ -46,6 +47,9 @@
 - (void)restoreDataTransfer;
 - (void)restoreDataLabel:(NSString *)label atToken:(Token *)token;
 - (Node *)readDataAtToken:(Token *)token;
+- (void)beginWriteDataWithForcedNewLine:(BOOL)forceNewLine;
+- (void)writeDataValue:(id)value disableNewLine:(BOOL)disableNewLine;
+- (NSString *)transferResult;
 
 - (void)wait:(NSTimeInterval)time stopBlock:(BOOL(^)())block;
 

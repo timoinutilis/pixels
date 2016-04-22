@@ -25,6 +25,7 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
 @property BOOL dataTransferEnabled;
 @property NSTimeInterval timeWhenOnEndStarted;
 @property BOOL pauseJumpRequested;
+@property BOOL writeMaxCountChanged;
 @end
 
 @implementation Runner
@@ -41,8 +42,8 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
         self.gosubStack = [NSMutableArray array];
         _variables = [[VariableManager alloc] initWithRunner:self];
         _numberPool = [[NumberPool alloc] init];
-        _transferStrings = [NSMutableArray array];
-                
+        _transferLines = [NSMutableArray array];
+        
         [self addSequenceWithNodes:runnable.nodes isLoop:NO parent:nil];
     }
     return self;
@@ -282,6 +283,54 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
     }
     
     self.error = [NSError programErrorWithCode:LRCErrorCodeRuntime reason:@"Out of data" token:token];
+    return nil;
+}
+
+- (void)setWriteMaxCount:(int)writeMaxCount
+{
+    _writeMaxCount = writeMaxCount;
+    self.writeMaxCountChanged = YES;
+}
+
+- (void)beginWriteDataWithForcedNewLine:(BOOL)forceNewLine
+{
+    if (self.writeMaxCount == 0 || forceNewLine || self.writeMaxCountChanged)
+    {
+        [self.transferLines addObject:[[NSMutableArray alloc] init]];
+        _writeMaxCountChanged = NO;
+    }
+}
+
+- (void)writeDataValue:(id)value disableNewLine:(BOOL)disableNewLine
+{
+    NSString *string = nil;
+    if ([value isKindOfClass:[NSString class]])
+    {
+        string = [NSString stringWithFormat:@"\"%@\"", value];
+    }
+    else
+    {
+        string = [value stringValue];
+    }
+    if (!disableNewLine && self.writeMaxCount > 0 && self.transferLines.lastObject.count >= self.writeMaxCount)
+    {
+        [self.transferLines addObject:[[NSMutableArray alloc] init]];
+    }
+    [self.transferLines.lastObject addObject:string];
+}
+
+- (NSString *)transferResult
+{
+    if (self.transferLines.count > 0)
+    {
+        NSMutableArray *lines = [[NSMutableArray alloc] init];
+        for (NSArray *strings in self.transferLines)
+        {
+            NSString *dataString = [strings componentsJoinedByString:@","];
+            [lines addObject:[NSString stringWithFormat:@"DATA %@", dataString]];
+        }
+        return [lines componentsJoinedByString:@"\n"];
+    }
     return nil;
 }
 

@@ -1750,32 +1750,6 @@ NSString *const TRANSFER = @"TRANSFER";
 
 
 
-@implementation WriteBaseNode
-
-- (void)addValue:(id)value
-{
-    NSString *string = nil;
-    if ([value isKindOfClass:[NSString class]])
-    {
-        string = [NSString stringWithFormat:@"\"%@\"", value];
-    }
-    else
-    {
-        string = [value stringValue];
-    }
-    [self.strings addObject:string];
-}
-
-- (void)writeDataLineWithRunner:(Runner *)runner
-{
-    NSString *dataString = [self.strings componentsJoinedByString:@","];
-    [runner.transferStrings addObject:[NSString stringWithFormat:@"DATA %@", dataString]];
-}
-
-@end
-
-
-
 @implementation WriteNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
@@ -1790,11 +1764,11 @@ NSString *const TRANSFER = @"TRANSFER";
 {
     if (self.clear)
     {
-        [runner.transferStrings removeAllObjects];
+        [runner.transferLines removeAllObjects];
     }
     else
     {
-        self.strings = [NSMutableArray array];
+        [runner beginWriteDataWithForcedNewLine:NO];
         for (Node *valueNode in self.valueExpressions)
         {
             id value = [valueNode evaluateWithRunner:runner];
@@ -1803,9 +1777,8 @@ NSString *const TRANSFER = @"TRANSFER";
                 return nil;
             }
             
-            [self addValue:value];
+            [runner writeDataValue:value disableNewLine:NO];
         }
-        [self writeDataLineWithRunner:runner];
     }
     [runner next];
     return nil;
@@ -1834,25 +1807,44 @@ NSString *const TRANSFER = @"TRANSFER";
     
     int currentColumn = 0;
     int columns = (columnsNumber && columnsNumber.intValue != 0) ? columnsNumber.intValue : 8;
-    self.strings = [NSMutableArray array];
     
+    [runner beginWriteDataWithForcedNewLine:YES];
     for (id value in arrayVariable.values)
     {
-        [self addValue:value];
-        
-        currentColumn++;
         if (currentColumn == columns)
         {
-            [self writeDataLineWithRunner:runner];
+            [runner beginWriteDataWithForcedNewLine:YES];
             currentColumn = 0;
-            [self.strings removeAllObjects];
         }
-    }
-    if (self.strings.count > 0)
-    {
-        [self writeDataLineWithRunner:runner];
+        [runner writeDataValue:value disableNewLine:YES];
+        currentColumn++;
     }
     
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
+@implementation WriteWidthNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.columnsExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    Number *columns = [self.columnsExpression evaluateNumberWithRunner:runner min:0 max:16];
+    if (runner.error)
+    {
+        return nil;
+    }
+    
+    runner.writeMaxCount = columns.intValue;
+        
     [runner next];
     return nil;
 }

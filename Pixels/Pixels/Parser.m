@@ -325,9 +325,22 @@
         case TTypeSymRestore:
             node = [self acceptRestore];
             break;
-        case TTypeSymWrite:
-            node = [self acceptWrite];
+        case TTypeSymWrite: {
+            Token *next = [self nextToken];
+            if (next.type == TTypeSymDim)
+            {
+                node = [self acceptWriteDim];
+            }
+            else if (next.type == TTypeSymWidth)
+            {
+                node = [self acceptWriteWidth];
+            }
+            else
+            {
+                node = [self acceptWrite];
+            }
             break;
+        }
         case TTypeSymOn:
             node = [self acceptOnXGoto];
             break;
@@ -466,6 +479,7 @@
         case TTypeSymRead:
         case TTypeSymRestore:
         case TTypeSymWrite:
+        case TTypeSymWidth:
         case TTypeSymSprite:
         case TTypeSymSound:
         case TTypeSymLayer:
@@ -1214,20 +1228,8 @@
 
 - (Node *)acceptWrite
 {
-    [self accept:TTypeSymWrite];
-    if (self.token.type == TTypeSymDim)
-    {
-        [self accept:TTypeSymDim];
-        WriteDimNode *node = [[WriteDimNode alloc] init];
-        node.variable = [self acceptVariable];
-        if ([self acceptOptionalComma])
-        {
-            node.columnsExpression = [self acceptExpression];
-        }
-        return node;
-    }
-    
     WriteNode *node = [[WriteNode alloc] init];
+    [self accept:TTypeSymWrite];
     if (self.token.type == TTypeSymClear)
     {
         [self accept:TTypeSymClear];
@@ -1237,6 +1239,26 @@
     {
         node.valueExpressions = [self acceptExpressionList];
     }
+    return node;
+}
+
+- (Node *)acceptWriteDim
+{
+    [self accept:TTypeSymWrite and:TTypeSymDim];
+    WriteDimNode *node = [[WriteDimNode alloc] init];
+    node.variable = [self acceptVariable];
+    if ([self acceptOptionalComma])
+    {
+        node.columnsExpression = [self acceptExpression];
+    }
+    return node;
+}
+
+- (Node *)acceptWriteWidth
+{
+    WriteWidthNode *node = [[WriteWidthNode alloc] init];
+    [self accept:TTypeSymWrite and:TTypeSymWidth];
+    node.columnsExpression = [self acceptExpression];
     return node;
 }
 
