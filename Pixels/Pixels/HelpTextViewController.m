@@ -50,7 +50,7 @@
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
-    if (navigationType == UIWebViewNavigationTypeLinkClicked)
+    if (!request.URL.isFileURL)
     {
         // open links in Safari
         [[UIApplication sharedApplication] openURL:[request URL]];

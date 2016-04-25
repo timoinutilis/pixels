@@ -193,7 +193,7 @@ GOTO TESTLABEL
 
 <h3 id="_PRINT" name="PRINT">PRINT</h3>
 <pre>PRINT value</pre>
-<p>PRINT writes <i>value</i> on the screen, where <i>value</i> can be also a string or any expression. Each printed text will appear in a new line and the screen will scroll when the bottom is reached. In graphics based programs you should prefer the TEXT command.</p>
+<p>PRINT writes <i>value</i> on the screen, where <i>value</i> can be also a string or any expression. Each printed text will appear in a new line and the screen will scroll when the bottom is reached. In graphics based programs you should prefer the <a href="#_TEXT">TEXT</a> command.</p>
 <pre class="exm">
 PRINT "HELLO"
 PRINT 2+2
@@ -270,11 +270,11 @@ PRINT TIME$
 
 <h1 id="Graphics">Graphics</h1>
 
-<p>LowRes Coder runs your programs on a virtual screen with 64x64 pixels (by default) and 16 colors. Check the chapter "Screens" for information about different resolutions and more options. With the following commands you can draw on LowRes Coder's screen.</p>
+<p>LowRes Coder runs your programs on a virtual screen with 64x64 pixels (by default) and 16 colors. Check the chapter <a href="#Screens">Screens</a> for information about different resolutions and more options. With the following commands you can draw on LowRes Coder's screen.</p>
 
 <h3 id="_COLOR" name="COLOR">COLOR</h3>
 <pre>COLOR [color],[background],[border]</pre>
-<p>COLOR sets the current drawing color (for most graphical commands), the background color (for CLS) and the border color (for TEXT). Any parameter can be omitted to keep the current value. Possible values are:</p>
+<p>COLOR sets the current drawing color (for most graphical commands), the background color (for <a href="#_CLS">CLS</a>) and the border color (for <a href="#_TEXT">TEXT</a>). Any parameter can be omitted to keep the current value. Possible values are:</p>
 <table>
 <tr><td>0</td><td>black</td><td>8</td><td>yellow</td></tr>
 <tr><td>1</td><td>white</td><td>9</td><td>green</td></tr>
@@ -291,11 +291,11 @@ FOR I=1 TO 15
   PRINT "COLOR "+I
 NEXT I
 </pre>
-<p>These default colors can be changed with the PALETTE command.</p>
+<p>These default colors can be changed with the <a href="#_PALETTE">PALETTE</a> command.</p>
 
 <h3 id="_CLS" name="CLS">CLS</h3>
 <pre>CLS [color]</pre>
-<p>CLS clears and fills the whole screen with <i>color</i>. Check the color table of the COLOR command. If the parameter is omitted, the screen is cleared with the current background color.</p>
+<p>CLS clears and fills the whole screen with <i>color</i>. Check the color table of the <a href="#_COLOR">COLOR</a> command. If the parameter is omitted, the screen is cleared with the current background color.</p>
 <pre class="exm">
 FOR I=0 TO 15
   CLS I
@@ -394,7 +394,7 @@ PAINT 3,42
 
 <h3 id="_TEXTWIDTH" name="TEXT WIDTH,TEXT,WIDTH">=TEXT WIDTH</h3>
 <pre>v=TEXT WIDTH(text$)</pre>
-<p>TEXT WIDTH returns the width of <i>text$</i> in pixels as it would be drawn with the TEXT command.</p>
+<p>TEXT WIDTH returns the width of <i>text$</i> in pixels as it would be drawn with the <a href="#_TEXT">TEXT</a> command.</p>
 <pre class="exm">
 T$="HELLO"
 W=TEXT WIDTH(T$)
@@ -407,7 +407,7 @@ WEND
 
 <h3 id="_FONT" name="FONT">FONT</h3>
 <pre>FONT n</pre>
-<p>LowRes Coder includes 4 different fonts. FONT sets the current font for TEXT, TEXT WIDTH and PRINT. <i>n</i> must be a value from the following table:</p>
+<p>LowRes Coder includes 4 different fonts. FONT sets the current font for <a href="#_TEXT">TEXT</a>, <a href="#_TEXTWIDTH">TEXT WIDTH</a> and <a href="#_PRINT">PRINT</a>. <i>n</i> must be a value from the following table:</p>
 <table>
     <tr><td>0</td><td>6p proportional (default)</td></tr>
     <tr><td>1</td><td>6p 4x6 fixed-width</td></tr>
@@ -434,11 +434,11 @@ LOOP
 
 <h3 id="_GETBLOCK" name="GET BLOCK,GET,BLOCK">GET BLOCK</h3>
 <pre>GET BLOCK number,x1,y1 TO x2,y2</pre>
-<p>Copies the rectangular screen area between <i>x1,y1</i> and <i>x2,y2</i> to a block buffer with the given <i>number</i>. Possible numbers range from 0 to 63. Use the PUT BLOCK command to draw it on the screen.</p>
+<p>Copies the rectangular screen area between <i>x1,y1</i> and <i>x2,y2</i> to a block buffer with the given <i>number</i>. Possible numbers range from 0 to 63. Use the <a href="#_PUTBLOCK">PUT BLOCK</a> command to draw it on the screen.</p>
 
 <h3 id="_PUTBLOCK" name="PUT BLOCK,PUT,BLOCK">PUT BLOCK</h3>
 <pre>PUT BLOCK number,x,y[,mask]</pre>
-<p>Draws a block buffer copied by the GET BLOCK command on the screen at the coordinates <i>x,y</i>. The optional <i>mask</i> parameter can have two values:</p>
+<p>Draws a block buffer copied by the <a href="#_GETBLOCK">GET BLOCK</a> command on the screen at the coordinates <i>x,y</i>. The optional <i>mask</i> parameter can have two values:</p>
 <table>
 <tr><th>Mask</th><th>Description</th></tr>
 <tr><td>0</td><td>Block is drawn opaque (default)</td></tr>
@@ -464,7 +464,7 @@ LOOP
 
 <h3 id="_PALETTECLEAR" name="PALETTE CLEAR,PALETTE,CLEAR">PALETTE CLEAR</h3>
 <pre>PALETTE CLEAR</pre>
-<p>Resets the palette to the default colors (see COLOR command).</p>
+<p>Resets the palette to the default colors (see <a href="#_COLOR">COLOR</a> command).</p>
 
 <h3 id="_PALETTEFUNC" name="PALETTE">=PALETTE</h3>
 <pre>v=PALETTE(index)</pre>
@@ -525,7 +525,7 @@ GOTO GAMEOVER
 
 <h3 id="_GOSUB" name="GOSUB">GOSUB</h3>
 <pre>GOSUB label</pre>
-<p>GOSUB is similar to GOTO, but it remembers the current execution position. When RETURN is called, the program jumps back to the line where GOSUB was called.</p>
+<p>GOSUB is similar to <a href="#_GOTO">GOTO</a>, but it remembers the current execution position. When <a href="#_RETURN">RETURN</a> is called, the program jumps back to the line where GOSUB was called.</p>
 <pre class="exm">
 FOR I=1 TO 5
   GOSUB SHOWNUMBER
@@ -538,7 +538,7 @@ RETURN
 
 <h3 id="_RETURN" name="RETURN">RETURN</h3>
 <pre>RETURN [label]</pre>
-<p>The execution of the program returns to the last GOSUB call.</p>
+<p>The execution of the program returns to the last <a href="#_GOSUB">GOSUB</a> call.</p>
 <p>The <i>label</i> parameter may be included in the RETURN command to return to a specific label from the subroutine. This label must be accessible from the position of the previously called GOSUB command.</p>
 <pre class="exm">
 FOR I=1 TO 5
@@ -617,7 +617,7 @@ DO
 commands
 LOOP
 </pre>
-<p>A DO/LOOP command repeats a list of commands forever. You can still exit from the loop by calling EXIT.</p>
+<p>A DO/LOOP command repeats a list of commands forever. You can still exit from the loop by calling <a href="#_EXIT">EXIT</a>.</p>
 <pre class="exm">
 DO
   COLOR RND*16
@@ -641,7 +641,7 @@ PRINT "DONE"
 <h3 id="_ONENDGOTO" name="ON END,ON END GOTO,ON,END,GOTO">ON END GOTO</h3>
 <pre>ON END GOTO label</pre>
 <pre>ON END</pre>
-<p>This command adds special handling for the moment the user taps the exit button. Instead of just quitting the program, it will jump to <i>label</i>. The program has 2 seconds then to do something before calling END. You can use this for example to transfer data with WRITE.</p>
+<p>This command adds special handling for the moment the user taps the exit button. Instead of just quitting the program, it will jump to <i>label</i>. The program has 2 seconds then to do something before calling <a href="#_END">END</a>. You can use this for example to transfer data with <a href="#_WRITE">WRITE</a>.</p>
 <pre class="exm">
 ON END GOTO FIN
 DO
@@ -734,7 +734,7 @@ LOOP
 </table>
 <p>A sound with <i>pitch</i> 0 is silent and can be used as a pause.</p>
 <p>The <i>duration</i> of the note is set in 1/24 seconds. Each voice has an own queue, so sounds are played one after another without blocking the program. A maximum of 1023 sounds can be queued in each voice. If <i>duration</i> is 0, the queue is cleared and the sound will start immediately and won't stop until the voice starts another sound or SOUND OFF is called.</p>
-<p>You can set an instrument with the <i>instr</i> parameter (see DEF SOUND), otherwise the last instrument of the voice will be kept. By default the instruments are already set up with different waveforms.</p>
+<p>You can set an instrument with the <i>instr</i> parameter (see <a href="#_DEFSOUND">DEF SOUND</a>), otherwise the last instrument of the voice will be kept. By default the instruments are already set up with different waveforms.</p>
 <pre class="exm">
 SOUND 0,49,12,1
 SOUND 0,53,12
@@ -748,11 +748,11 @@ SOUND 0,61,24,0
 
 <h3 id="_SOUNDWAIT" name="SOUND WAIT,SOUND,WAIT">SOUND WAIT</h3>
 <pre>SOUND WAIT</pre>
-<p>Causes the sound queues to be paused until SOUND RESUME is called. This can be used to synchronize the sounds coming from the three voices.</p>
+<p>Causes the sound queues to be paused until <a href="#_SOUNDRESUME">SOUND RESUME</a> is called. This can be used to synchronize the sounds coming from the three voices.</p>
 
 <h3 id="_SOUNDRESUME" name="SOUND RESUME,SOUND,RESUME">SOUND RESUME</h3>
 <pre>SOUND RESUME</pre>
-<p>Lets the sound queues play again after a call to SOUND WAIT.</p>
+<p>Lets the sound queues play again after a call to <a href="#_SOUNDWAIT">SOUND WAIT</a>.</p>
 <pre class="exm">
 SOUND WAIT
 SOUND 0,49,12
@@ -785,7 +785,7 @@ LOOP
 
 <h3 id="_DEFSOUND" name="DEF SOUND,DEF,SOUND">DEF SOUND</h3>
 <pre>DEF SOUND instr,wave[,pulse[,time]]</pre>
-<p>Defines one of up to 64 different instruments which can be used with SOUND, so <i>instr</i> can be a value from 0 to 63.</p>
+<p>Defines one of up to 64 different instruments which can be used with <a href="#_SOUND">SOUND</a>, so <i>instr</i> can be a value from 0 to 63.</p>
 <p>The base of an instrument is the waveform, which is set with the <i>wave</i> parameter:</p>
 <table>
     <tr><td>0</td><td>sawtooth wave</td></tr>
@@ -798,7 +798,7 @@ LOOP
 
 <h3 id="_DEFSOUNDLINE" name="DEF SOUND LINE,DEF SOUND,SOUND LINE,DEF,SOUND,LINE">DEF SOUND LINE</h3>
 <pre>DEF SOUND LINE instr,time,pitch,pulse</pre>
-<p>Sets additional values for the instrument number <i>instr</i>. It makes sounds change over the given <i>time</i> (in seconds). Call this command (if needed) always after the DEF SOUND of the same instrument, otherwise the values will be reset.</p>
+<p>Sets additional values for the instrument number <i>instr</i>. It makes sounds change over the given <i>time</i> (in seconds). Call this command (if needed) always after the <a href="#_DEFSOUND">DEF SOUND</a> of the same instrument, otherwise the values will be reset.</p>
 <p>The sound will start with <i>pitch</i> added to the note's original value (or subtracted if <i>pitch</i> is negative). The <i>pulse</i> value is added to pulse width of the original sound (only if the waveform is "pulse").</p>
 <p>Pitch and pulse width will return in the given time to its original values.</p>
 <pre class="exm">
@@ -815,7 +815,7 @@ SOUND 0,54,12
 
 <h3 id="_DEFSPRITE" name="DEF SPRITE,DEF,SPRITE">DEF SPRITE</h3>
 <pre>DEF SPRITE image,data[,c1,c2,c3]</pre>
-<p>Defines a sprite image and stores it as number <i>image</i>. Possible values range from 0 to 63. <i>data</i> is the name of an array (without index numbers) which has 16 elements and contains the bitmap data. The optional parameters <i>c1, c2</i> and <i>c3</i> are used to set the default color palette for the given sprite. If these parameters are omitted, the colors are: 1, 2, 3. Usually the data array and colors are loaded from DATA lines, like this:</p>
+<p>Defines a sprite image and stores it as number <i>image</i>. Possible values range from 0 to 63. <i>data</i> is the name of an array (without index numbers) which has 16 elements and contains the bitmap data. The optional parameters <i>c1, c2</i> and <i>c3</i> are used to set the default color palette for the given sprite. If these parameters are omitted, the colors are: 1, 2, 3. Usually the data array and colors are loaded from <a href="#_DATA">DATA</a> lines, like this:</p>
 <pre class="exm">
 DIM ARR(15)
 FOR I=0 TO 15
@@ -836,7 +836,7 @@ DATA 0,8,11,6
 
 <h3 id="_SPRITE" name="SPRITE">SPRITE</h3>
 <pre>SPRITE number,[x],[y],[image]</pre>
-<p>Shows a sprite or changes the position or the image. <i>number</i> is the identification number of the sprite and can have a value from 0 to 63. The sprite will be shown at the display coordinates <i>x,y</i> with the given <i>image</i>. See the example of DEF SPRITE.</p>
+<p>Shows a sprite or changes the position or the image. <i>number</i> is the identification number of the sprite and can have a value from 0 to 63. The sprite will be shown at the display coordinates <i>x,y</i> with the given <i>image</i>. See the example of <a href="#_DEFSPRITE">DEF SPRITE</a>.</p>
 <p>If a sprite is already visible, it is possible to change only specific parameters and keeping others. Just omit the parameters you don't want to change, but don't remove the commas!</p>
 <pre class="exm">
 REM SHOW SPRITE
@@ -853,7 +853,7 @@ SPRITE 0,,,1
 
 <h3 id="_SPRITEPALETTE" name="SPRITE PALETTE,SPRITE,PALETTE">SPRITE PALETTE</h3>
 <pre>SPRITE PALETTE number,[c1],[c2],[c3]</pre>
-<p>By default a sprite will appear in its standard colors set by DEF SPRITE. With SPRITE PALETTE you can change the colors for each visible sprite separately. See the available color numbers of the COLOR command. Single color parameters can be omitted to keep the current values of the sprite. If a color is set to -1, the sprite's default color is used.</p>
+<p>By default a sprite will appear in its standard colors set by <a href="#_DEFSPRITE">DEF SPRITE</a>. With SPRITE PALETTE you can change the colors for each visible sprite separately. See the available color numbers of the <a href="#_COLOR">COLOR</a> command. Single color parameters can be omitted to keep the current values of the sprite. If a color is set to -1, the sprite's default color is used.</p>
 <pre class="exm">
 REM ORANGE, WHITE, RED
 SPRITE PALETTE 0,7,1,4
@@ -890,7 +890,7 @@ IF SPRITE HIT(1,5 TO 10) THEN PRINT "HIT"
 
 <h3 id="_HIT" name="HIT">=HIT</h3>
 <pre>v=HIT</pre>
-<p>Returns the number of the sprite which collided with the sprite of the last call of SPRITE HIT.</p>
+<p>Returns the number of the sprite which collided with the sprite of the last call of <a href="#_SPRITEHIT">SPRITE HIT</a>.</p>
 <pre class="exm">
 IF SPRITE HIT(0) THEN
   PRINT "0 COLLIDED WITH "+HIT
@@ -904,7 +904,7 @@ END IF
 
 <h3 id="_DISPLAY" name="DISPLAY">DISPLAY</h3>
 <pre>DISPLAY mode [SHARED]</pre>
-<p>DISPLAY sets the display resolution. When you call it all currently opened screens get closed (including the two default screens), so you will have to open any needed screen with SCREEN OPEN. Available options for <i>mode</i> are:</p>
+<p>DISPLAY sets the display resolution. When you call it all currently opened screens get closed (including the two default screens), so you will have to open any needed screen with <a href="#_SCREENOPEN">SCREEN OPEN</a>. Available options for <i>mode</i> are:</p>
 <table>
   <tr><th>Mode</th><th>Display Resolution</th></tr>
   <tr><td>0</td><td>8x8</td></tr>
@@ -917,7 +917,7 @@ END IF
 
 <h3 id="_SCREENOPEN" name="SCREEN OPEN,SCREEN,OPEN">SCREEN OPEN</h3>
 <pre>SCREEN OPEN number,width,height,mode</pre>
-<p>Creates a screen which will be used as the destination of all subsequent graphical operations in your program. <i>number</i> is used to identify this screen, possible values range from 0-3. Screens with higher numbers cover lower ones. If this screen is already open, it will be replaced with the new one. <i>width</i> and <i>height</i> hold the size of your screen in pixels. The maximum size is 512x512, so it can be larger than the actual display resolution. With the SCREEN OFFSET command you can manipulate the currently visible area. <i>mode</i> can be one of these options:</p>
+<p>Creates a screen which will be used as the destination of all subsequent graphical operations in your program. <i>number</i> is used to identify this screen, possible values range from 0-3. Screens with higher numbers cover lower ones. If this screen is already open, it will be replaced with the new one. <i>width</i> and <i>height</i> hold the size of your screen in pixels. The maximum size is 512x512, so it can be larger than the actual display resolution. With the <a href="#_SCREENOFFSET">SCREEN OFFSET</a> command you can manipulate the currently visible area. <i>mode</i> can be one of these options:</p>
 <table>
   <tr><th>Mode</th><th>Description</th></tr>
   <tr><td>0</td><td>Standard (opaque)</td></tr>
@@ -949,7 +949,7 @@ LOOP
 
 <h3 id="_SCREENDISPLAY" name="SCREEN DISPLAY,SCREEN,DISPLAY">SCREEN DISPLAY</h3>
 <pre>SCREEN DISPLAY number,[x],[y],[w],[h]</pre>
-<p>SCREEN DISPLAY sets where a screen should be shown on the display. <i>x</i> and <i>y</i> hold the position of the top left corner of the screen. You can even move it around like a sprite! <i>w</i> (width) and <i>h</i> (height) are not related to the actual size of the screen, but they set the visible size. If the screen is larger than its visible size, you can manipulate the current visible section with SCREEN OFFSET. Parameters can be omitted to keep the screen's current values.</p>
+<p>SCREEN DISPLAY sets where a screen should be shown on the display. <i>x</i> and <i>y</i> hold the position of the top left corner of the screen. You can even move it around like a sprite! <i>w</i> (width) and <i>h</i> (height) are not related to the actual size of the screen, but they set the visible size. If the screen is larger than its visible size, you can manipulate the current visible section with <a href="#_SCREENOFFSET">SCREEN OFFSET</a>. Parameters can be omitted to keep the screen's current values.</p>
 <pre class="exm">
 LINE 0,0 TO 63,63
 SCREEN OPEN 1,60,7,0
@@ -984,11 +984,11 @@ LOOP
 
 <h3 id="_SCREENOFF" name="SCREEN OFF,SCREEN,OFF">SCREEN OFF</h3>
 <pre>SCREEN OFF number</pre>
-<p>Hides the given screen without losing its contents. It's still possible to draw on it and it can be shown again with SCREEN ON.</p>
+<p>Hides the given screen without losing its contents. It's still possible to draw on it and it can be shown again with <a href="#_SCREENON">SCREEN ON</a>.</p>
 
 <h3 id="_SCREENON" name="SCREEN ON,SCREEN,ON">SCREEN ON</h3>
 <pre>SCREEN ON number</pre>
-<p>Shows a screen which was previously hidden by the SCREEN OFF command.</p>
+<p>Shows a screen which was previously hidden by the <a href="#_SCREENOFF">SCREEN OFF</a> command.</p>
 
 <h3 id="_SPRITESCREEN" name="SPRITE SCREEN,SPRITE,SCREEN">SPRITE SCREEN</h3>
 <pre>SPRITE SCREEN screen[,sprite [TO last]]</pre>
@@ -1207,8 +1207,8 @@ V=INT(RND*16)
 
 <h3 id="_RANDOMIZE" name="RANDOMIZE">RANDOMIZE</h3>
 <pre>RANDOMIZE seed</pre>
-<p>In practice, the numbers produced by the RND function are not really random. They're computed internally using a complex mathematical formula. The starting point for this calculation is taken from a number known as the seed. This seed is set to 0 whenever you run a program, so the sequence of numbers generated by RND will be exactly the same every time!</p>
-<p>With the RANDOMIZE command you can set your own <i>seed</i>. Each seed generates its own individual sequence of numbers. In order to generate true random numbers you should use the TIMER function for <i>seed</i>. Calling RANDOMIZE TIMER once at the beginning of your program will give different results depending on the time the program starts.
+<p>In practice, the numbers produced by the <a href="#_RND">RND</a> function are not really random. They're computed internally using a complex mathematical formula. The starting point for this calculation is taken from a number known as the seed. This seed is set to 0 whenever you run a program, so the sequence of numbers generated by RND will be exactly the same every time!</p>
+<p>With the RANDOMIZE command you can set your own <i>seed</i>. Each seed generates its own individual sequence of numbers. In order to generate true random numbers you should use the <a href="#_TIMER">TIMER</a> function for <i>seed</i>. Calling RANDOMIZE TIMER once at the beginning of your program will give different results depending on the time the program starts.
 <pre class="exm">
 RANDOMIZE TIMER
 FOR I=1 TO 8
@@ -1224,7 +1224,7 @@ NEXT I
 
 <h3 id="_DATA" name="DATA">DATA</h3>
 <pre>DATA list</pre>
-<p>Stores numeric and string constants (values, but no variables or expressions) that are accessed by the READ command. DATA commands are not executed and may be placed anywhere in the program. <i>list</i> can contain any number of constants, separated by commas.</p>
+<p>Stores numeric and string constants (values, but no variables or expressions) that are accessed by the <a href="#_READ">READ</a> command. DATA commands are not executed and may be placed anywhere in the program. <i>list</i> can contain any number of constants, separated by commas.</p>
 <p>READ commands access DATA in order, from the top of a program until the bottom. All constants of all DATA commands are read as one continuous list of items.</p>
 <pre class="exm">DATA 10,20,30,40,50</pre>
 ...is exactly the same as:
@@ -1235,7 +1235,7 @@ DATA 40,50
 
 <h3 id="_READ" name="READ">READ</h3>
 <pre>READ list</pre>
-<p>Reads values from DATA commands and assigns them to the variables in <i>list</i>. The program has an internal pointer to the current DATA value. With each value read, the pointer will move to the next DATA value.</p>
+<p>Reads values from <a href="#_DATA">DATA</a> commands and assigns them to the variables in <i>list</i>. The program has an internal pointer to the current DATA value. With each value read, the pointer will move to the next DATA value.</p>
 <pre class="exm">
 FOR I=1 TO 3
   READ A,B$
@@ -1248,7 +1248,7 @@ DATA "B",30,"C"
 <h3 id="_RESTORE" name="RESTORE,RESTORE TRANSFER,TRANSFER">RESTORE</h3>
 <pre>RESTORE [label]</pre>
 <pre>RESTORE TRANSFER</pre>
-<p>Changes the internal read pointer to another position. This allows to reread data or to select specific data. If the <i>label</i> parameter is omitted, READ will start again from the top of the program. Otherwise the pointer will be set to the jump label.</p>
+<p>Changes the internal read pointer to another position. This allows to reread data or to select specific data. If the <i>label</i> parameter is omitted, <a href="#_READ">READ</a> will start again from the top of the program. Otherwise the pointer will be set to the jump label.</p>
 <pre class="exm">
 RESTORE SECOND
 READ A$
@@ -1265,7 +1265,7 @@ DATA "SIX"
 
 <h3 id="_WRITE" name="WRITE">WRITE</h3>
 <pre>WRITE list</pre>
-<p>Writes values to the transfer memory, which can be pasted into your source code. <i>list</i> can be any number of values or expressions, separated by commas. Each call to WRITE will add one DATA command with all its values to the transfer memory (can be changed with WRITE WIDTH).</p>
+<p>Writes values to the transfer memory, which can be pasted into your source code. <i>list</i> can be any number of values or expressions, separated by commas. Each call to WRITE will add one <a href="#_DATA">DATA</a> command with all its values to the transfer memory (can be changed with <a href="#_WRITEWIDTH">WRITE WIDTH</a>).</p>
 <pre class="exm">
 FOR A=1 TO 5
   WRITE A,"HI",A*5
@@ -1275,7 +1275,7 @@ NEXT A
 
 <h3 id="_WRITEDIM" name="WRITE DIM,WRITE,DIM">WRITE DIM</h3>
 <pre>WRITE DIM array[,columns]</pre>
-<p>Writes all elements of an array to the transfer memory. <i>array</i> is the name of a variable (without index numbers). This command adds several DATA commands to the transfer memory, each with a maximum number of <i>columns</i> values. <i>columns</i> can be a number from 0 to 16. If the parameter is omitted or 0, the default value of 8 is used.</p>
+<p>Writes all elements of an array to the transfer memory. <i>array</i> is the name of a variable (without index numbers). This command adds several <a href="#_DATA">DATA</a> commands to the transfer memory, each with a maximum number of <i>columns</i> values. <i>columns</i> can be a number from 0 to 16. If the parameter is omitted or 0, the default value of 8 is used.</p>
 <pre class="exm">
 DIM ARR(3,7)
 FOR I=0 TO 3
@@ -1293,7 +1293,7 @@ WRITE DIM ARR,4
 
 <h3 id="_WRITEWIDTH" name="WRITE WIDTH,WRITE,WIDTH">WRITE WIDTH</h3>
 <pre>WRITE WIDTH columns</pre>
-<p>Changes the number of values per DATA line for the WRITE command (not WRITE DIM) to <i>columns</i>. The maximum value is 16. If <i>columns</i> is 0 (default), each WRITE command creates one DATA command.</p>
+<p>Changes the number of values per <a href="#_DATA">DATA</a> line for the WRITE command (not <a href="#_WRITEDIM">WRITE DIM</a>) to <i>columns</i>. The maximum value is 16. If <i>columns</i> is 0 (default), each WRITE command creates one DATA command.</p>
 <pre class="exm">
 WRITE WIDTH 6
 FOR I=1 TO 30
@@ -1307,12 +1307,12 @@ NEXT I
 
 <h3 id="_LAYER" name="LAYER">LAYER</h3>
 <pre>LAYER number</pre>
-<p><i>This command is obsolete. Use SCREEN instead. Its function did not change, but it's part of the screens system now, so it was renamed.</i></p>
+<p><i>This command is obsolete. Use <a href="#_SCREEN">SCREEN</a> instead. Its function did not change, but it's part of the screens system now, so it was renamed.</i></p>
 
 <h3 id="_GET" name="GET">GET</h3>
 <pre>GET x1,y1 TO x2,y2</pre>
 <p>Copies the rectangular screen area between <i>x1,y1</i> and <i>x2,y2</i> to a buffer. Use the PUT command to draw it on the screen.</p>
-<p><i>This command is obsolete. Use GET BLOCK and PUT BLOCK instead.</i></p>
+<p><i>This command is obsolete. Use <a href="#_GETBLOCK">GET BLOCK</a> and <a href="#_PUTBLOCK">PUT BLOCK</a> instead.</i></p>
 
 <h3 id="_PUT" name="PUT">PUT</h3>
 <pre>PUT x,y[,sx,sy,sw,sh[,transparency]]</pre>
@@ -1328,7 +1328,7 @@ PUT 15,25
 PUT 20,40,0,0,10,5
 PUT 40,40,11,6,10,5
 </pre>
-<p><i>This command is obsolete. Use GET BLOCK and PUT BLOCK instead.</i></p>
+<p><i>This command is obsolete. Use <a href="#_GETBLOCK">GET BLOCK</a> and <a href="#_PUTBLOCK">PUT BLOCK</a> instead.</i></p>
 
 <h3 id="_SOUNDEND" name="SOUND END,SOUND,END">=SOUND END</h3>
 <pre>v=SOUND END[(voice)]</pre>
@@ -1344,7 +1344,7 @@ DO
   WAIT 0.1
 LOOP
 </pre>
-<p><i>This function is obsolete. Use SOUND LEN instead.</i></p>
+<p><i>This function is obsolete. Use <a href="#_SOUNDLEN">SOUND LEN</a> instead.</i></p>
 
 <h1 id="Reserved-keywords" name="BANK,CALL,HEIGHT,INPUT,PEEK,POKE,SUB,TEMPO,TILE,TRACE,UBOUND">Reserved keywords</h1>
 <p>This is a list of all reserved keywords. They cannot be used as variable or label names.<p>
