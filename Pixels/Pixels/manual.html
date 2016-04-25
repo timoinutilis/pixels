@@ -388,8 +388,9 @@ PAINT 3,42
 <p>The are different modes to draw an outline with the current border color:</p>
 <table>
     <tr><td>0</td><td>No outline (default)</td></tr>
-    <tr><td>1</td><td>Normal outline</td></tr>
-    <tr><td>2</td><td>Strong outline</td></tr>
+    <tr><td>1</td><td>Shadow</td></tr>
+    <tr><td>2</td><td>Normal outline</td></tr>
+    <tr><td>3</td><td>Strong outline</td></tr>
 </table>
 
 <h3 id="_TEXTWIDTH" name="TEXT WIDTH,TEXT,WIDTH">=TEXT WIDTH</h3>
@@ -410,9 +411,9 @@ WEND
 <p>LowRes Coder includes 4 different fonts. FONT sets the current font for <a href="#_TEXT">TEXT</a>, <a href="#_TEXTWIDTH">TEXT WIDTH</a> and <a href="#_PRINT">PRINT</a>. <i>n</i> must be a value from the following table:</p>
 <table>
     <tr><td>0</td><td>6p proportional (default)</td></tr>
-    <tr><td>1</td><td>6p 4x6 fixed-width</td></tr>
+    <tr><td>1</td><td>6p fixed-width (4x6)</td></tr>
     <tr><td>2</td><td>8p proportional</td></tr>
-    <tr><td>3</td><td>8p 8x8 fixed-width</td></tr>
+    <tr><td>3</td><td>8p fixed-width (8x8)</td></tr>
 </table>
 <pre class="exm">
 FOR I=0 TO 3
@@ -440,7 +441,6 @@ LOOP
 <pre>PUT BLOCK number,x,y[,mask]</pre>
 <p>Draws a block buffer copied by the <a href="#_GETBLOCK">GET BLOCK</a> command on the screen at the coordinates <i>x,y</i>. The optional <i>mask</i> parameter can have two values:</p>
 <table>
-<tr><th>Mask</th><th>Description</th></tr>
 <tr><td>0</td><td>Block is drawn opaque (default)</td></tr>
 <tr><td>1</td><td>Block is drawn with color 0 transparent</td></tr>
 </table>
@@ -919,7 +919,6 @@ END IF
 <pre>SCREEN OPEN number,width,height,mode</pre>
 <p>Creates a screen which will be used as the destination of all subsequent graphical operations in your program. <i>number</i> is used to identify this screen, possible values range from 0-3. Screens with higher numbers cover lower ones. If this screen is already open, it will be replaced with the new one. <i>width</i> and <i>height</i> hold the size of your screen in pixels. The maximum size is 512x512, so it can be larger than the actual display resolution. With the <a href="#_SCREENOFFSET">SCREEN OFFSET</a> command you can manipulate the currently visible area. <i>mode</i> can be one of these options:</p>
 <table>
-  <tr><th>Mode</th><th>Description</th></tr>
   <tr><td>0</td><td>Standard (opaque)</td></tr>
   <tr><td>1</td><td>Transparent (for pixels with color 0)</td></tr>
 </table>

@@ -1255,7 +1255,7 @@ NSString *const TRANSFER = @"TRANSFER";
     Number *x = [self.xExpression evaluateWithRunner:runner];
     Number *y = [self.yExpression evaluateWithRunner:runner];
     Number *align = [self.alignExpression evaluateNumberWithRunner:runner min:0 max:2];
-    Number *outline = [self.outlineExpression evaluateNumberWithRunner:runner min:0 max:2];
+    Number *outline = [self.outlineExpression evaluateNumberWithRunner:runner min:0 max:3];
     if (runner.error)
     {
         return nil;

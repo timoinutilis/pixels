@@ -706,16 +706,19 @@ typedef struct Font {
     Screen *screen = &_screens[_screenIndex];
     if (outline >= 1)
     {
-        [self drawText:text screen:screen color:screen->borderColorIndex x:x y:y-1 start:0 wrap:NO bg:NO];
         [self drawText:text screen:screen color:screen->borderColorIndex x:x y:y+1 start:0 wrap:NO bg:NO];
-        [self drawText:text screen:screen color:screen->borderColorIndex x:x-1 y:y start:0 wrap:NO bg:NO];
-        [self drawText:text screen:screen color:screen->borderColorIndex x:x+1 y:y start:0 wrap:NO bg:NO];
         if (outline >= 2)
         {
-            [self drawText:text screen:screen color:screen->borderColorIndex x:x-1 y:y-1 start:0 wrap:NO bg:NO];
-            [self drawText:text screen:screen color:screen->borderColorIndex x:x-1 y:y+1 start:0 wrap:NO bg:NO];
-            [self drawText:text screen:screen color:screen->borderColorIndex x:x+1 y:y-1 start:0 wrap:NO bg:NO];
-            [self drawText:text screen:screen color:screen->borderColorIndex x:x+1 y:y+1 start:0 wrap:NO bg:NO];
+            [self drawText:text screen:screen color:screen->borderColorIndex x:x y:y-1 start:0 wrap:NO bg:NO];
+            [self drawText:text screen:screen color:screen->borderColorIndex x:x-1 y:y start:0 wrap:NO bg:NO];
+            [self drawText:text screen:screen color:screen->borderColorIndex x:x+1 y:y start:0 wrap:NO bg:NO];
+            if (outline >= 3)
+            {
+                [self drawText:text screen:screen color:screen->borderColorIndex x:x-1 y:y-1 start:0 wrap:NO bg:NO];
+                [self drawText:text screen:screen color:screen->borderColorIndex x:x-1 y:y+1 start:0 wrap:NO bg:NO];
+                [self drawText:text screen:screen color:screen->borderColorIndex x:x+1 y:y-1 start:0 wrap:NO bg:NO];
+                [self drawText:text screen:screen color:screen->borderColorIndex x:x+1 y:y+1 start:0 wrap:NO bg:NO];
+            }
         }
     }
     [self drawText:text screen:screen color:screen->colorIndex x:x y:y start:0 wrap:NO bg:NO];
