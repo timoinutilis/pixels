@@ -39,6 +39,7 @@ typedef struct PlayerSystem {
     int16_t noise[4096];
     int32_t filterBuffer[AudioFilterBufSize];
     double volume;
+    BOOL queuePaused;
 } PlayerSystem;
 
 static void RenderAudio(AudioQueueBufferRef buffer, PlayerSystem *player);
@@ -215,6 +216,17 @@ static double PitchToFrequency(int pitch);
     return _player.volume;
 }
 
+- (void)setQueuePaused:(BOOL)queuePaused
+{
+    _player.queuePaused = queuePaused;
+    _player.frameCount = 0.0;
+}
+
+- (BOOL)queuePaused
+{
+    return _player.queuePaused;
+}
+
 @end
 
 static double PitchToFrequency(int pitch)
@@ -285,14 +297,17 @@ static void RenderAudio(AudioQueueBufferRef buffer, PlayerSystem *player)
     // wave form
     for (i = 0; i < len; i++)
     {
-        if (player->frameCount == 0.0)
+        if (!player->queuePaused)
         {
-            UpdateNotes(player);
-        }
-        player->frameCount++;
-        if (player->frameCount == frameToUpdate)
-        {
-            player->frameCount = 0.0;
+            if (player->frameCount == 0.0)
+            {
+                UpdateNotes(player);
+            }
+            player->frameCount++;
+            if (player->frameCount == frameToUpdate)
+            {
+                player->frameCount = 0.0;
+            }
         }
         
         sumSample = 0;

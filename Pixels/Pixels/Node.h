@@ -346,6 +346,12 @@
 @property (nonatomic) Node *voiceExpression;
 @end
 
+@interface SoundWaitNode : Node
+@end
+
+@interface SoundResumeNode : Node
+@end
+
 @interface GetNode : Node
 @property (nonatomic) Node *fromXExpression;
 @property (nonatomic) Node *fromYExpression;

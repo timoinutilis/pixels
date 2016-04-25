@@ -386,6 +386,14 @@
             {
                 node = [self acceptSoundOff];
             }
+            else if (next.type == TTypeSymWait)
+            {
+                node = [self acceptSoundWait];
+            }
+            else if (next.type == TTypeSymResume)
+            {
+                node = [self acceptSoundResume];
+            }
             else
             {
                 node = [self acceptSound];
@@ -1342,6 +1350,20 @@
     SoundOffNode *node = [[SoundOffNode alloc] init];
     [self accept:TTypeSymSound and:TTypeSymOff];
     node.voiceExpression = [self acceptOptionalExpression];
+    return node;
+}
+
+- (Node *)acceptSoundWait
+{
+    SoundWaitNode *node = [[SoundWaitNode alloc] init];
+    [self accept:TTypeSymSound and:TTypeSymWait];
+    return node;
+}
+
+- (Node *)acceptSoundResume
+{
+    SoundResumeNode *node = [[SoundResumeNode alloc] init];
+    [self accept:TTypeSymSound and:TTypeSymResume];
     return node;
 }
 

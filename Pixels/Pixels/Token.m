@@ -38,6 +38,7 @@
         case TTypeSymLoop: return @"LOOP";
         case TTypeSymExit: return @"EXIT";
         case TTypeSymWait: return @"WAIT";
+        case TTypeSymResume: return @"RESUME";
         case TTypeSymScreen: return @"SCREEN";
         case TTypeSymColor: return @"COLOR";
         case TTypeSymCls: return @"CLS";

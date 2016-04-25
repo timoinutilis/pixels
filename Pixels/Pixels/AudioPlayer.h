@@ -35,8 +35,9 @@ extern int const AudioNumSoundDefs;
 
 @interface AudioPlayer : NSObject
 
-@property (readonly) BOOL isActive;
-@property double volume;
+@property (nonatomic, readonly) BOOL isActive;
+@property (nonatomic) double volume;
+@property (nonatomic) BOOL queuePaused;
 
 - (void)start;
 - (void)stop;

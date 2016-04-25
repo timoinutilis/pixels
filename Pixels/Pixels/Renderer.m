@@ -731,7 +731,7 @@ typedef struct Font {
     for (int index = start; index < text.length; index++)
     {
         unichar currentChar = [text characterAtIndex:index];
-        if (currentChar >= 32)
+        if (currentChar >= 32 && currentChar <= 90)
         {
             NSUInteger charIndex = currentChar - 32;
             int charLeftX = font->x[charIndex];
@@ -782,7 +782,7 @@ typedef struct Font {
     for (NSUInteger index = 0; index < text.length; index++)
     {
         unichar currentChar = [text characterAtIndex:index];
-        if (currentChar >= 32)
+        if (currentChar >= 32 && currentChar <= 90)
         {
             NSUInteger charIndex = currentChar - 32;
             width += charWidths[charIndex];

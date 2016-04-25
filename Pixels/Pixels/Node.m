@@ -2135,6 +2135,32 @@ NSString *const TRANSFER = @"TRANSFER";
 
 
 
+@implementation SoundWaitNode
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    runner.audioPlayer.queuePaused = YES;
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
+@implementation SoundResumeNode
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    runner.audioPlayer.queuePaused = NO;
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
 @implementation GetNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass

@@ -746,6 +746,26 @@ SOUND 0,61,24,0
 <pre>SOUND OFF [voice]</pre>
 <p>Stops the sound of <i>voice</i> and clears its queue. If the <i>voice</i> parameter is omitted, all voices will be stopped.</p>
 
+<h3 id="_SOUNDWAIT" name="SOUND WAIT,SOUND,WAIT">SOUND WAIT</h3>
+<pre>SOUND WAIT</pre>
+<p>Causes the sound queues to be paused until SOUND RESUME is called. This can be used to synchronize the sounds coming from the three voices.</p>
+
+<h3 id="_SOUNDRESUME" name="SOUND RESUME,SOUND,RESUME">SOUND RESUME</h3>
+<pre>SOUND RESUME</pre>
+<p>Lets the sound queues play again after a call to SOUND WAIT.</p>
+<pre class="exm">
+SOUND WAIT
+SOUND 0,49,12
+SOUND 0,53,12
+SOUND 0,56,12
+SOUND 0,61,24
+SOUND 1,41,36
+SOUND 1,44,24
+PRINT "TAP SCREEN"
+WAIT BUTTON
+SOUND RESUME
+</pre>
+
 <h3 id="_SOUNDLEN" name="SOUND LEN,SOUND,LEN">=SOUND LEN</h3>
 <pre>v=SOUND LEN[(voice)]</pre>
 <p>This function returns the number of notes in the queue of the given <i>voice</i>. The currently playing sound is already removed from the queue. If the parameter is omitted, all voices are checked and the highest value is returned.</p>
@@ -1407,6 +1427,7 @@ READ,
 REM,
 REPEAT,
 RESTORE,
+RESUME,
 RETURN,
 RIGHT,
 RIGHT$,
