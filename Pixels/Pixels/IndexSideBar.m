@@ -21,6 +21,7 @@ static const CGFloat MARGIN = 3.0;
 @property IndexMarker *oldMarker;
 @property UIView *highlight;
 @property NSMutableArray *labels;
+@property CGFloat startTouchY;
 @end
 
 @implementation IndexSideBar
@@ -120,7 +121,7 @@ static const CGFloat MARGIN = 3.0;
     }
     [self showLabels];
     CGPoint point = [touch locationInView:self];
-    [self touchedAtY:point.y];
+    self.startTouchY = point.y;
     return YES;
 }
 
@@ -147,6 +148,17 @@ static const CGFloat MARGIN = 3.0;
 
 - (void)touchedAtY:(CGFloat)touchY
 {
+    if (ABS(touchY - self.startTouchY) < 10.0)
+    {
+        // not moved enough
+        return;
+    }
+    else
+    {
+        // unblock scrolling
+        self.startTouchY = -100.0;
+    }
+    
     IndexMarker *bestMarker = nil;
     CGFloat bestDist = self.bounds.size.height;
     CGFloat dist;
