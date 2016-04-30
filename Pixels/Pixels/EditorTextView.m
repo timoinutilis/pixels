@@ -207,10 +207,11 @@ NSString *EditorTextView_transferText;
         finalRange.length--;
     }
     self.selectedRange = finalRange;
-    CGRect rect = [self firstRectForRange:self.selectedTextRange];
+    [self scrollRangeToVisible:self.selectedRange];
+/*    CGRect rect = [self firstRectForRange:self.selectedTextRange];
     UIMenuController *menu = [UIMenuController sharedMenuController];
     [menu setTargetRect:rect inView:self];
-    [menu setMenuVisible:YES animated:NO];
+    [menu setMenuVisible:YES animated:NO];*/
 }
 
 - (void)insertCheckedText:(NSString *)text

@@ -713,6 +713,7 @@ typedef void(^InfoBlock)(void);
         sourceText = [sourceText stringByReplacingCharactersInRange:selectedRange withString:replaceText];
         self.sourceCodeTextView.text = sourceText;
         self.sourceCodeTextView.selectedRange = NSMakeRange(selectedRange.location + replaceText.length, 0);
+        [self.sourceCodeTextView scrollSelectedRangeToVisible];
     }
     
     // find next
