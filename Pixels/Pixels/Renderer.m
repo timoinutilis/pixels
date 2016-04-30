@@ -9,9 +9,9 @@
 #import "Renderer.h"
 #import "Fonts.h"
 
-int const RendererMaxScreenSize = 512;
+int const RendererMaxLayerSize = 512;
 int const RendererNumColors = 16;
-int const RendererNumScreens = 4;
+int const RendererNumLayers = 4;
 int const RendererNumSprites = 64;
 int const RendererNumSpriteDefs = 64;
 int const RendererSpriteSize = 8;
@@ -30,16 +30,16 @@ typedef struct Font {
 } Font;
 
 @implementation Renderer {
-    Screen _screens[RendererNumScreens];
-    uint32_t _palettes[RendererNumScreens][RendererNumColors];
-    uint8_t _copyBuffer[RendererMaxScreenSize][RendererMaxScreenSize];
+    Layer _layers[RendererNumLayers];
+    uint32_t _palettes[RendererNumLayers][RendererNumColors];
+    uint8_t _copyBuffer[RendererMaxLayerSize][RendererMaxLayerSize];
     Sprite _sprites[RendererNumSprites];
     SpriteDef _spriteDefs[RendererNumSpriteDefs];
     Font _fonts[RendererNumFonts];
     Block _blocks[RendererNumBlocks];
     int _copyWidth;
     int _copyHeight;
-    int _currentMaxScreenIndex;
+    int _currentMaxLayerIndex;
     int _currentMaxSpriteIndex;
 }
 
@@ -47,13 +47,13 @@ typedef struct Font {
 {
     if (self = [super init])
     {
-        // default screen configuration
+        // default layer configuration
         self.displayMode = 3; // 64x64
         self.sharedPalette = YES;
-        [self openScreen:0 width:64 height:64 renderMode:0];
-        [self openScreen:1 width:64 height:64 renderMode:RendererFlagTransparent];
+        [self openLayer:0 width:64 height:64 renderMode:0];
+        [self openLayer:1 width:64 height:64 renderMode:RendererFlagTransparent];
         
-        self.screenIndex = 0;
+        self.layerIndex = 0;
         
         for (int i = 0; i < RendererNumSprites; i++)
         {
@@ -89,12 +89,12 @@ typedef struct Font {
 - (void)dealloc
 {
     [self freeAllBlocks];
-    [self closeScreens];
+    [self closeLayers];
 }
 
 - (void)setDisplayMode:(int)displayMode
 {
-    [self closeScreens];
+    [self closeLayers];
     _displayMode = displayMode;
     _displaySize = pow(2, displayMode + 3);
 }
@@ -108,86 +108,86 @@ typedef struct Font {
     }
 }
 
-- (Screen *)currentScreen
+- (Layer *)currentLayer
 {
-    if (_screenIndex >= 0)
+    if (_layerIndex >= 0)
     {
-        return &_screens[_screenIndex];
+        return &_layers[_layerIndex];
     }
     return NULL;
 }
 
-- (Screen *)screenAtIndex:(int)index
+- (Layer *)layerAtIndex:(int)index
 {
-    return &_screens[index];
+    return &_layers[index];
 }
 
-- (void)openScreen:(int)index width:(int)width height:(int)height renderMode:(int)renderMode
+- (void)openLayer:(int)index width:(int)width height:(int)height renderMode:(int)renderMode
 {
-    Screen *screen = &_screens[index];
-    if (screen->pixelBuffer)
+    Layer *layer = &_layers[index];
+    if (layer->pixelBuffer)
     {
-        free(screen->pixelBuffer);
-        screen->pixelBuffer = NULL;
+        free(layer->pixelBuffer);
+        layer->pixelBuffer = NULL;
     }
-    screen->visible = YES;
-    screen->width = width;
-    screen->height = height;
-    screen->displayX = 0;
-    screen->displayY = 0;
-    screen->displayWidth = width;
-    screen->displayHeight = height;
-    screen->offsetX = 0;
-    screen->offsetY = 0;
-    screen->renderMode = renderMode;
-    screen->colorIndex = 1;
-    screen->bgColorIndex = 0;
-    screen->borderColorIndex = 3;
-    screen->fontIndex = 0;
+    layer->visible = YES;
+    layer->width = width;
+    layer->height = height;
+    layer->displayX = 0;
+    layer->displayY = 0;
+    layer->displayWidth = width;
+    layer->displayHeight = height;
+    layer->offsetX = 0;
+    layer->offsetY = 0;
+    layer->renderMode = renderMode;
+    layer->colorIndex = 1;
+    layer->bgColorIndex = 0;
+    layer->borderColorIndex = 3;
+    layer->fontIndex = 0;
     
-    screen->pixelBuffer = calloc(width * height, sizeof(uint8_t));
+    layer->pixelBuffer = calloc(width * height, sizeof(uint8_t));
     
-    _screenIndex = index;
-    _currentMaxScreenIndex = MAX(_currentMaxScreenIndex, index);
+    _layerIndex = index;
+    _currentMaxLayerIndex = MAX(_currentMaxLayerIndex, index);
     if (!_sharedPalette)
     {
         [self initPalette];
     }
 }
 
-- (void)closeScreen:(int)index
+- (void)closeLayer:(int)index
 {
-    Screen *screen = &_screens[index];
-    screen->visible = NO;
-    screen->width = 0;
-    screen->height = 0;
-    screen->displayX = 0;
-    screen->displayY = 0;
-    screen->displayWidth = 0;
-    screen->displayHeight = 0;
-    screen->offsetX = 0;
-    screen->offsetY = 0;
-    screen->renderMode = 0;
+    Layer *layer = &_layers[index];
+    layer->visible = NO;
+    layer->width = 0;
+    layer->height = 0;
+    layer->displayX = 0;
+    layer->displayY = 0;
+    layer->displayWidth = 0;
+    layer->displayHeight = 0;
+    layer->offsetX = 0;
+    layer->offsetY = 0;
+    layer->renderMode = 0;
     
-    free(screen->pixelBuffer);
-    screen->pixelBuffer = NULL;
+    free(layer->pixelBuffer);
+    layer->pixelBuffer = NULL;
     
-    if (_screenIndex == index)
+    if (_layerIndex == index)
     {
-        _screenIndex = -1;
+        _layerIndex = -1;
     }
 }
 
-- (void)closeScreens
+- (void)closeLayers
 {
-    for (int i = 0; i < RendererNumScreens; i++)
+    for (int i = 0; i < RendererNumLayers; i++)
     {
-        if (_screens[i].pixelBuffer)
+        if (_layers[i].pixelBuffer)
         {
-            [self closeScreen:i];
+            [self closeLayer:i];
         }
     }
-    _currentMaxScreenIndex = 0;
+    _currentMaxLayerIndex = 0;
 }
 
 - (void)initPalette
@@ -195,8 +195,8 @@ typedef struct Font {
     int paletteIndex = 0;
     if (!_sharedPalette)
     {
-        if (_screenIndex == -1) return;
-        paletteIndex = _screenIndex;
+        if (_layerIndex == -1) return;
+        paletteIndex = _layerIndex;
     }
     for (int i = 0; i < RendererNumColors; i++)
     {
@@ -209,8 +209,8 @@ typedef struct Font {
     int paletteIndex = 0;
     if (!_sharedPalette)
     {
-        if (_screenIndex == -1) return 0;
-        paletteIndex = _screenIndex;
+        if (_layerIndex == -1) return 0;
+        paletteIndex = _layerIndex;
     }
     int color = _palettes[paletteIndex][index];
     return ((color >> 18) & 0x30) | ((color >> 12) & 0x0C) | ((color >> 6) & 0x03);
@@ -221,8 +221,8 @@ typedef struct Font {
     int paletteIndex = 0;
     if (!_sharedPalette)
     {
-        if (_screenIndex == -1) return;
-        paletteIndex = _screenIndex;
+        if (_layerIndex == -1) return;
+        paletteIndex = _layerIndex;
     }
     int r = (color >> 4) & 0x03;
     int g = (color >> 2) & 0x03;
@@ -232,38 +232,38 @@ typedef struct Font {
 
 - (int)colorIndexAtX:(int)x Y:(int)y
 {
-    if (_screenIndex == -1) return 0;
-    Screen *screen = &_screens[_screenIndex];
-    if (x >= 0 && x < screen->width && y >= 0 && y < screen->height)
+    if (_layerIndex == -1) return 0;
+    Layer *layer = &_layers[_layerIndex];
+    if (x >= 0 && x < layer->width && y >= 0 && y < layer->height)
     {
-        return screen->pixelBuffer[y * screen->width + x];
+        return layer->pixelBuffer[y * layer->width + x];
     }
     return -1;
 }
 
 - (void)clearWithColorIndex:(int)colorIndex
 {
-    if (_screenIndex == -1) return;
-    Screen *screen = &_screens[_screenIndex];
+    if (_layerIndex == -1) return;
+    Layer *layer = &_layers[_layerIndex];
     if (colorIndex == -1)
     {
-        colorIndex = screen->bgColorIndex;
+        colorIndex = layer->bgColorIndex;
     }
-    uint8_t *pixelBuffer = screen->pixelBuffer;
-    for (int i = screen->width * screen->height - 1; i >= 0; i--)
+    uint8_t *pixelBuffer = layer->pixelBuffer;
+    for (int i = layer->width * layer->height - 1; i >= 0; i--)
     {
         pixelBuffer[i] = colorIndex;
     }
-    screen->printY = 0;
+    layer->printY = 0;
 }
 
 - (void)plotX:(int)x Y:(int)y
 {
-    if (_screenIndex == -1) return;
-    Screen *screen = &_screens[_screenIndex];
-    if (x >= 0 && x < screen->width && y >= 0 && y < screen->height)
+    if (_layerIndex == -1) return;
+    Layer *layer = &_layers[_layerIndex];
+    if (x >= 0 && x < layer->width && y >= 0 && y < layer->height)
     {
-        screen->pixelBuffer[y * screen->width + x] = screen->colorIndex;
+        layer->pixelBuffer[y * layer->width + x] = layer->colorIndex;
     }
 }
 
@@ -333,7 +333,7 @@ typedef struct Font {
 
 - (void)fillBoxFromX:(int)fromX Y:(int)fromY toX:(int)toX Y:(int)toY
 {
-    if (_screenIndex == -1) return;
+    if (_layerIndex == -1) return;
     if (fromX > toX)
     {
         int value = toX; toX = fromX; fromX = value;
@@ -342,23 +342,23 @@ typedef struct Font {
     {
         int value = toY; toY = fromY; fromY = value;
     }
-    Screen *screen = &_screens[_screenIndex];
-    int screenWidth = screen->width;
-    int screenHeight = screen->height;
-    int colorIndex = screen->colorIndex;
-    if (toX >= 0 && toY >= 0 && fromX < screenWidth && fromY < screenHeight)
+    Layer *layer = &_layers[_layerIndex];
+    int layerWidth = layer->width;
+    int layerHeight = layer->height;
+    int colorIndex = layer->colorIndex;
+    if (toX >= 0 && toY >= 0 && fromX < layerWidth && fromY < layerHeight)
     {
         if (fromX < 0) fromX = 0;
         if (fromY < 0) fromY = 0;
-        if (toX >= screenWidth) toX = screenWidth - 1;
-        if (toY >= screenHeight) toY = screenHeight - 1;
+        if (toX >= layerWidth) toX = layerWidth - 1;
+        if (toY >= layerHeight) toY = layerHeight - 1;
         
-        uint8_t *pixelBuffer = screen->pixelBuffer;
+        uint8_t *pixelBuffer = layer->pixelBuffer;
         for (int y = fromY; y <= toY; y++)
         {
             for (int x = fromX; x <= toX; x++)
             {
-                pixelBuffer[y * screenWidth + x] = colorIndex;
+                pixelBuffer[y * layerWidth + x] = colorIndex;
             }
         }
     }
@@ -366,7 +366,7 @@ typedef struct Font {
 
 - (void)scrollFromX:(int)fromX Y:(int)fromY toX:(int)toX Y:(int)toY deltaX:(int)deltaX Y:(int)deltaY refill:(BOOL)refill
 {
-    if (_screenIndex == -1) return;
+    if (_layerIndex == -1) return;
     if (fromX > toX)
     {
         int value = toX; toX = fromX; fromX = value;
@@ -375,19 +375,19 @@ typedef struct Font {
     {
         int value = toY; toY = fromY; fromY = value;
     }
-    Screen *screen = &_screens[_screenIndex];
-    int screenWidth = screen->width;
-    int screenHeight = screen->height;
-    if (fromX < screenWidth && fromY < screenHeight && toX >= 0 && toY >= 0)
+    Layer *layer = &_layers[_layerIndex];
+    int layerWidth = layer->width;
+    int layerHeight = layer->height;
+    if (fromX < layerWidth && fromY < layerHeight && toX >= 0 && toY >= 0)
     {
         if (fromX < 0) fromX = 0;
         if (fromY < 0) fromY = 0;
-        if (toX >= screenWidth) toX = screenWidth - 1;
-        if (toY >= screenHeight) toY = screenHeight - 1;
+        if (toX >= layerWidth) toX = layerWidth - 1;
+        if (toY >= layerHeight) toY = layerHeight - 1;
         
         int width = toX - fromX + 1;
         int height = toY - fromY + 1;
-        uint8_t *pixelBuffer = screen->pixelBuffer;
+        uint8_t *pixelBuffer = layer->pixelBuffer;
         
         for (int oy = 0; oy < height; oy++)
         {
@@ -399,13 +399,13 @@ typedef struct Font {
                 int getY = y - deltaY;
                 if (refill && (getX < fromX || getX > toX || getY < fromY || getY > toY))
                 {
-                    pixelBuffer[y * screenWidth + x] = screen->bgColorIndex;
+                    pixelBuffer[y * layerWidth + x] = layer->bgColorIndex;
                 }
                 else
                 {
                     getX = MAX(fromX, MIN(toX, getX));
                     getY = MAX(fromY, MIN(toY, getY));
-                    pixelBuffer[y * screenWidth + x] = pixelBuffer[getY * screenWidth + getX];
+                    pixelBuffer[y * layerWidth + x] = pixelBuffer[getY * layerWidth + getX];
                 }
             }
         }
@@ -414,7 +414,7 @@ typedef struct Font {
 
 - (void)drawCircleX:(int)centerX Y:(int)centerY radius:(int)radius
 {
-    if (_screenIndex == -1) return;
+    if (_layerIndex == -1) return;
     int f = 1 - radius;
     int ddF_x = 0;
     int ddF_y = -2 * radius;
@@ -451,7 +451,7 @@ typedef struct Font {
 
 - (void)fillCircleX:(int)centerX Y:(int)centerY radius:(int)radius
 {
-    if (_screenIndex == -1) return;
+    if (_layerIndex == -1) return;
     int f = 1 - radius;
     int ddF_x = 0;
     int ddF_y = -2 * radius;
@@ -481,16 +481,16 @@ typedef struct Font {
 
 - (void)floodFillX:(int)x Y:(int)y
 {
-    if (_screenIndex == -1) return;
-    Screen *screen = &_screens[_screenIndex];
+    if (_layerIndex == -1) return;
+    Layer *layer = &_layers[_layerIndex];
     int oldColor = [self colorIndexAtX:x Y:y];
-    int newColor = screen->colorIndex;
+    int newColor = layer->colorIndex;
     
     if (oldColor == newColor || oldColor == -1) return;
     
-    int w = screen->width;
-    int h = screen->height;
-    uint8_t *pixelBuffer = screen->pixelBuffer;
+    int w = layer->width;
+    int h = layer->height;
+    uint8_t *pixelBuffer = layer->pixelBuffer;
     
     NSMutableArray *stack = [NSMutableArray array];
     
@@ -539,9 +539,9 @@ typedef struct Font {
     }
 }
 
-- (void)getScreenFromX:(int)fromX Y:(int)fromY toX:(int)toX Y:(int)toY
+- (void)getLayerFromX:(int)fromX Y:(int)fromY toX:(int)toX Y:(int)toY
 {
-    if (_screenIndex == -1) return;
+    if (_layerIndex == -1) return;
     if (fromX > toX)
     {
         int value = toX; toX = fromX; fromX = value;
@@ -553,22 +553,22 @@ typedef struct Font {
     _copyWidth = toX - fromX + 1;
     _copyHeight = toY - fromY + 1;
     
-    Screen *screen = &_screens[_screenIndex];
-    int screenWidth = screen->width;
-    uint8_t *pixelBuffer = screen->pixelBuffer;
+    Layer *layer = &_layers[_layerIndex];
+    int layerWidth = layer->width;
+    uint8_t *pixelBuffer = layer->pixelBuffer;
 
     for (int y = fromY; y <= toY; y++)
     {
         for (int x = fromX; x <= toX; x++)
         {
-            _copyBuffer[y - fromY][x - fromX] = pixelBuffer[y * screenWidth + x];
+            _copyBuffer[y - fromY][x - fromX] = pixelBuffer[y * layerWidth + x];
         }
     }
 }
 
-- (void)putScreenX:(int)x Y:(int)y srcX:(int)srcX srcY:(int)srcY srcWidth:(int)srcWidth srcHeight:(int)srcHeight transparency:(int)transparency
+- (void)putLayerX:(int)x Y:(int)y srcX:(int)srcX srcY:(int)srcY srcWidth:(int)srcWidth srcHeight:(int)srcHeight transparency:(int)transparency
 {
-    if (_screenIndex == -1) return;
+    if (_layerIndex == -1) return;
     int px, py;
     if (srcWidth == 0 || srcHeight == 0)
     {
@@ -587,10 +587,10 @@ typedef struct Font {
         }
     }
     
-    Screen *screen = &_screens[_screenIndex];
-    int screenWidth = screen->width;
-    int screenHeight = screen->height;
-    uint8_t *pixelBuffer = screen->pixelBuffer;
+    Layer *layer = &_layers[_layerIndex];
+    int layerWidth = layer->width;
+    int layerHeight = layer->height;
+    uint8_t *pixelBuffer = layer->pixelBuffer;
     
     for (int oy = 0; oy < srcHeight; oy++)
     {
@@ -598,12 +598,12 @@ typedef struct Font {
         for (int ox = 0; ox < srcWidth; ox++)
         {
             px = ox + x;
-            if (px >= 0 && py >= 0 && px < screenWidth && py < screenHeight)
+            if (px >= 0 && py >= 0 && px < layerWidth && py < layerHeight)
             {
                 uint8_t color = _copyBuffer[srcY + oy][srcX + ox];
                 if (transparency == -1 || color != transparency)
                 {
-                    pixelBuffer[py * screenWidth + px] = color;
+                    pixelBuffer[py * layerWidth + px] = color;
                 }
             }
         }
@@ -613,7 +613,7 @@ typedef struct Font {
 - (void)getBlock:(int)index fromX:(int)fromX Y:(int)fromY toX:(int)toX Y:(int)toY
 {
     [self freeBlock:index];
-    if (_screenIndex == -1) return;
+    if (_layerIndex == -1) return;
     if (fromX > toX)
     {
         int value = toX; toX = fromX; fromX = value;
@@ -627,15 +627,15 @@ typedef struct Font {
     int blockHeight = toY - fromY + 1;
     uint8_t *blockBuffer = calloc(blockWidth * blockHeight, sizeof(uint8_t));
     
-    Screen *screen = &_screens[_screenIndex];
-    int screenWidth = screen->width;
-    uint8_t *pixelBuffer = screen->pixelBuffer;
+    Layer *layer = &_layers[_layerIndex];
+    int layerWidth = layer->width;
+    uint8_t *pixelBuffer = layer->pixelBuffer;
     
     for (int y = fromY; y <= toY; y++)
     {
         for (int x = fromX; x <= toX; x++)
         {
-            blockBuffer[(y - fromY) * blockWidth + (x - fromX)] = pixelBuffer[y * screenWidth + x];
+            blockBuffer[(y - fromY) * blockWidth + (x - fromX)] = pixelBuffer[y * layerWidth + x];
         }
     }
     
@@ -647,7 +647,7 @@ typedef struct Font {
 
 - (void)putBlock:(int)index X:(int)x Y:(int)y mask:(BOOL)mask
 {
-    if (_screenIndex == -1) return;
+    if (_layerIndex == -1) return;
     
     Block *block = &_blocks[index];
     if (block->pixelBuffer)
@@ -656,10 +656,10 @@ typedef struct Font {
         int blockHeight = block->height;
         uint8_t *blockBuffer = block->pixelBuffer;
         
-        Screen *screen = &_screens[_screenIndex];
-        int screenWidth = screen->width;
-        int screenHeight = screen->height;
-        uint8_t *pixelBuffer = screen->pixelBuffer;
+        Layer *layer = &_layers[_layerIndex];
+        int layerWidth = layer->width;
+        int layerHeight = layer->height;
+        uint8_t *pixelBuffer = layer->pixelBuffer;
         
         for (int oy = 0; oy < blockHeight; oy++)
         {
@@ -667,12 +667,12 @@ typedef struct Font {
             for (int ox = 0; ox < blockWidth; ox++)
             {
                 int px = ox + x;
-                if (px >= 0 && py >= 0 && px < screenWidth && py < screenHeight)
+                if (px >= 0 && py >= 0 && px < layerWidth && py < layerHeight)
                 {
                     uint8_t color = blockBuffer[oy * blockWidth + ox];
                     if (mask == 0 || color != 0)
                     {
-                        pixelBuffer[py * screenWidth + px] = color;
+                        pixelBuffer[py * layerWidth + px] = color;
                     }
                 }
             }
@@ -702,35 +702,35 @@ typedef struct Font {
 
 - (void)drawText:(NSString *)text x:(int)x y:(int)y outline:(int)outline
 {
-    if (_screenIndex == -1) return;
-    Screen *screen = &_screens[_screenIndex];
+    if (_layerIndex == -1) return;
+    Layer *layer = &_layers[_layerIndex];
     if (outline >= 1)
     {
-        [self drawText:text screen:screen color:screen->borderColorIndex x:x y:y+1 start:0 wrap:NO bg:NO];
+        [self drawText:text layer:layer color:layer->borderColorIndex x:x y:y+1 start:0 wrap:NO bg:NO];
         if (outline >= 2)
         {
-            [self drawText:text screen:screen color:screen->borderColorIndex x:x y:y-1 start:0 wrap:NO bg:NO];
-            [self drawText:text screen:screen color:screen->borderColorIndex x:x-1 y:y start:0 wrap:NO bg:NO];
-            [self drawText:text screen:screen color:screen->borderColorIndex x:x+1 y:y start:0 wrap:NO bg:NO];
+            [self drawText:text layer:layer color:layer->borderColorIndex x:x y:y-1 start:0 wrap:NO bg:NO];
+            [self drawText:text layer:layer color:layer->borderColorIndex x:x-1 y:y start:0 wrap:NO bg:NO];
+            [self drawText:text layer:layer color:layer->borderColorIndex x:x+1 y:y start:0 wrap:NO bg:NO];
             if (outline >= 3)
             {
-                [self drawText:text screen:screen color:screen->borderColorIndex x:x-1 y:y-1 start:0 wrap:NO bg:NO];
-                [self drawText:text screen:screen color:screen->borderColorIndex x:x-1 y:y+1 start:0 wrap:NO bg:NO];
-                [self drawText:text screen:screen color:screen->borderColorIndex x:x+1 y:y-1 start:0 wrap:NO bg:NO];
-                [self drawText:text screen:screen color:screen->borderColorIndex x:x+1 y:y+1 start:0 wrap:NO bg:NO];
+                [self drawText:text layer:layer color:layer->borderColorIndex x:x-1 y:y-1 start:0 wrap:NO bg:NO];
+                [self drawText:text layer:layer color:layer->borderColorIndex x:x-1 y:y+1 start:0 wrap:NO bg:NO];
+                [self drawText:text layer:layer color:layer->borderColorIndex x:x+1 y:y-1 start:0 wrap:NO bg:NO];
+                [self drawText:text layer:layer color:layer->borderColorIndex x:x+1 y:y+1 start:0 wrap:NO bg:NO];
             }
         }
     }
-    [self drawText:text screen:screen color:screen->colorIndex x:x y:y start:0 wrap:NO bg:NO];
+    [self drawText:text layer:layer color:layer->colorIndex x:x y:y start:0 wrap:NO bg:NO];
 }
 
 
-- (int)drawText:(NSString *)text screen:(Screen *)screen color:(int)colorIndex x:(int)x y:(int)y start:(int)start wrap:(BOOL)wrap bg:(BOOL)bg
+- (int)drawText:(NSString *)text layer:(Layer *)layer color:(int)colorIndex x:(int)x y:(int)y start:(int)start wrap:(BOOL)wrap bg:(BOOL)bg
 {
-    Font *font = &_fonts[screen->fontIndex];
+    Font *font = &_fonts[layer->fontIndex];
     int fontHeight = font->height;
     uint8_t *fontData = font->data;
-    int screenWidth = screen->width;
+    int layerWidth = layer->width;
     for (int index = start; index < text.length; index++)
     {
         unichar currentChar = [text characterAtIndex:index];
@@ -740,28 +740,28 @@ typedef struct Font {
             int charLeftX = font->x[charIndex];
             int charWidth = font->width[charIndex];
             
-            if (wrap && x + charWidth > screenWidth)
+            if (wrap && x + charWidth > layerWidth)
             {
                 return index;
             }
             
             for (int charX = 0; charX < charWidth; charX++)
             {
-                if (x >= 0 && x < screenWidth)
+                if (x >= 0 && x < layerWidth)
                 {
                     uint8_t rowBits = fontData[charLeftX + charX];
                     for (int charY = 0; charY < fontHeight; charY++)
                     {
                         int pY = y+charY;
-                        if (pY >= 0 && pY < screen->height)
+                        if (pY >= 0 && pY < layer->height)
                         {
                             if (rowBits & (1<<charY))
                             {
-                                screen->pixelBuffer[pY * screen->width + x] = colorIndex;
+                                layer->pixelBuffer[pY * layer->width + x] = colorIndex;
                             }
                             else if (bg)
                             {
-                                screen->pixelBuffer[pY * screen->width + x] = screen->bgColorIndex;
+                                layer->pixelBuffer[pY * layer->width + x] = layer->bgColorIndex;
                             }
                         }
                     }
@@ -779,9 +779,9 @@ typedef struct Font {
 
 - (int)widthForText:(NSString *)text
 {
-    if (_screenIndex == -1) return 0;
+    if (_layerIndex == -1) return 0;
     int width = 0;
-    int *charWidths = _fonts[_screens[_screenIndex].fontIndex].width;
+    int *charWidths = _fonts[_layers[_layerIndex].fontIndex].width;
     for (NSUInteger index = 0; index < text.length; index++)
     {
         unichar currentChar = [text characterAtIndex:index];
@@ -796,22 +796,22 @@ typedef struct Font {
 
 - (void)print:(NSString *)text
 {
-    if (_screenIndex == -1) return;
-    Screen *screen = &_screens[_screenIndex];
-    int fontHeight = _fonts[screen->fontIndex].height;
+    if (_layerIndex == -1) return;
+    Layer *layer = &_layers[_layerIndex];
+    int fontHeight = _fonts[layer->fontIndex].height;
     
     int index = 0;
     do
     {
-        index = [self drawText:text screen:screen color:screen->colorIndex x:0 y:screen->printY start:index wrap:YES bg:YES];
+        index = [self drawText:text layer:layer color:layer->colorIndex x:0 y:layer->printY start:index wrap:YES bg:YES];
         
-        if (screen->printY > screen->height - 2 * fontHeight)
+        if (layer->printY > layer->height - 2 * fontHeight)
         {
-            [self scrollFromX:0 Y:0 toX:screen->width - 1 Y:screen->printY + fontHeight - 1 deltaX:0 Y:-fontHeight refill:YES];
+            [self scrollFromX:0 Y:0 toX:layer->width - 1 Y:layer->printY + fontHeight - 1 deltaX:0 Y:-fontHeight refill:YES];
         }
         else
         {
-            screen->printY += fontHeight;
+            layer->printY += fontHeight;
         }
     }
     while (index > 0);
@@ -874,29 +874,29 @@ uint8_t getSpritePixel(SpriteDef *def, int x, int y)
     return NO;
 }
 
-- (BOOL)checkCollisionBetweenSprite:(int)spriteIndex andScreen:(int)screenIndex
+- (BOOL)checkCollisionBetweenSprite:(int)spriteIndex andLayer:(int)layerIndex
 {
     Sprite *sprite = &_sprites[spriteIndex];
-    Screen *screen = &_screens[screenIndex];
-    if (sprite->visible && screen->visible)
+    Layer *layer = &_layers[layerIndex];
+    if (sprite->visible && layer->visible)
     {
-        int diffX = screen->displayX - screen->offsetX - floorf(sprite->x);
-        int diffY = screen->displayY - screen->offsetY - floorf(sprite->y);
-        if (   diffX < (RendererSpriteSize << sprite->scaleX) && diffX > -screen->width
-            && diffY < (RendererSpriteSize << sprite->scaleY) && diffY > -screen->height)
+        int diffX = layer->displayX - layer->offsetX - floorf(sprite->x);
+        int diffY = layer->displayY - layer->offsetY - floorf(sprite->y);
+        if (   diffX < (RendererSpriteSize << sprite->scaleX) && diffX > -layer->width
+            && diffY < (RendererSpriteSize << sprite->scaleY) && diffY > -layer->height)
         {
             SpriteDef *def = &_spriteDefs[sprite->image];
-            uint8_t *pixelBuffer = screen->pixelBuffer;
-            int screenWidth = screen->width;
+            uint8_t *pixelBuffer = layer->pixelBuffer;
+            int layerWidth = layer->width;
             int minX = MAX(0, diffX);
             int minY = MAX(0, diffY);
-            int maxX = MIN(RendererSpriteSize << sprite->scaleX, screen->width + diffX);
-            int maxY = MIN(RendererSpriteSize << sprite->scaleY, screen->height + diffY);
+            int maxX = MIN(RendererSpriteSize << sprite->scaleX, layer->width + diffX);
+            int maxY = MIN(RendererSpriteSize << sprite->scaleY, layer->height + diffY);
             for (int y = minY; y < maxY; y++)
             {
                 for (int x = minX; x < maxX; x++)
                 {
-                    if (getSpritePixel(def, x >> sprite->scaleX, y >> sprite->scaleY) > 0 && pixelBuffer[(y - diffY) * screenWidth + (x - diffX)] > 0)
+                    if (getSpritePixel(def, x >> sprite->scaleX, y >> sprite->scaleY) > 0 && pixelBuffer[(y - diffY) * layerWidth + (x - diffX)] > 0)
                     {
                         return YES;
                     }
@@ -910,29 +910,29 @@ uint8_t getSpritePixel(SpriteDef *def, int x, int y)
 - (uint32_t)screenColorAtX:(int)x Y:(int)y
 {
     uint8_t colorIndex = 0;
-    int screenIndex = 0;
+    int layerIndex = 0;
     
-    // screens
-    for (int i = _currentMaxScreenIndex; i >= 0 ; i--)
+    // layers
+    for (int i = _currentMaxLayerIndex; i >= 0 ; i--)
     {
-        Screen *screen = &_screens[i];
-        if (screen->visible)
+        Layer *layer = &_layers[i];
+        if (layer->visible)
         {
-            int localX = x - screen->displayX;
-            int localY = y - screen->displayY;
-            if (localX >= 0 && localY >= 0 && localX < screen->displayWidth && localY < screen->displayHeight)
+            int localX = x - layer->displayX;
+            int localY = y - layer->displayY;
+            if (localX >= 0 && localY >= 0 && localX < layer->displayWidth && localY < layer->displayHeight)
             {
-                localX += screen->offsetX;
-                localY += screen->offsetY;
-                uint8_t screenColorIndex = 0;
-                if (localX >= 0 && localY >= 0 && localX < screen->width && localY < screen->height)
+                localX += layer->offsetX;
+                localY += layer->offsetY;
+                uint8_t layerColorIndex = 0;
+                if (localX >= 0 && localY >= 0 && localX < layer->width && localY < layer->height)
                 {
-                    screenColorIndex = screen->pixelBuffer[localY * screen->width + localX];
+                    layerColorIndex = layer->pixelBuffer[localY * layer->width + localX];
                 }
-                if (!(screen->renderMode & RendererFlagTransparent) || screenColorIndex > 0)
+                if (!(layer->renderMode & RendererFlagTransparent) || layerColorIndex > 0)
                 {
-                    colorIndex = screenColorIndex;
-                    screenIndex = i;
+                    colorIndex = layerColorIndex;
+                    layerIndex = i;
                     break;
                 }
             }
@@ -943,7 +943,7 @@ uint8_t getSpritePixel(SpriteDef *def, int x, int y)
     for (int i = 0; i <= _currentMaxSpriteIndex; i++)
     {
         Sprite *sprite = &_sprites[i];
-        if (sprite->visible && sprite->screen >= screenIndex)
+        if (sprite->visible && sprite->layer >= layerIndex)
         {
             int localX = (x - (int)floorf(sprite->x)) >> sprite->scaleX;
             int localY = (y - (int)floorf(sprite->y)) >> sprite->scaleY;
@@ -964,7 +964,7 @@ uint8_t getSpritePixel(SpriteDef *def, int x, int y)
                         // use sprite def palette
                         colorIndex = def->colors[pixel - 1];
                     }
-                    screenIndex = sprite->screen;
+                    layerIndex = sprite->layer;
                     break;
                 }
             }
@@ -976,7 +976,7 @@ uint8_t getSpritePixel(SpriteDef *def, int x, int y)
     {
         return _palettes[0][colorIndex];
     }
-    return _palettes[screenIndex][colorIndex];
+    return _palettes[layerIndex][colorIndex];
 }
 
 @end

@@ -135,24 +135,24 @@
 @property (nonatomic) BOOL sharedPalette;
 @end
 
-@interface ScreenOpenNode : Node
+@interface LayerOpenNode : Node
 @property (nonatomic) Node *nExpression;
 @property (nonatomic) Node *widthExpression;
 @property (nonatomic) Node *heightExpression;
 @property (nonatomic) Node *renderModeExpression;
 @end
 
-@interface ScreenCloseNode : Node
+@interface LayerCloseNode : Node
 @property (nonatomic) Node *nExpression;
 @end
 
-@interface ScreenOffsetNode : Node
+@interface LayerOffsetNode : Node
 @property (nonatomic) Node *nExpression;
 @property (nonatomic) Node *xExpression;
 @property (nonatomic) Node *yExpression;
 @end
 
-@interface ScreenDisplayNode : Node
+@interface LayerDisplayNode : Node
 @property (nonatomic) Node *nExpression;
 @property (nonatomic) Node *xExpression;
 @property (nonatomic) Node *yExpression;
@@ -160,12 +160,12 @@
 @property (nonatomic) Node *heightExpression;
 @end
 
-@interface ScreenOnOffNode : Node
+@interface LayerOnOffNode : Node
 @property (nonatomic) Node *nExpression;
 @property (nonatomic) BOOL visible;
 @end
 
-@interface ScreenNode : Node
+@interface LayerNode : Node
 @property (nonatomic) Node *nExpression;
 @end
 
@@ -276,8 +276,8 @@
 @property (nonatomic) Node *nExpression;
 @end
 
-@interface SpriteScreenNode : Node
-@property (nonatomic) Node *screenExpression;
+@interface SpriteLayerNode : Node
+@property (nonatomic) Node *layerExpression;
 @property (nonatomic) Node *spriteFromExpression;
 @property (nonatomic) Node *spriteToExpression;
 @end
@@ -434,8 +434,8 @@
 @property (nonatomic) Node *lastNExpression;
 @end
 
-@interface ScreenHitNode : Node
-@property (nonatomic) Node *screenExpression;
+@interface LayerHitNode : Node
+@property (nonatomic) Node *layerExpression;
 @property (nonatomic) Node *spriteExpression;
 @end
 

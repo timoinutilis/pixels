@@ -253,35 +253,35 @@
         case TTypeSymDisplay:
             node = [self acceptDisplay];
             break;
-        case TTypeSymScreen: {
+        case TTypeSymLayer: {
             Token *next = [self nextToken];
             if (next.type == TTypeSymOpen)
             {
-                node = [self acceptScreenOpen];
+                node = [self acceptLayerOpen];
             }
             else if (next.type == TTypeSymClose)
             {
-                node = [self acceptScreenClose];
+                node = [self acceptLayerClose];
             }
             else if (next.type == TTypeSymDisplay)
             {
-                node = [self acceptScreenDisplay];
+                node = [self acceptLayerDisplay];
             }
             else if (next.type == TTypeSymOffset)
             {
-                node = [self acceptScreenOffset];
+                node = [self acceptLayerOffset];
             }
             else if (next.type == TTypeSymOff)
             {
-                node = [self acceptScreenOff];
+                node = [self acceptLayerOff];
             }
             else if (next.type == TTypeSymOn)
             {
-                node = [self acceptScreenOn];
+                node = [self acceptLayerOn];
             }
             else
             {
-                node = [self acceptScreen];
+                node = [self acceptLayer];
             }
             break;
         }
@@ -370,9 +370,9 @@
             {
                 node = [self acceptSpriteOff];
             }
-            else if (next.type == TTypeSymScreen)
+            else if (next.type == TTypeSymLayer)
             {
-                node = [self acceptSpriteScreen];
+                node = [self acceptSpriteLayer];
             }
             else
             {
@@ -400,9 +400,6 @@
             }
             break;
         }
-        case TTypeSymLayer: // obsolete, now called Screen
-            node = [self acceptScreen];
-            break;
         case TTypeSymPaint:
             node = [self acceptPaint];
             break;
@@ -470,7 +467,6 @@
         case TTypeSymPersist:
         case TTypeSymSwap:
         case TTypeSymWait:
-        case TTypeSymScreen:
         case TTypeSymDisplay:
         case TTypeSymColor:
         case TTypeSymCls:
@@ -812,10 +808,10 @@
     return node;
 }
 
-- (Node *)acceptScreenOpen
+- (Node *)acceptLayerOpen
 {
-    ScreenOpenNode *node = [[ScreenOpenNode alloc] init];
-    [self accept:TTypeSymScreen and:TTypeSymOpen];
+    LayerOpenNode *node = [[LayerOpenNode alloc] init];
+    [self accept:TTypeSymLayer and:TTypeSymOpen];
     node.nExpression = [self acceptExpression];
     [self accept:TTypeSymComma];
     node.widthExpression = [self acceptExpression];
@@ -826,18 +822,18 @@
     return node;
 }
 
-- (Node *)acceptScreenClose
+- (Node *)acceptLayerClose
 {
-    ScreenCloseNode *node = [[ScreenCloseNode alloc] init];
-    [self accept:TTypeSymScreen and:TTypeSymClose];
+    LayerCloseNode *node = [[LayerCloseNode alloc] init];
+    [self accept:TTypeSymLayer and:TTypeSymClose];
     node.nExpression = [self acceptExpression];
     return node;
 }
 
-- (Node *)acceptScreenOffset
+- (Node *)acceptLayerOffset
 {
-    ScreenOffsetNode *node = [[ScreenOffsetNode alloc] init];
-    [self accept:TTypeSymScreen and:TTypeSymOffset];
+    LayerOffsetNode *node = [[LayerOffsetNode alloc] init];
+    [self accept:TTypeSymLayer and:TTypeSymOffset];
     node.nExpression = [self acceptExpression];
     if ([self acceptOptionalComma])
     {
@@ -850,10 +846,10 @@
     return node;
 }
 
-- (Node *)acceptScreenDisplay
+- (Node *)acceptLayerDisplay
 {
-    ScreenDisplayNode *node = [[ScreenDisplayNode alloc] init];
-    [self accept:TTypeSymScreen and:TTypeSymDisplay];
+    LayerDisplayNode *node = [[LayerDisplayNode alloc] init];
+    [self accept:TTypeSymLayer and:TTypeSymDisplay];
     node.nExpression = [self acceptExpression];
     if ([self acceptOptionalComma])
     {
@@ -874,35 +870,28 @@
     return node;
 }
 
-- (Node *)acceptScreenOff
+- (Node *)acceptLayerOff
 {
-    ScreenOnOffNode *node = [[ScreenOnOffNode alloc] init];
-    [self accept:TTypeSymScreen and:TTypeSymOff];
+    LayerOnOffNode *node = [[LayerOnOffNode alloc] init];
+    [self accept:TTypeSymLayer and:TTypeSymOff];
     node.nExpression = [self acceptExpression];
     node.visible = NO;
     return node;
 }
 
-- (Node *)acceptScreenOn
+- (Node *)acceptLayerOn
 {
-    ScreenOnOffNode *node = [[ScreenOnOffNode alloc] init];
-    [self accept:TTypeSymScreen and:TTypeSymOn];
+    LayerOnOffNode *node = [[LayerOnOffNode alloc] init];
+    [self accept:TTypeSymLayer and:TTypeSymOn];
     node.nExpression = [self acceptExpression];
     node.visible = YES;
     return node;
 }
 
-- (Node *)acceptScreen
+- (Node *)acceptLayer
 {
-    ScreenNode *node = [[ScreenNode alloc] init];
-    if (self.token.type == TTypeSymLayer)
-    {
-        [self accept:TTypeSymLayer];
-    }
-    else
-    {
-        [self accept:TTypeSymScreen];
-    }
+    LayerNode *node = [[LayerNode alloc] init];
+    [self accept:TTypeSymLayer];
     node.nExpression = [self acceptExpression];
     return node;
 }
@@ -1137,11 +1126,11 @@
     return node;
 }
 
-- (Node *)acceptSpriteScreen
+- (Node *)acceptSpriteLayer
 {
-    SpriteScreenNode *node = [[SpriteScreenNode alloc] init];
-    [self accept:TTypeSymSprite and:TTypeSymScreen];
-    node.screenExpression = [self acceptExpression];
+    SpriteLayerNode *node = [[SpriteLayerNode alloc] init];
+    [self accept:TTypeSymSprite and:TTypeSymLayer];
+    node.layerExpression = [self acceptExpression];
     if (self.token.type == TTypeSymComma)
     {
         [self accept:TTypeSymComma];
@@ -1742,11 +1731,11 @@
                 return node;
             }
         }
-        case TTypeSymScreen: {
-            ScreenHitNode *node = [[ScreenHitNode alloc] init];
-            [self accept:TTypeSymScreen and:TTypeSymHit];
+        case TTypeSymLayer: {
+            LayerHitNode *node = [[LayerHitNode alloc] init];
+            [self accept:TTypeSymLayer and:TTypeSymHit];
             [self accept:TTypeSymBracketOpen];
-            node.screenExpression = [self acceptExpression];
+            node.layerExpression = [self acceptExpression];
             [self accept:TTypeSymComma];
             node.spriteExpression = [self acceptExpression];
             [self accept:TTypeSymBracketClose];

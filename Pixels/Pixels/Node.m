@@ -806,7 +806,7 @@ NSString *const TRANSFER = @"TRANSFER";
 @end
 
 
-@implementation ScreenOpenNode
+@implementation LayerOpenNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
 {
@@ -818,16 +818,16 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    Number *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumScreens - 1];
-    Number *width = [self.widthExpression evaluateNumberWithRunner:runner min:1 max:RendererMaxScreenSize];
-    Number *height = [self.heightExpression evaluateNumberWithRunner:runner min:1 max:RendererMaxScreenSize];
+    Number *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumLayers - 1];
+    Number *width = [self.widthExpression evaluateNumberWithRunner:runner min:1 max:RendererMaxLayerSize];
+    Number *height = [self.heightExpression evaluateNumberWithRunner:runner min:1 max:RendererMaxLayerSize];
     Number *renderMode = [self.renderModeExpression evaluateNumberWithRunner:runner min:0 max:1];
     if (runner.error)
     {
         return nil;
     }
     
-    [runner.renderer openScreen:n.intValue width:width.intValue height:height.intValue renderMode:renderMode.intValue];
+    [runner.renderer openLayer:n.intValue width:width.intValue height:height.intValue renderMode:renderMode.intValue];
     
     [runner next];
     return nil;
@@ -837,7 +837,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 
 
-@implementation ScreenCloseNode
+@implementation LayerCloseNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
 {
@@ -846,19 +846,19 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    Number *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumScreens - 1];
+    Number *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumLayers - 1];
     if (runner.error)
     {
         return nil;
     }
     
-    if ([runner.renderer screenAtIndex:n.intValue]->pixelBuffer == NULL)
+    if ([runner.renderer layerAtIndex:n.intValue]->pixelBuffer == NULL)
     {
-        runner.error = [NSError screenNotOpenedErrorWithNode:self];
+        runner.error = [NSError layerNotOpenedErrorWithNode:self];
         return nil;
     }
     
-    [runner.renderer closeScreen:n.intValue];
+    [runner.renderer closeLayer:n.intValue];
     
     [runner next];
     return nil;
@@ -868,7 +868,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 
 
-@implementation ScreenOffsetNode
+@implementation LayerOffsetNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
 {
@@ -879,7 +879,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    Number *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumScreens - 1];
+    Number *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumLayers - 1];
     Number *x = [self.xExpression evaluateWithRunner:runner];
     Number *y = [self.yExpression evaluateWithRunner:runner];
     if (runner.error)
@@ -887,15 +887,15 @@ NSString *const TRANSFER = @"TRANSFER";
         return nil;
     }
     
-    Screen *screen = [runner.renderer screenAtIndex:n.intValue];
-    if (screen->pixelBuffer == NULL)
+    Layer *layer = [runner.renderer layerAtIndex:n.intValue];
+    if (layer->pixelBuffer == NULL)
     {
-        runner.error = [NSError screenNotOpenedErrorWithNode:self];
+        runner.error = [NSError layerNotOpenedErrorWithNode:self];
         return nil;
     }
     
-    if (x) screen->offsetX = x.intValue;
-    if (y) screen->offsetY = y.intValue;
+    if (x) layer->offsetX = x.intValue;
+    if (y) layer->offsetY = y.intValue;
     
     [runner next];
     return nil;
@@ -905,7 +905,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 
 
-@implementation ScreenDisplayNode
+@implementation LayerDisplayNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
 {
@@ -918,27 +918,27 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    Number *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumScreens - 1];
+    Number *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumLayers - 1];
     Number *x = [self.xExpression evaluateWithRunner:runner];
     Number *y = [self.yExpression evaluateWithRunner:runner];
-    Number *width = [self.widthExpression evaluateNumberWithRunner:runner min:0 max:RendererMaxScreenSize];
-    Number *height = [self.heightExpression evaluateNumberWithRunner:runner min:0 max:RendererMaxScreenSize];
+    Number *width = [self.widthExpression evaluateNumberWithRunner:runner min:0 max:RendererMaxLayerSize];
+    Number *height = [self.heightExpression evaluateNumberWithRunner:runner min:0 max:RendererMaxLayerSize];
     if (runner.error)
     {
         return nil;
     }
     
-    Screen *screen = [runner.renderer screenAtIndex:n.intValue];
-    if (screen->pixelBuffer == NULL)
+    Layer *layer = [runner.renderer layerAtIndex:n.intValue];
+    if (layer->pixelBuffer == NULL)
     {
-        runner.error = [NSError screenNotOpenedErrorWithNode:self];
+        runner.error = [NSError layerNotOpenedErrorWithNode:self];
         return nil;
     }
     
-    if (x) screen->displayX = x.intValue;
-    if (y) screen->displayY = y.intValue;
-    if (width) screen->displayWidth = width.intValue;
-    if (height) screen->displayHeight = height.intValue;
+    if (x) layer->displayX = x.intValue;
+    if (y) layer->displayY = y.intValue;
+    if (width) layer->displayWidth = width.intValue;
+    if (height) layer->displayHeight = height.intValue;
     
     [runner next];
     return nil;
@@ -948,7 +948,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 
 
-@implementation ScreenOnOffNode
+@implementation LayerOnOffNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
 {
@@ -957,20 +957,20 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    Number *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumScreens - 1];
+    Number *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumLayers - 1];
     if (runner.error)
     {
         return nil;
     }
     
-    Screen *screen = [runner.renderer screenAtIndex:n.intValue];
-    if (screen->pixelBuffer == NULL)
+    Layer *layer = [runner.renderer layerAtIndex:n.intValue];
+    if (layer->pixelBuffer == NULL)
     {
-        runner.error = [NSError screenNotOpenedErrorWithNode:self];
+        runner.error = [NSError layerNotOpenedErrorWithNode:self];
         return nil;
     }
     
-    screen->visible = self.visible;
+    layer->visible = self.visible;
     
     [runner next];
     return nil;
@@ -980,7 +980,7 @@ NSString *const TRANSFER = @"TRANSFER";
 
 
 
-@implementation ScreenNode
+@implementation LayerNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
 {
@@ -989,19 +989,19 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    Number *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumScreens - 1];
+    Number *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumLayers - 1];
     if (runner.error)
     {
         return nil;
     }
     
-    if ([runner.renderer screenAtIndex:n.intValue]->pixelBuffer == NULL)
+    if ([runner.renderer layerAtIndex:n.intValue]->pixelBuffer == NULL)
     {
-        runner.error = [NSError screenNotOpenedErrorWithNode:self];
+        runner.error = [NSError layerNotOpenedErrorWithNode:self];
         return nil;
     }
     
-    runner.renderer.screenIndex = n.intValue;
+    runner.renderer.layerIndex = n.intValue;
     
     [runner next];
     return nil;
@@ -1030,12 +1030,12 @@ NSString *const TRANSFER = @"TRANSFER";
         return nil;
     }
     
-    Screen *screen = runner.renderer.currentScreen;
-    if (screen)
+    Layer *layer = runner.renderer.currentLayer;
+    if (layer)
     {
-        if (color) screen->colorIndex = color.intValue;
-        if (bgColor) screen->bgColorIndex = bgColor.intValue;
-        if (borderColor) screen->borderColorIndex = borderColor.intValue;
+        if (color) layer->colorIndex = color.intValue;
+        if (bgColor) layer->bgColorIndex = bgColor.intValue;
+        if (borderColor) layer->borderColorIndex = borderColor.intValue;
     }
     [runner next];
     return nil;
@@ -1300,10 +1300,10 @@ NSString *const TRANSFER = @"TRANSFER";
         return nil;
     }
     
-    Screen *screen = runner.renderer.currentScreen;
-    if (screen)
+    Layer *layer = runner.renderer.currentLayer;
+    if (layer)
     {
-        screen->fontIndex = font.intValue;
+        layer->fontIndex = font.intValue;
     }
     [runner next];
     return nil;
@@ -1610,18 +1610,18 @@ NSString *const TRANSFER = @"TRANSFER";
 
 
 
-@implementation SpriteScreenNode
+@implementation SpriteLayerNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
 {
-    [self.screenExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.layerExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
     [self.spriteFromExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
     [self.spriteToExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
 }
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    Number *screen = [self.screenExpression evaluateNumberWithRunner:runner min:0 max:RendererNumScreens - 1];
+    Number *layer = [self.layerExpression evaluateNumberWithRunner:runner min:0 max:RendererNumLayers - 1];
     Number *spriteFrom = [self.spriteFromExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSprites - 1];
     Number *spriteTo = [self.spriteToExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSprites - 1];
     if (runner.error)
@@ -1640,12 +1640,12 @@ NSString *const TRANSFER = @"TRANSFER";
     {
         to = spriteTo.intValue;
     }
-    int screenInt = screen.intValue;
+    int layerInt = layer.intValue;
     
     for (int i = from; i <= to; i++)
     {
         Sprite *sprite = [runner.renderer spriteAtIndex:i];
-        sprite->screen = screenInt;
+        sprite->layer = layerInt;
     }
     
     [runner next];
@@ -2173,11 +2173,11 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    Screen *screen = runner.renderer.currentScreen;
-    if (screen)
+    Layer *layer = runner.renderer.currentLayer;
+    if (layer)
     {
-        int maxX = screen->width - 1;
-        int maxY = screen->height - 1;
+        int maxX = layer->width - 1;
+        int maxY = layer->height - 1;
         
         Number *fromX = [self.fromXExpression evaluateNumberWithRunner:runner min:0 max:maxX];
         Number *fromY = [self.fromYExpression evaluateNumberWithRunner:runner min:0 max:maxY];
@@ -2188,7 +2188,7 @@ NSString *const TRANSFER = @"TRANSFER";
             return nil;
         }
         
-        [runner.renderer getScreenFromX:fromX.intValue Y:fromY.intValue toX:toX.intValue Y:toY.intValue];
+        [runner.renderer getLayerFromX:fromX.intValue Y:fromY.intValue toX:toX.intValue Y:toY.intValue];
     }
     
     [runner next];
@@ -2224,21 +2224,21 @@ NSString *const TRANSFER = @"TRANSFER";
     
     if (self.srcXExpression)
     {
-        Number *srcX = [self.srcXExpression evaluateNumberWithRunner:runner min:0 max:RendererMaxScreenSize - 1];
-        Number *srcY = [self.srcYExpression evaluateNumberWithRunner:runner min:0 max:RendererMaxScreenSize - 1];
-        Number *srcW = [self.srcWidthExpression evaluateNumberWithRunner:runner min:0 max:RendererMaxScreenSize];
-        Number *srcH = [self.srcHeightExpression evaluateNumberWithRunner:runner min:0 max:RendererMaxScreenSize];
+        Number *srcX = [self.srcXExpression evaluateNumberWithRunner:runner min:0 max:RendererMaxLayerSize - 1];
+        Number *srcY = [self.srcYExpression evaluateNumberWithRunner:runner min:0 max:RendererMaxLayerSize - 1];
+        Number *srcW = [self.srcWidthExpression evaluateNumberWithRunner:runner min:0 max:RendererMaxLayerSize];
+        Number *srcH = [self.srcHeightExpression evaluateNumberWithRunner:runner min:0 max:RendererMaxLayerSize];
         
         if (runner.error)
         {
             return nil;
         }
         
-        [runner.renderer putScreenX:x.intValue Y:y.intValue srcX:srcX.intValue srcY:srcY.intValue srcWidth:srcW.intValue srcHeight:srcH.intValue transparency:transInt];
+        [runner.renderer putLayerX:x.intValue Y:y.intValue srcX:srcX.intValue srcY:srcY.intValue srcWidth:srcW.intValue srcHeight:srcH.intValue transparency:transInt];
     }
     else
     {
-        [runner.renderer putScreenX:x.intValue Y:y.intValue srcX:0 srcY:0 srcWidth:0 srcHeight:0 transparency:transInt];
+        [runner.renderer putLayerX:x.intValue Y:y.intValue srcX:0 srcY:0 srcWidth:0 srcHeight:0 transparency:transInt];
     }
     
     [runner next];
@@ -2262,11 +2262,11 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    Screen *screen = runner.renderer.currentScreen;
-    if (screen)
+    Layer *layer = runner.renderer.currentLayer;
+    if (layer)
     {
-        int maxX = screen->width - 1;
-        int maxY = screen->height - 1;
+        int maxX = layer->width - 1;
+        int maxY = layer->height - 1;
         
         Number *n = [self.nExpression evaluateNumberWithRunner:runner min:0 max:RendererNumBlocks - 1];
         Number *fromX = [self.fromXExpression evaluateNumberWithRunner:runner min:0 max:maxX];
@@ -2710,30 +2710,30 @@ NSString *const TRANSFER = @"TRANSFER";
 
 
 
-@implementation ScreenHitNode
+@implementation LayerHitNode
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
 {
-    [self.screenExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
+    [self.layerExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
     [self.spriteExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
 }
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    Number *screen = [self.screenExpression evaluateNumberWithRunner:runner min:0 max:RendererNumScreens - 1];
+    Number *layer = [self.layerExpression evaluateNumberWithRunner:runner min:0 max:RendererNumLayers - 1];
     Number *sprite = [self.spriteExpression evaluateNumberWithRunner:runner min:0 max:RendererNumSprites - 1];
     if (runner.error)
     {
         return nil;
     }
 
-    if ([runner.renderer screenAtIndex:screen.intValue]->pixelBuffer == NULL)
+    if ([runner.renderer layerAtIndex:layer.intValue]->pixelBuffer == NULL)
     {
-        runner.error = [NSError screenNotOpenedErrorWithNode:self];
+        runner.error = [NSError layerNotOpenedErrorWithNode:self];
         return nil;
     }
     
-    if ([runner.renderer checkCollisionBetweenSprite:sprite.intValue andScreen:screen.intValue])
+    if ([runner.renderer checkCollisionBetweenSprite:sprite.intValue andLayer:layer.intValue])
     {
         return [runner.numberPool numberWithValue:-1];
     }

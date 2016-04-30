@@ -48,9 +48,9 @@ NSString *const LRCErrorDomain = @"com.inutilis.LowResCoder.ErrorDomain";
     return [NSError programErrorWithCode:LRCErrorCodeDivisionByZero reason:@"Division by zero" token:node.token];
 }
 
-+ (NSError *)screenNotOpenedErrorWithNode:(Node *)node
++ (NSError *)layerNotOpenedErrorWithNode:(Node *)node
 {
-    return [NSError programErrorWithCode:LRCErrorCodeRuntime reason:@"Screen not opened" token:node.token];
+    return [NSError programErrorWithCode:LRCErrorCodeRuntime reason:@"Layer not opened" token:node.token];
 }
 
 - (NSUInteger)programPosition

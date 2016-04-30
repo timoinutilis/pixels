@@ -16,7 +16,7 @@ typedef struct Sprite {
     int scaleX;
     int scaleY;
     int8_t colors[3];
-    int screen;
+    int layer;
 } Sprite;
 
 typedef struct SpriteDef {
@@ -24,7 +24,7 @@ typedef struct SpriteDef {
     uint8_t colors[3];
 } SpriteDef;
 
-typedef struct Screen {
+typedef struct Layer {
     BOOL visible;
     int width;
     int height;
@@ -41,7 +41,7 @@ typedef struct Screen {
     int borderColorIndex;
     int fontIndex;
     int printY;
-} Screen;
+} Layer;
 
 typedef struct Block {
     int width;
@@ -49,9 +49,9 @@ typedef struct Block {
     uint8_t *pixelBuffer;
 } Block;
 
-extern int const RendererMaxScreenSize;
+extern int const RendererMaxLayerSize;
 extern int const RendererNumColors;
-extern int const RendererNumScreens;
+extern int const RendererNumLayers;
 extern int const RendererNumSprites;
 extern int const RendererNumSpriteDefs;
 extern int const RendererSpriteSize;
@@ -64,12 +64,12 @@ extern int const RendererNumBlocks;
 @property (nonatomic) int displayMode;
 @property (nonatomic, readonly) int displaySize;
 @property (nonatomic) BOOL sharedPalette;
-@property (nonatomic) int screenIndex;
-@property (nonatomic, readonly) Screen *currentScreen;
+@property (nonatomic) int layerIndex;
+@property (nonatomic, readonly) Layer *currentLayer;
 
-- (Screen *)screenAtIndex:(int)index;
-- (void)openScreen:(int)index width:(int)width height:(int)height renderMode:(int)renderMode;
-- (void)closeScreen:(int)index;
+- (Layer *)layerAtIndex:(int)index;
+- (void)openLayer:(int)index width:(int)width height:(int)height renderMode:(int)renderMode;
+- (void)closeLayer:(int)index;
 - (void)initPalette;
 - (int)colorAtIndex:(int)index;
 - (void)setColor:(int)color atIndex:(int)index;
@@ -83,8 +83,8 @@ extern int const RendererNumBlocks;
 - (void)drawCircleX:(int)centerX Y:(int)centerY radius:(int)radius;
 - (void)fillCircleX:(int)centerX Y:(int)centerY radius:(int)radius;
 - (void)floodFillX:(int)x Y:(int)y;
-- (void)getScreenFromX:(int)fromX Y:(int)fromY toX:(int)toX Y:(int)toY;
-- (void)putScreenX:(int)x Y:(int)y srcX:(int)srcX srcY:(int)srcY srcWidth:(int)srcWidth srcHeight:(int)srcHeight transparency:(int)transparency;
+- (void)getLayerFromX:(int)fromX Y:(int)fromY toX:(int)toX Y:(int)toY;
+- (void)putLayerX:(int)x Y:(int)y srcX:(int)srcX srcY:(int)srcY srcWidth:(int)srcWidth srcHeight:(int)srcHeight transparency:(int)transparency;
 - (void)getBlock:(int)index fromX:(int)fromX Y:(int)fromY toX:(int)toX Y:(int)toY;
 - (void)putBlock:(int)index X:(int)x Y:(int)y mask:(BOOL)mask;
 - (void)freeBlock:(int)index;
@@ -95,7 +95,7 @@ extern int const RendererNumBlocks;
 - (Sprite *)spriteAtIndex:(int)index;
 - (SpriteDef *)spriteDefAtIndex:(int)index;
 - (BOOL)checkCollisionBetweenSprite:(int)index1 andSprite:(int)index2;
-- (BOOL)checkCollisionBetweenSprite:(int)spriteIndex andScreen:(int)screenIndex;
+- (BOOL)checkCollisionBetweenSprite:(int)spriteIndex andLayer:(int)layerIndex;
 
 - (uint32_t)screenColorAtX:(int)x Y:(int)y;
 
