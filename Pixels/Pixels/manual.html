@@ -43,20 +43,20 @@ WAIT 0.1
 LOOP
 </pre>
 <p>Now tap on the Play button and you should see your name flashing in random colors! If you see an error message instead, check if you wrote something wrong. When you looked enough on your name, tap the Exit button (or the top left corner).</p>
-<p>We should give a name to this program. Tap on the Share/Action button and select "Rename" from the menu. Change the name to "My Name" or whatever you like.</p>
+<p>We should give a name to this program. Tap on the Share/Action button and select "Rename / Settings..." from the menu. Change the name to "My Name" or whatever you like. You can also choose a nicer icon from the snapshots.</p>
 
 <h2 id="_Share">Share your work!</h2>
 <p>LowRes Coder has an own community. You can create a profile page to post your programs or status updates. Follow other programmers to try and discuss their works.</p>
 <p>When you created something and you are happy with it, you should share it! Tap on the Share button and select "Share with Community" to post your program on your profile page. We keep an eye on most of the activity, if we like something, we will share it in the official LowRes Coder news!</p>
 
 <h2 id="_Where-to-go">Where to go from here?</h2>
-<p>You are ready now! Well, maybe you don't know programming yet, so you should read some more chapters! Also try all the other included programs and learn from them! You can duplicate them and experiment with the copies.</p>
+<p>You are ready now! Well, maybe you don't know programming yet, so you should read some more chapters! Also try all the other included programs (especially from the "Simple Examples" folder) and learn from them! You can duplicate them and experiment with the copies.</p>
 
 <h1 id="BASIC-principles">Basic principles</h1>
 
 <h2 id="_Variables">Variables</h2>
 <p>Variables are the names used to refer to values stored in the memory of a computer. They are used to hold the results of calculations in a program. The contents of a variable can be changed at any time.<br/>
-You can choose any variable names in your programs, with the following restrictions: Allowed characters are the letters A to Z, the numbers 0 to 9 and the underscore "_", but no spaces. They must begin with a letter and cannot match with an existing LowRes Coder command or function name, but they can begin with one (see "Reserved keywords" chapter). <br/>
+You can choose any variable names in your programs, with the following restrictions: Allowed characters are the letters A to Z, the numbers 0 to 9 and the underscore "_", but no spaces. They must begin with a letter and cannot match with an existing LowRes Coder command or function name, but they can begin with one (see <a href="#Reserved-keywords">Reserved keywords</a> chapter). <br/>
 In LowRes Coder you don't have to declare variables. They start to exist automatically when they appear the first time in your program.</p>
 
 <h3 id="_Numbers">Numbers</h3>
@@ -205,7 +205,7 @@ PRINT 2+2
 <h3 id="_WAIT" name="WAIT,TAP">WAIT</h3>
 <pre>WAIT seconds [TAP]</pre>
 <p>WAIT pauses the execution of the program for the time set by the <i>seconds</i> parameter. The shortes wait time is 0.04 seconds. If you add the TAP keyword, the waiting will be interrupted by any tap on a gamepad button (including the direction-pad). This is useful if you have a slow loop, but you want immediate reactions to user inputs.</p>
-<p>This command has an important side effect: It updates the display. If you draw something in a loop, you won't see it until you call WAIT (or the program ends).</p>
+<p>This command has an important side effect: It updates the screen. If you draw something in a loop, you won't see it until you call WAIT (or the program ends).</p>
 <pre class="exm">
 FOR X=0 TO 63
   PLOT X,31
@@ -270,7 +270,7 @@ PRINT TIME$
 
 <h1 id="Graphics">Graphics</h1>
 
-<p>LowRes Coder runs your programs on a virtual screen with 64x64 pixels (by default) and 16 colors. Check the chapter <a href="#Screens">Screens</a> for information about different resolutions and more options. With the following commands you can draw on LowRes Coder's screen.</p>
+<p>LowRes Coder runs your programs on a virtual screen with 64x64 pixels (by default) and 16 colors. Check the chapter <a href="#Screen-layers">Screen layers</a> for information about different resolutions and more options. With the following commands you can draw on LowRes Coder's screen.</p>
 
 <h3 id="_COLOR" name="COLOR">COLOR</h3>
 <pre>COLOR [color],[background],[border]</pre>
@@ -811,7 +811,7 @@ SOUND 0,54,12
 
 <h1 id="Sprites">Sprites</h1>
 
-<p>Sprites are graphical objects with 8x8 pixels and 3 colors (plus a transparent background color). They are shown on an own layer and don't affect the normal graphic screens used for drawing. They can be moved and animated very easily, that's why they are perfect for game objects. Sprites are not designed with the normal graphic commands, but they are defined by bitmaps. LowRes Coder can show up to 64 sprites at once.</p>
+<p>Sprites are graphical objects with 8x8 pixels and 3 colors (plus a transparent background color). They are shown on an own layer and don't affect the normal graphic layers used for drawing. They can be moved and animated very easily, that's why they are perfect for game objects. Sprites are not designed with the normal graphic commands, but they are defined by bitmaps. LowRes Coder can show up to 64 sprites at once.</p>
 
 <h3 id="_DEFSPRITE" name="DEF SPRITE,DEF,SPRITE">DEF SPRITE</h3>
 <pre>DEF SPRITE image,data[,c1,c2,c3]</pre>
@@ -836,7 +836,7 @@ DATA 0,8,11,6
 
 <h3 id="_SPRITE" name="SPRITE">SPRITE</h3>
 <pre>SPRITE number,[x],[y],[image]</pre>
-<p>Shows a sprite or changes the position or the image. <i>number</i> is the identification number of the sprite and can have a value from 0 to 63. The sprite will be shown at the display coordinates <i>x,y</i> with the given <i>image</i>. See the example of <a href="#_DEFSPRITE">DEF SPRITE</a>.</p>
+<p>Shows a sprite or changes the position or the image. <i>number</i> is the identification number of the sprite and can have a value from 0 to 63. The sprite will be shown at the screen coordinates <i>x,y</i> with the given <i>image</i>. See the example of <a href="#_DEFSPRITE">DEF SPRITE</a>.</p>
 <p>If a sprite is already visible, it is possible to change only specific parameters and keeping others. Just omit the parameters you don't want to change, but don't remove the commas!</p>
 <pre class="exm">
 REM SHOW SPRITE
@@ -849,7 +849,7 @@ SPRITE 0,,,1
 
 <h3 id="_SPRITEOFF" name="SPRITE OFF,SPRITE,OFF">SPRITE OFF</h3>
 <pre>SPRITE OFF [number]</pre>
-<p>Removes the sprite with the given <i>number</i> from the display. If the parameter is omitted, all sprites are removed.</p>
+<p>Removes the sprite with the given <i>number</i> from the screen. If the parameter is omitted, all sprites are removed.</p>
 
 <h3 id="_SPRITEPALETTE" name="SPRITE PALETTE,SPRITE,PALETTE">SPRITE PALETTE</h3>
 <pre>SPRITE PALETTE number,[c1],[c2],[c3]</pre>
@@ -897,48 +897,49 @@ IF SPRITE HIT(0) THEN
 END IF
 </pre>
 
-<h1 id="Screens">Screens</h1>
+<h1 id="Screen-layers">Screen layers</h1>
 
-<p>A screen can be explained as a visible canvas to draw on. LowRes Coder can show up to 4 screens at once! Each screen can have an own size, they can even be bigger than the visible size and you can scroll their content easily. There is a mode to show a screen with a transparent background color, so you can use them like layers and even create impressive paralax scrolling effects. Also each screen can have its own color palette, so for example you can use different colors for the background and for the foreground.</p>
-<p>By default LowRes Coder creates two screens with a resolution of 64x64 pixels and a shared color palette. Screen 0 is the main screen and screen 1 is a transparent layer on top of it.</p>
+<p>LowRes Coder can show up to 4 screen layers at once! Each layer can have an own size, they can even be bigger than the actual screen and you can scroll their content easily. There is a mode to show a layer with a transparent background color, so you can create impressive parallax scrolling effects. Also each layer can have its own color palette, so for example you can use different colors for the background and for the foreground.</p>
+<p>By default LowRes Coder creates two layers with a resolution of 64x64 pixels and a shared color palette. Layer 0 is in the background and usually the main layer. Layer 1 is in the foreground and it's transparent in all pixels with color 0.</p>
 
 <h3 id="_DISPLAY" name="DISPLAY">DISPLAY</h3>
 <pre>DISPLAY mode [SHARED]</pre>
-<p>DISPLAY sets the display resolution. When you call it all currently opened screens get closed (including the two default screens), so you will have to open any needed screen with <a href="#_SCREENOPEN">SCREEN OPEN</a>. Available options for <i>mode</i> are:</p>
+<p>DISPLAY sets the screen resolution. When you call it all currently opened layers get closed (including the two default layers), so you will have to open any needed layer with <a href="#_LAYEROPEN">LAYER OPEN</a>. Available options for <i>mode</i> are:</p>
 <table>
-  <tr><th>Mode</th><th>Display Resolution</th></tr>
+  <tr><th>Mode</th><th>Screen Resolution</th></tr>
   <tr><td>0</td><td>8x8</td></tr>
   <tr><td>1</td><td>16x16</td></tr>
   <tr><td>2</td><td>32x32</td></tr>
   <tr><td>3</td><td>64x64</td></tr>
   <tr><td>4</td><td>128x128</td></tr>
 </table>
-<p>By adding the SHARED keyword, all screens will share the same color palette. Otherwise each screen will have its own.
+<p>By adding the SHARED keyword, all layers will share the same color palette. Otherwise each layer will have its own.
 
-<h3 id="_SCREENOPEN" name="SCREEN OPEN,SCREEN,OPEN">SCREEN OPEN</h3>
-<pre>SCREEN OPEN number,width,height,mode</pre>
-<p>Creates a screen which will be used as the destination of all subsequent graphical operations in your program. <i>number</i> is used to identify this screen, possible values range from 0-3. Screens with higher numbers cover lower ones. If this screen is already open, it will be replaced with the new one. <i>width</i> and <i>height</i> hold the size of your screen in pixels. The maximum size is 512x512, so it can be larger than the actual display resolution. With the <a href="#_SCREENOFFSET">SCREEN OFFSET</a> command you can manipulate the currently visible area. <i>mode</i> can be one of these options:</p>
+<h3 id="_LAYEROPEN" name="LAYER OPEN,LAYER,OPEN">LAYER OPEN</h3>
+<pre>LAYER OPEN number,width,height,mode</pre>
+<p>Creates a layer which will be used as the destination of all subsequent graphical commands. <i>number</i> is used to identify this layer, possible values range from 0-3. Layers with higher numbers cover lower ones. If this layer is already open, it will be replaced with the new one. <i>width</i> and <i>height</i> hold the size of your layer in pixels. The maximum size is 512x512, so it can be larger than the actual screen resolution. With the <a href="#_LAYEROFFSET">LAYER OFFSET</a> command you can manipulate the currently visible area. <i>mode</i> can be one of these options:</p>
 <table>
   <tr><td>0</td><td>Standard (opaque)</td></tr>
-  <tr><td>1</td><td>Transparent (for pixels with color 0)</td></tr>
+  <tr><td>1</td><td>Transparent for pixels with color 0</td></tr>
 </table>
 <pre class="exm">
 DISPLAY 4
-SCREEN OPEN 0,128,128,0
+LAYER OPEN 0,128,128,0
 TEXT 64,64,"THIS IS HI-RES!",1
 </pre>
 
-<h3 id="_SCREENCLOSE" name="SCREEN CLOSE,SCREEN,CLOSE">SCREEN CLOSE</h3>
-<pre>SCREEN CLOSE number</pre>
-<p>Deletes the screen with the given <i>number</i>. If it was the current screen, following graphical commands won't have any effect until you open or set another current screen.</p>
+<h3 id="_LAYERCLOSE" name="LAYER CLOSE,LAYER,CLOSE">LAYER CLOSE</h3>
+<pre>LAYER CLOSE number</pre>
+<p>Deletes the layer with the given <i>number</i>. If it was the current layer, following graphical commands won't have any effect until you open or set another current layer.</p>
 
-<h3 id="_SCREEN" name="SCREEN">SCREEN</h3>
-<pre>SCREEN number</pre>
-<p>Use this command to select the current screen. All following graphical commands render on the selected screen. By default LowRes Coder opens two screens: Screen 0 is the main screen and screen 1 is a transparent layer on top of it.</p>
+<h3 id="_LAYER" name="LAYER">LAYER</h3>
+<pre>LAYER number</pre>
+<p>Use this command to select the current layer. This layer will be used as the destination of all subsequent graphical commands. Each layer will even hold its own current colors and font.</p>
+<p>By default LowRes Coder opens two layers: Layer 0 is in the background and usually the main layer. Layer 1 is in the foreground and it's transparent in all pixels with color 0.</p>
 <pre class="exm">
-SCREEN 1
+LAYER 1
 LINE 0,0 TO 63,63
-SCREEN 0
+LAYER 0
 DO
   COLOR RND*16
   BAR 0,26 TO 63,36
@@ -946,64 +947,64 @@ DO
 LOOP
 </pre>
 
-<h3 id="_SCREENDISPLAY" name="SCREEN DISPLAY,SCREEN,DISPLAY">SCREEN DISPLAY</h3>
-<pre>SCREEN DISPLAY number,[x],[y],[w],[h]</pre>
-<p>SCREEN DISPLAY sets where a screen should be shown on the display. <i>x</i> and <i>y</i> hold the position of the top left corner of the screen. You can even move it around like a sprite! <i>w</i> (width) and <i>h</i> (height) are not related to the actual size of the screen, but they set the visible size. If the screen is larger than its visible size, you can manipulate the current visible section with <a href="#_SCREENOFFSET">SCREEN OFFSET</a>. Parameters can be omitted to keep the screen's current values.</p>
+<h3 id="_LAYERDISPLAY" name="LAYER DISPLAY,LAYER,DISPLAY">LAYER DISPLAY</h3>
+<pre>LAYER DISPLAY number,[x],[y],[w],[h]</pre>
+<p>LAYER DISPLAY sets where a layer should be shown on the screen. <i>x</i> and <i>y</i> hold the position of the top left corner of the layer. You can even move it around like a sprite! <i>w</i> (width) and <i>h</i> (height) are not related to the actual size of the layer, but they set the visible size. If the layer is larger than its visible size, you can manipulate the current visible section with <a href="#_LAYEROFFSET">LAYER OFFSET</a>. Parameters can be omitted to keep the layer's current values.</p>
 <pre class="exm">
 LINE 0,0 TO 63,63
-SCREEN OPEN 1,60,7,0
-SCREEN DISPLAY 1,2,0
+LAYER OPEN 1,60,7,0
+LAYER DISPLAY 1,2,0
 CLS 14
-TEXT 1,1,"I AM A SCREEN"
+TEXT 1,1,"I AM A LAYER"
 DO
   FOR Y=-7 TO 64
-    SCREEN DISPLAY 1,,Y
+    LAYER DISPLAY 1,,Y
     WAIT 0.04
   NEXT Y
 LOOP
 </pre>
 
-<h3 id="_SCREENOFFSET" name="SCREEN OFFSET,SCREEN,OFFSET">SCREEN OFFSET</h3>
-<pre>SCREEN OFFSET number,[x],[y]</pre>
-<p>SCREEN OFFSET sets the visible section of a screen. <i>x</i> and <i>y</i> measure the offset from the top left
-corner of the screen to the starting point for your section. By creating a screen larger than the display resolution and moving its offset, you can produce scrolling in a very simple way. Parameters can be omitted to keep the screen's current values.</p>
+<h3 id="_LAYEROFFSET" name="LAYER OFFSET,LAYER,OFFSET">LAYER OFFSET</h3>
+<pre>LAYER OFFSET number,[x],[y]</pre>
+<p>LAYER OFFSET sets the visible section of a layer. <i>x</i> and <i>y</i> measure the offset from the top left
+corner of the layer to the starting point for your section. By creating a layer larger than the screen resolution and moving its offset, you can produce scrolling in a very simple way. Parameters can be omitted to keep the layer's current values.</p>
 <pre class="exm">
-SCREEN OPEN 0,256,64,0
+LAYER OPEN 0,256,64,0
 FOR I=0 TO 20
   COLOR RND*16
   BAR RND*256,RND*64 TO RND*256,RND*64
 NEXT I
 DO
   FOR X=0 TO 191
-    SCREEN OFFSET 0,X,0
+    LAYER OFFSET 0,X,0
     WAIT 0.04
   NEXT X
 LOOP
 </pre>
 
-<h3 id="_SCREENOFF" name="SCREEN OFF,SCREEN,OFF">SCREEN OFF</h3>
-<pre>SCREEN OFF number</pre>
-<p>Hides the given screen without losing its contents. It's still possible to draw on it and it can be shown again with <a href="#_SCREENON">SCREEN ON</a>.</p>
+<h3 id="_LAYEROFF" name="LAYER OFF,LAYER,OFF">LAYER OFF</h3>
+<pre>LAYER OFF number</pre>
+<p>Hides the given layer without losing its contents. It's still possible to draw on it and it can be shown again with <a href="#_LAYERON">LAYER ON</a>.</p>
 
-<h3 id="_SCREENON" name="SCREEN ON,SCREEN,ON">SCREEN ON</h3>
-<pre>SCREEN ON number</pre>
-<p>Shows a screen which was previously hidden by the <a href="#_SCREENOFF">SCREEN OFF</a> command.</p>
+<h3 id="_LAYERON" name="LAYER ON,LAYER,ON">LAYER ON</h3>
+<pre>LAYER ON number</pre>
+<p>Shows a layer which was previously hidden by the <a href="#_LAYEROFF">LAYER OFF</a> command.</p>
 
-<h3 id="_SPRITESCREEN" name="SPRITE SCREEN,SPRITE,SCREEN">SPRITE SCREEN</h3>
-<pre>SPRITE SCREEN screen[,sprite [TO last]]</pre>
-<p>By default all sprites are shown on screen 0. This means they use the colors of that screen and they will be covered by all screens with higher numbers. However, positions of sprites are always independent from the screen position and offset. With the command SPRITE SCREEN you can set the screen for each sprite.</p>
+<h3 id="_SPRITELAYER" name="SPRITE LAYER,SPRITE,LAYER">SPRITE LAYER</h3>
+<pre>SPRITE LAYER layer[,sprite [TO last]]</pre>
+<p>By default all sprites are shown on layer 0. This means they use the colors of that layer and they will be covered by all layers with higher numbers. However, positions of sprites are always independent from the layer position and offset. With the command SPRITE LAYER you can set the layer for each sprite.</p>
 <pre class="exm">
-REM ASSIGN ALL SPRITES TO SCREEN 1
-SPRITE SCREEN 1
-REM ASSIGN ONLY SPRITE 7 TO SCREEN 1
-SPRITE SCREEN 1,7
-REM ASSIGN SPRITES 0 TO 7 TO SCREEN 1
-SPRITE SCREEN 1,0 TO 7
+REM ASSIGN ALL SPRITES TO LAYER 1
+SPRITE LAYER 1
+REM ASSIGN ONLY SPRITE 7 TO LAYER 1
+SPRITE LAYER 1,7
+REM ASSIGN SPRITES 0 TO 7 TO LAYER 1
+SPRITE LAYER 1,0 TO 7
 </pre>
 
-<h3 id="_SCREENHIT" name="SCREEN HIT,SCREEN,HIT">=SCREEN HIT</h3>
-<pre>v=SCREEN HIT(screen,sprite)</pre>
-<p>Returns TRUE if <i>screen</i> collides with <i>sprite</i>.</p>
+<h3 id="_LAYERHIT" name="LAYER HIT,LAYER,HIT">=LAYER HIT</h3>
+<pre>v=LAYER HIT(layer,sprite)</pre>
+<p>Returns TRUE if <i>layer</i> collides with <i>sprite</i>. A collision happens when a non-transparent pixel of the sprite hits a layer pixel with a color different from 0.</p>
 
 <h1 id="String-functions">String functions</h1>
 
@@ -1449,8 +1450,8 @@ TIMER,
 TO,
 TRACE*,
 TRUE,
-UNTIL,
 UBOUND*,
+UNTIL,
 UP,
 VAL,
 WAIT,
