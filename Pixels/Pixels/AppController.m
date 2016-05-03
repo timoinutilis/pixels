@@ -22,6 +22,11 @@ NSString *const ErrorKey = @"Error";
 NSString *const PurchaseStateNotification = @"PurchaseStateNotification";
 NSString *const ShowPostNotification = @"ShowPostNotification";
 NSString *const UpgradeNotification = @"UpgradeNotification";
+NSString *const ImportProjectNotification = @"ImportProjectNotification";
+
+
+@implementation TempProject
+@end
 
 
 @implementation AppController
@@ -276,6 +281,29 @@ NSString *const UpgradeNotification = @"UpgradeNotification";
             [[NSNotificationCenter defaultCenter] postNotificationName:ShowPostNotification object:self];
         }
         return YES;
+    }
+    else if (url.isFileURL)
+    {
+        // load text file for new project
+        NSError *error = nil;
+        NSString *fileText = [NSString stringWithContentsOfURL:url encoding:NSUTF8StringEncoding error:&error];
+        if (fileText)
+        {
+            NSString *name = url.lastPathComponent;
+            if (url.pathExtension.length > 0)
+            {
+                name = [name substringToIndex:name.length - url.pathExtension.length - 1];
+            }
+            TempProject *tempProject = [[TempProject alloc] init];
+            tempProject.name = name;
+            tempProject.sourceCode = fileText;
+            self.shouldImportProject = tempProject;
+            [[NSNotificationCenter defaultCenter] postNotificationName:ImportProjectNotification object:self];
+        }
+        else
+        {
+            NSLog(@"error: %@", error.localizedDescription);
+        }
     }
     return NO;
 }

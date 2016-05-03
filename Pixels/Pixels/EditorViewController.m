@@ -588,7 +588,7 @@ typedef void(^InfoBlock)(void);
         
         if (community)
         {
-            UIViewController *vc = [ShareViewController createShareWithDelegate:nil project:self.project];
+            UIViewController *vc = [ShareViewController createShareWithProject:self.project];
             [self presentViewController:vc animated:YES completion:nil];
         }
         else

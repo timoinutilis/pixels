@@ -39,11 +39,10 @@
 
 @implementation ShareViewController
 
-+ (UIViewController *)createShareWithDelegate:(id <ShareViewControllerDelegate>)delegate project:(Project *)project
++ (UIViewController *)createShareWithProject:(Project *)project
 {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     ShareViewController *vc = (ShareViewController *)[storyboard instantiateViewControllerWithIdentifier:@"ShareView"];
-    vc.shareDelegate = delegate;
     vc.project = project;
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
     nav.modalPresentationStyle = vc.modalPresentationStyle;
@@ -168,14 +167,7 @@
 - (IBAction)onCancelTapped:(id)sender
 {
     [self.view endEditing:YES];
-    if (self.shareDelegate)
-    {
-        [self.shareDelegate onClosedWithSuccess:NO];
-    }
-    else
-    {
-        [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-    }
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (IBAction)onSendTapped:(id)sender
@@ -284,16 +276,9 @@
             [PFQuery clearAllCachedResults];
             
             self.project.postId = post.objectId;
-            if (self.shareDelegate)
-            {
-                [self.shareDelegate onClosedWithSuccess:YES];
-            }
-            else
-            {
-                [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
-                    [[AppController sharedController] registerForNotifications];
-                }];
-            }
+            [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
+                [[AppController sharedController] registerForNotifications];
+            }];
             
             NSDictionary *dimensions = @{@"category": [post categoryString],
                                          @"app": ([AppController sharedController].isFullVersion) ? @"full version" : @"free"};

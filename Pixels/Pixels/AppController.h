@@ -19,8 +19,14 @@ typedef NS_ENUM(NSInteger, PurchaseState) {
 extern NSString *const PurchaseStateNotification;
 extern NSString *const ShowPostNotification;
 extern NSString *const UpgradeNotification;
+extern NSString *const ImportProjectNotification;
 
 @class TabBarController, HelpContent, RPPreviewViewController;
+
+@interface TempProject : NSObject
+@property NSString *name;
+@property NSString *sourceCode;
+@end
 
 @interface AppController : NSObject <SKProductsRequestDelegate, SKPaymentTransactionObserver>
 
@@ -34,6 +40,7 @@ extern NSString *const UpgradeNotification;
 @property (readonly) NSInteger numProgramsOpened;
 @property BOOL shouldShowTransferAlert;
 @property NSString *shouldShowPostId;
+@property TempProject *shouldImportProject;
 @property RPPreviewViewController *replayPreviewViewController;
 @property (readonly) CFAbsoluteTime bootTime;
 

@@ -10,18 +10,11 @@
 
 @class Project;
 
-@protocol ShareViewControllerDelegate <NSObject>
-
-- (void)onClosedWithSuccess:(BOOL)success;
-
-@end
-
 @interface ShareViewController : GORMenuTableViewController
 
-@property (weak) id <ShareViewControllerDelegate> shareDelegate;
 @property Project *project;
 
-+ (UIViewController *)createShareWithDelegate:(id <ShareViewControllerDelegate>)delegate project:(Project *)project;
++ (UIViewController *)createShareWithProject:(Project *)project;
 
 @end
 

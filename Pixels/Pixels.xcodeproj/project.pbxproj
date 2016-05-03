@@ -100,7 +100,6 @@
 		929381D61BC5696C00D41B72 /* HelpMasterNavController.m in Sources */ = {isa = PBXBuildFile; fileRef = 929381D51BC5696C00D41B72 /* HelpMasterNavController.m */; };
 		929381D71BC5696C00D41B72 /* HelpMasterNavController.m in Sources */ = {isa = PBXBuildFile; fileRef = 929381D51BC5696C00D41B72 /* HelpMasterNavController.m */; };
 		9293D46D1B219BCC009A156B /* ExtendedActivityIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9293D46C1B219BCC009A156B /* ExtendedActivityIndicatorView.m */; };
-		929797FD1A50956900DB5D70 /* PublishActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 929797FC1A50956900DB5D70 /* PublishActivity.m */; };
 		929BCEF31BB142FC005F1DBD /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 929BCEF11BB142FC005F1DBD /* Bolts.framework */; };
 		929BCEF41BB142FC005F1DBD /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 929BCEF21BB142FC005F1DBD /* Parse.framework */; };
 		929BCEF61BB143A0005F1DBD /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 929BCEF51BB143A0005F1DBD /* libsqlite3.tbd */; };
@@ -183,7 +182,6 @@
 		929BCF5A1BB14A1B005F1DBD /* ModelManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9273349F1A2A499B00C89AF0 /* ModelManager.m */; };
 		929BCF5B1BB14A1B005F1DBD /* HelpTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9273349C1A2A478700C89AF0 /* HelpTableViewController.m */; };
 		929BCF5C1BB14A1B005F1DBD /* UIView+WebCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 92884F181B0F25B30032623D /* UIView+WebCacheOperation.m */; };
-		929BCF5D1BB14A1B005F1DBD /* PublishActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 929797FC1A50956900DB5D70 /* PublishActivity.m */; };
 		929BCF5E1BB14A1B005F1DBD /* AFNetworkReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 929BCF021BB14800005F1DBD /* AFNetworkReachabilityManager.m */; };
 		929BCF5F1BB14A1B005F1DBD /* HelpContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 920822021A4DABB8005B7862 /* HelpContent.m */; };
 		929BCF601BB14A1B005F1DBD /* Runnable.m in Sources */ = {isa = PBXBuildFile; fileRef = 926086311A5E8560006C5523 /* Runnable.m */; };
@@ -438,8 +436,6 @@
 		929381D51BC5696C00D41B72 /* HelpMasterNavController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpMasterNavController.m; sourceTree = "<group>"; };
 		9293D46B1B219BCC009A156B /* ExtendedActivityIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExtendedActivityIndicatorView.h; sourceTree = "<group>"; };
 		9293D46C1B219BCC009A156B /* ExtendedActivityIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExtendedActivityIndicatorView.m; sourceTree = "<group>"; };
-		929797FB1A50956900DB5D70 /* PublishActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublishActivity.h; sourceTree = "<group>"; };
-		929797FC1A50956900DB5D70 /* PublishActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublishActivity.m; sourceTree = "<group>"; };
 		929BCEF11BB142FC005F1DBD /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
 		929BCEF21BB142FC005F1DBD /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 		929BCEF51BB143A0005F1DBD /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
@@ -998,8 +994,6 @@
 		92E2B8AB1A52F4CA00D0DF29 /* Share */ = {
 			isa = PBXGroup;
 			children = (
-				929797FB1A50956900DB5D70 /* PublishActivity.h */,
-				929797FC1A50956900DB5D70 /* PublishActivity.m */,
 				92E2B8A81A52F08D00D0DF29 /* ActivityItemSource.h */,
 				92E2B8A91A52F08D00D0DF29 /* ActivityItemSource.m */,
 			);
@@ -1275,7 +1269,6 @@
 				927334A01A2A499B00C89AF0 /* ModelManager.m in Sources */,
 				9273349D1A2A478700C89AF0 /* HelpTableViewController.m in Sources */,
 				92884F281B0F25B30032623D /* UIView+WebCacheOperation.m in Sources */,
-				929797FD1A50956900DB5D70 /* PublishActivity.m in Sources */,
 				92D6AD421BC29C4A001E5EED /* SearchToolbar.m in Sources */,
 				929BCF101BB14800005F1DBD /* AFNetworkReachabilityManager.m in Sources */,
 				920822031A4DABB8005B7862 /* HelpContent.m in Sources */,
@@ -1399,7 +1392,6 @@
 				929BCF5A1BB14A1B005F1DBD /* ModelManager.m in Sources */,
 				929BCF5B1BB14A1B005F1DBD /* HelpTableViewController.m in Sources */,
 				929BCF5C1BB14A1B005F1DBD /* UIView+WebCacheOperation.m in Sources */,
-				929BCF5D1BB14A1B005F1DBD /* PublishActivity.m in Sources */,
 				92D6AD431BC29C4A001E5EED /* SearchToolbar.m in Sources */,
 				929BCF5E1BB14A1B005F1DBD /* AFNetworkReachabilityManager.m in Sources */,
 				929BCF5F1BB14A1B005F1DBD /* HelpContent.m in Sources */,

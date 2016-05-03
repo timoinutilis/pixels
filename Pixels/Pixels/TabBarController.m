@@ -12,6 +12,7 @@
 #import "CommSplitViewController.h"
 #import "AppController.h"
 #import "CommunityModel.h"
+#import "ModelManager.h"
 
 @interface TabBarController () <UITabBarDelegate>
 
@@ -55,12 +56,14 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationsNumChanged:) name:NotificationsNumChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkShowPost:) name:ShowPostNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkImportProject:) name:ImportProjectNotification object:nil];
 }
 
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NotificationsNumChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:ShowPostNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:ImportProjectNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -73,6 +76,7 @@
 {
     [super viewDidAppear:animated];
     [self checkShowPost:nil];
+    [self checkImportProject:nil];
 }
 
 - (void)setSelectedIndex:(NSInteger)selectedIndex
@@ -125,27 +129,65 @@
     }
 }
 
+- (void)dismissPresentedViewController:(void (^)(void))completion
+{
+    UIViewController *topVC = _selectedViewController;
+    if ([topVC isKindOfClass:[UINavigationController class]])
+    {
+        topVC = ((UINavigationController *)topVC).topViewController;
+    }
+    if (topVC.presentedViewController)
+    {
+        [topVC dismissViewControllerAnimated:YES completion:completion];
+    }
+    else
+    {
+        completion();
+    }
+}
+
 - (void)checkShowPost:(NSNotification *)notification
 {
     AppController *app = [AppController sharedController];
     if (app.shouldShowPostId && self.selectedIndex != TabIndexCommunity)
     {
-        UIViewController *topVC = _selectedViewController;
-        if ([topVC isKindOfClass:[UINavigationController class]])
-        {
-            topVC = ((UINavigationController *)topVC).topViewController;
-        }
-        if (topVC.presentedViewController)
-        {
-            [topVC dismissViewControllerAnimated:YES completion:^{
-                self.selectedIndex = TabIndexCommunity;
-            }];
-        }
-        else
-        {
+        [self dismissPresentedViewController:^{
             self.selectedIndex = TabIndexCommunity;
-        }
+        }];
     }
+}
+
+- (void)checkImportProject:(NSNotification *)notification
+{
+    AppController *app = [AppController sharedController];
+    if (app.shouldImportProject)
+    {
+        __weak TabBarController *weakSelf = self;
+        
+        [self dismissPresentedViewController:^{
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"Do you want to add \"%@\" as a new program?", app.shouldImportProject.name]
+                                                                           message:nil preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                app.shouldImportProject = nil;
+            }]];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"Add" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [weakSelf importProject:app.shouldImportProject];
+                app.shouldImportProject = nil;
+            }]];
+            
+            [self presentViewController:alert animated:YES completion:nil];
+        }];
+    }
+}
+
+- (void)importProject:(TempProject *)tempProject
+{
+    Project *project = [[ModelManager sharedManager] createNewProjectInFolder:[ModelManager sharedManager].rootFolder];
+    project.name = tempProject.name;
+    project.sourceCode = tempProject.sourceCode;
+    
+    [self showExplorerAnimated:YES root:YES];
 }
 
 - (void)showExplorerAnimated:(BOOL)animated root:(BOOL)root
