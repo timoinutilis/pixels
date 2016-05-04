@@ -33,7 +33,7 @@ li {
 <h1 id="Getting-started">Getting started</h1>
 
 <h2 id="_Tutorial">Tutorial</h2>
-<p>Let's create your first own program! If you didn't create a new program yet, go to the overview of all programs and tap the Plus button in the top right corner. A new icon will appear at the end of the program list, called "Unnamed Program". Tap on it!</p>
+<p>Let's create your first own program! If you didn't create a new program yet, go to the overview of all programs and tap the Plus button in the top-right corner. A new icon will appear at the end of the program list, called "Unnamed Program". Tap on it!</p>
 <p>You will see now an empty text editor. Write the following lines, but replace MY NAME with your own name (keep the quotation marks):</p>
 <pre class="exm">
 DO
@@ -42,12 +42,12 @@ TEXT 31,29,"MY NAME",1
 WAIT 0.1
 LOOP
 </pre>
-<p>Now tap on the Play button and you should see your name flashing in random colors! If you see an error message instead, check if you wrote something wrong. When you looked enough on your name, tap the Exit button (or the top left corner).</p>
+<p>Now tap on the Play button and you should see your name flashing in random colors! If you see an error message instead, check if you wrote something wrong. When you have finished looking at your name, tap the Exit button (or the top-left corner).</p>
 <p>We should give a name to this program. Tap on the Share/Action button and select "Rename / Settings..." from the menu. Change the name to "My Name" or whatever you like. You can also choose a nicer icon from the snapshots.</p>
 
 <h2 id="_Share">Share your work!</h2>
-<p>LowRes Coder has an own community. You can create a profile page to post your programs or status updates. Follow other programmers to try and discuss their works.</p>
-<p>When you created something and you are happy with it, you should share it! Tap on the Share button and select "Share with Community" to post your program on your profile page. We keep an eye on most of the activity, if we like something, we will share it in the official LowRes Coder news!</p>
+<p>LowRes Coder has its own community. You can create a profile page to post your programs or status updates. Follow other programmers to try and discuss their works.</p>
+<p>When you have created something and you are happy with it, you should share it! Tap on the Share button and select "Share with Community" to post your program on your profile page. We keep an eye on most of the activity, and if we like something, we will share it in the official LowRes Coder news!</p>
 
 <h2 id="_Where-to-go">Where to go from here?</h2>
 <p>You are ready now! Well, maybe you don't know programming yet, so you should read some more chapters! Also try all the other included programs (especially from the "Simple Examples" folder) and learn from them! You can duplicate them and experiment with the copies.</p>
@@ -899,8 +899,8 @@ END IF
 
 <h1 id="Screen-layers">Screen layers</h1>
 
-<p>LowRes Coder can show up to 4 screen layers at once! Each layer can have an own size, they can even be bigger than the actual screen and you can scroll their content easily. There is a mode to show a layer with a transparent background color, so you can create impressive parallax scrolling effects. Also each layer can have its own color palette, so for example you can use different colors for the background and for the foreground.</p>
-<p>By default LowRes Coder creates two layers with a resolution of 64x64 pixels and a shared color palette. Layer 0 is in the background and usually the main layer. Layer 1 is in the foreground and it's transparent in all pixels with color 0.</p>
+<p>LowRes Coder can show up to 4 screen layers at once! Each layer can have its own size, and they can even be bigger than the actual screen and you can scroll their content easily. There is a mode to show a layer with a transparent background color, so you can create impressive parallax scrolling effects. Also each layer can have its own color palette, so for example you can use different colors for the background and for the foreground.</p>
+<p>By default LowRes Coder creates two layers with a resolution of 64x64 pixels and a shared color palette. Layer 0 is in the background and usually the main layer. Layer 1 is in the foreground and is transparent in all pixels with color 0.</p>
 
 <h3 id="_DISPLAY" name="DISPLAY">DISPLAY</h3>
 <pre>DISPLAY mode [SHARED]</pre>
@@ -935,7 +935,7 @@ TEXT 64,64,"THIS IS HI-RES!",1
 <h3 id="_LAYER" name="LAYER">LAYER</h3>
 <pre>LAYER number</pre>
 <p>Use this command to select the current layer. This layer will be used as the destination of all subsequent graphical commands. Each layer will even hold its own current colors and font.</p>
-<p>By default LowRes Coder opens two layers: Layer 0 is in the background and usually the main layer. Layer 1 is in the foreground and it's transparent in all pixels with color 0.</p>
+<p>By default LowRes Coder opens two layers: Layer 0 is in the background and usually the main layer. Layer 1 is in the foreground and is transparent in all pixels with color 0.</p>
 <pre class="exm">
 LAYER 1
 LINE 0,0 TO 63,63
