@@ -22,7 +22,7 @@ const Vertex Vertices[] = {
     {{-1, -1, 0}, {0, 1}}
 };
 
-const GLubyte Indices[] = {
+const GLushort Indices[] = {
     0, 1, 2,
     2, 3, 0
 };
@@ -35,6 +35,7 @@ const GLubyte Indices[] = {
 @end
 
 @implementation OpenGLRendererView {
+    BOOL _initialized;
     GLuint _vertexBuffer;
     GLuint _indexBuffer;
     GLuint _texName;
@@ -55,36 +56,20 @@ const GLubyte Indices[] = {
 {
     self.ciContext = [CIContext contextWithOptions:nil];
     
+    // OpenGL
     self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
-    
-    [EAGLContext setCurrentContext:self.context];
-    
     self.effect = [[GLKBaseEffect alloc] init];
-    
-    glGenBuffers(1, &_vertexBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW);
-    
-    glGenBuffers(1, &_indexBuffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices), Indices, GL_STATIC_DRAW);
-    
-    glGenTextures(1, &_texName);
-    glBindTexture(GL_TEXTURE_2D, _texName);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    
-    self.effect.texture2d0.name = _texName;
-    self.effect.texture2d1.enabled = GL_FALSE;
 }
 
 - (void)dealloc
 {
-    [EAGLContext setCurrentContext:self.context];
-    
-    glDeleteBuffers(1, &_vertexBuffer);
-    glDeleteBuffers(1, &_indexBuffer);
-    glDeleteTextures(1, &_texName);
+    if (_initialized)
+    {
+        [EAGLContext setCurrentContext:self.context];
+        glDeleteBuffers(1, &_vertexBuffer);
+        glDeleteBuffers(1, &_indexBuffer);
+        glDeleteTextures(1, &_texName);
+    }
     
     if (_textureData)
     {
@@ -124,22 +109,42 @@ const GLubyte Indices[] = {
 {
     [self renderTextureData];
     
-    glClearColor(1.0, 0.0, 0.0, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT);
+    if (!_initialized)
+    {
+        glGenBuffers(1, &_vertexBuffer);
+        glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW);
+        
+        glGenBuffers(1, &_indexBuffer);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices), Indices, GL_STATIC_DRAW);
+        
+        glGenTextures(1, &_texName);
+        glBindTexture(GL_TEXTURE_2D, _texName);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        
+        self.effect.texture2d0.name = _texName;
+        self.effect.texture2d1.enabled = GL_FALSE;
+
+        glClearColor(1.0, 0.0, 0.0, 1.0);
+        glClear(GL_COLOR_BUFFER_BIT);
+        
+        glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+        
+        glEnableVertexAttribArray(GLKVertexAttribPosition);
+        glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid *) offsetof(Vertex, Position));
+        glEnableVertexAttribArray(GLKVertexAttribTexCoord0);
+        glVertexAttribPointer(GLKVertexAttribTexCoord0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid *) offsetof(Vertex, TexCoord));
+
+        _initialized = YES;
+    }
     
     [self.effect prepareToDraw];
     
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _currentSize, _currentSize, 0, GL_RGB, GL_UNSIGNED_BYTE, _textureData);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
-    
-    glEnableVertexAttribArray(GLKVertexAttribPosition);
-    glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid *) offsetof(Vertex, Position));
-    glEnableVertexAttribArray(GLKVertexAttribTexCoord0);
-    glVertexAttribPointer(GLKVertexAttribTexCoord0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid *) offsetof(Vertex, TexCoord));
-
-    glDrawElements(GL_TRIANGLES, sizeof(Indices)/sizeof(Indices[0]), GL_UNSIGNED_BYTE, 0);
+    glDrawElements(GL_TRIANGLES, sizeof(Indices)/sizeof(Indices[0]), GL_UNSIGNED_SHORT, 0);
 }
 
 #pragma mark - Snapshots
