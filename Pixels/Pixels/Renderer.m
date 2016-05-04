@@ -275,8 +275,8 @@ typedef struct Font {
     {
         if (toX < fromX)
         {
-            int value = toX; toX = fromX; fromX = value;
-            value = toY; toY = fromY; fromY = value;
+            fromX = toX;
+            fromY = toY;
             
             diffX *= -1;
             diffY *= -1;
@@ -293,8 +293,8 @@ typedef struct Font {
     {
         if (toY < fromY)
         {
-            int value = toX; toX = fromX; fromX = value;
-            value = toY; toY = fromY; fromY = value;
+            fromX = toX;
+            fromY = toY;
             
             diffX *= -1;
             diffY *= -1;

@@ -45,7 +45,7 @@
     CGContextDrawRadialGradient(cx, g, _point, 0.0f, _point, radius * 2.0, 0);
     
     CGGradientRelease(g);
-    CGColorSpaceRetain(space);
+    CGColorSpaceRelease(space);
 }
 
 - (void)setPoint:(CGPoint)point
