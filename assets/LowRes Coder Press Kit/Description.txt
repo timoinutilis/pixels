@@ -1,6 +1,6 @@
 Play homegrown retro games and program your own directly on your iPad or iPhone!
 
-- Run your programs on a virtual game console with 64x64 pixels, 16 colors, 8x8-pixel sprites and 3 sound generators.
+- Run your programs on a virtual game console inspired by 8- and 16-bit systems.
 - Write in a dialect of the classic, easy to learn BASIC programming language.
 - Share your programs with the LowRes Coder community and play other members' games.
 - Play with your MFi game controller.
