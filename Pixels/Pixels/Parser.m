@@ -350,9 +350,14 @@
             {
                 node = [self acceptDefSound];
             }
-            else
+            else if (next.type == TTypeSymSprite)
             {
                 node = [self acceptDefSprite];
+            }
+            else
+            {
+                self.error = [NSError unexpectedTokenErrorWithToken:next];
+                return nil;
             }
             break;
         }
@@ -460,6 +465,7 @@
         case TTypeSymPrint:
         case TTypeSymFor:
         case TTypeSymLet:
+        case TTypeSymDim:
         case TTypeSymWhile:
         case TTypeSymRepeat:
         case TTypeSymDo:
@@ -483,7 +489,8 @@
         case TTypeSymRead:
         case TTypeSymRestore:
         case TTypeSymWrite:
-        case TTypeSymWidth:
+        case TTypeSymOn:
+        case TTypeSymDef:
         case TTypeSymSprite:
         case TTypeSymSound:
         case TTypeSymLayer:
@@ -492,21 +499,14 @@
         case TTypeSymPut:
         case TTypeSymPalette:
         case TTypeSymRandomize:
+        case TTypeSymLeftS:
+        case TTypeSymRightS:
+        case TTypeSymMid:
             return YES;
         
         case TTypeSymEnd: {
             Token *next = [self nextToken];
             return (!next || next.type != TTypeSymIf);
-        }
-        
-        case TTypeSymDef: {
-            Token *next = [self nextToken];
-            return (next.type == TTypeSymSprite || next.type == TTypeSymSound);
-        }
-            
-        case TTypeSymOn: {
-            Token *next = [self nextToken];
-            return (next.type == TTypeSymEnd);
         }
         
         default:
@@ -1264,14 +1264,12 @@
     OnXGotoNode *node = [[OnXGotoNode alloc] init];
 
     [self accept:TTypeSymOn];
-    node.xType = self.token.type;
-    if (node.xType != TTypeSymEnd && node.xType != TTypeSymPause)
+    if (self.token.type != TTypeSymEnd && self.token.type != TTypeSymPause)
     {
-        self.error = [NSError programErrorWithCode:LRCErrorCodeParse
-                                            reason:[NSString stringWithFormat:@"Unexpected %@", [Token stringForType:node.xType printable:YES]]
-                                             token:self.token];
+        self.error = [NSError unexpectedTokenErrorWithToken:self.token];
         return nil;
     }
+    node.xType = self.token.type;
     [self accept:node.xType];
     
     if (self.token.type == TTypeSymGoto)

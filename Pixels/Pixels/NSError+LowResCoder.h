@@ -27,6 +27,7 @@ typedef NS_ENUM(NSInteger, LRCErrorCode) {
 
 + (NSError *)programErrorWithCode:(LRCErrorCode)code reason:(NSString *)reason position:(NSUInteger)position;
 + (NSError *)programErrorWithCode:(LRCErrorCode)code reason:(NSString *)reason token:(Token *)token;
++ (NSError *)unexpectedTokenErrorWithToken:(Token *)token;
 + (NSError *)typeMismatchErrorWithNode:(Node *)node;
 + (NSError *)invalidParameterErrorWithNode:(Node *)node value:(float)value;
 + (NSError *)undefinedLabelErrorWithNode:(Node *)node label:(NSString *)label;

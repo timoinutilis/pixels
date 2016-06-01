@@ -24,6 +24,13 @@ NSString *const LRCErrorDomain = @"com.inutilis.LowResCoder.ErrorDomain";
     return [NSError errorWithDomain:LRCErrorDomain code:code userInfo:@{NSLocalizedDescriptionKey:reason, @"token": token}];
 }
 
++ (NSError *)unexpectedTokenErrorWithToken:(Token *)token
+{
+    return [NSError programErrorWithCode:LRCErrorCodeParse
+                                  reason:[NSString stringWithFormat:@"Unexpected %@", [Token stringForType:token.type printable:YES]]
+                                   token:token];
+}
+
 + (NSError *)typeMismatchErrorWithNode:(Node *)node
 {
     return [NSError programErrorWithCode:LRCErrorCodeTypeMismatch reason:@"Type mismatch" token:node.token];

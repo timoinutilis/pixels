@@ -11,22 +11,32 @@
 
 @implementation ActivityItemSource
 
+- (NSURL *)tempFileURL
+{
+    NSURL *dirURL = [[NSFileManager defaultManager] URLForDirectory:NSCachesDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:YES error:nil];
+    return [dirURL URLByAppendingPathComponent:[NSString stringWithFormat:@"%@.bas", self.project.name]];
+}
+
 // called to determine data type. only the class of the return type is consulted. it should match what -itemForActivityType: returns later
 - (id)activityViewControllerPlaceholderItem:(UIActivityViewController *)activityViewController
 {
-    return self.project.sourceCode;
+    return [self tempFileURL];
 }
 
 // called to fetch data after an activity is selected. you can return nil.
 - (id)activityViewController:(UIActivityViewController *)activityViewController itemForActivityType:(NSString *)activityType
 {
-    return self.project.sourceCode;
+    NSURL *url = [self tempFileURL];
+    NSData *data = [self.project.sourceCode dataUsingEncoding:NSUTF8StringEncoding];
+    [data writeToURL:url atomically:YES];
+    
+    return url;
 }
 
 // if activity supports a Subject field
 - (NSString *)activityViewController:(UIActivityViewController *)activityViewController subjectForActivityType:(NSString *)activityType
 {
-    return self.project.name;
+    return [NSString stringWithFormat:@"%@ for LowRes Coder", self.project.name];
 }
 
 // if activity supports preview image
