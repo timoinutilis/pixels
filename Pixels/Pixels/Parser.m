@@ -202,6 +202,9 @@
         case TTypeSymPrint:
             node = [self acceptPrint];
             break;
+        case TTypeSymInput:
+            node = [self acceptInput];
+            break;
         case TTypeSymFor:
             node = [self acceptForNext];
             break;
@@ -543,6 +546,16 @@
     PrintNode *node = [[PrintNode alloc] init];
     [self accept:TTypeSymPrint];
     node.expression = [self acceptExpression];
+    return node;
+}
+
+- (Node *)acceptInput
+{
+    InputNode *node = [[InputNode alloc] init];
+    [self accept:TTypeSymInput];
+    node.expression = [self acceptExpression];
+    [self accept:TTypeSymComma];
+    node.variable = [self acceptVariable];
     return node;
 }
 

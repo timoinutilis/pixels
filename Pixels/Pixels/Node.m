@@ -334,6 +334,58 @@ NSString *const TRANSFER = @"TRANSFER";
 
 
 
+@implementation InputNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.expression prepareWithRunnable:runnable pass:pass canBeString:YES];
+    [self.variable prepareWithRunnable:runnable pass:pass canBeString:YES];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    id value = [self.expression evaluateWithRunner:runner];
+    if (runner.error)
+    {
+        return nil;
+    }
+    if (runner.delegate)
+    {
+        NSString *text = [value description];
+        [runner.renderer print:text];
+        [runner.delegate updateRendererView];
+        [runner.delegate setKeyboardVisible:YES];
+        runner.lastKeyPressed = 0;
+        BOOL done = NO;
+        do
+        {
+            [runner wait:0.04 stopBlock:nil];
+            const unichar letter = runner.lastKeyPressed;
+            if (letter != 0)
+            {
+                if (letter == '\n')
+                {
+                    done = YES;
+                }
+                else
+                {
+                    [runner.renderer print:[NSString stringWithCharacters:&letter length:1]];
+                    [runner.delegate updateRendererView];
+                }
+                runner.lastKeyPressed = 0;
+            }
+        }
+        while (!done);
+        [runner.delegate setKeyboardVisible:NO];
+    }
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
 @interface ForNextNode ()
 @property float limit;
 @property float increment;

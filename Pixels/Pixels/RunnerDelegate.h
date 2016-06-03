@@ -24,5 +24,6 @@ typedef NS_ENUM(NSInteger, ButtonType) {
 - (BOOL)isButtonDown:(ButtonType)type;
 - (int)currentGamepadFlags;
 - (void)setGamepadModeWithPlayers:(int)players;
+- (void)setKeyboardVisible:(BOOL)keyboard;
 
 @end

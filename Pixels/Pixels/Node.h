@@ -66,6 +66,11 @@
 @property (nonatomic) Node *expression;
 @end
 
+@interface InputNode : Node
+@property (nonatomic) Node *expression;
+@property (nonatomic) VariableNode *variable;
+@end
+
 @interface ForNextNode : Node
 @property (nonatomic) VariableNode *variable;
 @property (nonatomic) VariableNode *matchingVariable;

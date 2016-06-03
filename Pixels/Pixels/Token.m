@@ -50,6 +50,7 @@
         case TTypeSymEnd: return @"END";
         case TTypeSymGamepad: return @"GAMEPAD";
         case TTypeSymPrint: return @"PRINT";
+        case TTypeSymInput: return @"INPUT";
         case TTypeSymData: return @"DATA";
         case TTypeSymRead: return @"READ";
         case TTypeSymRestore: return @"RESTORE";
@@ -144,7 +145,6 @@
         
         case TType_reserved: return nil;
         
-        case TTypeSymInput: return @"INPUT";
         case TTypeSymSub: return @"SUB";
         case TTypeSymCall: return @"CALL";
         case TTypeSymUbound: return @"UBOUND";

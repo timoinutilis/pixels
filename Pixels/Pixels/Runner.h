@@ -28,6 +28,7 @@
 @property int lastSpriteHit;
 @property BOOL buttonATapped;
 @property BOOL buttonBTapped;
+@property unichar lastKeyPressed;
 @property (nonatomic) int writeMaxCount;
 @property CFAbsoluteTime bootTime;
 

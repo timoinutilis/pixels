@@ -28,7 +28,7 @@ NSString *const UserDefaultsFullscreenKey = @"fullscreen";
 NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
 NSString *const UserDefaultsPersistentKey = @"persistent";
 
-@interface RunnerViewController () <RunnerDelegate>
+@interface RunnerViewController () <RunnerDelegate, UIKeyInput>
 
 @property (weak, nonatomic) IBOutlet UIView *containerView;
 @property (weak, nonatomic) IBOutlet UIButton *exitButton;
@@ -578,6 +578,61 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
         self.buttonB.hidden = NO;
         self.pauseButton.hidden = NO;
     }
+}
+
+- (void)setKeyboardVisible:(BOOL)keyboard
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (keyboard)
+        {
+            [self becomeFirstResponder];
+        }
+        else
+        {
+            [self resignFirstResponder];
+        }
+    });
+}
+
+- (BOOL)canBecomeFirstResponder
+{
+    return YES;
+}
+
+- (UITextAutocorrectionType)autocorrectionType
+{
+    return UITextAutocorrectionTypeNo;
+}
+
+- (UITextSpellCheckingType)spellCheckingType
+{
+    return UITextSpellCheckingTypeNo;
+}
+
+- (UIKeyboardAppearance)keyboardAppearance
+{
+    return UIKeyboardAppearanceDark;
+}
+
+- (BOOL)hasText
+{
+    return YES;
+}
+
+- (void)insertText:(NSString *)text
+{
+    if (text.length > 0)
+    {
+        unichar inputChar = [text.uppercaseString characterAtIndex:0];
+        NSLog(@"char: %c", inputChar);
+        self.runner.lastKeyPressed = inputChar;
+    }
+}
+
+- (void)deleteBackward
+{
+    NSLog(@"backspace");
+    self.runner.lastKeyPressed = 0x08;
 }
 
 @end
