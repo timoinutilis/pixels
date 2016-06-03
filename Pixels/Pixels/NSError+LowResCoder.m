@@ -43,6 +43,13 @@ NSString *const LRCErrorDomain = @"com.inutilis.LowResCoder.ErrorDomain";
                                    token:node.token];
 }
 
++ (NSError *)labelAlreadyDefinedErrorWithNode:(Node *)node
+{
+    return [NSError programErrorWithCode:LRCErrorCodeLabelAlreadyDefined
+                                  reason:@"Label already defined"
+                                   token:node.token];
+}
+
 + (NSError *)undefinedLabelErrorWithNode:(Node *)node label:(NSString *)label
 {
     return [NSError programErrorWithCode:LRCErrorCodeUndefinedLabel

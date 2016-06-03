@@ -164,6 +164,11 @@ NSString *const TRANSFER = @"TRANSFER";
 {
     if (pass == PrePassInit)
     {
+        if (runnable.labels[self.identifier])
+        {
+            runnable.error = [NSError labelAlreadyDefinedErrorWithNode:self];
+            return;
+        }
         runnable.labels[self.identifier] = self;
         
         // labels are needed for data too!
@@ -761,7 +766,13 @@ NSString *const TRANSFER = @"TRANSFER";
     [self.playersExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
     if (pass == PrePassInit)
     {
-        runnable.usesGamepad = YES;
+        if (   self.playersExpression.token.type != TTypeNumber
+            || ((NumberNode *)self.playersExpression).value > 0 )
+        {
+            // if "players" is greater than 0 or unknown...
+            runnable.usesGamepad = YES;
+        }
+        
     }
 }
 

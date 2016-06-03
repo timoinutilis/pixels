@@ -15,6 +15,7 @@ typedef NS_ENUM(NSInteger, LRCErrorCode) {
     LRCErrorCodeParse,
     LRCErrorCodeTypeMismatch,
     LRCErrorCodeInvalidParameter,
+    LRCErrorCodeLabelAlreadyDefined,
     LRCErrorCodeUndefinedLabel,
     LRCErrorCodeDivisionByZero,
     LRCErrorCodeSemantic,
@@ -30,6 +31,7 @@ typedef NS_ENUM(NSInteger, LRCErrorCode) {
 + (NSError *)unexpectedTokenErrorWithToken:(Token *)token;
 + (NSError *)typeMismatchErrorWithNode:(Node *)node;
 + (NSError *)invalidParameterErrorWithNode:(Node *)node value:(float)value;
++ (NSError *)labelAlreadyDefinedErrorWithNode:(Node *)node;
 + (NSError *)undefinedLabelErrorWithNode:(Node *)node label:(NSString *)label;
 + (NSError *)divisionByZeroErrorWithNode:(Node *)node;
 + (NSError *)layerNotOpenedErrorWithNode:(Node *)node;
