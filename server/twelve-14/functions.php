@@ -99,6 +99,7 @@ function community_init() {
 				$query = new ParseQuery("Post");
 				$query->equalTo("user", $lccUser);
 				$query->notEqualTo("type", 2);
+				$query->notEqualTo("image", null);
 				$query->includeKey("sharedPost");
 				$query->descending("createdAt");
 				$lccUserPosts = $query->find();
@@ -137,6 +138,8 @@ function insert_fb_in_head() {
 		echo '<meta property="og:type" content="article"/>';
 		echo '<meta property="og:url" content="' . get_permalink() . '"/>';
 		echo '<meta property="og:image" content="http://lowres.inutilis.com/wordpress/wp-content/uploads/2015/08/shareimage.png"/>';
+		echo '<meta property="og:image:width" content="1200"/>';
+		echo '<meta property="og:image:height" content="630"/>';
 	}
 	echo '<meta property="og:site_name" content="LowRes Coder"/>';
     echo "
