@@ -302,7 +302,7 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
             }
         }
         
-        [self setKeyboardVisible:NO];
+        [self setKeyboardActive:NO];
         
         if (runner.error && self.view.superview)
         {
@@ -587,11 +587,11 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
     }
 }
 
-- (void)setKeyboardVisible:(BOOL)keyboard
+- (void)setKeyboardActive:(BOOL)active
 {
-    self.isKeyboardActive = keyboard;
+    self.isKeyboardActive = active;
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (keyboard)
+        if (active)
         {
             [self becomeFirstResponder];
         }

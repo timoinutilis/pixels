@@ -738,7 +738,7 @@ typedef struct Font {
     int fontHeight = font->height;
     uint8_t *fontData = font->data;
     int layerWidth = layer->width;
-    int nextStart = 0;
+    int nextStart = -1;
     for (int index = start; index < text.length; index++)
     {
         unichar currentChar = [text characterAtIndex:index];
@@ -824,7 +824,7 @@ typedef struct Font {
     {
         index = [self drawText:text layer:layer color:layer->colorIndex x:layer->cursorX y:layer->cursorY start:index wrap:wrap bg:YES outX:&layer->cursorX];
         
-        if (newLine || index > 0)
+        if (newLine || index >= 0)
         {
             if (layer->cursorY > layer->height - 2 * fontHeight)
             {

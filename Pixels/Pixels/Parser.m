@@ -253,6 +253,9 @@
         case TTypeSymGamepad:
             node = [self acceptGamepad];
             break;
+        case TTypeSymKeyboard:
+            node = [self acceptKeyboard];
+            break;
         case TTypeSymDisplay:
             node = [self acceptDisplay];
             break;
@@ -466,6 +469,7 @@
         case TTypeSymGosub:
         case TTypeSymReturn:
         case TTypeSymPrint:
+        case TTypeSymInput:
         case TTypeSymFor:
         case TTypeSymLet:
         case TTypeSymDim:
@@ -488,6 +492,7 @@
         case TTypeSymText:
         case TTypeSymFont:
         case TTypeSymGamepad:
+        case TTypeSymKeyboard:
         case TTypeSymData:
         case TTypeSymRead:
         case TTypeSymRestore:
@@ -815,6 +820,23 @@
     GamepadNode *node = [[GamepadNode alloc] init];
     [self accept:TTypeSymGamepad];
     node.playersExpression = [self acceptExpression];
+    return node;
+}
+
+- (Node *)acceptKeyboard
+{
+    KeyboardNode *node = [[KeyboardNode alloc] init];
+    [self accept:TTypeSymKeyboard];
+    if (self.token.type == TTypeSymOff)
+    {
+        [self accept:TTypeSymOff];
+        node.active = NO;
+    }
+    else
+    {
+        [self accept:TTypeSymOn];
+        node.active = YES;
+    }
     return node;
 }
 
@@ -1831,7 +1853,8 @@
         }
 
         case TTypeSymDate:
-        case TTypeSymTime: {
+        case TTypeSymTime:
+        case TTypeSymInkey: {
             String0Node *node = [[String0Node alloc] init];
             node.type = self.token.type;
             [self accept:self.token.type];

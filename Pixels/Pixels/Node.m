@@ -350,10 +350,12 @@ NSString *const TRANSFER = @"TRANSFER";
     if (self.prompt)
     {
         [runner.renderer print:self.prompt.value newLine:NO wrap:YES];
+        [runner.delegate updateRendererView];
+        [runner wait:0.04 stopBlock:nil];
     }
     [runner.renderer showCursor];
     [runner.delegate updateRendererView];
-    [runner.delegate setKeyboardVisible:YES];
+    [runner.delegate setKeyboardActive:YES];
     runner.lastKeyPressed = 0;
     BOOL done = NO;
     NSMutableString *inputString = [NSMutableString stringWithCapacity:16];
@@ -859,6 +861,19 @@ NSString *const TRANSFER = @"TRANSFER";
     }
     
     [runner.delegate setGamepadModeWithPlayers:players.intValue];
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
+@implementation KeyboardNode
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    [runner.delegate setKeyboardActive:self.active];
     [runner next];
     return nil;
 }
@@ -2979,6 +2994,19 @@ NSString *const TRANSFER = @"TRANSFER";
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
             dateFormatter.dateFormat = @"HH:mm:ss";
             result = [dateFormatter stringFromDate:[NSDate date]];
+            break;
+        }
+        case TTypeSymInkey: {
+            if (runner.lastKeyPressed)
+            {
+                unichar letter = runner.lastKeyPressed;
+                result = [NSString stringWithCharacters:&letter length:1];
+                runner.lastKeyPressed = 0;
+            }
+            else
+            {
+                result = @"";
+            }
             break;
         }
         default:

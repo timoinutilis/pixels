@@ -136,6 +136,10 @@
 @property (nonatomic) Node *playersExpression;
 @end
 
+@interface KeyboardNode : Node
+@property (nonatomic) BOOL active;
+@end
+
 @interface DisplayNode : Node
 @property (nonatomic) Node *modeExpression;
 @property (nonatomic) BOOL sharedPalette;
