@@ -140,6 +140,7 @@
         case TTypeSymOpNot: return @"NOT";
         case TTypeSymColon: return @":";
         case TTypeSymComma: return @",";
+        case TTypeSymSemicolon: return @";";
         case TTypeSymDollar: return @"$";
         case TTypeSymEol: return printable ? @"end of line" : nil;
         

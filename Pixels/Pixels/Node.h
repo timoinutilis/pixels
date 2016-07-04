@@ -64,10 +64,11 @@
 
 @interface PrintNode : Node
 @property (nonatomic) Node *expression;
+@property (nonatomic) BOOL newLine;
 @end
 
 @interface InputNode : Node
-@property (nonatomic) Node *expression;
+@property (nonatomic) StringNode *prompt;
 @property (nonatomic) VariableNode *variable;
 @end
 

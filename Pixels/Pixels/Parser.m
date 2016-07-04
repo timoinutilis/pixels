@@ -116,7 +116,7 @@
 
 - (BOOL)tokenIsParameter
 {
-    return self.token.type != TTypeSymComma && self.token.type != TTypeSymEol && self.token.type != TTypeSymElse;
+    return self.token.type != TTypeSymComma && self.token.type != TTypeSymSemicolon && self.token.type != TTypeSymEol && self.token.type != TTypeSymElse;
 }
 
 #pragma mark - Lines
@@ -545,7 +545,13 @@
 {
     PrintNode *node = [[PrintNode alloc] init];
     [self accept:TTypeSymPrint];
-    node.expression = [self acceptExpression];
+    node.expression = [self acceptOptionalExpression];
+    node.newLine = YES;
+    if (node.expression && self.token.type == TTypeSymSemicolon)
+    {
+        [self accept:TTypeSymSemicolon];
+        node.newLine = NO;
+    }
     return node;
 }
 
@@ -553,8 +559,12 @@
 {
     InputNode *node = [[InputNode alloc] init];
     [self accept:TTypeSymInput];
-    node.expression = [self acceptExpression];
-    [self accept:TTypeSymComma];
+    if (self.token.type == TTypeString)
+    {
+        node.prompt = [[StringNode alloc] initWithValue:self.token.attrString];
+        [self accept:TTypeString];
+        [self accept:TTypeSymSemicolon];
+    }
     node.variable = [self acceptVariable];
     return node;
 }

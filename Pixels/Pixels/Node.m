@@ -319,13 +319,17 @@ NSString *const TRANSFER = @"TRANSFER";
     {
         return nil;
     }
-    if (runner.delegate)
+    if (value)
     {
         NSString *text = [value description];
-        [runner.renderer print:text];
-        [runner.delegate updateRendererView];
-        [runner wait:0.1 stopBlock:nil];
+        [runner.renderer print:text newLine:self.newLine wrap:YES];
     }
+    else
+    {
+        [runner.renderer print:@"" newLine:YES wrap:YES];
+    }
+    [runner.delegate updateRendererView];
+    [runner wait:0.1 stopBlock:nil];
     [runner next];
     return nil;
 }
@@ -338,45 +342,63 @@ NSString *const TRANSFER = @"TRANSFER";
 
 - (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
 {
-    [self.expression prepareWithRunnable:runnable pass:pass canBeString:YES];
     [self.variable prepareWithRunnable:runnable pass:pass canBeString:YES];
 }
 
 - (id)evaluateWithRunner:(Runner *)runner
 {
-    id value = [self.expression evaluateWithRunner:runner];
-    if (runner.error)
+    if (self.prompt)
     {
-        return nil;
+        [runner.renderer print:self.prompt.value newLine:NO wrap:YES];
     }
-    if (runner.delegate)
+    [runner.renderer showCursor];
+    [runner.delegate updateRendererView];
+    [runner.delegate setKeyboardVisible:YES];
+    runner.lastKeyPressed = 0;
+    BOOL done = NO;
+    NSMutableString *inputString = [NSMutableString stringWithCapacity:16];
+    do
     {
-        NSString *text = [value description];
-        [runner.renderer print:text];
-        [runner.delegate updateRendererView];
-        [runner.delegate setKeyboardVisible:YES];
-        runner.lastKeyPressed = 0;
-        BOOL done = NO;
-        do
+        [runner wait:0.04 stopBlock:nil];
+        const unichar letter = runner.lastKeyPressed;
+        if (letter != 0)
         {
-            [runner wait:0.04 stopBlock:nil];
-            const unichar letter = runner.lastKeyPressed;
-            if (letter != 0)
+            if (letter == '\n') // Enter
             {
-                if (letter == '\n')
+                [runner.renderer hideCursor];
+                [runner.renderer print:@"" newLine:YES wrap:NO];
+                [runner.delegate updateRendererView];
+                done = YES;
+            }
+            else if (letter == '\b') // Backspace
+            {
+                if (inputString.length > 0)
                 {
-                    done = YES;
-                }
-                else
-                {
-                    [runner.renderer print:[NSString stringWithCharacters:&letter length:1]];
+                    [runner.renderer clearCharacter:[inputString characterAtIndex:inputString.length - 1]];
+                    [inputString deleteCharactersInRange:NSMakeRange(inputString.length - 1, 1)];
                     [runner.delegate updateRendererView];
                 }
-                runner.lastKeyPressed = 0;
             }
+            else if (letter >= 32 && letter <= 90) // Printable
+            {
+                NSString *letterString = [NSString stringWithCharacters:&letter length:1];
+                [inputString appendString:letterString];
+                [runner.renderer print:letterString newLine:NO wrap:NO];
+                [runner.delegate updateRendererView];
+            }
+            runner.lastKeyPressed = 0;
         }
-        while (!done);
-        [runner.delegate setKeyboardVisible:NO];
+    }
+    while (!done && !runner.endRequested);
+//    [runner.delegate setKeyboardVisible:NO];
+    if (self.variable.isString)
+    {
+        [runner.variables setValue:inputString forVariable:self.variable];
+    }
+    else
+    {
+        float number = [inputString floatValue];
+        [runner.variables setValue:[runner.numberPool numberWithValue:number] forVariable:self.variable];
     }
     [runner next];
     return nil;

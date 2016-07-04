@@ -54,6 +54,7 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
 @property GCController *gameController;
 @property BOOL dismissWhenFinished;
 @property double audioVolume;
+@property BOOL isKeyboardActive;
 
 @end
 
@@ -198,6 +199,10 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
     {
         self.isPaused = NO;
     }
+    else if (self.isKeyboardActive)
+    {
+        [self becomeFirstResponder];
+    }
     else if (self.numPlayers > 0)
     {
         // show that gamepad should be used
@@ -296,6 +301,8 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
                 }
             }
         }
+        
+        [self setKeyboardVisible:NO];
         
         if (runner.error && self.view.superview)
         {
@@ -582,6 +589,7 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
 
 - (void)setKeyboardVisible:(BOOL)keyboard
 {
+    self.isKeyboardActive = keyboard;
     dispatch_async(dispatch_get_main_queue(), ^{
         if (keyboard)
         {
@@ -623,9 +631,7 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
 {
     if (text.length > 0)
     {
-        unichar inputChar = [text.uppercaseString characterAtIndex:0];
-        NSLog(@"char: %c", inputChar);
-        self.runner.lastKeyPressed = inputChar;
+        self.runner.lastKeyPressed = [text.uppercaseString characterAtIndex:0];
     }
 }
 

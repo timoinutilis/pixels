@@ -139,6 +139,7 @@ typedef NS_ENUM(NSInteger, TType) {
     
     TTypeSymColon,
     TTypeSymComma,
+    TTypeSymSemicolon,
     TTypeSymDollar,
     TTypeSymEol,
     

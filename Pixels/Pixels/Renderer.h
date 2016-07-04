@@ -40,7 +40,9 @@ typedef struct Layer {
     int bgColorIndex;
     int borderColorIndex;
     int fontIndex;
-    int printY;
+    int cursorX;
+    int cursorY;
+    int cursorVisible;
 } Layer;
 
 typedef struct Block {
@@ -91,7 +93,10 @@ extern int const RendererNumBlocks;
 - (void)freeAllBlocks;
 - (void)drawText:(NSString *)text x:(int)x y:(int)y outline:(int)outline;
 - (int)widthForText:(NSString *)text;
-- (void)print:(NSString *)text;
+- (void)print:(NSString *)text newLine:(BOOL)newLine wrap:(BOOL)wrap;
+- (void)clearCharacter:(unichar)character;
+- (void)showCursor;
+- (void)hideCursor;
 - (Sprite *)spriteAtIndex:(int)index;
 - (SpriteDef *)spriteDefAtIndex:(int)index;
 - (BOOL)checkCollisionBetweenSprite:(int)index1 andSprite:(int)index2;

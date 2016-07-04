@@ -144,6 +144,9 @@ typedef struct Font {
     layer->bgColorIndex = 0;
     layer->borderColorIndex = 3;
     layer->fontIndex = 0;
+    layer->cursorX = 0;
+    layer->cursorY = 0;
+    layer->cursorVisible = NO;
     
     layer->pixelBuffer = calloc(width * height, sizeof(uint8_t));
     
@@ -254,7 +257,8 @@ typedef struct Font {
     {
         pixelBuffer[i] = colorIndex;
     }
-    layer->printY = 0;
+    layer->cursorX = 0;
+    layer->cursorY = 0;
 }
 
 - (void)plotX:(int)x Y:(int)y
@@ -334,6 +338,12 @@ typedef struct Font {
 - (void)fillBoxFromX:(int)fromX Y:(int)fromY toX:(int)toX Y:(int)toY
 {
     if (_layerIndex == -1) return;
+    Layer *layer = &_layers[_layerIndex];
+    [self fillBoxFromX:fromX Y:fromY toX:toX Y:toY layer:layer color:layer->colorIndex];
+}
+
+- (void)fillBoxFromX:(int)fromX Y:(int)fromY toX:(int)toX Y:(int)toY layer:(Layer *)layer color:(int)colorIndex
+{
     if (fromX > toX)
     {
         int value = toX; toX = fromX; fromX = value;
@@ -342,10 +352,8 @@ typedef struct Font {
     {
         int value = toY; toY = fromY; fromY = value;
     }
-    Layer *layer = &_layers[_layerIndex];
     int layerWidth = layer->width;
     int layerHeight = layer->height;
-    int colorIndex = layer->colorIndex;
     if (toX >= 0 && toY >= 0 && fromX < layerWidth && fromY < layerHeight)
     {
         if (fromX < 0) fromX = 0;
@@ -706,31 +714,31 @@ typedef struct Font {
     Layer *layer = &_layers[_layerIndex];
     if (outline >= 1)
     {
-        [self drawText:text layer:layer color:layer->borderColorIndex x:x y:y+1 start:0 wrap:NO bg:NO];
+        [self drawText:text layer:layer color:layer->borderColorIndex x:x y:y+1 start:0 wrap:NO bg:NO outX:nil];
         if (outline >= 2)
         {
-            [self drawText:text layer:layer color:layer->borderColorIndex x:x y:y-1 start:0 wrap:NO bg:NO];
-            [self drawText:text layer:layer color:layer->borderColorIndex x:x-1 y:y start:0 wrap:NO bg:NO];
-            [self drawText:text layer:layer color:layer->borderColorIndex x:x+1 y:y start:0 wrap:NO bg:NO];
+            [self drawText:text layer:layer color:layer->borderColorIndex x:x y:y-1 start:0 wrap:NO bg:NO outX:nil];
+            [self drawText:text layer:layer color:layer->borderColorIndex x:x-1 y:y start:0 wrap:NO bg:NO outX:nil];
+            [self drawText:text layer:layer color:layer->borderColorIndex x:x+1 y:y start:0 wrap:NO bg:NO outX:nil];
             if (outline >= 3)
             {
-                [self drawText:text layer:layer color:layer->borderColorIndex x:x-1 y:y-1 start:0 wrap:NO bg:NO];
-                [self drawText:text layer:layer color:layer->borderColorIndex x:x-1 y:y+1 start:0 wrap:NO bg:NO];
-                [self drawText:text layer:layer color:layer->borderColorIndex x:x+1 y:y-1 start:0 wrap:NO bg:NO];
-                [self drawText:text layer:layer color:layer->borderColorIndex x:x+1 y:y+1 start:0 wrap:NO bg:NO];
+                [self drawText:text layer:layer color:layer->borderColorIndex x:x-1 y:y-1 start:0 wrap:NO bg:NO outX:nil];
+                [self drawText:text layer:layer color:layer->borderColorIndex x:x-1 y:y+1 start:0 wrap:NO bg:NO outX:nil];
+                [self drawText:text layer:layer color:layer->borderColorIndex x:x+1 y:y-1 start:0 wrap:NO bg:NO outX:nil];
+                [self drawText:text layer:layer color:layer->borderColorIndex x:x+1 y:y+1 start:0 wrap:NO bg:NO outX:nil];
             }
         }
     }
-    [self drawText:text layer:layer color:layer->colorIndex x:x y:y start:0 wrap:NO bg:NO];
+    [self drawText:text layer:layer color:layer->colorIndex x:x y:y start:0 wrap:NO bg:NO outX:nil];
 }
 
-
-- (int)drawText:(NSString *)text layer:(Layer *)layer color:(int)colorIndex x:(int)x y:(int)y start:(int)start wrap:(BOOL)wrap bg:(BOOL)bg
+- (int)drawText:(NSString *)text layer:(Layer *)layer color:(int)colorIndex x:(int)x y:(int)y start:(int)start wrap:(BOOL)wrap bg:(BOOL)bg outX:(int *)outX
 {
     Font *font = &_fonts[layer->fontIndex];
     int fontHeight = font->height;
     uint8_t *fontData = font->data;
     int layerWidth = layer->width;
+    int nextStart = 0;
     for (int index = start; index < text.length; index++)
     {
         unichar currentChar = [text characterAtIndex:index];
@@ -742,7 +750,8 @@ typedef struct Font {
             
             if (wrap && x + charWidth > layerWidth)
             {
-                return index;
+                nextStart = index;
+                break;
             }
             
             for (int charX = 0; charX < charWidth; charX++)
@@ -771,10 +780,15 @@ typedef struct Font {
         }
         else if (wrap && (currentChar == '\n' || currentChar == '\r'))
         {
-            return index + 1;
+            nextStart = index + 1;
+            break;
         }
     };
-    return 0;
+    if (outX)
+    {
+        *outX = x;
+    }
+    return nextStart;
 }
 
 - (int)widthForText:(NSString *)text
@@ -794,27 +808,86 @@ typedef struct Font {
     return width;
 }
 
-- (void)print:(NSString *)text
+- (void)print:(NSString *)text newLine:(BOOL)newLine wrap:(BOOL)wrap
 {
     if (_layerIndex == -1) return;
     Layer *layer = &_layers[_layerIndex];
     int fontHeight = _fonts[layer->fontIndex].height;
     
+    if (layer->cursorVisible)
+    {
+        [self drawCursorWithLayer:layer bg:YES];
+    }
+    
     int index = 0;
     do
     {
-        index = [self drawText:text layer:layer color:layer->colorIndex x:0 y:layer->printY start:index wrap:YES bg:YES];
+        index = [self drawText:text layer:layer color:layer->colorIndex x:layer->cursorX y:layer->cursorY start:index wrap:wrap bg:YES outX:&layer->cursorX];
         
-        if (layer->printY > layer->height - 2 * fontHeight)
+        if (newLine || index > 0)
         {
-            [self scrollFromX:0 Y:0 toX:layer->width - 1 Y:layer->printY + fontHeight - 1 deltaX:0 Y:-fontHeight refill:YES];
-        }
-        else
-        {
-            layer->printY += fontHeight;
+            if (layer->cursorY > layer->height - 2 * fontHeight)
+            {
+                [self scrollFromX:0 Y:0 toX:layer->width - 1 Y:layer->cursorY + fontHeight - 1 deltaX:0 Y:-fontHeight refill:YES];
+            }
+            else
+            {
+                layer->cursorY += fontHeight;
+            }
+            layer->cursorX = 0;
         }
     }
     while (index > 0);
+    
+    if (layer->cursorVisible)
+    {
+        [self drawCursorWithLayer:layer bg:NO];
+    }
+}
+
+- (void)clearCharacter:(unichar)character
+{
+    if (_layerIndex == -1) return;
+    Layer *layer = &_layers[_layerIndex];
+    Font *font = &_fonts[layer->fontIndex];
+    int charWidth = font->width[character - 32];
+    
+    if (layer->cursorVisible)
+    {
+        [self drawCursorWithLayer:layer bg:YES];
+    }
+    
+    layer->cursorX -= charWidth;
+    [self fillBoxFromX:layer->cursorX Y:layer->cursorY toX:layer->cursorX + charWidth - 1 Y:layer->cursorY + font->height - 1
+                 layer:layer color:layer->bgColorIndex];
+
+    if (layer->cursorVisible)
+    {
+        [self drawCursorWithLayer:layer bg:NO];
+    }
+}
+
+- (void)showCursor
+{
+    if (_layerIndex == -1) return;
+    Layer *layer = &_layers[_layerIndex];
+    layer->cursorVisible = YES;
+    [self drawCursorWithLayer:layer bg:NO];
+}
+
+- (void)hideCursor
+{
+    if (_layerIndex == -1) return;
+    Layer *layer = &_layers[_layerIndex];
+    layer->cursorVisible = NO;
+    [self drawCursorWithLayer:layer bg:YES];
+}
+
+- (void)drawCursorWithLayer:(Layer *)layer bg:(BOOL)bg
+{
+    Font *font = &_fonts[layer->fontIndex];
+    [self fillBoxFromX:layer->cursorX Y:layer->cursorY toX:layer->cursorX + font->width[0] Y:layer->cursorY + font->height - 1
+                 layer:layer color:(bg ? layer->bgColorIndex : layer->colorIndex)];
 }
 
 - (Sprite *)spriteAtIndex:(int)index
