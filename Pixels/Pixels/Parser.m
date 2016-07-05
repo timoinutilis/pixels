@@ -116,7 +116,7 @@
 
 - (BOOL)tokenIsParameter
 {
-    return self.token.type != TTypeSymComma && self.token.type != TTypeSymEol && self.token.type != TTypeSymElse;
+    return self.token.type != TTypeSymComma && self.token.type != TTypeSymSemicolon && self.token.type != TTypeSymEol && self.token.type != TTypeSymElse;
 }
 
 #pragma mark - Lines
@@ -202,6 +202,9 @@
         case TTypeSymPrint:
             node = [self acceptPrint];
             break;
+        case TTypeSymInput:
+            node = [self acceptInput];
+            break;
         case TTypeSymFor:
             node = [self acceptForNext];
             break;
@@ -249,6 +252,9 @@
             break;
         case TTypeSymGamepad:
             node = [self acceptGamepad];
+            break;
+        case TTypeSymKeyboard:
+            node = [self acceptKeyboard];
             break;
         case TTypeSymDisplay:
             node = [self acceptDisplay];
@@ -463,6 +469,7 @@
         case TTypeSymGosub:
         case TTypeSymReturn:
         case TTypeSymPrint:
+        case TTypeSymInput:
         case TTypeSymFor:
         case TTypeSymLet:
         case TTypeSymDim:
@@ -485,6 +492,7 @@
         case TTypeSymText:
         case TTypeSymFont:
         case TTypeSymGamepad:
+        case TTypeSymKeyboard:
         case TTypeSymData:
         case TTypeSymRead:
         case TTypeSymRestore:
@@ -542,7 +550,27 @@
 {
     PrintNode *node = [[PrintNode alloc] init];
     [self accept:TTypeSymPrint];
-    node.expression = [self acceptExpression];
+    node.expression = [self acceptOptionalExpression];
+    node.newLine = YES;
+    if (node.expression && self.token.type == TTypeSymSemicolon)
+    {
+        [self accept:TTypeSymSemicolon];
+        node.newLine = NO;
+    }
+    return node;
+}
+
+- (Node *)acceptInput
+{
+    InputNode *node = [[InputNode alloc] init];
+    [self accept:TTypeSymInput];
+    if (self.token.type == TTypeString)
+    {
+        node.prompt = [[StringNode alloc] initWithValue:self.token.attrString];
+        [self accept:TTypeString];
+        [self accept:TTypeSymSemicolon];
+    }
+    node.variable = [self acceptVariable];
     return node;
 }
 
@@ -792,6 +820,23 @@
     GamepadNode *node = [[GamepadNode alloc] init];
     [self accept:TTypeSymGamepad];
     node.playersExpression = [self acceptExpression];
+    return node;
+}
+
+- (Node *)acceptKeyboard
+{
+    KeyboardNode *node = [[KeyboardNode alloc] init];
+    [self accept:TTypeSymKeyboard];
+    if (self.token.type == TTypeSymOff)
+    {
+        [self accept:TTypeSymOff];
+        node.active = NO;
+    }
+    else
+    {
+        [self accept:TTypeSymOn];
+        node.active = YES;
+    }
     return node;
 }
 
@@ -1808,7 +1853,8 @@
         }
 
         case TTypeSymDate:
-        case TTypeSymTime: {
+        case TTypeSymTime:
+        case TTypeSymInkey: {
             String0Node *node = [[String0Node alloc] init];
             node.type = self.token.type;
             [self accept:self.token.type];

@@ -319,12 +319,88 @@ NSString *const TRANSFER = @"TRANSFER";
     {
         return nil;
     }
-    if (runner.delegate)
+    if (value)
     {
         NSString *text = [value description];
-        [runner.renderer print:text];
+        [runner.renderer print:text newLine:self.newLine wrap:YES];
+    }
+    else
+    {
+        [runner.renderer print:@"" newLine:YES wrap:YES];
+    }
+    [runner.delegate updateRendererView];
+    [runner wait:0.1 stopBlock:nil];
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
+@implementation InputNode
+
+- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
+{
+    [self.variable prepareWithRunnable:runnable pass:pass canBeString:YES];
+}
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    if (self.prompt)
+    {
+        [runner.renderer print:self.prompt.value newLine:NO wrap:YES];
         [runner.delegate updateRendererView];
-        [runner wait:0.1 stopBlock:nil];
+        [runner wait:0.04 stopBlock:nil];
+    }
+    [runner.renderer showCursor];
+    [runner.delegate updateRendererView];
+    [runner.delegate setKeyboardActive:YES];
+    runner.lastKeyPressed = 0;
+    BOOL done = NO;
+    NSMutableString *inputString = [NSMutableString stringWithCapacity:16];
+    do
+    {
+        [runner wait:0.04 stopBlock:nil];
+        const unichar letter = runner.lastKeyPressed;
+        if (letter != 0)
+        {
+            if (letter == '\n') // Enter
+            {
+                [runner.renderer hideCursor];
+                [runner.renderer print:@"" newLine:YES wrap:NO];
+                [runner.delegate updateRendererView];
+                done = YES;
+            }
+            else if (letter == '\b') // Backspace
+            {
+                if (inputString.length > 0)
+                {
+                    [runner.renderer clearCharacter:[inputString characterAtIndex:inputString.length - 1]];
+                    [inputString deleteCharactersInRange:NSMakeRange(inputString.length - 1, 1)];
+                    [runner.delegate updateRendererView];
+                }
+            }
+            else if (letter >= 32 && letter <= 90) // Printable
+            {
+                NSString *letterString = [NSString stringWithCharacters:&letter length:1];
+                [inputString appendString:letterString];
+                [runner.renderer print:letterString newLine:NO wrap:NO];
+                [runner.delegate updateRendererView];
+            }
+            runner.lastKeyPressed = 0;
+        }
+    }
+    while (!done && !runner.endRequested);
+//    [runner.delegate setKeyboardVisible:NO];
+    if (self.variable.isString)
+    {
+        [runner.variables setValue:inputString forVariable:self.variable];
+    }
+    else
+    {
+        float number = [inputString floatValue];
+        [runner.variables setValue:[runner.numberPool numberWithValue:number] forVariable:self.variable];
     }
     [runner next];
     return nil;
@@ -785,6 +861,19 @@ NSString *const TRANSFER = @"TRANSFER";
     }
     
     [runner.delegate setGamepadModeWithPlayers:players.intValue];
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
+@implementation KeyboardNode
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    [runner.delegate setKeyboardActive:self.active];
     [runner next];
     return nil;
 }
@@ -2905,6 +2994,19 @@ NSString *const TRANSFER = @"TRANSFER";
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
             dateFormatter.dateFormat = @"HH:mm:ss";
             result = [dateFormatter stringFromDate:[NSDate date]];
+            break;
+        }
+        case TTypeSymInkey: {
+            if (runner.lastKeyPressed)
+            {
+                unichar letter = runner.lastKeyPressed;
+                result = [NSString stringWithCharacters:&letter length:1];
+                runner.lastKeyPressed = 0;
+            }
+            else
+            {
+                result = @"";
+            }
             break;
         }
         default:

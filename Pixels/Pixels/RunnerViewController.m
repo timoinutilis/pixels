@@ -28,7 +28,7 @@ NSString *const UserDefaultsFullscreenKey = @"fullscreen";
 NSString *const UserDefaultsSoundEnabledKey = @"soundEnabled";
 NSString *const UserDefaultsPersistentKey = @"persistent";
 
-@interface RunnerViewController () <RunnerDelegate>
+@interface RunnerViewController () <RunnerDelegate, UIKeyInput>
 
 @property (weak, nonatomic) IBOutlet UIView *containerView;
 @property (weak, nonatomic) IBOutlet UIButton *exitButton;
@@ -44,6 +44,7 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintWidth;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTop;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintKeyboard;
 
 @property BOOL didAppearAlready;
 @property (nonatomic) BOOL isFullscreen;
@@ -54,6 +55,7 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
 @property GCController *gameController;
 @property BOOL dismissWhenFinished;
 @property double audioVolume;
+@property BOOL isKeyboardActive;
 
 @end
 
@@ -95,12 +97,16 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(gameControllerDidConnect:) name:GCControllerDidConnectNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(gameControllerDidDisconnect:) name:GCControllerDidDisconnectNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:GCControllerDidConnectNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:GCControllerDidDisconnectNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (BOOL)prefersStatusBarHidden
@@ -192,11 +198,32 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
     }
 }
 
+- (void)keyboardWillShow:(NSNotification *)notification
+{
+    CGRect kbRect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    self.constraintKeyboard.constant = kbRect.size.height;
+    [UIView animateWithDuration:0.3 animations:^{
+        [self.view layoutIfNeeded];
+    }];
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification
+{
+    self.constraintKeyboard.constant = 0;
+    [UIView animateWithDuration:0.3 animations:^{
+        [self.view layoutIfNeeded];
+    }];
+}
+
 - (IBAction)onBackgroundTouchDown:(id)sender
 {
     if (self.isPaused)
     {
         self.isPaused = NO;
+    }
+    else if (self.isKeyboardActive)
+    {
+        [self becomeFirstResponder];
     }
     else if (self.numPlayers > 0)
     {
@@ -296,6 +323,8 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
                 }
             }
         }
+        
+        [self setKeyboardActive:NO];
         
         if (runner.error && self.view.superview)
         {
@@ -578,6 +607,65 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
         self.buttonB.hidden = NO;
         self.pauseButton.hidden = NO;
     }
+}
+
+- (void)setKeyboardActive:(BOOL)active
+{
+    self.isKeyboardActive = active;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (active)
+        {
+            [self becomeFirstResponder];
+        }
+        else
+        {
+            [self resignFirstResponder];
+        }
+    });
+}
+
+- (BOOL)canBecomeFirstResponder
+{
+    return self.isKeyboardActive;
+}
+
+- (UITextAutocorrectionType)autocorrectionType
+{
+    return UITextAutocorrectionTypeNo;
+}
+
+- (UITextSpellCheckingType)spellCheckingType
+{
+    return UITextSpellCheckingTypeNo;
+}
+
+- (UIKeyboardAppearance)keyboardAppearance
+{
+    return UIKeyboardAppearanceDark;
+}
+
+- (BOOL)hasText
+{
+    return YES;
+}
+
+- (void)insertText:(NSString *)text
+{
+    if (text.length > 0)
+    {
+        self.runner.lastKeyPressed = [text.uppercaseString characterAtIndex:0];
+    }
+}
+
+- (void)deleteBackward
+{
+    self.runner.lastKeyPressed = '\b';
+}
+
+// this is from UITextInput, needed because of crash on iPhone 6 keyboard (left/right arrows)
+- (UITextRange *)selectedTextRange
+{
+    return nil;
 }
 
 @end

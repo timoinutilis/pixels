@@ -49,7 +49,9 @@
         case TTypeSymText: return @"TEXT";
         case TTypeSymEnd: return @"END";
         case TTypeSymGamepad: return @"GAMEPAD";
+        case TTypeSymKeyboard: return @"KEYBOARD";
         case TTypeSymPrint: return @"PRINT";
+        case TTypeSymInput: return @"INPUT";
         case TTypeSymData: return @"DATA";
         case TTypeSymRead: return @"READ";
         case TTypeSymRestore: return @"RESTORE";
@@ -84,6 +86,7 @@
         case TTypeSymLeft: return @"LEFT";
         case TTypeSymRight: return @"RIGHT";
         case TTypeSymButton: return @"BUTTON";
+        case TTypeSymInkey: return @"INKEY$";
         case TTypeSymPoint: return @"POINT";
         case TTypeSymWidth: return @"WIDTH";
         case TTypeSymHit: return @"HIT";
@@ -139,12 +142,12 @@
         case TTypeSymOpNot: return @"NOT";
         case TTypeSymColon: return @":";
         case TTypeSymComma: return @",";
+        case TTypeSymSemicolon: return @";";
         case TTypeSymDollar: return @"$";
         case TTypeSymEol: return printable ? @"end of line" : nil;
         
         case TType_reserved: return nil;
         
-        case TTypeSymInput: return @"INPUT";
         case TTypeSymSub: return @"SUB";
         case TTypeSymCall: return @"CALL";
         case TTypeSymUbound: return @"UBOUND";

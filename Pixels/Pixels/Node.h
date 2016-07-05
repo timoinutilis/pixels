@@ -64,6 +64,12 @@
 
 @interface PrintNode : Node
 @property (nonatomic) Node *expression;
+@property (nonatomic) BOOL newLine;
+@end
+
+@interface InputNode : Node
+@property (nonatomic) StringNode *prompt;
+@property (nonatomic) VariableNode *variable;
 @end
 
 @interface ForNextNode : Node
@@ -128,6 +134,10 @@
 
 @interface GamepadNode : Node
 @property (nonatomic) Node *playersExpression;
+@end
+
+@interface KeyboardNode : Node
+@property (nonatomic) BOOL active;
 @end
 
 @interface DisplayNode : Node
