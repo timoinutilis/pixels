@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="oli-IW-NHE">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="oli-IW-NHE">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -315,11 +315,13 @@ The upgrade is valid for all your devices and without time limit.</string>
                                 <constraints>
                                     <constraint firstItem="8Mt-zw-kOg" firstAttribute="top" secondItem="wgn-Os-cIh" secondAttribute="top" id="HKA-ts-i6L"/>
                                     <constraint firstAttribute="centerY" secondItem="B6C-lp-NaC" secondAttribute="centerY" priority="250" id="IX4-nU-T5z"/>
+                                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="B6C-lp-NaC" secondAttribute="bottom" id="R90-FZ-LiA"/>
                                     <constraint firstAttribute="trailing" secondItem="8Mt-zw-kOg" secondAttribute="trailing" id="bdw-68-0ZE"/>
                                     <constraint firstItem="8Mt-zw-kOg" firstAttribute="leading" secondItem="wgn-Os-cIh" secondAttribute="leading" id="eQj-UH-FW2"/>
                                     <constraint firstItem="B6C-lp-NaC" firstAttribute="top" secondItem="wgn-Os-cIh" secondAttribute="top" priority="750" id="nCm-iM-J6q"/>
                                     <constraint firstAttribute="bottom" secondItem="8Mt-zw-kOg" secondAttribute="bottom" id="pz3-JH-QQp"/>
                                     <constraint firstAttribute="centerX" secondItem="B6C-lp-NaC" secondAttribute="centerX" id="wZC-cb-Qbi"/>
+                                    <constraint firstItem="B6C-lp-NaC" firstAttribute="top" relation="greaterThanOrEqual" secondItem="wgn-Os-cIh" secondAttribute="top" id="xNI-tB-zV4"/>
                                 </constraints>
                             </view>
                             <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U9l-B1-gng" userLabel="Exit Button">
@@ -451,6 +453,7 @@ The upgrade is valid for all your devices and without time limit.</string>
                         <outlet property="buttonA" destination="gGg-rj-ecJ" id="Lj8-wl-JCJ"/>
                         <outlet property="buttonB" destination="WUP-DK-URn" id="fTd-nZ-6E5"/>
                         <outlet property="constraintHeight" destination="QmA-x4-euh" id="LoG-gN-tgc"/>
+                        <outlet property="constraintKeyboard" destination="R90-FZ-LiA" id="VTm-FW-HWr"/>
                         <outlet property="constraintTop" destination="nCm-iM-J6q" id="bVd-w9-tKv"/>
                         <outlet property="constraintWidth" destination="jPQ-zS-yRd" id="gFM-fY-cy8"/>
                         <outlet property="containerView" destination="wgn-Os-cIh" id="Urd-Fb-b8e"/>

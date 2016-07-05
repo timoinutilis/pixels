@@ -886,7 +886,7 @@ typedef struct Font {
 - (void)drawCursorWithLayer:(Layer *)layer bg:(BOOL)bg
 {
     Font *font = &_fonts[layer->fontIndex];
-    [self fillBoxFromX:layer->cursorX Y:layer->cursorY toX:layer->cursorX + font->width[0] Y:layer->cursorY + font->height - 1
+    [self fillBoxFromX:layer->cursorX Y:layer->cursorY toX:layer->cursorX + font->width[0] - 1 Y:layer->cursorY + font->height - 1
                  layer:layer color:(bg ? layer->bgColorIndex : layer->colorIndex)];
 }
 

@@ -44,6 +44,7 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintWidth;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTop;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintKeyboard;
 
 @property BOOL didAppearAlready;
 @property (nonatomic) BOOL isFullscreen;
@@ -96,12 +97,16 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(gameControllerDidConnect:) name:GCControllerDidConnectNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(gameControllerDidDisconnect:) name:GCControllerDidDisconnectNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:GCControllerDidConnectNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:GCControllerDidDisconnectNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (BOOL)prefersStatusBarHidden
@@ -191,6 +196,23 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
     {
         [self setIsPaused:YES message:@"GAME CONTROLLER DISCONNECTED, PAUSED"];
     }
+}
+
+- (void)keyboardWillShow:(NSNotification *)notification
+{
+    CGRect kbRect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    self.constraintKeyboard.constant = kbRect.size.height;
+    [UIView animateWithDuration:0.3 animations:^{
+        [self.view layoutIfNeeded];
+    }];
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification
+{
+    self.constraintKeyboard.constant = 0;
+    [UIView animateWithDuration:0.3 animations:^{
+        [self.view layoutIfNeeded];
+    }];
 }
 
 - (IBAction)onBackgroundTouchDown:(id)sender
@@ -604,7 +626,7 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
 
 - (BOOL)canBecomeFirstResponder
 {
-    return YES;
+    return self.isKeyboardActive;
 }
 
 - (UITextAutocorrectionType)autocorrectionType
@@ -637,8 +659,13 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
 
 - (void)deleteBackward
 {
-    NSLog(@"backspace");
-    self.runner.lastKeyPressed = 0x08;
+    self.runner.lastKeyPressed = '\b';
+}
+
+// this is from UITextInput, needed because of crash on iPhone 6 keyboard (left/right arrows)
+- (UITextRange *)selectedTextRange
+{
+    return nil;
 }
 
 @end
