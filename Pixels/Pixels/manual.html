@@ -192,15 +192,26 @@ GOTO TESTLABEL
 <h1 id="Simple-commands">Simple commands</h1>
 
 <h3 id="_PRINT" name="PRINT">PRINT</h3>
-<pre>PRINT value</pre>
-<p>PRINT writes <i>value</i> on the screen, where <i>value</i> can be also a string or any expression. Each printed text will appear in a new line and the screen will scroll when the bottom is reached. In graphics based programs you should prefer the <a href="#_TEXT">TEXT</a> command.</p>
+<pre>PRINT [value[;]]</pre>
+<p>PRINT writes <i>value</i> on the screen, where <i>value</i> can be also a string or any expression. By default the text cursor (invisible) jumps to the next line afterwards and the screen scrolls when the bottom is reached. If you append a semicolon, the cursor stays at the end of the printed text and following text appears in the same line. If the <i>value</i> parameter is omitted, PRINT outputs an empty line.</p>
+<p>In graphics based programs you should prefer the <a href="#_TEXT">TEXT</a> command.</p>
 <pre class="exm">
 PRINT "HELLO"
 PRINT 2+2
+PRINT
+PRINT "ONE ";
+PRINT "LINE"
 </pre>
 
 <h3 id="_INPUT" name="INPUT">INPUT</h3>
-<p>In the classic BASIC language, this command is the main way of getting user input by the keyboard. As LowRes Coder doesn't support keyboard, this command does not exist here.</p>
+<pre>INPUT ["prompt";]var</pre>
+<p>INPUT lets the user enter a text or number on the keyboard and stores it in the variable <i>var</i>. Optionally it can show a prompt text before (cannot be a variable). The keyboard will be activated automatically. If you want to hide it afterwards, you can call <a href="#_KEYBOARD">KEYBOARD OFF</a>.</p>
+<pre class="exm">
+INPUT "NAME:";N$
+INPUT "AGE:";AGE
+PRINT "HELLO "+N$+"!"
+PRINT "IN ONE YEAR YOU ARE "+(AGE+1)
+</pre>
 
 <h3 id="_WAIT" name="WAIT,TAP">WAIT</h3>
 <pre>WAIT seconds [TAP]</pre>
@@ -684,7 +695,7 @@ LOOP
 
 <h1 id="User-input">User input</h1>
 
-<p>LowRes Coder can show a virtual game pad. Use these commands to handle the user input.</p>
+<p>LowRes Coder can show a virtual game pad and a keyboard. Use these commands to handle the user input.</p>
 
 <h3 id="_GAMEPAD" name="GAMEPAD">GAMEPAD</h3>
 <pre>GAMEPAD players</pre>
@@ -710,6 +721,22 @@ LOOP
 <pre>v=BUTTON [TAP](player[,button])</pre>
 <p>Returns TRUE if the A or B button of the given player is currently pressed. <i>player</i> starts with 0 for the first one. If <i>button</i> is omitted or 0, any button (A and B) is checked. 1 checks only the A button, 2 checks only the B button.</p>
 <p>With the optional TAP keyword the function returns TRUE only once for one tap on the button, and not as long as the button is pressed.</p>
+
+<h3 id="_KEYBOARD" name="KEYBOARD,ON,OFF">KEYBOARD ON/OFF</h3>
+<pre>KEYBOARD ON</pre>
+<pre>KEYBOARD OFF</pre>
+<p>Activates or deactivates the keyboard.</p>
+
+<h3 id="_INKEY" name="INKEY$">=INKEY$</h3>
+<pre>s$=INKEY$</pre>
+<p>INKEY$ returns the last pressed key as a string. If no key was pressed, it returns an empty string (""). After calling this function its value is cleared, so it returns each pressed key only once.</p>
+<pre class="exm">
+KEYBOARD ON
+DO
+  I$=INKEY$
+  IF I$&lt;&gt;"" THEN PRINT "PRESSED "+I$
+LOOP
+</pre>
 
 <h1 id="Sound">Sound</h1>
 <p>LowRes Coder has three independent sound generators, called voices. Each of them has a queue which can store and reproduce sound sequences without blocking the execution of the program.</p>
@@ -1314,35 +1341,14 @@ NEXT I
 <pre>PUT x,y[,sx,sy,sw,sh[,transparency]]</pre>
 <pre>PUT x,y[,transparency]</pre>
 <p>Draws the screen area copied by the GET command on the screen at the coordinates <i>x,y</i>. By default the complete copied area will be drawn. With the additional parameters you can draw a smaller part of the source image. With <i>sx</i> and <i>sy</i> you specify the top left corner of the source image, <i>sw</i> is the width and <i>sh</i> the height. If <i>transparency</i> is given and different from -1, the image is drawn with <i>transparency</i> as transparent color.</p>
-<pre class="exm">
-COLOR 4
-BAR 10,10 TO 30,20
-COLOR 8
-BAR 12,12 TO 28,18
-GET 10,10 TO 30,20
-PUT 15,25
-PUT 20,40,0,0,10,5
-PUT 40,40,11,6,10,5
-</pre>
 <p><i>This command is obsolete. Use <a href="#_GETBLOCK">GET BLOCK</a> and <a href="#_PUTBLOCK">PUT BLOCK</a> instead.</i></p>
 
 <h3 id="_SOUNDEND" name="SOUND END,SOUND,END">=SOUND END</h3>
 <pre>v=SOUND END[(voice)]</pre>
 <p>This function returns TRUE, if the queue of the given <i>voice</i> is empty. A queue is already empty when its last sound is still playing. If the parameter is omitted, all voices are checked.</p>
-<pre class="exm">
-DO
-  IF SOUND END THEN
-    SOUND 0,49,12
-    SOUND 0,53,12
-    SOUND 0,56,12
-    SOUND 0,61,24
-  END IF
-  WAIT 0.1
-LOOP
-</pre>
 <p><i>This function is obsolete. Use <a href="#_SOUNDLEN">SOUND LEN</a> instead.</i></p>
 
-<h1 id="Reserved-keywords" name="BANK,CALL,HEIGHT,INPUT,PEEK,POKE,SUB,TEMPO,TILE,TRACE,UBOUND">Reserved keywords</h1>
+<h1 id="Reserved-keywords" name="BANK,CALL,HEIGHT,PEEK,POKE,SUB,TEMPO,TILE,TRACE,UBOUND">Reserved keywords</h1>
 <p>This is a list of all reserved keywords. They cannot be used as variable or label names.<p>
 <p>* Keywords with an asterisk have no function yet, but are reserved for future versions of LowRes Coder.</p>
 <p>
@@ -1385,9 +1391,11 @@ HEIGHT*,
 HEX$,
 HIT,
 IF,
-INPUT*,
+INKEY$,
+INPUT,
 INSTR,
 INT,
+KEYBOARD,
 LAYER,
 LEFT,
 LEFT$,
