@@ -46,6 +46,8 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTop;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintKeyboard;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintGamepad;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintButtons;
 
 @property BOOL didAppearAlready;
 @property (nonatomic) BOOL isFullscreen;
@@ -167,7 +169,7 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
 
 - (void)viewWillLayoutSubviews
 {
-    [self updateRendererConstraints];
+    [self updateDynamicConstraints];
 }
 
 - (NSString *)projectKeyFor:(NSString *)key
@@ -268,21 +270,24 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
     }];
 }
 
-- (void)updateRendererConstraints
+- (void)updateDynamicConstraints
 {
-    UIWindow* window = [UIApplication sharedApplication].keyWindow;
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    CGSize windowSize = window.bounds.size;
+    BOOL isPanorama = windowSize.width > windowSize.height;
+    
+    // renderer
     if (self.isFullscreen)
     {
-        self.constraintWidth.constant = window.bounds.size.width;
-        self.constraintHeight.constant = window.bounds.size.height;
+        self.constraintWidth.constant = windowSize.width;
+        self.constraintHeight.constant = windowSize.height;
         self.constraintTop.constant = 0;
         self.constraintTop.priority = UILayoutPriorityDefaultHigh;
     }
     else
     {
-        BOOL isPanorama = window.bounds.size.width > window.bounds.size.height;
-        CGFloat shortSize = MIN(window.bounds.size.width, window.bounds.size.height);
-        CGFloat ratio = window.bounds.size.width / window.bounds.size.height;
+        CGFloat shortSize = MIN(windowSize.width, windowSize.height);
+        CGFloat ratio = windowSize.width / windowSize.height;
         self.constraintWidth.constant = shortSize;
         self.constraintHeight.constant = shortSize;
         self.constraintTop.constant = (isPanorama || ratio >= 0.65) ? 0 : self.exitButton.bounds.size.height;
@@ -295,6 +300,33 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
             self.constraintTop.priority = UILayoutPriorityDefaultLow - 1;
         }
     }
+    
+    // gamepad
+    CGFloat gamepadBottom = 11.0;
+    if (windowSize.width >= 768.0)
+    {
+        gamepadBottom = 88.0;
+    }
+    else if (!self.isFullscreen)
+    {
+        if (isPanorama)
+        {
+            if (windowSize.width >= 568.0)
+            {
+                gamepadBottom = (windowSize.width >= 667.0) ? 88.0 : 44.0;
+            }
+        }
+        else
+        {
+            if (windowSize.height >= 568)
+            {
+                gamepadBottom = (windowSize.height >= 667) ? 88.0 : 44.0;
+            }
+        }
+
+    }
+    self.constraintGamepad.constant = gamepadBottom;
+    self.constraintButtons.constant = gamepadBottom - 10.0;
 }
 
 - (void)run
@@ -439,9 +471,9 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
     [self showExitButtonWithHiding:YES];
     
     [self.containerView layoutIfNeeded];
-    [self updateRendererConstraints];
+    [self updateDynamicConstraints];
     [UIView animateWithDuration:0.3 animations:^{
-        [self.containerView layoutIfNeeded];
+        [self.view layoutIfNeeded];
     }];
 }
 

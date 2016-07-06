@@ -331,7 +331,7 @@ The upgrade is valid for all your devices and without time limit.</string>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ceS-Jn-ChI" customClass="Gamepad">
-                                <rect key="frame" x="11" y="382" width="130" height="130"/>
+                                <rect key="frame" x="11" y="459" width="130" height="130"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="130" placeholder="YES" id="CJ4-zs-YMN"/>
@@ -339,7 +339,7 @@ The upgrade is valid for all your devices and without time limit.</string>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7HN-R1-eFx">
-                                <rect key="frame" x="459" y="382" width="141" height="140"/>
+                                <rect key="frame" x="459" y="459" width="141" height="140"/>
                                 <subviews>
                                     <button opaque="NO" alpha="0.5" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gGg-rj-ecJ" userLabel="Button A" customClass="GameButton">
                                         <rect key="frame" x="0.0" y="62" width="68" height="68"/>
@@ -440,20 +440,14 @@ The upgrade is valid for all your devices and without time limit.</string>
                             <constraint firstAttribute="trailing" secondItem="bvI-r1-E4F" secondAttribute="trailing" id="REX-DO-734"/>
                             <constraint firstItem="bvI-r1-E4F" firstAttribute="top" relation="greaterThanOrEqual" secondItem="B6C-lp-NaC" secondAttribute="bottom" id="TbN-L4-Y07"/>
                             <constraint firstAttribute="centerY" secondItem="91e-Xg-Kad" secondAttribute="centerY" id="Ukp-yl-CPZ"/>
-                            <constraint firstItem="vm8-Vn-fOJ" firstAttribute="top" secondItem="7HN-R1-eFx" secondAttribute="bottom" priority="750" constant="78" id="ZJ4-pP-JIz">
-                                <variation key="heightClass=compact" constant="1"/>
-                                <variation key="widthClass=compact" constant="1"/>
-                            </constraint>
+                            <constraint firstItem="vm8-Vn-fOJ" firstAttribute="top" secondItem="7HN-R1-eFx" secondAttribute="bottom" priority="750" constant="1" id="ZJ4-pP-JIz"/>
                             <constraint firstItem="U9l-B1-gng" firstAttribute="top" secondItem="7pe-HW-2Cc" secondAttribute="top" id="aUb-1W-ipI"/>
                             <constraint firstItem="kUA-yC-VoN" firstAttribute="leading" secondItem="Sy3-3B-3ez" secondAttribute="trailing" id="aYX-iD-5mN"/>
                             <constraint firstAttribute="trailing" secondItem="kUA-yC-VoN" secondAttribute="trailing" id="aoH-oi-bIC"/>
                             <constraint firstItem="bvI-r1-E4F" firstAttribute="top" relation="greaterThanOrEqual" secondItem="ceS-Jn-ChI" secondAttribute="bottom" constant="11" id="fDg-n7-aQR"/>
                             <constraint firstItem="U9l-B1-gng" firstAttribute="leading" secondItem="7pe-HW-2Cc" secondAttribute="leading" id="gHu-Cg-qnB"/>
                             <constraint firstAttribute="trailing" secondItem="wgn-Os-cIh" secondAttribute="trailing" id="gZl-g8-tmR"/>
-                            <constraint firstItem="vm8-Vn-fOJ" firstAttribute="top" secondItem="ceS-Jn-ChI" secondAttribute="bottom" priority="750" constant="88" id="i2v-NB-2DY">
-                                <variation key="heightClass=compact" constant="11"/>
-                                <variation key="widthClass=compact" constant="11"/>
-                            </constraint>
+                            <constraint firstItem="vm8-Vn-fOJ" firstAttribute="top" secondItem="ceS-Jn-ChI" secondAttribute="bottom" priority="750" constant="11" id="i2v-NB-2DY"/>
                             <constraint firstAttribute="trailing" secondItem="91e-Xg-Kad" secondAttribute="trailing" constant="10" id="l8r-TN-jJz"/>
                             <constraint firstItem="vm8-Vn-fOJ" firstAttribute="top" secondItem="bvI-r1-E4F" secondAttribute="bottom" id="pNt-sX-IBw"/>
                             <constraint firstItem="91e-Xg-Kad" firstAttribute="leading" secondItem="7pe-HW-2Cc" secondAttribute="leading" constant="10" id="qsh-GE-erk"/>
@@ -465,6 +459,8 @@ The upgrade is valid for all your devices and without time limit.</string>
                         <outlet property="buttonA" destination="gGg-rj-ecJ" id="Lj8-wl-JCJ"/>
                         <outlet property="buttonB" destination="WUP-DK-URn" id="fTd-nZ-6E5"/>
                         <outlet property="buttonContainer" destination="7HN-R1-eFx" id="Hgy-es-zFz"/>
+                        <outlet property="constraintButtons" destination="ZJ4-pP-JIz" id="ilk-FO-UTV"/>
+                        <outlet property="constraintGamepad" destination="i2v-NB-2DY" id="xyp-TY-i3g"/>
                         <outlet property="constraintHeight" destination="QmA-x4-euh" id="LoG-gN-tgc"/>
                         <outlet property="constraintKeyboard" destination="ADm-MR-Nur" id="nwS-Dm-UGg"/>
                         <outlet property="constraintTop" destination="nCm-iM-J6q" id="bVd-w9-tKv"/>
