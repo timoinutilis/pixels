@@ -288,6 +288,13 @@ The upgrade is valid for all your devices and without time limit.</string>
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bvI-r1-E4F" userLabel="Keyboard">
+                                <rect key="frame" x="0.0" y="600" width="600" height="0.0"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" id="ADm-MR-Nur"/>
+                                </constraints>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wgn-Os-cIh">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <subviews>
@@ -315,13 +322,62 @@ The upgrade is valid for all your devices and without time limit.</string>
                                 <constraints>
                                     <constraint firstItem="8Mt-zw-kOg" firstAttribute="top" secondItem="wgn-Os-cIh" secondAttribute="top" id="HKA-ts-i6L"/>
                                     <constraint firstAttribute="centerY" secondItem="B6C-lp-NaC" secondAttribute="centerY" priority="250" id="IX4-nU-T5z"/>
-                                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="B6C-lp-NaC" secondAttribute="bottom" id="R90-FZ-LiA"/>
                                     <constraint firstAttribute="trailing" secondItem="8Mt-zw-kOg" secondAttribute="trailing" id="bdw-68-0ZE"/>
                                     <constraint firstItem="8Mt-zw-kOg" firstAttribute="leading" secondItem="wgn-Os-cIh" secondAttribute="leading" id="eQj-UH-FW2"/>
                                     <constraint firstItem="B6C-lp-NaC" firstAttribute="top" secondItem="wgn-Os-cIh" secondAttribute="top" priority="750" id="nCm-iM-J6q"/>
                                     <constraint firstAttribute="bottom" secondItem="8Mt-zw-kOg" secondAttribute="bottom" id="pz3-JH-QQp"/>
                                     <constraint firstAttribute="centerX" secondItem="B6C-lp-NaC" secondAttribute="centerX" id="wZC-cb-Qbi"/>
                                     <constraint firstItem="B6C-lp-NaC" firstAttribute="top" relation="greaterThanOrEqual" secondItem="wgn-Os-cIh" secondAttribute="top" id="xNI-tB-zV4"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ceS-Jn-ChI" customClass="Gamepad">
+                                <rect key="frame" x="11" y="382" width="130" height="130"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="130" placeholder="YES" id="CJ4-zs-YMN"/>
+                                    <constraint firstAttribute="width" constant="130" placeholder="YES" id="I1z-XH-Kcj"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7HN-R1-eFx">
+                                <rect key="frame" x="459" y="382" width="141" height="140"/>
+                                <subviews>
+                                    <button opaque="NO" alpha="0.5" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gGg-rj-ecJ" userLabel="Button A" customClass="GameButton">
+                                        <rect key="frame" x="0.0" y="62" width="68" height="68"/>
+                                        <state key="normal" image="button_a">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted" image="button_a_pressed"/>
+                                    </button>
+                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d20-TV-G8l" userLabel="Pause Button">
+                                        <rect key="frame" x="86" y="85" width="55" height="55"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="55" id="Wn0-Yo-G4N"/>
+                                            <constraint firstAttribute="height" constant="55" id="cmB-Ky-EKk"/>
+                                        </constraints>
+                                        <state key="normal" image="pause">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="onPauseTapped:" destination="glc-Eb-QOK" eventType="touchUpInside" id="sYd-mE-zJr"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" alpha="0.5" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WUP-DK-URn" userLabel="Button B" customClass="GameButton">
+                                        <rect key="frame" x="62" y="0.0" width="68" height="68"/>
+                                        <state key="normal" image="button_b">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted" image="button_b_pressed"/>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="d20-TV-G8l" firstAttribute="top" secondItem="WUP-DK-URn" secondAttribute="bottom" constant="17" id="39U-7Q-Tch"/>
+                                    <constraint firstAttribute="trailing" secondItem="WUP-DK-URn" secondAttribute="trailing" constant="11" id="9YW-wW-lVn"/>
+                                    <constraint firstAttribute="bottom" secondItem="d20-TV-G8l" secondAttribute="bottom" id="Mmb-TS-PMQ"/>
+                                    <constraint firstItem="gGg-rj-ecJ" firstAttribute="leading" secondItem="7HN-R1-eFx" secondAttribute="leading" id="NsZ-KE-aog"/>
+                                    <constraint firstAttribute="trailing" secondItem="d20-TV-G8l" secondAttribute="trailing" id="T2o-Zs-43c"/>
+                                    <constraint firstItem="WUP-DK-URn" firstAttribute="top" secondItem="7HN-R1-eFx" secondAttribute="top" id="f0D-SF-PTL"/>
+                                    <constraint firstAttribute="bottom" secondItem="gGg-rj-ecJ" secondAttribute="bottom" constant="10" id="r9n-qj-X8h"/>
+                                    <constraint firstItem="d20-TV-G8l" firstAttribute="leading" secondItem="gGg-rj-ecJ" secondAttribute="trailing" constant="18" id="wSi-iY-SQC"/>
                                 </constraints>
                             </view>
                             <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U9l-B1-gng" userLabel="Exit Button">
@@ -363,41 +419,6 @@ The upgrade is valid for all your devices and without time limit.</string>
                                     <action selector="onSoundTapped:" destination="glc-Eb-QOK" eventType="touchUpInside" id="vIk-yT-3Wp"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ceS-Jn-ChI" customClass="Gamepad">
-                                <rect key="frame" x="11" y="382" width="130" height="130"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="130" placeholder="YES" id="CJ4-zs-YMN"/>
-                                    <constraint firstAttribute="width" constant="130" placeholder="YES" id="I1z-XH-Kcj"/>
-                                </constraints>
-                            </view>
-                            <button opaque="NO" alpha="0.5" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WUP-DK-URn" userLabel="Button B" customClass="GameButton">
-                                <rect key="frame" x="521" y="382" width="68" height="68"/>
-                                <state key="normal" image="button_b">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <state key="highlighted" image="button_b_pressed"/>
-                            </button>
-                            <button opaque="NO" alpha="0.5" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gGg-rj-ecJ" userLabel="Button A" customClass="GameButton">
-                                <rect key="frame" x="459" y="444" width="68" height="68"/>
-                                <state key="normal" image="button_a">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <state key="highlighted" image="button_a_pressed"/>
-                            </button>
-                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d20-TV-G8l" userLabel="Pause Button">
-                                <rect key="frame" x="545" y="467" width="55" height="55"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="55" id="Wn0-Yo-G4N"/>
-                                    <constraint firstAttribute="height" constant="55" id="cmB-Ky-EKk"/>
-                                </constraints>
-                                <state key="normal" image="pause">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="onPauseTapped:" destination="glc-Eb-QOK" eventType="touchUpInside" id="sYd-mE-zJr"/>
-                                </connections>
-                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PAUSED" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="91e-Xg-Kad">
                                 <rect key="frame" x="10" y="286" width="580" height="28"/>
                                 <fontDescription key="fontDescription" name="Menlo-Regular" family="Menlo" pointSize="24"/>
@@ -407,35 +428,34 @@ The upgrade is valid for all your devices and without time limit.</string>
                         </subviews>
                         <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="WUP-DK-URn" firstAttribute="leading" secondItem="gGg-rj-ecJ" secondAttribute="trailing" constant="-6" id="1nO-se-RY7"/>
                             <constraint firstItem="kUA-yC-VoN" firstAttribute="top" secondItem="7pe-HW-2Cc" secondAttribute="top" id="5T8-i5-zkV"/>
                             <constraint firstItem="wgn-Os-cIh" firstAttribute="top" secondItem="7pe-HW-2Cc" secondAttribute="top" id="5cK-O7-fVw"/>
+                            <constraint firstItem="bvI-r1-E4F" firstAttribute="top" relation="greaterThanOrEqual" secondItem="7HN-R1-eFx" secondAttribute="bottom" constant="1" id="BMA-0K-ypu"/>
                             <constraint firstItem="Sy3-3B-3ez" firstAttribute="top" secondItem="7pe-HW-2Cc" secondAttribute="top" id="CBT-Ah-9EE"/>
+                            <constraint firstItem="bvI-r1-E4F" firstAttribute="leading" secondItem="7pe-HW-2Cc" secondAttribute="leading" id="CtT-7H-CC4"/>
                             <constraint firstAttribute="bottom" secondItem="wgn-Os-cIh" secondAttribute="bottom" id="KXT-Er-Hxj"/>
                             <constraint firstItem="ceS-Jn-ChI" firstAttribute="leading" secondItem="7pe-HW-2Cc" secondAttribute="leading" constant="11" id="OsW-tt-HSN"/>
+                            <constraint firstAttribute="trailing" secondItem="7HN-R1-eFx" secondAttribute="trailing" id="PD1-N5-wnU"/>
                             <constraint firstItem="wgn-Os-cIh" firstAttribute="leading" secondItem="7pe-HW-2Cc" secondAttribute="leading" id="PqW-SW-bRW"/>
+                            <constraint firstAttribute="trailing" secondItem="bvI-r1-E4F" secondAttribute="trailing" id="REX-DO-734"/>
+                            <constraint firstItem="bvI-r1-E4F" firstAttribute="top" relation="greaterThanOrEqual" secondItem="B6C-lp-NaC" secondAttribute="bottom" id="TbN-L4-Y07"/>
                             <constraint firstAttribute="centerY" secondItem="91e-Xg-Kad" secondAttribute="centerY" id="Ukp-yl-CPZ"/>
+                            <constraint firstItem="vm8-Vn-fOJ" firstAttribute="top" secondItem="7HN-R1-eFx" secondAttribute="bottom" priority="750" constant="78" id="ZJ4-pP-JIz">
+                                <variation key="heightClass=compact" constant="1"/>
+                                <variation key="widthClass=compact" constant="1"/>
+                            </constraint>
                             <constraint firstItem="U9l-B1-gng" firstAttribute="top" secondItem="7pe-HW-2Cc" secondAttribute="top" id="aUb-1W-ipI"/>
                             <constraint firstItem="kUA-yC-VoN" firstAttribute="leading" secondItem="Sy3-3B-3ez" secondAttribute="trailing" id="aYX-iD-5mN"/>
                             <constraint firstAttribute="trailing" secondItem="kUA-yC-VoN" secondAttribute="trailing" id="aoH-oi-bIC"/>
-                            <constraint firstItem="d20-TV-G8l" firstAttribute="top" secondItem="WUP-DK-URn" secondAttribute="bottom" constant="17" id="bZ1-Rs-Tji"/>
-                            <constraint firstAttribute="trailing" secondItem="d20-TV-G8l" secondAttribute="trailing" id="dB1-0i-OxM"/>
+                            <constraint firstItem="bvI-r1-E4F" firstAttribute="top" relation="greaterThanOrEqual" secondItem="ceS-Jn-ChI" secondAttribute="bottom" constant="11" id="fDg-n7-aQR"/>
                             <constraint firstItem="U9l-B1-gng" firstAttribute="leading" secondItem="7pe-HW-2Cc" secondAttribute="leading" id="gHu-Cg-qnB"/>
                             <constraint firstAttribute="trailing" secondItem="wgn-Os-cIh" secondAttribute="trailing" id="gZl-g8-tmR"/>
-                            <constraint firstItem="vm8-Vn-fOJ" firstAttribute="top" secondItem="ceS-Jn-ChI" secondAttribute="bottom" constant="88" id="i2v-NB-2DY">
+                            <constraint firstItem="vm8-Vn-fOJ" firstAttribute="top" secondItem="ceS-Jn-ChI" secondAttribute="bottom" priority="750" constant="88" id="i2v-NB-2DY">
                                 <variation key="heightClass=compact" constant="11"/>
                                 <variation key="widthClass=compact" constant="11"/>
                             </constraint>
                             <constraint firstAttribute="trailing" secondItem="91e-Xg-Kad" secondAttribute="trailing" constant="10" id="l8r-TN-jJz"/>
-                            <constraint firstAttribute="trailing" secondItem="WUP-DK-URn" secondAttribute="trailing" constant="11" id="lML-pE-zo0"/>
-                            <constraint firstItem="vm8-Vn-fOJ" firstAttribute="top" secondItem="gGg-rj-ecJ" secondAttribute="bottom" constant="88" id="oc7-0l-h6D">
-                                <variation key="heightClass=compact" constant="11"/>
-                                <variation key="widthClass=compact" constant="11"/>
-                            </constraint>
-                            <constraint firstItem="vm8-Vn-fOJ" firstAttribute="top" secondItem="WUP-DK-URn" secondAttribute="bottom" constant="150" id="qcH-kT-O3Z">
-                                <variation key="heightClass=compact" constant="66"/>
-                                <variation key="widthClass=compact" constant="66"/>
-                            </constraint>
+                            <constraint firstItem="vm8-Vn-fOJ" firstAttribute="top" secondItem="bvI-r1-E4F" secondAttribute="bottom" id="pNt-sX-IBw"/>
                             <constraint firstItem="91e-Xg-Kad" firstAttribute="leading" secondItem="7pe-HW-2Cc" secondAttribute="leading" constant="10" id="qsh-GE-erk"/>
                         </constraints>
                     </view>
@@ -444,8 +464,9 @@ The upgrade is valid for all your devices and without time limit.</string>
                         <outlet property="backgroundButton" destination="8Mt-zw-kOg" id="nvC-GD-mZe"/>
                         <outlet property="buttonA" destination="gGg-rj-ecJ" id="Lj8-wl-JCJ"/>
                         <outlet property="buttonB" destination="WUP-DK-URn" id="fTd-nZ-6E5"/>
+                        <outlet property="buttonContainer" destination="7HN-R1-eFx" id="Hgy-es-zFz"/>
                         <outlet property="constraintHeight" destination="QmA-x4-euh" id="LoG-gN-tgc"/>
-                        <outlet property="constraintKeyboard" destination="R90-FZ-LiA" id="VTm-FW-HWr"/>
+                        <outlet property="constraintKeyboard" destination="ADm-MR-Nur" id="nwS-Dm-UGg"/>
                         <outlet property="constraintTop" destination="nCm-iM-J6q" id="bVd-w9-tKv"/>
                         <outlet property="constraintWidth" destination="jPQ-zS-yRd" id="gFM-fY-cy8"/>
                         <outlet property="containerView" destination="wgn-Os-cIh" id="Urd-Fb-b8e"/>

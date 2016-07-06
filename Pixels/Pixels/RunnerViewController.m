@@ -35,6 +35,7 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
 @property (weak, nonatomic) IBOutlet UIButton *zoomButton;
 @property (weak, nonatomic) IBOutlet UIButton *soundButton;
 @property (weak, nonatomic) IBOutlet OpenGLRendererView *rendererView;
+@property (weak, nonatomic) IBOutlet UIView *buttonContainer;
 @property (weak, nonatomic) IBOutlet UIButton *pauseButton;
 @property (weak, nonatomic) IBOutlet UIButton *buttonA;
 @property (weak, nonatomic) IBOutlet UIButton *buttonB;
@@ -475,6 +476,7 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
         self.pausedLabel.text = message;
         [self performSelector:@selector(togglePausedLabel) withObject:nil afterDelay:0.5];
         [self showExitButtonWithHiding:YES];
+        [self resignFirstResponder];
     }
     else
     {
@@ -596,16 +598,12 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
     if (self.numPlayers == 0 || self.gameController || self.isPaused)
     {
         self.gamepad.hidden = YES;
-        self.buttonA.hidden = YES;
-        self.buttonB.hidden = YES;
-        self.pauseButton.hidden = YES;
+        self.buttonContainer.hidden = YES;
     }
     else
     {
         self.gamepad.hidden = NO;
-        self.buttonA.hidden = NO;
-        self.buttonB.hidden = NO;
-        self.pauseButton.hidden = NO;
+        self.buttonContainer.hidden = NO;
     }
 }
 
