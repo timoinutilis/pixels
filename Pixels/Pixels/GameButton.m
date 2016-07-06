@@ -14,7 +14,7 @@
 {
     if (!self.hidden && self.userInteractionEnabled)
     {
-        int errorMargin = 20;
+        int errorMargin = 10;
         CGRect largerFrame = CGRectMake(-errorMargin, -errorMargin, self.frame.size.width + 2 * errorMargin, self.frame.size.height + 2 * errorMargin);
         return CGRectContainsPoint(largerFrame, point) ? self : nil;
     }
