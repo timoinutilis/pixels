@@ -3431,7 +3431,7 @@ NSString *const TRANSFER = @"TRANSFER";
             return [runner.numberPool numberWithValue:result];
         }
         case TTypeSymOpPow: {
-            int result = powf(((Number *)leftValue).floatValue, ((Number *)rightValue).floatValue);
+            float result = powf(((Number *)leftValue).floatValue, ((Number *)rightValue).floatValue);
             return [runner.numberPool numberWithValue:result];
         }
         case TTypeSymOpEq:
