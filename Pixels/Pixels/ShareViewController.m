@@ -79,7 +79,7 @@
     [self addCell:self.categoryToolCell];
     
     self.categoryDemoCell = [self.tableView dequeueReusableCellWithIdentifier:@"BasicCell"];
-    self.categoryDemoCell.textLabel.text = @"Demo (Gfx/SFX examples)";
+    self.categoryDemoCell.textLabel.text = @"Demo (graphics/sound examples)";
     [self addCell:self.categoryDemoCell];
     
     [self setHeaderTitle:@"Write a Description" section:3];
@@ -322,9 +322,16 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
+    
+    NSString *text1 = @"Post this program to your community profile! If we like it, we will feature it in the LowRes Coder news!\n";
+    NSString *text2 = @"Feel free to copy programs from other users and change or improve them, but please don't remove the names of the authors if indicated. Thanks!";
+    NSMutableAttributedString *attrText = [[NSMutableAttributedString alloc] initWithString:text1 attributes:@{NSFontAttributeName: [UIFont boldSystemFontOfSize:16]}];
+    NSAttributedString *attrText2 = [[NSAttributedString alloc] initWithString:text2 attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:16]}];
+    [attrText appendAttributedString:attrText2];
+    
     self.textView.textContainer.lineFragmentPadding = 0;
     self.textView.textContainerInset = UIEdgeInsetsZero;
-    self.textView.text = @"Post this program to your community profile! If we like it, we will feature it in the LowRes Coder news!";
+    self.textView.attributedText = attrText;
     CALayer *layer = self.iconImageView.layer;
     layer.masksToBounds = YES;
     layer.cornerRadius = 3;
