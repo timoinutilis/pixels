@@ -206,6 +206,7 @@ PRINT "LINE"
 <h3 id="_INPUT" name="INPUT">INPUT</h3>
 <pre>INPUT ["prompt";]var</pre>
 <p>INPUT lets the user enter a text or number on the keyboard and stores it in the variable <i>var</i>. Optionally it can show a prompt text before (cannot be a variable). The keyboard will be activated automatically. If you want to hide it afterwards, you can call <a href="#_KEYBOARD">KEYBOARD OFF</a>.</p>
+<p>Note: There is no length limit for the input, but currently no line wrapping exists, so the user can write out of the screen.</p>
 <pre class="exm">
 INPUT "NAME:";N$
 INPUT "AGE:";AGE
