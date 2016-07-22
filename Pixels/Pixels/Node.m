@@ -353,6 +353,10 @@ NSString *const TRANSFER = @"TRANSFER";
         [runner.delegate updateRendererView];
         [runner wait:0.04 stopBlock:nil];
     }
+    else
+    {
+        [runner.renderer print:@"" newLine:NO wrap:YES];
+    }
     [runner.renderer showCursor];
     [runner.delegate updateRendererView];
     [runner.delegate setKeyboardActive:YES];

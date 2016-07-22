@@ -822,18 +822,18 @@ typedef struct Font {
     int index = 0;
     do
     {
+        int yOver = layer->cursorY + fontHeight - layer->height;
+        if (yOver > 0)
+        {
+            [self scrollFromX:0 Y:0 toX:layer->width - 1 Y:layer->height - 1 deltaX:0 Y:-yOver refill:YES];
+            layer->cursorY -= yOver;
+        }
+        
         index = [self drawText:text layer:layer color:layer->colorIndex x:layer->cursorX y:layer->cursorY start:index wrap:wrap bg:YES outX:&layer->cursorX];
         
         if (newLine || index >= 0)
         {
-            if (layer->cursorY > layer->height - 2 * fontHeight)
-            {
-                [self scrollFromX:0 Y:0 toX:layer->width - 1 Y:layer->cursorY + fontHeight - 1 deltaX:0 Y:-fontHeight refill:YES];
-            }
-            else
-            {
-                layer->cursorY += fontHeight;
-            }
+            layer->cursorY += fontHeight;
             layer->cursorX = 0;
         }
     }
