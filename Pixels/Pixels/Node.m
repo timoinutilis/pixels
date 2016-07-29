@@ -355,6 +355,7 @@ NSString *const TRANSFER = @"TRANSFER";
     }
     else
     {
+        // print empty string to scroll if needed
         [runner.renderer print:@"" newLine:NO wrap:YES];
     }
     [runner.renderer showCursor];

@@ -683,7 +683,11 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
 {
     if (text.length > 0)
     {
-        self.runner.lastKeyPressed = [text.uppercaseString characterAtIndex:0];
+        unichar key = [text.uppercaseString characterAtIndex:0];
+        if (key < 127)
+        {
+            self.runner.lastKeyPressed = key;
+        }
     }
 }
 

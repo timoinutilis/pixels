@@ -14,6 +14,10 @@
 {
     NSUInteger lineStart = 0;
     NSUInteger lineEnd = self.length;
+    if (index > lineEnd)
+    {
+        return nil;
+    }
     
     NSRange lineStartRange = [self rangeOfString:@"\n" options:NSBackwardsSearch range:NSMakeRange(0, index)];
     NSRange lineEndRange = [self rangeOfString:@"\n" options:0 range:NSMakeRange(index, self.length - index)];
