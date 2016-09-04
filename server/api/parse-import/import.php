@@ -11,6 +11,9 @@ $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 $json_dir = "./json/";
 $files_dir = "./files/";
 
+import_users();
+//import_posts();
+
 function load_json_results($name) {
 	global $json_dir;
 	$datatext = file_get_contents($json_dir.$name);
@@ -36,45 +39,67 @@ function file_title($title) {
     return $title;
 }
 
-// Posts
-
-$s = $pdo->prepare("INSERT INTO posts (objectId,updatedAt,createdAt,type,category,user,title,detail,image,program,sharedPost) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
-
-$results = load_json_results("Post.json");
-$old_programs = load_json_by_ids("Program.json");
-foreach ($results as $post) {
-	$is_original = true;
-	$sharedPost = NULL;
-	$image = NULL;
-	$program = NULL;
-	$detail = NULL;
-	if (!empty($post->sharedPost)) {
-		$sharedPost = $post->sharedPost->objectId;
-		$is_original = false;
+function import_users() {
+	global $pdo;
+	$s = $pdo->prepare("INSERT INTO users (objectId,updatedAt,createdAt,username,bcryptPassword,sessionToken,lastPostDate,notificationsOpenedDate) VALUES (?,?,?,?,?,?,?,?)");
+	$results = load_json_results("_User.json");
+	foreach ($results as $object) {
+		$sessionToken = NULL;
+		$lastPostDate = NULL;
+		$notificationsOpenedDate = NULL;
+		if (!empty($object->sessionToken)) {
+			$sessionToken = $object->sessionToken;
+		}
+		if (!empty($object->lastPostDate)) {
+			$lastPostDate = $object->lastPostDate->iso;
+		}
+		if (!empty($object->notificationsOpenedDate)) {
+			$notificationsOpenedDate = $object->notificationsOpenedDate->iso;
+		}
+		$values = array($object->objectId, $object->updatedAt, $object->createdAt, $object->username, $object->bcryptPassword, $sessionToken, $lastPostDate, $notificationsOpenedDate);
+		$s->execute($values);
 	}
-	if (!empty($post->image)) {
-		$image = $post->image->name;
+}
+
+function import_posts() {
+	global $pdo, $files_dir;
+	$s = $pdo->prepare("INSERT INTO posts (objectId,updatedAt,createdAt,type,category,user,title,detail,image,program,sharedPost) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+	$results = load_json_results("Post.json");
+	$old_programs = load_json_by_ids("Program.json");
+	foreach ($results as $object) {
+		$is_original = true;
+		$sharedPost = NULL;
+		$image = NULL;
+		$program = NULL;
+		$detail = NULL;
+		if (!empty($object->sharedPost)) {
+			$sharedPost = $object->sharedPost->objectId;
+			$is_original = false;
+		}
+		if (!empty($object->image)) {
+			$image = $object->image->name;
+			if ($is_original) {
+				file_put_contents($files_dir.$image, fopen($object->image->url, 'r'));
+			}
+		}
 		if ($is_original) {
-			file_put_contents($files_dir.$image, fopen($post->image->url, 'r'));
+			// shared posts don't need these values
+			if (!empty($object->programFile)) {
+				// download program file
+				$program = $object->programFile->name;
+				file_put_contents($files_dir.$program, fopen($object->programFile->url, 'r'));
+			}
+			else if (!empty($object->program)) {
+				// get old program from db and save to file
+				$old_program = $old_programs[$object->program->objectId];
+				$program = "lrc-".md5(microtime())."-".file_title($object->title).".txt";
+				file_put_contents($files_dir.$program, $old_program->sourceCode);
+			}
+			$detail = $object->detail;
 		}
+		$values = array($object->objectId, $object->updatedAt, $object->createdAt, $object->type, $object->category, $object->user->objectId, $object->title, $detail, $image, $program, $sharedPost);
+		$s->execute($values);
 	}
-	if ($is_original) {
-		// shared posts don't need these values
-		if (!empty($post->programFile)) {
-			// download program file
-			$program = $post->programFile->name;
-			file_put_contents($files_dir.$program, fopen($post->programFile->url, 'r'));
-		}
-		else if (!empty($post->program)) {
-			// get old program from db and save to file
-			$old_program = $old_programs[$post->program->objectId];
-			$program = "lrc-".md5(microtime())."-".file_title($post->title).".txt";
-			file_put_contents($files_dir.$program, $old_program->sourceCode);
-		}
-		$detail = $post->detail;
-	}
-	$values = array($post->objectId, $post->updatedAt, $post->createdAt, $post->type, $post->category, $post->user->objectId, $post->title, $detail, $image, $program, $sharedPost);
-	$s->execute($values);
 }
 
 echo "done\n";
