@@ -12,7 +12,14 @@ $json_dir = "./json/";
 $files_dir = "./files/";
 
 import_users();
-//import_posts();
+import_posts();
+import_comments();
+import_post_stats();
+import_likes();
+import_follows();
+import_notifications();
+
+echo "done\n";
 
 function load_json_results($name) {
 	global $json_dir;
@@ -41,12 +48,13 @@ function file_title($title) {
 
 function import_users() {
 	global $pdo;
-	$s = $pdo->prepare("INSERT INTO users (objectId,updatedAt,createdAt,username,bcryptPassword,sessionToken,lastPostDate,notificationsOpenedDate) VALUES (?,?,?,?,?,?,?,?)");
+	$s = $pdo->prepare("INSERT INTO Users (objectId,updatedAt,createdAt,username,bcryptPassword,sessionToken,lastPostDate,notificationsOpenedDate,about) VALUES (?,?,?,?,?,?,?,?,?)");
 	$results = load_json_results("_User.json");
 	foreach ($results as $object) {
 		$sessionToken = NULL;
 		$lastPostDate = NULL;
 		$notificationsOpenedDate = NULL;
+		$about = NULL;
 		if (!empty($object->sessionToken)) {
 			$sessionToken = $object->sessionToken;
 		}
@@ -56,14 +64,17 @@ function import_users() {
 		if (!empty($object->notificationsOpenedDate)) {
 			$notificationsOpenedDate = $object->notificationsOpenedDate->iso;
 		}
-		$values = array($object->objectId, $object->updatedAt, $object->createdAt, $object->username, $object->bcryptPassword, $sessionToken, $lastPostDate, $notificationsOpenedDate);
+		if (!empty($object->about)) {
+			$about = $object->about;
+		}
+		$values = array($object->objectId, $object->updatedAt, $object->createdAt, $object->username, $object->bcryptPassword, $sessionToken, $lastPostDate, $notificationsOpenedDate, $about);
 		$s->execute($values);
 	}
 }
 
 function import_posts() {
 	global $pdo, $files_dir;
-	$s = $pdo->prepare("INSERT INTO posts (objectId,updatedAt,createdAt,type,category,user,title,detail,image,program,sharedPost) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+	$s = $pdo->prepare("INSERT INTO Posts (objectId,updatedAt,createdAt,type,category,user,title,detail,image,program,sharedPost,stats) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
 	$results = load_json_results("Post.json");
 	$old_programs = load_json_by_ids("Program.json");
 	foreach ($results as $object) {
@@ -97,10 +108,82 @@ function import_posts() {
 			}
 			$detail = $object->detail;
 		}
-		$values = array($object->objectId, $object->updatedAt, $object->createdAt, $object->type, $object->category, $object->user->objectId, $object->title, $detail, $image, $program, $sharedPost);
+		$values = array($object->objectId, $object->updatedAt, $object->createdAt, $object->type, $object->category, $object->user->objectId, $object->title, $detail, $image, $program, $sharedPost, $object->stats->objectId);
 		$s->execute($values);
 	}
 }
 
-echo "done\n";
+function import_comments() {
+	global $pdo;
+	$s = $pdo->prepare("INSERT INTO Comments (objectId,updatedAt,createdAt,post,user,text) VALUES (?,?,?,?,?,?)");
+	$results = load_json_results("Comment.json");
+	foreach ($results as $object) {
+		$user = NULL;
+		if (!empty($object->user)) {
+			$user = $object->user->objectId;
+		}
+		$values = array($object->objectId, $object->updatedAt, $object->createdAt, $object->post->objectId, $user, $object->text);
+		$s->execute($values);
+	}
+}
+
+function import_post_stats() {
+	global $pdo;
+	$s = $pdo->prepare("INSERT INTO PostStats (objectId,updatedAt,createdAt,numDownloads,numComments,numLikes) VALUES (?,?,?,?,?,?)");
+	$results = load_json_results("PostStats.json");
+	foreach ($results as $object) {
+		$numDownloads = 0;
+		$numComments = 0;
+		$numLikes = 0;
+		if (!empty($object->numDownloads)) {
+			$numDownloads = $object->numDownloads;
+		}
+		if (!empty($object->numComments)) {
+			$numComments = $object->numComments;
+		}
+		if (!empty($object->numLikes)) {
+			$numLikes = $object->numLikes;
+		}
+		$values = array($object->objectId, $object->updatedAt, $object->createdAt, $numDownloads, $numComments, $numLikes);
+		$s->execute($values);
+	}
+}
+
+function import_likes() {
+	global $pdo;
+	$s = $pdo->prepare("INSERT INTO Likes (objectId,updatedAt,createdAt,post,user) VALUES (?,?,?,?,?)");
+	$results = load_json_results("Count.json");
+	foreach ($results as $object) {
+		if ($object->type == 1) { // Count type "like"
+			$values = array($object->objectId, $object->updatedAt, $object->createdAt, $object->post->objectId, $object->user->objectId);
+			$s->execute($values);
+		}
+	}
+}
+
+function import_follows() {
+	global $pdo;
+	$s = $pdo->prepare("INSERT INTO Follows (objectId,updatedAt,createdAt,user,followsUser) VALUES (?,?,?,?,?)");
+	$results = load_json_results("Follow.json");
+	foreach ($results as $object) {
+		$user = NULL;
+		$values = array($object->objectId, $object->updatedAt, $object->createdAt, $object->user->objectId, $object->followsUser->objectId);
+		$s->execute($values);
+	}
+}
+
+function import_notifications() {
+	global $pdo;
+	$s = $pdo->prepare("INSERT INTO Notifications (objectId,updatedAt,createdAt,sender,recipient,post,type) VALUES (?,?,?,?,?,?,?)");
+	$results = load_json_results("Notification.json");
+	foreach ($results as $object) {
+		$post = NULL;
+		if (!empty($object->post)) {
+			$post = $object->post->objectId;
+		}
+		$values = array($object->objectId, $object->updatedAt, $object->createdAt, $object->sender->objectId, $object->recipient->objectId, $post, $object->type);
+		$s->execute($values);
+	}
+}
+
 ?>
