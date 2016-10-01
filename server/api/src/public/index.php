@@ -38,10 +38,33 @@ $container['db'] = function ($c) {
     return $pdo;
 };
 
-$app->get('/hello/{name}', function (Request $request, Response $response) {
-	//$request->getQueryParams()
-    $name = $request->getAttribute('name');
-    $response->getBody()->write("Hello, $name");
+
+// Fields defaults
+define("MIN_POST_FIELDS", "type, category, user, title, image, sharedPost, stats");
+define("MIN_USER_FIELDS", "username");
+define("FULL_USER_FIELDS", "username, lastPostDate, notificationsOpenedDate, about");
+
+// GET
+
+$app->get('/posts/{id}', function (Request $request, Response $response) {
+    $params = $request->getQueryParams();
+    $postId = $request->getAttribute('id');
+    $access = new DataBaseAccess($this->db);
+
+    $post = $access->addObject("posts", "post", $postId);
+    if ($post !== FALSE) {
+        $user = $access->addObject("users", "user", $post['user'], MIN_USER_FIELDS);
+        $stats = $access->addObject("postStats", "postStats", $post['stats']);
+
+        $stmt = $access->prepareMainStatement("comments", $params, "*", "WHERE post = ? ORDER BY createdAt ASC");
+        $stmt->bindValue(1, $postId);
+        $comments = $access->addObjects($stmt, "comments");
+        if ($comments !== FALSE) {
+            $access->addSubObjects($comments, "user", "users", MIN_USER_FIELDS);
+        }
+    }
+
+    $response->getBody()->write($access->getJSONData());
     return $response;
 });
 
@@ -49,16 +72,106 @@ $app->get('/posts', function (Request $request, Response $response) {
     $params = $request->getQueryParams();
     $access = new DataBaseAccess($this->db);
 
-    $posts = $access->addMainObjects("posts", $params);
+    $stmt = $access->prepareMainStatement("posts", $params, MIN_POST_FIELDS, "ORDER BY createdAt DESC");
+    $posts = $access->addObjects($stmt, "posts");
     if ($posts !== FALSE) {
-        if ($access->addSubObjects($posts, "user", "users")) {
+        if ($access->addSubObjects($posts, "user", "users", MIN_USER_FIELDS)) {
             $access->addSubObjects($posts, "stats", "postStats");
         }
     }
 
-    $response->getBody()->write(json_encode($access->data, JSON_PRETTY_PRINT));
+    $response->getBody()->write($access->getJSONData());
     return $response;
 });
+
+$app->get('/users/{id}/news', function (Request $request, Response $response) {
+    $params = $request->getQueryParams();
+    $userId = $request->getAttribute('id');
+    $access = new DataBaseAccess($this->db);
+
+    //TODO posts of followed users
+
+    $response->getBody()->write($access->getJSONData());
+    return $response;
+});
+
+
+$app->get('/users/{id}/notifications', function (Request $request, Response $response) {
+    $params = $request->getQueryParams();
+    $userId = $request->getAttribute('id');
+    $access = new DataBaseAccess($this->db);
+
+    $stmt = $access->prepareMainStatement("notifications", $params, "*", "WHERE recipient = ? ORDER BY createdAt DESC");
+    $stmt->bindValue(1, $userId);
+    $notifications = $access->addObjects($stmt, "notifications");
+    if ($notifications !== FALSE) {
+        $access->addSubObjects($notifications, "post", "posts", "title");
+        $access->addSubObjects($notifications, "sender", "users", MIN_USER_FIELDS);
+    }
+
+    $response->getBody()->write($access->getJSONData());
+    return $response;
+});
+
+$app->get('/users/{id}/following', function (Request $request, Response $response) {
+    $params = $request->getQueryParams();
+    $userId = $request->getAttribute('id');
+    $access = new DataBaseAccess($this->db);
+
+    $access->addFollowUsers($userId, FALSE);
+
+    $response->getBody()->write($access->getJSONData());
+    return $response;
+});
+
+$app->get('/users/{id}/followers', function (Request $request, Response $response) {
+    $params = $request->getQueryParams();
+    $userId = $request->getAttribute('id');
+    $access = new DataBaseAccess($this->db);
+
+    $access->addFollowUsers($userId, TRUE);
+
+    $response->getBody()->write($access->getJSONData());
+    return $response;
+});
+
+$app->get('/users/{id}/posts', function (Request $request, Response $response) {
+    $params = $request->getQueryParams();
+    $userId = $request->getAttribute('id');
+    $access = new DataBaseAccess($this->db);
+
+    $stmt = $access->prepareMainStatement("posts", $params, MIN_POST_FIELDS, "WHERE user = ? ORDER BY createdAt DESC");
+    $stmt->bindValue(1, $userId);
+    $posts = $access->addObjects($stmt, "posts");
+    if ($posts !== FALSE) {
+        $access->addSubObjects($posts, "stats", "postStats");
+    }
+
+    $response->getBody()->write($access->getJSONData());
+    return $response;
+});
+
+$app->get('/users/{id}', function (Request $request, Response $response) {
+    $params = $request->getQueryParams();
+    $userId = $request->getAttribute('id');
+    $access = new DataBaseAccess($this->db);
+
+    $user = $access->addObject("users", "user", $userId, FULL_USER_FIELDS);
+    if ($user !== FALSE) {
+
+        $stmt = $access->prepareMainStatement("posts", $params, MIN_POST_FIELDS, "WHERE user = ? ORDER BY createdAt DESC");
+        $stmt->bindValue(1, $userId);
+        $posts = $access->addObjects($stmt, "posts");
+        if ($posts !== FALSE) {
+            $access->addSubObjects($posts, "stats", "postStats");
+        }
+    }
+
+    $response->getBody()->write($access->getJSONData());
+    return $response;
+});
+
+// Login
 
 $app->get('/login', function (Request $request, Response $response) {
     $params = $request->getQueryParams();
@@ -74,8 +187,10 @@ $app->get('/login', function (Request $request, Response $response) {
         if ($user == NULL) {
             $access->setError("InvalidLogin", "The username or password is invalid.");
         } else {
-            $valid = password_verify($password, $user["bcryptPassword"]);
+            $valid = password_verify($password, $user['bcryptPassword']);
             if ($valid) {
+                unset($user['bcryptPassword']);
+                unset($user['sessionToken']);
                 $access->data['user'] = $user;
             } else {
                 $access->setError("InvalidLogin", "The username or password is invalid.");
@@ -84,7 +199,7 @@ $app->get('/login', function (Request $request, Response $response) {
     } else {
         $access->setError("SQL", $stmt->errorInfo()[2]);
     }
-    $response->getBody()->write(json_encode($access->data, JSON_PRETTY_PRINT));
+    $response->getBody()->write($access->getJSONData());
     return $response;
 });
 
