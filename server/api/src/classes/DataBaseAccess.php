@@ -101,8 +101,33 @@ class DataBaseAccess {
 	    return FALSE;
 	}
 
-	function getJSONData() {
-		return json_encode($this->data, JSON_PRETTY_PRINT);
+	function createObject($tableName, $body) {
+		$id = $this->uniqid_base36();
+		$columns = array("objectId", "createdAt");
+		$values = array("'$id'", "NOW()");
+		foreach ($body as $key => $value) {
+			$columns[] = $key;
+			$values[] = ":".$key;
+		}
+		$columnsString = implode($columns, ", ");
+		$valuesString = implode($values, ", ");
+	    $stmt = $this->db->prepare("INSERT INTO $tableName ($columnsString) VALUES ($valuesString)");
+	    foreach ($body as $key => $value) {
+		    $stmt->bindValue(":".$key, $value);
+		}
+	    if ($stmt->execute()) {
+	        $this->data["objectId"] = $id;
+	        return TRUE;
+	    } else {
+	        $this->setError("SQL", $stmt->errorInfo()[2]);
+	    }
+	    return FALSE;
 	}
+
+	function uniqid_base36() {
+    	$s = uniqid();
+        return base_convert($s, 16, 36);
+    }
+
 }
 ?> 

@@ -44,7 +44,6 @@ define("MIN_POST_FIELDS", "type, category, user, title, image, sharedPost, stats
 define("MIN_USER_FIELDS", "username");
 define("FULL_USER_FIELDS", "username, lastPostDate, notificationsOpenedDate, about");
 
-// GET
 
 $app->get('/posts/{id}', function (Request $request, Response $response) {
     $params = $request->getQueryParams();
@@ -64,7 +63,7 @@ $app->get('/posts/{id}', function (Request $request, Response $response) {
         }
     }
 
-    $response->getBody()->write($access->getJSONData());
+    $response = $response->withJson($access->data);
     return $response;
 });
 
@@ -80,7 +79,7 @@ $app->get('/posts', function (Request $request, Response $response) {
         }
     }
 
-    $response->getBody()->write($access->getJSONData());
+    $response = $response->withJson($access->data);
     return $response;
 });
 
@@ -91,10 +90,9 @@ $app->get('/users/{id}/news', function (Request $request, Response $response) {
 
     //TODO posts of followed users
 
-    $response->getBody()->write($access->getJSONData());
+    $response = $response->withJson($access->data);
     return $response;
 });
-
 
 $app->get('/users/{id}/notifications', function (Request $request, Response $response) {
     $params = $request->getQueryParams();
@@ -109,7 +107,7 @@ $app->get('/users/{id}/notifications', function (Request $request, Response $res
         $access->addSubObjects($notifications, "sender", "users", MIN_USER_FIELDS);
     }
 
-    $response->getBody()->write($access->getJSONData());
+    $response = $response->withJson($access->data);
     return $response;
 });
 
@@ -120,7 +118,7 @@ $app->get('/users/{id}/following', function (Request $request, Response $respons
 
     $access->addFollowUsers($userId, FALSE);
 
-    $response->getBody()->write($access->getJSONData());
+    $response = $response->withJson($access->data);
     return $response;
 });
 
@@ -131,7 +129,7 @@ $app->get('/users/{id}/followers', function (Request $request, Response $respons
 
     $access->addFollowUsers($userId, TRUE);
 
-    $response->getBody()->write($access->getJSONData());
+    $response = $response->withJson($access->data);
     return $response;
 });
 
@@ -147,7 +145,19 @@ $app->get('/users/{id}/posts', function (Request $request, Response $response) {
         $access->addSubObjects($posts, "stats", "postStats");
     }
 
-    $response->getBody()->write($access->getJSONData());
+    $response = $response->withJson($access->data);
+    return $response;
+});
+
+$app->post('/users/{id}/posts', function (Request $request, Response $response) {
+    $body = $request->getParsedBody();
+    $userId = $request->getAttribute('id');
+    $access = new DataBaseAccess($this->db);
+
+    $body['user'] = $userId;
+    $access->createObject("posts", $body);
+
+    $response = $response->withJson($access->data);
     return $response;
 });
 
@@ -167,7 +177,7 @@ $app->get('/users/{id}', function (Request $request, Response $response) {
         }
     }
 
-    $response->getBody()->write($access->getJSONData());
+    $response = $response->withJson($access->data);
     return $response;
 });
 
@@ -199,7 +209,7 @@ $app->get('/login', function (Request $request, Response $response) {
     } else {
         $access->setError("SQL", $stmt->errorInfo()[2]);
     }
-    $response->getBody()->write($access->getJSONData());
+    $response = $response->withJson($access->data);
     return $response;
 });
 
