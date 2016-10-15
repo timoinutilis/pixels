@@ -31,6 +31,7 @@
 @property unichar lastKeyPressed;
 @property (nonatomic) int writeMaxCount;
 @property CFAbsoluteTime bootTime;
+@property CFTimeInterval pausedTime;
 
 - (instancetype)initWithRunnable:(Runnable *)runnable;
 - (BOOL)isFinished;

@@ -59,6 +59,7 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
 @property BOOL dismissWhenFinished;
 @property double audioVolume;
 @property BOOL isKeyboardActive;
+@property CFAbsoluteTime pauseStartTime;
 
 @end
 
@@ -102,6 +103,8 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(gameControllerDidDisconnect:) name:GCControllerDidDisconnectNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 - (void)dealloc
@@ -110,6 +113,8 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
     [[NSNotificationCenter defaultCenter] removeObserver:self name:GCControllerDidDisconnectNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 - (BOOL)prefersStatusBarHidden
@@ -216,6 +221,16 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
     [UIView animateWithDuration:0.3 animations:^{
         [self.view layoutIfNeeded];
     }];
+}
+
+- (void)applicationDidEnterBackground:(NSNotification *)notification
+{
+    self.isPaused = YES;
+}
+
+- (void)applicationDidBecomeActive:(NSNotification *)notification
+{
+    [self showExitButtonWithHiding:YES];
 }
 
 - (IBAction)onBackgroundTouchDown:(id)sender
@@ -332,7 +347,7 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
 - (void)run
 {
     // don't change icons for example projects
-    self.rendererView.shouldMakeSnapshots = !self.project.isDefault.boolValue;// && (self.project.iconData == nil || self.wasEditedSinceLastRun);
+    self.rendererView.shouldMakeSnapshots = !self.project.isDefault.boolValue;
     
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     
@@ -419,10 +434,7 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
 - (void)requestEnd
 {
     self.runner.endRequested = YES;
-    if (self.isPaused)
-    {
-        self.isPaused = NO;
-    }
+    self.isPaused = NO;
 }
 
 - (void)finish
@@ -498,21 +510,33 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
 
 - (void)setIsPaused:(BOOL)isPaused message:(NSString *)message
 {
-    _isPaused = isPaused;
-    self.pausedLabel.hidden = !isPaused;
-    self.rendererView.hidden = isPaused;
-    [self updateOnScreenGamepads];
-    if (isPaused)
+    if (isPaused != _isPaused)
     {
-        self.runner.audioPlayer.volume = 0.0;
-        self.pausedLabel.text = message;
-        [self performSelector:@selector(togglePausedLabel) withObject:nil afterDelay:0.5];
-        [self showExitButtonWithHiding:YES];
-        [self resignFirstResponder];
-    }
-    else
-    {
-        self.runner.audioPlayer.volume = self.soundEnabled ? self.audioVolume : 0.0;
+        _isPaused = isPaused;
+        self.pausedLabel.hidden = !isPaused;
+        self.rendererView.hidden = isPaused;
+        [self updateOnScreenGamepads];
+        if (isPaused)
+        {
+            if (self.pauseStartTime == 0.0)
+            {
+                self.pauseStartTime = CFAbsoluteTimeGetCurrent();
+            }
+            self.runner.audioPlayer.volume = 0.0;
+            self.pausedLabel.text = message;
+            [self performSelector:@selector(togglePausedLabel) withObject:nil afterDelay:0.5];
+            [self showExitButtonWithHiding:YES];
+            [self resignFirstResponder];
+        }
+        else
+        {
+            if (self.pauseStartTime != 0.0)
+            {
+                self.runner.pausedTime += CFAbsoluteTimeGetCurrent() - self.pauseStartTime;
+                self.pauseStartTime = 0.0;
+            }
+            self.runner.audioPlayer.volume = self.soundEnabled ? self.audioVolume : 0.0;
+        }
     }
 }
 
