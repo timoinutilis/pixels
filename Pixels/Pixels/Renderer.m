@@ -831,7 +831,7 @@ typedef struct Font {
         
         index = [self drawText:text layer:layer color:layer->colorIndex x:layer->cursorX y:layer->cursorY start:index wrap:wrap bg:YES outX:&layer->cursorX];
         
-        if (newLine || index >= 0)
+        if (newLine || index >= 0 || (wrap && layer->cursorX >= layer->width))
         {
             layer->cursorY += fontHeight;
             layer->cursorX = 0;
