@@ -26,6 +26,9 @@ $config['db']['user']   = "root";
 $config['db']['pass']   = "root";
 $config['db']['dbname'] = "lowres";
 
+$config['lowres']['filesurl'] = "lowresfiles.timokloss.com";
+$config['lowres']['filespath'] = "../../lowresfiles";
+
 $app = new \Slim\App(["settings" => $config]);
 $container = $app->getContainer();
 
@@ -181,6 +184,29 @@ $app->get('/users/{id}', function (Request $request, Response $response) {
     return $response;
 });
 
+// Files
+
+$app->post('/files/{name}', function (Request $request, Response $response) {
+    $name = basename($request->getAttribute('name'));
+    $body = $request->getBody();
+    $settings = $this->get('settings')['lowres'];
+    $data = array();
+
+    if ($body->getSize() > 5 * 1024 * 1024) {
+        $data['error'] =  array('message' => "The uploaded file is too large.", 'type' => "FileTooLarge");
+    } else {
+        $uniqueName = "lrc-".md5(microtime())."-".$name;
+
+        file_put_contents($settings['filespath']."/".$uniqueName, $body/*->getContents()*/);
+
+        $data['name'] = $uniqueName;
+        $data['url'] = $settings['filesurl']."/".$uniqueName;
+    }
+
+    $response = $response->withJson($data);
+    return $response;
+});
+
 // Login
 
 $app->get('/login', function (Request $request, Response $response) {
@@ -200,7 +226,6 @@ $app->get('/login', function (Request $request, Response $response) {
             $valid = password_verify($password, $user['bcryptPassword']);
             if ($valid) {
                 unset($user['bcryptPassword']);
-                unset($user['sessionToken']);
                 $access->data['user'] = $user;
             } else {
                 $access->setError("InvalidLogin", "The username or password is invalid.");

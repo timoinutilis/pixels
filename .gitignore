@@ -2,3 +2,4 @@ Pixels/Pixels.xcodeproj/project.xcworkspace
 Pixels/Pixels.xcodeproj/xcuserdata
 server/api/parse-import/files
 server/api/parse-import/json
+server/api/lowresfiles
