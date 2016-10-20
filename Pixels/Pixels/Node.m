@@ -2863,7 +2863,7 @@ NSString *const TRANSFER = @"TRANSFER";
             result = runner.lastSpriteHit;
             break;
         case TTypeSymTimer:
-            result = CFAbsoluteTimeGetCurrent() - runner.bootTime;
+            result = CFAbsoluteTimeGetCurrent() - runner.bootTime - runner.pausedTime;
             break;
         default:
             break;

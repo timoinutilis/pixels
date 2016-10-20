@@ -28,6 +28,7 @@ static const CGFloat MARGIN = 3.0;
 
 - (void)awakeFromNib
 {
+    [super awakeFromNib];
     self.backgroundColor = [AppStyle sideBarColor];
     self.alpha = 0.5;
     

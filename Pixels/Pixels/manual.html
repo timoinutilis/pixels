@@ -278,7 +278,7 @@ PRINT TIME$
 
 <h3 id="_TIMER" name="TIMER">=TIMER</h3>
 <pre>v=TIMER</pre>
-<p>TIMER returns the time passed since LowRes Coder was started in seconds. The value is a decimal, so time can be measured with high precision.</p>
+<p>TIMER returns the time passed since LowRes Coder was started in seconds. The value is a decimal, so time can be measured with high precision. Note that TIMER stops counting while you pause the program.</p>
 
 <h1 id="Graphics">Graphics</h1>
 
@@ -1222,6 +1222,8 @@ SWAP A,B
 PRINT A
 PRINT B
 </pre>
+<p>Note: If you want to swap values from arrays randomly, don't use <a href="#_RND">RND</a> for indices in the line of SWAP, but store the random values in variables before.</p>
+
 
 <h2 id="_Creating-random-sequences">Creating random sequences</h2>
 

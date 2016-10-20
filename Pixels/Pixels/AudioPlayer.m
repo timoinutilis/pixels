@@ -8,7 +8,7 @@
 
 #import "AudioPlayer.h"
 #import <AudioToolbox/AudioToolbox.h>
-#import <AVFoundation/AVAudioSession.h>
+#import <AVFoundation/AVFoundation.h>
 
 int const AudioNumVoices = 3;
 int const AudioNumSoundDefs = 64;
