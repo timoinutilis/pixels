@@ -48,6 +48,7 @@ define("MIN_USER_FIELDS", "username");
 define("FULL_USER_FIELDS", "username, lastPostDate, notificationsOpenedDate, about");
 
 
+// get post
 $app->get('/posts/{id}', function (Request $request, Response $response) {
     $params = $request->getQueryParams();
     $postId = $request->getAttribute('id');
@@ -56,7 +57,11 @@ $app->get('/posts/{id}', function (Request $request, Response $response) {
     $post = $access->addObject("posts", "post", $postId);
     if ($post !== FALSE) {
         $user = $access->addObject("users", "user", $post['user'], MIN_USER_FIELDS);
-        $stats = $access->addObject("postStats", "postStats", $post['stats']);
+        $stats = $access->addObject("postStats", "stats", $post['stats']);
+
+        if (!empty($params['likedUserId'])) {
+            $access->data['liked'] = $access->userLikesPost($params['likedUserId'], $postId);
+        }
 
         $stmt = $access->prepareMainStatement("comments", $params, "*", "WHERE post = ? ORDER BY createdAt ASC");
         $stmt->bindValue(1, $postId);
@@ -70,6 +75,54 @@ $app->get('/posts/{id}', function (Request $request, Response $response) {
     return $response;
 });
 
+// add post comment
+$app->post('/posts/{id}/comments', function (Request $request, Response $response) {
+    $body = $request->getParsedBody();
+    $postId = $request->getAttribute('id');
+    $access = new DataBaseAccess($this->db);
+
+    $body['post'] = $postId;
+    if ($access->createObject("comments", $body) !== FALSE) {
+        $access->increasePostStats($postId, 0, 1, 0);
+    }
+
+    $response = $response->withJson($access->data);
+    return $response;
+});
+
+// add post like
+$app->post('/posts/{id}/likes', function (Request $request, Response $response) {
+    $body = $request->getParsedBody();
+    $postId = $request->getAttribute('id');
+    $userId = $body['user'];
+    $access = new DataBaseAccess($this->db);
+
+    if (userLikesPost($userId, $postId)) {
+        $access->setError("AlreadyLiked", "You already like this post.");
+    } else {
+        $body['post'] = $postId;
+        if ($access->createObject("likes", $body) !== FALSE) {
+            $access->increasePostStats($postId, 0, 0, 1);
+        }
+    }
+
+    $response = $response->withJson($access->data);
+    return $response;
+});
+
+// add post download
+$app->post('/posts/{id}/downloads', function (Request $request, Response $response) {
+    $body = $request->getParsedBody();
+    $postId = $request->getAttribute('id');
+    $access = new DataBaseAccess($this->db);
+
+    $access->increasePostStats($postId, 1, 0, 0);
+
+    $response = $response->withJson($access->data);
+    return $response;
+});
+
+// get all posts
 $app->get('/posts', function (Request $request, Response $response) {
     $params = $request->getQueryParams();
     $access = new DataBaseAccess($this->db);
@@ -86,6 +139,7 @@ $app->get('/posts', function (Request $request, Response $response) {
     return $response;
 });
 
+// get user news
 $app->get('/users/{id}/news', function (Request $request, Response $response) {
     $params = $request->getQueryParams();
     $userId = $request->getAttribute('id');
@@ -97,6 +151,7 @@ $app->get('/users/{id}/news', function (Request $request, Response $response) {
     return $response;
 });
 
+// get user notifications
 $app->get('/users/{id}/notifications', function (Request $request, Response $response) {
     $params = $request->getQueryParams();
     $userId = $request->getAttribute('id');
@@ -114,6 +169,7 @@ $app->get('/users/{id}/notifications', function (Request $request, Response $res
     return $response;
 });
 
+// get users followed by user
 $app->get('/users/{id}/following', function (Request $request, Response $response) {
     $params = $request->getQueryParams();
     $userId = $request->getAttribute('id');
@@ -125,6 +181,7 @@ $app->get('/users/{id}/following', function (Request $request, Response $respons
     return $response;
 });
 
+// get user followers
 $app->get('/users/{id}/followers', function (Request $request, Response $response) {
     $params = $request->getQueryParams();
     $userId = $request->getAttribute('id');
@@ -136,6 +193,7 @@ $app->get('/users/{id}/followers', function (Request $request, Response $respons
     return $response;
 });
 
+// get user posts
 $app->get('/users/{id}/posts', function (Request $request, Response $response) {
     $params = $request->getQueryParams();
     $userId = $request->getAttribute('id');
@@ -152,18 +210,32 @@ $app->get('/users/{id}/posts', function (Request $request, Response $response) {
     return $response;
 });
 
+// add user post
 $app->post('/users/{id}/posts', function (Request $request, Response $response) {
     $body = $request->getParsedBody();
     $userId = $request->getAttribute('id');
     $access = new DataBaseAccess($this->db);
 
     $body['user'] = $userId;
-    $access->createObject("posts", $body);
+    $postId = $access->createObject("posts", $body);
+    if ($postId !== FALSE) {
+        $statsId = $access->createObject("postStats", array('post' => $postId), "postStats");
+        if ($statsId !== FALSE) {
+            $stmt = $this->db->prepare("UPDATE posts SET stats = ? WHERE objectId = ?");
+            $stmt->bindParam(1, $statsId);
+            $stmt->bindParam(2, $postId);
+            if ($stmt->execute()) {
+            } else {
+                $access->setSQLError($stmt);
+            }
+        }
+    }
 
     $response = $response->withJson($access->data);
     return $response;
 });
 
+// get user
 $app->get('/users/{id}', function (Request $request, Response $response) {
     $params = $request->getQueryParams();
     $userId = $request->getAttribute('id');
@@ -171,7 +243,6 @@ $app->get('/users/{id}', function (Request $request, Response $response) {
 
     $user = $access->addObject("users", "user", $userId, FULL_USER_FIELDS);
     if ($user !== FALSE) {
-
         $stmt = $access->prepareMainStatement("posts", $params, MIN_POST_FIELDS, "WHERE user = ? ORDER BY createdAt DESC");
         $stmt->bindValue(1, $userId);
         $posts = $access->addObjects($stmt, "posts");
@@ -186,6 +257,7 @@ $app->get('/users/{id}', function (Request $request, Response $response) {
 
 // Files
 
+// save file
 $app->post('/files/{name}', function (Request $request, Response $response) {
     $name = basename($request->getAttribute('name'));
     $body = $request->getBody();
@@ -197,7 +269,7 @@ $app->post('/files/{name}', function (Request $request, Response $response) {
     } else {
         $uniqueName = "lrc-".md5(microtime())."-".$name;
 
-        file_put_contents($settings['filespath']."/".$uniqueName, $body/*->getContents()*/);
+        file_put_contents($settings['filespath']."/".$uniqueName, $body);
 
         $data['name'] = $uniqueName;
         $data['url'] = $settings['filesurl']."/".$uniqueName;
@@ -232,7 +304,7 @@ $app->get('/login', function (Request $request, Response $response) {
             }
         }
     } else {
-        $access->setError("SQL", $stmt->errorInfo()[2]);
+        $access->setSQLError($stmt);
     }
     $response = $response->withJson($access->data);
     return $response;

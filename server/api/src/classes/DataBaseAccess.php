@@ -12,6 +12,10 @@ class DataBaseAccess {
     	$this->data['error'] =  array('message' => $message, 'type' => $type);
 	}
 
+	function setSQLError($stmt) {
+		$this->setError("SQL", $stmt->errorInfo()[2]);
+	}
+
 	function addObject($tableName, $dataName, $id, $fields ="*") {
 	    if ($fields != "*") {
 	    	$fields = "objectId, updatedAt, createdAt, ".$fields;
@@ -25,7 +29,7 @@ class DataBaseAccess {
 	        $this->data[$dataName] = $object;
 	        return $object;
 	    } else {
-	        $this->setError("SQL", $stmt->errorInfo()[2]);
+	        $this->setSQLError($stmt);
 	    }
 	    return FALSE;
 	}
@@ -52,7 +56,7 @@ class DataBaseAccess {
 	        $this->data[$dataName] = $objects;
 	        return $objects;
 	    } else {
-	        $this->setError("SQL", $stmt->errorInfo()[2]);
+	        $this->setSQLError($stmt);
 	    }
 	    return FALSE;
     }
@@ -77,7 +81,7 @@ class DataBaseAccess {
             $this->data[$sourceTableName] = $stmt->fetchAll();
             return TRUE;
         } else {
-	        $this->setError("SQL", $stmt->errorInfo()[2]);
+	        $this->setSQLError($stmt);
         }
         return FALSE;
 	}
@@ -93,15 +97,15 @@ class DataBaseAccess {
 	    $stmt = $this->db->prepare("SELECT u.objectId, u.updatedAt, u.createdAt, u.username, u.lastPostDate FROM follows f JOIN users u $options ORDER BY createdAt DESC");
 	    $stmt->bindValue(1, $userId);
 	    if ($stmt->execute()) {
-	        $this->data["users"] = $stmt->fetchAll();
+	        $this->data['users'] = $stmt->fetchAll();
 	        return TRUE;
 	    } else {
-	        $this->setError("SQL", $stmt->errorInfo()[2]);
+	        $this->setSQLError($stmt);
 	    }
 	    return FALSE;
 	}
 
-	function createObject($tableName, $body) {
+	function createObject($tableName, $body, $dataName = NULL) {
 		$id = $this->uniqid_base36();
 		$columns = array("objectId", "createdAt");
 		$values = array("'$id'", "NOW()");
@@ -116,12 +120,49 @@ class DataBaseAccess {
 		    $stmt->bindValue(":".$key, $value);
 		}
 	    if ($stmt->execute()) {
-	        $this->data["objectId"] = $id;
-	        return TRUE;
+	    	$createdAt = NULL;
+		    $stmt = $this->db->prepare("SELECT createdAt FROM $tableName WHERE objectId = ?");
+		    $stmt->bindValue(1, $id);
+		    if ($stmt->execute()) {
+		    	$object = $stmt->fetch();
+   		   		$createdAt = $object['createdAt'];
+ 			    if (!empty($dataName)) {
+   			    	$this->data[$dataName] = array('objectId' => $id, 'createdAt' => $createdAt);
+			    } else {
+			    	$this->data['objectId'] = $id;
+			    	$this->data['createdAt'] = $createdAt;
+			    }
+		    }		    
+	        return $id;
 	    } else {
-	        $this->setError("SQL", $stmt->errorInfo()[2]);
+	        $this->setSQLError($stmt);
 	    }
 	    return FALSE;
+	}
+
+	function increasePostStats($postId, $numDownloads, $numComments, $numLikes) {
+		$stmt = $this->db->prepare("UPDATE postStats SET numDownloads = numDownloads+$numDownloads, numComments = numComments+$numComments, numLikes = numLikes+$numLikes WHERE post = ?");
+		$stmt->bindValue(1, $postId);
+		if ($stmt->execute()) {
+			// add postStats to data
+		} else {
+			$this->setSQLError($stmt);
+		}
+		return FALSE;
+	}
+
+	function userLikesPost($userId, $postId) {
+	    $stmt = $this->db->prepare("SELECT objectId FROM likes WHERE user = ? AND post = ?");
+	    $stmt->bindParam(1, $userId);
+	    $stmt->bindParam(2, $postId);
+	    if ($stmt->execute()) {
+	    	if ($stmt->fetch()) {
+	    		return TRUE;
+	       	}
+	    } else {
+			$this->setSQLError($stmt);
+		}
+		return FALSE;
 	}
 
 	function uniqid_base36() {
