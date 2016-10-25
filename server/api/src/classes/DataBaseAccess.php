@@ -16,6 +16,18 @@ class DataBaseAccess {
 		$this->setError("SQL", $stmt->errorInfo()[2]);
 	}
 
+	function getPostsFilter($queryParams, $word) {
+		$filter = "";
+	    if (!empty($queryParams['category'])) {
+	        $category = intval($queryParams['category']);
+	        $filter = " category = $category";
+	    }
+	    if ($filter != "") {
+	    	$filter = $word.$filter;
+	    }
+	    return $filter;
+	}
+
 	function addObject($tableName, $dataName, $id, $fields ="*") {
 	    if ($fields != "*") {
 	    	$fields = "objectId, updatedAt, createdAt, ".$fields;
@@ -99,6 +111,21 @@ class DataBaseAccess {
 	    if ($stmt->execute()) {
 	        $this->data['users'] = $stmt->fetchAll();
 	        return TRUE;
+	    } else {
+	        $this->setSQLError($stmt);
+	    }
+	    return FALSE;
+	}
+
+	function getFollowedUserIds($userId) {
+		$stmt = $this->db->prepare("SELECT followsUser FROM follows WHERE user = ?");
+	    $stmt->bindValue(1, $userId);
+	    if ($stmt->execute()) {
+	    	$ids = array();
+	    	while ($object = $stmt->fetch()) {
+	    		$ids[] = $object['followsUser'];
+	    	}
+	    	return $ids;
 	    } else {
 	        $this->setSQLError($stmt);
 	    }

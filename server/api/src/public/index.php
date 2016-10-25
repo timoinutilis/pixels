@@ -1,7 +1,4 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', '1');
-
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
@@ -28,6 +25,7 @@ $config['db']['dbname'] = "lowres";
 
 $config['lowres']['filesurl'] = "lowresfiles.timokloss.com";
 $config['lowres']['filespath'] = "../../lowresfiles";
+$config['lowres']['admin'] = "T5VWaLW28x";
 
 $app = new \Slim\App(["settings" => $config]);
 $container = $app->getContainer();
@@ -47,6 +45,7 @@ define("MIN_POST_FIELDS", "type, category, user, title, image, sharedPost, stats
 define("MIN_USER_FIELDS", "username");
 define("FULL_USER_FIELDS", "username, lastPostDate, notificationsOpenedDate, about");
 
+define("GUEST_USER_ID", "guest");
 
 // get post
 $app->get('/posts/{id}', function (Request $request, Response $response) {
@@ -88,7 +87,7 @@ $app->post('/posts/{id}/comments', function (Request $request, Response $respons
 
     $response = $response->withJson($access->data);
     return $response;
-});
+})->add(new AuthMiddleware());
 
 // add post like
 $app->post('/posts/{id}/likes', function (Request $request, Response $response) {
@@ -108,7 +107,7 @@ $app->post('/posts/{id}/likes', function (Request $request, Response $response) 
 
     $response = $response->withJson($access->data);
     return $response;
-});
+})->add(new AuthMiddleware());
 
 // add post download
 $app->post('/posts/{id}/downloads', function (Request $request, Response $response) {
@@ -120,14 +119,15 @@ $app->post('/posts/{id}/downloads', function (Request $request, Response $respon
 
     $response = $response->withJson($access->data);
     return $response;
-});
+})->add(new AuthMiddleware());
 
 // get all posts
 $app->get('/posts', function (Request $request, Response $response) {
     $params = $request->getQueryParams();
     $access = new DataBaseAccess($this->db);
 
-    $stmt = $access->prepareMainStatement("posts", $params, MIN_POST_FIELDS, "ORDER BY createdAt DESC");
+    $filter = $access->getPostsFilter($params, "WHERE");
+    $stmt = $access->prepareMainStatement("posts", $params, MIN_POST_FIELDS, "$filter ORDER BY createdAt DESC");
     $posts = $access->addObjects($stmt, "posts");
     if ($posts !== FALSE) {
         if ($access->addSubObjects($posts, "user", "users", MIN_USER_FIELDS)) {
@@ -143,9 +143,21 @@ $app->get('/posts', function (Request $request, Response $response) {
 $app->get('/users/{id}/news', function (Request $request, Response $response) {
     $params = $request->getQueryParams();
     $userId = $request->getAttribute('id');
+    $settings = $this->get('settings')['lowres'];
     $access = new DataBaseAccess($this->db);
 
-    //TODO posts of followed users
+    $followedUserIds = ($userId == GUEST_USER_ID) ? array($settings['admin']) : $access->getFollowedUserIds($userId);
+    if ($followedUserIds !== FALSE) {
+        $followedUserIdsString = "'".implode("','", $followedUserIds)."'";
+        $filter = $access->getPostsFilter($params, "AND");
+        $stmt = $access->prepareMainStatement("posts", $params, MIN_POST_FIELDS, "WHERE user IN ($followedUserIdsString) $filter ORDER BY createdAt DESC");
+        $posts = $access->addObjects($stmt, "posts");
+        if ($posts !== FALSE) {
+            if ($access->addSubObjects($posts, "user", "users", MIN_USER_FIELDS)) {
+                $access->addSubObjects($posts, "stats", "postStats");
+            }
+        }
+    }
 
     $response = $response->withJson($access->data);
     return $response;
@@ -193,13 +205,47 @@ $app->get('/users/{id}/followers', function (Request $request, Response $respons
     return $response;
 });
 
+// start following user
+$app->post('/users/{id}/followers', function (Request $request, Response $response) {
+    $body = $request->getParsedBody();
+    $userId = $request->getAttribute('id');
+    $access = new DataBaseAccess($this->db);
+
+    $followsObject = array('user' => $body['user'], 'followsUser' => $userId);
+    $postId = $access->createObject("follows", $followsObject, "follow");
+
+    $response = $response->withJson($access->data);
+    return $response;
+})->add(new AuthMiddleware());
+
+// stop following user
+$app->delete('/users/{id}/followers/{myId}', function (Request $request, Response $response) {
+    $body = $request->getParsedBody();
+    $userId = $request->getAttribute('id');
+    $myUserId = $request->getAttribute('myId');
+    $access = new DataBaseAccess($this->db);
+
+    $stmt = $this->db->prepare("DELETE FROM follows WHERE user = ? AND followsUser = ?");
+    $stmt->bindValue(1, $myUserId);
+    $stmt->bindValue(2, $userId);
+    if ($stmt->execute()) {
+        $access->data['success'] = TRUE;
+    } else {
+        $access->setSQLError($stmt);
+    }
+
+    $response = $response->withJson($access->data);
+    return $response;
+})->add(new AuthMiddleware());
+
 // get user posts
 $app->get('/users/{id}/posts', function (Request $request, Response $response) {
     $params = $request->getQueryParams();
     $userId = $request->getAttribute('id');
     $access = new DataBaseAccess($this->db);
 
-    $stmt = $access->prepareMainStatement("posts", $params, MIN_POST_FIELDS, "WHERE user = ? ORDER BY createdAt DESC");
+    $filter = $access->getPostsFilter($params, "AND");
+    $stmt = $access->prepareMainStatement("posts", $params, MIN_POST_FIELDS, "WHERE user = ? $filter ORDER BY createdAt DESC");
     $stmt->bindValue(1, $userId);
     $posts = $access->addObjects($stmt, "posts");
     if ($posts !== FALSE) {
@@ -233,7 +279,7 @@ $app->post('/users/{id}/posts', function (Request $request, Response $response) 
 
     $response = $response->withJson($access->data);
     return $response;
-});
+})->add(new AuthMiddleware());
 
 // get user
 $app->get('/users/{id}', function (Request $request, Response $response) {
@@ -243,7 +289,8 @@ $app->get('/users/{id}', function (Request $request, Response $response) {
 
     $user = $access->addObject("users", "user", $userId, FULL_USER_FIELDS);
     if ($user !== FALSE) {
-        $stmt = $access->prepareMainStatement("posts", $params, MIN_POST_FIELDS, "WHERE user = ? ORDER BY createdAt DESC");
+        $filter = $access->getPostsFilter($params, "AND");
+        $stmt = $access->prepareMainStatement("posts", $params, MIN_POST_FIELDS, "WHERE user = ? $filter ORDER BY createdAt DESC");
         $stmt->bindValue(1, $userId);
         $posts = $access->addObjects($stmt, "posts");
         if ($posts !== FALSE) {
@@ -264,7 +311,7 @@ $app->post('/files/{name}', function (Request $request, Response $response) {
     $settings = $this->get('settings')['lowres'];
     $data = array();
 
-    if ($body->getSize() > 5 * 1024 * 1024) {
+    if ($body->getSize() > 1 * 1024 * 1024) {
         $data['error'] =  array('message' => "The uploaded file is too large.", 'type' => "FileTooLarge");
     } else {
         $uniqueName = "lrc-".md5(microtime())."-".$name;
@@ -277,14 +324,20 @@ $app->post('/files/{name}', function (Request $request, Response $response) {
 
     $response = $response->withJson($data);
     return $response;
+})->add(new AuthMiddleware());
+
+// User accounts
+
+// sign up
+$app->post('/users', function (Request $request, Response $response) {
+    //TODO
 });
 
-// Login
-
-$app->get('/login', function (Request $request, Response $response) {
-    $params = $request->getQueryParams();
-    $username = $params['username'];
-    $password = $params['password'];
+// log in
+$app->post('/login', function (Request $request, Response $response) {
+    $body = $request->getParsedBody();
+    $username = $body['username'];
+    $password = $body['password'];
 
     $access = new DataBaseAccess($this->db);
 
@@ -298,6 +351,19 @@ $app->get('/login', function (Request $request, Response $response) {
             $valid = password_verify($password, $user['bcryptPassword']);
             if ($valid) {
                 unset($user['bcryptPassword']);
+
+                if (empty($user['sessionToken'])) {
+                    $sessionToken = md5(microtime());
+                    $stmt = $this->db->prepare("UPDATE users SET sessionToken = ? WHERE objectId = ?");
+                    $stmt->bindParam(1, $sessionToken);
+                    $stmt->bindParam(2, $user['objectId']);
+                    if ($stmt->execute()) {
+                        $user['sessionToken'] = $sessionToken;
+                    } else {
+                        $access->setSQLError($stmt);
+                    }
+                }
+
                 $access->data['user'] = $user;
             } else {
                 $access->setError("InvalidLogin", "The username or password is invalid.");
@@ -309,6 +375,27 @@ $app->get('/login', function (Request $request, Response $response) {
     $response = $response->withJson($access->data);
     return $response;
 });
+
+// log out
+$app->post('/logout', function (Request $request, Response $response) {
+})->add(new AuthMiddleware());
+
+// delete user
+$app->delete('/users/{id}', function (Request $request, Response $response) {
+    $userId = $request->getAttribute('id');
+    $access = new DataBaseAccess($this->db);
+
+    $stmt = $this->db->prepare("DELETE FROM users WHERE objectId = ?");
+    $stmt->bindValue(1, $userId);
+    if ($stmt->execute()) {
+        $access->data['success'] = TRUE;
+    } else {
+        $access->setSQLError($stmt);
+    }
+
+    $response = $response->withJson($access->data);
+    return $response;
+})->add(new AuthMiddleware());
 
 $app->run();
 ?>
