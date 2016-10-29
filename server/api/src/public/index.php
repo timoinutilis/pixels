@@ -314,7 +314,7 @@ $app->post('/files/{name}', function (Request $request, Response $response) {
     if ($body->getSize() > 1 * 1024 * 1024) {
         $data['error'] =  array('message' => "The uploaded file is too large.", 'type' => "FileTooLarge");
     } else {
-        $uniqueName = "lrc-".md5(microtime())."-".$name;
+        $uniqueName = "lrc-".bin2hex(openssl_random_pseudo_bytes(16))."-".$name;
 
         file_put_contents($settings['filespath']."/".$uniqueName, $body);
 
@@ -353,7 +353,7 @@ $app->post('/login', function (Request $request, Response $response) {
                 unset($user['bcryptPassword']);
 
                 if (empty($user['sessionToken'])) {
-                    $sessionToken = md5(microtime());
+                    $sessionToken = $access->unique_id(25);
                     $stmt = $this->db->prepare("UPDATE users SET sessionToken = ? WHERE objectId = ?");
                     $stmt->bindParam(1, $sessionToken);
                     $stmt->bindParam(2, $user['objectId']);

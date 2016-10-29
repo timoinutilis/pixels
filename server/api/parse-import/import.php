@@ -103,7 +103,7 @@ function import_posts() {
 			else if (!empty($object->program)) {
 				// get old program from db and save to file
 				$old_program = $old_programs[$object->program->objectId];
-				$program = "lrc-".md5(microtime())."-".file_title($object->title).".txt";
+				$program = "lrc-".bin2hex(openssl_random_pseudo_bytes(16))."-".file_title($object->title).".txt";
 				file_put_contents($files_dir.$program, $old_program->sourceCode);
 			}
 			$detail = $object->detail;

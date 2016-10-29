@@ -133,7 +133,7 @@ class DataBaseAccess {
 	}
 
 	function createObject($tableName, $body, $dataName = NULL) {
-		$id = $this->uniqid_base36();
+		$id = $this->unique_id(10);
 		$columns = array("objectId", "createdAt");
 		$values = array("'$id'", "NOW()");
 		foreach ($body as $key => $value) {
@@ -192,9 +192,14 @@ class DataBaseAccess {
 		return FALSE;
 	}
 
-	function uniqid_base36() {
-    	$s = uniqid();
-        return base_convert($s, 16, 36);
+    function unique_id($length) {
+		$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		$maxIndex = strlen($characters) - 1;
+		$string = "";    
+		for ($p = 0; $p < $length; $p++) {
+			$string .= $characters[mt_rand(0, $maxIndex)];
+		}
+		return $string;
     }
 
 }
