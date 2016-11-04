@@ -3,12 +3,18 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost:8889
--- Tiempo de generación: 25-09-2016 a las 20:59:52
+-- Tiempo de generación: 04-11-2016 a las 22:36:18
 -- Versión del servidor: 5.5.38
 -- Versión de PHP: 5.6.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
 
 --
 -- Base de datos: `lowres`
@@ -17,152 +23,163 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `comments`
+-- Estructura de tabla para la tabla `Comments`
 --
 
-CREATE TABLE `comments` (
-  `objectId` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE `Comments` (
+  `objectId` varchar(10) NOT NULL,
   `updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `createdAt` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `post` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `user` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `text` text COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `post` varchar(10) NOT NULL,
+  `user` varchar(10) DEFAULT NULL,
+  `text` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `follows`
+-- Estructura de tabla para la tabla `Follows`
 --
 
-CREATE TABLE `follows` (
-  `objectId` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE `Follows` (
+  `objectId` varchar(10) NOT NULL,
   `updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `createdAt` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `user` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `followsUser` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `user` varchar(10) NOT NULL,
+  `followsUser` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `likes`
+-- Estructura de tabla para la tabla `Likes`
 --
 
-CREATE TABLE `likes` (
-  `objectId` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE `Likes` (
+  `objectId` varchar(10) NOT NULL,
   `updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `createdAt` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `post` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `user` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `post` varchar(10) NOT NULL,
+  `user` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `notifications`
+-- Estructura de tabla para la tabla `Notifications`
 --
 
-CREATE TABLE `notifications` (
-  `objectId` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE `Notifications` (
+  `objectId` varchar(10) NOT NULL,
   `updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `createdAt` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `sender` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `recipient` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `post` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `sender` varchar(10) NOT NULL,
+  `recipient` varchar(10) NOT NULL,
+  `post` varchar(10) DEFAULT NULL,
   `type` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `posts`
+-- Estructura de tabla para la tabla `Posts`
 --
 
-CREATE TABLE `posts` (
-  `objectId` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE `Posts` (
+  `objectId` varchar(10) NOT NULL,
   `updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `createdAt` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `type` int(11) NOT NULL,
   `category` int(11) NOT NULL,
-  `user` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `title` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `detail` text COLLATE utf8mb4_unicode_ci,
-  `image` text COLLATE utf8mb4_unicode_ci,
-  `program` text COLLATE utf8mb4_unicode_ci,
-  `sharedPost` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `stats` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `user` varchar(10) NOT NULL,
+  `title` text NOT NULL,
+  `detail` text,
+  `image` text,
+  `program` text,
+  `sharedPost` varchar(10) DEFAULT NULL,
+  `stats` varchar(10) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `postStats`
+-- Estructura de tabla para la tabla `PostStats`
 --
 
-CREATE TABLE `postStats` (
-  `objectId` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE `PostStats` (
+  `objectId` varchar(10) NOT NULL,
   `updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `createdAt` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `post` varchar(10) NOT NULL,
   `numDownloads` int(11) NOT NULL,
   `numComments` int(11) NOT NULL,
   `numLikes` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `users`
+-- Estructura de tabla para la tabla `Users`
 --
 
-CREATE TABLE `users` (
-  `objectId` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE `Users` (
+  `objectId` varchar(10) NOT NULL,
   `updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `createdAt` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `username` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `bcryptPassword` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `sessionToken` text COLLATE utf8mb4_unicode_ci,
+  `username` varchar(60) NOT NULL,
+  `bcryptPassword` varchar(60) NOT NULL,
+  `sessionToken` varchar(25) DEFAULT NULL,
   `lastPostDate` timestamp NULL DEFAULT NULL,
   `notificationsOpenedDate` timestamp NULL DEFAULT NULL,
-  `about` text COLLATE utf8mb4_unicode_ci
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `about` text
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 --
 -- Índices para tablas volcadas
 --
 
 --
--- Indices de la tabla `comments`
+-- Indices de la tabla `Comments`
 --
-ALTER TABLE `comments`
+ALTER TABLE `Comments`
  ADD PRIMARY KEY (`objectId`);
 
 --
--- Indices de la tabla `follows`
+-- Indices de la tabla `Follows`
 --
-ALTER TABLE `follows`
+ALTER TABLE `Follows`
+ ADD PRIMARY KEY (`objectId`), ADD UNIQUE KEY `userPair` (`user`,`followsUser`);
+
+--
+-- Indices de la tabla `Likes`
+--
+ALTER TABLE `Likes`
+ ADD PRIMARY KEY (`objectId`), ADD UNIQUE KEY `userPostPair` (`user`,`post`);
+
+--
+-- Indices de la tabla `Notifications`
+--
+ALTER TABLE `Notifications`
  ADD PRIMARY KEY (`objectId`);
 
 --
--- Indices de la tabla `likes`
+-- Indices de la tabla `Posts`
 --
-ALTER TABLE `likes`
+ALTER TABLE `Posts`
  ADD PRIMARY KEY (`objectId`);
 
 --
--- Indices de la tabla `notifications`
+-- Indices de la tabla `PostStats`
 --
-ALTER TABLE `notifications`
- ADD PRIMARY KEY (`objectId`);
+ALTER TABLE `PostStats`
+ ADD PRIMARY KEY (`objectId`), ADD UNIQUE KEY `post` (`post`);
 
 --
--- Indices de la tabla `posts`
+-- Indices de la tabla `Users`
 --
-ALTER TABLE `posts`
- ADD PRIMARY KEY (`objectId`);
+ALTER TABLE `Users`
+ ADD PRIMARY KEY (`objectId`), ADD UNIQUE KEY `username` (`username`), ADD UNIQUE KEY `sessionToken` (`sessionToken`);
 
---
--- Indices de la tabla `users`
---
-ALTER TABLE `users`
- ADD PRIMARY KEY (`objectId`);
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
