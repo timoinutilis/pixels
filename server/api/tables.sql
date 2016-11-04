@@ -23,10 +23,10 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `Comments`
+-- Estructura de tabla para la tabla `comments`
 --
 
-CREATE TABLE `Comments` (
+CREATE TABLE `comments` (
   `objectId` varchar(10) NOT NULL,
   `updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `createdAt` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -38,10 +38,10 @@ CREATE TABLE `Comments` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `Follows`
+-- Estructura de tabla para la tabla `follows`
 --
 
-CREATE TABLE `Follows` (
+CREATE TABLE `follows` (
   `objectId` varchar(10) NOT NULL,
   `updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `createdAt` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -52,10 +52,10 @@ CREATE TABLE `Follows` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `Likes`
+-- Estructura de tabla para la tabla `likes`
 --
 
-CREATE TABLE `Likes` (
+CREATE TABLE `likes` (
   `objectId` varchar(10) NOT NULL,
   `updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `createdAt` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -66,10 +66,10 @@ CREATE TABLE `Likes` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `Notifications`
+-- Estructura de tabla para la tabla `notifications`
 --
 
-CREATE TABLE `Notifications` (
+CREATE TABLE `notifications` (
   `objectId` varchar(10) NOT NULL,
   `updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `createdAt` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -82,10 +82,10 @@ CREATE TABLE `Notifications` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `Posts`
+-- Estructura de tabla para la tabla `posts`
 --
 
-CREATE TABLE `Posts` (
+CREATE TABLE `posts` (
   `objectId` varchar(10) NOT NULL,
   `updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `createdAt` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -103,10 +103,10 @@ CREATE TABLE `Posts` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `PostStats`
+-- Estructura de tabla para la tabla `postStats`
 --
 
-CREATE TABLE `PostStats` (
+CREATE TABLE `postStats` (
   `objectId` varchar(10) NOT NULL,
   `updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `createdAt` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -119,15 +119,15 @@ CREATE TABLE `PostStats` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `Users`
+-- Estructura de tabla para la tabla `users`
 --
 
-CREATE TABLE `Users` (
+CREATE TABLE `users` (
   `objectId` varchar(10) NOT NULL,
   `updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `createdAt` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `username` varchar(60) NOT NULL,
-  `bcryptPassword` varchar(60) NOT NULL,
+  `bcryptPassword` varchar(255) NOT NULL,
   `sessionToken` varchar(25) DEFAULT NULL,
   `lastPostDate` timestamp NULL DEFAULT NULL,
   `notificationsOpenedDate` timestamp NULL DEFAULT NULL,
@@ -139,45 +139,45 @@ CREATE TABLE `Users` (
 --
 
 --
--- Indices de la tabla `Comments`
+-- Indices de la tabla `comments`
 --
-ALTER TABLE `Comments`
+ALTER TABLE `comments`
  ADD PRIMARY KEY (`objectId`);
 
 --
--- Indices de la tabla `Follows`
+-- Indices de la tabla `follows`
 --
-ALTER TABLE `Follows`
+ALTER TABLE `follows`
  ADD PRIMARY KEY (`objectId`), ADD UNIQUE KEY `userPair` (`user`,`followsUser`);
 
 --
--- Indices de la tabla `Likes`
+-- Indices de la tabla `likes`
 --
-ALTER TABLE `Likes`
+ALTER TABLE `likes`
  ADD PRIMARY KEY (`objectId`), ADD UNIQUE KEY `userPostPair` (`user`,`post`);
 
 --
--- Indices de la tabla `Notifications`
+-- Indices de la tabla `notifications`
 --
-ALTER TABLE `Notifications`
+ALTER TABLE `notifications`
  ADD PRIMARY KEY (`objectId`);
 
 --
--- Indices de la tabla `Posts`
+-- Indices de la tabla `posts`
 --
-ALTER TABLE `Posts`
+ALTER TABLE `posts`
  ADD PRIMARY KEY (`objectId`);
 
 --
--- Indices de la tabla `PostStats`
+-- Indices de la tabla `postStats`
 --
-ALTER TABLE `PostStats`
+ALTER TABLE `postStats`
  ADD PRIMARY KEY (`objectId`), ADD UNIQUE KEY `post` (`post`);
 
 --
--- Indices de la tabla `Users`
+-- Indices de la tabla `users`
 --
-ALTER TABLE `Users`
+ALTER TABLE `users`
  ADD PRIMARY KEY (`objectId`), ADD UNIQUE KEY `username` (`username`), ADD UNIQUE KEY `sessionToken` (`sessionToken`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

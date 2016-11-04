@@ -302,6 +302,40 @@ $app->get('/users/{id}', function (Request $request, Response $response) {
     return $response;
 });
 
+// update user
+$app->put('/users/{id}', function (Request $request, Response $response) {
+    $userId = $request->getAttribute('id');
+    $body = $request->getParsedBody();
+    $access = new DataBaseAccess($this->db);
+
+    if (!empty($body['password'])) {
+        $body['bcryptPassword'] = password_hash($body['password'], PASSWORD_DEFAULT);
+        unset($body['password']);
+    }
+
+    $access->updateObject("users", $userId, $body);
+
+    $response = $response->withJson($access->data);
+    return $response;
+})->add(new AuthMiddleware());
+
+// delete user
+$app->delete('/users/{id}', function (Request $request, Response $response) {
+    $userId = $request->getAttribute('id');
+    $access = new DataBaseAccess($this->db);
+
+    $stmt = $this->db->prepare("DELETE FROM users WHERE objectId = ?");
+    $stmt->bindValue(1, $userId);
+    if ($stmt->execute()) {
+        $access->data['success'] = TRUE;
+    } else {
+        $access->setSQLError($stmt);
+    }
+
+    $response = $response->withJson($access->data);
+    return $response;
+})->add(new AuthMiddleware());
+
 // Files
 
 // save file
@@ -330,7 +364,21 @@ $app->post('/files/{name}', function (Request $request, Response $response) {
 
 // sign up
 $app->post('/users', function (Request $request, Response $response) {
-    //TODO
+    $body = $request->getParsedBody();
+    $access = new DataBaseAccess($this->db);
+
+    $sessionToken = $access->unique_id(25);
+    $body['bcryptPassword'] = password_hash($body['password'], PASSWORD_DEFAULT);
+    $body['sessionToken'] = $sessionToken;
+
+    unset($body['password']);
+
+    if ($access->createObject("users", $body) !== FALSE) {
+        $access->data['sessionToken'] = $sessionToken;
+    }
+
+    $response = $response->withJson($access->data);
+    return $response;
 });
 
 // log in
@@ -378,15 +426,11 @@ $app->post('/login', function (Request $request, Response $response) {
 
 // log out
 $app->post('/logout', function (Request $request, Response $response) {
-})->add(new AuthMiddleware());
-
-// delete user
-$app->delete('/users/{id}', function (Request $request, Response $response) {
-    $userId = $request->getAttribute('id');
+    $currentUser = $request->getAttribute('currentUser');
     $access = new DataBaseAccess($this->db);
 
-    $stmt = $this->db->prepare("DELETE FROM users WHERE objectId = ?");
-    $stmt->bindValue(1, $userId);
+    $stmt = $this->db->prepare("UPDATE users SET sessionToken = NULL WHERE objectId = ?");
+    $stmt->bindValue(1, $currentUser);
     if ($stmt->execute()) {
         $access->data['success'] = TRUE;
     } else {
@@ -395,6 +439,7 @@ $app->delete('/users/{id}', function (Request $request, Response $response) {
 
     $response = $response->withJson($access->data);
     return $response;
+
 })->add(new AuthMiddleware());
 
 $app->run();

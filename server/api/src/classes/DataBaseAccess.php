@@ -137,14 +137,14 @@ class DataBaseAccess {
 		$columns = array("objectId", "createdAt");
 		$values = array("'$id'", "NOW()");
 		foreach ($body as $key => $value) {
-			$columns[] = $key;
-			$values[] = ":".$key;
+			$columns[] = $key; // TODO make safe!
+			$values[] = ":".$key; // TODO make safe!
 		}
 		$columnsString = implode($columns, ", ");
 		$valuesString = implode($values, ", ");
 	    $stmt = $this->db->prepare("INSERT INTO $tableName ($columnsString) VALUES ($valuesString)");
 	    foreach ($body as $key => $value) {
-		    $stmt->bindValue(":".$key, $value);
+		    $stmt->bindValue(":".$key, $value); // TODO make key safe!
 		}
 	    if ($stmt->execute()) {
 	    	$createdAt = NULL;
@@ -161,6 +161,33 @@ class DataBaseAccess {
 			    }
 		    }		    
 	        return $id;
+	    } else {
+	        $this->setSQLError($stmt);
+	    }
+	    return FALSE;
+	}
+
+	function updateObject($tableName, $id, $body) {
+		$changes = array();
+		foreach ($body as $key => $value) {
+			$changes[] = "$key = :$key"; // TODO make safe!
+		}
+		$changesString = implode($changes, ", ");
+	    $stmt = $this->db->prepare("UPDATE $tableName SET $changesString WHERE objectId = :id");
+	    foreach ($body as $key => $value) {
+		    $stmt->bindValue(":".$key, $value); // TODO make key safe!
+		}
+		$stmt->bindValue(":id", $id);
+	    if ($stmt->execute()) {
+	    	$updatedAt = NULL;
+		    $stmt = $this->db->prepare("SELECT updatedAt FROM $tableName WHERE objectId = ?");
+		    $stmt->bindValue(1, $id);
+		    if ($stmt->execute()) {
+		    	$object = $stmt->fetch();
+   		   		$updatedAt = $object['updatedAt'];
+		    	$this->data['updatedAt'] = $updatedAt;
+		    }		    
+	        return TRUE;
 	    } else {
 	        $this->setSQLError($stmt);
 	    }

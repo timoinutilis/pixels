@@ -12,7 +12,9 @@ class AuthMiddleware {
             $stmt->bindValue(1, $sessionToken);
             if ($stmt->execute()) {
                 $user = $stmt->fetch();
-                $request = $request->withAttribute('currentUser', $user['objectId']);
+                if ($user) {
+                    $request = $request->withAttribute('currentUser', $user['objectId']);
+                }
                 //TODO check users 403 Forbidden
             }
         }
