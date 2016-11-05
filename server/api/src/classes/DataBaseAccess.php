@@ -8,14 +8,6 @@ class DataBaseAccess {
         $this->data = array();
     }
 
-    function setError($type, $message) {
-    	$this->data['error'] =  array('message' => $message, 'type' => $type);
-	}
-
-	function setSQLError($stmt) {
-		$this->setError("SQL", $stmt->errorInfo()[2]);
-	}
-
 	function getPostsFilter($queryParams, $word) {
 		$filter = "";
 	    if (!empty($queryParams['category'])) {
@@ -38,10 +30,12 @@ class DataBaseAccess {
 	    $stmt->bindValue(1, $id);
 	    if ($stmt->execute()) {
 	    	$object = $stmt->fetch();
-	        $this->data[$dataName] = $object;
-	        return $object;
-	    } else {
-	        $this->setSQLError($stmt);
+	    	if ($object) {
+		        $this->data[$dataName] = $object;
+		        return $object;
+		    } else {
+		    	throw new APIException("The object '$id' could not be found.", 404, "NotFound");
+		    }
 	    }
 	    return FALSE;
 	}
@@ -67,8 +61,6 @@ class DataBaseAccess {
 	    	$objects = $stmt->fetchAll();
 	        $this->data[$dataName] = $objects;
 	        return $objects;
-	    } else {
-	        $this->setSQLError($stmt);
 	    }
 	    return FALSE;
     }
@@ -92,8 +84,6 @@ class DataBaseAccess {
         if ($stmt->execute()) {
             $this->data[$sourceTableName] = $stmt->fetchAll();
             return TRUE;
-        } else {
-	        $this->setSQLError($stmt);
         }
         return FALSE;
 	}
@@ -111,8 +101,6 @@ class DataBaseAccess {
 	    if ($stmt->execute()) {
 	        $this->data['users'] = $stmt->fetchAll();
 	        return TRUE;
-	    } else {
-	        $this->setSQLError($stmt);
 	    }
 	    return FALSE;
 	}
@@ -126,8 +114,6 @@ class DataBaseAccess {
 	    		$ids[] = $object['followsUser'];
 	    	}
 	    	return $ids;
-	    } else {
-	        $this->setSQLError($stmt);
 	    }
 	    return FALSE;
 	}
@@ -161,8 +147,6 @@ class DataBaseAccess {
 			    }
 		    }		    
 	        return $id;
-	    } else {
-	        $this->setSQLError($stmt);
 	    }
 	    return FALSE;
 	}
@@ -179,17 +163,19 @@ class DataBaseAccess {
 		}
 		$stmt->bindValue(":id", $id);
 	    if ($stmt->execute()) {
-	    	$updatedAt = NULL;
-		    $stmt = $this->db->prepare("SELECT updatedAt FROM $tableName WHERE objectId = ?");
-		    $stmt->bindValue(1, $id);
-		    if ($stmt->execute()) {
-		    	$object = $stmt->fetch();
-   		   		$updatedAt = $object['updatedAt'];
-		    	$this->data['updatedAt'] = $updatedAt;
-		    }		    
-	        return TRUE;
-	    } else {
-	        $this->setSQLError($stmt);
+	    	if ($stmt->rowCount() > 0) {
+		    	$updatedAt = NULL;
+			    $stmt = $this->db->prepare("SELECT updatedAt FROM $tableName WHERE objectId = ?");
+			    $stmt->bindValue(1, $id);
+			    if ($stmt->execute()) {
+			    	$object = $stmt->fetch();
+	   		   		$updatedAt = $object['updatedAt'];
+			    	$this->data['updatedAt'] = $updatedAt;
+			    }		    
+		        return TRUE;
+		    } else {
+		    	throw new APIException("The object '$id' could not be found.", 404, "NotFound");
+		    }
 	    }
 	    return FALSE;
 	}
@@ -198,9 +184,11 @@ class DataBaseAccess {
 		$stmt = $this->db->prepare("UPDATE postStats SET numDownloads = numDownloads+$numDownloads, numComments = numComments+$numComments, numLikes = numLikes+$numLikes WHERE post = ?");
 		$stmt->bindValue(1, $postId);
 		if ($stmt->execute()) {
-			// add postStats to data
-		} else {
-			$this->setSQLError($stmt);
+			if ($stmt->rowCount() > 0) {
+				// add postStats to data
+			} else {
+				throw new APIException("Missing statistics for post '$postId'.", 500, "InternalServerError");
+			}
 		}
 		return FALSE;
 	}
@@ -213,9 +201,7 @@ class DataBaseAccess {
 	    	if ($stmt->fetch()) {
 	    		return TRUE;
 	       	}
-	    } else {
-			$this->setSQLError($stmt);
-		}
+	    }
 		return FALSE;
 	}
 

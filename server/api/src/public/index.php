@@ -8,6 +8,8 @@ spl_autoload_register(function ($classname) {
     require ("../classes/" . $classname . ".php");
 });
 
+/* ============ Config ============ */
+
 $config['displayErrorDetails'] = true;
 $config['addContentLengthHeader'] = false;
 /*
@@ -27,6 +29,8 @@ $config['lowres']['filesurl'] = "lowresfiles.timokloss.com";
 $config['lowres']['filespath'] = "../../lowresfiles";
 $config['lowres']['admin'] = "T5VWaLW28x";
 
+/* ============ Slim App ============ */
+
 $app = new \Slim\App(["settings" => $config]);
 $container = $app->getContainer();
 
@@ -39,6 +43,37 @@ $container['db'] = function ($c) {
     return $pdo;
 };
 
+/* ============ Error Handlers ============ */
+
+$container['errorHandler'] = function ($c) {
+    return function ($request, $response, $exception) use ($c) {
+        if ($exception instanceof APIException) {
+            $data = array('error' => array('message' => $exception->getMessage(), 'type' => $exception->getType()));
+            return $c['response']->withStatus($exception->getCode())->withJson($data);
+        } else {
+            $data = array('error' => array('message' => "Something went wrong on the server.", 'details' => $exception->getMessage(), 'type' => "InternalServerError"));
+            return $c['response']->withStatus(500)->withJson($data);
+        }
+    };
+};
+
+$container['notFoundHandler'] = function ($c) {
+    return function ($request, $response) use ($c) {
+        $data = array('error' => array('message' => "This route is unknown.", 'type' => "NotFound"));
+        return $c['response']->withStatus(404)->withJson($data);
+    };
+};
+
+$container['notAllowedHandler'] = function ($c) {
+    return function ($request, $response, $methods) use ($c) {
+        $data = array('error' => array('message' => "Method must be one of: " . implode(", ", $methods), 'type' => "MethodNotAllowed"));
+        return $c['response']->withStatus(405)
+                             ->withHeader('Allow', implode(', ', $methods))
+                             ->withJson($data);
+    };
+};
+
+/* ============ Defines ============ */
 
 // Fields defaults
 define("MIN_POST_FIELDS", "type, category, user, title, image, sharedPost, stats");
@@ -46,6 +81,35 @@ define("MIN_USER_FIELDS", "username");
 define("FULL_USER_FIELDS", "username, lastPostDate, notificationsOpenedDate, about");
 
 define("GUEST_USER_ID", "guest");
+
+/* ============ Parameter Checks ============ */
+
+function checkMyUser($userId, Request $request) {
+    $currentUser = $request->getAttribute('currentUser');
+    if (empty($userId) || empty($currentUser) || $userId != $currentUser) {
+        throw new APIException("You don't have the permission for this.", 403, "Forbidden");
+    }
+}
+
+function checkNewPassword($password) {
+    if (empty($password) || strlen($password) < 6) {
+        throw new APIException("Choose a password with 6 or more characters.", 403, "BadPassword");
+    }
+}
+
+function checkNewUsername($username) {
+    if (empty($username) || strlen($username) < 4) {
+        throw new APIException("Choose a username with 4 or more characters.", 403, "BadUsername");
+    }
+}
+
+function checkRequired($body, $key) {
+    if (empty($body[$key])) {
+        throw new APIException("Missing parameter '$key'.", 400, "MissingParameter");
+    }
+}
+
+/* ============ Routes ============ */
 
 // get post
 $app->get('/posts/{id}', function (Request $request, Response $response) {
@@ -80,8 +144,12 @@ $app->post('/posts/{id}/comments', function (Request $request, Response $respons
     $postId = $request->getAttribute('id');
     $access = new DataBaseAccess($this->db);
 
+    checkMyUser($body['user'], $request);
+    checkRequired($body, 'text');
+
     $body['post'] = $postId;
     if ($access->createObject("comments", $body) !== FALSE) {
+        $response = $response->withStatus(201);
         $access->increasePostStats($postId, 0, 1, 0);
     }
 
@@ -96,11 +164,14 @@ $app->post('/posts/{id}/likes', function (Request $request, Response $response) 
     $userId = $body['user'];
     $access = new DataBaseAccess($this->db);
 
+    checkMyUser($userId, $request);
+
     if (userLikesPost($userId, $postId)) {
-        $access->setError("AlreadyLiked", "You already like this post.");
+        throw new APIException("You already like this post.", 403, "AlreadyLiked");
     } else {
         $body['post'] = $postId;
         if ($access->createObject("likes", $body) !== FALSE) {
+            $response = $response->withStatus(201);
             $access->increasePostStats($postId, 0, 0, 1);
         }
     }
@@ -209,10 +280,16 @@ $app->get('/users/{id}/followers', function (Request $request, Response $respons
 $app->post('/users/{id}/followers', function (Request $request, Response $response) {
     $body = $request->getParsedBody();
     $userId = $request->getAttribute('id');
+    $myUserId = $body['user'];
     $access = new DataBaseAccess($this->db);
 
-    $followsObject = array('user' => $body['user'], 'followsUser' => $userId);
+    checkMyUser($myUserId, $request);
+
+    $followsObject = array('user' => $myUserId, 'followsUser' => $userId);
     $postId = $access->createObject("follows", $followsObject, "follow");
+    if ($postId !== FALSE) {
+        $response = $response->withStatus(201);
+    }
 
     $response = $response->withJson($access->data);
     return $response;
@@ -225,13 +302,13 @@ $app->delete('/users/{id}/followers/{myId}', function (Request $request, Respons
     $myUserId = $request->getAttribute('myId');
     $access = new DataBaseAccess($this->db);
 
+    checkMyUser($myUserId, $request);
+
     $stmt = $this->db->prepare("DELETE FROM follows WHERE user = ? AND followsUser = ?");
     $stmt->bindValue(1, $myUserId);
     $stmt->bindValue(2, $userId);
     if ($stmt->execute()) {
         $access->data['success'] = TRUE;
-    } else {
-        $access->setSQLError($stmt);
     }
 
     $response = $response->withJson($access->data);
@@ -262,17 +339,25 @@ $app->post('/users/{id}/posts', function (Request $request, Response $response) 
     $userId = $request->getAttribute('id');
     $access = new DataBaseAccess($this->db);
 
+    checkMyUser($userId, $request);
+    checkRequired($body, 'type');
+    checkRequired($body, 'category');
+    checkRequired($body, 'title');
+    checkRequired($body, 'detail');
+
     $body['user'] = $userId;
     $postId = $access->createObject("posts", $body);
     if ($postId !== FALSE) {
+        $response = $response->withStatus(201);
         $statsId = $access->createObject("postStats", array('post' => $postId), "postStats");
         if ($statsId !== FALSE) {
             $stmt = $this->db->prepare("UPDATE posts SET stats = ? WHERE objectId = ?");
             $stmt->bindParam(1, $statsId);
             $stmt->bindParam(2, $postId);
             if ($stmt->execute()) {
-            } else {
-                $access->setSQLError($stmt);
+                if ($stmt->rowCount() == 0) {
+                    throw new APIException("Could not add statistics to post.", 500, "InternalServerError");
+                }
             }
         }
     }
@@ -306,10 +391,21 @@ $app->get('/users/{id}', function (Request $request, Response $response) {
 $app->put('/users/{id}', function (Request $request, Response $response) {
     $userId = $request->getAttribute('id');
     $body = $request->getParsedBody();
+    $username = $body['username'];
+    $password = $body['password'];
     $access = new DataBaseAccess($this->db);
 
-    if (!empty($body['password'])) {
-        $body['bcryptPassword'] = password_hash($body['password'], PASSWORD_DEFAULT);
+    checkMyUser($userId, $request);
+
+    if (isset($body['bcryptPassword'])) {
+        throw new APIException("You don't have the permission for this.", 403, "Forbidden");
+    }
+    if (isset($username)) {
+        checkNewUsername($username);
+    }
+    if (isset($password)) {
+        checkNewPassword($password);
+        $body['bcryptPassword'] = password_hash($body[$password], PASSWORD_DEFAULT);
         unset($body['password']);
     }
 
@@ -319,24 +415,7 @@ $app->put('/users/{id}', function (Request $request, Response $response) {
     return $response;
 })->add(new AuthMiddleware());
 
-// delete user
-$app->delete('/users/{id}', function (Request $request, Response $response) {
-    $userId = $request->getAttribute('id');
-    $access = new DataBaseAccess($this->db);
-
-    $stmt = $this->db->prepare("DELETE FROM users WHERE objectId = ?");
-    $stmt->bindValue(1, $userId);
-    if ($stmt->execute()) {
-        $access->data['success'] = TRUE;
-    } else {
-        $access->setSQLError($stmt);
-    }
-
-    $response = $response->withJson($access->data);
-    return $response;
-})->add(new AuthMiddleware());
-
-// Files
+/* ============ Files ============ */
 
 // save file
 $app->post('/files/{name}', function (Request $request, Response $response) {
@@ -346,7 +425,7 @@ $app->post('/files/{name}', function (Request $request, Response $response) {
     $data = array();
 
     if ($body->getSize() > 1 * 1024 * 1024) {
-        $data['error'] =  array('message' => "The uploaded file is too large.", 'type' => "FileTooLarge");
+        throw new APIException("The uploaded file is too large.", 403, "FileTooLarge");
     } else {
         $uniqueName = "lrc-".bin2hex(openssl_random_pseudo_bytes(16))."-".$name;
 
@@ -360,20 +439,26 @@ $app->post('/files/{name}', function (Request $request, Response $response) {
     return $response;
 })->add(new AuthMiddleware());
 
-// User accounts
+/* ============ Sessions ============ */
 
 // sign up
 $app->post('/users', function (Request $request, Response $response) {
     $body = $request->getParsedBody();
+    $username = $body['username'];
+    $password = $body['password'];
     $access = new DataBaseAccess($this->db);
 
+    checkNewUsername($username);
+    checkNewPassword($password);
+
     $sessionToken = $access->unique_id(25);
-    $body['bcryptPassword'] = password_hash($body['password'], PASSWORD_DEFAULT);
+    $body['bcryptPassword'] = password_hash($password, PASSWORD_DEFAULT);
     $body['sessionToken'] = $sessionToken;
 
     unset($body['password']);
 
     if ($access->createObject("users", $body) !== FALSE) {
+        $response = $response->withStatus(201);
         $access->data['sessionToken'] = $sessionToken;
     }
 
@@ -386,15 +471,17 @@ $app->post('/login', function (Request $request, Response $response) {
     $body = $request->getParsedBody();
     $username = $body['username'];
     $password = $body['password'];
-
     $access = new DataBaseAccess($this->db);
+
+    checkRequired($body, 'username');
+    checkRequired($body, 'password');
 
     $stmt = $this->db->prepare("SELECT * FROM users WHERE username = ?");
     $stmt->bindParam(1, $username);
     if ($stmt->execute()) {
         $user = $stmt->fetch();
         if ($user == NULL) {
-            $access->setError("InvalidLogin", "The username or password is invalid.");
+            throw new APIException("The username or password is invalid.", 403, "InvalidLogin");
         } else {
             $valid = password_verify($password, $user['bcryptPassword']);
             if ($valid) {
@@ -407,18 +494,14 @@ $app->post('/login', function (Request $request, Response $response) {
                     $stmt->bindParam(2, $user['objectId']);
                     if ($stmt->execute()) {
                         $user['sessionToken'] = $sessionToken;
-                    } else {
-                        $access->setSQLError($stmt);
                     }
                 }
 
                 $access->data['user'] = $user;
             } else {
-                $access->setError("InvalidLogin", "The username or password is invalid.");
+                throw new APIException("The username or password is invalid.", 403, "InvalidLogin");
             }
         }
-    } else {
-        $access->setSQLError($stmt);
     }
     $response = $response->withJson($access->data);
     return $response;
@@ -433,8 +516,6 @@ $app->post('/logout', function (Request $request, Response $response) {
     $stmt->bindValue(1, $currentUser);
     if ($stmt->execute()) {
         $access->data['success'] = TRUE;
-    } else {
-        $access->setSQLError($stmt);
     }
 
     $response = $response->withJson($access->data);
