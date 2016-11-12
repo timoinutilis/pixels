@@ -8,19 +8,11 @@
 
 #import "LCCPostStats.h"
 
-NSString *const LCCPostStatsLikesKey = @"numLikes";
-NSString *const LCCPostStatsDownloadsKey = @"numDownloads";
-NSString *const LCCPostStatsCommentsKey = @"numComments";
-
 @implementation LCCPostStats
 
+@dynamic post;
 @dynamic numLikes;
 @dynamic numDownloads;
 @dynamic numComments;
-
-+ (NSString *)parseClassName
-{
-    return @"PostStats";
-}
 
 @end

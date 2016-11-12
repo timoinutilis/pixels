@@ -161,7 +161,7 @@
         return;
     }
     
-    LCCUser *user = (LCCUser *)[PFUser user];
+    LCCUser *user = [[LCCUser alloc] init];
     user.username = username;
     user.password = password;
     
@@ -217,7 +217,7 @@
     [self setBusy:YES];
     [self.logInButtonCell setDisabled:YES wheel:YES];
     
-    [PFUser logInWithUsernameInBackground:username password:password block:^(PFUser *user, NSError *error) {
+    [LCCUser logInWithUsernameInBackground:username password:password block:^(LCCUser *user, NSError *error) {
        
         [self setBusy:NO];
         if (user)

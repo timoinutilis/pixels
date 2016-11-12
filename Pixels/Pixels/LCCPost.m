@@ -7,7 +7,6 @@
 //
 
 #import "LCCPost.h"
-#import "LCCProgram.h"
 
 @implementation LCCPost
 
@@ -18,14 +17,8 @@
 @dynamic title;
 @dynamic detail;
 @dynamic program;
-@dynamic programFile;
 @dynamic sharedPost;
 @dynamic stats;
-
-+ (NSString *)parseClassName
-{
-    return @"Post";
-}
 
 - (NSString *)categoryString
 {
@@ -42,18 +35,6 @@
         default:
             return @"Unknown";
     }
-}
-
-- (NSString *)sourceCode
-{
-    if (self.programFile)
-    {
-        // new format
-        return [[NSString alloc] initWithData:[self.programFile getData] encoding:NSUTF8StringEncoding];
-    }
-
-    // old format
-    return self.program.sourceCode;
 }
 
 @end

@@ -16,9 +16,4 @@
 @dynamic recipient;
 @dynamic post;
 
-+ (NSString *)parseClassName
-{
-    return @"Notification";
-}
-
 @end

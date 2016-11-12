@@ -12,17 +12,15 @@ NSString *const LowResNewsUserIDKey = @"LowResNewsUserID";
 
 @implementation LCCUser
 
+@dynamic username;
+@dynamic password;
 @dynamic about;
 @dynamic lastPostDate;
 @dynamic notificationsOpenedDate;
 
 - (BOOL)isMe
 {
-    if ([PFUser currentUser])
-    {
-        return [self.objectId isEqualToString:[PFUser currentUser].objectId];
-    }
-    return NO;
+    return NO; //TODO
 }
 
 - (BOOL)isNewsUser

@@ -13,9 +13,4 @@
 @dynamic user;
 @dynamic followsUser;
 
-+ (NSString *)parseClassName
-{
-    return @"Follow";
-}
-
 @end

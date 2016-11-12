@@ -6,14 +6,11 @@
 //  Copyright (c) 2015 Inutilis Software. All rights reserved.
 //
 
-#import <Parse/Parse.h>
+#import "APIObject.h"
 
-extern NSString *const LCCPostStatsLikesKey;
-extern NSString *const LCCPostStatsDownloadsKey;
-extern NSString *const LCCPostStatsCommentsKey;
+@interface LCCPostStats : APIObject
 
-@interface LCCPostStats : PFObject<PFSubclassing>
-
+@property (retain) NSString *post;
 @property int numLikes;
 @property int numDownloads;
 @property int numComments;

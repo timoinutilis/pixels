@@ -9,10 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "LCCUser.h"
 #import "LCCPost.h"
-#import "LCCProgram.h"
 #import "LCCComment.h"
 #import "LCCFollow.h"
-#import "LCCCount.h"
+#import "LCCLike.h"
 #import "LCCPostStats.h"
 #import "LCCNotification.h"
 

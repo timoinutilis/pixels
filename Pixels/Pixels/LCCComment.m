@@ -14,9 +14,4 @@
 @dynamic post;
 @dynamic text;
 
-+ (NSString *)parseClassName
-{
-    return @"Comment";
-}
-
 @end

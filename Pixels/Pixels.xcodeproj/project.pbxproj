@@ -34,9 +34,7 @@
 		92509CCA1A28F99D0086E7E3 /* ExplorerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92509CC91A28F99D0086E7E3 /* ExplorerViewController.m */; };
 		9251440F1B92044100C9D254 /* VariableManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9251440E1B92044100C9D254 /* VariableManager.m */; };
 		9254DF601B628A3C00774E98 /* LCCPostStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 9254DF5F1B628A3C00774E98 /* LCCPostStats.m */; };
-		925935A11B1B77D7001CE0B1 /* LCCProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = 925935A01B1B77D7001CE0B1 /* LCCProgram.m */; };
 		925935A41B1B7E4F001CE0B1 /* UIViewController+CommUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 925935A31B1B7E4F001CE0B1 /* UIViewController+CommUtils.m */; };
-		925935A71B1B80C9001CE0B1 /* LCCCount.m in Sources */ = {isa = PBXBuildFile; fileRef = 925935A61B1B80C9001CE0B1 /* LCCCount.m */; };
 		925A01A91A1E67F900A321E6 /* Parser.m in Sources */ = {isa = PBXBuildFile; fileRef = 925A01A81A1E67F900A321E6 /* Parser.m */; };
 		925C28191B092BD9007AC515 /* DayCodeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 925C28181B092BD9007AC515 /* DayCodeManager.m */; };
 		925C281F1B092CA4007AC515 /* NSDate+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 925C281E1B092CA4007AC515 /* NSDate+Utils.m */; };
@@ -70,14 +68,6 @@
 		927CF5A61C271F3E00C38BB5 /* BorderedButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 927CF5A51C271F3E00C38BB5 /* BorderedButton.m */; };
 		927CF5A71C271F3E00C38BB5 /* BorderedButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 927CF5A51C271F3E00C38BB5 /* BorderedButton.m */; };
 		927D345B1B1CB0D700967AE7 /* CommEditUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 927D345A1B1CB0D700967AE7 /* CommEditUserViewController.m */; };
-		928445F11B012CAE00203974 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 928445F01B012CAE00203974 /* AudioToolbox.framework */; };
-		928445F31B012CB800203974 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 928445F21B012CB800203974 /* CFNetwork.framework */; };
-		928445F51B012CBF00203974 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 928445F41B012CBF00203974 /* CoreGraphics.framework */; };
-		928445F71B012CC900203974 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 928445F61B012CC900203974 /* CoreLocation.framework */; };
-		928445F91B012CD300203974 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 928445F81B012CD300203974 /* MobileCoreServices.framework */; };
-		928445FB1B012CDE00203974 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 928445FA1B012CDE00203974 /* QuartzCore.framework */; };
-		928445FD1B012CE600203974 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 928445FC1B012CE600203974 /* Security.framework */; };
-		928445FF1B012CF700203974 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 928445FE1B012CF700203974 /* SystemConfiguration.framework */; };
 		92884F191B0F25B30032623D /* MKAnnotationView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 92884EF91B0F25B30032623D /* MKAnnotationView+WebCache.m */; };
 		92884F1A1B0F25B30032623D /* NSData+ImageContentType.m in Sources */ = {isa = PBXBuildFile; fileRef = 92884EFB1B0F25B30032623D /* NSData+ImageContentType.m */; };
 		92884F1B1B0F25B30032623D /* SDImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 92884EFD1B0F25B30032623D /* SDImageCache.m */; };
@@ -96,14 +86,14 @@
 		92884F281B0F25B30032623D /* UIView+WebCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 92884F181B0F25B30032623D /* UIView+WebCacheOperation.m */; };
 		92884F2B1B0F307F0032623D /* CommSourceCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92884F2A1B0F307F0032623D /* CommSourceCodeViewController.m */; };
 		92884F2E1B0F33850032623D /* LCCComment.m in Sources */ = {isa = PBXBuildFile; fileRef = 92884F2D1B0F33850032623D /* LCCComment.m */; };
+		928987A21DD74FA3002B84B7 /* APIObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 928987A11DD74FA3002B84B7 /* APIObject.m */; };
+		928987A31DD74FA3002B84B7 /* APIObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 928987A11DD74FA3002B84B7 /* APIObject.m */; };
+		928987A61DD756DB002B84B7 /* LCCLike.m in Sources */ = {isa = PBXBuildFile; fileRef = 928987A51DD756DB002B84B7 /* LCCLike.m */; };
+		928987A71DD756DB002B84B7 /* LCCLike.m in Sources */ = {isa = PBXBuildFile; fileRef = 928987A51DD756DB002B84B7 /* LCCLike.m */; };
 		928FB8991A5C804200EA377F /* GORSeparatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 928FB8981A5C804200EA377F /* GORSeparatorView.m */; };
 		929381D61BC5696C00D41B72 /* HelpMasterNavController.m in Sources */ = {isa = PBXBuildFile; fileRef = 929381D51BC5696C00D41B72 /* HelpMasterNavController.m */; };
 		929381D71BC5696C00D41B72 /* HelpMasterNavController.m in Sources */ = {isa = PBXBuildFile; fileRef = 929381D51BC5696C00D41B72 /* HelpMasterNavController.m */; };
 		9293D46D1B219BCC009A156B /* ExtendedActivityIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9293D46C1B219BCC009A156B /* ExtendedActivityIndicatorView.m */; };
-		929BCEF31BB142FC005F1DBD /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 929BCEF11BB142FC005F1DBD /* Bolts.framework */; };
-		929BCEF41BB142FC005F1DBD /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 929BCEF21BB142FC005F1DBD /* Parse.framework */; };
-		929BCEF61BB143A0005F1DBD /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 929BCEF51BB143A0005F1DBD /* libsqlite3.tbd */; };
-		929BCEF81BB1442F005F1DBD /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 929BCEF71BB1442F005F1DBD /* libz.tbd */; };
 		929BCF0D1BB14800005F1DBD /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 929BCEFB1BB14800005F1DBD /* AFHTTPRequestOperation.m */; };
 		929BCF0E1BB14800005F1DBD /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 929BCEFD1BB14800005F1DBD /* AFHTTPRequestOperationManager.m */; };
 		929BCF0F1BB14800005F1DBD /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 929BCEFF1BB14800005F1DBD /* AFHTTPSessionManager.m */; };
@@ -138,7 +128,6 @@
 		929BCF2E1BB14A1B005F1DBD /* UIViewController+LowResCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 926A6A171B1C929D00A85412 /* UIViewController+LowResCoder.m */; };
 		929BCF2F1BB14A1B005F1DBD /* ActivityItemSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E2B8A91A52F08D00D0DF29 /* ActivityItemSource.m */; };
 		929BCF301BB14A1B005F1DBD /* UIImage+GIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 92884F0E1B0F25B30032623D /* UIImage+GIF.m */; };
-		929BCF311BB14A1B005F1DBD /* LCCProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = 925935A01B1B77D7001CE0B1 /* LCCProgram.m */; };
 		929BCF321BB14A1B005F1DBD /* SDWebImageDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 92884F011B0F25B30032623D /* SDWebImageDecoder.m */; };
 		929BCF331BB14A1B005F1DBD /* GORScrollViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E53DEF1A5B3A1D00FE9F91 /* GORScrollViewDelegate.m */; };
 		929BCF341BB14A1B005F1DBD /* StandardTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9215D7781B37361100A65E55 /* StandardTableViewCell.m */; };
@@ -190,7 +179,6 @@
 		929BCF641BB14A1B005F1DBD /* NotificationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E1AF951B6A49E8000B1B0D /* NotificationView.m */; };
 		929BCF651BB14A1B005F1DBD /* LCCPostStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 9254DF5F1B628A3C00774E98 /* LCCPostStats.m */; };
 		929BCF661BB14A1B005F1DBD /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 929BCEFD1BB14800005F1DBD /* AFHTTPRequestOperationManager.m */; };
-		929BCF671BB14A1B005F1DBD /* LCCCount.m in Sources */ = {isa = PBXBuildFile; fileRef = 925935A61B1B80C9001CE0B1 /* LCCCount.m */; };
 		929BCF681BB14A1B005F1DBD /* Runner.m in Sources */ = {isa = PBXBuildFile; fileRef = 924CC0FD1A220B3C00D2AF68 /* Runner.m */; };
 		929BCF691BB14A1B005F1DBD /* GORMenuTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E53DED1A5B3A1D00FE9F91 /* GORMenuTableViewController.m */; };
 		929BCF6A1BB14A1B005F1DBD /* AudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 92B7A5321AA8C71000B6CA81 /* AudioPlayer.m */; };
@@ -206,18 +194,6 @@
 		929BCF751BB14A1B005F1DBD /* CommunityModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C0811B1B0DDCDB0006331B /* CommunityModel.m */; };
 		929BCF761BB14A1B005F1DBD /* UIViewController+CommUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 925935A31B1B7E4F001CE0B1 /* UIViewController+CommUtils.m */; };
 		929BCF771BB14A1B005F1DBD /* ExplorerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92509CC91A28F99D0086E7E3 /* ExplorerViewController.m */; };
-		929BCF791BB14A1B005F1DBD /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 929BCEF71BB1442F005F1DBD /* libz.tbd */; };
-		929BCF7A1BB14A1B005F1DBD /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 929BCEF51BB143A0005F1DBD /* libsqlite3.tbd */; };
-		929BCF7B1BB14A1B005F1DBD /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 928445FE1B012CF700203974 /* SystemConfiguration.framework */; };
-		929BCF7C1BB14A1B005F1DBD /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 928445FC1B012CE600203974 /* Security.framework */; };
-		929BCF7D1BB14A1B005F1DBD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 928445FA1B012CDE00203974 /* QuartzCore.framework */; };
-		929BCF7E1BB14A1B005F1DBD /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 928445F81B012CD300203974 /* MobileCoreServices.framework */; };
-		929BCF7F1BB14A1B005F1DBD /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 928445F61B012CC900203974 /* CoreLocation.framework */; };
-		929BCF801BB14A1B005F1DBD /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 929BCEF11BB142FC005F1DBD /* Bolts.framework */; };
-		929BCF811BB14A1B005F1DBD /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 929BCEF21BB142FC005F1DBD /* Parse.framework */; };
-		929BCF821BB14A1B005F1DBD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 928445F41B012CBF00203974 /* CoreGraphics.framework */; };
-		929BCF831BB14A1B005F1DBD /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 928445F21B012CB800203974 /* CFNetwork.framework */; };
-		929BCF841BB14A1B005F1DBD /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 928445F01B012CAE00203974 /* AudioToolbox.framework */; };
 		929BCF851BB14A1B005F1DBD /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 926864201AA5E50900F305B9 /* StoreKit.framework */; };
 		929BCF871BB14A1B005F1DBD /* Community.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 924F83281B0B347C00B96C91 /* Community.storyboard */; };
 		929BCF881BB14A1B005F1DBD /* manual.html in Resources */ = {isa = PBXBuildFile; fileRef = 9204EF691A4C430300B8C29C /* manual.html */; };
@@ -325,12 +301,8 @@
 		9251440E1B92044100C9D254 /* VariableManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VariableManager.m; sourceTree = "<group>"; };
 		9254DF5E1B628A3C00774E98 /* LCCPostStats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCPostStats.h; sourceTree = "<group>"; };
 		9254DF5F1B628A3C00774E98 /* LCCPostStats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCPostStats.m; sourceTree = "<group>"; };
-		9259359F1B1B77D7001CE0B1 /* LCCProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCProgram.h; sourceTree = "<group>"; };
-		925935A01B1B77D7001CE0B1 /* LCCProgram.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCProgram.m; sourceTree = "<group>"; };
 		925935A21B1B7E4F001CE0B1 /* UIViewController+CommUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+CommUtils.h"; sourceTree = "<group>"; };
 		925935A31B1B7E4F001CE0B1 /* UIViewController+CommUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+CommUtils.m"; sourceTree = "<group>"; };
-		925935A51B1B80C9001CE0B1 /* LCCCount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCCount.h; sourceTree = "<group>"; };
-		925935A61B1B80C9001CE0B1 /* LCCCount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCCount.m; sourceTree = "<group>"; };
 		925A01A71A1E67F900A321E6 /* Parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Parser.h; sourceTree = "<group>"; };
 		925A01A81A1E67F900A321E6 /* Parser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Parser.m; sourceTree = "<group>"; };
 		925C28171B092BD9007AC515 /* DayCodeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DayCodeManager.h; sourceTree = "<group>"; };
@@ -384,14 +356,6 @@
 		927D345A1B1CB0D700967AE7 /* CommEditUserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommEditUserViewController.m; sourceTree = "<group>"; };
 		927E2FC81A72586E006C9B9C /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		927E2FC91A72586E006C9B9C /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Main.storyboard; sourceTree = "<group>"; };
-		928445F01B012CAE00203974 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
-		928445F21B012CB800203974 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
-		928445F41B012CBF00203974 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		928445F61B012CC900203974 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		928445F81B012CD300203974 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
-		928445FA1B012CDE00203974 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		928445FC1B012CE600203974 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		928445FE1B012CF700203974 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		92884EF81B0F25B30032623D /* MKAnnotationView+WebCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MKAnnotationView+WebCache.h"; sourceTree = "<group>"; };
 		92884EF91B0F25B30032623D /* MKAnnotationView+WebCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MKAnnotationView+WebCache.m"; sourceTree = "<group>"; };
 		92884EFA1B0F25B30032623D /* NSData+ImageContentType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+ImageContentType.h"; sourceTree = "<group>"; };
@@ -429,6 +393,10 @@
 		92884F2A1B0F307F0032623D /* CommSourceCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommSourceCodeViewController.m; sourceTree = "<group>"; };
 		92884F2C1B0F33850032623D /* LCCComment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCComment.h; sourceTree = "<group>"; };
 		92884F2D1B0F33850032623D /* LCCComment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCComment.m; sourceTree = "<group>"; };
+		928987A01DD74FA3002B84B7 /* APIObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIObject.h; sourceTree = "<group>"; };
+		928987A11DD74FA3002B84B7 /* APIObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APIObject.m; sourceTree = "<group>"; };
+		928987A41DD756DB002B84B7 /* LCCLike.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCLike.h; sourceTree = "<group>"; };
+		928987A51DD756DB002B84B7 /* LCCLike.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCLike.m; sourceTree = "<group>"; };
 		928DBBA51B52918400C5EBCC /* Model 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 3.xcdatamodel"; sourceTree = "<group>"; };
 		928E14BD1B067AB9002DC8E6 /* Info_dev.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info_dev.plist; sourceTree = "<group>"; };
 		928FB8971A5C804200EA377F /* GORSeparatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GORSeparatorView.h; sourceTree = "<group>"; };
@@ -437,10 +405,6 @@
 		929381D51BC5696C00D41B72 /* HelpMasterNavController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpMasterNavController.m; sourceTree = "<group>"; };
 		9293D46B1B219BCC009A156B /* ExtendedActivityIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExtendedActivityIndicatorView.h; sourceTree = "<group>"; };
 		9293D46C1B219BCC009A156B /* ExtendedActivityIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExtendedActivityIndicatorView.m; sourceTree = "<group>"; };
-		929BCEF11BB142FC005F1DBD /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
-		929BCEF21BB142FC005F1DBD /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
-		929BCEF51BB143A0005F1DBD /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
-		929BCEF71BB1442F005F1DBD /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		929BCEFA1BB14800005F1DBD /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
 		929BCEFB1BB14800005F1DBD /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperation.m; sourceTree = "<group>"; };
 		929BCEFC1BB14800005F1DBD /* AFHTTPRequestOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperationManager.h; sourceTree = "<group>"; };
@@ -551,18 +515,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				92B4BF801BDA47F0000EB8FD /* ReplayKit.framework in Frameworks */,
-				929BCEF81BB1442F005F1DBD /* libz.tbd in Frameworks */,
-				929BCEF61BB143A0005F1DBD /* libsqlite3.tbd in Frameworks */,
-				928445FF1B012CF700203974 /* SystemConfiguration.framework in Frameworks */,
-				928445FD1B012CE600203974 /* Security.framework in Frameworks */,
-				928445FB1B012CDE00203974 /* QuartzCore.framework in Frameworks */,
-				928445F91B012CD300203974 /* MobileCoreServices.framework in Frameworks */,
-				928445F71B012CC900203974 /* CoreLocation.framework in Frameworks */,
-				929BCEF31BB142FC005F1DBD /* Bolts.framework in Frameworks */,
-				929BCEF41BB142FC005F1DBD /* Parse.framework in Frameworks */,
-				928445F51B012CBF00203974 /* CoreGraphics.framework in Frameworks */,
-				928445F31B012CB800203974 /* CFNetwork.framework in Frameworks */,
-				928445F11B012CAE00203974 /* AudioToolbox.framework in Frameworks */,
 				926864211AA5E50900F305B9 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -572,18 +524,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				92B4BF811BDA47FF000EB8FD /* ReplayKit.framework in Frameworks */,
-				929BCF791BB14A1B005F1DBD /* libz.tbd in Frameworks */,
-				929BCF7A1BB14A1B005F1DBD /* libsqlite3.tbd in Frameworks */,
-				929BCF7B1BB14A1B005F1DBD /* SystemConfiguration.framework in Frameworks */,
-				929BCF7C1BB14A1B005F1DBD /* Security.framework in Frameworks */,
-				929BCF7D1BB14A1B005F1DBD /* QuartzCore.framework in Frameworks */,
-				929BCF7E1BB14A1B005F1DBD /* MobileCoreServices.framework in Frameworks */,
-				929BCF7F1BB14A1B005F1DBD /* CoreLocation.framework in Frameworks */,
-				929BCF801BB14A1B005F1DBD /* Bolts.framework in Frameworks */,
-				929BCF811BB14A1B005F1DBD /* Parse.framework in Frameworks */,
-				929BCF821BB14A1B005F1DBD /* CoreGraphics.framework in Frameworks */,
-				929BCF831BB14A1B005F1DBD /* CFNetwork.framework in Frameworks */,
-				929BCF841BB14A1B005F1DBD /* AudioToolbox.framework in Frameworks */,
 				929BCF851BB14A1B005F1DBD /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -870,18 +810,6 @@
 			isa = PBXGroup;
 			children = (
 				92B4BF7F1BDA47F0000EB8FD /* ReplayKit.framework */,
-				929BCEF71BB1442F005F1DBD /* libz.tbd */,
-				929BCEF51BB143A0005F1DBD /* libsqlite3.tbd */,
-				929BCEF11BB142FC005F1DBD /* Bolts.framework */,
-				929BCEF21BB142FC005F1DBD /* Parse.framework */,
-				928445FE1B012CF700203974 /* SystemConfiguration.framework */,
-				928445FC1B012CE600203974 /* Security.framework */,
-				928445FA1B012CDE00203974 /* QuartzCore.framework */,
-				928445F81B012CD300203974 /* MobileCoreServices.framework */,
-				928445F61B012CC900203974 /* CoreLocation.framework */,
-				928445F41B012CBF00203974 /* CoreGraphics.framework */,
-				928445F21B012CB800203974 /* CFNetwork.framework */,
-				928445F01B012CAE00203974 /* AudioToolbox.framework */,
 				926864201AA5E50900F305B9 /* StoreKit.framework */,
 			);
 			name = Frameworks;
@@ -973,18 +901,18 @@
 			children = (
 				92C0811A1B0DDCDB0006331B /* CommunityModel.h */,
 				92C0811B1B0DDCDB0006331B /* CommunityModel.m */,
+				928987A01DD74FA3002B84B7 /* APIObject.h */,
+				928987A11DD74FA3002B84B7 /* APIObject.m */,
 				92C081131B0DCD5F0006331B /* LCCUser.h */,
 				92C081141B0DCD5F0006331B /* LCCUser.m */,
 				92C081521B0DF1900006331B /* LCCPost.h */,
 				92C081531B0DF1900006331B /* LCCPost.m */,
 				92884F2C1B0F33850032623D /* LCCComment.h */,
 				92884F2D1B0F33850032623D /* LCCComment.m */,
+				928987A41DD756DB002B84B7 /* LCCLike.h */,
+				928987A51DD756DB002B84B7 /* LCCLike.m */,
 				920E5E5C1B1324FE00071C6A /* LCCFollow.h */,
 				920E5E5D1B1324FE00071C6A /* LCCFollow.m */,
-				9259359F1B1B77D7001CE0B1 /* LCCProgram.h */,
-				925935A01B1B77D7001CE0B1 /* LCCProgram.m */,
-				925935A51B1B80C9001CE0B1 /* LCCCount.h */,
-				925935A61B1B80C9001CE0B1 /* LCCCount.m */,
 				9254DF5E1B628A3C00774E98 /* LCCPostStats.h */,
 				9254DF5F1B628A3C00774E98 /* LCCPostStats.m */,
 				92C6C9131C2DC4BC0030D8AA /* LCCNotification.h */,
@@ -1217,7 +1145,6 @@
 				926A6A181B1C929D00A85412 /* UIViewController+LowResCoder.m in Sources */,
 				92E2B8AA1A52F08D00D0DF29 /* ActivityItemSource.m in Sources */,
 				92884F231B0F25B30032623D /* UIImage+GIF.m in Sources */,
-				925935A11B1B77D7001CE0B1 /* LCCProgram.m in Sources */,
 				92884F1D1B0F25B30032623D /* SDWebImageDecoder.m in Sources */,
 				92E53DF51A5B3A1D00FE9F91 /* GORScrollViewDelegate.m in Sources */,
 				9215D7791B37361100A65E55 /* StandardTableViewCell.m in Sources */,
@@ -1256,6 +1183,7 @@
 				926864271AA6087300F305B9 /* AppController.m in Sources */,
 				925C281F1B092CA4007AC515 /* NSDate+Utils.m in Sources */,
 				92E36D1F1ADD679D00C16CBE /* GORLabel.m in Sources */,
+				928987A61DD756DB002B84B7 /* LCCLike.m in Sources */,
 				92884F1F1B0F25B30032623D /* SDWebImageDownloaderOperation.m in Sources */,
 				920F55E71BE7D1DF00ABBE1E /* Project+CoreDataProperties.m in Sources */,
 				9276F38F1A1D289C0060E909 /* main.m in Sources */,
@@ -1282,12 +1210,12 @@
 				92E1AF961B6A49E8000B1B0D /* NotificationView.m in Sources */,
 				9254DF601B628A3C00774E98 /* LCCPostStats.m in Sources */,
 				929BCF0E1BB14800005F1DBD /* AFHTTPRequestOperationManager.m in Sources */,
-				925935A71B1B80C9001CE0B1 /* LCCCount.m in Sources */,
 				924CC0FE1A220B3C00D2AF68 /* Runner.m in Sources */,
 				92E53DF41A5B3A1D00FE9F91 /* GORMenuTableViewController.m in Sources */,
 				92B7A5331AA8C71000B6CA81 /* AudioPlayer.m in Sources */,
 				9232FA0D1B860CF80082DDF1 /* NumberPool.m in Sources */,
 				929BCF0D1BB14800005F1DBD /* AFHTTPRequestOperation.m in Sources */,
+				928987A21DD74FA3002B84B7 /* APIObject.m in Sources */,
 				92884F1B1B0F25B30032623D /* SDImageCache.m in Sources */,
 				921B234C1A9E3DA800C45AFA /* EditorTextView.m in Sources */,
 				92751E931C85D44600E73A6C /* TextFieldTableViewCell.m in Sources */,
@@ -1340,7 +1268,6 @@
 				92D1F2A21C7CDDD40087FF8F /* UITableView+Parse.m in Sources */,
 				929BCF2F1BB14A1B005F1DBD /* ActivityItemSource.m in Sources */,
 				929BCF301BB14A1B005F1DBD /* UIImage+GIF.m in Sources */,
-				929BCF311BB14A1B005F1DBD /* LCCProgram.m in Sources */,
 				929BCF321BB14A1B005F1DBD /* SDWebImageDecoder.m in Sources */,
 				9230D0621CC4F71100EF6E52 /* UIImage+Utils.m in Sources */,
 				929BCF331BB14A1B005F1DBD /* GORScrollViewDelegate.m in Sources */,
@@ -1377,6 +1304,7 @@
 				92612CE51BD7A5F600370C82 /* IndexSideBar.m in Sources */,
 				929BCF4D1BB14A1B005F1DBD /* AppController.m in Sources */,
 				92751E941C85D44600E73A6C /* TextFieldTableViewCell.m in Sources */,
+				928987A71DD756DB002B84B7 /* LCCLike.m in Sources */,
 				929BCF4E1BB14A1B005F1DBD /* NSDate+Utils.m in Sources */,
 				929BCF4F1BB14A1B005F1DBD /* GORLabel.m in Sources */,
 				929BCF501BB14A1B005F1DBD /* SDWebImageDownloaderOperation.m in Sources */,
@@ -1404,11 +1332,11 @@
 				929BCF641BB14A1B005F1DBD /* NotificationView.m in Sources */,
 				929BCF651BB14A1B005F1DBD /* LCCPostStats.m in Sources */,
 				929BCF661BB14A1B005F1DBD /* AFHTTPRequestOperationManager.m in Sources */,
-				929BCF671BB14A1B005F1DBD /* LCCCount.m in Sources */,
 				92C6C9161C2DC4BC0030D8AA /* LCCNotification.m in Sources */,
 				929BCF681BB14A1B005F1DBD /* Runner.m in Sources */,
 				929BCF691BB14A1B005F1DBD /* GORMenuTableViewController.m in Sources */,
 				929BCF6A1BB14A1B005F1DBD /* AudioPlayer.m in Sources */,
+				928987A31DD74FA3002B84B7 /* APIObject.m in Sources */,
 				929BCF6B1BB14A1B005F1DBD /* NumberPool.m in Sources */,
 				929BCF6C1BB14A1B005F1DBD /* AFHTTPRequestOperation.m in Sources */,
 				929BCF6D1BB14A1B005F1DBD /* SDImageCache.m in Sources */,

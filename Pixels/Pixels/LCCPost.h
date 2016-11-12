@@ -6,9 +6,7 @@
 //  Copyright (c) 2015 Inutilis Software. All rights reserved.
 //
 
-#import <Parse/Parse.h>
-
-@class LCCUser, LCCProgram, LCCPostStats;
+#import "APIObject.h"
 
 typedef NS_ENUM(int, LCCPostType) {
     LCCPostTypeUndefined,
@@ -25,20 +23,18 @@ typedef NS_ENUM(int, LCCPostCategory) {
     LCCPostCategoryDemo
 };
 
-@interface LCCPost : PFObject<PFSubclassing>
+@interface LCCPost : APIObject
 
-@property (retain) LCCUser *user;
+@property (retain) NSString *user;
 @property LCCPostType type;
 @property LCCPostCategory category;
-@property (retain) PFFile *image;
+@property (retain) NSString *image;
 @property (retain) NSString *title;
 @property (retain) NSString *detail;
-@property (retain) LCCProgram *program; // deprecated, uses programFile now
-@property (retain) PFFile *programFile;
-@property (retain) LCCPost *sharedPost;
-@property (retain) LCCPostStats *stats;
+@property (retain) NSString *program;
+@property (retain) NSString *sharedPost;
+@property (retain) NSString *stats;
 
 - (NSString *)categoryString;
-- (NSString *)sourceCode;
 
 @end
