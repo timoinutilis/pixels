@@ -329,7 +329,7 @@ NSString *const TRANSFER = @"TRANSFER";
         [runner.renderer print:@"" newLine:YES wrap:YES];
     }
     [runner.delegate updateRendererView];
-    [runner wait:0.1 stopBlock:nil];
+    [runner wait:0.04 stopBlock:nil];
     [runner next];
     return nil;
 }
