@@ -14,6 +14,7 @@
 #import "LCCLike.h"
 #import "LCCPostStats.h"
 #import "LCCNotification.h"
+#import "AFNetworking.h"
 
 extern NSString *const CurrentUserChangeNotification;
 extern NSString *const FollowsChangeNotification;
@@ -31,19 +32,24 @@ typedef NS_ENUM(NSInteger, StatsType) {
     StatsTypeComment
 };
 
+typedef void (^LCCResultBlock)(BOOL succeeded, NSError *error);
+
 @interface CommunityModel : NSObject
 
-@property (readonly) NSMutableArray *follows;
-@property (readonly) BOOL isUpdatingUser;
-@property (readonly) NSMutableArray <LCCNotification *> *notifications;
-@property (readonly) BOOL isUpdatingNotifications;
-@property (readonly, nonatomic) NSInteger numNewNotifications;
+@property (nonatomic, readonly) AFHTTPSessionManager *sessionManager;
+@property (nonatomic, readonly) NSMutableArray *follows;
+@property (nonatomic, readonly) BOOL isUpdatingUser;
+@property (nonatomic, readonly) NSMutableArray <LCCNotification *> *notifications;
+@property (nonatomic, readonly) BOOL isUpdatingNotifications;
+@property (nonatomic, readonly) NSInteger numNewNotifications;
+@property (nonatomic, readonly) LCCUser *currentUser;
 
 + (CommunityModel *)sharedInstance;
-+ (void)registerSubclasses;
 
-- (void)onLoggedIn;
-- (void)onLoggedOut;
+- (void)signUpWithUser:(LCCUser *)user completion:(LCCResultBlock)completion;
+- (void)logInWithUsername:(NSString *)username password:(NSString *)password completion:(LCCResultBlock)completion;
+- (void)logOutWithCompletion:(LCCResultBlock)completion;
+
 - (void)onUserDataChanged;
 - (void)updateCurrentUser;
 - (void)onPostedWithDate:(NSDate *)date;
@@ -53,7 +59,6 @@ typedef NS_ENUM(NSInteger, StatsType) {
 - (LCCFollow *)followWithUser:(LCCUser *)user;
 - (NSArray *)arrayWithFollowedUsers;
 - (void)countPost:(LCCPost *)post type:(StatsType)type;
-- (void)trackEvent:(NSString *)name forPost:(LCCPost *)post;
 
 - (void)loadNotifications;
 - (void)onOpenNotifications;

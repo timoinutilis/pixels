@@ -10,7 +10,7 @@
 #import "GORTextView.h"
 #import "LCCPost.h"
 
-@class LCCUser;
+@class LCCUser, LCCPostStats;
 
 typedef NS_ENUM(NSInteger, CommListMode) {
     CommListModeUndefined = 0,

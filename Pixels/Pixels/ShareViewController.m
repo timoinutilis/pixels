@@ -8,7 +8,6 @@
 
 #import "ShareViewController.h"
 #import "Project.h"
-#import "AFNetworking.h"
 #import "CommunityModel.h"
 #import "CommLogInViewController.h"
 #import "UIViewController+LowResCoder.h"
@@ -153,7 +152,7 @@
 
 - (void)updateLogin:(NSNotification *)notification
 {
-    LCCUser *user = (LCCUser *)[PFUser currentUser];
+    LCCUser *user = [CommunityModel sharedInstance].currentUser;
     if (user)
     {
         self.loginCell.textLabel.text = [NSString stringWithFormat:@"%@ (Tap to log out)", user.username];
@@ -174,7 +173,7 @@
 {
     [self.view endEditing:YES];
     
-    if (![PFUser currentUser])
+    if (![CommunityModel sharedInstance].currentUser)
     {
         CommLogInViewController *vc = [CommLogInViewController create];
         [self presentInNavigationViewController:vc];
@@ -199,10 +198,13 @@
     
     if (cell == self.loginCell)
     {
-        if ([PFUser currentUser])
+        if ([CommunityModel sharedInstance].currentUser)
         {
-            [PFUser logOutInBackgroundWithBlock:^(NSError *error) {
-                [[CommunityModel sharedInstance] onLoggedOut];
+            [[CommunityModel sharedInstance] logOutWithCompletion:^(BOOL succeeded, NSError *error) {
+                if (!succeeded)
+                {
+                    [self showAlertWithTitle:@"Could not log out" message:error.localizedDescription block:nil];
+                }
             }];
         }
         else
@@ -227,7 +229,7 @@
 }
 
 - (void)send
-{
+{/*
     [self isBusy:YES];
 
     NSString *title = self.titleCell.textField.text;
@@ -290,7 +292,7 @@
         }
         
     }];
-    
+    */
 }
 
 - (void)showSendError

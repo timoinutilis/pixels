@@ -34,7 +34,7 @@ const NSTimeInterval MAX_CACHE_AGE = 1 * 60 * 60;
 }
 
 - (void)addProgramOfPost:(LCCPost *)post
-{
+{/*
     Project *project = [[ModelManager sharedManager] createNewProjectInFolder:[ModelManager sharedManager].currentDownloadFolder];
     project.name = post.title;
     project.sourceCode = [post sourceCode];
@@ -56,7 +56,7 @@ const NSTimeInterval MAX_CACHE_AGE = 1 * 60 * 60;
     else
     {
         [[AppController sharedController].tabBarController showExplorerAnimated:NO root:root];
-    }
+    }*/
 }
 
 - (BOOL)isModal

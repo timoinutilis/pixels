@@ -72,7 +72,7 @@
 }
 
 - (void)updateDataForceReload:(BOOL)forceReload
-{
+{/*
     NSArray *oldUsers = self.users.copy;
     
     PFQuery *query = [PFQuery queryWithClassName:[LCCFollow parseClassName]];
@@ -128,7 +128,7 @@
         }
         [self.refreshControl endRefreshing];
         
-    }];
+    }];*/
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

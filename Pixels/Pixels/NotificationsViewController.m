@@ -54,7 +54,7 @@
 {
     [super viewWillAppear:animated];
     
-    self.unreadDate = ((LCCUser *)[PFUser currentUser]).notificationsOpenedDate;
+    self.unreadDate = [CommunityModel sharedInstance].currentUser.notificationsOpenedDate;
     [[CommunityModel sharedInstance] onOpenNotifications];
 }
 
@@ -77,7 +77,7 @@
         [self.tableView reloadDataAnimatedWithOldArray:oldNotifications newArray:self.notifications inSection:0 offset:0];
         [self.refreshControl endRefreshing];
         
-        self.unreadDate = ((LCCUser *)[PFUser currentUser]).notificationsOpenedDate;
+        self.unreadDate = [CommunityModel sharedInstance].currentUser.notificationsOpenedDate;
         [[CommunityModel sharedInstance] onOpenNotifications];
     }
 }
@@ -113,7 +113,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     LCCNotification *notification = self.notifications[indexPath.row];
-    
+    /*
     switch (notification.type)
     {
         case LCCNotificationTypeComment: {
@@ -135,7 +135,7 @@
         default:
             [tableView deselectRowAtIndexPath:indexPath animated:YES];
             break;
-    }
+    }*/
 }
 
 @end
@@ -158,7 +158,7 @@
 - (void)setNotification:(LCCNotification *)notification
 {
     _notification = notification;
-    
+    /*
     NSString *text;
     NSString *name = (notification.sender != nil) ? notification.sender.username : @"A guest";
     switch (notification.type)
@@ -185,7 +185,7 @@
     }
     
     self.textView.text = text;
-    self.dateLabel.text = [NSDateFormatter localizedStringFromDate:notification.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
+    self.dateLabel.text = [NSDateFormatter localizedStringFromDate:notification.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];*/
 }
 
 - (void)setIsUnread:(BOOL)isUnread

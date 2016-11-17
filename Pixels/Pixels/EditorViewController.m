@@ -548,9 +548,9 @@ typedef void(^InfoBlock)(void);
         [self showAlertWithTitle:@"Feedback is available for downloaded or shared programs only." message:nil block:nil];
     }
     else
-    {
+    {/*
         LCCPost *post = [LCCPost objectWithoutDataWithClassName:[LCCPost parseClassName] objectId:self.project.postId];
-        [self showPost:post];
+        [self showPost:post];*/
     }
 }
 

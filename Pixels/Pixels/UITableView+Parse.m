@@ -7,7 +7,7 @@
 //
 
 #import "UITableView+Parse.h"
-#import <Parse/Parse.h>
+#import "APIObject.h"
 
 @implementation UITableView (Parse)
 
@@ -16,11 +16,11 @@
     NSMutableSet *oldSet = [NSMutableSet setWithCapacity:oldArray.count];
     NSMutableSet *newSet = [NSMutableSet setWithCapacity:newArray.count];
     
-    for (PFObject *object in oldArray)
+    for (APIObject *object in oldArray)
     {
         [oldSet addObject:object.objectId];
     }
-    for (PFObject *object in newArray)
+    for (APIObject *object in newArray)
     {
         [newSet addObject:object.objectId];
     }
@@ -29,7 +29,7 @@
     NSMutableArray *indexPathsToAdd = [NSMutableArray array];
     for (int i = 0; i < oldArray.count; i++)
     {
-        PFObject *object = oldArray[i];
+        APIObject *object = oldArray[i];
         if (![newSet containsObject:object.objectId])
         {
             [indexPathsToRemove addObject:[NSIndexPath indexPathForRow:i + offset inSection:section]];
@@ -37,7 +37,7 @@
     }
     for (int i = 0; i < newArray.count; i++)
     {
-        PFObject *object = newArray[i];
+        APIObject *object = newArray[i];
         if (![oldSet containsObject:object.objectId])
         {
             [indexPathsToAdd addObject:[NSIndexPath indexPathForRow:i + offset inSection:section]];

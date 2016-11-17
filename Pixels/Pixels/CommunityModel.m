@@ -18,6 +18,11 @@ NSString *const NotificationsUpdateNotification = @"NotificationsUpdateNotificat
 NSString *const NotificationsNumChangeNotification = @"NotificationsNumChangeNotification";
 
 NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
+NSString *const HTTPHeaderSessionTokenKey = @"X-LowResCoder-Session-Token";
+
+@interface CommunityModel()
+@property (nonatomic) AFHTTPSessionManager *sessionManager;
+@end
 
 @implementation CommunityModel
 
@@ -31,20 +36,73 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
     return sharedInstance;
 }
 
-+ (void)registerSubclasses
+- (instancetype)init
 {
-    [LCCUser registerSubclass];
-    [LCCPost registerSubclass];
-    [LCCProgram registerSubclass];
-    [LCCComment registerSubclass];
-    [LCCFollow registerSubclass];
-    [LCCCount registerSubclass];
-    [LCCPostStats registerSubclass];
-    [LCCNotification registerSubclass];
+    if (self = [super init])
+    {
+        _sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:@"https://lowresapi.timokloss.com"]];
+        
+        [LCCUser registerAPIClass];
+        [LCCPost registerAPIClass];
+        [LCCComment registerAPIClass];
+        [LCCFollow registerAPIClass];
+        [LCCLike registerAPIClass];
+        [LCCPostStats registerAPIClass];
+        [LCCNotification registerAPIClass];
+    }
+    return self;
 }
 
-- (void)onLoggedIn
+- (void)signUpWithUser:(LCCUser *)user completion:(LCCResultBlock)completion
 {
+    NSDictionary *params = [user dirtyDictionary];
+    
+    [self.sessionManager POST:@"users" parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+        
+        [self onLoggedInWithUser:[[LCCUser alloc] initWithDictionary:responseObject]];
+        completion(YES, nil);
+        
+    } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+        
+        completion(NO, error);
+        
+    }];
+}
+
+- (void)logInWithUsername:(NSString *)username password:(NSString *)password completion:(LCCResultBlock)completion;
+{
+    NSDictionary *params = @{@"username":username, @"password":password};
+    
+    [self.sessionManager POST:@"login" parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+        
+        [self onLoggedInWithUser:[[LCCUser alloc] initWithDictionary:responseObject[@"user"]]];
+        completion(YES, nil);
+        
+    } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+        
+        completion(NO, error);
+    }];
+
+}
+
+- (void)logOutWithCompletion:(LCCResultBlock)completion
+{
+    [self.sessionManager POST:@"logout" parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+        
+        [self onLoggedOut];
+        completion(YES, nil);
+        
+    } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+        
+        completion(NO, error);
+        
+    }];
+}
+
+- (void)onLoggedInWithUser:(LCCUser *)user
+{
+    _currentUser = user;
+    [self.sessionManager.requestSerializer setValue:self.currentUser.sessionToken forHTTPHeaderField:HTTPHeaderSessionTokenKey];
     [[NSNotificationCenter defaultCenter] postNotificationName:CurrentUserChangeNotification object:self];
     [self updateCurrentUser];
     [self loadNotifications];
@@ -52,6 +110,9 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
 
 - (void)onLoggedOut
 {
+    _currentUser = nil;
+    
+    [self.sessionManager.requestSerializer setValue:nil forHTTPHeaderField:HTTPHeaderSessionTokenKey];
     [self.follows removeAllObjects];
     _notifications = nil;
     
@@ -66,7 +127,7 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
 }
 
 - (void)updateCurrentUser
-{
+{/*
     _isUpdatingUser = YES;
     [[NSNotificationCenter defaultCenter] postNotificationName:UserUpdateNotification object:self];
     
@@ -124,28 +185,28 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
     // update installation
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     currentInstallation[@"user"] = [PFUser currentUser] ? [PFUser currentUser] : [NSNull null];
-    [currentInstallation saveInBackground];
+    [currentInstallation saveInBackground];*/
 }
 
 - (void)onPostedWithDate:(NSDate *)date
-{
+{/*
     LCCUser *user = (LCCUser *)[PFUser currentUser];
     if (user)
     {
         user.lastPostDate = date;
         [user saveInBackground];
-    }
+    }*/
 }
 
 - (void)sortFollows
-{
+{/*
     NSSortDescriptor *lastPost = [NSSortDescriptor sortDescriptorWithKey:@"followsUser.lastPostDate" ascending:NO];
     NSSortDescriptor *followDate = [NSSortDescriptor sortDescriptorWithKey:@"createdAt" ascending:NO];
-    [self.follows sortUsingDescriptors:@[lastPost, followDate]];
+    [self.follows sortUsingDescriptors:@[lastPost, followDate]];*/
 }
 
 - (void)followUser:(LCCUser *)user
-{
+{/*
     LCCFollow *follow = [LCCFollow object];
     follow.user = (LCCUser *)[PFUser currentUser];
     follow.followsUser = user;
@@ -162,11 +223,11 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
         {
             NSLog(@"Error: %@", error.description);
         }
-    }];
+    }];*/
 }
 
 - (void)unfollowUser:(LCCUser *)user
-{
+{/*
     LCCFollow *follow = [self followWithUser:user];
     if (follow)
     {
@@ -184,18 +245,18 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
                 NSLog(@"Error: %@", error.description);
             }
         }];
-    }
+    }*/
 }
 
 - (LCCFollow *)followWithUser:(LCCUser *)user
-{
+{/*
     for (LCCFollow *follow in self.follows)
     {
         if ([follow.followsUser.objectId isEqualToString:user.objectId])
         {
             return follow;
         }
-    }
+    }*/
     return nil;
 }
 
@@ -210,7 +271,7 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
 }
 
 - (void)countPost:(LCCPost *)post type:(StatsType)type
-{
+{/*
     LCCCountType countType = LCCCountTypeUndefined;
     NSString *event = nil;
     
@@ -256,20 +317,11 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
             NSLog(@"Error: %@", error.description);
         }
         
-    }];
-}
-
-- (void)trackEvent:(NSString *)name forPost:(LCCPost *)post
-{
-    NSDictionary *dimensions = @{@"user": [PFUser currentUser] ? @"registered" : @"guest",
-                                 @"app": ([AppController sharedController].isFullVersion) ? @"full version" : @"free",
-                                 @"category": [post categoryString]};
-    
-    [PFAnalytics trackEvent:name dimensions:dimensions];
+    }];*/
 }
 
 - (void)loadNotifications
-{
+{/*
     if ([PFUser currentUser] && !self.isUpdatingNotifications)
     {
         _isUpdatingNotifications = YES;
@@ -305,11 +357,11 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
             [self updateNewNotifications];
             
         }];
-    }
+    }*/
 }
 
 - (void)updateNewNotifications
-{
+{/*
     NSInteger num = 0;
     LCCUser *user = (LCCUser *)[PFUser currentUser];
     if (user)
@@ -328,11 +380,11 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
     {
         _numNewNotifications = num;
         [[NSNotificationCenter defaultCenter] postNotificationName:NotificationsNumChangeNotification object:self];
-    }
+    }*/
 }
 
 - (void)onOpenNotifications
-{
+{/*
     LCCUser *user = (LCCUser *)[PFUser currentUser];
     if (user && self.notifications.count > 0)
     {
@@ -343,7 +395,7 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
             [user saveInBackground];
             [self updateNewNotifications];
         }
-    }
+    }*/
 }
 
 @end

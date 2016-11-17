@@ -8,7 +8,7 @@
 
 #import "APIObject.h"
 
-typedef NS_ENUM(NSInteger, LCCNotificationType) {
+typedef NS_ENUM(int, LCCNotificationType) {
     LCCNotificationTypeComment,
     LCCNotificationTypeLike,
     LCCNotificationTypeShare,

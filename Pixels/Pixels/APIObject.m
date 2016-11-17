@@ -253,8 +253,12 @@ void integerSetterMethodIMP(APIObject *self, SEL _cmd, int value)
         }
     }
     
-    [self.dirty removeAllObjects];
     return dictionary;
+}
+
+- (void)clean
+{
+    [self.dirty removeAllObjects];
 }
 
 + (BOOL)resolveInstanceMethod:(SEL)aSEL

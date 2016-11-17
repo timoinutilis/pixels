@@ -10,7 +10,6 @@
 #import "ModelManager.h"
 #import "AppController.h"
 #import <StoreKit/StoreKit.h>
-#import <Parse/Parse.h>
 #import "CommunityModel.h"
 #import "AppStyle.h"
 
@@ -26,27 +25,7 @@
     
     [[SKPaymentQueue defaultQueue] addTransactionObserver:[AppController sharedController]];
     
-    [CommunityModel registerSubclasses];
-    
-    NSString *parseAppID = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"ParseAppID"];
-    NSString *parseClientKey = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"ParseClientKey"];
-    [Parse setApplicationId:parseAppID clientKey:parseClientKey];
-    
     [AppStyle setAppearance];
-    
-    if (application.applicationState != UIApplicationStateBackground)
-    {
-        // Track an app open here if we launch with a push, unless
-        // "content_available" was used to trigger a background push (introduced
-        // in iOS 7). In that case, we skip tracking here to avoid double
-        // counting the app-open.
-        BOOL preBackgroundPush = ![application respondsToSelector:@selector(backgroundRefreshStatus)];
-        BOOL oldPushHandlerOnly = ![self respondsToSelector:@selector(application:didReceiveRemoteNotification:fetchCompletionHandler:)];
-        BOOL noPushPayload = ![launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
-        if (preBackgroundPush || oldPushHandlerOnly || noPushPayload) {
-            [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
-        }
-    }
     
     if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey])
     {
@@ -81,12 +60,12 @@
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     
-    PFInstallation *installation = [PFInstallation currentInstallation];
+/*    PFInstallation *installation = [PFInstallation currentInstallation];
     if (installation.badge > 0)
     {
         installation.badge = 0;
         [installation saveInBackground];
-    }
+    }*/
     
     [[CommunityModel sharedInstance] loadNotifications];
 }
@@ -100,10 +79,10 @@
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
     // Store the deviceToken in the current installation and save it to Parse.
-    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+/*    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     [currentInstallation setDeviceTokenFromData:deviceToken];
     currentInstallation[@"user"] = [PFUser currentUser] ? [PFUser currentUser] : [NSNull null];
-    [currentInstallation saveInBackground];
+    [currentInstallation saveInBackground];*/
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
@@ -113,13 +92,6 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    if (application.applicationState == UIApplicationStateInactive)
-    {
-        // The application was just brought from the background to the foreground,
-        // so we consider the app as having been "opened by a push notification."
-        [PFAnalytics trackAppOpenedWithRemoteNotificationPayload:userInfo];
-    }
-    
     BOOL inForeground = (application.applicationState == UIApplicationStateActive);
     [[AppController sharedController] handlePush:userInfo inForeground:inForeground];
     if (inForeground)

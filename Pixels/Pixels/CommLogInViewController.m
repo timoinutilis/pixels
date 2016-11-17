@@ -137,7 +137,7 @@
         }];
         return;
     }
-    if (password.length < 4)
+    if (password.length < 6)
     {
         [self showAlertWithTitle:(password.length == 0 ? @"Please enter a password!" : @"Please enter a longer password!") message:nil block:^{
             [self.registerPasswordCell.textField becomeFirstResponder];
@@ -167,30 +167,17 @@
     
     [self setBusy:YES];
     [self.registerButtonCell setDisabled:YES wheel:YES];
-
-    [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        
+    
+    [[CommunityModel sharedInstance] signUpWithUser:user completion:^(BOOL succeeded, NSError *error) {
+        [self setBusy:NO];
         if (succeeded)
         {
-            LCCFollow *defaultFollow = [LCCFollow object];
-            NSString *newsUserID = [[NSBundle mainBundle] objectForInfoDictionaryKey:LowResNewsUserIDKey];
-            defaultFollow.user = user;
-            defaultFollow.followsUser = [LCCUser objectWithoutDataWithObjectId:newsUserID];
-            
-            [defaultFollow saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                
-                //TODO fail handling, but not here...
-                [self setBusy:NO];
-                [self loggedInWithUsername:username];
-                
-            }];
+            [self loggedInWithUsername:username];
         }
-        else if (error)
+        else
         {
-            [self setBusy:NO];
-            [self showAlertWithTitle:@"Could not register" message:error.userInfo[@"error"] block:nil];
+            [self showAlertWithTitle:@"Could not register" message:error.localizedDescription block:nil];
         }
-        
     }];
 }
 
@@ -217,18 +204,16 @@
     [self setBusy:YES];
     [self.logInButtonCell setDisabled:YES wheel:YES];
     
-    [LCCUser logInWithUsernameInBackground:username password:password block:^(LCCUser *user, NSError *error) {
-       
+    [[CommunityModel sharedInstance] logInWithUsername:username password:password completion:^(BOOL succeeded, NSError *error) {
         [self setBusy:NO];
-        if (user)
+        if (succeeded)
         {
             [self loggedInWithUsername:username];
         }
         else if (error)
         {
-            [self showAlertWithTitle:@"Could not log in" message:error.userInfo[@"error"] block:nil];
+            [self showAlertWithTitle:@"Could not log in" message:error.localizedDescription block:nil];
         }
-        
     }];
 }
 
@@ -236,8 +221,6 @@
 {
     NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
     [storage setObject:username forKey:UserDefaultsLogInKey];
-    
-    [[CommunityModel sharedInstance] onLoggedIn];
     
     [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
         [[AppController sharedController] registerForNotifications];

@@ -49,7 +49,7 @@
 }
 
 - (void)checkShowPost:(NSNotification *)notification
-{
+{/*
     NSString *postId = [AppController sharedController].shouldShowPostId;
     if (postId)
     {
@@ -62,7 +62,7 @@
         
         UINavigationController *nav = (UINavigationController *)self.viewControllers.lastObject;
         [nav pushViewController:vc animated:YES];
-    }
+    }*/
 }
 
 @end

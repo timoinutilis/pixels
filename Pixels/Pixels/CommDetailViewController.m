@@ -45,7 +45,7 @@ static const NSInteger LIMIT = 50;
 @property BOOL userNeedsUpdate;
 @property BOOL showsUserUpdateActivity;
 @property LCCPostCategory filterCategory;
-@property PFQuery *currentQuery;
+//@property PFQuery *currentQuery;
 @property BOOL hasMorePosts;
 @property BOOL isLoading;
 
@@ -115,7 +115,7 @@ static const NSInteger LIMIT = 50;
     
     if (self.mode == CommListModeUndefined)
     {
-        LCCUser *user = (LCCUser *)[PFUser currentUser];
+        LCCUser *user = [CommunityModel sharedInstance].currentUser;
         [self setUser:user mode:CommListModeNews];
     }
 }
@@ -133,7 +133,7 @@ static const NSInteger LIMIT = 50;
     if ([user isMe])
     {
         // use global instance of user
-        self.user = (LCCUser *)[PFUser currentUser];
+        self.user = [CommunityModel sharedInstance].currentUser;
     }
     else
     {
@@ -184,7 +184,7 @@ static const NSInteger LIMIT = 50;
     {
         LCCPost *post = self.posts[i];
         if (   [post.objectId isEqualToString:deletedPostId]
-            || [post.sharedPost.objectId isEqualToString:deletedPostId])
+            || [post.sharedPost isEqualToString:deletedPostId])
         {
             [self.posts removeObjectAtIndex:i];
             changed = YES;
@@ -204,7 +204,7 @@ static const NSInteger LIMIT = 50;
     {
         LCCPost *post = self.posts[i];
         if (   [post.objectId isEqualToString:counterPostId]
-            || [post.sharedPost.objectId isEqualToString:counterPostId])
+            || [post.sharedPost isEqualToString:counterPostId])
         {
             [self.tableView reloadData];
             break;
@@ -230,7 +230,7 @@ static const NSInteger LIMIT = 50;
 }
 
 - (void)updateDataForceReload:(BOOL)forceReload
-{
+{/*
     switch (self.mode)
     {
         case CommListModeNews: {
@@ -262,9 +262,9 @@ static const NSInteger LIMIT = 50;
         }
         case CommListModeUndefined:
             break;
-    }
+    }*/
 }
-
+/*
 - (PFQuery *)createQueryWithForceReload:(BOOL)forceReload
 {
     PFQuery *query = [PFQuery queryWithClassName:[LCCPost parseClassName]];
@@ -281,9 +281,9 @@ static const NSInteger LIMIT = 50;
     query.maxCacheAge = MAX_CACHE_AGE;
     return query;
 }
-
+*/
 - (void)loadCurrentQuery
-{
+{/*
     self.isLoading = YES;
     BOOL forcedReload = (self.currentQuery.cachePolicy == kPFCachePolicyNetworkOnly);
     BOOL add = (self.currentQuery.skip > 0);
@@ -327,11 +327,11 @@ static const NSInteger LIMIT = 50;
         [self.refreshControl endRefreshing];
         self.isLoading = NO;
         
-    }];
+    }];*/
 }
 
 - (void)updateVisiblePosts
-{
+{/*
     NSArray *cells = self.tableView.visibleCells;
     for (CommPostCell *cell in cells)
     {
@@ -346,7 +346,7 @@ static const NSInteger LIMIT = 50;
                 }
             }
         }
-    }
+    }*/
 }
 
 - (NSMutableArray *)filteredNewsWithPosts:(NSArray *)objects
@@ -358,7 +358,7 @@ static const NSInteger LIMIT = 50;
     {
         if (post.sharedPost)
         {
-            [sharedPosts addObject:post.sharedPost.objectId];
+            [sharedPosts addObject:post.sharedPost];
         }
         if (![sharedPosts containsObject:post.objectId])
         {
@@ -378,7 +378,7 @@ static const NSInteger LIMIT = 50;
         UIViewController *vc = [CommEditUserViewController create];
         [self presentInNavigationViewController:vc];
     }
-    else if (![PFUser currentUser])
+    else if (![CommunityModel sharedInstance].currentUser)
     {
         UIViewController *vc = [CommLogInViewController create];
         [self presentInNavigationViewController:vc];
@@ -414,7 +414,7 @@ static const NSInteger LIMIT = 50;
     else
     {
         [self.view endEditing:YES];
-        
+        /*
         UIButton *button = (UIButton *)sender;
         button.enabled = NO;
         
@@ -455,7 +455,7 @@ static const NSInteger LIMIT = 50;
             }
             
             button.enabled = YES;
-        }];
+        }];*/
     }
 }
 
@@ -473,7 +473,7 @@ static const NSInteger LIMIT = 50;
 }
 
 - (void)deletePost:(LCCPost *)post indexPath:(NSIndexPath *)indexPath
-{
+{/*
     [self.activityIndicator increaseActivity];
     self.view.userInteractionEnabled = NO;
     
@@ -493,7 +493,7 @@ static const NSInteger LIMIT = 50;
             [self showAlertWithTitle:@"Could not delete post." message:error.userInfo[@"error"] block:nil];
         }
         
-    }];
+    }];*/
 }
 
 #pragma mark - Table view
@@ -604,7 +604,7 @@ static const NSInteger LIMIT = 50;
         else if (self.mode == CommListModeNews)
         {
             CommInfoCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommInfoCell" forIndexPath:indexPath];
-            if ([PFUser currentUser])
+            if ([CommunityModel sharedInstance].currentUser)
             {
                 cell.infoTextLabel.text = @"Here you see featured programs, official news, and posts of all the users you follow.";
             }
@@ -633,7 +633,7 @@ static const NSInteger LIMIT = 50;
             return cell;
         }
         else
-        {
+        {/*
             LCCPost *post = self.posts[indexPath.row - 1];
             LCCPost *targetPost = post.sharedPost ? post.sharedPost : post;
             NSString *cellType = (targetPost.type == LCCPostTypeStatus) ? @"StatusCell" : @"ProgramCell";
@@ -641,7 +641,7 @@ static const NSInteger LIMIT = 50;
             cell.showName = (self.mode == CommListModeNews);
             cell.post = post;
             cell.tag = CellTagPost;
-            return cell;
+            return cell;*/
         }
     }
     return nil;
@@ -666,7 +666,7 @@ static const NSInteger LIMIT = 50;
             break;
         }
         case CellTagPost: {
-            CommPostViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"CommPostView"];
+/*            CommPostViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"CommPostView"];
             LCCPost *post = self.posts[indexPath.row - 1];
             if (post.type == LCCPostTypeShare)
             {
@@ -677,7 +677,7 @@ static const NSInteger LIMIT = 50;
             {
                 [vc setPost:post mode:CommPostModePost];
             }
-            [self.navigationController pushViewController:vc animated:YES];
+            [self.navigationController pushViewController:vc animated:YES];*/
             break;
         }
     }
@@ -687,14 +687,14 @@ static const NSInteger LIMIT = 50;
 {
     NSString *sectionId = self.sections[indexPath.section];
     if (sectionId == SectionPosts && indexPath.row > 0)
-    {
+    {/*
         LCCUser *user = (LCCUser *)[PFUser currentUser];
         LCCPost *post = self.posts[indexPath.row - 1];
         
         if ([user isNewsUser] && post.type == LCCPostTypeShare && [post.user isMe])
         {
             return UITableViewCellEditingStyleDelete;
-        }
+        }*/
     }
     return UITableViewCellEditingStyleNone;
 }
@@ -768,7 +768,7 @@ static const NSInteger LIMIT = 50;
     {
         self.actionButton.hidden = NO;
         self.actionButton.enabled = YES;
-        if ([PFUser currentUser] && [[CommunityModel sharedInstance] followWithUser:user])
+        if ([CommunityModel sharedInstance].currentUser && [[CommunityModel sharedInstance] followWithUser:user])
         {
             [self.actionButton setTitle:@"Stop Following" forState:UIControlStateNormal];
         }
@@ -893,7 +893,7 @@ static const NSInteger LIMIT = 50;
 - (void)setPost:(LCCPost *)post
 {
     _post = post;
-    
+    /*
     self.starImageView.hidden = ![post.user isNewsUser];
     
     self.titleLabel.text = post.title;
@@ -917,11 +917,11 @@ static const NSInteger LIMIT = 50;
     if (self.iconImageView)
     {
         [self.iconImageView sd_setImageWithURL:[NSURL URLWithString:post.image.url]];
-    }
+    }*/
 }
 
 - (void)setStats:(LCCPostStats *)stats
-{
+{/*
     if ([stats isDataAvailable])
     {
         NSString *likesWord = stats.numLikes == 1 ? @"Like" : @"Likes";
@@ -945,7 +945,7 @@ static const NSInteger LIMIT = 50;
     else
     {
         self.statsLabel.text = @" ";
-    }
+    }*/
 }
 
 @end

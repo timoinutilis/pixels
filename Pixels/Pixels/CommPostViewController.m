@@ -58,11 +58,11 @@ typedef NS_ENUM(NSInteger, Section) {
         UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onDoneTapped:)];
         [items addObject:doneItem];
     }
-    if (![self.post isDataAvailable] || self.post.type == LCCPostTypeProgram)
+/*    if (![self.post isDataAvailable] || self.post.type == LCCPostTypeProgram)
     {
         UIBarButtonItem *actionItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(onActionTapped:)];
         [items addObject:actionItem];
-    }
+    }*/
     UIBarButtonItem *activityItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
     [items addObject:activityItem];
     self.navigationItem.rightBarButtonItems = items;
@@ -153,7 +153,7 @@ typedef NS_ENUM(NSInteger, Section) {
 
 - (void)onCounterChanged:(NSNotification *)notification
 {
-    NSString *counterPostId = notification.userInfo[@"postId"];
+/*    NSString *counterPostId = notification.userInfo[@"postId"];
     if ([counterPostId isEqualToString:self.post.objectId])
     {
         StatsType type = [notification.userInfo[@"type"] integerValue];
@@ -166,7 +166,7 @@ typedef NS_ENUM(NSInteger, Section) {
         {
             [self.titleCell likeIt];
         }
-    }
+    }*/
 }
 
 - (void)updatePostView
@@ -178,7 +178,7 @@ typedef NS_ENUM(NSInteger, Section) {
 }
 
 - (void)loadAllForceReload:(BOOL)forceReload
-{
+{/*
     if ([self.post isDataAvailable])
     {
         if (!forceReload)
@@ -218,7 +218,7 @@ typedef NS_ENUM(NSInteger, Section) {
             
         }];
         
-    }
+    }*/
 }
 
 - (void)loadSubDataForceReload:(BOOL)forceReload
@@ -232,7 +232,7 @@ typedef NS_ENUM(NSInteger, Section) {
 }
 
 - (void)loadUser
-{
+{/*
     if (![self.post.user isDataAvailable])
     {
         [self.activityIndicator increaseActivity];
@@ -249,11 +249,11 @@ typedef NS_ENUM(NSInteger, Section) {
             }
             
         }];
-    }
+    }*/
 }
 
 - (void)loadCommentsForceReload:(BOOL)forceReload
-{
+{/*
     self.isLoadingComments = YES;
     
     PFQuery *query = [PFQuery queryWithClassName:[LCCComment parseClassName]];
@@ -290,11 +290,11 @@ typedef NS_ENUM(NSInteger, Section) {
         }
         [self.refreshControl endRefreshing];
         
-    }];
+    }];*/
 }
 
 - (void)loadProgram
-{
+{/*
     if (self.post.programFile)
     {
         // New format: Load program from file
@@ -346,11 +346,11 @@ typedef NS_ENUM(NSInteger, Section) {
                 
             }];
         }
-    }
+    }*/
 }
 
 - (void)loadStatsForceReload:(BOOL)forceReload
-{
+{/*
     if (self.post.stats && (!self.post.stats.isDataAvailable || forceReload))
     {
         [self.activityIndicator increaseActivity];
@@ -368,11 +368,11 @@ typedef NS_ENUM(NSInteger, Section) {
             }
             
         }];
-    }
+    }*/
 }
 
 - (void)loadLike
-{
+{/*
     if (![PFUser currentUser])
     {
         // "like" tap will ask for log-in.
@@ -403,7 +403,7 @@ typedef NS_ENUM(NSInteger, Section) {
             [self.activityIndicator decreaseActivity];
             
         }];
-    }
+    }*/
 }
 
 - (void)onUserChanged:(NSNotification *)notification
@@ -412,7 +412,7 @@ typedef NS_ENUM(NSInteger, Section) {
 }
 
 - (IBAction)onLikeTapped:(id)sender
-{
+{/*
     if (![PFUser currentUser])
     {
         CommLogInViewController *vc = [CommLogInViewController create];
@@ -421,7 +421,7 @@ typedef NS_ENUM(NSInteger, Section) {
     else if (![self.post.user isMe])
     {
         [[CommunityModel sharedInstance] countPost:self.post type:StatsTypeLike];
-    }
+    }*/
 }
 
 - (IBAction)onGetProgramTapped:(id)sender
@@ -438,7 +438,7 @@ typedef NS_ENUM(NSInteger, Section) {
 }
 
 - (void)share
-{
+{/*
     LCCPost *post = [LCCPost object];
     post.user = (LCCUser *)[PFUser currentUser];
     post.type = LCCPostTypeShare;
@@ -465,11 +465,11 @@ typedef NS_ENUM(NSInteger, Section) {
             [self showAlertWithTitle:@"Could not share post." message:error.userInfo[@"error"] block:nil];
         }
         
-    }];
+    }];*/
 }
 
 - (IBAction)onSendCommentTapped:(id)sender
-{
+{/*
     NSString *commentText = self.writeCommentCell.textView.text;
     commentText = [commentText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     if (commentText.length > 0)
@@ -534,11 +534,11 @@ typedef NS_ENUM(NSInteger, Section) {
             button.enabled = YES;
             
         }];
-    }
+    }*/
 }
 
 - (void)deletePost
-{
+{/*
     [self.activityIndicator increaseActivity];
     self.view.userInteractionEnabled = NO;
     
@@ -556,7 +556,7 @@ typedef NS_ENUM(NSInteger, Section) {
             [self showAlertWithTitle:@"Could not delete post." message:error.userInfo[@"error"] block:nil];
         }
         
-    }];
+    }];*/
 }
 
 - (void)showUser:(LCCUser *)user
@@ -588,7 +588,7 @@ typedef NS_ENUM(NSInteger, Section) {
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return ([self.post isDataAvailable] ? Section_count : 0);
+    return 0; //([self.post isDataAvailable] ? Section_count : 0);
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -597,10 +597,10 @@ typedef NS_ENUM(NSInteger, Section) {
     if (section == SectionTitle)
     {
         NSInteger num = (self.post.type == LCCPostTypeProgram ? 3 : 2);
-        if ([self.post.user isMe])
+/*        if ([self.post.user isMe])
         {
             num++; // "delete" cell
-        }
+        }*/
         return num;
     }
     else if (section == SectionComments)
@@ -626,14 +626,15 @@ typedef NS_ENUM(NSInteger, Section) {
     }
     else if (section == SectionWriteComment)
     {
-        NSString *name = ([PFUser currentUser] ? [PFUser currentUser].username : @"Guest");
+        LCCUser *currentUser = [CommunityModel sharedInstance].currentUser;
+        NSString *name = (currentUser ? currentUser.username : @"Guest");
         return [NSString stringWithFormat:@"Write a Comment (as %@)", name];
     }
     return nil;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+{/*
     if (indexPath.section == SectionTitle)
     {
         if (indexPath.row == 0)
@@ -674,12 +675,12 @@ typedef NS_ENUM(NSInteger, Section) {
     {
         return self.writeCommentCell;
     }
-
+*/
     return nil;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+{/*
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     
     switch (cell.tag)
@@ -724,7 +725,7 @@ typedef NS_ENUM(NSInteger, Section) {
         }
         default:
             break;
-    }
+    }*/
 }
 
 @end
@@ -764,12 +765,12 @@ typedef NS_ENUM(NSInteger, Section) {
     
     self.likeButton.enabled = NO;
     
-    LCCUser *currentUser = (LCCUser *)[PFUser currentUser];
+    LCCUser *currentUser = [CommunityModel sharedInstance].currentUser;
     self.shareButton.hidden = ![currentUser isNewsUser];
 }
 
 - (void)setPost:(LCCPost *)post
-{
+{/*
     if (post != _post)
     {
         _post = post;
@@ -794,7 +795,7 @@ typedef NS_ENUM(NSInteger, Section) {
             self.likeCount = 0;
             self.downloadCount = 0;
         }
-    }
+    }*/
 }
 
 - (void)setLikeCount:(NSInteger)likeCount
@@ -840,7 +841,7 @@ typedef NS_ENUM(NSInteger, Section) {
 - (void)setComment:(LCCComment *)comment
 {
     _comment = comment;
-    if (comment.user)
+/*    if (comment.user)
     {
         [self.nameButton setTitle:comment.user.username forState:UIControlStateNormal];
         self.nameButton.enabled = YES;
@@ -851,12 +852,12 @@ typedef NS_ENUM(NSInteger, Section) {
         self.nameButton.enabled = NO;
     }
     self.dateLabel.text = [NSDateFormatter localizedStringFromDate:comment.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
-    self.textView.text = comment.text;
+    self.textView.text = comment.text;*/
 }
 
 - (IBAction)onNameTapped:(id)sender
 {
-    [self.delegate showUser:self.comment.user];
+//    [self.delegate showUser:self.comment.user];
 }
 
 @end

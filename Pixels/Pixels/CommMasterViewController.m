@@ -75,7 +75,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
 - (void)onUserChanged:(NSNotification *)notification
 {
     [self.tableView reloadData];
-    if (![PFUser currentUser] && ![self.currentSelection isEqual:self.newsIndexPath])
+    if (![CommunityModel sharedInstance].currentUser && ![self.currentSelection isEqual:self.newsIndexPath])
     {
         // show news
         self.currentSelection = self.newsIndexPath;
@@ -126,11 +126,11 @@ typedef NS_ENUM(NSInteger, CellTag) {
 {
     if (section == 0)
     {
-        return [PFUser currentUser] ? 2 : 1;
+        return [CommunityModel sharedInstance].currentUser ? 2 : 1;
     }
     else if (section == 1)
     {
-        return [PFUser currentUser] ? 2 : 1;
+        return [CommunityModel sharedInstance].currentUser ? 2 : 1;
     }
     else if (section == 2)
     {
@@ -171,7 +171,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
     {
         if (indexPath.row == 0)
         {
-            LCCUser *user = (LCCUser *)[PFUser currentUser];
+            LCCUser *user = [CommunityModel sharedInstance].currentUser;
             if (user)
             {
                 cell = [tableView dequeueReusableCellWithIdentifier:@"MenuCell" forIndexPath:indexPath];
@@ -194,9 +194,9 @@ typedef NS_ENUM(NSInteger, CellTag) {
     }
     else if (indexPath.section == 2)
     {
-        LCCFollow *follow = [CommunityModel sharedInstance].follows[indexPath.row];
+//        LCCFollow *follow = [CommunityModel sharedInstance].follows[indexPath.row];
         cell = [tableView dequeueReusableCellWithIdentifier:@"MenuCell" forIndexPath:indexPath];
-        cell.textLabel.text = follow.followsUser.username;
+//        cell.textLabel.text = follow.followsUser.username;
         cell.tag = CellTagFollowing;
     }
     
@@ -217,14 +217,10 @@ typedef NS_ENUM(NSInteger, CellTag) {
         }
         case CellTagLogOut: {
             [tableView deselectRowAtIndexPath:indexPath animated:YES];
-            [PFUser logOutInBackgroundWithBlock:^(NSError *error) {
-                if (error)
+            [[CommunityModel sharedInstance] logOutWithCompletion:^(BOOL succeeded, NSError *error) {
+                if (!succeeded)
                 {
-                    [self showAlertWithTitle:@"Could not log out" message:error.userInfo[@"error"] block:nil];
-                }
-                else
-                {
-                    [[CommunityModel sharedInstance] onLoggedOut];
+                    [self showAlertWithTitle:@"Could not log out" message:error.localizedDescription block:nil];
                 }
             }];
             break;
@@ -253,19 +249,19 @@ typedef NS_ENUM(NSInteger, CellTag) {
         switch (cell.tag)
         {
             case CellTagNews: {
-                LCCUser *user = (LCCUser *)[PFUser currentUser];
+                LCCUser *user = [CommunityModel sharedInstance].currentUser;
                 [vc setUser:user mode:CommListModeNews];
                 break;
             }
             case CellTagAccount: {
-                LCCUser *user = (LCCUser *)[PFUser currentUser];
+                LCCUser *user = [CommunityModel sharedInstance].currentUser;
                 [vc setUser:user mode:CommListModeProfile];
                 break;
             }
             case CellTagFollowing: {
-                LCCFollow *follow = [CommunityModel sharedInstance].follows[indexPath.row];
+/*                LCCFollow *follow = [CommunityModel sharedInstance].follows[indexPath.row];
                 LCCUser *user = follow.followsUser;
-                [vc setUser:user mode:CommListModeProfile];
+                [vc setUser:user mode:CommListModeProfile];*/
                 break;
             }
         }

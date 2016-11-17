@@ -60,7 +60,7 @@
     self.cycleManager = [[GORCycleManager alloc] initWithFields:@[self.usernameCell.textField, self.passwordCell.textField, self.passwordVerifyCell.textField, self.aboutCell.textView]];
     
     // set user data
-    self.user = (LCCUser *)[PFUser currentUser];
+    self.user = [CommunityModel sharedInstance].currentUser;
     self.usernameCell.textField.text = self.user.username;
     self.aboutCell.textView.text = self.user.about;
 }
@@ -114,7 +114,7 @@
     {
         self.user.password = password;
     }
-    
+    /*
     [self setBusy:YES];
     [self.user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         
@@ -136,7 +136,7 @@
             [self showAlertWithTitle:@"Could not save changes" message:error.userInfo[@"error"] block:nil];
         }
         
-    }];
+    }];*/
 }
 
 - (IBAction)onCancelTapped:(id)sender

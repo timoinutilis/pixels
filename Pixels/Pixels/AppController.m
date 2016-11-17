@@ -7,7 +7,6 @@
 //
 
 #import "AppController.h"
-#import <Parse/Parse.h>
 #import "UIViewController+LowResCoder.h"
 #import "NotificationView.h"
 #import "NSMutableDictionary+Utils.h"
@@ -245,7 +244,7 @@ NSString *const ImportProjectNotification = @"ImportProjectNotification";
     NSDictionary *aps = userInfo[@"aps"];
     NSString *alertText = aps[@"alert"];
     
-    [PFQuery clearAllCachedResults];
+//    [PFQuery clearAllCachedResults];
     
     if (inForeground)
     {

@@ -14,6 +14,7 @@ extern NSString *const LowResNewsUserIDKey;
 
 @property (retain) NSString *username;
 @property (retain) NSString *password;
+@property (retain) NSString *sessionToken;
 @property (retain) NSString *about;
 @property (retain) NSDate *lastPostDate;
 @property (retain) NSDate *notificationsOpenedDate;
