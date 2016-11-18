@@ -515,7 +515,7 @@ static const NSInteger LIMIT = 50;
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return self.sections.count;
+    return (self.posts != nil ? self.sections.count : 0);
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -665,18 +665,18 @@ static const NSInteger LIMIT = 50;
             break;
         }
         case CellTagPost: {
-/*            CommPostViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"CommPostView"];
+            CommPostViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"CommPostView"];
             LCCPost *post = self.posts[indexPath.row - 1];
-            if (post.type == LCCPostTypeShare)
+/*            if (post.type == LCCPostTypeShare)
             {
                 post.sharedPost.stats = post.stats;
                 [vc setPost:post.sharedPost mode:CommPostModePost];
             }
-            else
+            else*/
             {
                 [vc setPost:post mode:CommPostModePost];
             }
-            [self.navigationController pushViewController:vc animated:YES];*/
+            [self.navigationController pushViewController:vc animated:YES];
             break;
         }
     }
