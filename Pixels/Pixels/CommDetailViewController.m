@@ -37,15 +37,20 @@ static const NSInteger LIMIT = 50;
 
 @property LCCUser *user;
 @property CommListMode mode;
+
 @property NSMutableArray *posts;
+@property NSMutableDictionary *usersById;
+@property NSMutableDictionary *statsById;
+
 @property NSArray *sections;
 @property CommProfileCell *profileCell;
 @property CommWriteStatusCell *writeStatusCell;
 @property ExtendedActivityIndicatorView *activityIndicator;
 @property BOOL userNeedsUpdate;
-@property BOOL showsUserUpdateActivity;
 @property LCCPostCategory filterCategory;
 //@property PFQuery *currentQuery;
+@property int currentOffset;
+@property NSString *currentRoute;
 @property BOOL hasMorePosts;
 @property BOOL isLoading;
 
@@ -110,9 +115,6 @@ static const NSInteger LIMIT = 50;
 {
     [super viewWillAppear:animated];
     
-    [self onUserUpdate:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserUpdate:) name:UserUpdateNotification object:nil];
-    
     if (self.mode == CommListModeUndefined)
     {
         LCCUser *user = [CommunityModel sharedInstance].currentUser;
@@ -124,8 +126,6 @@ static const NSInteger LIMIT = 50;
 {
     [super viewWillDisappear:animated];
     [self.view endEditing:YES];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UserUpdateNotification object:nil];
 }
 
 - (void)setUser:(LCCUser *)user mode:(CommListMode)mode
@@ -169,10 +169,18 @@ static const NSInteger LIMIT = 50;
 
 - (void)onUserChanged:(NSNotification *)notification
 {
-    if (self.mode == CommListModeProfile && [self.user isMe])
+    if (self.mode == CommListModeNews)
     {
-        self.userNeedsUpdate = YES;
-        [self.tableView reloadData];
+        self.user = [CommunityModel sharedInstance].currentUser;
+        [self updateDataForceReload:NO];
+    }
+    else if (self.mode == CommListModeProfile)
+    {
+        if ([self.user isMe])
+        {
+            self.userNeedsUpdate = YES;
+            [self.tableView reloadData];
+        }
     }
 }
 
@@ -212,57 +220,29 @@ static const NSInteger LIMIT = 50;
     }
 }
 
-- (void)onUserUpdate:(NSNotification *)notification
-{
-    if ([CommunityModel sharedInstance].isUpdatingUser)
-    {
-        if (!self.showsUserUpdateActivity)
-        {
-            [self.activityIndicator increaseActivity];
-            self.showsUserUpdateActivity = YES;
-        }
-    }
-    else if (self.showsUserUpdateActivity)
-    {
-        [self.activityIndicator decreaseActivity];
-        self.showsUserUpdateActivity = NO;
-    }
-}
-
 - (void)updateDataForceReload:(BOOL)forceReload
-{/*
+{
     switch (self.mode)
     {
         case CommListModeNews: {
             self.title = @"News";
             self.sections = @[SectionInfo, SectionPosts];
-            
-            NSArray *followedUsers = [[CommunityModel sharedInstance] arrayWithFollowedUsers];
-            if (followedUsers.count > 0)
-            {
-                self.currentQuery = [self createQueryWithForceReload:forceReload];
-                [self.currentQuery whereKey:@"user" containedIn:followedUsers];
-                [self loadCurrentQuery];
-            }
-            else
-            {
-                self.posts = nil;
-                [self.tableView reloadData];
-            }
+            self.currentOffset = 0;
+            self.currentRoute = [NSString stringWithFormat:@"users/%@/news", (self.user ? self.user.objectId : @"guest")];
+            [self loadCurrentQuery];
             break;
         }
         case CommListModeProfile: {
             self.title = self.user.username;
             self.sections = [self.user isMe] ? @[SectionInfo, SectionPostStatus, SectionPosts] : @[SectionInfo, SectionPosts];
-            
-            self.currentQuery = [self createQueryWithForceReload:forceReload];
-            [self.currentQuery whereKey:@"user" equalTo:self.user];
+            self.currentOffset = 0;
+            self.currentRoute = [NSString stringWithFormat:@"users/%@", self.user.objectId];
             [self loadCurrentQuery];
             break;
         }
         case CommListModeUndefined:
             break;
-    }*/
+    }
 }
 /*
 - (PFQuery *)createQueryWithForceReload:(BOOL)forceReload
@@ -283,55 +263,71 @@ static const NSInteger LIMIT = 50;
 }
 */
 - (void)loadCurrentQuery
-{/*
+{
     self.isLoading = YES;
-    BOOL forcedReload = (self.currentQuery.cachePolicy == kPFCachePolicyNetworkOnly);
-    BOOL add = (self.currentQuery.skip > 0);
+    BOOL forcedReload = NO; //(self.currentQuery.cachePolicy == kPFCachePolicyNetworkOnly);
+    BOOL add = (self.currentOffset > 0);
     NSArray *oldPosts = self.posts.copy;
     [self.activityIndicator increaseActivity];
-    [self.currentQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        
+    
+    NSDictionary *params = @{@"offset": @(self.currentOffset), @"limit":@(LIMIT)};
+    [[CommunityModel sharedInstance].sessionManager GET:self.currentRoute parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+
         [self.activityIndicator decreaseActivity];
-        if (objects)
+        
+        NSArray *posts = [LCCPost objectsFromArray:responseObject[@"posts"]];
+        NSDictionary *usersById = [LCCUser objectsByIdFromArray:responseObject[@"users"]];
+        NSDictionary *statsById = [LCCPostStats objectsByIdFromArray:responseObject[@"postStats"]];
+        if (add)
         {
-            if (add)
-            {
-                [self.posts addObjectsFromArray:objects];
-            }
-            else
-            {
-                self.posts = [NSMutableArray arrayWithArray:objects];
-            }
-            
-            if (self.mode == CommListModeNews)
-            {
-                self.posts = [self filteredNewsWithPosts:self.posts];
-            }
-            
-            self.hasMorePosts = (objects.count == LIMIT);
-            self.currentQuery.skip += LIMIT; // for next load
-            if (forcedReload && !add)
-            {
-                [self updateVisiblePosts];
-                [self.tableView reloadDataAnimatedWithOldArray:oldPosts newArray:self.posts inSection:self.sections.count - 1 offset:1];
-            }
-            else
-            {
-                [self.tableView reloadData];
-            }
+            [self.posts addObjectsFromArray:posts];
+            [self.usersById addEntriesFromDictionary:usersById];
+            [self.statsById addEntriesFromDictionary:statsById];
         }
-        else if (error)
+        else
         {
-            [self showAlertWithTitle:@"Could not load posts" message:error.userInfo[@"error"] block:nil];
+            self.posts = posts.mutableCopy;
+            self.usersById = usersById.mutableCopy;
+            self.statsById = statsById.mutableCopy;
         }
+        
+        if (self.mode == CommListModeNews)
+        {
+            self.posts = [self filteredNewsWithPosts:self.posts];
+        }
+        
+        self.hasMorePosts = (posts.count == LIMIT);
+        self.currentOffset += LIMIT; // for next load
+        if (self.mode == CommListModeProfile)
+        {
+            // don't fetch complete user again for following pages
+            self.currentRoute = [NSString stringWithFormat:@"users/%@/posts", self.user.objectId];
+        }
+        if (forcedReload && !add)
+        {
+            [self updateVisiblePosts];
+            [self.tableView reloadDataAnimatedWithOldArray:oldPosts newArray:self.posts inSection:self.sections.count - 1 offset:1];
+        }
+        else
+        {
+            [self.tableView reloadData];
+        }
+        
         [self.refreshControl endRefreshing];
         self.isLoading = NO;
-        
-    }];*/
+
+    } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+
+        [self.activityIndicator decreaseActivity];
+        [self showAlertWithTitle:@"Could not load posts" message:error.localizedDescription block:nil];
+        [self.refreshControl endRefreshing];
+        self.isLoading = NO;
+
+    }];
 }
 
 - (void)updateVisiblePosts
-{/*
+{
     NSArray *cells = self.tableView.visibleCells;
     for (CommPostCell *cell in cells)
     {
@@ -341,12 +337,13 @@ static const NSInteger LIMIT = 50;
             {
                 if ([post.objectId isEqualToString:cell.post.objectId])
                 {
-                    [cell setStats:post.stats];
+                    LCCPostStats *stats = self.statsById[post.stats];
+                    [cell setStats:stats];
                     break;
                 }
             }
         }
-    }*/
+    }
 }
 
 - (NSMutableArray *)filteredNewsWithPosts:(NSArray *)objects
@@ -633,15 +630,17 @@ static const NSInteger LIMIT = 50;
             return cell;
         }
         else
-        {/*
+        {
             LCCPost *post = self.posts[indexPath.row - 1];
-            LCCPost *targetPost = post.sharedPost ? post.sharedPost : post;
+            LCCPost *targetPost = /*post.sharedPost ? post.sharedPost :*/ post;
+            LCCUser *user = self.usersById[post.user];
+            LCCPostStats *stats = self.statsById[post.stats];
             NSString *cellType = (targetPost.type == LCCPostTypeStatus) ? @"StatusCell" : @"ProgramCell";
             CommPostCell *cell = [tableView dequeueReusableCellWithIdentifier:cellType forIndexPath:indexPath];
-            cell.showName = (self.mode == CommListModeNews);
-            cell.post = post;
+            [cell setPost:post user:user showName:(self.mode == CommListModeNews)];
+            [cell setStats:stats];
             cell.tag = CellTagPost;
-            return cell;*/
+            return cell;
         }
     }
     return nil;
@@ -687,14 +686,14 @@ static const NSInteger LIMIT = 50;
 {
     NSString *sectionId = self.sections[indexPath.section];
     if (sectionId == SectionPosts && indexPath.row > 0)
-    {/*
-        LCCUser *user = (LCCUser *)[PFUser currentUser];
+    {
+        LCCUser *user = [CommunityModel sharedInstance].currentUser;
         LCCPost *post = self.posts[indexPath.row - 1];
         
-        if ([user isNewsUser] && post.type == LCCPostTypeShare && [post.user isMe])
+        if ([user isNewsUser] && post.type == LCCPostTypeShare && [post.user isEqualToString:user.objectId])
         {
             return UITableViewCellEditingStyleDelete;
-        }*/
+        }
     }
     return UITableViewCellEditingStyleNone;
 }
@@ -875,6 +874,9 @@ static const NSInteger LIMIT = 50;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *statsLabel;
+
+@property (nonatomic) LCCPost *post;
+@property (nonatomic) LCCUser *user;
 @end
 
 @implementation CommPostCell
@@ -890,11 +892,12 @@ static const NSInteger LIMIT = 50;
     layer.borderColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.25].CGColor;
 }
 
-- (void)setPost:(LCCPost *)post
+- (void)setPost:(LCCPost *)post user:(LCCUser *)user showName:(BOOL)showName
 {
     _post = post;
-    /*
-    self.starImageView.hidden = ![post.user isNewsUser];
+    _user = user;
+    
+    self.starImageView.hidden = ![user isNewsUser];
     
     self.titleLabel.text = post.title;
 
@@ -903,26 +906,24 @@ static const NSInteger LIMIT = 50;
     {
         [infos addObject:[post categoryString]];
     }
-    if (self.showName)
+    if (showName)
     {
-        NSString *name = (post.type == LCCPostTypeShare) ? [NSString stringWithFormat:@"Shared by %@", post.user.username] : post.user.username;
+        NSString *name = (post.type == LCCPostTypeShare) ? [NSString stringWithFormat:@"Shared by %@", user.username] : user.username;
         [infos addObject:name];
     }
     NSString *date = [NSDateFormatter localizedStringFromDate:post.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterNoStyle];
     [infos addObject:date];
     self.dateLabel.text = [infos componentsJoinedByString:@" - "];
     
-    [self setStats:post.stats];
-    
     if (self.iconImageView)
     {
-        [self.iconImageView sd_setImageWithURL:[NSURL URLWithString:post.image.url]];
-    }*/
+        [self.iconImageView sd_setImageWithURL:post.image];
+    }
 }
 
 - (void)setStats:(LCCPostStats *)stats
-{/*
-    if ([stats isDataAvailable])
+{
+    if (stats)
     {
         NSString *likesWord = stats.numLikes == 1 ? @"Like" : @"Likes";
         NSString *downloadsWord = stats.numDownloads == 1 ? @"Download" : @"Downloads";
@@ -945,7 +946,7 @@ static const NSInteger LIMIT = 50;
     else
     {
         self.statsLabel.text = @" ";
-    }*/
+    }
 }
 
 @end

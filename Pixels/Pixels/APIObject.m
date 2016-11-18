@@ -12,6 +12,7 @@
 typedef NS_ENUM(NSInteger, APIObjectPropertyType) {
     APIObjectPropertyTypeString,
     APIObjectPropertyTypeDate,
+    APIObjectPropertyTypeURL,
     APIObjectPropertyTypeInteger
 };
 
@@ -113,6 +114,10 @@ void integerSetterMethodIMP(APIObject *self, SEL _cmd, int value)
                 else if ([className isEqualToString:@"NSDate"])
                 {
                     type = APIObjectPropertyTypeDate;
+                }
+                else if ([className isEqualToString:@"NSURL"])
+                {
+                    type = APIObjectPropertyTypeURL;
                 }
                 else
                 {
@@ -221,6 +226,10 @@ void integerSetterMethodIMP(APIObject *self, SEL _cmd, int value)
                         self.values[property.name] = [[NSDateFormatter sharedAPIDateFormatter] dateFromString:value];
                         break;
                         
+                    case APIObjectPropertyTypeURL:
+                        self.values[property.name] = [NSURL URLWithString:value relativeToURL:[NSURL URLWithString:@"http://lowresfiles.timokloss.com"]];
+                        break;
+                        
                     case APIObjectPropertyTypeInteger:
                         self.values[property.name] = @([value intValue]);
                         break;
@@ -250,6 +259,10 @@ void integerSetterMethodIMP(APIObject *self, SEL _cmd, int value)
             case APIObjectPropertyTypeDate:
                 dictionary[key] = [[NSDateFormatter sharedAPIDateFormatter] stringFromDate:value];
                 break;
+                
+            case APIObjectPropertyTypeURL:
+                dictionary[key] = ((NSURL *)value).relativeString;
+                break;
         }
     }
     
@@ -273,6 +286,7 @@ void integerSetterMethodIMP(APIObject *self, SEL _cmd, int value)
             {
                 case APIObjectPropertyTypeString:
                 case APIObjectPropertyTypeDate:
+                case APIObjectPropertyTypeURL:
                     class_addMethod([self class], aSEL, (IMP)objectSetterMethodIMP, "v@:@");
                     break;
                     
@@ -287,6 +301,7 @@ void integerSetterMethodIMP(APIObject *self, SEL _cmd, int value)
             {
                 case APIObjectPropertyTypeString:
                 case APIObjectPropertyTypeDate:
+                case APIObjectPropertyTypeURL:
                     class_addMethod([self class], aSEL, (IMP)objectGetterMethodIMP, "@@:");
                     break;
                     

@@ -28,10 +28,10 @@ typedef NS_ENUM(int, LCCPostCategory) {
 @property (retain) NSString *user;
 @property LCCPostType type;
 @property LCCPostCategory category;
-@property (retain) NSString *image;
+@property (retain) NSURL *image;
 @property (retain) NSString *title;
 @property (retain) NSString *detail;
-@property (retain) NSString *program;
+@property (retain) NSURL *program;
 @property (retain) NSString *sharedPost;
 @property (retain) NSString *stats;
 
