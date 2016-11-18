@@ -321,49 +321,69 @@ NSString *const HTTPHeaderSessionTokenKey = @"X-LowResCoder-Session-Token";
 }
 
 - (void)loadNotifications
-{/*
-    if ([PFUser currentUser] && !self.isUpdatingNotifications)
+{
+    if (self.currentUser && !self.isUpdatingNotifications)
     {
         _isUpdatingNotifications = YES;
         [[NSNotificationCenter defaultCenter] postNotificationName:NotificationsUpdateNotification object:self];
         
-        PFQuery *query = [PFQuery queryWithClassName:[LCCNotification parseClassName]];
-        [query whereKey:@"recipient" equalTo:[PFUser currentUser]];
-        [query includeKey:@"sender"];
-        [query includeKey:@"post"];
-        [query orderByDescending:@"createdAt"];
-        if (_notifications.count > 0)
+        NSString *route = [NSString stringWithFormat:@"/users/%@/notifications", self.currentUser.objectId];
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        params[@"limit"] = @(50);
+        
+/*        if (_notifications.count > 0)
         {
             LCCNotification *lastNotification = _notifications.firstObject;
             [query whereKey:@"createdAt" greaterThan:lastNotification.createdAt];
-        }
-        query.cachePolicy = kPFCachePolicyNetworkOnly;
+        }*/
         
-        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        [self.sessionManager GET:route parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
             
-            if (objects)
+            NSArray *notifications = [LCCNotification objectsFromArray:responseObject[@"notifications"]];
+            NSDictionary *usersById = [LCCUser objectsByIdFromArray:responseObject[@"users"]];
+            NSDictionary *postsById = [LCCPost objectsByIdFromArray:responseObject[@"posts"]];
+            if (notifications.count > 0)
             {
+                // copy references to user and post objects
+                for (LCCNotification *notification in notifications)
+                {
+                    if (notification.sender)
+                    {
+                        notification.senderObject = usersById[notification.sender];
+                    }
+                    if (notification.post)
+                    {
+                        notification.postObject = postsById[notification.post];
+                    }
+                }
+                
                 if (_notifications)
                 {
-                    [_notifications insertObjects:objects atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, objects.count)]];
+                    [_notifications insertObjects:notifications atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, notifications.count)]];
                 }
                 else
                 {
-                    _notifications = objects.mutableCopy;
+                    _notifications = notifications.mutableCopy;
                 }
             }
             _isUpdatingNotifications = NO;
             [[NSNotificationCenter defaultCenter] postNotificationName:NotificationsUpdateNotification object:self];
             [self updateNewNotifications];
             
+        } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+            
+            _isUpdatingNotifications = NO;
+            [[NSNotificationCenter defaultCenter] postNotificationName:NotificationsUpdateNotification object:self];
+            [self updateNewNotifications];
+            
         }];
-    }*/
+    }
 }
 
 - (void)updateNewNotifications
-{/*
+{
     NSInteger num = 0;
-    LCCUser *user = (LCCUser *)[PFUser currentUser];
+    LCCUser *user = self.currentUser;
     if (user)
     {
         NSDate *date = user.notificationsOpenedDate ? user.notificationsOpenedDate : [NSDate distantPast];
@@ -380,7 +400,7 @@ NSString *const HTTPHeaderSessionTokenKey = @"X-LowResCoder-Session-Token";
     {
         _numNewNotifications = num;
         [[NSNotificationCenter defaultCenter] postNotificationName:NotificationsNumChangeNotification object:self];
-    }*/
+    }
 }
 
 - (void)onOpenNotifications

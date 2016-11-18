@@ -113,12 +113,12 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     LCCNotification *notification = self.notifications[indexPath.row];
-    /*
+    
     switch (notification.type)
     {
         case LCCNotificationTypeComment: {
             CommPostViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"CommPostView"];
-            [vc setPost:notification.post mode:CommPostModePost];
+            [vc setPost:notification.postObject mode:CommPostModePost];
             [self.navigationController pushViewController:vc animated:YES];
             break;
         }
@@ -127,7 +127,7 @@
         case LCCNotificationTypeShare:
         case LCCNotificationTypeFollow: {
             CommDetailViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"CommDetailView"];
-            [vc setUser:notification.sender mode:CommListModeProfile];
+            [vc setUser:notification.senderObject mode:CommListModeProfile];
             [self.navigationController pushViewController:vc animated:YES];
             break;
         }
@@ -135,7 +135,7 @@
         default:
             [tableView deselectRowAtIndexPath:indexPath animated:YES];
             break;
-    }*/
+    }
 }
 
 @end
@@ -158,21 +158,21 @@
 - (void)setNotification:(LCCNotification *)notification
 {
     _notification = notification;
-    /*
+    
     NSString *text;
-    NSString *name = (notification.sender != nil) ? notification.sender.username : @"A guest";
+    NSString *name = (notification.senderObject != nil) ? notification.senderObject.username : @"A guest";
     switch (notification.type)
     {
         case LCCNotificationTypeComment:
-            text = [NSString stringWithFormat:@"%@ commented on '%@'", name, notification.post.title];
+            text = [NSString stringWithFormat:@"%@ commented on '%@'", name, notification.postObject.title];
             break;
             
         case LCCNotificationTypeLike:
-            text = [NSString stringWithFormat:@"%@ likes '%@'", name, notification.post.title];
+            text = [NSString stringWithFormat:@"%@ likes '%@'", name, notification.postObject.title];
             break;
             
         case LCCNotificationTypeShare:
-            text = [NSString stringWithFormat:@"%@ shared '%@'", name, notification.post.title];
+            text = [NSString stringWithFormat:@"%@ shared '%@'", name, notification.postObject.title];
             break;
             
         case LCCNotificationTypeFollow:
@@ -185,7 +185,7 @@
     }
     
     self.textView.text = text;
-    self.dateLabel.text = [NSDateFormatter localizedStringFromDate:notification.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];*/
+    self.dateLabel.text = [NSDateFormatter localizedStringFromDate:notification.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
 }
 
 - (void)setIsUnread:(BOOL)isUnread

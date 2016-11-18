@@ -95,49 +95,54 @@ void integerSetterMethodIMP(APIObject *self, SEL _cmd, int value)
         objc_property_t property = properties[i];
         
         NSString *attributes = [NSString stringWithUTF8String:property_getAttributes(property)];
-        NSString *name = [NSString stringWithUTF8String:property_getName(property)];
-        NSString *getterName = name;
-        NSString *setterName = [NSString stringWithFormat:@"set%@%@:", [[name substringToIndex:1] capitalizedString], [name substringFromIndex:1]];
-        APIObjectPropertyType type;
-        unichar typeChar = [attributes characterAtIndex:1];
-        switch (typeChar)
-        {
-            case '@': {
-                NSUInteger start = [attributes rangeOfString:@"\""].location + 1;
-                NSUInteger end = [attributes rangeOfString:@"\"" options:0 range:NSMakeRange(start, attributes.length - start)].location - 1;
-                NSString *className = [attributes substringWithRange:NSMakeRange(start, end - start + 1)];
-                
-                if ([className isEqualToString:@"NSString"])
-                {
-                    type = APIObjectPropertyTypeString;
-                }
-                else if ([className isEqualToString:@"NSDate"])
-                {
-                    type = APIObjectPropertyTypeDate;
-                }
-                else if ([className isEqualToString:@"NSURL"])
-                {
-                    type = APIObjectPropertyTypeURL;
-                }
-                else
-                {
-                    NSAssert(NO, @"Class type not implemented");
-                }
-                break;
-            }
-                
-            case 'i':
-            case 'l':
-            case 's':
-                type = APIObjectPropertyTypeInteger;
-                break;
-                
-            default:
-                NSAssert(NO, @"Data type not implemented: %c", typeChar);
-        }
+        BOOL isDynamic = [attributes rangeOfString:@",D"].location != NSNotFound;
         
-        classProperties[getterName] = [[APIObjectProperty alloc] initWithName:name type:type isSetter:NO];
-        classProperties[setterName] = [[APIObjectProperty alloc] initWithName:name type:type isSetter:YES];
+        if (isDynamic)
+        {
+            NSString *name = [NSString stringWithUTF8String:property_getName(property)];
+            NSString *getterName = name;
+            NSString *setterName = [NSString stringWithFormat:@"set%@%@:", [[name substringToIndex:1] capitalizedString], [name substringFromIndex:1]];
+            APIObjectPropertyType type;
+            unichar typeChar = [attributes characterAtIndex:1];
+            switch (typeChar)
+            {
+                case '@': {
+                    NSUInteger start = [attributes rangeOfString:@"\""].location + 1;
+                    NSUInteger end = [attributes rangeOfString:@"\"" options:0 range:NSMakeRange(start, attributes.length - start)].location - 1;
+                    NSString *className = [attributes substringWithRange:NSMakeRange(start, end - start + 1)];
+                    
+                    if ([className isEqualToString:@"NSString"])
+                    {
+                        type = APIObjectPropertyTypeString;
+                    }
+                    else if ([className isEqualToString:@"NSDate"])
+                    {
+                        type = APIObjectPropertyTypeDate;
+                    }
+                    else if ([className isEqualToString:@"NSURL"])
+                    {
+                        type = APIObjectPropertyTypeURL;
+                    }
+                    else
+                    {
+                        NSAssert(NO, @"Class type not implemented: %@", className);
+                    }
+                    break;
+                }
+                    
+                case 'i':
+                case 'l':
+                case 's':
+                    type = APIObjectPropertyTypeInteger;
+                    break;
+                    
+                default:
+                    NSAssert(NO, @"Data type not implemented: %c", typeChar);
+            }
+            
+            classProperties[getterName] = [[APIObjectProperty alloc] initWithName:name type:type isSetter:NO];
+            classProperties[setterName] = [[APIObjectProperty alloc] initWithName:name type:type isSetter:YES];
+        }
     }
     
     if (properties)

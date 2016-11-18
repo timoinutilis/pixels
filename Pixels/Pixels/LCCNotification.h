@@ -8,6 +8,8 @@
 
 #import "APIObject.h"
 
+@class LCCUser, LCCPost;
+
 typedef NS_ENUM(int, LCCNotificationType) {
     LCCNotificationTypeComment,
     LCCNotificationTypeLike,
@@ -21,5 +23,8 @@ typedef NS_ENUM(int, LCCNotificationType) {
 @property (nonatomic, retain) NSString *sender;
 @property (nonatomic, retain) NSString *recipient;
 @property (nonatomic, retain) NSString *post;
+
+@property (nonatomic) LCCUser *senderObject;
+@property (nonatomic) LCCPost *postObject;
 
 @end

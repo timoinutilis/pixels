@@ -15,4 +15,7 @@
 @dynamic recipient;
 @dynamic post;
 
+@synthesize senderObject = _senderObject;
+@synthesize postObject = _postObject;
+
 @end
