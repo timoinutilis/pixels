@@ -13,7 +13,7 @@ NSString *const CurrentUserChangeNotification = @"CurrentUserChangeNotification"
 NSString *const FollowsLoadNotification = @"FollowsLoadNotification";
 NSString *const FollowsChangeNotification = @"FollowsChangeNotification";
 NSString *const PostDeleteNotification = @"PostDeleteNotification";
-NSString *const PostCounterChangeNotification = @"PostCounterChangeNotification";
+NSString *const PostStatsChangeNotification = @"PostStatsChangeNotification";
 NSString *const NotificationsUpdateNotification = @"NotificationsUpdateNotification";
 NSString *const NotificationsNumChangeNotification = @"NotificationsNumChangeNotification";
 
@@ -166,65 +166,59 @@ NSString *const HTTPHeaderSessionTokenKey = @"X-LowResCoder-Session-Token";
 }
 
 - (void)sortFollows
-{/*
-    NSSortDescriptor *lastPost = [NSSortDescriptor sortDescriptorWithKey:@"followsUser.lastPostDate" ascending:NO];
-    NSSortDescriptor *followDate = [NSSortDescriptor sortDescriptorWithKey:@"createdAt" ascending:NO];
-    [self.follows sortUsingDescriptors:@[lastPost, followDate]];*/
+{
+    NSSortDescriptor *lastPost = [NSSortDescriptor sortDescriptorWithKey:@"lastPostDate" ascending:NO];
+    NSSortDescriptor *creationDate = [NSSortDescriptor sortDescriptorWithKey:@"createdAt" ascending:NO];
+    [self.follows sortUsingDescriptors:@[lastPost, creationDate]];
 }
 
 - (void)followUser:(LCCUser *)user
-{/*
-    LCCFollow *follow = [LCCFollow object];
-    follow.user = (LCCUser *)[PFUser currentUser];
-    follow.followsUser = user;
-    [follow saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        if (succeeded)
-        {
-            [PFQuery clearAllCachedResults];
-            [self.follows insertObject:follow atIndex:0];
-            [[NSNotificationCenter defaultCenter] postNotificationName:FollowsChangeNotification object:self];
-            
-            [PFAnalytics trackEvent:@"follow"];
-        }
-        else
-        {
-            NSLog(@"Error: %@", error.description);
-        }
-    }];*/
+{
+    NSString *route = [NSString stringWithFormat:@"/users/%@/followers", user.objectId];
+    NSDictionary *params = @{@"user":self.currentUser.objectId};
+    [self.sessionManager POST:route parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+        
+//        [PFQuery clearAllCachedResults];
+        [self.follows insertObject:user atIndex:0];
+        [[NSNotificationCenter defaultCenter] postNotificationName:FollowsChangeNotification object:self];
+        
+    } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+        
+        NSLog(@"Error: %@", error.localizedDescription);
+        
+    }];
 }
 
 - (void)unfollowUser:(LCCUser *)user
-{/*
-    LCCFollow *follow = [self followWithUser:user];
-    if (follow)
+{
+    user = [self userInFollowing:user];
+    if (user)
     {
-        [follow deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            if (succeeded)
-            {
-                [PFQuery clearAllCachedResults];
-                [self.follows removeObject:follow];
-                [[NSNotificationCenter defaultCenter] postNotificationName:FollowsChangeNotification object:self];
-                
-                [PFAnalytics trackEvent:@"unfollow"];
-            }
-            else
-            {
-                NSLog(@"Error: %@", error.description);
-            }
+        NSString *route = [NSString stringWithFormat:@"/users/%@/followers/%@", user.objectId, self.currentUser.objectId];
+        [self.sessionManager DELETE:route parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+
+//            [PFQuery clearAllCachedResults];
+            [self.follows removeObject:user];
+            [[NSNotificationCenter defaultCenter] postNotificationName:FollowsChangeNotification object:self];
+            
+        } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+            
+            NSLog(@"Error: %@", error.localizedDescription);
+            
         }];
-    }*/
+    }
 }
 
-- (BOOL)followsUser:(LCCUser *)user
+- (LCCUser *)userInFollowing:(LCCUser *)user
 {
     for (LCCUser *followUser in self.follows)
     {
         if ([followUser.objectId isEqualToString:user.objectId])
         {
-            return YES;
+            return followUser;
         }
     }
-    return NO;
+    return nil;
 }
 
 - (NSArray *)arrayWithFollowedUsers
@@ -237,54 +231,35 @@ NSString *const HTTPHeaderSessionTokenKey = @"X-LowResCoder-Session-Token";
     return array;
 }
 
-- (void)countPost:(LCCPost *)post type:(StatsType)type
-{/*
-    LCCCountType countType = LCCCountTypeUndefined;
-    NSString *event = nil;
-    
-    if (!post.stats)
-    {
-        post.stats = [LCCPostStats object];
-    }
-    
-    switch (type)
-    {
-        case StatsTypeLike:
-            [post.stats incrementKey:@"numLikes"];
-            countType = LCCCountTypeLike;
-            event = @"like";
-            break;
-        case StatsTypeDownload:
-            [post.stats incrementKey:@"numDownloads"];
-            countType = LCCCountTypeDownload;
-            event = @"get_program";
-            break;
-        default:
-            [NSException raise:@"InvalidType" format:@"Invalid type, comments use other method!"];
-    }
-    
-    // UI Notification
-    [[NSNotificationCenter defaultCenter] postNotificationName:PostCounterChangeNotification object:self userInfo:@{@"postId":post.objectId, @"type":@(type)}];
-    
-    // Save to server
-    LCCCount *count = [LCCCount object];
-    count.post = post;
-    count.user = (LCCUser *)[PFUser currentUser];
-    count.type = countType;
-    
-    [PFObject saveAllInBackground:@[count, post.stats] block:^(BOOL succeeded, NSError * _Nullable error) {
+- (void)likePost:(LCCPost *)post
+{
+    NSString *route = [NSString stringWithFormat:@"/posts/%@/likes", post.objectId];
+    NSDictionary *params = @{@"user": self.currentUser.objectId};
+    [self.sessionManager POST:route parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         
-        if (succeeded)
-        {
-            [self trackEvent:event forPost:post];
-            [PFQuery clearAllCachedResults];
-        }
-        else if (error)
-        {
-            NSLog(@"Error: %@", error.description);
-        }
+        LCCPostStats *stats = [[LCCPostStats alloc] initWithDictionary:responseObject[@"postStats"]];
+        [[NSNotificationCenter defaultCenter] postNotificationName:PostStatsChangeNotification object:self userInfo:@{@"stats":stats}];
         
-    }];*/
+    } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+        
+        NSLog(@"Error: %@", error.localizedDescription);
+        
+    }];
+}
+
+- (void)countDownloadPost:(LCCPost *)post
+{
+    NSString *route = [NSString stringWithFormat:@"/posts/%@/downloads", post.objectId];
+    [self.sessionManager POST:route parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+        
+        LCCPostStats *stats = [[LCCPostStats alloc] initWithDictionary:responseObject[@"postStats"]];
+        [[NSNotificationCenter defaultCenter] postNotificationName:PostStatsChangeNotification object:self userInfo:@{@"stats":stats}];
+        
+    } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+        
+        NSLog(@"Error: %@", error.localizedDescription);
+        
+    }];
 }
 
 - (void)loadNotifications

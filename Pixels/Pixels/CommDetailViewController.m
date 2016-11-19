@@ -100,7 +100,7 @@ static const NSInteger LIMIT = 50;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onFollowsChanged:) name:FollowsChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserChanged:) name:CurrentUserChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onPostDeleted:) name:PostDeleteNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onCounterChanged:) name:PostCounterChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onStatsChanged:) name:PostStatsChangeNotification object:nil];
 }
 
 - (void)dealloc
@@ -108,7 +108,7 @@ static const NSInteger LIMIT = 50;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:FollowsChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:CurrentUserChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:PostDeleteNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:PostCounterChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:PostStatsChangeNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -205,19 +205,11 @@ static const NSInteger LIMIT = 50;
     }
 }
 
-- (void)onCounterChanged:(NSNotification *)notification
+- (void)onStatsChanged:(NSNotification *)notification
 {
-    NSString *counterPostId = notification.userInfo[@"postId"];
-    for (int i = 0; i < (int)self.posts.count; i++)
-    {
-        LCCPost *post = self.posts[i];
-        if (   [post.objectId isEqualToString:counterPostId]
-            || [post.sharedPost isEqualToString:counterPostId])
-        {
-            [self.tableView reloadData];
-            break;
-        }
-    }
+    LCCPostStats *stats = notification.userInfo[@"stats"];
+    self.statsById[stats.objectId] = stats;
+    [self updateVisiblePosts];
 }
 
 - (void)updateDataForceReload:(BOOL)forceReload
@@ -387,7 +379,7 @@ static const NSInteger LIMIT = 50;
         UIViewController *vc = [CommLogInViewController create];
         [self presentInNavigationViewController:vc];
     }
-    else if ([[CommunityModel sharedInstance] followsUser:self.user])
+    else if ([[CommunityModel sharedInstance] userInFollowing:self.user])
     {
         button.enabled = NO;
         [[CommunityModel sharedInstance] unfollowUser:self.user];
@@ -674,12 +666,12 @@ static const NSInteger LIMIT = 50;
         case CellTagPost: {
             CommPostViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"CommPostView"];
             LCCPost *post = self.posts[indexPath.row - 1];
-/*            if (post.type == LCCPostTypeShare)
+            if (post.type == LCCPostTypeShare)
             {
-                post.sharedPost.stats = post.stats;
-                [vc setPost:post.sharedPost mode:CommPostModePost];
+                LCCPost *sharedPost = [[LCCPost alloc] initWithObjectId:post.sharedPost];
+                [vc setPost:sharedPost mode:CommPostModePost];
             }
-            else*/
+            else
             {
                 [vc setPost:post mode:CommPostModePost];
             }
@@ -774,7 +766,7 @@ static const NSInteger LIMIT = 50;
     {
         self.actionButton.hidden = NO;
         self.actionButton.enabled = YES;
-        if ([CommunityModel sharedInstance].currentUser && [[CommunityModel sharedInstance] followsUser:user])
+        if ([CommunityModel sharedInstance].currentUser && [[CommunityModel sharedInstance] userInFollowing:user])
         {
             [self.actionButton setTitle:@"Following ✓" forState:UIControlStateNormal];
         }

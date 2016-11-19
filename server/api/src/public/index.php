@@ -12,18 +12,20 @@ spl_autoload_register(function ($classname) {
 
 $config['displayErrorDetails'] = true;
 $config['addContentLengthHeader'] = false;
-/*
-$config['db']['host']   = "db645859868.db.1and1.com";
-$config['db']['port']   = "3306";
-$config['db']['user']   = "dbo645859868";
-$config['db']['pass']   = "lowres.82";
-$config['db']['dbname'] = "db645859868";
-*/
-$config['db']['host']   = "localhost";
-$config['db']['port']   = "8889";
-$config['db']['user']   = "root";
-$config['db']['pass']   = "root";
-$config['db']['dbname'] = "lowres";
+
+if ($_SERVER['SERVER_NAME'] == "localhost") {
+    $config['db']['host']   = "localhost";
+    $config['db']['port']   = "8889";
+    $config['db']['user']   = "root";
+    $config['db']['pass']   = "root";
+    $config['db']['dbname'] = "lowres";
+} else {
+    $config['db']['host']   = "db645859868.db.1and1.com";
+    $config['db']['port']   = "3306";
+    $config['db']['user']   = "dbo645859868";
+    $config['db']['pass']   = "lowres.82";
+    $config['db']['dbname'] = "db645859868";
+}
 
 $config['lowres']['filesurl'] = "lowresfiles.timokloss.com";
 $config['lowres']['filespath'] = "../../lowresfiles";
@@ -166,7 +168,7 @@ $app->post('/posts/{id}/likes', function (Request $request, Response $response) 
 
     checkMyUser($userId, $request);
 
-    if (userLikesPost($userId, $postId)) {
+    if ($access->userLikesPost($userId, $postId)) {
         throw new APIException("You already like this post.", 403, "AlreadyLiked");
     } else {
         $body['post'] = $postId;
@@ -190,7 +192,7 @@ $app->post('/posts/{id}/downloads', function (Request $request, Response $respon
 
     $response = $response->withJson($access->data);
     return $response;
-})->add(new AuthMiddleware());
+});
 
 // get all posts
 $app->get('/posts', function (Request $request, Response $response) {

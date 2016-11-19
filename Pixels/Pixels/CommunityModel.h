@@ -20,7 +20,7 @@ extern NSString *const CurrentUserChangeNotification;
 extern NSString *const FollowsLoadNotification;
 extern NSString *const FollowsChangeNotification;
 extern NSString *const PostDeleteNotification;
-extern NSString *const PostCounterChangeNotification;
+extern NSString *const PostStatsChangeNotification;
 extern NSString *const NotificationsUpdateNotification;
 extern NSString *const NotificationsNumChangeNotification;
 
@@ -55,9 +55,10 @@ typedef void (^LCCResultBlock)(BOOL succeeded, NSError *error);
 
 - (void)followUser:(LCCUser *)user;
 - (void)unfollowUser:(LCCUser *)user;
-- (BOOL)followsUser:(LCCUser *)user;
+- (LCCUser *)userInFollowing:(LCCUser *)user;
 - (NSArray *)arrayWithFollowedUsers;
-- (void)countPost:(LCCPost *)post type:(StatsType)type;
+- (void)likePost:(LCCPost *)post;
+- (void)countDownloadPost:(LCCPost *)post;
 
 - (void)loadNotifications;
 - (void)onOpenNotifications;

@@ -44,9 +44,9 @@ const NSTimeInterval MAX_CACHE_AGE = 1 * 60 * 60;
         
         LCCUser *currentUser = [CommunityModel sharedInstance].currentUser;
         
-        if (currentUser && ![post.user isEqualToString:currentUser.objectId])
+        if (!currentUser || ![post.user isEqualToString:currentUser.objectId])
         {
-            [[CommunityModel sharedInstance] countPost:post type:StatsTypeDownload];
+            [[CommunityModel sharedInstance] countDownloadPost:post];
         }
         
         BOOL root = (project.parent == [ModelManager sharedManager].rootFolder);

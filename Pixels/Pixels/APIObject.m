@@ -275,7 +275,8 @@ void integerSetterMethodIMP(APIObject *self, SEL _cmd, int value)
                 break;
                 
             case APIObjectPropertyTypeURL:
-                dictionary[key] = ((NSURL *)value).relativeString;
+//                dictionary[key] = ((NSURL *)value).relativeString;
+                NSAssert(NO, @"Not implemented yet");
                 break;
         }
     }

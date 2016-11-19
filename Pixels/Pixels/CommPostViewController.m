@@ -90,14 +90,14 @@ typedef NS_ENUM(NSInteger, Section) {
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserChanged:) name:CurrentUserChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onPostDeleted:) name:PostDeleteNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onCounterChanged:) name:PostCounterChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onStatsChanged:) name:PostStatsChangeNotification object:nil];
 }
 
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:CurrentUserChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:PostDeleteNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:PostCounterChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:PostStatsChangeNotification object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -157,22 +157,20 @@ typedef NS_ENUM(NSInteger, Section) {
     }
 }
 
-- (void)onCounterChanged:(NSNotification *)notification
+- (void)onStatsChanged:(NSNotification *)notification
 {
-/*    NSString *counterPostId = notification.userInfo[@"postId"];
-    if ([counterPostId isEqualToString:self.post.objectId])
+    LCCPostStats *stats = notification.userInfo[@"stats"];
+    if ([stats.post isEqualToString:self.post.objectId])
     {
-        StatsType type = [notification.userInfo[@"type"] integerValue];
-        if (self.post.stats)
-        {
-            self.titleCell.likeCount = self.post.stats.numLikes;
-            self.titleCell.downloadCount = self.post.stats.numDownloads;
-        }
-        if (type == StatsTypeLike)
+        int oldLikes = self.stats.numLikes;
+        self.stats = stats;
+        [self.titleCell setStats:stats];
+
+        if (stats.numLikes > oldLikes)
         {
             [self.titleCell likeIt];
         }
-    }*/
+    }
 }
 
 - (void)loadAllForceReload:(BOOL)forceReload
@@ -200,7 +198,8 @@ typedef NS_ENUM(NSInteger, Section) {
         self.title = [self.post.title stringWithMaxWords:4];
         
         self.titleCell = [self.tableView dequeueReusableCellWithIdentifier:(self.post.type == LCCPostTypeProgram ? @"ProgramTitleCell" : @"StatusTitleCell")];
-        [self.titleCell setPost:self.post user:self.user stats:self.stats];
+        [self.titleCell setPost:self.post user:self.user];
+        [self.titleCell setStats:self.stats];
         
         if (currentUser)
         {
@@ -221,6 +220,7 @@ typedef NS_ENUM(NSInteger, Section) {
         
         if (forceReload)
         {
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:SectionTitle]] withRowAnimation:UITableViewRowAnimationFade];
             [self.tableView reloadDataAnimatedWithOldArray:oldComments newArray:self.comments inSection:SectionComments offset:0];
         }
         else
@@ -251,7 +251,7 @@ typedef NS_ENUM(NSInteger, Section) {
     }
     else if (![self.user isMe])
     {
-        [[CommunityModel sharedInstance] countPost:self.post type:StatsTypeLike];
+        [[CommunityModel sharedInstance] likePost:self.post];
     }
 }
 
@@ -581,7 +581,7 @@ typedef NS_ENUM(NSInteger, Section) {
     self.shareButton.hidden = ![currentUser isNewsUser];
 }
 
-- (void)setPost:(LCCPost *)post user:(LCCUser *)user stats:(LCCPostStats *)stats
+- (void)setPost:(LCCPost *)post user:(LCCUser *)user
 {
     if (post.image)
     {
@@ -593,29 +593,17 @@ typedef NS_ENUM(NSInteger, Section) {
     self.dateLabel.text = [NSDateFormatter localizedStringFromDate:post.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
     
     self.shareButton.enabled = ![user isMe];
-    
-    self.likeCount = stats.numLikes;
-    self.downloadCount = stats.numDownloads;
 }
 
-- (void)setLikeCount:(NSInteger)likeCount
+- (void)setStats:(LCCPostStats *)stats
 {
-    _likeCount = likeCount;
-    self.likeCountLabel.text = [NSString stringWithFormat:@"%ld", (long)likeCount];
-}
-
-- (void)setDownloadCount:(NSInteger)downloadCount
-{
-    _downloadCount = downloadCount;
-    if (self.downloadCountLabel)
-    {
-        self.downloadCountLabel.text = [NSString stringWithFormat:@"%ld", (long)downloadCount];
-    }
+    self.likeCountLabel.text = [NSString stringWithFormat:@"%ld", (long)stats.numLikes];
+    self.downloadCountLabel.text = [NSString stringWithFormat:@"%ld", (long)stats.numDownloads];
 }
 
 - (void)likeIt
 {
-    [self.likeButton setTitle:@"You like this" forState:UIControlStateNormal];
+    [self.likeButton setTitle:@"Liked ✓" forState:UIControlStateNormal];
     self.likeButton.enabled = NO;
 }
 

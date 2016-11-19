@@ -185,7 +185,19 @@ class DataBaseAccess {
 		$stmt->bindValue(1, $postId);
 		if ($stmt->execute()) {
 			if ($stmt->rowCount() > 0) {
-				// add postStats to data
+			    $sqlText = "SELECT objectId, updatedAt, createdAt, post, numDownloads, numComments, numLikes FROM postStats WHERE post = ?";
+			    $stmt = $this->db->prepare($sqlText);
+			    $stmt->bindValue(1, $postId);
+			    if ($stmt->execute()) {
+			    	$object = $stmt->fetch();
+			    	if ($object) {
+				        $this->data["postStats"] = $object;
+				        return $object;
+				    } else {
+				    	throw new APIException("Missing statistics for post '$postId'.", 500, "InternalServerError");
+				    }
+			    }
+
 			} else {
 				throw new APIException("Missing statistics for post '$postId'.", 500, "InternalServerError");
 			}
