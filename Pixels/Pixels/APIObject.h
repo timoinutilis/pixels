@@ -19,6 +19,7 @@
 + (NSArray *)objectsFromArray:(NSArray<NSDictionary *> *)array;
 + (NSDictionary *)objectsByIdFromArray:(NSArray<NSDictionary *> *)array;
 
+- (instancetype)initWithObjectId:(NSString *)objectId;
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary;
 - (void)updateWithDictionary:(NSDictionary *)dictionary;
 - (NSDictionary *)dirtyDictionary;

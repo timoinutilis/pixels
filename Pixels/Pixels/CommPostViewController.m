@@ -516,17 +516,10 @@ typedef NS_ENUM(NSInteger, Section) {
     
     switch (cell.tag)
     {
-        case CellTagSourceCode: {/*
-            if ([self.post isDataAvailable] && ([self.post.program isDataAvailable] || [self.post.programFile isDataAvailable]))
-            {
-                CommSourceCodeViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"CommSourceCodeView"];
-                vc.post = self.post;
-                [self.navigationController pushViewController:vc animated:YES];
-            }
-            else
-            {
-                [tableView deselectRowAtIndexPath:indexPath animated:YES];
-            }*/
+        case CellTagSourceCode: {
+            CommSourceCodeViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"CommSourceCodeView"];
+            vc.post = self.post;
+            [self.navigationController pushViewController:vc animated:YES];
             break;
         }
         case CellTagPostAuthor: {

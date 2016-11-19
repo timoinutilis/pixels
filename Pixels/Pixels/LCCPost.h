@@ -23,6 +23,8 @@ typedef NS_ENUM(int, LCCPostCategory) {
     LCCPostCategoryDemo
 };
 
+typedef void (^LCCPostLoadSourceCodeBlock)(NSString *sourceCode, NSError *error);
+
 @interface LCCPost : APIObject
 
 @property (retain) NSString *user;
@@ -36,5 +38,7 @@ typedef NS_ENUM(int, LCCPostCategory) {
 @property (retain) NSString *stats;
 
 - (NSString *)categoryString;
+- (void)loadSourceCodeWithCompletion:(LCCPostLoadSourceCodeBlock)block;
+
 
 @end

@@ -188,6 +188,15 @@ void integerSetterMethodIMP(APIObject *self, SEL _cmd, int value)
     return self;
 }
 
+- (instancetype)initWithObjectId:(NSString *)objectId
+{
+    if (self = [self init])
+    {
+        _objectId = objectId;
+    }
+    return self;
+}
+
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary
 {
     if (self = [self init])
