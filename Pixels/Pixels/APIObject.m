@@ -77,6 +77,13 @@ void integerSetterMethodIMP(APIObject *self, SEL _cmd, int value)
 
 @implementation APIObject
 
++ (NSURL *)filesURL
+{
+    NSString *url = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"LowResFilesURL"];
+    NSAssert(url, @"LowResFilesURL not defined in info.plist");
+    return [NSURL URLWithString:url];
+}
+
 + (void)registerAPIClass
 {
     static dispatch_once_t onceToken;
@@ -212,7 +219,7 @@ void integerSetterMethodIMP(APIObject *self, SEL _cmd, int value)
     for (NSString *key in dictionary)
     {
         id value = dictionary[key];
-        if (value && value != [NSNull null])
+        if (value && value != [NSNull null] && ![value isKindOfClass:[NSDictionary class]])
         {
             if ([key isEqualToString:@"objectId"])
             {
@@ -241,7 +248,7 @@ void integerSetterMethodIMP(APIObject *self, SEL _cmd, int value)
                         break;
                         
                     case APIObjectPropertyTypeURL:
-                        self.values[property.name] = [NSURL URLWithString:value relativeToURL:[NSURL URLWithString:@"http://lowresfiles.timokloss.com"]];
+                        self.values[property.name] = [NSURL URLWithString:value relativeToURL:[APIObject filesURL]];
                         break;
                         
                     case APIObjectPropertyTypeInteger:
@@ -284,7 +291,7 @@ void integerSetterMethodIMP(APIObject *self, SEL _cmd, int value)
     return dictionary;
 }
 
-- (void)clean
+- (void)resetDirty
 {
     [self.dirty removeAllObjects];
 }

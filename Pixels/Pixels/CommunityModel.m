@@ -40,13 +40,14 @@ NSString *const HTTPHeaderSessionTokenKey = @"X-LowResCoder-Session-Token";
 {
     if (self = [super init])
     {
-        _sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:@"https://lowresapi.timokloss.com"]];
+        NSString *url = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"LowResAPIURL"];
+        NSAssert(url, @"LowResAPIURL not defined in info.plist");
+        
+        _sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:url]];
         
         [LCCUser registerAPIClass];
         [LCCPost registerAPIClass];
         [LCCComment registerAPIClass];
-        [LCCFollow registerAPIClass];
-        [LCCLike registerAPIClass];
         [LCCPostStats registerAPIClass];
         [LCCNotification registerAPIClass];
     }
@@ -219,16 +220,6 @@ NSString *const HTTPHeaderSessionTokenKey = @"X-LowResCoder-Session-Token";
         }
     }
     return nil;
-}
-
-- (NSArray *)arrayWithFollowedUsers
-{
-    NSMutableArray *array = [NSMutableArray array];
-    for (LCCFollow *follow in self.follows)
-    {
-        [array addObject:follow.followsUser];
-    }
-    return array;
 }
 
 - (void)likePost:(LCCPost *)post

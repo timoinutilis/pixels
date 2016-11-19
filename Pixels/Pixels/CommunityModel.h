@@ -10,8 +10,6 @@
 #import "LCCUser.h"
 #import "LCCPost.h"
 #import "LCCComment.h"
-#import "LCCFollow.h"
-#import "LCCLike.h"
 #import "LCCPostStats.h"
 #import "LCCNotification.h"
 #import "AFNetworking.h"
@@ -56,7 +54,6 @@ typedef void (^LCCResultBlock)(BOOL succeeded, NSError *error);
 - (void)followUser:(LCCUser *)user;
 - (void)unfollowUser:(LCCUser *)user;
 - (LCCUser *)userInFollowing:(LCCUser *)user;
-- (NSArray *)arrayWithFollowedUsers;
 - (void)likePost:(LCCPost *)post;
 - (void)countDownloadPost:(LCCPost *)post;
 

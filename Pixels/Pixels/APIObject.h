@@ -23,7 +23,7 @@
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary;
 - (void)updateWithDictionary:(NSDictionary *)dictionary;
 - (NSDictionary *)dirtyDictionary;
-- (void)clean;
+- (void)resetDirty;
 
 @end
 

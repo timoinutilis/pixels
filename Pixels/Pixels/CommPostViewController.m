@@ -39,7 +39,7 @@ typedef NS_ENUM(NSInteger, Section) {
 @property LCCUser *user;
 @property LCCPostStats *stats;
 @property NSMutableArray *comments;
-@property NSDictionary *commentUsersById;
+@property NSMutableDictionary *commentUsersById;
 
 @property CommPostMode mode;
 @property ProgramTitleCell *titleCell;
@@ -192,7 +192,7 @@ typedef NS_ENUM(NSInteger, Section) {
         self.user = [[LCCUser alloc] initWithDictionary:responseObject[@"user"]];
         self.stats = [[LCCPostStats alloc] initWithDictionary:responseObject[@"stats"]];
         self.comments = [LCCComment objectsFromArray:responseObject[@"comments"]].mutableCopy;
-        self.commentUsersById = [LCCUser objectsByIdFromArray:responseObject[@"users"]];
+        self.commentUsersById = [LCCUser objectsByIdFromArray:responseObject[@"users"]].mutableCopy;
         BOOL liked = [responseObject[@"liked"] boolValue];
         
         self.title = [self.post.title stringWithMaxWords:4];
@@ -300,7 +300,7 @@ typedef NS_ENUM(NSInteger, Section) {
 }
 
 - (IBAction)onSendCommentTapped:(id)sender
-{/*
+{
     NSString *commentText = self.writeCommentCell.textView.text;
     commentText = [commentText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     if (commentText.length > 0)
@@ -311,61 +311,59 @@ typedef NS_ENUM(NSInteger, Section) {
         
         UIButton *button = (UIButton *)sender;
         button.enabled = NO;
+
+        LCCUser *currentUser = [CommunityModel sharedInstance].currentUser;
+        self.commentUsersById[currentUser.objectId] = currentUser;
         
         // Comment
-        LCCComment *comment = [LCCComment object];
-        comment.user = (LCCUser *)[PFUser currentUser];
-        comment.post = self.post;
+        LCCComment *comment = [[LCCComment alloc] init];
+        comment.user = currentUser.objectId;
+        comment.post = self.post.objectId;
         comment.text = commentText;
         
-        // Stats
-        if (!self.post.stats)
-        {
-            self.post.stats = [LCCPostStats object];
-        }
-        [self.post.stats incrementKey:@"numComments"];
         
-        // UI Notification
-        [[NSNotificationCenter defaultCenter] postNotificationName:PostCounterChangeNotification object:self userInfo:@{@"postId":self.post.objectId, @"type":@(StatsTypeComment)}];
+        NSString *route = [NSString stringWithFormat:@"/posts/%@/comments", self.post.objectId];
+        NSDictionary *params = [comment dirtyDictionary];
         
-        // Save to server
-        [PFObject saveAllInBackground:@[comment, self.post.stats] block:^(BOOL succeeded, NSError * _Nullable error) {
-            
+        [[CommunityModel sharedInstance].sessionManager POST:route parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+
             [self.activityIndicator decreaseActivity];
+            [comment updateWithDictionary:responseObject];
+            [comment resetDirty];
             
-            if (succeeded)
+            LCCPostStats *stats = [[LCCPostStats alloc] initWithDictionary:responseObject[@"postStats"]];
+            [[NSNotificationCenter defaultCenter] postNotificationName:PostStatsChangeNotification object:self userInfo:@{@"stats":stats}];
+            
+            [self.writeCommentCell reset];
+            
+            [self.comments addObject:comment];
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.comments.count - 1 inSection:1];
+            
+            if (self.comments.count == 1)
             {
-                [self.writeCommentCell reset];
-
-                [self.comments addObject:comment];
-                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.comments.count - 1 inSection:1];
-                
-                if (self.comments.count == 1)
-                {
-                    // first comment (need to refresh headers)
-                    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
-                }
-                else
-                {
-                    // later comment
-                    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-                }
-                
-                [[CommunityModel sharedInstance] trackEvent:@"comment" forPost:self.post];
-                
-                [[AppController sharedController] registerForNotifications];
-                
-                [PFQuery clearAllCachedResults];
+                // first comment (need to refresh headers)
+                [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
             }
-            else if (error)
+            else
             {
-                [self showAlertWithTitle:@"Could not send comment." message:error.userInfo[@"error"] block:nil];
+                // later comment
+                [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
             }
+            
+            [[AppController sharedController] registerForNotifications];
+            
+//            [PFQuery clearAllCachedResults];
+            
+            button.enabled = YES;
 
+        } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+
+            [self.activityIndicator decreaseActivity];
+            [self showAlertWithTitle:@"Could not send comment." message:error.localizedDescription block:nil];
             button.enabled = YES;
             
         }];
-    }*/
+    }
 }
 
 - (void)deletePost

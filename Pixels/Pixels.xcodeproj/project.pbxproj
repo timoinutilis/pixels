@@ -11,7 +11,6 @@
 		9204EF681A4C397300B8C29C /* HelpTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9204EF671A4C397300B8C29C /* HelpTextViewController.m */; };
 		9204EF6A1A4C430300B8C29C /* manual.html in Resources */ = {isa = PBXBuildFile; fileRef = 9204EF691A4C430300B8C29C /* manual.html */; };
 		920822031A4DABB8005B7862 /* HelpContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 920822021A4DABB8005B7862 /* HelpContent.m */; };
-		920E5E5E1B1324FE00071C6A /* LCCFollow.m in Sources */ = {isa = PBXBuildFile; fileRef = 920E5E5D1B1324FE00071C6A /* LCCFollow.m */; };
 		920E681D1AB731620038994A /* CoachMarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 920E681C1AB731620038994A /* CoachMarkView.m */; };
 		920E68221AB74CDA0038994A /* SplashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 920E68211AB74CDA0038994A /* SplashViewController.m */; };
 		920F55E71BE7D1DF00ABBE1E /* Project+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 920F55E41BE7D1DF00ABBE1E /* Project+CoreDataProperties.m */; };
@@ -88,8 +87,6 @@
 		92884F2E1B0F33850032623D /* LCCComment.m in Sources */ = {isa = PBXBuildFile; fileRef = 92884F2D1B0F33850032623D /* LCCComment.m */; };
 		928987A21DD74FA3002B84B7 /* APIObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 928987A11DD74FA3002B84B7 /* APIObject.m */; };
 		928987A31DD74FA3002B84B7 /* APIObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 928987A11DD74FA3002B84B7 /* APIObject.m */; };
-		928987A61DD756DB002B84B7 /* LCCLike.m in Sources */ = {isa = PBXBuildFile; fileRef = 928987A51DD756DB002B84B7 /* LCCLike.m */; };
-		928987A71DD756DB002B84B7 /* LCCLike.m in Sources */ = {isa = PBXBuildFile; fileRef = 928987A51DD756DB002B84B7 /* LCCLike.m */; };
 		928FB8991A5C804200EA377F /* GORSeparatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 928FB8981A5C804200EA377F /* GORSeparatorView.m */; };
 		929381D61BC5696C00D41B72 /* HelpMasterNavController.m in Sources */ = {isa = PBXBuildFile; fileRef = 929381D51BC5696C00D41B72 /* HelpMasterNavController.m */; };
 		929381D71BC5696C00D41B72 /* HelpMasterNavController.m in Sources */ = {isa = PBXBuildFile; fileRef = 929381D51BC5696C00D41B72 /* HelpMasterNavController.m */; };
@@ -133,7 +130,6 @@
 		929BCF341BB14A1B005F1DBD /* StandardTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9215D7781B37361100A65E55 /* StandardTableViewCell.m */; };
 		929BCF351BB14A1B005F1DBD /* SDWebImageCompat.m in Sources */ = {isa = PBXBuildFile; fileRef = 92884EFF1B0F25B30032623D /* SDWebImageCompat.m */; };
 		929BCF361BB14A1B005F1DBD /* LCCPost.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C081531B0DF1900006331B /* LCCPost.m */; };
-		929BCF371BB14A1B005F1DBD /* LCCFollow.m in Sources */ = {isa = PBXBuildFile; fileRef = 920E5E5D1B1324FE00071C6A /* LCCFollow.m */; };
 		929BCF381BB14A1B005F1DBD /* CommSourceCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92884F2A1B0F307F0032623D /* CommSourceCodeViewController.m */; };
 		929BCF391BB14A1B005F1DBD /* AFURLRequestSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 929BCF081BB14800005F1DBD /* AFURLRequestSerialization.m */; };
 		929BCF3A1BB14A1B005F1DBD /* GORTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E53DF31A5B3A1D00FE9F91 /* GORTextView.m */; };
@@ -264,8 +260,6 @@
 		9204EF691A4C430300B8C29C /* manual.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = manual.html; sourceTree = "<group>"; };
 		920822011A4DABB8005B7862 /* HelpContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpContent.h; sourceTree = "<group>"; };
 		920822021A4DABB8005B7862 /* HelpContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpContent.m; sourceTree = "<group>"; };
-		920E5E5C1B1324FE00071C6A /* LCCFollow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCFollow.h; sourceTree = "<group>"; };
-		920E5E5D1B1324FE00071C6A /* LCCFollow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCFollow.m; sourceTree = "<group>"; };
 		920E681B1AB731620038994A /* CoachMarkView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoachMarkView.h; sourceTree = "<group>"; };
 		920E681C1AB731620038994A /* CoachMarkView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoachMarkView.m; sourceTree = "<group>"; };
 		920E68201AB74CDA0038994A /* SplashViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplashViewController.h; sourceTree = "<group>"; };
@@ -395,8 +389,6 @@
 		92884F2D1B0F33850032623D /* LCCComment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCComment.m; sourceTree = "<group>"; };
 		928987A01DD74FA3002B84B7 /* APIObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIObject.h; sourceTree = "<group>"; };
 		928987A11DD74FA3002B84B7 /* APIObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APIObject.m; sourceTree = "<group>"; };
-		928987A41DD756DB002B84B7 /* LCCLike.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCLike.h; sourceTree = "<group>"; };
-		928987A51DD756DB002B84B7 /* LCCLike.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCLike.m; sourceTree = "<group>"; };
 		928DBBA51B52918400C5EBCC /* Model 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 3.xcdatamodel"; sourceTree = "<group>"; };
 		928E14BD1B067AB9002DC8E6 /* Info_dev.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info_dev.plist; sourceTree = "<group>"; };
 		928FB8971A5C804200EA377F /* GORSeparatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GORSeparatorView.h; sourceTree = "<group>"; };
@@ -909,10 +901,6 @@
 				92C081531B0DF1900006331B /* LCCPost.m */,
 				92884F2C1B0F33850032623D /* LCCComment.h */,
 				92884F2D1B0F33850032623D /* LCCComment.m */,
-				928987A41DD756DB002B84B7 /* LCCLike.h */,
-				928987A51DD756DB002B84B7 /* LCCLike.m */,
-				920E5E5C1B1324FE00071C6A /* LCCFollow.h */,
-				920E5E5D1B1324FE00071C6A /* LCCFollow.m */,
 				9254DF5E1B628A3C00774E98 /* LCCPostStats.h */,
 				9254DF5F1B628A3C00774E98 /* LCCPostStats.m */,
 				92C6C9131C2DC4BC0030D8AA /* LCCNotification.h */,
@@ -1053,7 +1041,8 @@
 						};
 					};
 					929BCF161BB14A1B005F1DBD = {
-						ProvisioningStyle = Manual;
+						DevelopmentTeam = BZ4VC623NH;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 1;
@@ -1150,7 +1139,6 @@
 				9215D7791B37361100A65E55 /* StandardTableViewCell.m in Sources */,
 				92884F1C1B0F25B30032623D /* SDWebImageCompat.m in Sources */,
 				92C081541B0DF1900006331B /* LCCPost.m in Sources */,
-				920E5E5E1B1324FE00071C6A /* LCCFollow.m in Sources */,
 				92884F2B1B0F307F0032623D /* CommSourceCodeViewController.m in Sources */,
 				929BCF131BB14800005F1DBD /* AFURLRequestSerialization.m in Sources */,
 				92D1F2A11C7CDDD40087FF8F /* UITableView+Parse.m in Sources */,
@@ -1183,7 +1171,6 @@
 				926864271AA6087300F305B9 /* AppController.m in Sources */,
 				925C281F1B092CA4007AC515 /* NSDate+Utils.m in Sources */,
 				92E36D1F1ADD679D00C16CBE /* GORLabel.m in Sources */,
-				928987A61DD756DB002B84B7 /* LCCLike.m in Sources */,
 				92884F1F1B0F25B30032623D /* SDWebImageDownloaderOperation.m in Sources */,
 				920F55E71BE7D1DF00ABBE1E /* Project+CoreDataProperties.m in Sources */,
 				9276F38F1A1D289C0060E909 /* main.m in Sources */,
@@ -1275,7 +1262,6 @@
 				929BCF341BB14A1B005F1DBD /* StandardTableViewCell.m in Sources */,
 				929BCF351BB14A1B005F1DBD /* SDWebImageCompat.m in Sources */,
 				929BCF361BB14A1B005F1DBD /* LCCPost.m in Sources */,
-				929BCF371BB14A1B005F1DBD /* LCCFollow.m in Sources */,
 				929BCF381BB14A1B005F1DBD /* CommSourceCodeViewController.m in Sources */,
 				929BCF391BB14A1B005F1DBD /* AFURLRequestSerialization.m in Sources */,
 				92B957031BBD912400699BFF /* HelpSplitViewController.m in Sources */,
@@ -1304,7 +1290,6 @@
 				92612CE51BD7A5F600370C82 /* IndexSideBar.m in Sources */,
 				929BCF4D1BB14A1B005F1DBD /* AppController.m in Sources */,
 				92751E941C85D44600E73A6C /* TextFieldTableViewCell.m in Sources */,
-				928987A71DD756DB002B84B7 /* LCCLike.m in Sources */,
 				929BCF4E1BB14A1B005F1DBD /* NSDate+Utils.m in Sources */,
 				929BCF4F1BB14A1B005F1DBD /* GORLabel.m in Sources */,
 				929BCF501BB14A1B005F1DBD /* SDWebImageDownloaderOperation.m in Sources */,
@@ -1515,7 +1500,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = BZ4VC623NH;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1540,7 +1525,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = BZ4VC623NH;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
