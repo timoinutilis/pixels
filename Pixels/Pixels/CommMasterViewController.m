@@ -43,6 +43,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserChanged:) name:CurrentUserChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onFollowsChanged:) name:FollowsChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onFollowsChanged:) name:FollowsLoadNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNotificationsNumChanged:) name:NotificationsNumChangeNotification object:nil];
     
     self.newsIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
@@ -55,6 +56,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:CurrentUserChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:FollowsChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:FollowsLoadNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NotificationsNumChangeNotification object:nil];
 }
 
@@ -106,7 +108,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3;
+    return ([CommunityModel sharedInstance].follows.count > 0 ? 3 : 2);
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -194,9 +196,9 @@ typedef NS_ENUM(NSInteger, CellTag) {
     }
     else if (indexPath.section == 2)
     {
-//        LCCFollow *follow = [CommunityModel sharedInstance].follows[indexPath.row];
+        LCCUser *followUser = [CommunityModel sharedInstance].follows[indexPath.row];
         cell = [tableView dequeueReusableCellWithIdentifier:@"MenuCell" forIndexPath:indexPath];
-//        cell.textLabel.text = follow.followsUser.username;
+        cell.textLabel.text = followUser.username;
         cell.tag = CellTagFollowing;
     }
     
@@ -259,9 +261,8 @@ typedef NS_ENUM(NSInteger, CellTag) {
                 break;
             }
             case CellTagFollowing: {
-/*                LCCFollow *follow = [CommunityModel sharedInstance].follows[indexPath.row];
-                LCCUser *user = follow.followsUser;
-                [vc setUser:user mode:CommListModeProfile];*/
+                LCCUser *followUser = [CommunityModel sharedInstance].follows[indexPath.row];
+                [vc setUser:followUser mode:CommListModeProfile];
                 break;
             }
         }

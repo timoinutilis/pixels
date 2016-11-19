@@ -275,6 +275,13 @@ static const NSInteger LIMIT = 50;
 
         [self.activityIndicator decreaseActivity];
         
+        id userDict = responseObject[@"user"];
+        if (self.mode == CommListModeProfile && userDict)
+        {
+            [self.user updateWithDictionary:userDict];
+            self.userNeedsUpdate = YES;
+        }
+        
         NSArray *posts = [LCCPost objectsFromArray:responseObject[@"posts"]];
         NSDictionary *usersById = [LCCUser objectsByIdFromArray:responseObject[@"users"]];
         NSDictionary *statsById = [LCCPostStats objectsByIdFromArray:responseObject[@"postStats"]];
@@ -380,7 +387,7 @@ static const NSInteger LIMIT = 50;
         UIViewController *vc = [CommLogInViewController create];
         [self presentInNavigationViewController:vc];
     }
-    else if ([[CommunityModel sharedInstance] followWithUser:self.user])
+    else if ([[CommunityModel sharedInstance] followsUser:self.user])
     {
         button.enabled = NO;
         [[CommunityModel sharedInstance] unfollowUser:self.user];
@@ -767,9 +774,9 @@ static const NSInteger LIMIT = 50;
     {
         self.actionButton.hidden = NO;
         self.actionButton.enabled = YES;
-        if ([CommunityModel sharedInstance].currentUser && [[CommunityModel sharedInstance] followWithUser:user])
+        if ([CommunityModel sharedInstance].currentUser && [[CommunityModel sharedInstance] followsUser:user])
         {
-            [self.actionButton setTitle:@"Stop Following" forState:UIControlStateNormal];
+            [self.actionButton setTitle:@"Following ✓" forState:UIControlStateNormal];
         }
         else
         {

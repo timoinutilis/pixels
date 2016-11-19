@@ -17,10 +17,10 @@
 #import "AFNetworking.h"
 
 extern NSString *const CurrentUserChangeNotification;
+extern NSString *const FollowsLoadNotification;
 extern NSString *const FollowsChangeNotification;
 extern NSString *const PostDeleteNotification;
 extern NSString *const PostCounterChangeNotification;
-extern NSString *const UserUpdateNotification;
 extern NSString *const NotificationsUpdateNotification;
 extern NSString *const NotificationsNumChangeNotification;
 
@@ -37,8 +37,7 @@ typedef void (^LCCResultBlock)(BOOL succeeded, NSError *error);
 @interface CommunityModel : NSObject
 
 @property (nonatomic, readonly) AFHTTPSessionManager *sessionManager;
-@property (nonatomic, readonly) NSMutableArray *follows;
-@property (nonatomic, readonly) BOOL isUpdatingUser;
+@property (nonatomic, readonly) NSMutableArray<LCCUser *> *follows;
 @property (nonatomic, readonly) NSMutableArray <LCCNotification *> *notifications;
 @property (nonatomic, readonly) BOOL isUpdatingNotifications;
 @property (nonatomic, readonly) NSInteger numNewNotifications;
@@ -56,7 +55,7 @@ typedef void (^LCCResultBlock)(BOOL succeeded, NSError *error);
 
 - (void)followUser:(LCCUser *)user;
 - (void)unfollowUser:(LCCUser *)user;
-- (LCCFollow *)followWithUser:(LCCUser *)user;
+- (BOOL)followsUser:(LCCUser *)user;
 - (NSArray *)arrayWithFollowedUsers;
 - (void)countPost:(LCCPost *)post type:(StatsType)type;
 

@@ -10,10 +10,10 @@
 #import "AppController.h"
 
 NSString *const CurrentUserChangeNotification = @"CurrentUserChangeNotification";
+NSString *const FollowsLoadNotification = @"FollowsLoadNotification";
 NSString *const FollowsChangeNotification = @"FollowsChangeNotification";
 NSString *const PostDeleteNotification = @"PostDeleteNotification";
 NSString *const PostCounterChangeNotification = @"PostCounterChangeNotification";
-NSString *const UserUpdateNotification = @"UserUpdateNotification";
 NSString *const NotificationsUpdateNotification = @"NotificationsUpdateNotification";
 NSString *const NotificationsNumChangeNotification = @"NotificationsNumChangeNotification";
 
@@ -127,63 +127,30 @@ NSString *const HTTPHeaderSessionTokenKey = @"X-LowResCoder-Session-Token";
 }
 
 - (void)updateCurrentUser
-{/*
-    _isUpdatingUser = YES;
-    [[NSNotificationCenter defaultCenter] postNotificationName:UserUpdateNotification object:self];
-    
-    if ([PFUser currentUser])
+{
+    if (self.currentUser)
     {
-        PFQuery *query = [PFQuery queryWithClassName:[LCCFollow parseClassName]];
-        [query whereKey:@"user" equalTo:[PFUser currentUser]];
-        [query includeKey:@"followsUser"];
-        [query orderByDescending:@"lastPostDate"];
-        query.cachePolicy = kPFCachePolicyNetworkElseCache;
-        
-        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        NSString *route = [NSString stringWithFormat:@"users/%@/following", self.currentUser.objectId];
+        [self.sessionManager GET:route parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
             
-            if (objects)
-            {
-                _follows = [NSMutableArray arrayWithArray:objects];
-                [self sortFollows];
-                [[NSNotificationCenter defaultCenter] postNotificationName:FollowsChangeNotification object:self];
-            }
-            else
-            {
-                NSLog(@"Error: %@", error.description);
-            }
-            _isUpdatingUser = NO;
-            [[NSNotificationCenter defaultCenter] postNotificationName:UserUpdateNotification object:self];
+            _follows = [LCCUser objectsFromArray:responseObject[@"users"]].mutableCopy;
+            [self sortFollows];
+            [[NSNotificationCenter defaultCenter] postNotificationName:FollowsLoadNotification object:self];
+            
+        } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+            
+            NSLog(@"Error: %@", error.localizedDescription);
             
         }];
     }
     else
     {
         _follows = [NSMutableArray array];
-        
-        LCCFollow *defaultFollow = [LCCFollow object];
-        NSString *newsUserID = [[NSBundle mainBundle] objectForInfoDictionaryKey:LowResNewsUserIDKey];
-        defaultFollow.followsUser = [LCCUser objectWithoutDataWithObjectId:newsUserID];
-        
-        [defaultFollow.followsUser fetchInBackgroundWithBlock:^(PFObject *object,  NSError *error) {
-            
-            if (object)
-            {
-                [_follows addObject:defaultFollow];
-                [[NSNotificationCenter defaultCenter] postNotificationName:FollowsChangeNotification object:self];
-            }
-            else
-            {
-                NSLog(@"Error: %@", error.description);
-                [[NSNotificationCenter defaultCenter] postNotificationName:FollowsChangeNotification object:self];
-            }
-            _isUpdatingUser = NO;
-            [[NSNotificationCenter defaultCenter] postNotificationName:UserUpdateNotification object:self];
-            
-        }];
+        [[NSNotificationCenter defaultCenter] postNotificationName:FollowsLoadNotification object:self];
     }
     
     // update installation
-    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+/*    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     currentInstallation[@"user"] = [PFUser currentUser] ? [PFUser currentUser] : [NSNull null];
     [currentInstallation saveInBackground];*/
 }
@@ -248,16 +215,16 @@ NSString *const HTTPHeaderSessionTokenKey = @"X-LowResCoder-Session-Token";
     }*/
 }
 
-- (LCCFollow *)followWithUser:(LCCUser *)user
-{/*
-    for (LCCFollow *follow in self.follows)
+- (BOOL)followsUser:(LCCUser *)user
+{
+    for (LCCUser *followUser in self.follows)
     {
-        if ([follow.followsUser.objectId isEqualToString:user.objectId])
+        if ([followUser.objectId isEqualToString:user.objectId])
         {
-            return follow;
+            return YES;
         }
-    }*/
-    return nil;
+    }
+    return NO;
 }
 
 - (NSArray *)arrayWithFollowedUsers
