@@ -60,7 +60,8 @@ NSString *const HTTPHeaderSessionTokenKey = @"X-LowResCoder-Session-Token";
     
     [self.sessionManager POST:@"users" parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         
-        [self onLoggedInWithUser:[[LCCUser alloc] initWithDictionary:responseObject]];
+        [user updateWithDictionary:responseObject[@"user"]];
+        [self onLoggedInWithUser:user];
         completion(YES, nil);
         
     } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
@@ -157,7 +158,9 @@ NSString *const HTTPHeaderSessionTokenKey = @"X-LowResCoder-Session-Token";
 }
 
 - (void)onPostedWithDate:(NSDate *)date
-{/*
+{
+    //TODO move to server!
+    /*
     LCCUser *user = (LCCUser *)[PFUser currentUser];
     if (user)
     {
@@ -351,4 +354,26 @@ NSString *const HTTPHeaderSessionTokenKey = @"X-LowResCoder-Session-Token";
     }*/
 }
 
+- (void)uploadFileWithName:(NSString *)filename data:(NSData *)data completion:(LCCUploadResultBlock)block
+{
+    NSString *route = [NSString stringWithFormat:@"/files/%@", filename];
+    NSMutableURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:route relativeToURL:self.sessionManager.baseURL]].mutableCopy;
+    request.HTTPMethod = @"POST";
+    [request addValue:self.currentUser.sessionToken forHTTPHeaderField:HTTPHeaderSessionTokenKey];
+    
+    [[self.sessionManager uploadTaskWithRequest:request fromData:data progress:nil completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        
+        if (!error)
+        {
+            NSString *url = responseObject[@"url"];
+            block([NSURL URLWithString:url], nil);
+        }
+        else
+        {
+            block(nil, error);
+        }
+        
+    }] resume];
+                                                                                                                       
+}
 @end

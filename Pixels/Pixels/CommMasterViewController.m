@@ -101,7 +101,10 @@ typedef NS_ENUM(NSInteger, CellTag) {
 
 - (void)onNotificationsNumChanged:(NSNotification *)notification
 {
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+    if ([CommunityModel sharedInstance].currentUser)
+    {
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+    }
 }
 
 #pragma mark - Table view data source

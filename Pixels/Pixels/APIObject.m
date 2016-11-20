@@ -77,13 +77,6 @@ void integerSetterMethodIMP(APIObject *self, SEL _cmd, int value)
 
 @implementation APIObject
 
-+ (NSURL *)filesURL
-{
-    NSString *url = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"LowResFilesURL"];
-    NSAssert(url, @"LowResFilesURL not defined in info.plist");
-    return [NSURL URLWithString:url];
-}
-
 + (void)registerAPIClass
 {
     static dispatch_once_t onceToken;
@@ -248,7 +241,7 @@ void integerSetterMethodIMP(APIObject *self, SEL _cmd, int value)
                         break;
                         
                     case APIObjectPropertyTypeURL:
-                        self.values[property.name] = [NSURL URLWithString:value relativeToURL:[APIObject filesURL]];
+                        self.values[property.name] = [NSURL URLWithString:value];
                         break;
                         
                     case APIObjectPropertyTypeInteger:
@@ -282,8 +275,7 @@ void integerSetterMethodIMP(APIObject *self, SEL _cmd, int value)
                 break;
                 
             case APIObjectPropertyTypeURL:
-//                dictionary[key] = ((NSURL *)value).relativeString;
-                NSAssert(NO, @"Not implemented yet");
+                dictionary[key] = ((NSURL *)value).absoluteString;
                 break;
         }
     }

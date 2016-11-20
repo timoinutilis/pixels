@@ -209,7 +209,7 @@ typedef NS_ENUM(NSInteger, Section) {
             }
             else
             {
-                self.titleCell.likeButton.enabled = YES;
+                self.titleCell.likeButton.enabled = ![self.user isMe];
             }
         }
         else
@@ -318,7 +318,6 @@ typedef NS_ENUM(NSInteger, Section) {
         // Comment
         LCCComment *comment = [[LCCComment alloc] init];
         comment.user = currentUser.objectId;
-        comment.post = self.post.objectId;
         comment.text = commentText;
         
         
@@ -328,7 +327,7 @@ typedef NS_ENUM(NSInteger, Section) {
         [[CommunityModel sharedInstance].sessionManager POST:route parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
 
             [self.activityIndicator decreaseActivity];
-            [comment updateWithDictionary:responseObject];
+            [comment updateWithDictionary:responseObject[@"comment"]];
             [comment resetDirty];
             
             LCCPostStats *stats = [[LCCPostStats alloc] initWithDictionary:responseObject[@"postStats"]];
@@ -367,25 +366,25 @@ typedef NS_ENUM(NSInteger, Section) {
 }
 
 - (void)deletePost
-{/*
+{
     [self.activityIndicator increaseActivity];
     self.view.userInteractionEnabled = NO;
     
-    [self.post deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        
+    NSString *route = [NSString stringWithFormat:@"/posts/%@", self.post.objectId];
+    [[CommunityModel sharedInstance].sessionManager DELETE:route parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+
         [self.activityIndicator decreaseActivity];
         self.view.userInteractionEnabled = YES;
-        if (succeeded)
-        {
-            [PFQuery clearAllCachedResults];
-            [[NSNotificationCenter defaultCenter] postNotificationName:PostDeleteNotification object:self userInfo:@{@"postId": self.post.objectId}];
-        }
-        else if (error)
-        {
-            [self showAlertWithTitle:@"Could not delete post." message:error.userInfo[@"error"] block:nil];
-        }
-        
-    }];*/
+//        [PFQuery clearAllCachedResults];
+        [[NSNotificationCenter defaultCenter] postNotificationName:PostDeleteNotification object:self userInfo:@{@"postId": self.post.objectId}];
+
+    } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+
+        [self.activityIndicator decreaseActivity];
+        self.view.userInteractionEnabled = YES;
+        [self showAlertWithTitle:@"Could not delete post." message:error.localizedDescription block:nil];
+
+    }];
 }
 
 - (void)showUser:(LCCUser *)user

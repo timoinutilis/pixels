@@ -118,7 +118,7 @@ class DataBaseAccess {
 	    return FALSE;
 	}
 
-	function createObject($tableName, $body, $dataName = NULL) {
+	function createObject($tableName, $body, $dataName) {
 		$id = $this->unique_id(10);
 		$columns = array("objectId", "createdAt");
 		$values = array("'$id'", "NOW()");
@@ -139,12 +139,7 @@ class DataBaseAccess {
 		    if ($stmt->execute()) {
 		    	$object = $stmt->fetch();
    		   		$createdAt = $object['createdAt'];
- 			    if (!empty($dataName)) {
-   			    	$this->data[$dataName] = array('objectId' => $id, 'createdAt' => $createdAt);
-			    } else {
-			    	$this->data['objectId'] = $id;
-			    	$this->data['createdAt'] = $createdAt;
-			    }
+   			    $this->data[$dataName] = array('objectId' => $id, 'createdAt' => $createdAt);
 		    }		    
 	        return $id;
 	    }

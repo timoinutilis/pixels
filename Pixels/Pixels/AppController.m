@@ -212,12 +212,11 @@ NSString *const ImportProjectNotification = @"ImportProjectNotification";
 }
 
 - (void)registerForNotifications
-{
-    // Register for Push Notitications
+{/*
     UIApplication *application = [UIApplication sharedApplication];
     UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
     UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes categories:nil];
-    [application registerUserNotificationSettings:settings];
+    [application registerUserNotificationSettings:settings];*/
 }
 
 - (void)storeError:(NSError *)error message:(NSString *)message

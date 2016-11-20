@@ -262,7 +262,14 @@ static const NSInteger LIMIT = 50;
     NSArray *oldPosts = self.posts.copy;
     [self.activityIndicator increaseActivity];
     
-    NSDictionary *params = @{@"offset": @(self.currentOffset), @"limit":@(LIMIT)};
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"offset"] = @(self.currentOffset);
+    params[@"limit"] = @(LIMIT);
+    if (self.filterCategory != LCCPostCategoryUndefined)
+    {
+        params[@"category"] = @(self.filterCategory);
+    }
+
     [[CommunityModel sharedInstance].sessionManager GET:self.currentRoute parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
 
         [self.activityIndicator decreaseActivity];
@@ -410,48 +417,51 @@ static const NSInteger LIMIT = 50;
     else
     {
         [self.view endEditing:YES];
-        /*
+        
         UIButton *button = (UIButton *)sender;
         button.enabled = NO;
         
-        LCCPost *post = [LCCPost object];
-        post.user = (LCCUser *)[PFUser currentUser];
+        LCCPost *post = [[LCCPost alloc] init];
         post.type = LCCPostTypeStatus;
         post.category = LCCPostCategoryStatus;
         post.title = statusTitleText;
         post.detail = statusDetailText;
-        post.stats = [LCCPostStats object];
         
         [self.activityIndicator increaseActivity];
-        [post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            
+        
+        NSString *route = [NSString stringWithFormat:@"/users/%@/posts", [CommunityModel sharedInstance].currentUser.objectId];
+        NSDictionary *params = [post dirtyDictionary];
+        
+        [[CommunityModel sharedInstance].sessionManager POST:route parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+
             [self.activityIndicator decreaseActivity];
+            [post updateWithDictionary:responseObject[@"post"]];
+            [post resetDirty];
             
-            if (succeeded)
-            {
-                [[CommunityModel sharedInstance] onPostedWithDate:post.createdAt];
-                [PFQuery clearAllCachedResults];
-                
-                self.writeStatusCell.titleTextField.text = @"";
-                self.writeStatusCell.textView.text = @"";
-                
-                [self.posts insertObject:post atIndex:0];
-                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:2];
-                [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-                
-                NSDictionary *dimensions = @{@"category": [post categoryString],
-                                             @"app": ([AppController sharedController].isFullVersion) ? @"full version" : @"free"};
-                [PFAnalytics trackEvent:@"post" dimensions:dimensions];
-                
-                [[AppController sharedController] registerForNotifications];
-            }
-            else if (error)
-            {
-                [self showAlertWithTitle:@"Could not send status update." message:error.userInfo[@"error"] block:nil];
-            }
+            LCCPostStats *stats = [[LCCPostStats alloc] initWithDictionary:responseObject[@"postStats"]];
+            self.statsById[stats.objectId] = stats;
+            
+            [[CommunityModel sharedInstance] onPostedWithDate:post.createdAt];
+//            [PFQuery clearAllCachedResults];
+            
+            self.writeStatusCell.titleTextField.text = @"";
+            self.writeStatusCell.textView.text = @"";
+            
+            [self.posts insertObject:post atIndex:0];
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:2];
+            [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            
+            [[AppController sharedController] registerForNotifications];
             
             button.enabled = YES;
-        }];*/
+
+        } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+
+            [self.activityIndicator decreaseActivity];
+            [self showAlertWithTitle:@"Could not send status update." message:error.localizedDescription block:nil];
+            button.enabled = YES;
+
+        }];
     }
 }
 
@@ -469,27 +479,26 @@ static const NSInteger LIMIT = 50;
 }
 
 - (void)deletePost:(LCCPost *)post indexPath:(NSIndexPath *)indexPath
-{/*
+{
     [self.activityIndicator increaseActivity];
     self.view.userInteractionEnabled = NO;
-    
-    [post deleteInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+ 
+    NSString *route = [NSString stringWithFormat:@"/posts/%@", post.objectId];
+    [[CommunityModel sharedInstance].sessionManager DELETE:route parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         
         [self.activityIndicator decreaseActivity];
         self.view.userInteractionEnabled = YES;
+        [self.posts removeObject:post];
+        [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+//        [PFQuery clearAllCachedResults];
         
-        if (succeeded)
-        {
-            [self.posts removeObject:post];
-            [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-            [PFQuery clearAllCachedResults];
-        }
-        else if (error)
-        {
-            [self showAlertWithTitle:@"Could not delete post." message:error.userInfo[@"error"] block:nil];
-        }
+    } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
         
-    }];*/
+        [self.activityIndicator decreaseActivity];
+        self.view.userInteractionEnabled = YES;
+        [self showAlertWithTitle:@"Could not delete post." message:error.localizedDescription block:nil];
+        
+    }];
 }
 
 #pragma mark - Table view
@@ -631,10 +640,9 @@ static const NSInteger LIMIT = 50;
         else
         {
             LCCPost *post = self.posts[indexPath.row - 1];
-            LCCPost *targetPost = /*post.sharedPost ? post.sharedPost :*/ post;
             LCCUser *user = self.usersById[post.user];
             LCCPostStats *stats = self.statsById[post.stats];
-            NSString *cellType = (targetPost.type == LCCPostTypeStatus) ? @"StatusCell" : @"ProgramCell";
+            NSString *cellType = (post.type == LCCPostTypeStatus || post.image == nil) ? @"StatusCell" : @"ProgramCell";
             CommPostCell *cell = [tableView dequeueReusableCellWithIdentifier:cellType forIndexPath:indexPath];
             [cell setPost:post user:user showName:(self.mode == CommListModeNews)];
             [cell setStats:stats];

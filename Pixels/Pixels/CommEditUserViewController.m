@@ -114,29 +114,31 @@
     {
         self.user.password = password;
     }
-    /*
+    
     [self setBusy:YES];
-    [self.user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+    
+    NSString *route = [NSString stringWithFormat:@"/users/%@", self.user.objectId];
+    NSDictionary *params = [self.user dirtyDictionary];
+    
+    [[CommunityModel sharedInstance].sessionManager PUT:route parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+
+        [self.user resetDirty];
+//        [PFQuery clearAllCachedResults];
         
+        // save name for log-in view
+        NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
+        [storage setObject:username forKey:UserDefaultsLogInKey];
+        
+        [[CommunityModel sharedInstance] onUserDataChanged];
+        
+        [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+
+    } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+
         [self setBusy:NO];
-        if (succeeded)
-        {
-            [PFQuery clearAllCachedResults];
-            
-            // save name for log-in view
-            NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
-            [storage setObject:username forKey:UserDefaultsLogInKey];
-            
-            [[CommunityModel sharedInstance] onUserDataChanged];
-            
-            [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-        }
-        else if (error)
-        {
-            [self showAlertWithTitle:@"Could not save changes" message:error.userInfo[@"error"] block:nil];
-        }
-        
-    }];*/
+        [self showAlertWithTitle:@"Could not save changes" message:error.localizedDescription block:nil];
+
+    }];
 }
 
 - (IBAction)onCancelTapped:(id)sender

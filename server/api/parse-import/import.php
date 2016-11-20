@@ -10,6 +10,7 @@ $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 
 $json_dir = "./json/";
 $files_dir = "./files/";
+$files_url = "http://lowresfiles.timokloss.com/";
 
 import_users();
 import_posts();
@@ -87,7 +88,7 @@ function import_users() {
 }
 
 function import_posts() {
-	global $pdo, $files_dir;
+	global $pdo, $files_dir, $files_url;
 	$s = $pdo->prepare("INSERT INTO posts (objectId,updatedAt,createdAt,type,category,user,title,detail,image,program,sharedPost,stats) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
 	$results = load_json_results("Post.json");
 	$old_programs = load_json_by_ids("Program.json");
@@ -108,6 +109,7 @@ function import_posts() {
 				if ($is_original) {
 					file_put_contents($files_dir.$image, fopen($object->image->url, 'r'));
 				}
+				$image = $files_url.$image;
 			}
 			if (!empty($object->stats)) {
 				$stats = $object->stats->objectId;
@@ -117,13 +119,15 @@ function import_posts() {
 				if (!empty($object->programFile)) {
 					// download program file
 					$program = $object->programFile->name;
+					$program = str_replace(".txt", ".bas", $program);
 					file_put_contents($files_dir.$program, fopen($object->programFile->url, 'r'));
-				}
-				else if (!empty($object->program)) {
+					$program = $files_url.$program;
+				} else if (!empty($object->program)) {
 					// get old program from db and save to file
 					$old_program = $old_programs[$object->program->objectId];
-					$program = "lrc-".bin2hex(openssl_random_pseudo_bytes(16))."-".file_title($object->title).".txt";
+					$program = "lrc-".bin2hex(openssl_random_pseudo_bytes(16))."-".file_title($object->title).".bas";
 					file_put_contents($files_dir.$program, $old_program->sourceCode);
+					$program = $files_url.$program;
 				}
 				$detail = $object->detail;
 			}

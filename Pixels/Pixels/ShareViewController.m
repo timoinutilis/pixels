@@ -229,7 +229,7 @@
 }
 
 - (void)send
-{/*
+{
     [self isBusy:YES];
 
     NSString *title = self.titleCell.textField.text;
@@ -241,64 +241,73 @@
         fileTitle = [fileTitle substringToIndex:30];
     }
     
-    // icon image
-    
-    NSString *iconFileName = [NSString stringWithFormat:@"%@.png", fileTitle];
-    PFFile *imageFile = [PFFile fileWithName:iconFileName data:self.project.iconData];
-
-    // source code
-    
-    NSString *programFileName = [NSString stringWithFormat:@"%@.txt", fileTitle];
-    NSData *fileData = [self.project.sourceCode dataUsingEncoding:NSUTF8StringEncoding];
-    PFFile *programFile = [PFFile fileWithName:programFileName data:fileData contentType:@"text/plain"];
-    
-    // note for users with old app version
-    
-    LCCProgram *program = [LCCProgram object];
-    program.sourceCode = @"REM ************************\nREM LOWRES CODER 3.1 OR NEWER REQUIRED\nREM PLEASE UPDATE LOWRES CODER AND GET THIS PROGRAM AGAIN\nREM ************************";
-    
-    // post
-    
-    LCCPost *post = [LCCPost object];
-    post.type = LCCPostTypeProgram;
-    post.user = (LCCUser *)[PFUser currentUser];
-    post.title = title;
-    post.detail = description;
-    post.program = program;
-    post.programFile = programFile;
-    post.image = imageFile;
-    post.category = self.selectedCategory;
-    post.stats = [LCCPostStats object];
-    
-    [post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+    // icon file
+    [[CommunityModel sharedInstance] uploadFileWithName:[NSString stringWithFormat:@"%@.png", fileTitle] data:self.project.iconData completion:^(NSURL *url, NSError *error) {
         
-        if (succeeded)
+        if (url)
         {
-            [[CommunityModel sharedInstance] onPostedWithDate:post.createdAt];
-            [PFQuery clearAllCachedResults];
+            NSURL *iconFileURL = url;
             
-            self.project.postId = post.objectId;
-            [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
-                [[AppController sharedController] registerForNotifications];
+            // program file
+            NSData *fileData = [self.project.sourceCode dataUsingEncoding:NSUTF8StringEncoding];
+            
+            [[CommunityModel sharedInstance] uploadFileWithName:[NSString stringWithFormat:@"%@.txt", fileTitle] data:fileData completion:^(NSURL *url, NSError *error) {
+            
+                if (url)
+                {
+                    NSURL *programFileURL = url;
+                    
+                    // post
+                    LCCPost *post = [[LCCPost alloc] init];
+                    post.type = LCCPostTypeProgram;
+                    post.title = title;
+                    post.detail = description;
+                    post.program = programFileURL;
+                    post.image = iconFileURL;
+                    post.category = self.selectedCategory;
+                    
+                    NSString *route = [NSString stringWithFormat:@"/users/%@/posts", [CommunityModel sharedInstance].currentUser.objectId];
+                    NSDictionary *params = [post dirtyDictionary];
+                    
+                    [[CommunityModel sharedInstance].sessionManager POST:route parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+                        
+                        [post updateWithDictionary:responseObject[@"post"]];
+                        [post resetDirty];
+                        [[CommunityModel sharedInstance] onPostedWithDate:post.createdAt];
+                        
+//                        [PFQuery clearAllCachedResults];
+                        
+                        self.project.postId = post.objectId;
+                        [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
+                            [[AppController sharedController] registerForNotifications];
+                        }];
+                        
+                    } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+                        
+                        [self showSendError:error];
+                        
+                    }];
+                }
+                else
+                {
+                    [self showSendError:error];
+                }
+                
             }];
             
-            NSDictionary *dimensions = @{@"category": [post categoryString],
-                                         @"app": ([AppController sharedController].isFullVersion) ? @"full version" : @"free"};
-            [PFAnalytics trackEvent:@"post" dimensions:dimensions];
         }
         else
         {
-            [self showSendError];
+            [self showSendError:error];
         }
         
     }];
-    */
 }
 
-- (void)showSendError
+- (void)showSendError:(NSError *)error
 {
     [self isBusy:NO];
-    [self showAlertWithTitle:@"Could not send program" message:@"Please try again later!" block:nil];
+    [self showAlertWithTitle:@"Could not send program" message:error.localizedDescription block:nil];
 }
 
 - (void)isBusy:(BOOL)isBusy

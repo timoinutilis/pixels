@@ -27,7 +27,7 @@ if ($_SERVER['SERVER_NAME'] == "localhost") {
     $config['db']['dbname'] = "db645859868";
 }
 
-$config['lowres']['filesurl'] = "lowresfiles.timokloss.com";
+$config['lowres']['filesurl'] = "http://lowresfiles.timokloss.com";
 $config['lowres']['filespath'] = "../../lowresfiles";
 $config['lowres']['admin'] = "T5VWaLW28x";
 
@@ -140,6 +140,52 @@ $app->get('/posts/{id}', function (Request $request, Response $response) {
     return $response;
 });
 
+// delete post
+$app->delete('/posts/{id}', function (Request $request, Response $response) {
+    $body = $request->getParsedBody();
+    $postId = $request->getAttribute('id');
+    $access = new DataBaseAccess($this->db);
+
+    $stmt = $this->db->prepare("SELECT * FROM posts WHERE objectId = ?");
+    $stmt->bindParam(1, $postId);
+    if ($stmt->execute()) {
+        $post = $stmt->fetch();
+        if ($post) {
+            checkMyUser($post['user'], $request);
+
+            $stmt = $this->db->prepare("DELETE FROM posts WHERE sharedPost = ?");
+            $stmt->bindValue(1, $postId);
+            if ($stmt->execute()) {
+                $stmt = $this->db->prepare("DELETE FROM comments WHERE post = ?");
+                $stmt->bindValue(1, $postId);
+                if ($stmt->execute()) {
+                    $stmt = $this->db->prepare("DELETE FROM likes WHERE post = ?");
+                    $stmt->bindValue(1, $postId);
+                    if ($stmt->execute()) {
+                        $stmt = $this->db->prepare("DELETE FROM posts WHERE objectId = ?");
+                        $stmt->bindValue(1, $postId);
+                        if ($stmt->execute()) {
+                            //TODO delete files
+                            $access->data['success'] = TRUE;
+
+                            if ($post['type'] != 3) { // not if post is a "share"
+                                $stmt = $this->db->prepare("DELETE FROM postStats WHERE post = ?");
+                                $stmt->bindValue(1, $postId);
+                                $stmt->execute();
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            throw new APIException("The object '$postId' could not be found.", 404, "NotFound");
+        }
+    }
+
+    $response = $response->withJson($access->data);
+    return $response;
+})->add(new AuthMiddleware());
+
 // add post comment
 $app->post('/posts/{id}/comments', function (Request $request, Response $response) {
     $body = $request->getParsedBody();
@@ -150,7 +196,8 @@ $app->post('/posts/{id}/comments', function (Request $request, Response $respons
     checkRequired($body, 'text');
 
     $body['post'] = $postId;
-    if ($access->createObject("comments", $body) !== FALSE) {
+    if ($access->createObject("comments", $body, "comment") !== FALSE) {
+        $access->data['comment']['post'] = $postId;
         $response = $response->withStatus(201);
         $access->increasePostStats($postId, 0, 1, 0);
     }
@@ -172,7 +219,8 @@ $app->post('/posts/{id}/likes', function (Request $request, Response $response) 
         throw new APIException("You already like this post.", 403, "AlreadyLiked");
     } else {
         $body['post'] = $postId;
-        if ($access->createObject("likes", $body) !== FALSE) {
+        if ($access->createObject("likes", $body, "like") !== FALSE) {
+            $access->data['like']['post'] = $postId;
             $response = $response->withStatus(201);
             $access->increasePostStats($postId, 0, 0, 1);
         }
@@ -288,8 +336,9 @@ $app->post('/users/{id}/followers', function (Request $request, Response $respon
     checkMyUser($myUserId, $request);
 
     $followsObject = array('user' => $myUserId, 'followsUser' => $userId);
-    $postId = $access->createObject("follows", $followsObject, "follow");
-    if ($postId !== FALSE) {
+    $followId = $access->createObject("follows", $followsObject, "follow");
+    if ($followId !== FALSE) {
+        $access->data['follow']['followsUser'] = $userId;
         $response = $response->withStatus(201);
     }
 
@@ -348,15 +397,18 @@ $app->post('/users/{id}/posts', function (Request $request, Response $response) 
     checkRequired($body, 'detail');
 
     $body['user'] = $userId;
-    $postId = $access->createObject("posts", $body);
+    $postId = $access->createObject("posts", $body, "post");
     if ($postId !== FALSE) {
+        $access->data['post']['user'] = $userId;
         $response = $response->withStatus(201);
         $statsId = $access->createObject("postStats", array('post' => $postId), "postStats");
         if ($statsId !== FALSE) {
+            $access->data['postStats']['post'] = $postId;
             $stmt = $this->db->prepare("UPDATE posts SET stats = ? WHERE objectId = ?");
             $stmt->bindParam(1, $statsId);
             $stmt->bindParam(2, $postId);
             if ($stmt->execute()) {
+                $access->data['post']['stats'] = $statsId;
                 if ($stmt->rowCount() == 0) {
                     throw new APIException("Could not add statistics to post.", 500, "InternalServerError");
                 }
@@ -448,6 +500,7 @@ $app->post('/users', function (Request $request, Response $response) {
     $body = $request->getParsedBody();
     $username = $body['username'];
     $password = $body['password'];
+    $settings = $this->get('settings')['lowres'];
     $access = new DataBaseAccess($this->db);
 
     checkNewUsername($username);
@@ -459,9 +512,17 @@ $app->post('/users', function (Request $request, Response $response) {
 
     unset($body['password']);
 
-    if ($access->createObject("users", $body) !== FALSE) {
+    $userId = $access->createObject("users", $body, "user");
+    if ($userId !== FALSE) {
+        // follow admin        
+        $followsObject = array('user' => $userId, 'followsUser' => $settings['admin']);
+        $followId = $access->createObject("follows", $followsObject, "follow");
+        if ($followId !== FALSE) {
+            $access->data['follow']['followsUser'] = $userId;
+        }
+
         $response = $response->withStatus(201);
-        $access->data['sessionToken'] = $sessionToken;
+        $access->data['user']['sessionToken'] = $sessionToken;
     }
 
     $response = $response->withJson($access->data);

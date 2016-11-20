@@ -31,6 +31,7 @@ typedef NS_ENUM(NSInteger, StatsType) {
 };
 
 typedef void (^LCCResultBlock)(BOOL succeeded, NSError *error);
+typedef void (^LCCUploadResultBlock)(NSURL *url, NSError *error);
 
 @interface CommunityModel : NSObject
 
@@ -59,5 +60,7 @@ typedef void (^LCCResultBlock)(BOOL succeeded, NSError *error);
 
 - (void)loadNotifications;
 - (void)onOpenNotifications;
+
+- (void)uploadFileWithName:(NSString *)filename data:(NSData *)data completion:(LCCUploadResultBlock)block;
 
 @end

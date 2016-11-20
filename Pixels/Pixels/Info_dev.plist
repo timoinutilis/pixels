@@ -62,6 +62,8 @@
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>LowResAPIURL</key>
+	<string>https://lowresapi.timokloss.com</string>
 	<key>LowResNewsUserID</key>
 	<string>URx43Y5mTG</string>
 	<key>NSAppTransportSecurity</key>

@@ -64,8 +64,6 @@
 	<true/>
 	<key>LowResAPIURL</key>
 	<string>https://lowresapi.timokloss.com</string>
-	<key>LowResFilesURL</key>
-	<string>http://lowresfiles.timokloss.com</string>
 	<key>LowResNewsUserID</key>
 	<string>T5VWaLW28x</string>
 	<key>NSAppTransportSecurity</key>
