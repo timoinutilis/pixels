@@ -267,11 +267,11 @@ NSString *const HTTPHeaderSessionTokenKey = @"X-LowResCoder-Session-Token";
         NSMutableDictionary *params = [NSMutableDictionary dictionary];
         params[@"limit"] = @(50);
         
-/*        if (_notifications.count > 0)
+        if (_notifications.count > 0)
         {
             LCCNotification *lastNotification = _notifications.firstObject;
-            [query whereKey:@"createdAt" greaterThan:lastNotification.createdAt];
-        }*/
+            params[@"after"] = [[NSDateFormatter sharedAPIDateFormatter] stringFromDate:lastNotification.createdAt];
+        }
         
         [self.sessionManager GET:route parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
             

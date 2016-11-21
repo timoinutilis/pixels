@@ -289,9 +289,18 @@ $app->get('/users/{id}/notifications', function (Request $request, Response $res
     $params = $request->getQueryParams();
     $userId = $request->getAttribute('id');
     $access = new DataBaseAccess($this->db);
+    
+    $options = "WHERE recipient = ? ";
+    if (!empty($params['after'])) {
+        $options .= "AND createdAt > ? ";
+    }
+    $options .= "ORDER BY createdAt DESC";
 
-    $stmt = $access->prepareMainStatement("notifications", $params, "*", "WHERE recipient = ? ORDER BY createdAt DESC");
+    $stmt = $access->prepareMainStatement("notifications", $params, "*", $options);
     $stmt->bindValue(1, $userId);
+    if (!empty($params['after'])) {
+        $stmt->bindValue(2, $params['after']);
+    }
     $notifications = $access->addObjects($stmt, "notifications");
     if ($notifications !== FALSE) {
         $access->addSubObjects($notifications, "post", "posts", "title");
