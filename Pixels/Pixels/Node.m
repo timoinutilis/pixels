@@ -145,6 +145,10 @@ NSString *const TRANSFER = @"TRANSFER";
     for (Node *expressionNode in self.indexExpressions)
     {
         Number *indexNumber = [expressionNode evaluateWithRunner:runner];
+        if (runner.error)
+        {
+            return nil;
+        }
         if (isDim)
         {
             indexNumber = [Number numberWithValue:(indexNumber.intValue + 1)];

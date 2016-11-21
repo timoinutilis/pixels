@@ -187,7 +187,7 @@
 - (id)valueOfVariable:(VariableNode *)variable
 {
     id value = [self accessVariable:variable setValue:nil];
-    if (!value || value == [NSNull null])
+    if (!self.runner.error && (!value || value == [NSNull null]))
     {
         value = variable.isString ? @"" : [self.runner.numberPool numberWithValue:0];
     }
@@ -240,6 +240,10 @@
         }
         
         NSArray *indexes = [variable indexesWithRunner:self.runner isDim:NO];
+        if (self.runner.error)
+        {
+            return nil;
+        }
         
         // check bounds
         for (NSUInteger i = 0; i < indexes.count; i++)
