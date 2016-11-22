@@ -269,34 +269,31 @@ typedef NS_ENUM(NSInteger, Section) {
 }
 
 - (void)share
-{/*
-    LCCPost *post = [LCCPost object];
-    post.user = (LCCUser *)[PFUser currentUser];
+{
+    LCCPost *post = [[LCCPost alloc] init];
     post.type = LCCPostTypeShare;
     post.category = self.post.category;
     post.image = self.post.image;
     post.title = self.post.title;
-    post.detail = self.post.detail;
     post.stats = self.post.stats;
-    post.sharedPost = self.post;
+    post.sharedPost = self.post.objectId;
     
     [self.activityIndicator increaseActivity];
-    [post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+    
+    NSString *route = [NSString stringWithFormat:@"/users/%@/posts", [CommunityModel sharedInstance].currentUser.objectId];
+    NSDictionary *params = [post dirtyDictionary];
+    [[CommunityModel sharedInstance].sessionManager POST:route parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         
         [self.activityIndicator decreaseActivity];
-        if (succeeded)
-        {
-            [[CommunityModel sharedInstance] onPostedWithDate:post.createdAt];
-            [PFQuery clearAllCachedResults];
-            
-            [self showAlertWithTitle:@"Shared successfully." message:nil block:nil];
-        }
-        else if (error)
-        {
-            [self showAlertWithTitle:@"Could not share post." message:error.userInfo[@"error"] block:nil];
-        }
+//        [PFQuery clearAllCachedResults];
+        [self showAlertWithTitle:@"Shared successfully." message:nil block:nil];
         
-    }];*/
+    } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+        
+        [self.activityIndicator decreaseActivity];
+        [self showAlertWithTitle:@"Could not share post." message:error.localizedDescription block:nil];
+        
+    }];
 }
 
 - (IBAction)onSendCommentTapped:(id)sender

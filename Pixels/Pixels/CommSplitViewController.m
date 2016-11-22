@@ -49,20 +49,20 @@
 }
 
 - (void)checkShowPost:(NSNotification *)notification
-{/*
+{
     NSString *postId = [AppController sharedController].shouldShowPostId;
     if (postId)
     {
         [AppController sharedController].shouldShowPostId = nil;
         
-        LCCPost *post = [LCCPost objectWithoutDataWithClassName:[LCCPost parseClassName] objectId:postId];
+        LCCPost *post = [[LCCPost alloc] initWithObjectId:postId];
         
         CommPostViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"CommPostView"];
         [vc setPost:post mode:CommPostModePost];
         
         UINavigationController *nav = (UINavigationController *)self.viewControllers.lastObject;
         [nav pushViewController:vc animated:YES];
-    }*/
+    }
 }
 
 @end

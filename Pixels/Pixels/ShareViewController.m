@@ -273,7 +273,6 @@
                         
                         [post updateWithDictionary:responseObject[@"post"]];
                         [post resetDirty];
-                        [[CommunityModel sharedInstance] onPostedWithDate:post.createdAt];
                         
 //                        [PFQuery clearAllCachedResults];
                         

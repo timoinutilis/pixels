@@ -175,6 +175,19 @@ class DataBaseAccess {
 	    return FALSE;
 	}
 
+	function updateLastPostDate($userId) {
+		$stmt = $this->db->prepare("UPDATE users SET lastPostDate = NOW() WHERE objectId = :id");
+		$stmt->bindValue(":id", $userId);
+	    if ($stmt->execute()) {
+	    	if ($stmt->rowCount() > 0) {
+	    		return TRUE;
+	    	} else {
+	    		throw new APIException("The user '$userId' could not be found.", 404, "NotFound");
+	    	}
+	    }
+	    return FALSE;
+	}
+
 	function increasePostStats($postId, $numDownloads, $numComments, $numLikes) {
 		$stmt = $this->db->prepare("UPDATE postStats SET numDownloads = numDownloads+$numDownloads, numComments = numComments+$numComments, numLikes = numLikes+$numLikes WHERE post = ?");
 		$stmt->bindValue(1, $postId);

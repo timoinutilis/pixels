@@ -50,7 +50,6 @@ typedef void (^LCCUploadResultBlock)(NSURL *url, NSError *error);
 
 - (void)onUserDataChanged;
 - (void)updateCurrentUser;
-- (void)onPostedWithDate:(NSDate *)date;
 
 - (void)followUser:(LCCUser *)user;
 - (void)unfollowUser:(LCCUser *)user;

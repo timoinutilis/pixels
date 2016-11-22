@@ -48,7 +48,6 @@ static const NSInteger LIMIT = 50;
 @property ExtendedActivityIndicatorView *activityIndicator;
 @property BOOL userNeedsUpdate;
 @property LCCPostCategory filterCategory;
-//@property PFQuery *currentQuery;
 @property int currentOffset;
 @property NSString *currentRoute;
 @property BOOL hasMorePosts;
@@ -221,7 +220,7 @@ static const NSInteger LIMIT = 50;
             self.sections = @[SectionInfo, SectionPosts];
             self.currentOffset = 0;
             self.currentRoute = [NSString stringWithFormat:@"users/%@/news", (self.user ? self.user.objectId : @"guest")];
-            [self loadCurrentQuery];
+            [self loadCurrentQueryForceReload:forceReload];
             break;
         }
         case CommListModeProfile: {
@@ -229,35 +228,17 @@ static const NSInteger LIMIT = 50;
             self.sections = [self.user isMe] ? @[SectionInfo, SectionPostStatus, SectionPosts] : @[SectionInfo, SectionPosts];
             self.currentOffset = 0;
             self.currentRoute = [NSString stringWithFormat:@"users/%@", self.user.objectId];
-            [self loadCurrentQuery];
+            [self loadCurrentQueryForceReload:forceReload];
             break;
         }
         case CommListModeUndefined:
             break;
     }
 }
-/*
-- (PFQuery *)createQueryWithForceReload:(BOOL)forceReload
-{
-    PFQuery *query = [PFQuery queryWithClassName:[LCCPost parseClassName]];
-    if (self.filterCategory != LCCPostCategoryUndefined)
-    {
-        [query whereKey:@"category" equalTo:@(self.filterCategory)];
-    }
-    [query includeKey:@"sharedPost"];
-    [query includeKey:@"user"];
-    [query includeKey:@"stats"];
-    [query orderByDescending:@"createdAt"];
-    query.limit = LIMIT;
-    query.cachePolicy = forceReload ? kPFCachePolicyNetworkOnly : kPFCachePolicyCacheElseNetwork;;
-    query.maxCacheAge = MAX_CACHE_AGE;
-    return query;
-}
-*/
-- (void)loadCurrentQuery
+
+- (void)loadCurrentQueryForceReload:(BOOL)forceReload
 {
     self.isLoading = YES;
-    BOOL forcedReload = NO; //(self.currentQuery.cachePolicy == kPFCachePolicyNetworkOnly);
     BOOL add = (self.currentOffset > 0);
     NSArray *oldPosts = self.posts.copy;
     [self.activityIndicator increaseActivity];
@@ -309,7 +290,7 @@ static const NSInteger LIMIT = 50;
             // don't fetch complete user again for following pages
             self.currentRoute = [NSString stringWithFormat:@"users/%@/posts", self.user.objectId];
         }
-        if (forcedReload && !add)
+        if (forceReload && !add)
         {
             [self updateVisiblePosts];
             [self.tableView reloadDataAnimatedWithOldArray:oldPosts newArray:self.posts inSection:self.sections.count - 1 offset:1];
@@ -441,7 +422,6 @@ static const NSInteger LIMIT = 50;
             LCCPostStats *stats = [[LCCPostStats alloc] initWithDictionary:responseObject[@"postStats"]];
             self.statsById[stats.objectId] = stats;
             
-            [[CommunityModel sharedInstance] onPostedWithDate:post.createdAt];
 //            [PFQuery clearAllCachedResults];
             
             self.writeStatusCell.titleTextField.text = @"";
@@ -720,7 +700,7 @@ static const NSInteger LIMIT = 50;
     if (   self.hasMorePosts && !self.isLoading
         && scrollView.contentOffset.y >= scrollView.contentSize.height - scrollView.bounds.size.height - 80.0)
     {
-        [self loadCurrentQuery];
+        [self loadCurrentQueryForceReload:NO];
     }
 }
 

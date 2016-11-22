@@ -157,18 +157,6 @@ NSString *const HTTPHeaderSessionTokenKey = @"X-LowResCoder-Session-Token";
     [currentInstallation saveInBackground];*/
 }
 
-- (void)onPostedWithDate:(NSDate *)date
-{
-    //TODO move to server!
-    /*
-    LCCUser *user = (LCCUser *)[PFUser currentUser];
-    if (user)
-    {
-        user.lastPostDate = date;
-        [user saveInBackground];
-    }*/
-}
-
 - (void)sortFollows
 {
     NSSortDescriptor *lastPost = [NSSortDescriptor sortDescriptorWithKey:@"lastPostDate" ascending:NO];
@@ -340,18 +328,29 @@ NSString *const HTTPHeaderSessionTokenKey = @"X-LowResCoder-Session-Token";
 }
 
 - (void)onOpenNotifications
-{/*
-    LCCUser *user = (LCCUser *)[PFUser currentUser];
+{
+    LCCUser *user = self.currentUser;
     if (user && self.notifications.count > 0)
     {
         LCCNotification *newestNotification = self.notifications.firstObject;
         if (newestNotification.createdAt.timeIntervalSinceReferenceDate > user.notificationsOpenedDate.timeIntervalSinceReferenceDate)
         {
             user.notificationsOpenedDate = newestNotification.createdAt;
-            [user saveInBackground];
             [self updateNewNotifications];
+            
+            NSString *route = [NSString stringWithFormat:@"/users/%@", user.objectId];
+            NSDictionary *params = [user dirtyDictionary];
+            [self.sessionManager PUT:route parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+                
+                [user resetDirty];
+                
+            } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+                
+                NSLog(@"error: %@", error.localizedDescription);
+                
+            }];
         }
-    }*/
+    }
 }
 
 - (void)uploadFileWithName:(NSString *)filename data:(NSData *)data completion:(LCCUploadResultBlock)block

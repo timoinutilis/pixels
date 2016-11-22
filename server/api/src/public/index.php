@@ -403,7 +403,6 @@ $app->post('/users/{id}/posts', function (Request $request, Response $response) 
     checkRequired($body, 'type');
     checkRequired($body, 'category');
     checkRequired($body, 'title');
-    checkRequired($body, 'detail');
 
     $body['user'] = $userId;
     $postId = $access->createObject("posts", $body, "post");
@@ -420,6 +419,8 @@ $app->post('/users/{id}/posts', function (Request $request, Response $response) 
                 $access->data['post']['stats'] = $statsId;
                 if ($stmt->rowCount() == 0) {
                     throw new APIException("Could not add statistics to post.", 500, "InternalServerError");
+                } else {
+                    $access->updateLastPostDate($userId);
                 }
             }
         }
