@@ -273,20 +273,3 @@ typedef NS_ENUM(NSInteger, CellTag) {
 }
 
 @end
-
-
-@implementation CommMasterActionCell
-
-- (void)awakeFromNib
-{
-    [super awakeFromNib];
-    self.textLabel.textColor = self.contentView.tintColor;
-}
-
-- (void)tintColorDidChange
-{
-    [super tintColorDidChange];
-    self.textLabel.textColor = self.contentView.tintColor;
-}
-
-@end

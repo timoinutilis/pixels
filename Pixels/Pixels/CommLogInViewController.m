@@ -11,6 +11,7 @@
 #import "UIViewController+LowResCoder.h"
 #import "GORCycleManager.h"
 #import "AppController.h"
+#import "ActionTableViewCell.h"
 
 @interface CommLogInViewController () <UITextFieldDelegate>
 
@@ -18,11 +19,11 @@
 
 @property CommLogInInputCell *logInUsernameCell;
 @property CommLogInInputCell *logInPasswordCell;
-@property CommLogInButtonCell *logInButtonCell;
+@property ActionTableViewCell *logInButtonCell;
 @property CommLogInInputCell *registerUsernameCell;
 @property CommLogInInputCell *registerPasswordCell;
 @property CommLogInInputCell *registerPasswordVerifyCell;
-@property CommLogInButtonCell *registerButtonCell;
+@property ActionTableViewCell *registerButtonCell;
 
 @property (nonatomic) BOOL isBusy;
 @property GORCycleManager *loginCycleManager;
@@ -242,42 +243,6 @@
 {
     self.textField.secureTextEntry = YES;
     self.textField.placeholder = verify ? @"Repeat password" : @"Password";
-}
-
-@end
-
-@implementation CommLogInButtonCell
-
-- (void)awakeFromNib
-{
-    [super awakeFromNib];
-    self.textLabel.textColor = self.contentView.tintColor;
-}
-
-- (void)tintColorDidChange
-{
-    [super tintColorDidChange];
-    self.textLabel.textColor = self.contentView.tintColor;
-}
-
-- (void)setDisabled:(BOOL)disabled wheel:(BOOL)wheel
-{
-    if (disabled)
-    {
-        self.textLabel.textColor = [UIColor grayColor];
-        if (wheel)
-        {
-            UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-            [indicator startAnimating];
-            self.accessoryView = indicator;
-        }
-    }
-    else
-    {
-        self.textLabel.textColor = self.contentView.tintColor;
-        self.accessoryView = nil;
-    }
-    [self layoutIfNeeded];
 }
 
 @end

@@ -17,13 +17,15 @@
 #import "AppController.h"
 #import "ModelManager.h"
 #import "TextFieldTableViewCell.h"
+#import "TextViewTableViewCell.h"
+#import "ActionTableViewCell.h"
 
 @interface ShareViewController ()
 
 @property ShareHeaderCell *headerCell;
 @property TextFieldTableViewCell *titleCell;
-@property ShareTextViewCell *descriptionCell;
-@property ShareActionCell *loginCell;
+@property TextViewTableViewCell *descriptionCell;
+@property ActionTableViewCell *loginCell;
 @property UITableViewCell *categoryGameCell;
 @property UITableViewCell *categoryToolCell;
 @property UITableViewCell *categoryDemoCell;
@@ -348,25 +350,5 @@
     layer.borderWidth = 0.5;
     layer.borderColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.25].CGColor;
 }
-
-@end
-
-@implementation ShareActionCell
-
-- (void)awakeFromNib
-{
-    [super awakeFromNib];
-    self.textLabel.textColor = self.contentView.tintColor;
-}
-
-- (void)tintColorDidChange
-{
-    [super tintColorDidChange];
-    self.textLabel.textColor = self.contentView.tintColor;
-}
-
-@end
-
-@implementation ShareTextViewCell
 
 @end

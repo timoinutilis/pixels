@@ -19,12 +19,14 @@
 #import "AppController.h"
 #import "GORCycleManager.h"
 #import "UITableView+Parse.h"
+#import "CommStatusUpdateViewController.h"
 
 typedef NS_ENUM(NSInteger, CellTag) {
     CellTagNoAction,
     CellTagPost,
     CellTagFollowers,
-    CellTagFollowing
+    CellTagFollowing,
+    CellTagWriteStatus
 };
 
 static NSString *const SectionInfo = @"Info";
@@ -44,7 +46,6 @@ static const NSInteger LIMIT = 50;
 
 @property NSArray *sections;
 @property CommProfileCell *profileCell;
-@property CommWriteStatusCell *writeStatusCell;
 @property ExtendedActivityIndicatorView *activityIndicator;
 @property BOOL userNeedsUpdate;
 @property LCCPostCategory filterCategory;
@@ -93,7 +94,6 @@ static const NSInteger LIMIT = 50;
         }
     }
     
-    self.writeStatusCell = [self.tableView dequeueReusableCellWithIdentifier:@"CommWriteStatusCell"];
     self.profileCell = [self.tableView dequeueReusableCellWithIdentifier:@"CommProfileCell"];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onFollowsChanged:) name:FollowsChangeNotification object:nil];
@@ -386,6 +386,7 @@ static const NSInteger LIMIT = 50;
     [self.tableView endUpdates];
 }
 
+/*
 - (IBAction)onSendStatusTapped:(id)sender
 {
     NSString *statusTitleText = [self.writeStatusCell.titleTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
@@ -444,6 +445,7 @@ static const NSInteger LIMIT = 50;
         }];
     }
 }
+*/
 
 - (IBAction)onFilterChanged:(UISegmentedControl *)sender
 {
@@ -489,10 +491,6 @@ static const NSInteger LIMIT = 50;
     if (sectionId == SectionInfo && indexPath.row == 0)
     {
         return 122;
-    }
-    else if (sectionId == SectionPostStatus)
-    {
-        return 132;
     }
     else if (sectionId == SectionPosts)
     {
@@ -542,10 +540,6 @@ static const NSInteger LIMIT = 50;
     if (sectionId == SectionInfo)
     {
         return (self.mode == CommListModeNews) ? @"Info" : @"User";
-    }
-    else if (sectionId == SectionPostStatus)
-    {
-        return @"Write a Status Update";
     }
     else if (sectionId == SectionPosts)
     {
@@ -602,7 +596,10 @@ static const NSInteger LIMIT = 50;
     }
     else if (sectionId == SectionPostStatus)
     {
-        return self.writeStatusCell;
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ActionCell" forIndexPath:indexPath];
+        cell.textLabel.text = @"Write Status Update";
+        cell.tag = CellTagWriteStatus;
+        return cell;
     }
     else if (sectionId == SectionPosts)
     {
@@ -665,6 +662,17 @@ static const NSInteger LIMIT = 50;
             }
             [self.navigationController pushViewController:vc animated:YES];
             break;
+        }
+        case CellTagWriteStatus: {
+            UIViewController *vc = [CommStatusUpdateViewController createWithStoryboard:self.storyboard completion:^(LCCPost *post, LCCPostStats *stats) {
+                self.statsById[stats.objectId] = stats;
+                [self.posts insertObject:post atIndex:0];
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:2];
+                [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            }];
+            
+            [self presentViewController:vc animated:YES completion:nil];
+            [tableView deselectRowAtIndexPath:indexPath animated:YES];
         }
     }
 }
@@ -812,22 +820,6 @@ static const NSInteger LIMIT = 50;
 @implementation CommInfoCell
 @end
 
-@interface CommWriteStatusCell()
-@property GORCycleManager *cycleManager;
-@end
-
-@implementation CommWriteStatusCell
-
-- (void)awakeFromNib
-{
-    [super awakeFromNib];
-    self.textView.placeholderView = self.detailPlaceholderLabel;
-    self.textView.hidePlaceholderWhenFirstResponder = YES;
-    
-    self.cycleManager = [[GORCycleManager alloc] initWithFields:@[self.titleTextField, self.textView]];
-}
-
-@end
 
 @implementation CommFilterCell
 

@@ -23,8 +23,3 @@
 - (void)setupAsPasswordVerify:(BOOL)verify;
 
 @end
-
-
-@interface CommLogInButtonCell : UITableViewCell
-- (void)setDisabled:(BOOL)disabled wheel:(BOOL)wheel;
-@end

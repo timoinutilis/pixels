@@ -63,7 +63,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>LowResAPIURL</key>
-	<string>http://localhost:8888</string>
+	<string>https://lowresapi.timokloss.com</string>
 	<key>LowResNewsUserID</key>
 	<string>T5VWaLW28x</string>
 	<key>NSAppTransportSecurity</key>

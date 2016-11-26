@@ -23,7 +23,8 @@ typedef NS_ENUM(NSInteger, CellTag) {
     CellTagNoAction,
     CellTagSourceCode,
     CellTagPostAuthor,
-    CellTagDelete
+    CellTagDelete,
+    CellTagLogin
 };
 
 typedef NS_ENUM(NSInteger, Section) {
@@ -452,8 +453,11 @@ typedef NS_ENUM(NSInteger, Section) {
     else if (section == SectionWriteComment)
     {
         LCCUser *currentUser = [CommunityModel sharedInstance].currentUser;
-        NSString *name = (currentUser ? currentUser.username : @"Guest");
-        return [NSString stringWithFormat:@"Write a Comment (as %@)", name];
+        if (currentUser)
+        {
+            return [NSString stringWithFormat:@"Write a Comment (as %@)", currentUser.username];
+        }
+        return @"Write a Comment (Not Logged In)";
     }
     return nil;
 }
@@ -499,7 +503,18 @@ typedef NS_ENUM(NSInteger, Section) {
     }
     else if (indexPath.section == SectionWriteComment)
     {
-        return self.writeCommentCell;
+        if ([CommunityModel sharedInstance].currentUser)
+        {
+            return self.writeCommentCell;
+        }
+        else
+        {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"LoginCell" forIndexPath:indexPath];
+            cell.textLabel.text = @"Log In / Register";
+            cell.tag = CellTagLogin;
+            return cell;
+
+        }
     }
     return nil;
 }
@@ -531,6 +546,12 @@ typedef NS_ENUM(NSInteger, Section) {
             [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDefault handler:nil]];
             
             [self presentViewController:alert animated:YES completion:nil];
+            [tableView deselectRowAtIndexPath:indexPath animated:YES];
+            break;
+        }
+        case CellTagLogin: {
+            CommLogInViewController *vc = [CommLogInViewController create];
+            [self presentInNavigationViewController:vc];
             [tableView deselectRowAtIndexPath:indexPath animated:YES];
             break;
         }

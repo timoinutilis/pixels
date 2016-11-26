@@ -35,12 +35,6 @@ typedef NS_ENUM(NSInteger, CommListMode) {
 @property (weak, nonatomic) IBOutlet UILabel *infoTextLabel;
 @end
 
-@interface CommWriteStatusCell : UITableViewCell
-@property (weak, nonatomic) IBOutlet UITextField *titleTextField;
-@property (weak, nonatomic) IBOutlet GORTextView *textView;
-@property (weak, nonatomic) IBOutlet UILabel *detailPlaceholderLabel;
-@end
-
 @interface CommFilterCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
 - (void) setPostCategory:(LCCPostCategory)postCategory;

@@ -24,11 +24,3 @@
 @property (weak, nonatomic) IBOutlet UITextView *textView;
 
 @end
-
-@interface ShareActionCell : UITableViewCell
-
-@end
-
-@interface ShareTextViewCell : UITableViewCell
-@property (weak, nonatomic) IBOutlet UITextView *textView;
-@end

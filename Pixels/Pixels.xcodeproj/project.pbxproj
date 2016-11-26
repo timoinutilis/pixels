@@ -23,6 +23,12 @@
 		9230D0631CC4F71700EF6E52 /* UITextView+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F788871BF4B2C400F6996B /* UITextView+Utils.m */; };
 		923115A21A444AA800624201 /* Renderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 923115A11A444AA800624201 /* Renderer.m */; };
 		9232FA0D1B860CF80082DDF1 /* NumberPool.m in Sources */ = {isa = PBXBuildFile; fileRef = 9232FA0C1B860CF80082DDF1 /* NumberPool.m */; };
+		9234A64D1DE9E5F400337FF3 /* CommStatusUpdateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9234A64C1DE9E5F400337FF3 /* CommStatusUpdateViewController.m */; };
+		9234A64E1DE9E5F400337FF3 /* CommStatusUpdateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9234A64C1DE9E5F400337FF3 /* CommStatusUpdateViewController.m */; };
+		9234A6511DE9E90900337FF3 /* TextViewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9234A6501DE9E90900337FF3 /* TextViewTableViewCell.m */; };
+		9234A6521DE9E90900337FF3 /* TextViewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9234A6501DE9E90900337FF3 /* TextViewTableViewCell.m */; };
+		9234A6551DE9EA3200337FF3 /* ActionTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9234A6541DE9EA3200337FF3 /* ActionTableViewCell.m */; };
+		9234A6561DE9EA3200337FF3 /* ActionTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9234A6541DE9EA3200337FF3 /* ActionTableViewCell.m */; };
 		9245076E1B2B839C006956F1 /* NSError+LowResCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 9245076D1B2B839C006956F1 /* NSError+LowResCoder.m */; };
 		9248A6B01A7A641D00FD5656 /* Default Projects in Resources */ = {isa = PBXBuildFile; fileRef = 9248A6AF1A7A641D00FD5656 /* Default Projects */; };
 		924CC0FE1A220B3C00D2AF68 /* Runner.m in Sources */ = {isa = PBXBuildFile; fileRef = 924CC0FD1A220B3C00D2AF68 /* Runner.m */; };
@@ -277,6 +283,12 @@
 		923115A11A444AA800624201 /* Renderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Renderer.m; sourceTree = "<group>"; };
 		9232FA0B1B860CF80082DDF1 /* NumberPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NumberPool.h; sourceTree = "<group>"; };
 		9232FA0C1B860CF80082DDF1 /* NumberPool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NumberPool.m; sourceTree = "<group>"; };
+		9234A64B1DE9E5F400337FF3 /* CommStatusUpdateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommStatusUpdateViewController.h; sourceTree = "<group>"; };
+		9234A64C1DE9E5F400337FF3 /* CommStatusUpdateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommStatusUpdateViewController.m; sourceTree = "<group>"; };
+		9234A64F1DE9E90900337FF3 /* TextViewTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextViewTableViewCell.h; sourceTree = "<group>"; };
+		9234A6501DE9E90900337FF3 /* TextViewTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextViewTableViewCell.m; sourceTree = "<group>"; };
+		9234A6531DE9EA3200337FF3 /* ActionTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActionTableViewCell.h; sourceTree = "<group>"; };
+		9234A6541DE9EA3200337FF3 /* ActionTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActionTableViewCell.m; sourceTree = "<group>"; };
 		9245076C1B2B839C006956F1 /* NSError+LowResCoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+LowResCoder.h"; sourceTree = "<group>"; };
 		9245076D1B2B839C006956F1 /* NSError+LowResCoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+LowResCoder.m"; sourceTree = "<group>"; };
 		9248A6AF1A7A641D00FD5656 /* Default Projects */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Default Projects"; sourceTree = "<group>"; };
@@ -586,6 +598,10 @@
 				927CF5A51C271F3E00C38BB5 /* BorderedButton.m */,
 				92751E911C85D44500E73A6C /* TextFieldTableViewCell.h */,
 				92751E921C85D44500E73A6C /* TextFieldTableViewCell.m */,
+				9234A64F1DE9E90900337FF3 /* TextViewTableViewCell.h */,
+				9234A6501DE9E90900337FF3 /* TextViewTableViewCell.m */,
+				9234A6531DE9EA3200337FF3 /* ActionTableViewCell.h */,
+				9234A6541DE9EA3200337FF3 /* ActionTableViewCell.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -633,6 +649,8 @@
 				927D345A1B1CB0D700967AE7 /* CommEditUserViewController.m */,
 				92C081171B0DD9490006331B /* CommLogInViewController.h */,
 				92C081181B0DD9490006331B /* CommLogInViewController.m */,
+				9234A64B1DE9E5F400337FF3 /* CommStatusUpdateViewController.h */,
+				9234A64C1DE9E5F400337FF3 /* CommStatusUpdateViewController.m */,
 			);
 			name = Community;
 			sourceTree = "<group>";
@@ -1178,9 +1196,11 @@
 				9251440F1B92044100C9D254 /* VariableManager.m in Sources */,
 				92884F221B0F25B30032623D /* UIButton+WebCache.m in Sources */,
 				92EC21241BE399B500072BE4 /* LSCollectionViewHelper.m in Sources */,
+				9234A6511DE9E90900337FF3 /* TextViewTableViewCell.m in Sources */,
 				929BCF0F1BB14800005F1DBD /* AFHTTPSessionManager.m in Sources */,
 				92B956FE1BBD6CD500699BFF /* TabBarController.m in Sources */,
 				92884F251B0F25B30032623D /* UIImage+WebP.m in Sources */,
+				9234A6551DE9EA3200337FF3 /* ActionTableViewCell.m in Sources */,
 				928FB8991A5C804200EA377F /* GORSeparatorView.m in Sources */,
 				92C135D31B81D95100E9F5A4 /* NSMutableDictionary+Utils.m in Sources */,
 				92884F1E1B0F25B30032623D /* SDWebImageDownloader.m in Sources */,
@@ -1194,6 +1214,7 @@
 				929BCF121BB14800005F1DBD /* AFURLConnectionOperation.m in Sources */,
 				92694C681C9704EE00837C2B /* OpenGLRendererView.m in Sources */,
 				920E681D1AB731620038994A /* CoachMarkView.m in Sources */,
+				9234A64D1DE9E5F400337FF3 /* CommStatusUpdateViewController.m in Sources */,
 				92E1AF961B6A49E8000B1B0D /* NotificationView.m in Sources */,
 				9254DF601B628A3C00774E98 /* LCCPostStats.m in Sources */,
 				929BCF0E1BB14800005F1DBD /* AFHTTPRequestOperationManager.m in Sources */,
@@ -1297,9 +1318,11 @@
 				929BCF511BB14A1B005F1DBD /* main.m in Sources */,
 				929BCF521BB14A1B005F1DBD /* AboutViewController.m in Sources */,
 				929BCF531BB14A1B005F1DBD /* VariableManager.m in Sources */,
+				9234A6521DE9E90900337FF3 /* TextViewTableViewCell.m in Sources */,
 				929BCF541BB14A1B005F1DBD /* UIButton+WebCache.m in Sources */,
 				92EC21251BE399B500072BE4 /* LSCollectionViewHelper.m in Sources */,
 				929BCF551BB14A1B005F1DBD /* AFHTTPSessionManager.m in Sources */,
+				9234A6561DE9EA3200337FF3 /* ActionTableViewCell.m in Sources */,
 				92B956FF1BBD6CD500699BFF /* TabBarController.m in Sources */,
 				929BCF561BB14A1B005F1DBD /* UIImage+WebP.m in Sources */,
 				929BCF571BB14A1B005F1DBD /* GORSeparatorView.m in Sources */,
@@ -1313,6 +1336,7 @@
 				929BCF5F1BB14A1B005F1DBD /* HelpContent.m in Sources */,
 				929BCF601BB14A1B005F1DBD /* Runnable.m in Sources */,
 				929BCF611BB14A1B005F1DBD /* AFURLConnectionOperation.m in Sources */,
+				9234A64E1DE9E5F400337FF3 /* CommStatusUpdateViewController.m in Sources */,
 				929BCF631BB14A1B005F1DBD /* CoachMarkView.m in Sources */,
 				929BCF641BB14A1B005F1DBD /* NotificationView.m in Sources */,
 				929BCF651BB14A1B005F1DBD /* LCCPostStats.m in Sources */,
