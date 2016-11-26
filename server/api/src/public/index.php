@@ -448,28 +448,32 @@ $app->post('/users/{id}/posts', function (Request $request, Response $response) 
     if ($postId !== FALSE) {
         $access->data['post']['user'] = $userId;
         $response = $response->withStatus(201);
-        $statsId = $access->createObject("postStats", array('post' => $postId), "postStats");
-        if ($statsId !== FALSE) {
-            $access->data['postStats']['post'] = $postId;
-            $stmt = $this->db->prepare("UPDATE posts SET stats = ? WHERE objectId = ?");
-            $stmt->bindParam(1, $statsId);
-            $stmt->bindParam(2, $postId);
-            if ($stmt->execute()) {
-                $access->data['post']['stats'] = $statsId;
-                if ($stmt->rowCount() == 0) {
-                    throw new APIException("Could not add statistics to post.", 500, "InternalServerError");
-                } else {
-                    $access->updateLastPostDate($userId);
-
-                    if ($body['type'] == PostTypeShare) {
-                        $sharedPost = $access->getObject("posts", $body['sharedPost'], "user");
-                        if ($sharedPost) {
-                            $access->createNotification($userId, array($sharedPost['user']), $postId, NotificationTypeShare);
-                        }
+        
+        $access->updateLastPostDate($userId);
+        
+        if ($body['type'] == PostTypeShare) {
+            $sharedPost = $access->getObject("posts", $body['sharedPost'], "user");
+            if ($sharedPost) {
+                $access->createNotification($userId, array($sharedPost['user']), $postId, NotificationTypeShare);
+            }
+        }
+        
+        if (empty($body['stats'])) {
+            $statsId = $access->createObject("postStats", array('post' => $postId), "postStats");
+            if ($statsId !== FALSE) {
+                $access->data['postStats']['post'] = $postId;
+                $stmt = $this->db->prepare("UPDATE posts SET stats = ? WHERE objectId = ?");
+                $stmt->bindParam(1, $statsId);
+                $stmt->bindParam(2, $postId);
+                if ($stmt->execute()) {
+                    $access->data['post']['stats'] = $statsId;
+                    if ($stmt->rowCount() == 0) {
+                        throw new APIException("Could not add statistics to post.", 500, "InternalServerError");
                     }
                 }
             }
         }
+
     }
 
     $response = $response->withJson($access->data);
