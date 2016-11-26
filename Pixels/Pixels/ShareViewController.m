@@ -306,7 +306,7 @@
 - (void)showSendError:(NSError *)error
 {
     [self isBusy:NO];
-    [self showAlertWithTitle:@"Could not send program" message:error.localizedDescription block:nil];
+    [self showAlertWithTitle:@"Could not send program" message:error.presentableError.localizedDescription block:nil];
 }
 
 - (void)isBusy:(BOOL)isBusy

@@ -63,3 +63,10 @@ typedef void (^LCCUploadResultBlock)(NSURL *url, NSError *error);
 - (void)uploadFileWithName:(NSString *)filename data:(NSData *)data completion:(LCCUploadResultBlock)block;
 
 @end
+
+
+@interface NSError (CommunityModel)
+
+- (NSError *)presentableError;
+
+@end

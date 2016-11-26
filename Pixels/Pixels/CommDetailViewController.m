@@ -306,7 +306,7 @@ static const NSInteger LIMIT = 50;
     } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
 
         [self.activityIndicator decreaseActivity];
-        [self showAlertWithTitle:@"Could not load posts" message:error.localizedDescription block:nil];
+        [self showAlertWithTitle:@"Could not load posts" message:error.presentableError.localizedDescription block:nil];
         [self.refreshControl endRefreshing];
         self.isLoading = NO;
 
@@ -438,7 +438,7 @@ static const NSInteger LIMIT = 50;
         } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
 
             [self.activityIndicator decreaseActivity];
-            [self showAlertWithTitle:@"Could not send status update." message:error.localizedDescription block:nil];
+            [self showAlertWithTitle:@"Could not send status update." message:error.presentableError.localizedDescription block:nil];
             button.enabled = YES;
 
         }];
@@ -476,7 +476,7 @@ static const NSInteger LIMIT = 50;
         
         [self.activityIndicator decreaseActivity];
         self.view.userInteractionEnabled = YES;
-        [self showAlertWithTitle:@"Could not delete post." message:error.localizedDescription block:nil];
+        [self showAlertWithTitle:@"Could not delete post." message:error.presentableError.localizedDescription block:nil];
         
     }];
 }

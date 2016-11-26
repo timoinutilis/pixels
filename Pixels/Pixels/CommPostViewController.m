@@ -232,7 +232,7 @@ typedef NS_ENUM(NSInteger, Section) {
     } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
 
         self.title = @"Error";
-        [self showAlertWithTitle:@"Could not load post." message:error.localizedDescription block:nil];
+        [self showAlertWithTitle:@"Could not load post." message:error.presentableError.localizedDescription block:nil];
 
     }];
 }
@@ -291,7 +291,7 @@ typedef NS_ENUM(NSInteger, Section) {
     } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
         
         [self.activityIndicator decreaseActivity];
-        [self showAlertWithTitle:@"Could not share post." message:error.localizedDescription block:nil];
+        [self showAlertWithTitle:@"Could not share post." message:error.presentableError.localizedDescription block:nil];
         
     }];
 }
@@ -355,7 +355,7 @@ typedef NS_ENUM(NSInteger, Section) {
         } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
 
             [self.activityIndicator decreaseActivity];
-            [self showAlertWithTitle:@"Could not send comment." message:error.localizedDescription block:nil];
+            [self showAlertWithTitle:@"Could not send comment." message:error.presentableError.localizedDescription block:nil];
             button.enabled = YES;
             
         }];
@@ -379,7 +379,7 @@ typedef NS_ENUM(NSInteger, Section) {
 
         [self.activityIndicator decreaseActivity];
         self.view.userInteractionEnabled = YES;
-        [self showAlertWithTitle:@"Could not delete post." message:error.localizedDescription block:nil];
+        [self showAlertWithTitle:@"Could not delete post." message:error.presentableError.localizedDescription block:nil];
 
     }];
 }

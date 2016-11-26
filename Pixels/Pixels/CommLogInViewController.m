@@ -176,7 +176,7 @@
         }
         else
         {
-            [self showAlertWithTitle:@"Could not register" message:error.localizedDescription block:nil];
+            [self showAlertWithTitle:@"Could not register" message:error.presentableError.localizedDescription block:nil];
         }
     }];
 }
@@ -212,7 +212,7 @@
         }
         else if (error)
         {
-            [self showAlertWithTitle:@"Could not log in" message:error.localizedDescription block:nil];
+            [self showAlertWithTitle:@"Could not log in" message:error.presentableError.localizedDescription block:nil];
         }
     }];
 }

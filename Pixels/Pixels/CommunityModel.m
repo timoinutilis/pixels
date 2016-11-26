@@ -44,6 +44,7 @@ NSString *const HTTPHeaderSessionTokenKey = @"X-LowResCoder-Session-Token";
         NSAssert(url, @"LowResAPIURL not defined in info.plist");
         
         _sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:url]];
+        self.sessionManager.requestSerializer = [[AFJSONRequestSerializer alloc] init];
         
         [LCCUser registerAPIClass];
         [LCCPost registerAPIClass];
@@ -141,7 +142,7 @@ NSString *const HTTPHeaderSessionTokenKey = @"X-LowResCoder-Session-Token";
             
         } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
             
-            NSLog(@"Error: %@", error.localizedDescription);
+            NSLog(@"Error: %@", error.presentableError.localizedDescription);
             
         }];
     }
@@ -176,7 +177,7 @@ NSString *const HTTPHeaderSessionTokenKey = @"X-LowResCoder-Session-Token";
         
     } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
         
-        NSLog(@"Error: %@", error.localizedDescription);
+        NSLog(@"Error: %@", error.presentableError.localizedDescription);
         
     }];
 }
@@ -195,7 +196,7 @@ NSString *const HTTPHeaderSessionTokenKey = @"X-LowResCoder-Session-Token";
             
         } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
             
-            NSLog(@"Error: %@", error.localizedDescription);
+            NSLog(@"Error: %@", error.presentableError.localizedDescription);
             
         }];
     }
@@ -224,7 +225,7 @@ NSString *const HTTPHeaderSessionTokenKey = @"X-LowResCoder-Session-Token";
         
     } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
         
-        NSLog(@"Error: %@", error.localizedDescription);
+        NSLog(@"Error: %@", error.presentableError.localizedDescription);
         
     }];
 }
@@ -239,7 +240,7 @@ NSString *const HTTPHeaderSessionTokenKey = @"X-LowResCoder-Session-Token";
         
     } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
         
-        NSLog(@"Error: %@", error.localizedDescription);
+        NSLog(@"Error: %@", error.presentableError.localizedDescription);
         
     }];
 }
@@ -346,7 +347,7 @@ NSString *const HTTPHeaderSessionTokenKey = @"X-LowResCoder-Session-Token";
                 
             } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
                 
-                NSLog(@"error: %@", error.localizedDescription);
+                NSLog(@"error: %@", error.presentableError.localizedDescription);
                 
             }];
         }
@@ -375,4 +376,30 @@ NSString *const HTTPHeaderSessionTokenKey = @"X-LowResCoder-Session-Token";
     }] resume];
                                                                                                                        
 }
+@end
+
+
+@implementation NSError (CommunityModel)
+
+- (NSError *)presentableError
+{
+    if ([self.domain isEqualToString:AFURLResponseSerializationErrorDomain])
+    {
+        NSData *data = self.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey];
+        NSDictionary *responseDict = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+        if (responseDict)
+        {
+            NSDictionary *errorDict = responseDict[@"error"];
+            if (errorDict)
+            {
+                NSLog(@"API error: %@", errorDict);
+                NSDictionary *userInfo = @{NSLocalizedDescriptionKey: errorDict[@"message"],
+                                           NSUnderlyingErrorKey: self};
+                return [NSError errorWithDomain:@"com.timokloss.lowresapi.error" code:self.code userInfo:userInfo];
+            }
+        }
+    }
+    return self;
+}
+
 @end

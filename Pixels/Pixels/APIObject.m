@@ -42,7 +42,7 @@ id objectGetterMethodIMP(APIObject *self, SEL _cmd)
 {
     APIObjectProperty *property = _dynamicProperties[NSStringFromClass([self class])][NSStringFromSelector(_cmd)];
     id value = self.values[property.name];
-    if (value && value != [NSNull null])
+    if (value) // && value != [NSNull null])
     {
         return value;
     }
@@ -52,7 +52,14 @@ id objectGetterMethodIMP(APIObject *self, SEL _cmd)
 void objectSetterMethodIMP(APIObject *self, SEL _cmd, id value)
 {
     APIObjectProperty *property = _dynamicProperties[NSStringFromClass([self class])][NSStringFromSelector(_cmd)];
-    self.values[property.name] = value ?: [NSNull null];
+    if (value)
+    {
+        self.values[property.name] = value;
+    }
+    else
+    {
+        [self.values removeObjectForKey:property.name];
+    }
     [self.dirty addObject:property.name];
 }
 
@@ -60,7 +67,7 @@ int integerGetterMethodIMP(APIObject *self, SEL _cmd)
 {
     APIObjectProperty *property = _dynamicProperties[NSStringFromClass([self class])][NSStringFromSelector(_cmd)];
     id value = self.values[property.name];
-    if (value && value != [NSNull null])
+//    if (value && value != [NSNull null])
     {
         return [value intValue];
     }

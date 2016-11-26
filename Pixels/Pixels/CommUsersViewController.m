@@ -104,7 +104,7 @@
 
         [self.activityIndicator decreaseActivity];
         [self.refreshControl endRefreshing];
-        [self showAlertWithTitle:@"Could not load users" message:error.localizedDescription block:nil];
+        [self showAlertWithTitle:@"Could not load users" message:error.presentableError.localizedDescription block:nil];
 
     }];
 }

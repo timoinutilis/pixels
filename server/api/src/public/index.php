@@ -84,6 +84,15 @@ define("FULL_USER_FIELDS", "username, lastPostDate, notificationsOpenedDate, abo
 
 define("GUEST_USER_ID", "guest");
 
+define("NotificationTypeComment", 0);
+define("NotificationTypeLike", 1);
+define("NotificationTypeShare", 2);
+define("NotificationTypeFollow", 3);
+
+define("PostTypeProgram", 1);
+define("PostTypeStatus", 2);
+define("PostTypeShare", 3);
+
 /* ============ Parameter Checks ============ */
 
 function checkMyUser($userId, Request $request) {
@@ -146,40 +155,36 @@ $app->delete('/posts/{id}', function (Request $request, Response $response) {
     $postId = $request->getAttribute('id');
     $access = new DataBaseAccess($this->db);
 
-    $stmt = $this->db->prepare("SELECT * FROM posts WHERE objectId = ?");
-    $stmt->bindParam(1, $postId);
-    if ($stmt->execute()) {
-        $post = $stmt->fetch();
-        if ($post) {
-            checkMyUser($post['user'], $request);
+    $post = $access->getObject("posts", $postId);
+    if ($post) {
+        checkMyUser($post['user'], $request);
 
-            $stmt = $this->db->prepare("DELETE FROM posts WHERE sharedPost = ?");
+        $stmt = $this->db->prepare("DELETE FROM posts WHERE sharedPost = ?");
+        $stmt->bindValue(1, $postId);
+        if ($stmt->execute()) {
+            $stmt = $this->db->prepare("DELETE FROM comments WHERE post = ?");
             $stmt->bindValue(1, $postId);
             if ($stmt->execute()) {
-                $stmt = $this->db->prepare("DELETE FROM comments WHERE post = ?");
+                $stmt = $this->db->prepare("DELETE FROM likes WHERE post = ?");
                 $stmt->bindValue(1, $postId);
                 if ($stmt->execute()) {
-                    $stmt = $this->db->prepare("DELETE FROM likes WHERE post = ?");
+                    $stmt = $this->db->prepare("DELETE FROM posts WHERE objectId = ?");
                     $stmt->bindValue(1, $postId);
                     if ($stmt->execute()) {
-                        $stmt = $this->db->prepare("DELETE FROM posts WHERE objectId = ?");
-                        $stmt->bindValue(1, $postId);
-                        if ($stmt->execute()) {
-                            //TODO delete files
-                            $access->data['success'] = TRUE;
+                        //TODO delete files
+                        $access->data['success'] = TRUE;
 
-                            if ($post['type'] != 3) { // not if post is a "share"
-                                $stmt = $this->db->prepare("DELETE FROM postStats WHERE post = ?");
-                                $stmt->bindValue(1, $postId);
-                                $stmt->execute();
-                            }
+                        if ($post['type'] != 3) { // not if post is a "share"
+                            $stmt = $this->db->prepare("DELETE FROM postStats WHERE post = ?");
+                            $stmt->bindValue(1, $postId);
+                            $stmt->execute();
                         }
                     }
                 }
             }
-        } else {
-            throw new APIException("The object '$postId' could not be found.", 404, "NotFound");
         }
+    } else {
+        throw new APIException("The object '$postId' could not be found.", 404, "NotFound");
     }
 
     $response = $response->withJson($access->data);
@@ -190,9 +195,10 @@ $app->delete('/posts/{id}', function (Request $request, Response $response) {
 $app->post('/posts/{id}/comments', function (Request $request, Response $response) {
     $body = $request->getParsedBody();
     $postId = $request->getAttribute('id');
+    $myUserId = $body['user'];
     $access = new DataBaseAccess($this->db);
 
-    checkMyUser($body['user'], $request);
+    checkMyUser($myUserId, $request);
     checkRequired($body, 'text');
 
     $body['post'] = $postId;
@@ -200,6 +206,33 @@ $app->post('/posts/{id}/comments', function (Request $request, Response $respons
         $access->data['comment']['post'] = $postId;
         $response = $response->withStatus(201);
         $access->increasePostStats($postId, 0, 1, 0);
+
+        // notifications...
+        $post = $access->getObject("posts", $postId, "user");
+        if ($post) {
+            $postUserId = $post['user'];
+
+            $recipientIds = array();
+
+            // post owner
+            if ($postUserId != $myUserId) {
+                $recipientIds[] = $postUserId;
+            }
+
+            // other comments' users
+            $stmt = $this->db->prepare("SELECT user FROM comments WHERE post = ? GROUP BY user");
+            $stmt->bindParam(1, $postId);
+            if ($stmt->execute()) {
+                while ($otherComment = $stmt->fetch()) {
+                    $otherUserId = $otherComment['user'];
+                    if ($otherUserId != $myUserId && $otherUserId != $postUserId) {
+                        $recipientIds[] = $otherUserId;
+                    }
+                }
+            }
+
+            $access->createNotification($myUserId, $recipientIds, $postId, NotificationTypeComment);
+        }
     }
 
     $response = $response->withJson($access->data);
@@ -223,6 +256,11 @@ $app->post('/posts/{id}/likes', function (Request $request, Response $response) 
             $access->data['like']['post'] = $postId;
             $response = $response->withStatus(201);
             $access->increasePostStats($postId, 0, 0, 1);
+
+            $post = $access->getObject("posts", $postId, "user");
+            if ($post) {
+                $access->createNotification($userId, array($post['user']), $postId, NotificationTypeLike);
+            }
         }
     }
 
@@ -348,6 +386,7 @@ $app->post('/users/{id}/followers', function (Request $request, Response $respon
     $followId = $access->createObject("follows", $followsObject, "follow");
     if ($followId !== FALSE) {
         $access->data['follow']['followsUser'] = $userId;
+        $access->createNotification($myUserId, array($userId), NULL, NotificationTypeFollow);
         $response = $response->withStatus(201);
     }
 
@@ -421,6 +460,13 @@ $app->post('/users/{id}/posts', function (Request $request, Response $response) 
                     throw new APIException("Could not add statistics to post.", 500, "InternalServerError");
                 } else {
                     $access->updateLastPostDate($userId);
+
+                    if ($body['type'] == PostTypeShare) {
+                        $sharedPost = $access->getObject("posts", $body['sharedPost'], "user");
+                        if ($sharedPost) {
+                            $access->createNotification($userId, array($sharedPost['user']), $postId, NotificationTypeShare);
+                        }
+                    }
                 }
             }
         }
@@ -455,8 +501,6 @@ $app->get('/users/{id}', function (Request $request, Response $response) {
 $app->put('/users/{id}', function (Request $request, Response $response) {
     $userId = $request->getAttribute('id');
     $body = $request->getParsedBody();
-    $username = $body['username'];
-    $password = $body['password'];
     $access = new DataBaseAccess($this->db);
 
     checkMyUser($userId, $request);
@@ -464,12 +508,12 @@ $app->put('/users/{id}', function (Request $request, Response $response) {
     if (isset($body['bcryptPassword'])) {
         throw new APIException("You don't have the permission for this.", 403, "Forbidden");
     }
-    if (isset($username)) {
-        checkNewUsername($username);
+    if (isset($body['username'])) {
+        checkNewUsername($body['username']);
     }
-    if (isset($password)) {
-        checkNewPassword($password);
-        $body['bcryptPassword'] = password_hash($body[$password], PASSWORD_DEFAULT);
+    if (isset($body['password'])) {
+        checkNewPassword($body['password']);
+        $body['bcryptPassword'] = password_hash($body['password'], PASSWORD_DEFAULT);
         unset($body['password']);
     }
 

@@ -63,13 +63,18 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>LowResAPIURL</key>
-	<string>https://lowresapi.timokloss.com</string>
+	<string>http://localhost:8888</string>
 	<key>LowResNewsUserID</key>
 	<string>T5VWaLW28x</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSExceptionDomains</key>
 		<dict>
+			<key>localhost</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
 			<key>lowresfiles.timokloss.com</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>

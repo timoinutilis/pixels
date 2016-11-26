@@ -20,6 +20,19 @@ class DataBaseAccess {
 	    return $filter;
 	}
 
+	function getObject($tableName, $id, $fields ="*") {
+	    $sqlText = "SELECT $fields FROM $tableName WHERE objectId = ?";
+	    $stmt = $this->db->prepare($sqlText);
+	    $stmt->bindValue(1, $id);
+	    if ($stmt->execute()) {
+	    	$object = $stmt->fetch();
+	    	if ($object) {
+		        return $object;
+		    }
+	    }
+	    return FALSE;
+	}
+
 	function addObject($tableName, $dataName, $id, $fields ="*") {
 	    if ($fields != "*") {
 	    	$fields = "objectId, updatedAt, createdAt, ".$fields;
@@ -223,6 +236,19 @@ class DataBaseAccess {
 	       	}
 	    }
 		return FALSE;
+	}
+
+	function createNotification($senderId, $recipientIds, $postId, $type) {
+		$stmt = $this->db->prepare("INSERT INTO notifications (objectId, createdAt, sender, recipient, post, type) VALUES (?,NOW(),?,?,?,?)");
+		foreach ($recipientIds as $recipientId) {
+			$id = $this->unique_id(10);
+		    $stmt->bindValue(1, $id);
+		    $stmt->bindValue(2, $senderId);
+		    $stmt->bindValue(3, $recipientId);
+		    $stmt->bindValue(4, $postId);
+		    $stmt->bindValue(5, $type);
+		    $stmt->execute();
+		}
 	}
 
     function unique_id($length) {
