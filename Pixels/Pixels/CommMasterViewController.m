@@ -222,12 +222,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
         }
         case CellTagLogOut: {
             [tableView deselectRowAtIndexPath:indexPath animated:YES];
-            [[CommunityModel sharedInstance] logOutWithCompletion:^(BOOL succeeded, NSError *error) {
-                if (!succeeded)
-                {
-                    [self showAlertWithTitle:@"Could not log out" message:error.localizedDescription block:nil];
-                }
-            }];
+            [[CommunityModel sharedInstance] logOut];
             break;
         }
         default: {

@@ -14,10 +14,11 @@
 #import "CommLogInViewController.h"
 #import "UIViewController+CommUtils.h"
 #import "UIViewController+LowResCoder.h"
-#import "ExtendedActivityIndicatorView.h"
 #import "NSString+Utils.h"
 #import "AppController.h"
 #import "UITableView+Parse.h"
+#import "ActivityView.h"
+#import "BlockerView.h"
 
 typedef NS_ENUM(NSInteger, CellTag) {
     CellTagNoAction,
@@ -45,7 +46,7 @@ typedef NS_ENUM(NSInteger, Section) {
 @property CommPostMode mode;
 @property ProgramTitleCell *titleCell;
 @property WriteCommentCell *writeCommentCell;
-@property ExtendedActivityIndicatorView *activityIndicator;
+@property ActivityView *activityView;
 @property BOOL wasDeleted;
 
 @end
@@ -56,7 +57,7 @@ typedef NS_ENUM(NSInteger, Section) {
 {
     [super viewDidLoad];
     
-    self.activityIndicator = [[ExtendedActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    self.activityView = [ActivityView view];
     
     NSMutableArray *items = [NSMutableArray array];
     if ([self isModal])
@@ -70,8 +71,6 @@ typedef NS_ENUM(NSInteger, Section) {
         UIBarButtonItem *actionItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(onActionTapped:)];
         [items addObject:actionItem];
     }
-    UIBarButtonItem *activityItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
-    [items addObject:activityItem];
     self.navigationItem.rightBarButtonItems = items;
 
     self.tableView.rowHeight = UITableViewAutomaticDimension;
@@ -176,7 +175,8 @@ typedef NS_ENUM(NSInteger, Section) {
 
 - (void)loadAllForceReload:(BOOL)forceReload
 {
-    [self.activityIndicator increaseActivity];
+    self.activityView.state = ActivityStateBusy;
+    self.tableView.tableFooterView = self.activityView;
     self.title = self.post.title ? [self.post.title stringWithMaxWords:4] : @"Loading...";
     
     LCCUser *currentUser = [CommunityModel sharedInstance].currentUser;
@@ -185,7 +185,8 @@ typedef NS_ENUM(NSInteger, Section) {
     NSDictionary *params = currentUser ? @{@"likedUserId": currentUser.objectId} : nil;
     [[CommunityModel sharedInstance].sessionManager GET:route parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         
-        [self.activityIndicator decreaseActivity];
+        self.activityView.state = ActivityStateReady;
+        self.tableView.tableFooterView = nil;
         
         NSArray *oldComments = self.comments.copy;
         
@@ -231,9 +232,10 @@ typedef NS_ENUM(NSInteger, Section) {
         [self.refreshControl endRefreshing];
         
     } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
-
+        
+        [self.activityView failWithMessage:error.presentableError.localizedDescription];
+        [self.refreshControl endRefreshing];
         self.title = @"Error";
-        [self showAlertWithTitle:@"Could not load post." message:error.presentableError.localizedDescription block:nil];
 
     }];
 }
@@ -279,19 +281,19 @@ typedef NS_ENUM(NSInteger, Section) {
     post.stats = self.post.stats;
     post.sharedPost = self.post.objectId;
     
-    [self.activityIndicator increaseActivity];
+    [BlockerView show];
     
     NSString *route = [NSString stringWithFormat:@"/users/%@/posts", [CommunityModel sharedInstance].currentUser.objectId];
     NSDictionary *params = [post dirtyDictionary];
     [[CommunityModel sharedInstance].sessionManager POST:route parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         
-        [self.activityIndicator decreaseActivity];
+        [BlockerView dismiss];
 //        [PFQuery clearAllCachedResults];
         [self showAlertWithTitle:@"Shared successfully." message:nil block:nil];
         
     } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
         
-        [self.activityIndicator decreaseActivity];
+        [BlockerView dismiss];
         [self showAlertWithTitle:@"Could not share post." message:error.presentableError.localizedDescription block:nil];
         
     }];
@@ -305,7 +307,7 @@ typedef NS_ENUM(NSInteger, Section) {
     {
         [self.view endEditing:YES];
         
-        [self.activityIndicator increaseActivity];
+        [BlockerView show];
         
         UIButton *button = (UIButton *)sender;
         button.enabled = NO;
@@ -324,7 +326,7 @@ typedef NS_ENUM(NSInteger, Section) {
         
         [[CommunityModel sharedInstance].sessionManager POST:route parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
 
-            [self.activityIndicator decreaseActivity];
+            [BlockerView dismiss];
             [comment updateWithDictionary:responseObject[@"comment"]];
             [comment resetDirty];
             
@@ -355,7 +357,7 @@ typedef NS_ENUM(NSInteger, Section) {
 
         } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
 
-            [self.activityIndicator decreaseActivity];
+            [BlockerView dismiss];
             [self showAlertWithTitle:@"Could not send comment." message:error.presentableError.localizedDescription block:nil];
             button.enabled = YES;
             
@@ -365,21 +367,18 @@ typedef NS_ENUM(NSInteger, Section) {
 
 - (void)deletePost
 {
-    [self.activityIndicator increaseActivity];
-    self.view.userInteractionEnabled = NO;
+    [BlockerView show];
     
     NSString *route = [NSString stringWithFormat:@"/posts/%@", self.post.objectId];
     [[CommunityModel sharedInstance].sessionManager DELETE:route parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
 
-        [self.activityIndicator decreaseActivity];
-        self.view.userInteractionEnabled = YES;
+        [BlockerView dismiss];
 //        [PFQuery clearAllCachedResults];
         [[NSNotificationCenter defaultCenter] postNotificationName:PostDeleteNotification object:self userInfo:@{@"postId": self.post.objectId}];
 
     } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
 
-        [self.activityIndicator decreaseActivity];
-        self.view.userInteractionEnabled = YES;
+        [BlockerView dismiss];
         [self showAlertWithTitle:@"Could not delete post." message:error.presentableError.localizedDescription block:nil];
 
     }];

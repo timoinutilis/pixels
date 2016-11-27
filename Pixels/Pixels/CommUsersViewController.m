@@ -9,54 +9,49 @@
 #import "CommUsersViewController.h"
 #import "CommunityModel.h"
 #import "CommDetailViewController.h"
-#import "ExtendedActivityIndicatorView.h"
 #import "UIViewController+LowResCoder.h"
 #import "UIViewController+CommUtils.h"
 #import "UITableView+Parse.h"
+#import "ActivityView.h"
 
 @interface CommUsersViewController ()
 
 @property LCCUser *user;
 @property CommUsersMode mode;
 @property NSMutableArray *users;
-@property ExtendedActivityIndicatorView *activityIndicator;
+@property ActivityView *activityView;
 
 @end
 
 @implementation CommUsersViewController
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder
-{
-    if (self = [super initWithCoder:aDecoder])
-    {
-        _activityIndicator = [[ExtendedActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-    }
-    return self;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    UIBarButtonItem *activityItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
+    self.activityView = [ActivityView view];
+    
     if ([self isModal])
     {
         UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onDoneTapped:)];
-        self.navigationItem.rightBarButtonItems = @[doneItem, activityItem];
+        self.navigationItem.rightBarButtonItem = doneItem;
     }
-    else
-    {
-        self.navigationItem.rightBarButtonItems = @[activityItem];
-    }
+}
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    if (self.activityView.state == ActivityStateUnknown)
+    {
+        [self updateDataForceReload:NO];
+    }
 }
 
 - (void)setUser:(LCCUser *)user mode:(CommUsersMode)mode
 {
     self.user = user;
     self.mode = mode;
-    
-    [self updateDataForceReload:NO];
     
     self.title = (self.mode == CommUsersModeFollowers) ? @"Followers" : @"Following";
 }
@@ -83,11 +78,14 @@
         route = [NSString stringWithFormat:@"/users/%@/following", self.user.objectId];
     }
     
-    [self.activityIndicator increaseActivity];
+    self.activityView.state = ActivityStateBusy;
+    self.tableView.tableFooterView = self.activityView;
     
     [[CommunityModel sharedInstance].sessionManager GET:route parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
 
-        [self.activityIndicator decreaseActivity];
+        self.activityView.state = ActivityStateReady;
+        self.tableView.tableFooterView = nil;
+        
         NSArray *oldUsers = self.users.copy;
         self.users = [LCCUser objectsFromArray:responseObject[@"users"]].mutableCopy;
         if (forceReload)
@@ -102,9 +100,8 @@
 
     } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
 
-        [self.activityIndicator decreaseActivity];
+        [self.activityView failWithMessage:error.presentableError.localizedDescription];
         [self.refreshControl endRefreshing];
-        [self showAlertWithTitle:@"Could not load users" message:error.presentableError.localizedDescription block:nil];
 
     }];
 }

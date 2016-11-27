@@ -97,16 +97,16 @@ NSString *const HTTPHeaderSessionTokenKey = @"X-LowResCoder-Session-Token";
 
 }
 
-- (void)logOutWithCompletion:(LCCResultBlock)completion
+- (void)logOut
 {
     [self.sessionManager POST:@"logout" parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         
         [self onLoggedOut];
-        completion(YES, nil);
         
     } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
         
-        completion(NO, error);
+        // ignore error
+        [self onLoggedOut];
         
     }];
 }

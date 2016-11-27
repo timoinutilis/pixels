@@ -13,6 +13,7 @@
 #import "ExplorerViewController.h"
 #import "AppController.h"
 #import "TabBarController.h"
+#import "BlockerView.h"
 
 const NSTimeInterval MAX_CACHE_AGE = 1 * 60 * 60;
 
@@ -35,31 +36,44 @@ const NSTimeInterval MAX_CACHE_AGE = 1 * 60 * 60;
 
 - (void)addProgramOfPost:(LCCPost *)post
 {
+    if (!post.isSourceCodeLoaded)
+    {
+        [BlockerView show];
+    }
+    
     [post loadSourceCodeWithCompletion:^(NSString *sourceCode, NSError *error) {
         
-        Project *project = [[ModelManager sharedManager] createNewProjectInFolder:[ModelManager sharedManager].currentDownloadFolder];
-        project.name = post.title;
-        project.sourceCode = sourceCode;
-        project.postId = post.objectId;
-        
-        LCCUser *currentUser = [CommunityModel sharedInstance].currentUser;
-        
-        if (!currentUser || ![post.user isEqualToString:currentUser.objectId])
+        [BlockerView dismiss];
+        if (sourceCode)
         {
-            [[CommunityModel sharedInstance] countDownloadPost:post];
-        }
-        
-        BOOL root = (project.parent == [ModelManager sharedManager].rootFolder);
-        
-        if ([self isModal])
-        {
-            [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
-                [[AppController sharedController].tabBarController showExplorerAnimated:YES root:root];
-            }];
+            Project *project = [[ModelManager sharedManager] createNewProjectInFolder:[ModelManager sharedManager].currentDownloadFolder];
+            project.name = post.title;
+            project.sourceCode = sourceCode;
+            project.postId = post.objectId;
+            
+            LCCUser *currentUser = [CommunityModel sharedInstance].currentUser;
+            
+            if (!currentUser || ![post.user isEqualToString:currentUser.objectId])
+            {
+                [[CommunityModel sharedInstance] countDownloadPost:post];
+            }
+            
+            BOOL root = (project.parent == [ModelManager sharedManager].rootFolder);
+            
+            if ([self isModal])
+            {
+                [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
+                    [[AppController sharedController].tabBarController showExplorerAnimated:YES root:root];
+                }];
+            }
+            else
+            {
+                [[AppController sharedController].tabBarController showExplorerAnimated:NO root:root];
+            }
         }
         else
         {
-            [[AppController sharedController].tabBarController showExplorerAnimated:NO root:root];
+            [self showAlertWithTitle:@"Could not download program." message:error.presentableError.localizedDescription block:nil];
         }
         
     }];

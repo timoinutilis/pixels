@@ -202,12 +202,7 @@
     {
         if ([CommunityModel sharedInstance].currentUser)
         {
-            [[CommunityModel sharedInstance] logOutWithCompletion:^(BOOL succeeded, NSError *error) {
-                if (!succeeded)
-                {
-                    [self showAlertWithTitle:@"Could not log out" message:error.localizedDescription block:nil];
-                }
-            }];
+            [[CommunityModel sharedInstance] logOut];
         }
         else
         {

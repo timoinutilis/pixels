@@ -15,11 +15,12 @@
 #import "CommLogInViewController.h"
 #import "UIViewController+LowResCoder.h"
 #import "UIViewController+CommUtils.h"
-#import "ExtendedActivityIndicatorView.h"
 #import "AppController.h"
 #import "GORCycleManager.h"
 #import "UITableView+Parse.h"
 #import "CommStatusUpdateViewController.h"
+#import "ActivityView.h"
+#import "BlockerView.h"
 
 typedef NS_ENUM(NSInteger, CellTag) {
     CellTagNoAction,
@@ -46,40 +47,27 @@ static const NSInteger LIMIT = 50;
 
 @property NSArray *sections;
 @property CommProfileCell *profileCell;
-@property ExtendedActivityIndicatorView *activityIndicator;
+@property ActivityView *activityView;
 @property BOOL userNeedsUpdate;
 @property LCCPostCategory filterCategory;
 @property int currentOffset;
 @property NSString *currentRoute;
 @property BOOL hasMorePosts;
-@property BOOL isLoading;
 
 @end
 
 @implementation CommDetailViewController
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder
-{
-    if (self = [super initWithCoder:aDecoder])
-    {
-        _activityIndicator = [[ExtendedActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-    }
-    return self;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    self.activityView = [ActivityView view];
     
-    UIBarButtonItem *activityItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
     if ([self isModal])
     {
         UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onDoneTapped:)];
-        self.navigationItem.rightBarButtonItems = @[doneItem, activityItem];
-    }
-    else
-    {
-        self.navigationItem.rightBarButtonItems = @[activityItem];
+        self.navigationItem.rightBarButtonItem = doneItem;
     }
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
@@ -119,6 +107,10 @@ static const NSInteger LIMIT = 50;
         LCCUser *user = [CommunityModel sharedInstance].currentUser;
         [self setUser:user mode:CommListModeNews];
     }
+    if (self.activityView.state == ActivityStateUnknown)
+    {
+        [self updateDataForceReload:NO];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -139,13 +131,18 @@ static const NSInteger LIMIT = 50;
         self.user = user;
     }
     self.mode = mode;
-    
-    [self updateDataForceReload:NO];
 }
 
 - (IBAction)onRefreshPulled:(id)sender
 {
-    [self updateDataForceReload:YES];
+    if (self.activityView.state != ActivityStateBusy)
+    {
+        [self updateDataForceReload:YES];
+    }
+    else
+    {
+        [self.refreshControl endRefreshing];
+    }
 }
 
 - (void)onDoneTapped:(id)sender
@@ -238,10 +235,21 @@ static const NSInteger LIMIT = 50;
 
 - (void)loadCurrentQueryForceReload:(BOOL)forceReload
 {
-    self.isLoading = YES;
     BOOL add = (self.currentOffset > 0);
     NSArray *oldPosts = self.posts.copy;
-    [self.activityIndicator increaseActivity];
+    
+    CGRect frame = self.activityView.frame;
+    if (add)
+    {
+        frame.size.height = 60;
+    }
+    else
+    {
+        frame.size.height = self.tableView.bounds.size.height;
+    }
+    self.activityView.frame = frame;
+    self.tableView.tableFooterView = self.activityView;
+    self.activityView.state = ActivityStateBusy;
     
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"offset"] = @(self.currentOffset);
@@ -252,8 +260,6 @@ static const NSInteger LIMIT = 50;
     }
 
     [[CommunityModel sharedInstance].sessionManager GET:self.currentRoute parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
-
-        [self.activityIndicator decreaseActivity];
         
         id userDict = responseObject[@"user"];
         if (self.mode == CommListModeProfile && userDict)
@@ -300,15 +306,14 @@ static const NSInteger LIMIT = 50;
             [self.tableView reloadData];
         }
         
+        self.activityView.state = ActivityStateReady;
+        self.tableView.tableFooterView = nil;
         [self.refreshControl endRefreshing];
-        self.isLoading = NO;
 
     } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
 
-        [self.activityIndicator decreaseActivity];
-        [self showAlertWithTitle:@"Could not load posts" message:error.presentableError.localizedDescription block:nil];
+        [self.activityView failWithMessage:error.presentableError.localizedDescription];
         [self.refreshControl endRefreshing];
-        self.isLoading = NO;
 
     }];
 }
@@ -386,69 +391,9 @@ static const NSInteger LIMIT = 50;
     [self.tableView endUpdates];
 }
 
-/*
-- (IBAction)onSendStatusTapped:(id)sender
-{
-    NSString *statusTitleText = [self.writeStatusCell.titleTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    NSString *statusDetailText = [self.writeStatusCell.textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    
-    if (statusTitleText.length == 0 || statusDetailText.length == 0)
-    {
-        [self showAlertWithTitle:@"Please write a title and a detail text!" message:nil block:nil];
-    }
-    else
-    {
-        [self.view endEditing:YES];
-        
-        UIButton *button = (UIButton *)sender;
-        button.enabled = NO;
-        
-        LCCPost *post = [[LCCPost alloc] init];
-        post.type = LCCPostTypeStatus;
-        post.category = LCCPostCategoryStatus;
-        post.title = statusTitleText;
-        post.detail = statusDetailText;
-        
-        [self.activityIndicator increaseActivity];
-        
-        NSString *route = [NSString stringWithFormat:@"/users/%@/posts", [CommunityModel sharedInstance].currentUser.objectId];
-        NSDictionary *params = [post dirtyDictionary];
-        
-        [[CommunityModel sharedInstance].sessionManager POST:route parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
-
-            [self.activityIndicator decreaseActivity];
-            [post updateWithDictionary:responseObject[@"post"]];
-            [post resetDirty];
-            
-            LCCPostStats *stats = [[LCCPostStats alloc] initWithDictionary:responseObject[@"postStats"]];
-            self.statsById[stats.objectId] = stats;
-            
-//            [PFQuery clearAllCachedResults];
-            
-            self.writeStatusCell.titleTextField.text = @"";
-            self.writeStatusCell.textView.text = @"";
-            
-            [self.posts insertObject:post atIndex:0];
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:2];
-            [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-            
-            [[AppController sharedController] registerForNotifications];
-            
-            button.enabled = YES;
-
-        } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
-
-            [self.activityIndicator decreaseActivity];
-            [self showAlertWithTitle:@"Could not send status update." message:error.presentableError.localizedDescription block:nil];
-            button.enabled = YES;
-
-        }];
-    }
-}
-*/
-
 - (IBAction)onFilterChanged:(UISegmentedControl *)sender
 {
+    [self.posts removeAllObjects];
     switch (sender.selectedSegmentIndex)
     {
         case 0: self.filterCategory = LCCPostCategoryUndefined; break;
@@ -458,26 +403,24 @@ static const NSInteger LIMIT = 50;
         case 4: self.filterCategory = LCCPostCategoryStatus; break;
     }
     [self updateDataForceReload:NO];
+    [self.tableView reloadData];
 }
 
 - (void)deletePost:(LCCPost *)post indexPath:(NSIndexPath *)indexPath
 {
-    [self.activityIndicator increaseActivity];
-    self.view.userInteractionEnabled = NO;
- 
+    [BlockerView show];
+    
     NSString *route = [NSString stringWithFormat:@"/posts/%@", post.objectId];
     [[CommunityModel sharedInstance].sessionManager DELETE:route parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         
-        [self.activityIndicator decreaseActivity];
-        self.view.userInteractionEnabled = YES;
+        [BlockerView dismiss];
         [self.posts removeObject:post];
         [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 //        [PFQuery clearAllCachedResults];
         
     } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
         
-        [self.activityIndicator decreaseActivity];
-        self.view.userInteractionEnabled = YES;
+        [BlockerView dismiss];
         [self showAlertWithTitle:@"Could not delete post." message:error.presentableError.localizedDescription block:nil];
         
     }];
@@ -524,12 +467,7 @@ static const NSInteger LIMIT = 50;
     }
     else if (sectionId == SectionPosts)
     {
-        NSInteger num = self.posts.count + 1; // posts + filter
-        if (self.hasMorePosts)
-        {
-            num++; // "Loading more..." cell
-        }
-        return num;
+        return self.posts.count + 1; // posts + filter
     }
     return 0;
 }
@@ -607,11 +545,6 @@ static const NSInteger LIMIT = 50;
         {
             CommFilterCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommFilterCell" forIndexPath:indexPath];
             cell.postCategory = self.filterCategory;
-            return cell;
-        }
-        else if (indexPath.row - 1 == self.posts.count)
-        {
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"LoadingMoreCell" forIndexPath:indexPath];
             return cell;
         }
         else
@@ -705,7 +638,7 @@ static const NSInteger LIMIT = 50;
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if (   self.hasMorePosts && !self.isLoading
+    if (   self.hasMorePosts && self.activityView.state == ActivityStateReady
         && scrollView.contentOffset.y >= scrollView.contentSize.height - scrollView.bounds.size.height - 80.0)
     {
         [self loadCurrentQueryForceReload:NO];

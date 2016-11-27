@@ -37,6 +37,8 @@ typedef void (^LCCPostLoadSourceCodeBlock)(NSString *sourceCode, NSError *error)
 @property (retain) NSString *sharedPost;
 @property (retain) NSString *stats;
 
+@property (nonatomic) BOOL isSourceCodeLoaded;
+
 - (NSString *)categoryString;
 - (void)loadSourceCodeWithCompletion:(LCCPostLoadSourceCodeBlock)block;
 

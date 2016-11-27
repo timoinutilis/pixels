@@ -44,6 +44,11 @@
     }
 }
 
+- (BOOL)isSourceCodeLoaded
+{
+    return self.sourceCode;
+}
+
 - (void)loadSourceCodeWithCompletion:(LCCPostLoadSourceCodeBlock)block
 {
     if (self.sourceCode)
