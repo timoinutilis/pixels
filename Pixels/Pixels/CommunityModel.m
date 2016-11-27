@@ -18,6 +18,7 @@ NSString *const NotificationsUpdateNotification = @"NotificationsUpdateNotificat
 NSString *const NotificationsNumChangeNotification = @"NotificationsNumChangeNotification";
 
 NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
+NSString *const UserDefaultsCurrentUserKey = @"UserDefaultsCurrentUser";
 NSString *const HTTPHeaderSessionTokenKey = @"X-LowResCoder-Session-Token";
 
 @interface CommunityModel()
@@ -51,6 +52,14 @@ NSString *const HTTPHeaderSessionTokenKey = @"X-LowResCoder-Session-Token";
         [LCCComment registerAPIClass];
         [LCCPostStats registerAPIClass];
         [LCCNotification registerAPIClass];
+        
+        NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
+        NSDictionary *userDict = [storage objectForKey:UserDefaultsCurrentUserKey];
+        if (userDict)
+        {
+            _currentUser = [[LCCUser alloc] initWithNativeDictionary:userDict];
+        }
+
     }
     return self;
 }
@@ -102,9 +111,26 @@ NSString *const HTTPHeaderSessionTokenKey = @"X-LowResCoder-Session-Token";
     }];
 }
 
+- (void)storeCurrentUser
+{
+    NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
+    if (self.currentUser)
+    {
+        NSDictionary *userDict = [self.currentUser nativeDictionary];
+        [storage setObject:userDict forKey:UserDefaultsCurrentUserKey];
+    }
+    else
+    {
+        [storage removeObjectForKey:UserDefaultsCurrentUserKey];
+        [storage synchronize];
+    }
+}
+
 - (void)onLoggedInWithUser:(LCCUser *)user
 {
     _currentUser = user;
+    [self storeCurrentUser];
+    
     [self.sessionManager.requestSerializer setValue:self.currentUser.sessionToken forHTTPHeaderField:HTTPHeaderSessionTokenKey];
     [[NSNotificationCenter defaultCenter] postNotificationName:CurrentUserChangeNotification object:self];
     [self updateCurrentUser];
@@ -114,6 +140,7 @@ NSString *const HTTPHeaderSessionTokenKey = @"X-LowResCoder-Session-Token";
 - (void)onLoggedOut
 {
     _currentUser = nil;
+    [self storeCurrentUser];
     
     [self.sessionManager.requestSerializer setValue:nil forHTTPHeaderField:HTTPHeaderSessionTokenKey];
     [self.follows removeAllObjects];
@@ -126,6 +153,7 @@ NSString *const HTTPHeaderSessionTokenKey = @"X-LowResCoder-Session-Token";
 
 - (void)onUserDataChanged
 {
+    [self storeCurrentUser];
     [[NSNotificationCenter defaultCenter] postNotificationName:CurrentUserChangeNotification object:self];
 }
 

@@ -21,9 +21,11 @@
 
 - (instancetype)initWithObjectId:(NSString *)objectId;
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary;
+- (instancetype)initWithNativeDictionary:(NSDictionary *)dictionary;
 - (void)updateWithDictionary:(NSDictionary *)dictionary;
 - (NSDictionary *)dirtyDictionary;
 - (void)resetDirty;
+- (NSDictionary *)nativeDictionary;
 
 @end
 

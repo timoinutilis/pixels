@@ -213,6 +213,22 @@ void integerSetterMethodIMP(APIObject *self, SEL _cmd, int value)
     return self;
 }
 
+- (instancetype)initWithNativeDictionary:(NSDictionary *)dictionary
+{
+    if (self = [self init])
+    {
+        _objectId = dictionary[@"objectId"];
+        _createdAt = dictionary[@"createdAt"];
+        _updatedAt = dictionary[@"updatedAt"];
+        
+        _values = dictionary.mutableCopy;
+        [_values removeObjectForKey:@"objectId"];
+        [_values removeObjectForKey:@"createdAt"];
+        [_values removeObjectForKey:@"updatedAt"];
+    }
+    return self;
+}
+
 - (void)updateWithDictionary:(NSDictionary *)dictionary
 {
     NSDictionary *classProperties = _dynamicProperties[NSStringFromClass([self class])];
@@ -293,6 +309,16 @@ void integerSetterMethodIMP(APIObject *self, SEL _cmd, int value)
 - (void)resetDirty
 {
     [self.dirty removeAllObjects];
+}
+
+- (NSDictionary *)nativeDictionary
+{
+    NSMutableDictionary *dict = self.values.mutableCopy;
+    NSDictionary *stdDict = @{@"objectId": self.objectId,
+                              @"createdAt": self.createdAt,
+                              @"updatedAt": self.updatedAt};
+    [dict addEntriesFromDictionary:stdDict];
+    return dict;
 }
 
 + (BOOL)resolveInstanceMethod:(SEL)aSEL

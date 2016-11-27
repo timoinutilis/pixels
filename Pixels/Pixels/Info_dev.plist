@@ -65,7 +65,7 @@
 	<key>LowResAPIURL</key>
 	<string>https://lowresapi.timokloss.com</string>
 	<key>LowResNewsUserID</key>
-	<string>URx43Y5mTG</string>
+	<string>T5VWaLW28x</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSExceptionDomains</key>

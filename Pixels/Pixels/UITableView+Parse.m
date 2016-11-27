@@ -13,6 +13,12 @@
 
 - (void)reloadDataAnimatedWithOldArray:(NSArray *)oldArray newArray:(NSArray *)newArray inSection:(NSInteger)section offset:(NSInteger)offset
 {
+    if (oldArray.count == 0)
+    {
+        [self reloadData];
+        return;
+    }
+    
     NSMutableSet *oldSet = [NSMutableSet setWithCapacity:oldArray.count];
     NSMutableSet *newSet = [NSMutableSet setWithCapacity:newArray.count];
     
