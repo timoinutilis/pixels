@@ -168,16 +168,20 @@ $app->delete('/posts/{id}', function (Request $request, Response $response) {
                 $stmt = $this->db->prepare("DELETE FROM likes WHERE post = ?");
                 $stmt->bindValue(1, $postId);
                 if ($stmt->execute()) {
-                    $stmt = $this->db->prepare("DELETE FROM posts WHERE objectId = ?");
+                    $stmt = $this->db->prepare("DELETE FROM notifications WHERE post = ?");
                     $stmt->bindValue(1, $postId);
                     if ($stmt->execute()) {
-                        //TODO delete files
-                        $access->data['success'] = TRUE;
+                        $stmt = $this->db->prepare("DELETE FROM posts WHERE objectId = ?");
+                        $stmt->bindValue(1, $postId);
+                        if ($stmt->execute()) {
+                            //TODO delete files
+                            $access->data['success'] = TRUE;
 
-                        if ($post['type'] != 3) { // not if post is a "share"
-                            $stmt = $this->db->prepare("DELETE FROM postStats WHERE post = ?");
-                            $stmt->bindValue(1, $postId);
-                            $stmt->execute();
+                            if ($post['type'] != 3) { // not if post is a "share"
+                                $stmt = $this->db->prepare("DELETE FROM postStats WHERE post = ?");
+                                $stmt->bindValue(1, $postId);
+                                $stmt->execute();
+                            }
                         }
                     }
                 }
@@ -570,7 +574,16 @@ $app->post('/users', function (Request $request, Response $response) {
 
     unset($body['password']);
 
-    $userId = $access->createObject("users", $body, "user");
+    try {
+        $userId = $access->createObject("users", $body, "user");
+    } catch (PDOException $e) {
+        if ($e->getCode() == "23000") {
+            throw new APIException("The username is already used.", 403, "ExistingUsername");
+        } else {
+            throw $e;
+        }
+    }
+
     if ($userId !== FALSE) {
         // follow admin        
         $followsObject = array('user' => $userId, 'followsUser' => $settings['admin']);
