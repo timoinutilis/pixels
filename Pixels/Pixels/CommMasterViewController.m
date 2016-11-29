@@ -13,6 +13,7 @@
 #import "UIViewController+LowResCoder.h"
 #import "UIViewController+CommUtils.h"
 #import "AppController.h"
+#import "ActionTableViewCell.h"
 
 typedef NS_ENUM(NSInteger, CellTag) {
     CellTagNews,
@@ -188,6 +189,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
                 cell = [tableView dequeueReusableCellWithIdentifier:@"ActionCell" forIndexPath:indexPath];
                 cell.textLabel.text = @"Log In / Register";
                 cell.tag = CellTagLogIn;
+                [((ActionTableViewCell *)cell) setDisabled:NO wheel:NO];
             }
         }
         else if (indexPath.row == 1)
@@ -222,6 +224,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
         }
         case CellTagLogOut: {
             [tableView deselectRowAtIndexPath:indexPath animated:YES];
+            [((ActionTableViewCell *)cell) setDisabled:YES wheel:YES];
             [[CommunityModel sharedInstance] logOut];
             break;
         }

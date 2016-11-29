@@ -314,10 +314,18 @@ void integerSetterMethodIMP(APIObject *self, SEL _cmd, int value)
 - (NSDictionary *)nativeDictionary
 {
     NSMutableDictionary *dict = self.values.mutableCopy;
-    NSDictionary *stdDict = @{@"objectId": self.objectId,
-                              @"createdAt": self.createdAt,
-                              @"updatedAt": self.updatedAt};
-    [dict addEntriesFromDictionary:stdDict];
+    if (self.objectId)
+    {
+        dict[@"objectId"] = self.objectId;
+    }
+    if (self.createdAt)
+    {
+        dict[@"createdAt"] = self.createdAt;
+    }
+    if (self.updatedAt)
+    {
+        dict[@"updatedAt"] = self.updatedAt;
+    }
     return dict;
 }
 

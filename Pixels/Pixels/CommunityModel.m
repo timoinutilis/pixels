@@ -58,6 +58,7 @@ NSString *const HTTPHeaderSessionTokenKey = @"X-LowResCoder-Session-Token";
         if (userDict)
         {
             _currentUser = [[LCCUser alloc] initWithNativeDictionary:userDict];
+            [self.sessionManager.requestSerializer setValue:self.currentUser.sessionToken forHTTPHeaderField:HTTPHeaderSessionTokenKey];
         }
 
     }
@@ -116,7 +117,8 @@ NSString *const HTTPHeaderSessionTokenKey = @"X-LowResCoder-Session-Token";
     NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
     if (self.currentUser)
     {
-        NSDictionary *userDict = [self.currentUser nativeDictionary];
+        NSMutableDictionary *userDict = [self.currentUser nativeDictionary].mutableCopy;
+        [userDict removeObjectForKey:@"password"];
         [storage setObject:userDict forKey:UserDefaultsCurrentUserKey];
     }
     else
@@ -365,6 +367,7 @@ NSString *const HTTPHeaderSessionTokenKey = @"X-LowResCoder-Session-Token";
         if (newestNotification.createdAt.timeIntervalSinceReferenceDate > user.notificationsOpenedDate.timeIntervalSinceReferenceDate)
         {
             user.notificationsOpenedDate = newestNotification.createdAt;
+            [self storeCurrentUser];
             [self updateNewNotifications];
             
             NSString *route = [NSString stringWithFormat:@"/users/%@", user.objectId];

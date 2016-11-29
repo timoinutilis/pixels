@@ -146,7 +146,11 @@ typedef NS_ENUM(NSInteger, Section) {
     NSString *deletedPostId = notification.userInfo[@"postId"];
     if ([deletedPostId isEqualToString:self.post.objectId])
     {
-        if (self.navigationController.topViewController == self)
+        if ([self isModal])
+        {
+            [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+        }
+        else if (self.navigationController.topViewController == self)
         {
             [self.navigationController popViewControllerAnimated:YES];
         }
