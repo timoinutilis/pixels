@@ -514,6 +514,7 @@
 		92F0C36C1B3EBF6D00000646 /* Compiler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Compiler.m; sourceTree = "<group>"; };
 		92F55A461DF22E7700BA6BE2 /* LimitedTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LimitedTextView.h; sourceTree = "<group>"; };
 		92F55A471DF22E7700BA6BE2 /* LimitedTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LimitedTextView.m; sourceTree = "<group>"; };
+		92F55A4A1DF2406800BA6BE2 /* LowRes Coder Dev.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "LowRes Coder Dev.entitlements"; sourceTree = "<group>"; };
 		92F788841BF4B2C400F6996B /* UIImage+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+Utils.h"; path = "Class Utils/UIImage+Utils.h"; sourceTree = "<group>"; };
 		92F788851BF4B2C400F6996B /* UIImage+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Utils.m"; path = "Class Utils/UIImage+Utils.m"; sourceTree = "<group>"; };
 		92F788861BF4B2C400F6996B /* UITextView+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UITextView+Utils.h"; path = "Class Utils/UITextView+Utils.h"; sourceTree = "<group>"; };
@@ -751,6 +752,7 @@
 		9276F3801A1D289C0060E909 = {
 			isa = PBXGroup;
 			children = (
+				92F55A4A1DF2406800BA6BE2 /* LowRes Coder Dev.entitlements */,
 				92044BD31DB3DD480053229B /* LowRes Coder.entitlements */,
 				928446041B012D2A00203974 /* Frameworks */,
 				9276F38B1A1D289C0060E909 /* Pixels */,
@@ -1550,6 +1552,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "LowRes Coder Dev.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = BZ4VC623NH;
@@ -1575,6 +1578,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "LowRes Coder Dev.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = BZ4VC623NH;
