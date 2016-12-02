@@ -7,22 +7,23 @@
 //
 
 #import "LCCUser.h"
+#import "CommunityModel.h"
 
 NSString *const LowResNewsUserIDKey = @"LowResNewsUserID";
 
 @implementation LCCUser
 
+@dynamic username;
+@dynamic password;
+@dynamic sessionToken;
 @dynamic about;
 @dynamic lastPostDate;
 @dynamic notificationsOpenedDate;
 
 - (BOOL)isMe
 {
-    if ([PFUser currentUser])
-    {
-        return [self.objectId isEqualToString:[PFUser currentUser].objectId];
-    }
-    return NO;
+    LCCUser *currentUser = [CommunityModel sharedInstance].currentUser;
+    return currentUser && [currentUser.objectId isEqualToString:self.objectId];
 }
 
 - (BOOL)isNewsUser

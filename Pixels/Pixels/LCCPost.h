@@ -6,9 +6,7 @@
 //  Copyright (c) 2015 Inutilis Software. All rights reserved.
 //
 
-#import <Parse/Parse.h>
-
-@class LCCUser, LCCProgram, LCCPostStats;
+#import "APIObject.h"
 
 typedef NS_ENUM(int, LCCPostType) {
     LCCPostTypeUndefined,
@@ -25,20 +23,24 @@ typedef NS_ENUM(int, LCCPostCategory) {
     LCCPostCategoryDemo
 };
 
-@interface LCCPost : PFObject<PFSubclassing>
+typedef void (^LCCPostLoadSourceCodeBlock)(NSString *sourceCode, NSError *error);
 
-@property (retain) LCCUser *user;
+@interface LCCPost : APIObject
+
+@property (retain) NSString *user;
 @property LCCPostType type;
 @property LCCPostCategory category;
-@property (retain) PFFile *image;
+@property (retain) NSURL *image;
 @property (retain) NSString *title;
 @property (retain) NSString *detail;
-@property (retain) LCCProgram *program; // deprecated, uses programFile now
-@property (retain) PFFile *programFile;
-@property (retain) LCCPost *sharedPost;
-@property (retain) LCCPostStats *stats;
+@property (retain) NSURL *program;
+@property (retain) NSString *sharedPost;
+@property (retain) NSString *stats;
+
+@property (nonatomic) BOOL isSourceCodeLoaded;
 
 - (NSString *)categoryString;
-- (NSString *)sourceCode;
+- (void)loadSourceCodeWithCompletion:(LCCPostLoadSourceCodeBlock)block;
+
 
 @end

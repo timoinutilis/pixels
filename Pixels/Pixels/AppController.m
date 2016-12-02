@@ -7,7 +7,6 @@
 //
 
 #import "AppController.h"
-#import <Parse/Parse.h>
 #import "UIViewController+LowResCoder.h"
 #import "NotificationView.h"
 #import "NSMutableDictionary+Utils.h"
@@ -213,12 +212,11 @@ NSString *const ImportProjectNotification = @"ImportProjectNotification";
 }
 
 - (void)registerForNotifications
-{
-    // Register for Push Notitications
+{/*
     UIApplication *application = [UIApplication sharedApplication];
     UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
     UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes categories:nil];
-    [application registerUserNotificationSettings:settings];
+    [application registerUserNotificationSettings:settings];*/
 }
 
 - (void)storeError:(NSError *)error message:(NSString *)message
@@ -245,7 +243,7 @@ NSString *const ImportProjectNotification = @"ImportProjectNotification";
     NSDictionary *aps = userInfo[@"aps"];
     NSString *alertText = aps[@"alert"];
     
-    [PFQuery clearAllCachedResults];
+//    [PFQuery clearAllCachedResults];
     
     if (inForeground)
     {

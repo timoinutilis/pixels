@@ -10,14 +10,20 @@
 #import "AppController.h"
 
 NSString *const CurrentUserChangeNotification = @"CurrentUserChangeNotification";
+NSString *const FollowsLoadNotification = @"FollowsLoadNotification";
 NSString *const FollowsChangeNotification = @"FollowsChangeNotification";
 NSString *const PostDeleteNotification = @"PostDeleteNotification";
-NSString *const PostCounterChangeNotification = @"PostCounterChangeNotification";
-NSString *const UserUpdateNotification = @"UserUpdateNotification";
+NSString *const PostStatsChangeNotification = @"PostStatsChangeNotification";
 NSString *const NotificationsUpdateNotification = @"NotificationsUpdateNotification";
 NSString *const NotificationsNumChangeNotification = @"NotificationsNumChangeNotification";
 
 NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
+NSString *const UserDefaultsCurrentUserKey = @"UserDefaultsCurrentUser";
+NSString *const HTTPHeaderSessionTokenKey = @"X-LowResCoder-Session-Token";
+
+@interface CommunityModel()
+@property (nonatomic) AFHTTPSessionManager *sessionManager;
+@end
 
 @implementation CommunityModel
 
@@ -31,20 +37,103 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
     return sharedInstance;
 }
 
-+ (void)registerSubclasses
+- (instancetype)init
 {
-    [LCCUser registerSubclass];
-    [LCCPost registerSubclass];
-    [LCCProgram registerSubclass];
-    [LCCComment registerSubclass];
-    [LCCFollow registerSubclass];
-    [LCCCount registerSubclass];
-    [LCCPostStats registerSubclass];
-    [LCCNotification registerSubclass];
+    if (self = [super init])
+    {
+        NSString *url = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"LowResAPIURL"];
+        NSAssert(url, @"LowResAPIURL not defined in info.plist");
+        
+        _sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:url]];
+        self.sessionManager.requestSerializer = [[AFJSONRequestSerializer alloc] init];
+        
+        [LCCUser registerAPIClass];
+        [LCCPost registerAPIClass];
+        [LCCComment registerAPIClass];
+        [LCCPostStats registerAPIClass];
+        [LCCNotification registerAPIClass];
+        
+        NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
+        NSDictionary *userDict = [storage objectForKey:UserDefaultsCurrentUserKey];
+        if (userDict)
+        {
+            _currentUser = [[LCCUser alloc] initWithNativeDictionary:userDict];
+            [self.sessionManager.requestSerializer setValue:self.currentUser.sessionToken forHTTPHeaderField:HTTPHeaderSessionTokenKey];
+        }
+
+    }
+    return self;
 }
 
-- (void)onLoggedIn
+- (void)signUpWithUser:(LCCUser *)user completion:(LCCResultBlock)completion
 {
+    NSDictionary *params = [user dirtyDictionary];
+    
+    [self.sessionManager POST:@"users" parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+        
+        [user updateWithDictionary:responseObject[@"user"]];
+        [self onLoggedInWithUser:user];
+        completion(YES, nil);
+        
+    } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+        
+        completion(NO, error);
+        
+    }];
+}
+
+- (void)logInWithUsername:(NSString *)username password:(NSString *)password completion:(LCCResultBlock)completion;
+{
+    NSDictionary *params = @{@"username":username, @"password":password};
+    
+    [self.sessionManager POST:@"login" parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+        
+        [self onLoggedInWithUser:[[LCCUser alloc] initWithDictionary:responseObject[@"user"]]];
+        completion(YES, nil);
+        
+    } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+        
+        completion(NO, error);
+    }];
+
+}
+
+- (void)logOut
+{
+    [self.sessionManager POST:@"logout" parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+        
+        [self onLoggedOut];
+        
+    } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+        
+        // ignore error
+        [self onLoggedOut];
+        
+    }];
+}
+
+- (void)storeCurrentUser
+{
+    NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
+    if (self.currentUser)
+    {
+        NSMutableDictionary *userDict = [self.currentUser nativeDictionary].mutableCopy;
+        [userDict removeObjectForKey:@"password"];
+        [storage setObject:userDict forKey:UserDefaultsCurrentUserKey];
+    }
+    else
+    {
+        [storage removeObjectForKey:UserDefaultsCurrentUserKey];
+        [storage synchronize];
+    }
+}
+
+- (void)onLoggedInWithUser:(LCCUser *)user
+{
+    _currentUser = user;
+    [self storeCurrentUser];
+    
+    [self.sessionManager.requestSerializer setValue:self.currentUser.sessionToken forHTTPHeaderField:HTTPHeaderSessionTokenKey];
     [[NSNotificationCenter defaultCenter] postNotificationName:CurrentUserChangeNotification object:self];
     [self updateCurrentUser];
     [self loadNotifications];
@@ -52,6 +141,10 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
 
 - (void)onLoggedOut
 {
+    _currentUser = nil;
+    [self storeCurrentUser];
+    
+    [self.sessionManager.requestSerializer setValue:nil forHTTPHeaderField:HTTPHeaderSessionTokenKey];
     [self.follows removeAllObjects];
     _notifications = nil;
     
@@ -62,244 +155,178 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
 
 - (void)onUserDataChanged
 {
+    [self storeCurrentUser];
     [[NSNotificationCenter defaultCenter] postNotificationName:CurrentUserChangeNotification object:self];
 }
 
 - (void)updateCurrentUser
 {
-    _isUpdatingUser = YES;
-    [[NSNotificationCenter defaultCenter] postNotificationName:UserUpdateNotification object:self];
-    
-    if ([PFUser currentUser])
+    if (self.currentUser)
     {
-        PFQuery *query = [PFQuery queryWithClassName:[LCCFollow parseClassName]];
-        [query whereKey:@"user" equalTo:[PFUser currentUser]];
-        [query includeKey:@"followsUser"];
-        [query orderByDescending:@"lastPostDate"];
-        query.cachePolicy = kPFCachePolicyNetworkElseCache;
-        
-        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        NSString *route = [NSString stringWithFormat:@"users/%@/following", self.currentUser.objectId];
+        [self.sessionManager GET:route parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
             
-            if (objects)
-            {
-                _follows = [NSMutableArray arrayWithArray:objects];
-                [self sortFollows];
-                [[NSNotificationCenter defaultCenter] postNotificationName:FollowsChangeNotification object:self];
-            }
-            else
-            {
-                NSLog(@"Error: %@", error.description);
-            }
-            _isUpdatingUser = NO;
-            [[NSNotificationCenter defaultCenter] postNotificationName:UserUpdateNotification object:self];
+            _follows = [LCCUser objectsFromArray:responseObject[@"users"]].mutableCopy;
+            [self sortFollows];
+            [[NSNotificationCenter defaultCenter] postNotificationName:FollowsLoadNotification object:self];
+            
+        } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+            
+            NSLog(@"Error: %@", error.presentableError.localizedDescription);
             
         }];
     }
     else
     {
         _follows = [NSMutableArray array];
-        
-        LCCFollow *defaultFollow = [LCCFollow object];
-        NSString *newsUserID = [[NSBundle mainBundle] objectForInfoDictionaryKey:LowResNewsUserIDKey];
-        defaultFollow.followsUser = [LCCUser objectWithoutDataWithObjectId:newsUserID];
-        
-        [defaultFollow.followsUser fetchInBackgroundWithBlock:^(PFObject *object,  NSError *error) {
-            
-            if (object)
-            {
-                [_follows addObject:defaultFollow];
-                [[NSNotificationCenter defaultCenter] postNotificationName:FollowsChangeNotification object:self];
-            }
-            else
-            {
-                NSLog(@"Error: %@", error.description);
-                [[NSNotificationCenter defaultCenter] postNotificationName:FollowsChangeNotification object:self];
-            }
-            _isUpdatingUser = NO;
-            [[NSNotificationCenter defaultCenter] postNotificationName:UserUpdateNotification object:self];
-            
-        }];
+        [[NSNotificationCenter defaultCenter] postNotificationName:FollowsLoadNotification object:self];
     }
     
     // update installation
-    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+/*    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     currentInstallation[@"user"] = [PFUser currentUser] ? [PFUser currentUser] : [NSNull null];
-    [currentInstallation saveInBackground];
-}
-
-- (void)onPostedWithDate:(NSDate *)date
-{
-    LCCUser *user = (LCCUser *)[PFUser currentUser];
-    if (user)
-    {
-        user.lastPostDate = date;
-        [user saveInBackground];
-    }
+    [currentInstallation saveInBackground];*/
 }
 
 - (void)sortFollows
 {
-    NSSortDescriptor *lastPost = [NSSortDescriptor sortDescriptorWithKey:@"followsUser.lastPostDate" ascending:NO];
-    NSSortDescriptor *followDate = [NSSortDescriptor sortDescriptorWithKey:@"createdAt" ascending:NO];
-    [self.follows sortUsingDescriptors:@[lastPost, followDate]];
+    NSSortDescriptor *lastPost = [NSSortDescriptor sortDescriptorWithKey:@"lastPostDate" ascending:NO];
+    NSSortDescriptor *creationDate = [NSSortDescriptor sortDescriptorWithKey:@"createdAt" ascending:NO];
+    [self.follows sortUsingDescriptors:@[lastPost, creationDate]];
 }
 
 - (void)followUser:(LCCUser *)user
 {
-    LCCFollow *follow = [LCCFollow object];
-    follow.user = (LCCUser *)[PFUser currentUser];
-    follow.followsUser = user;
-    [follow saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        if (succeeded)
-        {
-            [PFQuery clearAllCachedResults];
-            [self.follows insertObject:follow atIndex:0];
-            [[NSNotificationCenter defaultCenter] postNotificationName:FollowsChangeNotification object:self];
-            
-            [PFAnalytics trackEvent:@"follow"];
-        }
-        else
-        {
-            NSLog(@"Error: %@", error.description);
-        }
+    NSString *route = [NSString stringWithFormat:@"/users/%@/followers", user.objectId];
+    NSDictionary *params = @{@"user":self.currentUser.objectId};
+    [self.sessionManager POST:route parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+        
+//        [PFQuery clearAllCachedResults];
+        [self.follows insertObject:user atIndex:0];
+        [[NSNotificationCenter defaultCenter] postNotificationName:FollowsChangeNotification object:self];
+        
+    } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+        
+        NSLog(@"Error: %@", error.presentableError.localizedDescription);
+        
     }];
 }
 
 - (void)unfollowUser:(LCCUser *)user
 {
-    LCCFollow *follow = [self followWithUser:user];
-    if (follow)
+    user = [self userInFollowing:user];
+    if (user)
     {
-        [follow deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            if (succeeded)
-            {
-                [PFQuery clearAllCachedResults];
-                [self.follows removeObject:follow];
-                [[NSNotificationCenter defaultCenter] postNotificationName:FollowsChangeNotification object:self];
-                
-                [PFAnalytics trackEvent:@"unfollow"];
-            }
-            else
-            {
-                NSLog(@"Error: %@", error.description);
-            }
+        NSString *route = [NSString stringWithFormat:@"/users/%@/followers/%@", user.objectId, self.currentUser.objectId];
+        [self.sessionManager DELETE:route parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+
+//            [PFQuery clearAllCachedResults];
+            [self.follows removeObject:user];
+            [[NSNotificationCenter defaultCenter] postNotificationName:FollowsChangeNotification object:self];
+            
+        } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+            
+            NSLog(@"Error: %@", error.presentableError.localizedDescription);
+            
         }];
     }
 }
 
-- (LCCFollow *)followWithUser:(LCCUser *)user
+- (LCCUser *)userInFollowing:(LCCUser *)user
 {
-    for (LCCFollow *follow in self.follows)
+    for (LCCUser *followUser in self.follows)
     {
-        if ([follow.followsUser.objectId isEqualToString:user.objectId])
+        if ([followUser.objectId isEqualToString:user.objectId])
         {
-            return follow;
+            return followUser;
         }
     }
     return nil;
 }
 
-- (NSArray *)arrayWithFollowedUsers
+- (void)likePost:(LCCPost *)post
 {
-    NSMutableArray *array = [NSMutableArray array];
-    for (LCCFollow *follow in self.follows)
-    {
-        [array addObject:follow.followsUser];
-    }
-    return array;
-}
-
-- (void)countPost:(LCCPost *)post type:(StatsType)type
-{
-    LCCCountType countType = LCCCountTypeUndefined;
-    NSString *event = nil;
-    
-    if (!post.stats)
-    {
-        post.stats = [LCCPostStats object];
-    }
-    
-    switch (type)
-    {
-        case StatsTypeLike:
-            [post.stats incrementKey:@"numLikes"];
-            countType = LCCCountTypeLike;
-            event = @"like";
-            break;
-        case StatsTypeDownload:
-            [post.stats incrementKey:@"numDownloads"];
-            countType = LCCCountTypeDownload;
-            event = @"get_program";
-            break;
-        default:
-            [NSException raise:@"InvalidType" format:@"Invalid type, comments use other method!"];
-    }
-    
-    // UI Notification
-    [[NSNotificationCenter defaultCenter] postNotificationName:PostCounterChangeNotification object:self userInfo:@{@"postId":post.objectId, @"type":@(type)}];
-    
-    // Save to server
-    LCCCount *count = [LCCCount object];
-    count.post = post;
-    count.user = (LCCUser *)[PFUser currentUser];
-    count.type = countType;
-    
-    [PFObject saveAllInBackground:@[count, post.stats] block:^(BOOL succeeded, NSError * _Nullable error) {
+    NSString *route = [NSString stringWithFormat:@"/posts/%@/likes", post.objectId];
+    NSDictionary *params = @{@"user": self.currentUser.objectId};
+    [self.sessionManager POST:route parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         
-        if (succeeded)
-        {
-            [self trackEvent:event forPost:post];
-            [PFQuery clearAllCachedResults];
-        }
-        else if (error)
-        {
-            NSLog(@"Error: %@", error.description);
-        }
+        LCCPostStats *stats = [[LCCPostStats alloc] initWithDictionary:responseObject[@"postStats"]];
+        [[NSNotificationCenter defaultCenter] postNotificationName:PostStatsChangeNotification object:self userInfo:@{@"stats":stats}];
+        
+    } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+        
+        NSLog(@"Error: %@", error.presentableError.localizedDescription);
         
     }];
 }
 
-- (void)trackEvent:(NSString *)name forPost:(LCCPost *)post
+- (void)countDownloadPost:(LCCPost *)post
 {
-    NSDictionary *dimensions = @{@"user": [PFUser currentUser] ? @"registered" : @"guest",
-                                 @"app": ([AppController sharedController].isFullVersion) ? @"full version" : @"free",
-                                 @"category": [post categoryString]};
-    
-    [PFAnalytics trackEvent:name dimensions:dimensions];
+    NSString *route = [NSString stringWithFormat:@"/posts/%@/downloads", post.objectId];
+    [self.sessionManager POST:route parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+        
+        LCCPostStats *stats = [[LCCPostStats alloc] initWithDictionary:responseObject[@"postStats"]];
+        [[NSNotificationCenter defaultCenter] postNotificationName:PostStatsChangeNotification object:self userInfo:@{@"stats":stats}];
+        
+    } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+        
+        NSLog(@"Error: %@", error.presentableError.localizedDescription);
+        
+    }];
 }
 
 - (void)loadNotifications
 {
-    if ([PFUser currentUser] && !self.isUpdatingNotifications)
+    if (self.currentUser && !self.isUpdatingNotifications)
     {
         _isUpdatingNotifications = YES;
         [[NSNotificationCenter defaultCenter] postNotificationName:NotificationsUpdateNotification object:self];
         
-        PFQuery *query = [PFQuery queryWithClassName:[LCCNotification parseClassName]];
-        [query whereKey:@"recipient" equalTo:[PFUser currentUser]];
-        [query includeKey:@"sender"];
-        [query includeKey:@"post"];
-        [query orderByDescending:@"createdAt"];
+        NSString *route = [NSString stringWithFormat:@"/users/%@/notifications", self.currentUser.objectId];
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        params[@"limit"] = @(50);
+        
         if (_notifications.count > 0)
         {
             LCCNotification *lastNotification = _notifications.firstObject;
-            [query whereKey:@"createdAt" greaterThan:lastNotification.createdAt];
+            params[@"after"] = [[NSDateFormatter sharedAPIDateFormatter] stringFromDate:lastNotification.createdAt];
         }
-        query.cachePolicy = kPFCachePolicyNetworkOnly;
         
-        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        [self.sessionManager GET:route parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
             
-            if (objects)
+            NSArray *notifications = [LCCNotification objectsFromArray:responseObject[@"notifications"]];
+            NSDictionary *usersById = [LCCUser objectsByIdFromArray:responseObject[@"users"]];
+            NSDictionary *postsById = [LCCPost objectsByIdFromArray:responseObject[@"posts"]];
+            if (notifications.count > 0)
             {
+                // copy references to user and post objects
+                for (LCCNotification *notification in notifications)
+                {
+                    if (notification.sender)
+                    {
+                        notification.senderObject = usersById[notification.sender];
+                    }
+                    if (notification.post)
+                    {
+                        notification.postObject = postsById[notification.post];
+                    }
+                }
+                
                 if (_notifications)
                 {
-                    [_notifications insertObjects:objects atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, objects.count)]];
+                    [_notifications insertObjects:notifications atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, notifications.count)]];
                 }
                 else
                 {
-                    _notifications = objects.mutableCopy;
+                    _notifications = notifications.mutableCopy;
                 }
             }
+            _isUpdatingNotifications = NO;
+            [[NSNotificationCenter defaultCenter] postNotificationName:NotificationsUpdateNotification object:self];
+            [self updateNewNotifications];
+            
+        } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+            
             _isUpdatingNotifications = NO;
             [[NSNotificationCenter defaultCenter] postNotificationName:NotificationsUpdateNotification object:self];
             [self updateNewNotifications];
@@ -311,7 +338,7 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
 - (void)updateNewNotifications
 {
     NSInteger num = 0;
-    LCCUser *user = (LCCUser *)[PFUser currentUser];
+    LCCUser *user = self.currentUser;
     if (user)
     {
         NSDate *date = user.notificationsOpenedDate ? user.notificationsOpenedDate : [NSDate distantPast];
@@ -333,17 +360,77 @@ NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
 
 - (void)onOpenNotifications
 {
-    LCCUser *user = (LCCUser *)[PFUser currentUser];
+    LCCUser *user = self.currentUser;
     if (user && self.notifications.count > 0)
     {
         LCCNotification *newestNotification = self.notifications.firstObject;
         if (newestNotification.createdAt.timeIntervalSinceReferenceDate > user.notificationsOpenedDate.timeIntervalSinceReferenceDate)
         {
             user.notificationsOpenedDate = newestNotification.createdAt;
-            [user saveInBackground];
+            [self storeCurrentUser];
             [self updateNewNotifications];
+            
+            NSString *route = [NSString stringWithFormat:@"/users/%@", user.objectId];
+            NSDictionary *params = [user dirtyDictionary];
+            [self.sessionManager PUT:route parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+                
+                [user resetDirty];
+                
+            } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+                
+                NSLog(@"error: %@", error.presentableError.localizedDescription);
+                
+            }];
         }
     }
+}
+
+- (void)uploadFileWithName:(NSString *)filename data:(NSData *)data completion:(LCCUploadResultBlock)block
+{
+    NSString *route = [NSString stringWithFormat:@"/files/%@", filename];
+    NSMutableURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:route relativeToURL:self.sessionManager.baseURL]].mutableCopy;
+    request.HTTPMethod = @"POST";
+    [request addValue:self.currentUser.sessionToken forHTTPHeaderField:HTTPHeaderSessionTokenKey];
+    
+    [[self.sessionManager uploadTaskWithRequest:request fromData:data progress:nil completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        
+        if (!error)
+        {
+            NSString *url = responseObject[@"url"];
+            block([NSURL URLWithString:url], nil);
+        }
+        else
+        {
+            block(nil, error);
+        }
+        
+    }] resume];
+                                                                                                                       
+}
+@end
+
+
+@implementation NSError (CommunityModel)
+
+- (NSError *)presentableError
+{
+    if ([self.domain isEqualToString:AFURLResponseSerializationErrorDomain])
+    {
+        NSData *data = self.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey];
+        NSDictionary *responseDict = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+        if (responseDict)
+        {
+            NSDictionary *errorDict = responseDict[@"error"];
+            if (errorDict)
+            {
+                NSLog(@"API error: %@", errorDict);
+                NSDictionary *userInfo = @{NSLocalizedDescriptionKey: errorDict[@"message"],
+                                           NSUnderlyingErrorKey: self};
+                return [NSError errorWithDomain:@"com.timokloss.lowresapi.error" code:self.code userInfo:userInfo];
+            }
+        }
+    }
+    return self;
 }
 
 @end

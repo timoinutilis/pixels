@@ -14,16 +14,18 @@
 #import "CommLogInViewController.h"
 #import "UIViewController+CommUtils.h"
 #import "UIViewController+LowResCoder.h"
-#import "ExtendedActivityIndicatorView.h"
 #import "NSString+Utils.h"
 #import "AppController.h"
 #import "UITableView+Parse.h"
+#import "ActivityView.h"
+#import "BlockerView.h"
 
 typedef NS_ENUM(NSInteger, CellTag) {
     CellTagNoAction,
     CellTagSourceCode,
     CellTagPostAuthor,
-    CellTagDelete
+    CellTagDelete,
+    CellTagLogin
 };
 
 typedef NS_ENUM(NSInteger, Section) {
@@ -34,14 +36,19 @@ typedef NS_ENUM(NSInteger, Section) {
 };
 
 @interface CommPostViewController ()
+
 @property LCCPost *post;
+@property LCCUser *user;
+@property LCCPostStats *stats;
 @property NSMutableArray *comments;
+@property NSMutableDictionary *commentUsersById;
+
 @property CommPostMode mode;
 @property ProgramTitleCell *titleCell;
 @property WriteCommentCell *writeCommentCell;
-@property ExtendedActivityIndicatorView *activityIndicator;
+@property ActivityView *activityView;
 @property BOOL wasDeleted;
-@property BOOL isLoadingComments;
+
 @end
 
 @implementation CommPostViewController
@@ -50,7 +57,7 @@ typedef NS_ENUM(NSInteger, Section) {
 {
     [super viewDidLoad];
     
-    self.activityIndicator = [[ExtendedActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    self.activityView = [ActivityView view];
     
     NSMutableArray *items = [NSMutableArray array];
     if ([self isModal])
@@ -58,13 +65,12 @@ typedef NS_ENUM(NSInteger, Section) {
         UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onDoneTapped:)];
         [items addObject:doneItem];
     }
-    if (![self.post isDataAvailable] || self.post.type == LCCPostTypeProgram)
+    if (   self.post.title == nil // opened from editor, so it's a program
+        || self.post.type == LCCPostTypeProgram)
     {
         UIBarButtonItem *actionItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(onActionTapped:)];
         [items addObject:actionItem];
     }
-    UIBarButtonItem *activityItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
-    [items addObject:activityItem];
     self.navigationItem.rightBarButtonItems = items;
 
     self.tableView.rowHeight = UITableViewAutomaticDimension;
@@ -84,14 +90,14 @@ typedef NS_ENUM(NSInteger, Section) {
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserChanged:) name:CurrentUserChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onPostDeleted:) name:PostDeleteNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onCounterChanged:) name:PostCounterChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onStatsChanged:) name:PostStatsChangeNotification object:nil];
 }
 
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:CurrentUserChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:PostDeleteNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:PostCounterChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:PostStatsChangeNotification object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -140,7 +146,11 @@ typedef NS_ENUM(NSInteger, Section) {
     NSString *deletedPostId = notification.userInfo[@"postId"];
     if ([deletedPostId isEqualToString:self.post.objectId])
     {
-        if (self.navigationController.topViewController == self)
+        if ([self isModal])
+        {
+            [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+        }
+        else if (self.navigationController.topViewController == self)
         {
             [self.navigationController popViewControllerAnimated:YES];
         }
@@ -151,137 +161,72 @@ typedef NS_ENUM(NSInteger, Section) {
     }
 }
 
-- (void)onCounterChanged:(NSNotification *)notification
+- (void)onStatsChanged:(NSNotification *)notification
 {
-    NSString *counterPostId = notification.userInfo[@"postId"];
-    if ([counterPostId isEqualToString:self.post.objectId])
+    LCCPostStats *stats = notification.userInfo[@"stats"];
+    if ([stats.post isEqualToString:self.post.objectId])
     {
-        StatsType type = [notification.userInfo[@"type"] integerValue];
-        if (self.post.stats)
-        {
-            self.titleCell.likeCount = self.post.stats.numLikes;
-            self.titleCell.downloadCount = self.post.stats.numDownloads;
-        }
-        if (type == StatsTypeLike)
+        int oldLikes = self.stats.numLikes;
+        self.stats = stats;
+        [self.titleCell setStats:stats];
+
+        if (stats.numLikes > oldLikes)
         {
             [self.titleCell likeIt];
         }
     }
 }
 
-- (void)updatePostView
-{
-    self.title = [self.post.title stringWithMaxWords:4];
-    
-    self.titleCell = [self.tableView dequeueReusableCellWithIdentifier:(self.post.type == LCCPostTypeProgram ? @"ProgramTitleCell" : @"StatusTitleCell")];
-    self.titleCell.post = self.post;
-}
-
 - (void)loadAllForceReload:(BOOL)forceReload
 {
-    if ([self.post isDataAvailable])
-    {
-        if (!forceReload)
+    self.activityView.state = ActivityStateBusy;
+    self.tableView.tableFooterView = self.activityView;
+    self.title = self.post.title ? [self.post.title stringWithMaxWords:4] : @"Loading...";
+    
+    LCCUser *currentUser = [CommunityModel sharedInstance].currentUser;
+    
+    NSString *route = [NSString stringWithFormat:@"posts/%@", self.post.objectId];
+    NSDictionary *params = currentUser ? @{@"likedUserId": currentUser.objectId} : nil;
+    [[CommunityModel sharedInstance].sessionManager GET:route parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+        
+        self.activityView.state = ActivityStateReady;
+        self.tableView.tableFooterView = nil;
+        
+        NSArray *oldComments = self.comments.copy;
+        
+        [self.post updateWithDictionary:responseObject[@"post"]];
+        self.user = [[LCCUser alloc] initWithDictionary:responseObject[@"user"]];
+        self.stats = [[LCCPostStats alloc] initWithDictionary:responseObject[@"stats"]];
+        self.comments = [LCCComment objectsFromArray:responseObject[@"comments"]].mutableCopy;
+        self.commentUsersById = [LCCUser objectsByIdFromArray:responseObject[@"users"]].mutableCopy;
+        BOOL liked = [responseObject[@"liked"] boolValue];
+        
+        self.title = [self.post.title stringWithMaxWords:4];
+        
+        self.titleCell = [self.tableView dequeueReusableCellWithIdentifier:(self.post.type == LCCPostTypeProgram ? @"ProgramTitleCell" : @"StatusTitleCell")];
+        [self.titleCell setPost:self.post user:self.user];
+        [self.titleCell setStats:self.stats];
+        
+        if (currentUser)
         {
-            [self updatePostView];
+            if (liked)
+            {
+                [self.titleCell likeIt];
+            }
+            else
+            {
+                self.titleCell.likeButton.enabled = ![self.user isMe];
+            }
         }
-        [self loadUser];
-        [self loadStatsForceReload:forceReload];
-        [self loadSubDataForceReload:forceReload];
-    }
-    else
-    {
-        [self.activityIndicator increaseActivity];
-        
-        self.title = @"Loading...";
-
-        PFQuery *query = [PFQuery queryWithClassName:[LCCPost parseClassName]];
-        [query includeKey:@"user"];
-        [query includeKey:@"stats"];
-        query.cachePolicy = kPFCachePolicyCacheElseNetwork;
-        query.maxCacheAge = MAX_CACHE_AGE;
-        
-        [query getObjectInBackgroundWithId:self.post.objectId block:^(PFObject * _Nullable object, NSError * _Nullable error) {
-            
-            [self.activityIndicator decreaseActivity];
-            if (object)
-            {
-                self.post = (LCCPost *)object;
-                [self updatePostView];
-                [self loadSubDataForceReload:NO];
-            }
-            else if (error)
-            {
-                self.title = @"Error";
-                [self showAlertWithTitle:@"Could not load post." message:error.userInfo[@"error"] block:nil];
-            }
-            
-        }];
-        
-    }
-}
-
-- (void)loadSubDataForceReload:(BOOL)forceReload
-{
-    [self loadLike];
-    [self loadCommentsForceReload:forceReload];
-    if (self.post.type == LCCPostTypeProgram)
-    {
-        [self loadProgram];
-    }
-}
-
-- (void)loadUser
-{
-    if (![self.post.user isDataAvailable])
-    {
-        [self.activityIndicator increaseActivity];
-        [self.post.user fetchInBackgroundWithBlock:^(PFObject *object,  NSError *error) {
-            
-            [self.activityIndicator decreaseActivity];
-            if (object)
-            {
-                [self.tableView reloadData];
-            }
-            else if (error)
-            {
-                [self showAlertWithTitle:@"Could not load user." message:error.userInfo[@"error"] block:nil];
-            }
-            
-        }];
-    }
-}
-
-- (void)loadCommentsForceReload:(BOOL)forceReload
-{
-    self.isLoadingComments = YES;
-    
-    PFQuery *query = [PFQuery queryWithClassName:[LCCComment parseClassName]];
-    [query whereKey:@"post" equalTo:self.post];
-    [query includeKey:@"user"];
-    [query orderByAscending:@"createdAt"];
-    query.cachePolicy = forceReload ? kPFCachePolicyNetworkOnly : kPFCachePolicyCacheElseNetwork;
-    query.maxCacheAge = MAX_CACHE_AGE;
-    
-    NSArray *oldComments = self.comments.copy;
-    
-    [self.activityIndicator increaseActivity];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        
-        [self.activityIndicator decreaseActivity];
-        self.isLoadingComments = NO;
-        if (objects)
+        else
         {
-            self.comments = [NSMutableArray arrayWithArray:objects];
-        }
-        else if (error)
-        {
-            self.comments = [NSMutableArray array];
-            [self showAlertWithTitle:@"Could not load comments." message:error.userInfo[@"error"] block:nil];
+            // "like" tap will ask for log-in.
+            self.titleCell.likeButton.enabled = YES;
         }
         
         if (forceReload)
         {
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:SectionTitle]] withRowAnimation:UITableViewRowAnimationFade];
             [self.tableView reloadDataAnimatedWithOldArray:oldComments newArray:self.comments inSection:SectionComments offset:0];
         }
         else
@@ -290,120 +235,13 @@ typedef NS_ENUM(NSInteger, Section) {
         }
         [self.refreshControl endRefreshing];
         
+    } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+        
+        [self.activityView failWithMessage:error.presentableError.localizedDescription];
+        [self.refreshControl endRefreshing];
+        self.title = @"Error";
+
     }];
-}
-
-- (void)loadProgram
-{
-    if (self.post.programFile)
-    {
-        // New format: Load program from file
-        
-        if ([self.post.programFile isDataAvailable])
-        {
-            self.titleCell.getProgramButton.enabled = YES;
-        }
-        else
-        {
-            [self.activityIndicator increaseActivity];
-            [self.post.programFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
-                
-                [self.activityIndicator decreaseActivity];
-                if (data)
-                {
-                    self.titleCell.getProgramButton.enabled = YES;
-                }
-                else if (error)
-                {
-                    [self showAlertWithTitle:@"Could not load source code." message:error.userInfo[@"error"] block:nil];
-                }
-                
-            }];
-        }
-    }
-    else
-    {
-        // Old format: Load program from database object
-        
-        if ([self.post.program isDataAvailable])
-        {
-            self.titleCell.getProgramButton.enabled = YES;
-        }
-        else
-        {
-            [self.activityIndicator increaseActivity];
-            [self.post.program fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-                
-                [self.activityIndicator decreaseActivity];
-                if (object)
-                {
-                    self.titleCell.getProgramButton.enabled = YES;
-                }
-                else if (error)
-                {
-                    [self showAlertWithTitle:@"Could not load source code." message:error.userInfo[@"error"] block:nil];
-                }
-                
-            }];
-        }
-    }
-}
-
-- (void)loadStatsForceReload:(BOOL)forceReload
-{
-    if (self.post.stats && (!self.post.stats.isDataAvailable || forceReload))
-    {
-        [self.activityIndicator increaseActivity];
-        [self.post.stats fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-            
-            [self.activityIndicator decreaseActivity];
-            if (object)
-            {
-                self.titleCell.likeCount = self.post.stats.numLikes;
-                self.titleCell.downloadCount = self.post.stats.numDownloads;
-            }
-            else if (error)
-            {
-                [self showAlertWithTitle:@"Could not load statistics." message:error.userInfo[@"error"] block:nil];
-            }
-            
-        }];
-    }
-}
-
-- (void)loadLike
-{
-    if (![PFUser currentUser])
-    {
-        // "like" tap will ask for log-in.
-        self.titleCell.likeButton.enabled = YES;
-    }
-    else if (![self.post.user isMe])
-    {
-        PFQuery *query = [PFQuery queryWithClassName:[LCCCount parseClassName]];
-        [query whereKey:@"post" equalTo:self.post];
-        [query whereKey:@"type" equalTo:@(LCCCountTypeLike)];
-        [query whereKey:@"user" equalTo:[PFUser currentUser]];
-        
-        [self.activityIndicator increaseActivity];
-        [query countObjectsInBackgroundWithBlock:^(int number, NSError *PF_NULLABLE_S error) {
-            
-            if (error)
-            {
-                NSLog(@"Error: %@", error.description);
-            }
-            else if (number > 0)
-            {
-                [self.titleCell likeIt];
-            }
-            else
-            {
-                self.titleCell.likeButton.enabled = YES;
-            }
-            [self.activityIndicator decreaseActivity];
-            
-        }];
-    }
 }
 
 - (void)onUserChanged:(NSNotification *)notification
@@ -413,14 +251,14 @@ typedef NS_ENUM(NSInteger, Section) {
 
 - (IBAction)onLikeTapped:(id)sender
 {
-    if (![PFUser currentUser])
+    if (![CommunityModel sharedInstance].currentUser)
     {
         CommLogInViewController *vc = [CommLogInViewController create];
         [self presentInNavigationViewController:vc];
     }
-    else if (![self.post.user isMe])
+    else if (![self.user isMe])
     {
-        [[CommunityModel sharedInstance] countPost:self.post type:StatsTypeLike];
+        [[CommunityModel sharedInstance] likePost:self.post];
     }
 }
 
@@ -439,31 +277,28 @@ typedef NS_ENUM(NSInteger, Section) {
 
 - (void)share
 {
-    LCCPost *post = [LCCPost object];
-    post.user = (LCCUser *)[PFUser currentUser];
+    LCCPost *post = [[LCCPost alloc] init];
     post.type = LCCPostTypeShare;
     post.category = self.post.category;
     post.image = self.post.image;
     post.title = self.post.title;
-    post.detail = self.post.detail;
     post.stats = self.post.stats;
-    post.sharedPost = self.post;
+    post.sharedPost = self.post.objectId;
     
-    [self.activityIndicator increaseActivity];
-    [post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+    [BlockerView show];
+    
+    NSString *route = [NSString stringWithFormat:@"/users/%@/posts", [CommunityModel sharedInstance].currentUser.objectId];
+    NSDictionary *params = [post dirtyDictionary];
+    [[CommunityModel sharedInstance].sessionManager POST:route parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         
-        [self.activityIndicator decreaseActivity];
-        if (succeeded)
-        {
-            [[CommunityModel sharedInstance] onPostedWithDate:post.createdAt];
-            [PFQuery clearAllCachedResults];
-            
-            [self showAlertWithTitle:@"Shared successfully." message:nil block:nil];
-        }
-        else if (error)
-        {
-            [self showAlertWithTitle:@"Could not share post." message:error.userInfo[@"error"] block:nil];
-        }
+        [BlockerView dismiss];
+//        [PFQuery clearAllCachedResults];
+        [self showAlertWithTitle:@"Shared successfully." message:nil block:nil];
+        
+    } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+        
+        [BlockerView dismiss];
+        [self showAlertWithTitle:@"Could not share post." message:error.presentableError.localizedDescription block:nil];
         
     }];
 }
@@ -476,61 +311,58 @@ typedef NS_ENUM(NSInteger, Section) {
     {
         [self.view endEditing:YES];
         
-        [self.activityIndicator increaseActivity];
+        [BlockerView show];
         
         UIButton *button = (UIButton *)sender;
         button.enabled = NO;
+
+        LCCUser *currentUser = [CommunityModel sharedInstance].currentUser;
+        self.commentUsersById[currentUser.objectId] = currentUser;
         
         // Comment
-        LCCComment *comment = [LCCComment object];
-        comment.user = (LCCUser *)[PFUser currentUser];
-        comment.post = self.post;
+        LCCComment *comment = [[LCCComment alloc] init];
+        comment.user = currentUser.objectId;
         comment.text = commentText;
         
-        // Stats
-        if (!self.post.stats)
-        {
-            self.post.stats = [LCCPostStats object];
-        }
-        [self.post.stats incrementKey:@"numComments"];
         
-        // UI Notification
-        [[NSNotificationCenter defaultCenter] postNotificationName:PostCounterChangeNotification object:self userInfo:@{@"postId":self.post.objectId, @"type":@(StatsTypeComment)}];
+        NSString *route = [NSString stringWithFormat:@"/posts/%@/comments", self.post.objectId];
+        NSDictionary *params = [comment dirtyDictionary];
         
-        // Save to server
-        [PFObject saveAllInBackground:@[comment, self.post.stats] block:^(BOOL succeeded, NSError * _Nullable error) {
-            
-            [self.activityIndicator decreaseActivity];
-            
-            if (succeeded)
-            {
-                [self.writeCommentCell reset];
+        [[CommunityModel sharedInstance].sessionManager POST:route parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
 
-                [self.comments addObject:comment];
-                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.comments.count - 1 inSection:1];
-                
-                if (self.comments.count == 1)
-                {
-                    // first comment (need to refresh headers)
-                    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
-                }
-                else
-                {
-                    // later comment
-                    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-                }
-                
-                [[CommunityModel sharedInstance] trackEvent:@"comment" forPost:self.post];
-                
-                [[AppController sharedController] registerForNotifications];
-                
-                [PFQuery clearAllCachedResults];
-            }
-            else if (error)
+            [BlockerView dismiss];
+            [comment updateWithDictionary:responseObject[@"comment"]];
+            [comment resetDirty];
+            
+            LCCPostStats *stats = [[LCCPostStats alloc] initWithDictionary:responseObject[@"postStats"]];
+            [[NSNotificationCenter defaultCenter] postNotificationName:PostStatsChangeNotification object:self userInfo:@{@"stats":stats}];
+            
+            [self.writeCommentCell reset];
+            
+            [self.comments addObject:comment];
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.comments.count - 1 inSection:1];
+            
+            if (self.comments.count == 1)
             {
-                [self showAlertWithTitle:@"Could not send comment." message:error.userInfo[@"error"] block:nil];
+                // first comment (need to refresh headers)
+                [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
             }
+            else
+            {
+                // later comment
+                [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            }
+            
+            [[AppController sharedController] registerForNotifications];
+            
+//            [PFQuery clearAllCachedResults];
+            
+            button.enabled = YES;
 
+        } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+
+            [BlockerView dismiss];
+            [self showAlertWithTitle:@"Could not send comment." message:error.presentableError.localizedDescription block:nil];
             button.enabled = YES;
             
         }];
@@ -539,23 +371,20 @@ typedef NS_ENUM(NSInteger, Section) {
 
 - (void)deletePost
 {
-    [self.activityIndicator increaseActivity];
-    self.view.userInteractionEnabled = NO;
+    [BlockerView show];
     
-    [self.post deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        
-        [self.activityIndicator decreaseActivity];
-        self.view.userInteractionEnabled = YES;
-        if (succeeded)
-        {
-            [PFQuery clearAllCachedResults];
-            [[NSNotificationCenter defaultCenter] postNotificationName:PostDeleteNotification object:self userInfo:@{@"postId": self.post.objectId}];
-        }
-        else if (error)
-        {
-            [self showAlertWithTitle:@"Could not delete post." message:error.userInfo[@"error"] block:nil];
-        }
-        
+    NSString *route = [NSString stringWithFormat:@"/posts/%@", self.post.objectId];
+    [[CommunityModel sharedInstance].sessionManager DELETE:route parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+
+        [BlockerView dismiss];
+//        [PFQuery clearAllCachedResults];
+        [[NSNotificationCenter defaultCenter] postNotificationName:PostDeleteNotification object:self userInfo:@{@"postId": self.post.objectId}];
+
+    } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+
+        [BlockerView dismiss];
+        [self showAlertWithTitle:@"Could not delete post." message:error.presentableError.localizedDescription block:nil];
+
     }];
 }
 
@@ -588,7 +417,7 @@ typedef NS_ENUM(NSInteger, Section) {
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return ([self.post isDataAvailable] ? Section_count : 0);
+    return (self.comments != nil ? Section_count : 0);
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -597,7 +426,7 @@ typedef NS_ENUM(NSInteger, Section) {
     if (section == SectionTitle)
     {
         NSInteger num = (self.post.type == LCCPostTypeProgram ? 3 : 2);
-        if ([self.post.user isMe])
+        if ([self.user isMe])
         {
             num++; // "delete" cell
         }
@@ -622,12 +451,16 @@ typedef NS_ENUM(NSInteger, Section) {
     }
     else if (section == SectionComments)
     {
-        return (self.isLoadingComments) ? @"Loading Comments..." : (self.comments.count > 0) ? @"Comments" : @"No Comments Yet";
+        return (self.comments.count > 0) ? @"Comments" : @"No Comments Yet";
     }
     else if (section == SectionWriteComment)
     {
-        NSString *name = ([PFUser currentUser] ? [PFUser currentUser].username : @"Guest");
-        return [NSString stringWithFormat:@"Write a Comment (as %@)", name];
+        LCCUser *currentUser = [CommunityModel sharedInstance].currentUser;
+        if (currentUser)
+        {
+            return [NSString stringWithFormat:@"Write a Comment (as %@)", currentUser.username];
+        }
+        return @"Write a Comment (Not Logged In)";
     }
     return nil;
 }
@@ -643,7 +476,7 @@ typedef NS_ENUM(NSInteger, Section) {
         else if (indexPath.row == 1)
         {
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MenuCell" forIndexPath:indexPath];
-            cell.textLabel.text = [NSString stringWithFormat:@"By %@", [self.post.user isDataAvailable] ? self.post.user.username : @"..."];
+            cell.textLabel.text = [NSString stringWithFormat:@"By %@", self.user.username];
             cell.tag = CellTagPostAuthor;
             return cell;
         }
@@ -667,14 +500,25 @@ typedef NS_ENUM(NSInteger, Section) {
     {
         CommentCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommentCell" forIndexPath:indexPath];
         cell.delegate = self;
-        cell.comment = self.comments[indexPath.row];
+        LCCComment *comment = self.comments[indexPath.row];
+        [cell setComment:comment user:self.commentUsersById[comment.user]];
         return cell;
     }
     else if (indexPath.section == SectionWriteComment)
     {
-        return self.writeCommentCell;
-    }
+        if ([CommunityModel sharedInstance].currentUser)
+        {
+            return self.writeCommentCell;
+        }
+        else
+        {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"LoginCell" forIndexPath:indexPath];
+            cell.textLabel.text = @"Log In / Register";
+            cell.tag = CellTagLogin;
+            return cell;
 
+        }
+    }
     return nil;
 }
 
@@ -685,27 +529,13 @@ typedef NS_ENUM(NSInteger, Section) {
     switch (cell.tag)
     {
         case CellTagSourceCode: {
-            if ([self.post isDataAvailable] && ([self.post.program isDataAvailable] || [self.post.programFile isDataAvailable]))
-            {
-                CommSourceCodeViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"CommSourceCodeView"];
-                vc.post = self.post;
-                [self.navigationController pushViewController:vc animated:YES];
-            }
-            else
-            {
-                [tableView deselectRowAtIndexPath:indexPath animated:YES];
-            }
+            CommSourceCodeViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"CommSourceCodeView"];
+            vc.post = self.post;
+            [self.navigationController pushViewController:vc animated:YES];
             break;
         }
         case CellTagPostAuthor: {
-            if ([self.post.user isDataAvailable])
-            {
-                [self showUser:self.post.user];
-            }
-            else
-            {
-                [tableView deselectRowAtIndexPath:indexPath animated:YES];
-            }
+            [self showUser:self.user];
             break;
         }
         case CellTagDelete: {
@@ -719,6 +549,12 @@ typedef NS_ENUM(NSInteger, Section) {
             [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDefault handler:nil]];
             
             [self presentViewController:alert animated:YES completion:nil];
+            [tableView deselectRowAtIndexPath:indexPath animated:YES];
+            break;
+        }
+        case CellTagLogin: {
+            CommLogInViewController *vc = [CommLogInViewController create];
+            [self presentInNavigationViewController:vc];
             [tableView deselectRowAtIndexPath:indexPath animated:YES];
             break;
         }
@@ -757,64 +593,35 @@ typedef NS_ENUM(NSInteger, Section) {
     self.detailTextView.textContainer.lineFragmentPadding = 0;
     self.detailTextView.textContainerInset = UIEdgeInsetsZero;
     
-    if (self.getProgramButton)
-    {
-        self.getProgramButton.enabled = NO;
-    }
-    
     self.likeButton.enabled = NO;
     
-    LCCUser *currentUser = (LCCUser *)[PFUser currentUser];
+    LCCUser *currentUser = [CommunityModel sharedInstance].currentUser;
     self.shareButton.hidden = ![currentUser isNewsUser];
 }
 
-- (void)setPost:(LCCPost *)post
+- (void)setPost:(LCCPost *)post user:(LCCUser *)user
 {
-    if (post != _post)
+    if (post.image)
     {
-        _post = post;
-        if (post.image)
-        {
-            [self.programImage sd_setImageWithURL:[NSURL URLWithString:post.image.url]];
-        }
-        self.titleTextView.text = post.title;
-        self.detailTextView.text = [post.detail stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-        
-        self.dateLabel.text = [NSDateFormatter localizedStringFromDate:post.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
-        
-        self.shareButton.enabled = ![post.user isMe];
-        
-        if (post.stats.isDataAvailable)
-        {
-            self.likeCount = post.stats.numLikes;
-            self.downloadCount = post.stats.numDownloads;
-        }
-        else
-        {
-            self.likeCount = 0;
-            self.downloadCount = 0;
-        }
+        [self.programImage sd_setImageWithURL:post.image];
     }
+    self.titleTextView.text = post.title;
+    self.detailTextView.text = [post.detail stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+    self.dateLabel.text = [NSDateFormatter localizedStringFromDate:post.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
+    
+    self.shareButton.enabled = ![user isMe];
 }
 
-- (void)setLikeCount:(NSInteger)likeCount
+- (void)setStats:(LCCPostStats *)stats
 {
-    _likeCount = likeCount;
-    self.likeCountLabel.text = [NSString stringWithFormat:@"%ld", (long)likeCount];
-}
-
-- (void)setDownloadCount:(NSInteger)downloadCount
-{
-    _downloadCount = downloadCount;
-    if (self.downloadCountLabel)
-    {
-        self.downloadCountLabel.text = [NSString stringWithFormat:@"%ld", (long)downloadCount];
-    }
+    self.likeCountLabel.text = [NSString stringWithFormat:@"%ld", (long)stats.numLikes];
+    self.downloadCountLabel.text = [NSString stringWithFormat:@"%ld", (long)stats.numDownloads];
 }
 
 - (void)likeIt
 {
-    [self.likeButton setTitle:@"You like this" forState:UIControlStateNormal];
+    [self.likeButton setTitle:@"Liked ✓" forState:UIControlStateNormal];
     self.likeButton.enabled = NO;
 }
 
@@ -825,6 +632,7 @@ typedef NS_ENUM(NSInteger, Section) {
 @property (weak, nonatomic) IBOutlet UIButton *nameButton;
 @property (weak, nonatomic) IBOutlet UITextView *textView;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
+@property (nonatomic) LCCUser *user;
 @end
 
 @implementation CommentCell
@@ -837,12 +645,12 @@ typedef NS_ENUM(NSInteger, Section) {
     self.tag = CellTagNoAction;
 }
 
-- (void)setComment:(LCCComment *)comment
+- (void)setComment:(LCCComment *)comment user:(LCCUser *)user
 {
-    _comment = comment;
-    if (comment.user)
+    _user = user;
+    if (user)
     {
-        [self.nameButton setTitle:comment.user.username forState:UIControlStateNormal];
+        [self.nameButton setTitle:user.username forState:UIControlStateNormal];
         self.nameButton.enabled = YES;
     }
     else
@@ -856,7 +664,7 @@ typedef NS_ENUM(NSInteger, Section) {
 
 - (IBAction)onNameTapped:(id)sender
 {
-    [self.delegate showUser:self.comment.user];
+    [self.delegate showUser:self.user];
 }
 
 @end

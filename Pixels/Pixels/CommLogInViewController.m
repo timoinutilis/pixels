@@ -11,6 +11,7 @@
 #import "UIViewController+LowResCoder.h"
 #import "GORCycleManager.h"
 #import "AppController.h"
+#import "ActionTableViewCell.h"
 
 @interface CommLogInViewController () <UITextFieldDelegate>
 
@@ -18,11 +19,11 @@
 
 @property CommLogInInputCell *logInUsernameCell;
 @property CommLogInInputCell *logInPasswordCell;
-@property CommLogInButtonCell *logInButtonCell;
+@property ActionTableViewCell *logInButtonCell;
 @property CommLogInInputCell *registerUsernameCell;
 @property CommLogInInputCell *registerPasswordCell;
 @property CommLogInInputCell *registerPasswordVerifyCell;
-@property CommLogInButtonCell *registerButtonCell;
+@property ActionTableViewCell *registerButtonCell;
 
 @property (nonatomic) BOOL isBusy;
 @property GORCycleManager *loginCycleManager;
@@ -137,7 +138,7 @@
         }];
         return;
     }
-    if (password.length < 4)
+    if (password.length < 6)
     {
         [self showAlertWithTitle:(password.length == 0 ? @"Please enter a password!" : @"Please enter a longer password!") message:nil block:^{
             [self.registerPasswordCell.textField becomeFirstResponder];
@@ -161,36 +162,23 @@
         return;
     }
     
-    LCCUser *user = (LCCUser *)[PFUser user];
+    LCCUser *user = [[LCCUser alloc] init];
     user.username = username;
     user.password = password;
     
     [self setBusy:YES];
     [self.registerButtonCell setDisabled:YES wheel:YES];
-
-    [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        
+    
+    [[CommunityModel sharedInstance] signUpWithUser:user completion:^(BOOL succeeded, NSError *error) {
+        [self setBusy:NO];
         if (succeeded)
         {
-            LCCFollow *defaultFollow = [LCCFollow object];
-            NSString *newsUserID = [[NSBundle mainBundle] objectForInfoDictionaryKey:LowResNewsUserIDKey];
-            defaultFollow.user = user;
-            defaultFollow.followsUser = [LCCUser objectWithoutDataWithObjectId:newsUserID];
-            
-            [defaultFollow saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                
-                //TODO fail handling, but not here...
-                [self setBusy:NO];
-                [self loggedInWithUsername:username];
-                
-            }];
+            [self loggedInWithUsername:username];
         }
-        else if (error)
+        else
         {
-            [self setBusy:NO];
-            [self showAlertWithTitle:@"Could not register" message:error.userInfo[@"error"] block:nil];
+            [self showAlertWithTitle:@"Could not register" message:error.presentableError.localizedDescription block:nil];
         }
-        
     }];
 }
 
@@ -217,18 +205,16 @@
     [self setBusy:YES];
     [self.logInButtonCell setDisabled:YES wheel:YES];
     
-    [PFUser logInWithUsernameInBackground:username password:password block:^(PFUser *user, NSError *error) {
-       
+    [[CommunityModel sharedInstance] logInWithUsername:username password:password completion:^(BOOL succeeded, NSError *error) {
         [self setBusy:NO];
-        if (user)
+        if (succeeded)
         {
             [self loggedInWithUsername:username];
         }
         else if (error)
         {
-            [self showAlertWithTitle:@"Could not log in" message:error.userInfo[@"error"] block:nil];
+            [self showAlertWithTitle:@"Could not log in" message:error.presentableError.localizedDescription block:nil];
         }
-        
     }];
 }
 
@@ -236,8 +222,6 @@
 {
     NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
     [storage setObject:username forKey:UserDefaultsLogInKey];
-    
-    [[CommunityModel sharedInstance] onLoggedIn];
     
     [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
         [[AppController sharedController] registerForNotifications];
@@ -259,42 +243,6 @@
 {
     self.textField.secureTextEntry = YES;
     self.textField.placeholder = verify ? @"Repeat password" : @"Password";
-}
-
-@end
-
-@implementation CommLogInButtonCell
-
-- (void)awakeFromNib
-{
-    [super awakeFromNib];
-    self.textLabel.textColor = self.contentView.tintColor;
-}
-
-- (void)tintColorDidChange
-{
-    [super tintColorDidChange];
-    self.textLabel.textColor = self.contentView.tintColor;
-}
-
-- (void)setDisabled:(BOOL)disabled wheel:(BOOL)wheel
-{
-    if (disabled)
-    {
-        self.textLabel.textColor = [UIColor grayColor];
-        if (wheel)
-        {
-            UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-            [indicator startAnimating];
-            self.accessoryView = indicator;
-        }
-    }
-    else
-    {
-        self.textLabel.textColor = self.contentView.tintColor;
-        self.accessoryView = nil;
-    }
-    [self layoutIfNeeded];
 }
 
 @end

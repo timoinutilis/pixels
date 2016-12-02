@@ -7,7 +7,6 @@
 //
 
 #import "LCCNotification.h"
-#import <Parse/PFObject+Subclass.h>
 
 @implementation LCCNotification
 
@@ -16,9 +15,7 @@
 @dynamic recipient;
 @dynamic post;
 
-+ (NSString *)parseClassName
-{
-    return @"Notification";
-}
+@synthesize senderObject = _senderObject;
+@synthesize postObject = _postObject;
 
 @end

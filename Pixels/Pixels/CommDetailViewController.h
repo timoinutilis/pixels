@@ -10,7 +10,7 @@
 #import "GORTextView.h"
 #import "LCCPost.h"
 
-@class LCCUser;
+@class LCCUser, LCCPostStats;
 
 typedef NS_ENUM(NSInteger, CommListMode) {
     CommListModeUndefined = 0,
@@ -35,19 +35,14 @@ typedef NS_ENUM(NSInteger, CommListMode) {
 @property (weak, nonatomic) IBOutlet UILabel *infoTextLabel;
 @end
 
-@interface CommWriteStatusCell : UITableViewCell
-@property (weak, nonatomic) IBOutlet UITextField *titleTextField;
-@property (weak, nonatomic) IBOutlet GORTextView *textView;
-@property (weak, nonatomic) IBOutlet UILabel *detailPlaceholderLabel;
-@end
-
 @interface CommFilterCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
 - (void) setPostCategory:(LCCPostCategory)postCategory;
 @end
 
 @interface CommPostCell : UITableViewCell
-@property BOOL showName;
-@property (nonatomic) LCCPost *post;
+@property (nonatomic, readonly) LCCPost *post;
+@property (nonatomic, readonly) LCCUser *user;
+- (void)setPost:(LCCPost *)post user:(LCCUser *)user showName:(BOOL)showName;
 - (void)setStats:(LCCPostStats *)stats;
 @end

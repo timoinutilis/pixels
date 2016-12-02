@@ -13,6 +13,7 @@
 #import "UIViewController+LowResCoder.h"
 #import "UIViewController+CommUtils.h"
 #import "AppController.h"
+#import "ActionTableViewCell.h"
 
 typedef NS_ENUM(NSInteger, CellTag) {
     CellTagNews,
@@ -43,6 +44,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserChanged:) name:CurrentUserChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onFollowsChanged:) name:FollowsChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onFollowsChanged:) name:FollowsLoadNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNotificationsNumChanged:) name:NotificationsNumChangeNotification object:nil];
     
     self.newsIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
@@ -55,6 +57,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:CurrentUserChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:FollowsChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:FollowsLoadNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NotificationsNumChangeNotification object:nil];
 }
 
@@ -75,7 +78,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
 - (void)onUserChanged:(NSNotification *)notification
 {
     [self.tableView reloadData];
-    if (![PFUser currentUser] && ![self.currentSelection isEqual:self.newsIndexPath])
+    if (![CommunityModel sharedInstance].currentUser && ![self.currentSelection isEqual:self.newsIndexPath])
     {
         // show news
         self.currentSelection = self.newsIndexPath;
@@ -99,14 +102,17 @@ typedef NS_ENUM(NSInteger, CellTag) {
 
 - (void)onNotificationsNumChanged:(NSNotification *)notification
 {
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+    if ([CommunityModel sharedInstance].currentUser)
+    {
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+    }
 }
 
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3;
+    return ([CommunityModel sharedInstance].follows.count > 0 ? 3 : 2);
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -126,11 +132,11 @@ typedef NS_ENUM(NSInteger, CellTag) {
 {
     if (section == 0)
     {
-        return [PFUser currentUser] ? 2 : 1;
+        return [CommunityModel sharedInstance].currentUser ? 2 : 1;
     }
     else if (section == 1)
     {
-        return [PFUser currentUser] ? 2 : 1;
+        return [CommunityModel sharedInstance].currentUser ? 2 : 1;
     }
     else if (section == 2)
     {
@@ -171,7 +177,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
     {
         if (indexPath.row == 0)
         {
-            LCCUser *user = (LCCUser *)[PFUser currentUser];
+            LCCUser *user = [CommunityModel sharedInstance].currentUser;
             if (user)
             {
                 cell = [tableView dequeueReusableCellWithIdentifier:@"MenuCell" forIndexPath:indexPath];
@@ -183,6 +189,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
                 cell = [tableView dequeueReusableCellWithIdentifier:@"ActionCell" forIndexPath:indexPath];
                 cell.textLabel.text = @"Log In / Register";
                 cell.tag = CellTagLogIn;
+                [((ActionTableViewCell *)cell) setDisabled:NO wheel:NO];
             }
         }
         else if (indexPath.row == 1)
@@ -194,9 +201,9 @@ typedef NS_ENUM(NSInteger, CellTag) {
     }
     else if (indexPath.section == 2)
     {
-        LCCFollow *follow = [CommunityModel sharedInstance].follows[indexPath.row];
+        LCCUser *followUser = [CommunityModel sharedInstance].follows[indexPath.row];
         cell = [tableView dequeueReusableCellWithIdentifier:@"MenuCell" forIndexPath:indexPath];
-        cell.textLabel.text = follow.followsUser.username;
+        cell.textLabel.text = followUser.username;
         cell.tag = CellTagFollowing;
     }
     
@@ -217,16 +224,8 @@ typedef NS_ENUM(NSInteger, CellTag) {
         }
         case CellTagLogOut: {
             [tableView deselectRowAtIndexPath:indexPath animated:YES];
-            [PFUser logOutInBackgroundWithBlock:^(NSError *error) {
-                if (error)
-                {
-                    [self showAlertWithTitle:@"Could not log out" message:error.userInfo[@"error"] block:nil];
-                }
-                else
-                {
-                    [[CommunityModel sharedInstance] onLoggedOut];
-                }
-            }];
+            [((ActionTableViewCell *)cell) setDisabled:YES wheel:YES];
+            [[CommunityModel sharedInstance] logOut];
             break;
         }
         default: {
@@ -253,40 +252,22 @@ typedef NS_ENUM(NSInteger, CellTag) {
         switch (cell.tag)
         {
             case CellTagNews: {
-                LCCUser *user = (LCCUser *)[PFUser currentUser];
+                LCCUser *user = [CommunityModel sharedInstance].currentUser;
                 [vc setUser:user mode:CommListModeNews];
                 break;
             }
             case CellTagAccount: {
-                LCCUser *user = (LCCUser *)[PFUser currentUser];
+                LCCUser *user = [CommunityModel sharedInstance].currentUser;
                 [vc setUser:user mode:CommListModeProfile];
                 break;
             }
             case CellTagFollowing: {
-                LCCFollow *follow = [CommunityModel sharedInstance].follows[indexPath.row];
-                LCCUser *user = follow.followsUser;
-                [vc setUser:user mode:CommListModeProfile];
+                LCCUser *followUser = [CommunityModel sharedInstance].follows[indexPath.row];
+                [vc setUser:followUser mode:CommListModeProfile];
                 break;
             }
         }
     }
-}
-
-@end
-
-
-@implementation CommMasterActionCell
-
-- (void)awakeFromNib
-{
-    [super awakeFromNib];
-    self.textLabel.textColor = self.contentView.tintColor;
-}
-
-- (void)tintColorDidChange
-{
-    [super tintColorDidChange];
-    self.textLabel.textColor = self.contentView.tintColor;
 }
 
 @end

@@ -6,12 +6,15 @@
 //  Copyright (c) 2015 Inutilis Software. All rights reserved.
 //
 
-#import <Parse/Parse.h>
+#import "APIObject.h"
 
 extern NSString *const LowResNewsUserIDKey;
 
-@interface LCCUser : PFUser<PFSubclassing>
+@interface LCCUser : APIObject
 
+@property (retain) NSString *username;
+@property (retain) NSString *password;
+@property (retain) NSString *sessionToken;
 @property (retain) NSString *about;
 @property (retain) NSDate *lastPostDate;
 @property (retain) NSDate *notificationsOpenedDate;

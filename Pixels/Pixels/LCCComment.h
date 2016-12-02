@@ -6,14 +6,12 @@
 //  Copyright (c) 2015 Inutilis Software. All rights reserved.
 //
 
-#import <Parse/Parse.h>
+#import "APIObject.h"
 
-@class LCCUser, LCCPost;
+@interface LCCComment : APIObject
 
-@interface LCCComment : PFObject<PFSubclassing>
-
-@property (retain) LCCUser *user;
-@property (retain) LCCPost *post;
+@property (retain) NSString *user;
+@property (retain) NSString *post;
 @property (retain) NSString *text;
 
 @end

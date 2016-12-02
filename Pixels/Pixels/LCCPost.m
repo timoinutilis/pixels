@@ -7,7 +7,13 @@
 //
 
 #import "LCCPost.h"
-#import "LCCProgram.h"
+#import "CommunityModel.h"
+
+@interface LCCPost()
+@property (nonatomic) NSString *sourceCode;
+@property (nonatomic) BOOL isLoadingSourceCode;
+@property (nonatomic) NSMutableArray<LCCPostLoadSourceCodeBlock> *blocks;
+@end
 
 @implementation LCCPost
 
@@ -18,14 +24,8 @@
 @dynamic title;
 @dynamic detail;
 @dynamic program;
-@dynamic programFile;
 @dynamic sharedPost;
 @dynamic stats;
-
-+ (NSString *)parseClassName
-{
-    return @"Post";
-}
 
 - (NSString *)categoryString
 {
@@ -44,16 +44,50 @@
     }
 }
 
-- (NSString *)sourceCode
+- (BOOL)isSourceCodeLoaded
 {
-    if (self.programFile)
-    {
-        // new format
-        return [[NSString alloc] initWithData:[self.programFile getData] encoding:NSUTF8StringEncoding];
-    }
+    return self.sourceCode;
+}
 
-    // old format
-    return self.program.sourceCode;
+- (void)loadSourceCodeWithCompletion:(LCCPostLoadSourceCodeBlock)block
+{
+    if (self.sourceCode)
+    {
+        block(self.sourceCode, nil);
+    }
+    else
+    {
+        if (self.blocks == nil)
+        {
+            self.blocks = [NSMutableArray array];
+        }
+        [self.blocks addObject:block];
+        
+        if (!self.isLoadingSourceCode)
+        {
+            NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+            
+            [[session dataTaskWithURL:self.program completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (response)
+                    {
+                        self.sourceCode = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                    }
+                    else
+                    {
+                        NSLog(@"Error: %@", error.localizedDescription);
+                    }
+                    for (LCCPostLoadSourceCodeBlock block in self.blocks)
+                    {
+                        block(self.sourceCode, error);
+                    }
+                    self.blocks = nil;
+                });
+                
+            }] resume];
+        }
+    }
 }
 
 @end

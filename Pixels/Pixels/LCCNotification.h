@@ -6,22 +6,25 @@
 //  Copyright © 2015 Inutilis Software. All rights reserved.
 //
 
-#import <Parse/Parse.h>
+#import "APIObject.h"
 
-typedef NS_ENUM(NSInteger, LCCNotificationType) {
+@class LCCUser, LCCPost;
+
+typedef NS_ENUM(int, LCCNotificationType) {
     LCCNotificationTypeComment,
     LCCNotificationTypeLike,
     LCCNotificationTypeShare,
     LCCNotificationTypeFollow
 };
 
-@class LCCUser, LCCPost;
-
-@interface LCCNotification : PFObject<PFSubclassing>
+@interface LCCNotification : APIObject
 
 @property (nonatomic) LCCNotificationType type;
-@property (nonatomic, retain) LCCUser *sender;
-@property (nonatomic, retain) LCCUser *recipient;
-@property (nonatomic, retain) LCCPost *post;
+@property (nonatomic, retain) NSString *sender;
+@property (nonatomic, retain) NSString *recipient;
+@property (nonatomic, retain) NSString *post;
+
+@property (nonatomic) LCCUser *senderObject;
+@property (nonatomic) LCCPost *postObject;
 
 @end

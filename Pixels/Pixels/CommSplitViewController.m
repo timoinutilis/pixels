@@ -55,7 +55,7 @@
     {
         [AppController sharedController].shouldShowPostId = nil;
         
-        LCCPost *post = [LCCPost objectWithoutDataWithClassName:[LCCPost parseClassName] objectId:postId];
+        LCCPost *post = [[LCCPost alloc] initWithObjectId:postId];
         
         CommPostViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"CommPostView"];
         [vc setPost:post mode:CommPostModePost];

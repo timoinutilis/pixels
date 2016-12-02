@@ -13,6 +13,7 @@
 #import "ExplorerViewController.h"
 #import "AppController.h"
 #import "TabBarController.h"
+#import "BlockerView.h"
 
 const NSTimeInterval MAX_CACHE_AGE = 1 * 60 * 60;
 
@@ -23,7 +24,7 @@ const NSTimeInterval MAX_CACHE_AGE = 1 * 60 * 60;
     if ([[ModelManager sharedManager] hasProjectWithPostId:post.objectId])
     {
         id __weak weakSelf = self;
-        [self showConfirmAlertWithTitle:@"Do you want to get another copy?" message:@"You already got this program." block:^{
+        [self showConfirmAlertWithTitle:@"Do you want to get another copy?" message:@"You already downloaded this program." block:^{
             [weakSelf addProgramOfPost:post];
         }];
     }
@@ -35,28 +36,47 @@ const NSTimeInterval MAX_CACHE_AGE = 1 * 60 * 60;
 
 - (void)addProgramOfPost:(LCCPost *)post
 {
-    Project *project = [[ModelManager sharedManager] createNewProjectInFolder:[ModelManager sharedManager].currentDownloadFolder];
-    project.name = post.title;
-    project.sourceCode = [post sourceCode];
-    project.postId = post.objectId;
-    
-    if (![post.user isMe])
+    if (!post.isSourceCodeLoaded)
     {
-        [[CommunityModel sharedInstance] countPost:post type:StatsTypeDownload];
+        [BlockerView show];
     }
     
-    BOOL root = (project.parent == [ModelManager sharedManager].rootFolder);
-    
-    if ([self isModal])
-    {
-        [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
-            [[AppController sharedController].tabBarController showExplorerAnimated:YES root:root];
-        }];
-    }
-    else
-    {
-        [[AppController sharedController].tabBarController showExplorerAnimated:NO root:root];
-    }
+    [post loadSourceCodeWithCompletion:^(NSString *sourceCode, NSError *error) {
+        
+        [BlockerView dismiss];
+        if (sourceCode)
+        {
+            Project *project = [[ModelManager sharedManager] createNewProjectInFolder:[ModelManager sharedManager].currentDownloadFolder];
+            project.name = post.title;
+            project.sourceCode = sourceCode;
+            project.postId = post.objectId;
+            
+            LCCUser *currentUser = [CommunityModel sharedInstance].currentUser;
+            
+            if (!currentUser || ![post.user isEqualToString:currentUser.objectId])
+            {
+                [[CommunityModel sharedInstance] countDownloadPost:post];
+            }
+            
+            BOOL root = (project.parent == [ModelManager sharedManager].rootFolder);
+            
+            if ([self isModal])
+            {
+                [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
+                    [[AppController sharedController].tabBarController showExplorerAnimated:YES root:root];
+                }];
+            }
+            else
+            {
+                [[AppController sharedController].tabBarController showExplorerAnimated:NO root:root];
+            }
+        }
+        else
+        {
+            [self showAlertWithTitle:@"Could not download program." message:error.presentableError.localizedDescription block:nil];
+        }
+        
+    }];
 }
 
 - (BOOL)isModal

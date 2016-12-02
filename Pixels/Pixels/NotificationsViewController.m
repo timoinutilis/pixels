@@ -54,7 +54,7 @@
 {
     [super viewWillAppear:animated];
     
-    self.unreadDate = ((LCCUser *)[PFUser currentUser]).notificationsOpenedDate;
+    self.unreadDate = [CommunityModel sharedInstance].currentUser.notificationsOpenedDate;
     [[CommunityModel sharedInstance] onOpenNotifications];
 }
 
@@ -77,7 +77,7 @@
         [self.tableView reloadDataAnimatedWithOldArray:oldNotifications newArray:self.notifications inSection:0 offset:0];
         [self.refreshControl endRefreshing];
         
-        self.unreadDate = ((LCCUser *)[PFUser currentUser]).notificationsOpenedDate;
+        self.unreadDate = [CommunityModel sharedInstance].currentUser.notificationsOpenedDate;
         [[CommunityModel sharedInstance] onOpenNotifications];
     }
 }
@@ -118,7 +118,7 @@
     {
         case LCCNotificationTypeComment: {
             CommPostViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"CommPostView"];
-            [vc setPost:notification.post mode:CommPostModePost];
+            [vc setPost:notification.postObject mode:CommPostModePost];
             [self.navigationController pushViewController:vc animated:YES];
             break;
         }
@@ -127,7 +127,7 @@
         case LCCNotificationTypeShare:
         case LCCNotificationTypeFollow: {
             CommDetailViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"CommDetailView"];
-            [vc setUser:notification.sender mode:CommListModeProfile];
+            [vc setUser:notification.senderObject mode:CommListModeProfile];
             [self.navigationController pushViewController:vc animated:YES];
             break;
         }
@@ -160,19 +160,19 @@
     _notification = notification;
     
     NSString *text;
-    NSString *name = (notification.sender != nil) ? notification.sender.username : @"A guest";
+    NSString *name = (notification.senderObject != nil) ? notification.senderObject.username : @"A guest";
     switch (notification.type)
     {
         case LCCNotificationTypeComment:
-            text = [NSString stringWithFormat:@"%@ commented on '%@'", name, notification.post.title];
+            text = [NSString stringWithFormat:@"%@ commented on '%@'", name, notification.postObject.title];
             break;
             
         case LCCNotificationTypeLike:
-            text = [NSString stringWithFormat:@"%@ likes '%@'", name, notification.post.title];
+            text = [NSString stringWithFormat:@"%@ likes '%@'", name, notification.postObject.title];
             break;
             
         case LCCNotificationTypeShare:
-            text = [NSString stringWithFormat:@"%@ shared '%@'", name, notification.post.title];
+            text = [NSString stringWithFormat:@"%@ shared '%@'", name, notification.postObject.title];
             break;
             
         case LCCNotificationTypeFollow:

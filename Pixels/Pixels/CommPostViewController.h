@@ -13,7 +13,7 @@ typedef NS_ENUM(NSInteger, CommPostMode) {
     CommPostModePost
 };
 
-@class LCCPost, LCCComment;
+@class LCCPost, LCCComment, LCCUser, LCCPostStats;
 
 @interface CommPostViewController : UITableViewController
 
@@ -26,15 +26,14 @@ typedef NS_ENUM(NSInteger, CommPostMode) {
 @property (weak, nonatomic) IBOutlet UIButton *getProgramButton;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 @property (weak, nonatomic) IBOutlet UIButton *shareButton;
-@property (nonatomic) LCCPost *post;
-@property (nonatomic) NSInteger likeCount;
-@property (nonatomic) NSInteger downloadCount;
+- (void)setPost:(LCCPost *)post user:(LCCUser *)user;
+- (void)setStats:(LCCPostStats *)stats;
 - (void)likeIt;
 @end
 
 @interface CommentCell : UITableViewCell
 @property (weak) CommPostViewController *delegate;
-@property (nonatomic) LCCComment *comment;
+- (void)setComment:(LCCComment *)comment user:(LCCUser *)user;
 @end
 
 @interface WriteCommentCell : UITableViewCell

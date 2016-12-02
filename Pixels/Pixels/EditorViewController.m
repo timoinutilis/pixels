@@ -549,7 +549,7 @@ typedef void(^InfoBlock)(void);
     }
     else
     {
-        LCCPost *post = [LCCPost objectWithoutDataWithClassName:[LCCPost parseClassName] objectId:self.project.postId];
+        LCCPost *post = [[LCCPost alloc] initWithObjectId:self.project.postId];
         [self showPost:post];
     }
 }

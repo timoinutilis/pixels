@@ -9,18 +9,16 @@
 #import <Foundation/Foundation.h>
 #import "LCCUser.h"
 #import "LCCPost.h"
-#import "LCCProgram.h"
 #import "LCCComment.h"
-#import "LCCFollow.h"
-#import "LCCCount.h"
 #import "LCCPostStats.h"
 #import "LCCNotification.h"
+#import "AFNetworking.h"
 
 extern NSString *const CurrentUserChangeNotification;
+extern NSString *const FollowsLoadNotification;
 extern NSString *const FollowsChangeNotification;
 extern NSString *const PostDeleteNotification;
-extern NSString *const PostCounterChangeNotification;
-extern NSString *const UserUpdateNotification;
+extern NSString *const PostStatsChangeNotification;
 extern NSString *const NotificationsUpdateNotification;
 extern NSString *const NotificationsNumChangeNotification;
 
@@ -32,31 +30,43 @@ typedef NS_ENUM(NSInteger, StatsType) {
     StatsTypeComment
 };
 
+typedef void (^LCCResultBlock)(BOOL succeeded, NSError *error);
+typedef void (^LCCUploadResultBlock)(NSURL *url, NSError *error);
+
 @interface CommunityModel : NSObject
 
-@property (readonly) NSMutableArray *follows;
-@property (readonly) BOOL isUpdatingUser;
-@property (readonly) NSMutableArray <LCCNotification *> *notifications;
-@property (readonly) BOOL isUpdatingNotifications;
-@property (readonly, nonatomic) NSInteger numNewNotifications;
+@property (nonatomic, readonly) AFHTTPSessionManager *sessionManager;
+@property (nonatomic, readonly) NSMutableArray<LCCUser *> *follows;
+@property (nonatomic, readonly) NSMutableArray <LCCNotification *> *notifications;
+@property (nonatomic, readonly) BOOL isUpdatingNotifications;
+@property (nonatomic, readonly) NSInteger numNewNotifications;
+@property (nonatomic, readonly) LCCUser *currentUser;
 
 + (CommunityModel *)sharedInstance;
-+ (void)registerSubclasses;
 
-- (void)onLoggedIn;
-- (void)onLoggedOut;
+- (void)signUpWithUser:(LCCUser *)user completion:(LCCResultBlock)completion;
+- (void)logInWithUsername:(NSString *)username password:(NSString *)password completion:(LCCResultBlock)completion;
+- (void)logOut;
+
 - (void)onUserDataChanged;
 - (void)updateCurrentUser;
-- (void)onPostedWithDate:(NSDate *)date;
 
 - (void)followUser:(LCCUser *)user;
 - (void)unfollowUser:(LCCUser *)user;
-- (LCCFollow *)followWithUser:(LCCUser *)user;
-- (NSArray *)arrayWithFollowedUsers;
-- (void)countPost:(LCCPost *)post type:(StatsType)type;
-- (void)trackEvent:(NSString *)name forPost:(LCCPost *)post;
+- (LCCUser *)userInFollowing:(LCCUser *)user;
+- (void)likePost:(LCCPost *)post;
+- (void)countDownloadPost:(LCCPost *)post;
 
 - (void)loadNotifications;
 - (void)onOpenNotifications;
+
+- (void)uploadFileWithName:(NSString *)filename data:(NSData *)data completion:(LCCUploadResultBlock)block;
+
+@end
+
+
+@interface NSError (CommunityModel)
+
+- (NSError *)presentableError;
 
 @end
