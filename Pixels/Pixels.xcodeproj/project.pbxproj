@@ -251,6 +251,8 @@
 		92EDC4421A54701D007824A5 /* Gamepad.m in Sources */ = {isa = PBXBuildFile; fileRef = 92EDC4411A54701D007824A5 /* Gamepad.m */; };
 		92F0C36A1B3EAF0B00000646 /* GORCycleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F0C3691B3EAF0B00000646 /* GORCycleManager.m */; };
 		92F0C36D1B3EBF6D00000646 /* Compiler.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F0C36C1B3EBF6D00000646 /* Compiler.m */; };
+		92F55A481DF22E7700BA6BE2 /* LimitedTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F55A471DF22E7700BA6BE2 /* LimitedTextView.m */; };
+		92F55A491DF22E7700BA6BE2 /* LimitedTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F55A471DF22E7700BA6BE2 /* LimitedTextView.m */; };
 		92F788881BF4B2C400F6996B /* UIImage+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F788851BF4B2C400F6996B /* UIImage+Utils.m */; };
 		92F788891BF4B2C400F6996B /* UITextView+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F788871BF4B2C400F6996B /* UITextView+Utils.m */; };
 		92FD58521DEB069200970C3A /* ActivityView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FD58511DEB069200970C3A /* ActivityView.xib */; };
@@ -510,6 +512,8 @@
 		92F0C3691B3EAF0B00000646 /* GORCycleManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GORCycleManager.m; sourceTree = "<group>"; };
 		92F0C36B1B3EBF6D00000646 /* Compiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Compiler.h; sourceTree = "<group>"; };
 		92F0C36C1B3EBF6D00000646 /* Compiler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Compiler.m; sourceTree = "<group>"; };
+		92F55A461DF22E7700BA6BE2 /* LimitedTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LimitedTextView.h; sourceTree = "<group>"; };
+		92F55A471DF22E7700BA6BE2 /* LimitedTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LimitedTextView.m; sourceTree = "<group>"; };
 		92F788841BF4B2C400F6996B /* UIImage+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+Utils.h"; path = "Class Utils/UIImage+Utils.h"; sourceTree = "<group>"; };
 		92F788851BF4B2C400F6996B /* UIImage+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Utils.m"; path = "Class Utils/UIImage+Utils.m"; sourceTree = "<group>"; };
 		92F788861BF4B2C400F6996B /* UITextView+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UITextView+Utils.h"; path = "Class Utils/UITextView+Utils.h"; sourceTree = "<group>"; };
@@ -616,6 +620,8 @@
 				92FD58581DEB502200970C3A /* BlockerView.xib */,
 				92FD585B1DEB503400970C3A /* BlockerView.h */,
 				92FD585C1DEB503400970C3A /* BlockerView.m */,
+				92F55A461DF22E7700BA6BE2 /* LimitedTextView.h */,
+				92F55A471DF22E7700BA6BE2 /* LimitedTextView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1228,6 +1234,7 @@
 				92884F281B0F25B30032623D /* UIView+WebCacheOperation.m in Sources */,
 				92D6AD421BC29C4A001E5EED /* SearchToolbar.m in Sources */,
 				929BCF101BB14800005F1DBD /* AFNetworkReachabilityManager.m in Sources */,
+				92F55A481DF22E7700BA6BE2 /* LimitedTextView.m in Sources */,
 				920822031A4DABB8005B7862 /* HelpContent.m in Sources */,
 				926086321A5E8560006C5523 /* Runnable.m in Sources */,
 				929BCF121BB14800005F1DBD /* AFURLConnectionOperation.m in Sources */,
@@ -1351,6 +1358,7 @@
 				929BCF5A1BB14A1B005F1DBD /* ModelManager.m in Sources */,
 				929BCF5B1BB14A1B005F1DBD /* HelpTableViewController.m in Sources */,
 				929BCF5C1BB14A1B005F1DBD /* UIView+WebCacheOperation.m in Sources */,
+				92F55A491DF22E7700BA6BE2 /* LimitedTextView.m in Sources */,
 				92D6AD431BC29C4A001E5EED /* SearchToolbar.m in Sources */,
 				929BCF5E1BB14A1B005F1DBD /* AFNetworkReachabilityManager.m in Sources */,
 				929BCF5F1BB14A1B005F1DBD /* HelpContent.m in Sources */,

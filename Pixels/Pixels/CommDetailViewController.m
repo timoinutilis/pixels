@@ -21,6 +21,7 @@
 #import "CommStatusUpdateViewController.h"
 #import "ActivityView.h"
 #import "BlockerView.h"
+#import "LimitedTextView.h"
 
 typedef NS_ENUM(NSInteger, CellTag) {
     CellTagNoAction,
@@ -648,12 +649,11 @@ static const NSInteger LIMIT = 50;
 @end
 
 
-@interface CommProfileCell()
+@interface CommProfileCell() <LimitedTextViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UITextView *detailTextView;
+@property (weak, nonatomic) IBOutlet LimitedTextView *detailTextView;
 @property (weak, nonatomic) IBOutlet UIButton *actionButton;
 @property (weak, nonatomic) IBOutlet UIButton *moreButton;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *detailHeightConstraint;
 @end
 
 @implementation CommProfileCell
@@ -664,6 +664,9 @@ static const NSInteger LIMIT = 50;
     
     self.detailTextView.textContainer.lineFragmentPadding = 0;
     self.detailTextView.textContainerInset = UIEdgeInsetsZero;
+    self.detailTextView.heightLimit = 154;
+    self.detailTextView.limitEnabled = YES;
+    self.detailTextView.limitDelegate = self;
 }
 
 - (void)setUser:(LCCUser *)user
@@ -704,17 +707,14 @@ static const NSInteger LIMIT = 50;
             [self.actionButton setTitle:@"Follow" forState:UIControlStateNormal];
         }
     }
-    
-    [self updateMoreButton];
 }
 
-- (void)layoutSubviews
+- (void)textView:(LimitedTextView *)textView didChangeOversize:(BOOL)oversize
 {
-    [super layoutSubviews];
-    if (self.detailTextView.frame.size.height >= self.detailHeightConstraint.constant)
+    if (oversize)
     {
-        self.moreButton.hidden = NO;
         [self updateMoreButton];
+        self.moreButton.hidden = NO;
     }
     else
     {
@@ -724,26 +724,19 @@ static const NSInteger LIMIT = 50;
 
 - (void)toggleDetailSize
 {
-    if (self.detailHeightConstraint.priority < 999)
-    {
-        self.detailHeightConstraint.priority = 999;
-    }
-    else
-    {
-        self.detailHeightConstraint.priority = 1;
-    }
+    self.detailTextView.limitEnabled = !self.detailTextView.limitEnabled;
     [self updateMoreButton];
 }
 
 - (void)updateMoreButton
 {
-    if (self.detailHeightConstraint.priority < 999)
+    if (self.detailTextView.limitEnabled)
     {
-        [self.moreButton setTitle:@"Less" forState:UIControlStateNormal];
+        [self.moreButton setTitle:@"More..." forState:UIControlStateNormal];
     }
     else
     {
-        [self.moreButton setTitle:@"More..." forState:UIControlStateNormal];
+        [self.moreButton setTitle:@"Less" forState:UIControlStateNormal];
     }
 }
 

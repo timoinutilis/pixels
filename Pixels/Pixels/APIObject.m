@@ -67,11 +67,7 @@ int integerGetterMethodIMP(APIObject *self, SEL _cmd)
 {
     APIObjectProperty *property = _dynamicProperties[NSStringFromClass([self class])][NSStringFromSelector(_cmd)];
     id value = self.values[property.name];
-//    if (value && value != [NSNull null])
-    {
-        return [value intValue];
-    }
-    return 0;
+    return [value intValue];
 }
 
 void integerSetterMethodIMP(APIObject *self, SEL _cmd, int value)
@@ -252,26 +248,32 @@ void integerSetterMethodIMP(APIObject *self, SEL _cmd, int value)
             else
             {
                 APIObjectProperty *property = classProperties[key];
-                NSAssert(property, @"Key not defined as property: %@", key);
-                switch (property.type)
+                if (!property)
                 {
-                    case APIObjectPropertyTypeString:
-                        self.values[property.name] = value;
-                        break;
-
-                    case APIObjectPropertyTypeDate:
-                        self.values[property.name] = [[NSDateFormatter sharedAPIDateFormatter] dateFromString:value];
-                        break;
-                        
-                    case APIObjectPropertyTypeURL:
-                        self.values[property.name] = [NSURL URLWithString:value];
-                        break;
-                        
-                    case APIObjectPropertyTypeInteger:
-                        self.values[property.name] = @([value intValue]);
-                        break;
+                    NSLog(@"Warning: Key not defined as property: %@", key);
                 }
-                [self.dirty removeObject:property.name];
+                else
+                {
+                    switch (property.type)
+                    {
+                        case APIObjectPropertyTypeString:
+                            self.values[property.name] = value;
+                            break;
+
+                        case APIObjectPropertyTypeDate:
+                            self.values[property.name] = [[NSDateFormatter sharedAPIDateFormatter] dateFromString:value];
+                            break;
+                            
+                        case APIObjectPropertyTypeURL:
+                            self.values[property.name] = [NSURL URLWithString:value];
+                            break;
+                            
+                        case APIObjectPropertyTypeInteger:
+                            self.values[property.name] = @([value intValue]);
+                            break;
+                    }
+                    [self.dirty removeObject:property.name];
+                }
             }
         }
     }

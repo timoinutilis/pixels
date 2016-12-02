@@ -70,6 +70,11 @@
 	<dict>
 		<key>NSExceptionDomains</key>
 		<dict>
+			<key>localhost</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
 			<key>lowresfiles.timokloss.com</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
