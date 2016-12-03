@@ -35,7 +35,7 @@ static NSString *const SectionInfo = @"Info";
 static NSString *const SectionPostStatus = @"PostStatus";
 static NSString *const SectionPosts = @"Posts";
 
-static const NSInteger LIMIT = 50;
+static const NSInteger LIMIT = 25;
 
 @interface CommDetailViewController ()
 
@@ -153,7 +153,7 @@ static const NSInteger LIMIT = 50;
 
 - (void)onFollowsChanged:(NSNotification *)notification
 {
-    if (self.mode == CommListModeNews)
+    if (self.mode == CommListModeNews || self.mode == CommListModeDiscover)
     {
         [self updateDataForceReload:NO];
     }
@@ -166,7 +166,7 @@ static const NSInteger LIMIT = 50;
 
 - (void)onUserChanged:(NSNotification *)notification
 {
-    if (self.mode == CommListModeNews)
+    if (self.mode == CommListModeNews || self.mode == CommListModeDiscover)
     {
         self.user = [CommunityModel sharedInstance].currentUser;
         [self updateDataForceReload:NO];
@@ -218,6 +218,14 @@ static const NSInteger LIMIT = 50;
             self.sections = @[SectionInfo, SectionPosts];
             self.currentOffset = 0;
             self.currentRoute = [NSString stringWithFormat:@"users/%@/news", (self.user ? self.user.objectId : @"guest")];
+            [self loadCurrentQueryForceReload:forceReload];
+            break;
+        }
+        case CommListModeDiscover: {
+            self.title = @"Discover";
+            self.sections = @[SectionInfo, SectionPosts];
+            self.currentOffset = 0;
+            self.currentRoute = [NSString stringWithFormat:@"users/%@/discover", self.user.objectId];
             [self loadCurrentQueryForceReload:forceReload];
             break;
         }
@@ -457,7 +465,7 @@ static const NSInteger LIMIT = 50;
         {
             return 3;
         }
-        else if (self.mode == CommListModeNews)
+        else if (self.mode == CommListModeNews || self.mode == CommListModeDiscover)
         {
             return 1;
         }
@@ -478,7 +486,7 @@ static const NSInteger LIMIT = 50;
     NSString *sectionId = self.sections[section];
     if (sectionId == SectionInfo)
     {
-        return (self.mode == CommListModeNews) ? @"Info" : @"User";
+        return (self.mode == CommListModeNews || self.mode == CommListModeDiscover) ? @"Info" : @"User";
     }
     else if (sectionId == SectionPosts)
     {
@@ -530,6 +538,12 @@ static const NSInteger LIMIT = 50;
             {
                 cell.infoTextLabel.text = @"Here you see featured programs and official news. Log in to follow more users!";
             }
+            return cell;
+        }
+        else if (self.mode == CommListModeDiscover)
+        {
+            CommInfoCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommInfoCell" forIndexPath:indexPath];
+            cell.infoTextLabel.text = @"Discover new programmers! Here you see all posts of users you don't follow yet.";
             return cell;
         }
     }

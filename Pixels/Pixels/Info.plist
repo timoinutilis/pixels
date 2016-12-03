@@ -62,6 +62,8 @@
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>LowResAPIClientID</key>
+	<string>LowResCoder-iOS</string>
 	<key>LowResAPIURL</key>
 	<string>https://lowresapi.timokloss.com</string>
 	<key>LowResNewsUserID</key>

@@ -326,6 +326,30 @@ $app->get('/users/{id}/news', function (Request $request, Response $response) {
     return $response;
 });
 
+// get user discover posts
+$app->get('/users/{id}/discover', function (Request $request, Response $response) {
+    $params = $request->getQueryParams();
+    $userId = $request->getAttribute('id');
+    $access = new DataBaseAccess($this->db);
+
+    $excludedUserIds = $access->getFollowedUserIds($userId);
+    if ($excludedUserIds !== FALSE) {
+        $excludedUserIds[] = $userId;
+        $excludedUserIdsString = "'".implode("','", $excludedUserIds)."'";
+        $filter = $access->getPostsFilter($params, "AND");
+        $stmt = $access->prepareMainStatement("posts", $params, MIN_POST_FIELDS, "WHERE user NOT IN ($excludedUserIdsString) $filter ORDER BY createdAt DESC");
+        $posts = $access->addObjects($stmt, "posts");
+        if ($posts !== FALSE) {
+            if ($access->addSubObjects($posts, "user", "users", MIN_USER_FIELDS)) {
+                $access->addSubObjects($posts, "stats", "postStats");
+            }
+        }
+    }
+
+    $response = $response->withJson($access->data);
+    return $response;
+});
+
 // get user notifications
 $app->get('/users/{id}/notifications', function (Request $request, Response $response) {
     $params = $request->getQueryParams();

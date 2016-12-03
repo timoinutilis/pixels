@@ -20,6 +20,8 @@ NSString *const NotificationsNumChangeNotification = @"NotificationsNumChangeNot
 NSString *const UserDefaultsLogInKey = @"UserDefaultsLogIn";
 NSString *const UserDefaultsCurrentUserKey = @"UserDefaultsCurrentUser";
 NSString *const HTTPHeaderSessionTokenKey = @"X-LowResCoder-Session-Token";
+NSString *const HTTPHeaderClientIDKey = @"X-LowResCoder-Client-ID";
+NSString *const HTTPHeaderClientVersionKey = @"X-LowResCoder-Client-Version";
 
 @interface CommunityModel()
 @property (nonatomic) AFHTTPSessionManager *sessionManager;
@@ -43,9 +45,17 @@ NSString *const HTTPHeaderSessionTokenKey = @"X-LowResCoder-Session-Token";
     {
         NSString *url = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"LowResAPIURL"];
         NSAssert(url, @"LowResAPIURL not defined in info.plist");
+
+        NSString *clientID = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"LowResAPIClientID"];
+        NSAssert(clientID, @"LowResAPIClientID not defined in info.plist");
+
+        NSString *clientVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
+        NSAssert(clientVersion, @"CFBundleVersion not defined in info.plist");
         
         _sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:url]];
         self.sessionManager.requestSerializer = [[AFJSONRequestSerializer alloc] init];
+        [self.sessionManager.requestSerializer setValue:clientID forHTTPHeaderField:HTTPHeaderClientIDKey];
+        [self.sessionManager.requestSerializer setValue:clientVersion forHTTPHeaderField:HTTPHeaderClientVersionKey];
         
         [LCCUser registerAPIClass];
         [LCCPost registerAPIClass];
