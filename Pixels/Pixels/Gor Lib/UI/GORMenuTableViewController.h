@@ -28,6 +28,7 @@
 - (void)setHeader:(UIView *)view section:(NSInteger)section;
 
 - (void)setHeaderTitle:(NSString *)text section:(NSInteger)section;
+- (void)setFooterTitle:(NSString *)text section:(NSInteger)section;
 
 - (void)updateSpace;
 
@@ -42,5 +43,6 @@
 @property NSMutableArray *cells;
 @property UIView *header;
 @property NSString *headerText;
+@property NSString *footerText;
 @property BOOL isHidden;
 @end

@@ -105,7 +105,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
 {
     if ([CommunityModel sharedInstance].currentUser)
     {
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
     }
 }
 

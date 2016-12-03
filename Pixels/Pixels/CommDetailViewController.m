@@ -543,7 +543,7 @@ static const NSInteger LIMIT = 25;
         else if (self.mode == CommListModeDiscover)
         {
             CommInfoCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommInfoCell" forIndexPath:indexPath];
-            cell.infoTextLabel.text = @"Discover new programmers! Here you see all posts of users you don't follow yet.";
+            cell.infoTextLabel.text = @"Discover new programmers! Here you see all the posts of users you don't follow yet.";
             return cell;
         }
     }
@@ -569,7 +569,7 @@ static const NSInteger LIMIT = 25;
             LCCPostStats *stats = self.statsById[post.stats];
             NSString *cellType = (post.type == LCCPostTypeStatus || post.image == nil) ? @"StatusCell" : @"ProgramCell";
             CommPostCell *cell = [tableView dequeueReusableCellWithIdentifier:cellType forIndexPath:indexPath];
-            [cell setPost:post user:user showName:(self.mode == CommListModeNews)];
+            [cell setPost:post user:user showName:(self.mode == CommListModeNews || self.mode == CommListModeDiscover)];
             [cell setStats:stats];
             cell.tag = CellTagPost;
             return cell;

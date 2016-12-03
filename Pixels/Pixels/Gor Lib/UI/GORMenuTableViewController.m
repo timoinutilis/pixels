@@ -114,6 +114,12 @@
     sectionObj.headerText = text;
 }
 
+- (void)setFooterTitle:(NSString *)text section:(NSInteger)section
+{
+    GORMenuSection *sectionObj = [self sectionAt:section];
+    sectionObj.footerText = text;
+}
+
 - (void)updateSpace
 {
     self.verticalSpace = 0.0;
@@ -181,6 +187,12 @@
 {
     GORMenuSection *sectionObj = self.sections[section];
     return sectionObj.headerText;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+{
+    GORMenuSection *sectionObj = self.sections[section];
+    return sectionObj.footerText;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
