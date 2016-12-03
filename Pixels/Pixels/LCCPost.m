@@ -46,7 +46,7 @@
 
 - (BOOL)isSourceCodeLoaded
 {
-    return self.sourceCode;
+    return self.sourceCode != nil;
 }
 
 - (void)loadSourceCodeWithCompletion:(LCCPostLoadSourceCodeBlock)block
