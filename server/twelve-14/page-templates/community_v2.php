@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: Community Page
+ * Template Name: Community Page v2
  *
  * @package WordPress
  * @subpackage Twelve_Fourteen
@@ -13,7 +13,7 @@ $title = "";
 
 if (!empty($lccPostId)) {
 	if ($lccPost) {
-		$title = $lccPost->get("title");
+		$title = $lccPost->title;
 	} else {
 		$title = "Program not found";
 	}
@@ -21,7 +21,7 @@ if (!empty($lccPostId)) {
 	if (!empty($lccUserId)) {
 		// User
 		if ($lccUser) {
-			$title = $lccUser->get("username");
+			$title = $lccUser->username;
 		} else {
 			$title = "User not found";
 		}
@@ -51,21 +51,16 @@ get_header(); ?>
 
 		<?php
 			$postImageUrl = get_lcc_large_image_url($lccPost);
-			$programFile = $lccPost->get("programFile");
-			if ($programFile) {
-				$sourceCodeUrl = $programFile->getURL();
-			} else {
-				$sourceCodeUrl = "http://lowres.inutilis.com/wordpress/wp-content/themes/twelve-14/sourcecode.php?id=" . $lccPost->get("program")->getObjectId();
-			}
+			$sourceCodeUrl = $lccPost->program;
 		?>
 
-		<p class="lcc-author"><strong>By <a href="<?php echo $pageUrl . "?lccuser=" . $lccUser->getObjectId(); ?>"><?php echo $lccUser->get("username"); ?></a></strong></p>
+		<p class="lcc-author"><strong>By <a href="<?php echo $pageUrl . "?lccuser=" . $lccUser->objectId; ?>"><?php echo $lccUser->username; ?></a></strong></p>
 		<div class="lcc-images"><img src="<?php echo $postImageUrl; ?>"></div>
-		<p class="lcc-description"><?php echo wptexturize(nl2br($lccPost->get("detail"))); ?></p>
+		<p class="lcc-description"><?php echo wptexturize(nl2br($lccPost->detail)); ?></p>
 		<p>
 			<strong><a href="https://itunes.apple.com/us/app/lowres-coder/id962117496?mt=8&uo=4">Get LowRes Coder</a> to use this program.</strong>
 			<form method="GET" action="lowrescoder://">
-				<input type="hidden" name="lccpost" value="<?php echo $lccPost->getObjectId(); ?>">
+				<input type="hidden" name="lccpost" value="<?php echo $lccPost->objectId; ?>">
 				<input type="submit" value="Open in App">
 			</form>
 		</p>
@@ -75,7 +70,7 @@ get_header(); ?>
 		<?php } else if ($lccUser) {
 
 		if (!empty($lccUserId)) { ?>
-		<p class="lcc-about"><?php echo wptexturize(nl2br($lccUser->get("about"))); ?></p>
+		<p class="lcc-about"><?php echo wptexturize(nl2br($lccUser->about)); ?></p>
 		<?php } ?>
 
 		<div class="lcc-posts">
@@ -83,15 +78,16 @@ get_header(); ?>
 		<?php
 			for ($i = 0; $i < count($lccUserPosts); $i++) {
  				$userPost = $lccUserPosts[$i];
- 				if ($userPost->get("sharedPost")) {
- 					$userPost = $userPost->get("sharedPost");
+ 				$originalPostId = $userPost->objectId;
+ 				if (!empty($userPost->sharedPost)) {
+ 					$originalPostId = $userPost->sharedPost;
  				}
  		?>
 
  				<div class="lcc-post">
- 					<a href="<?php echo $pageUrl . "?lccpost=" . $userPost->getObjectId(); ?>">
- 						<img src="<?php echo $userPost->get("image")->getURL(); ?>">
- 						<p><?php echo $userPost->get("title"); ?></p>
+ 					<a href="<?php echo $pageUrl . "?lccpost=" . $originalPostId; ?>">
+ 						<img src="<?php echo $userPost->image; ?>">
+ 						<p><?php echo $userPost->title; ?></p>
  					</a>
  				</div>
 
