@@ -221,6 +221,14 @@ static const NSInteger LIMIT = 25;
             [self loadCurrentQueryForceReload:forceReload];
             break;
         }
+        case CommListModeForum: {
+            self.title = @"Forum";
+            self.sections = @[SectionInfo, SectionPostStatus, SectionPosts];
+            self.currentOffset = 0;
+            self.currentRoute = @"forum";
+            [self loadCurrentQueryForceReload:forceReload];
+            break;
+        }
         case CommListModeDiscover: {
             self.title = @"Discover";
             self.sections = @[SectionInfo, SectionPosts];
@@ -465,7 +473,7 @@ static const NSInteger LIMIT = 25;
         {
             return 3;
         }
-        else if (self.mode == CommListModeNews || self.mode == CommListModeDiscover)
+        else
         {
             return 1;
         }
@@ -486,7 +494,7 @@ static const NSInteger LIMIT = 25;
     NSString *sectionId = self.sections[section];
     if (sectionId == SectionInfo)
     {
-        return (self.mode == CommListModeNews || self.mode == CommListModeDiscover) ? @"Info" : @"User";
+        return (self.mode == CommListModeProfile) ? @"User" : @"Info";
     }
     else if (sectionId == SectionPosts)
     {
@@ -546,11 +554,24 @@ static const NSInteger LIMIT = 25;
             cell.infoTextLabel.text = @"Discover new programmers! Here you see all the posts of users you don't follow yet.";
             return cell;
         }
+        else if (self.mode == CommListModeForum)
+        {
+            CommInfoCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommInfoCell" forIndexPath:indexPath];
+            cell.infoTextLabel.text = @"Do you need help or have any question? Post it here in the Forum, where anyone can see it.";
+            return cell;
+        }
     }
     else if (sectionId == SectionPostStatus)
     {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ActionCell" forIndexPath:indexPath];
-        cell.textLabel.text = @"Write Status Update";
+        if (self.mode == CommListModeForum)
+        {
+            cell.textLabel.text = @"Write Question";
+        }
+        else
+        {
+            cell.textLabel.text = @"Write Status Update";
+        }
         cell.tag = CellTagWriteStatus;
         return cell;
     }
@@ -612,7 +633,8 @@ static const NSInteger LIMIT = 25;
             break;
         }
         case CellTagWriteStatus: {
-            UIViewController *vc = [CommStatusUpdateViewController createWithStoryboard:self.storyboard completion:^(LCCPost *post, LCCPostStats *stats) {
+            LCCPostType postType = (self.mode == CommListModeForum) ? LCCPostTypeForum : LCCPostTypeStatus;
+            UIViewController *vc = [CommStatusUpdateViewController createWithStoryboard:self.storyboard postType:postType completion:^(LCCPost *post, LCCPostStats *stats) {
                 self.statsById[stats.objectId] = stats;
                 [self.posts insertObject:post atIndex:0];
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:2];
@@ -781,6 +803,8 @@ static const NSInteger LIMIT = 25;
             break;
         case LCCPostCategoryStatus:
             self.segmentedControl.selectedSegmentIndex = 4;
+            break;
+        case LCCPostCategoryQuestion:
             break;
     }
 }

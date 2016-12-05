@@ -92,6 +92,7 @@ define("NotificationTypeFollow", 3);
 define("PostTypeProgram", 1);
 define("PostTypeStatus", 2);
 define("PostTypeShare", 3);
+define("PostTypeForum", 4);
 
 /* ============ Parameter Checks ============ */
 
@@ -291,6 +292,24 @@ $app->get('/posts', function (Request $request, Response $response) {
 
     $filter = $access->getPostsFilter($params, "WHERE");
     $stmt = $access->prepareMainStatement("posts", $params, MIN_POST_FIELDS, "$filter ORDER BY createdAt DESC");
+    $posts = $access->addObjects($stmt, "posts");
+    if ($posts !== FALSE) {
+        if ($access->addSubObjects($posts, "user", "users", MIN_USER_FIELDS)) {
+            $access->addSubObjects($posts, "stats", "postStats");
+        }
+    }
+
+    $response = $response->withJson($access->data);
+    return $response;
+});
+
+// get all forum posts
+$app->get('/forum', function (Request $request, Response $response) {
+    $params = $request->getQueryParams();
+    $access = new DataBaseAccess($this->db);
+
+    $filter = $access->getPostsFilter($params, "AND");
+    $stmt = $access->prepareMainStatement("posts", $params, MIN_POST_FIELDS, "WHERE type = ".PostTypeForum." $filter ORDER BY createdAt DESC");
     $posts = $access->addObjects($stmt, "posts");
     if ($posts !== FALSE) {
         if ($access->addSubObjects($posts, "user", "users", MIN_USER_FIELDS)) {

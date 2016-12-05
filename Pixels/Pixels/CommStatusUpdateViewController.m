@@ -23,16 +23,18 @@
 @property TextViewTableViewCell *descriptionCell;
 @property GORCycleManager *cycleManager;
 
+@property (nonatomic) LCCPostType postType;
 @property (nonatomic, copy) CommStatusUpdateBlock block;
 
 @end
 
 @implementation CommStatusUpdateViewController
 
-+ (UIViewController *)createWithStoryboard:(UIStoryboard *)storyboard completion:(CommStatusUpdateBlock)block
++ (UIViewController *)createWithStoryboard:(UIStoryboard *)storyboard postType:(LCCPostType)type completion:(CommStatusUpdateBlock)block
 {
     CommStatusUpdateViewController *vc = (CommStatusUpdateViewController *)[storyboard instantiateViewControllerWithIdentifier:@"CommStatusUpdateView"];
     vc.block = block;
+    vc.postType = type;
     
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
     nav.modalPresentationStyle = vc.modalPresentationStyle;
@@ -86,10 +88,10 @@
     
     // post
     LCCPost *post = [[LCCPost alloc] init];
-    post.type = LCCPostTypeStatus;
+    post.type = self.postType;
     post.title = title;
     post.detail = description;
-    post.category = LCCPostCategoryStatus;
+    post.category = (self.postType == LCCPostTypeStatus) ? LCCPostCategoryStatus : LCCPostCategoryQuestion;
     
     NSString *route = [NSString stringWithFormat:@"/users/%@/posts", [CommunityModel sharedInstance].currentUser.objectId];
     NSDictionary *params = [post dirtyDictionary];
@@ -116,7 +118,7 @@
     } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
         
         [self isBusy:NO];
-        [self showAlertWithTitle:@"Could not send status update" message:error.presentableError.localizedDescription block:nil];
+        [self showAlertWithTitle:@"Could not send text" message:error.presentableError.localizedDescription block:nil];
         
     }];
 }

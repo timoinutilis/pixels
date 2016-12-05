@@ -16,7 +16,8 @@ typedef NS_ENUM(NSInteger, CommListMode) {
     CommListModeUndefined = 0,
     CommListModeProfile,
     CommListModeNews,
-    CommListModeDiscover
+    CommListModeDiscover,
+    CommListModeForum
 };
 
 @interface CommDetailViewController : UITableViewController

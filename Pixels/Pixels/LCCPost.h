@@ -12,7 +12,8 @@ typedef NS_ENUM(int, LCCPostType) {
     LCCPostTypeUndefined,
     LCCPostTypeProgram,
     LCCPostTypeStatus,
-    LCCPostTypeShare
+    LCCPostTypeShare,
+    LCCPostTypeForum
 };
 
 typedef NS_ENUM(int, LCCPostCategory) {
@@ -20,7 +21,8 @@ typedef NS_ENUM(int, LCCPostCategory) {
     LCCPostCategoryStatus,
     LCCPostCategoryGame,
     LCCPostCategoryTool,
-    LCCPostCategoryDemo
+    LCCPostCategoryDemo,
+    LCCPostCategoryQuestion
 };
 
 typedef void (^LCCPostLoadSourceCodeBlock)(NSString *sourceCode, NSError *error);

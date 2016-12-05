@@ -7,13 +7,14 @@
 //
 
 #import "GORMenuTableViewController.h"
+#import "LCCPost.h"
 
-@class LCCPost, LCCPostStats;
+@class LCCPostStats;
 
 typedef void (^CommStatusUpdateBlock)(LCCPost *post, LCCPostStats *stats);
 
 @interface CommStatusUpdateViewController : GORMenuTableViewController
 
-+ (UIViewController *)createWithStoryboard:(UIStoryboard *)storyboard completion:(CommStatusUpdateBlock)block;
++ (UIViewController *)createWithStoryboard:(UIStoryboard *)storyboard postType:(LCCPostType)type completion:(CommStatusUpdateBlock)block;
 
 @end

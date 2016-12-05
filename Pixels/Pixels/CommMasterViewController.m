@@ -18,6 +18,7 @@
 typedef NS_ENUM(NSInteger, CellTag) {
     CellTagNews,
     CellTagDiscover,
+    CellTagForum,
     CellTagAccount,
     CellTagNotifications,
     CellTagLogIn,
@@ -105,7 +106,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
 {
     if ([CommunityModel sharedInstance].currentUser)
     {
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:3 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
     }
 }
 
@@ -133,7 +134,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
 {
     if (section == 0)
     {
-        return [CommunityModel sharedInstance].currentUser ? 3 : 1;
+        return [CommunityModel sharedInstance].currentUser ? 4 : 2;
     }
     else if (section == 1)
     {
@@ -162,10 +163,16 @@ typedef NS_ENUM(NSInteger, CellTag) {
         else if (indexPath.row == 1)
         {
             cell = [tableView dequeueReusableCellWithIdentifier:@"MenuCell" forIndexPath:indexPath];
+            cell.textLabel.text = @"Forum";
+            cell.tag = CellTagForum;
+        }
+        else if (indexPath.row == 2)
+        {
+            cell = [tableView dequeueReusableCellWithIdentifier:@"MenuCell" forIndexPath:indexPath];
             cell.textLabel.text = @"Discover";
             cell.tag = CellTagDiscover;
         }
-        else if (indexPath.row == 2)
+        else if (indexPath.row == 3)
         {
             cell = [tableView dequeueReusableCellWithIdentifier:@"NotificationsCell" forIndexPath:indexPath];
             NSInteger num = [CommunityModel sharedInstance].numNewNotifications;
@@ -261,6 +268,11 @@ typedef NS_ENUM(NSInteger, CellTag) {
             case CellTagNews: {
                 LCCUser *user = [CommunityModel sharedInstance].currentUser;
                 [vc setUser:user mode:CommListModeNews];
+                break;
+            }
+            case CellTagForum: {
+                LCCUser *user = [CommunityModel sharedInstance].currentUser;
+                [vc setUser:user mode:CommListModeForum];
                 break;
             }
             case CellTagDiscover: {
