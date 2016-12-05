@@ -17,6 +17,24 @@ var PostTypeProgram = 1;
 var PostTypeStatus = 2;
 var PostTypeShare = 3;
 
+// **** Migration ****
+
+var MigrationMessage = "Please update LowRes Coder to version 6.0 or higher!";
+
+Parse.Cloud.beforeSave(Parse.User, function(request, response) {
+  response.error(MigrationMessage);
+});
+
+Parse.Cloud.beforeSave("Comment", function(request, response) {
+  response.error(MigrationMessage);
+});
+
+/*Parse.Cloud.beforeSave("Post", function(request, response) {
+  response.error(MigrationMessage);
+});*/
+
+// **** End Migration ****
+
 
 Parse.Cloud.afterSave("Post", function(request) {
 
