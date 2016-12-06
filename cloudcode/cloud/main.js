@@ -29,9 +29,9 @@ Parse.Cloud.beforeSave("Comment", function(request, response) {
   response.error(MigrationMessage);
 });
 
-/*Parse.Cloud.beforeSave("Post", function(request, response) {
+Parse.Cloud.beforeSave("Post", function(request, response) {
   response.error(MigrationMessage);
-});*/
+});
 
 // **** End Migration ****
 
