@@ -555,6 +555,23 @@ $app->put('/users/{id}', function (Request $request, Response $response) {
     return $response;
 })->add(new AuthMiddleware());
 
+// reset password
+$app->post('/resetPassword', function (Request $request, Response $response) {
+    $body = $request->getParsedBody();
+    $access = new DataBaseAccess($this->db);
+    
+    if (isset($body['userId'])) {
+        $userId = $body['userId'];
+        $password = "new".mt_rand(0, 9999);
+        $user['bcryptPassword'] = password_hash($password, PASSWORD_DEFAULT);
+        $access->updateObject("users", $userId, $user);
+        $access->data['password'] = $password;
+    }
+
+    $response = $response->withJson($access->data);
+    return $response;
+})->add(new AuthMiddleware());
+
 /* ============ Files ============ */
 
 // save file
