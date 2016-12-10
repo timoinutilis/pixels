@@ -22,6 +22,7 @@
 #import "ActivityView.h"
 #import "BlockerView.h"
 #import "LimitedTextView.h"
+#import "AppStyle.h"
 
 typedef NS_ENUM(NSInteger, CellTag) {
     CellTagNoAction,
@@ -62,7 +63,10 @@ static const NSInteger LIMIT = 25;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
+    self.tableView.backgroundView = nil;
+    self.tableView.backgroundColor = [AppStyle tableBackgroundColor];
+    
     self.activityView = [ActivityView view];
     
     if ([self isModal])

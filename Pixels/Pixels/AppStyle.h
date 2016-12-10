@@ -16,6 +16,7 @@
 + (UIColor *)tintColor;
 + (UIColor *)darkTintColor;
 + (UIColor *)brightTintColor;
++ (UIColor *)tableBackgroundColor;
 + (UIColor *)darkColor;
 + (UIColor *)brightColor;
 + (UIColor *)editorColor;

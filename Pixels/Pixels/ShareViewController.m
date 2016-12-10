@@ -19,6 +19,7 @@
 #import "TextFieldTableViewCell.h"
 #import "TextViewTableViewCell.h"
 #import "ActionTableViewCell.h"
+#import "AppStyle.h"
 
 @interface ShareViewController ()
 
@@ -54,6 +55,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.tableView.backgroundView = nil;
+    self.tableView.backgroundColor = [AppStyle tableBackgroundColor];
     
     self.headerCell = [self.tableView dequeueReusableCellWithIdentifier:@"ShareHeaderCell"];
     self.headerCell.iconImageView.image = (self.project.iconData) ? [UIImage imageWithData:self.project.iconData] : [UIImage imageNamed:@"icon_project"];

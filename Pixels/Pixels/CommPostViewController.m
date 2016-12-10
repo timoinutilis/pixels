@@ -19,6 +19,7 @@
 #import "UITableView+Parse.h"
 #import "ActivityView.h"
 #import "BlockerView.h"
+#import "AppStyle.h"
 
 typedef NS_ENUM(NSInteger, CellTag) {
     CellTagNoAction,
@@ -56,6 +57,9 @@ typedef NS_ENUM(NSInteger, Section) {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.tableView.backgroundView = nil;
+    self.tableView.backgroundColor = [AppStyle tableBackgroundColor];
     
     self.activityView = [ActivityView view];
     

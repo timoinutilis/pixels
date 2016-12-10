@@ -38,7 +38,6 @@
     // Backgrounds
     [BackgroundView appearance].backgroundColor = [AppStyle brightColor];
     [UIWebView appearance].backgroundColor = [AppStyle brightColor];
-    [UITableView appearance].backgroundColor = [AppStyle brightColor];
     [UITableViewCell appearance].backgroundColor = [AppStyle brightColor];
     [UICollectionView appearance].backgroundColor = [AppStyle brightColor];
     [UITextView appearanceWhenContainedIn:[UITableViewCell class], nil].backgroundColor = [AppStyle brightColor];
@@ -78,6 +77,11 @@
 + (UIColor *)brightColor
 {
     return [UIColor colorWithHex:0xf6f6f6 alpha:1.0f];
+}
+
++ (UIColor *)tableBackgroundColor
+{
+    return [UIColor colorWithHex:0xf1f1f1 alpha:1.0f];
 }
 
 + (UIColor *)editorColor

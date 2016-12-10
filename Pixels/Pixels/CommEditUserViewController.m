@@ -10,6 +10,7 @@
 #import "CommunityModel.h"
 #import "UIViewController+LowResCoder.h"
 #import "GORCycleManager.h"
+#import "AppStyle.h"
 
 @interface CommEditUserViewController ()
 
@@ -36,6 +37,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.tableView.backgroundView = nil;
+    self.tableView.backgroundColor = [AppStyle tableBackgroundColor];
     
     [self setHeaderTitle:@"Account" section:0];
     self.usernameCell = [self.tableView dequeueReusableCellWithIdentifier:@"CommEditUserInputCell"];

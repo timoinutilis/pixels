@@ -12,6 +12,7 @@
 #import "GORCycleManager.h"
 #import "AppController.h"
 #import "ActionTableViewCell.h"
+#import "AppStyle.h"
 
 @interface CommLogInViewController () <UITextFieldDelegate>
 
@@ -44,6 +45,9 @@
 {
     [super viewDidLoad];
     
+    self.tableView.backgroundView = nil;
+    self.tableView.backgroundColor = [AppStyle tableBackgroundColor];
+    
     CommLogInViewController __weak *weakSelf = self;
     
     self.dynamicRowHeights = NO;
@@ -72,7 +76,7 @@
     [self addCell:self.logInUsernameCell section:0];
     [self addCell:self.logInPasswordCell];
     [self addCell:self.logInButtonCell];
-    [self setFooterTitle:@"If you forgot you password, please write to support@inutilis.com." section:0];
+    [self setFooterTitle:@"If you forgot your password, please write to support@inutilis.com." section:0];
     
     [self setHeaderTitle:@"Create a new account" section:1];
     [self addCell:self.registerUsernameCell section:1];

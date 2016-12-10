@@ -13,6 +13,7 @@
 #import "CommunityModel.h"
 #import "AppController.h"
 #import "UIViewController+LowResCoder.h"
+#import "AppStyle.h"
 
 @interface CommStatusUpdateViewController ()
 
@@ -43,6 +44,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.tableView.backgroundView = nil;
+    self.tableView.backgroundColor = [AppStyle tableBackgroundColor];
     
     [self setHeaderTitle:@"Title" section:0];
     
