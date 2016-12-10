@@ -140,7 +140,7 @@
     } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
 
         [self setBusy:NO];
-        [self showAlertWithTitle:@"Could not save changes" message:error.presentableError.localizedDescription block:nil];
+        [[CommunityModel sharedInstance] handleAPIError:error title:@"Could not save changes" viewController:self];
 
     }];
 }

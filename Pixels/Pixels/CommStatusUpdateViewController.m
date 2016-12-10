@@ -120,7 +120,7 @@
     } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
         
         [self isBusy:NO];
-        [self showAlertWithTitle:@"Could not send status update" message:error.presentableError.localizedDescription block:nil];
+        [[CommunityModel sharedInstance] handleAPIError:error title:@"Could not send text" viewController:self];
         
     }];
 }

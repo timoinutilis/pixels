@@ -73,7 +73,7 @@ const NSTimeInterval MAX_CACHE_AGE = 1 * 60 * 60;
         }
         else
         {
-            [self showAlertWithTitle:@"Could not download program." message:error.presentableError.localizedDescription block:nil];
+            [self showAlertWithTitle:@"Could not download program" message:error.localizedDescription block:nil];
         }
         
     }];

@@ -297,12 +297,12 @@ typedef NS_ENUM(NSInteger, Section) {
         
         [BlockerView dismiss];
 //        [PFQuery clearAllCachedResults];
-        [self showAlertWithTitle:@"Shared successfully." message:nil block:nil];
+        [self showAlertWithTitle:@"Shared successfully" message:nil block:nil];
         
     } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
         
         [BlockerView dismiss];
-        [self showAlertWithTitle:@"Could not share post." message:error.presentableError.localizedDescription block:nil];
+        [[CommunityModel sharedInstance] handleAPIError:error title:@"Could not share post" viewController:self];
         
     }];
 }
@@ -366,7 +366,7 @@ typedef NS_ENUM(NSInteger, Section) {
         } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
 
             [BlockerView dismiss];
-            [self showAlertWithTitle:@"Could not send comment." message:error.presentableError.localizedDescription block:nil];
+            [[CommunityModel sharedInstance] handleAPIError:error title:@"Could not send comment" viewController:self];
             button.enabled = YES;
             
         }];
@@ -387,7 +387,7 @@ typedef NS_ENUM(NSInteger, Section) {
     } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
 
         [BlockerView dismiss];
-        [self showAlertWithTitle:@"Could not delete post." message:error.presentableError.localizedDescription block:nil];
+        [[CommunityModel sharedInstance] handleAPIError:error title:@"Could not delete post" viewController:self];
 
     }];
 }

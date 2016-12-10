@@ -188,7 +188,7 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 {
     if (self.folder.isDefault.boolValue)
     {
-        [self showAlertWithTitle:@"Cannot add programs to example folders." message:nil block:nil];
+        [self showAlertWithTitle:@"Cannot add programs to example folders" message:nil block:nil];
     }
     else
     {
@@ -203,7 +203,7 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 {
     if (self.folder.isDefault.boolValue)
     {
-        [self showAlertWithTitle:@"Example folders cannot be changed." message:nil block:nil];
+        [self showAlertWithTitle:@"Example folders cannot be changed" message:nil block:nil];
     }
     else
     {
@@ -280,7 +280,7 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
 {
     if (self.folder.children.count > 0)
     {
-        [self showAlertWithTitle:@"Cannot delete folders with content." message:nil block:nil];
+        [self showAlertWithTitle:@"Cannot delete folders with content" message:nil block:nil];
     }
     else
     {
