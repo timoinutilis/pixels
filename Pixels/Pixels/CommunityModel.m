@@ -8,6 +8,8 @@
 
 #import "CommunityModel.h"
 #import "AppController.h"
+#import "UIViewController+LowResCoder.h"
+#import "CommLogInViewController.h"
 
 NSString *const CurrentUserChangeNotification = @"CurrentUserChangeNotification";
 NSString *const FollowsLoadNotification = @"FollowsLoadNotification";
@@ -22,6 +24,9 @@ NSString *const UserDefaultsCurrentUserKey = @"UserDefaultsCurrentUser";
 NSString *const HTTPHeaderSessionTokenKey = @"X-LowResCoder-Session-Token";
 NSString *const HTTPHeaderClientIDKey = @"X-LowResCoder-Client-ID";
 NSString *const HTTPHeaderClientVersionKey = @"X-LowResCoder-Client-Version";
+
+NSString *const APIErrorDomain = @"com.timokloss.lowresapi.error";
+NSString *const APIErrorTypeKey = @"APIErrorType";
 
 @interface CommunityModel()
 @property (nonatomic) AFHTTPSessionManager *sessionManager;
@@ -118,6 +123,26 @@ NSString *const HTTPHeaderClientVersionKey = @"X-LowResCoder-Client-Version";
         
         // ignore error
         [self onLoggedOut];
+        
+    }];
+}
+
+- (void)handleAPIError:(NSError *)error title:(NSString *)title viewController:(UIViewController *)vc
+{
+    NSError *presentableError = error.presentableError;
+    [vc showAlertWithTitle:title message:presentableError.localizedDescription block:^{
+        
+        if ([presentableError.domain isEqualToString:APIErrorDomain])
+        {
+            NSString *type = presentableError.userInfo[APIErrorTypeKey];
+            if ([type isEqualToString:@"Unauthorized"])
+            {
+                [self onLoggedOut];
+                
+                CommLogInViewController *loginVC = [CommLogInViewController create];
+                [vc presentInNavigationViewController:loginVC];
+            }
+        }
         
     }];
 }
@@ -435,8 +460,9 @@ NSString *const HTTPHeaderClientVersionKey = @"X-LowResCoder-Client-Version";
             {
                 NSLog(@"API error: %@", errorDict);
                 NSDictionary *userInfo = @{NSLocalizedDescriptionKey: errorDict[@"message"],
+                                           APIErrorTypeKey: errorDict[@"type"],
                                            NSUnderlyingErrorKey: self};
-                return [NSError errorWithDomain:@"com.timokloss.lowresapi.error" code:self.code userInfo:userInfo];
+                return [NSError errorWithDomain:APIErrorDomain code:self.code userInfo:userInfo];
             }
         }
     }

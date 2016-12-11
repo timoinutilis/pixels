@@ -14,6 +14,7 @@
 #import "UIViewController+CommUtils.h"
 #import "AppController.h"
 #import "ActionTableViewCell.h"
+#import "AppStyle.h"
 
 typedef NS_ENUM(NSInteger, CellTag) {
     CellTagNews,
@@ -43,6 +44,9 @@ typedef NS_ENUM(NSInteger, CellTag) {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.tableView.backgroundView = nil;
+    self.tableView.backgroundColor = [AppStyle tableBackgroundColor];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onUserChanged:) name:CurrentUserChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onFollowsChanged:) name:FollowsChangeNotification object:nil];

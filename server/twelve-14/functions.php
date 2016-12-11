@@ -2,11 +2,6 @@
 
 require 'autoload.php';
  
-use Parse\ParseClient;
-use Parse\ParseQuery;
-use Parse\ParseException;
-use Parse\ParseUser;
-
 define("LCC_IMAGE_WIDTH", 640);
 define("LCC_IMAGE_HEIGHT", 360);
 
@@ -36,24 +31,23 @@ function community_title($title, $sep, $seplocation) {
 	global $lccPost, $lccUser, $lccUserId;
 
 	if ($lccPost) {
-		return get_safe_string($lccPost->get("title")) . " " . $sep . " ";
+		return get_safe_string($lccPost->title) . " " . $sep . " ";
 	}
 	if ($lccUser && !empty($lccUserId)) {
-		return get_safe_string($lccUser->get("username")) . " " . $sep . " ";
+		return get_safe_string($lccUser->username) . " " . $sep . " ";
 	}
 
     return $title;
 }
 add_filter('wp_title', 'community_title', 10, 3);
 
-
 function get_lcc_large_image_url($post) {
-	$name = "/lccimages/post_" . $post->getObjectId() . ".png";
+	$name = "/lccimages/post_" . $post->objectId . ".png";
 	$filePath = WP_CONTENT_DIR . $name;
 	$fileUrl = WP_CONTENT_URL . $name;
 
 	if (!file_exists($filePath)) {
-		$srcImageFile = file_get_contents($post->get("image")->getURL());
+		$srcImageFile = file_get_contents($post->image);
 
 		$dstImage = imagecreatetruecolor(LCC_IMAGE_WIDTH, LCC_IMAGE_HEIGHT);
 		$srcImage = imagecreatefromstring($srcImageFile);
@@ -73,42 +67,28 @@ function get_lcc_large_image_url($post) {
 function community_init() {
 	global $lccPostId, $lccUserId, $lccPost, $lccUser, $lccUserPosts;
 
-	if (basename(get_page_template()) == 'community.php') {
-		ParseClient::initialize('JjXUGeQFrN79s4TcIunronsM13ehsBy0Pa1FLIUA', 'YlUL5qFSyRFVS0rFLdIHUQjNuTzHi294XDy7G9Em', 'g8mqpMyqSxN78OUfwmT7gwPLqOIQ4VqG4N0YWAg3');
+	if (basename(get_page_template()) == 'community_v2.php') {
 
-		try {
-			if (!empty($lccPostId)) {
+		if (!empty($lccPostId)) {
 
-				$query = new ParseQuery("Post");
-				$query->includeKey("user");
-				$lccPost = $query->get($lccPostId);
-				$lccUser = $lccPost->get("user");
+			// Post
+			$response = file_get_contents("https://lowresapi.timokloss.com/posts/".$lccPostId);
+			$responseData = json_decode($response);
 
-			} else {
+			$lccPost = $responseData->post;
+			$lccUser = $responseData->user;
 
-				if (!empty($lccUserId)) {
-					// User
-					$query = ParseUser::query();
-					$lccUser = $query->get($lccUserId);
-				} else {
-					// "LowRes Coder" account
-					$query = ParseUser::query();
-					$lccUser = $query->get("T5VWaLW28x");
-				}
+		} else {
 
-				$query = new ParseQuery("Post");
-				$query->equalTo("user", $lccUser);
-				$query->notEqualTo("type", 2);
-				$query->notEqualTo("image", null);
-				$query->includeKey("sharedPost");
-				$query->descending("createdAt");
-				$lccUserPosts = $query->find();
+			// User or LowRes Coder account
+			$id = !empty($lccUserId) ? $lccUserId : "T5VWaLW28x";
+			$response = file_get_contents("https://lowresapi.timokloss.com/users/".$id."?limit=50&onlyprograms=1");
+			$responseData = json_decode($response);
 
-			}
-
-		} catch (ParseException $ex) {
-			
+			$lccUser = $responseData->user;
+			$lccUserPosts = $responseData->posts;
 		}
+		
 	}
 }
 add_action('wp', 'community_init');
@@ -123,8 +103,8 @@ function insert_fb_in_head() {
         return;
 
     if ($lccPost) {
-    	$title = get_safe_string($lccPost->get("title"));
-    	$detail = get_safe_string($lccPost->get("detail"));
+    	$title = get_safe_string($lccPost->title);
+    	$detail = get_safe_string($lccPost->detail);
 		echo '<meta property="og:title" content="' . $title . '"/>';
 		echo '<meta property="og:description" content="' . $detail . '"/>';
 		echo '<meta property="og:type" content="article"/>';

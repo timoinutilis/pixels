@@ -22,6 +22,7 @@
 #import "ActivityView.h"
 #import "BlockerView.h"
 #import "LimitedTextView.h"
+#import "AppStyle.h"
 
 typedef NS_ENUM(NSInteger, CellTag) {
     CellTagNoAction,
@@ -62,7 +63,10 @@ static const NSInteger LIMIT = 25;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
+    self.tableView.backgroundView = nil;
+    self.tableView.backgroundColor = [AppStyle tableBackgroundColor];
+    
     self.activityView = [ActivityView view];
     
     if ([self isModal])
@@ -438,7 +442,7 @@ static const NSInteger LIMIT = 25;
     } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
         
         [BlockerView dismiss];
-        [self showAlertWithTitle:@"Could not delete post." message:error.presentableError.localizedDescription block:nil];
+        [[CommunityModel sharedInstance] handleAPIError:error title:@"Could not delete post" viewController:self];
         
     }];
 }

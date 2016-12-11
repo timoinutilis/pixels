@@ -545,7 +545,7 @@ typedef void(^InfoBlock)(void);
 {
     if (!self.project.postId)
     {
-        [self showAlertWithTitle:@"Feedback is available for downloaded or shared programs only." message:nil block:nil];
+        [self showAlertWithTitle:@"Feedback is available for downloaded or shared programs only" message:nil block:nil];
     }
     else
     {
@@ -762,7 +762,7 @@ typedef void(^InfoBlock)(void);
     }
     else
     {
-        NSString *title = [NSString stringWithFormat:@"%@ is not a keyword.", text];
+        NSString *title = [NSString stringWithFormat:@"%@ is not a keyword", text];
         [self showAlertWithTitle:title message:nil block:nil];
     }
 }

@@ -19,6 +19,7 @@
 #import "TextFieldTableViewCell.h"
 #import "TextViewTableViewCell.h"
 #import "ActionTableViewCell.h"
+#import "AppStyle.h"
 
 @interface ShareViewController ()
 
@@ -54,6 +55,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.tableView.backgroundView = nil;
+    self.tableView.backgroundColor = [AppStyle tableBackgroundColor];
     
     self.headerCell = [self.tableView dequeueReusableCellWithIdentifier:@"ShareHeaderCell"];
     self.headerCell.iconImageView.image = (self.project.iconData) ? [UIImage imageWithData:self.project.iconData] : [UIImage imageNamed:@"icon_project"];
@@ -112,7 +116,7 @@
     
     if (!self.project.iconData)
     {
-        [self showAlertWithTitle:@"This program doesn't have an icon yet." message:@"Please start it once to create one!" block:^{
+        [self showAlertWithTitle:@"This program doesn't have an icon yet" message:@"Please start it once to create one!" block:^{
             [self onCancelTapped:nil];
         }];
     }
@@ -122,7 +126,7 @@
         [Compiler compileSourceCode:self.project.sourceCode error:&error];
         if (error)
         {
-            [self showAlertWithTitle:@"This program has errors." message:@"Please fix them before posting!" block:^{
+            [self showAlertWithTitle:@"This program has errors" message:@"Please fix them before posting!" block:^{
                 [self onCancelTapped:nil];
             }];
         }
@@ -303,7 +307,7 @@
 - (void)showSendError:(NSError *)error
 {
     [self isBusy:NO];
-    [self showAlertWithTitle:@"Could not send program" message:error.presentableError.localizedDescription block:nil];
+    [[CommunityModel sharedInstance] handleAPIError:error title:@"Could not send program" viewController:self];
 }
 
 - (void)isBusy:(BOOL)isBusy

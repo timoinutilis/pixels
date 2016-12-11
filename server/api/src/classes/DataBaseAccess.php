@@ -14,6 +14,13 @@ class DataBaseAccess {
 	        $category = intval($queryParams['category']);
 	        $filter = " category = $category";
 	    }
+	    if (!empty($queryParams['onlyprograms'])) {
+	    	if ($filter != "") {
+	    		$filter = $filter." AND image IS NOT NULL";
+	    	} else {
+	    		$filter = " image IS NOT NULL";
+	    	}
+	    }
 	    if ($filter != "") {
 	    	$filter = $word.$filter;
 	    }

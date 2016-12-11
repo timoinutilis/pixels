@@ -13,6 +13,7 @@
 #import "CommunityModel.h"
 #import "AppController.h"
 #import "UIViewController+LowResCoder.h"
+#import "AppStyle.h"
 
 @interface CommStatusUpdateViewController ()
 
@@ -45,6 +46,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.tableView.backgroundView = nil;
+    self.tableView.backgroundColor = [AppStyle tableBackgroundColor];
     
     [self setHeaderTitle:@"Title" section:0];
     
@@ -118,7 +122,7 @@
     } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
         
         [self isBusy:NO];
-        [self showAlertWithTitle:@"Could not send text" message:error.presentableError.localizedDescription block:nil];
+        [[CommunityModel sharedInstance] handleAPIError:error title:@"Could not send text" viewController:self];
         
     }];
 }

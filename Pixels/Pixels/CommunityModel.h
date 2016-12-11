@@ -47,6 +47,7 @@ typedef void (^LCCUploadResultBlock)(NSURL *url, NSError *error);
 - (void)signUpWithUser:(LCCUser *)user completion:(LCCResultBlock)completion;
 - (void)logInWithUsername:(NSString *)username password:(NSString *)password completion:(LCCResultBlock)completion;
 - (void)logOut;
+- (void)handleAPIError:(NSError *)error title:(NSString *)title viewController:(UIViewController *)vc;
 
 - (void)onUserDataChanged;
 - (void)updateCurrentUser;
