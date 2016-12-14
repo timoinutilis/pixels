@@ -21,7 +21,12 @@
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *cancelItem;
 
 @property TextFieldTableViewCell *titleCell;
+@property UITableViewCell *categoryHowToCell;
+@property UITableViewCell *categoryCollabCell;
+@property UITableViewCell *categoryDiscussCell;
 @property TextViewTableViewCell *descriptionCell;
+
+@property (nonatomic) LCCPostCategory selectedCategory;
 @property GORCycleManager *cycleManager;
 
 @property (nonatomic) LCCPostType postType;
@@ -50,18 +55,50 @@
     self.tableView.backgroundView = nil;
     self.tableView.backgroundColor = [AppStyle tableBackgroundColor];
     
-    [self setHeaderTitle:@"Title" section:0];
+    int section = 0;
+    
+    [self setHeaderTitle:@"Title" section:section];
     
     self.titleCell = [self.tableView dequeueReusableCellWithIdentifier:@"ShareTextFieldCell"];
     self.titleCell.textField.placeholder = @"Title";
     [self addCell:self.titleCell];
     
-    [self setHeaderTitle:@"Write Your Text" section:1];
+    if (self.postType == LCCPostTypeForum)
+    {
+        section++;
+        [self setHeaderTitle:@"Category" section:section];
+        
+        self.categoryHowToCell = [self.tableView dequeueReusableCellWithIdentifier:@"SubtitleCell"];
+        self.categoryHowToCell.textLabel.text = @"How To";
+        self.categoryHowToCell.detailTextLabel.text = @"Questions, tips and tricks";
+        [self addCell:self.categoryHowToCell];
+        
+        self.categoryCollabCell = [self.tableView dequeueReusableCellWithIdentifier:@"SubtitleCell"];
+        self.categoryCollabCell.textLabel.text = @"Collaboration";
+        self.categoryCollabCell.detailTextLabel.text = @"Find people to work together";
+        [self addCell:self.categoryCollabCell];
+        
+        self.categoryDiscussCell = [self.tableView dequeueReusableCellWithIdentifier:@"SubtitleCell"];
+        self.categoryDiscussCell.textLabel.text = @"Discussion";
+        self.categoryDiscussCell.detailTextLabel.text = @"Ideas and anything else";
+        [self addCell:self.categoryDiscussCell];
+    }
+    
+    section++;
+    [self setHeaderTitle:@"Write Your Text" section:section];
     
     self.descriptionCell = [self.tableView dequeueReusableCellWithIdentifier:@"ShareTextViewCell"];
     [self addCell:self.descriptionCell];
     
     self.cycleManager = [[GORCycleManager alloc] initWithFields:@[self.titleCell.textField, self.descriptionCell.textView]];
+}
+
+- (void)setSelectedCategory:(LCCPostCategory)selectedCategory
+{
+    _selectedCategory = selectedCategory;
+    self.categoryHowToCell.accessoryType = (selectedCategory == LCCPostCategoryForumProgramming) ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+    self.categoryCollabCell.accessoryType = (selectedCategory == LCCPostCategoryForumCollaboration) ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+    self.categoryDiscussCell.accessoryType = (selectedCategory == LCCPostCategoryForumDiscussion) ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
 }
 
 - (IBAction)onCancelTapped:(id)sender
@@ -77,10 +114,33 @@
     {
         [self showAlertWithTitle:@"Please fill out all fields!" message:nil block:nil];
     }
+    else if (self.postType == LCCPostTypeForum && self.selectedCategory == LCCPostCategoryUndefined)
+    {
+        [self showAlertWithTitle:@"Please select a category!" message:nil block:nil];
+    }
     else
     {
         [self send];
     }
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    
+    if (cell == self.categoryHowToCell)
+    {
+        self.selectedCategory = LCCPostCategoryForumProgramming;
+    }
+    else if (cell == self.categoryCollabCell)
+    {
+        self.selectedCategory = LCCPostCategoryForumCollaboration;
+    }
+    else if (cell == self.categoryDiscussCell)
+    {
+        self.selectedCategory = LCCPostCategoryForumDiscussion;
+    }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (void)send
@@ -95,7 +155,7 @@
     post.type = self.postType;
     post.title = title;
     post.detail = description;
-    post.category = (self.postType == LCCPostTypeStatus) ? LCCPostCategoryStatus : LCCPostCategoryQuestion;
+    post.category = (self.postType == LCCPostTypeStatus) ? LCCPostCategoryStatus : self.selectedCategory;
     
     NSString *route = [NSString stringWithFormat:@"/users/%@/posts", [CommunityModel sharedInstance].currentUser.objectId];
     NSDictionary *params = [post dirtyDictionary];

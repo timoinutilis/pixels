@@ -451,7 +451,7 @@ typedef NS_ENUM(NSInteger, Section) {
 {
     if (section == SectionTitle)
     {
-        return (self.post.type == LCCPostTypeProgram ? [self.post categoryString] : @"Status Update");
+        return [self.post categoryString];
     }
     else if (section == SectionComments)
     {

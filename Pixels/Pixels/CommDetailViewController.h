@@ -39,7 +39,8 @@ typedef NS_ENUM(NSInteger, CommListMode) {
 
 @interface CommFilterCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
-- (void) setPostCategory:(LCCPostCategory)postCategory;
+- (void)setMode:(CommListMode)mode;
+- (void)setPostCategory:(LCCPostCategory)postCategory;
 @end
 
 @interface CommPostCell : UITableViewCell

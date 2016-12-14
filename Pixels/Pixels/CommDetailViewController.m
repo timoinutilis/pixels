@@ -51,7 +51,7 @@ static const NSInteger LIMIT = 25;
 @property CommProfileCell *profileCell;
 @property ActivityView *activityView;
 @property BOOL userNeedsUpdate;
-@property LCCPostCategory filterCategory;
+@property (nonatomic) LCCPostCategory filterCategory;
 @property int currentOffset;
 @property NSString *currentRoute;
 @property BOOL hasMorePosts;
@@ -122,6 +122,14 @@ static const NSInteger LIMIT = 25;
 {
     [super viewWillDisappear:animated];
     [self.view endEditing:YES];
+}
+
+- (void)setFilterCategory:(LCCPostCategory)filterCategory
+{
+    _filterCategory = filterCategory;
+    [self.posts removeAllObjects];
+    [self updateDataForceReload:NO];
+    [self.tableView reloadData];
 }
 
 - (void)setUser:(LCCUser *)user mode:(CommListMode)mode
@@ -414,17 +422,27 @@ static const NSInteger LIMIT = 25;
 
 - (IBAction)onFilterChanged:(UISegmentedControl *)sender
 {
-    [self.posts removeAllObjects];
-    switch (sender.selectedSegmentIndex)
+    if (self.mode == CommListModeForum)
     {
-        case 0: self.filterCategory = LCCPostCategoryUndefined; break;
-        case 1: self.filterCategory = LCCPostCategoryGame; break;
-        case 2: self.filterCategory = LCCPostCategoryTool; break;
-        case 3: self.filterCategory = LCCPostCategoryDemo; break;
-        case 4: self.filterCategory = LCCPostCategoryStatus; break;
+        switch (sender.selectedSegmentIndex)
+        {
+            case 0: self.filterCategory = LCCPostCategoryUndefined; break;
+            case 1: self.filterCategory = LCCPostCategoryForumProgramming; break;
+            case 2: self.filterCategory = LCCPostCategoryForumCollaboration; break;
+            case 3: self.filterCategory = LCCPostCategoryForumDiscussion; break;
+        }
     }
-    [self updateDataForceReload:NO];
-    [self.tableView reloadData];
+    else
+    {
+        switch (sender.selectedSegmentIndex)
+        {
+            case 0: self.filterCategory = LCCPostCategoryUndefined; break;
+            case 1: self.filterCategory = LCCPostCategoryGame; break;
+            case 2: self.filterCategory = LCCPostCategoryTool; break;
+            case 3: self.filterCategory = LCCPostCategoryDemo; break;
+            case 4: self.filterCategory = LCCPostCategoryStatus; break;
+        }
+    }
 }
 
 - (void)deletePost:(LCCPost *)post indexPath:(NSIndexPath *)indexPath
@@ -561,7 +579,7 @@ static const NSInteger LIMIT = 25;
         else if (self.mode == CommListModeForum)
         {
             CommInfoCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommInfoCell" forIndexPath:indexPath];
-            cell.infoTextLabel.text = @"Do you need help or have any question? Post it here in the Forum, where anyone can see it.";
+            cell.infoTextLabel.text = @"Do you need help or have an idea? Post it here in the Forum, where anyone can see it.";
             return cell;
         }
     }
@@ -570,7 +588,7 @@ static const NSInteger LIMIT = 25;
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ActionCell" forIndexPath:indexPath];
         if (self.mode == CommListModeForum)
         {
-            cell.textLabel.text = @"Write Question";
+            cell.textLabel.text = @"Start New Topic";
         }
         else
         {
@@ -584,6 +602,7 @@ static const NSInteger LIMIT = 25;
         if (indexPath.row == 0)
         {
             CommFilterCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommFilterCell" forIndexPath:indexPath];
+            cell.mode = self.mode;
             cell.postCategory = self.filterCategory;
             return cell;
         }
@@ -594,7 +613,7 @@ static const NSInteger LIMIT = 25;
             LCCPostStats *stats = self.statsById[post.stats];
             NSString *cellType = (post.type == LCCPostTypeStatus || post.image == nil) ? @"StatusCell" : @"ProgramCell";
             CommPostCell *cell = [tableView dequeueReusableCellWithIdentifier:cellType forIndexPath:indexPath];
-            [cell setPost:post user:user showName:(self.mode == CommListModeNews || self.mode == CommListModeDiscover)];
+            [cell setPost:post user:user showName:(self.mode == CommListModeNews || self.mode == CommListModeDiscover || self.mode == CommListModeForum)];
             [cell setStats:stats];
             cell.tag = CellTagPost;
             return cell;
@@ -640,9 +659,18 @@ static const NSInteger LIMIT = 25;
             LCCPostType postType = (self.mode == CommListModeForum) ? LCCPostTypeForum : LCCPostTypeStatus;
             UIViewController *vc = [CommStatusUpdateViewController createWithStoryboard:self.storyboard postType:postType completion:^(LCCPost *post, LCCPostStats *stats) {
                 self.statsById[stats.objectId] = stats;
-                [self.posts insertObject:post atIndex:0];
-                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:2];
-                [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                LCCUser *currentUser = [CommunityModel sharedInstance].currentUser;
+                self.usersById[currentUser.objectId] = currentUser;
+                if (self.filterCategory == LCCPostCategoryUndefined || post.category == self.filterCategory)
+                {
+                    [self.posts insertObject:post atIndex:0];
+                    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:2];
+                    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                }
+                else
+                {
+                    self.filterCategory = LCCPostCategoryUndefined;
+                }
             }];
             
             [self presentViewController:vc animated:YES completion:nil];
@@ -789,6 +817,27 @@ static const NSInteger LIMIT = 25;
 
 @implementation CommFilterCell
 
+- (void)setMode:(CommListMode)mode
+{
+    [self.segmentedControl removeAllSegments];
+    [self.segmentedControl insertSegmentWithTitle:@"All" atIndex:0 animated:NO];
+    switch (mode)
+    {
+        case CommListModeForum:
+            [self.segmentedControl insertSegmentWithTitle:@"How To" atIndex:1 animated:NO];
+            [self.segmentedControl insertSegmentWithTitle:@"Collaboration" atIndex:2 animated:NO];
+            [self.segmentedControl insertSegmentWithTitle:@"Discussion" atIndex:3 animated:NO];
+            break;
+            
+        default:
+            [self.segmentedControl insertSegmentWithTitle:@"Games" atIndex:1 animated:NO];
+            [self.segmentedControl insertSegmentWithTitle:@"Tools" atIndex:2 animated:NO];
+            [self.segmentedControl insertSegmentWithTitle:@"Demos" atIndex:3 animated:NO];
+            [self.segmentedControl insertSegmentWithTitle:@"Status" atIndex:4 animated:NO];
+            break;
+    }
+}
+
 - (void)setPostCategory:(LCCPostCategory)postCategory
 {
     switch (postCategory)
@@ -797,18 +846,19 @@ static const NSInteger LIMIT = 25;
             self.segmentedControl.selectedSegmentIndex = 0;
             break;
         case LCCPostCategoryGame:
+        case LCCPostCategoryForumProgramming:
             self.segmentedControl.selectedSegmentIndex = 1;
             break;
         case LCCPostCategoryTool:
+        case LCCPostCategoryForumCollaboration:
             self.segmentedControl.selectedSegmentIndex = 2;
             break;
         case LCCPostCategoryDemo:
+        case LCCPostCategoryForumDiscussion:
             self.segmentedControl.selectedSegmentIndex = 3;
             break;
         case LCCPostCategoryStatus:
             self.segmentedControl.selectedSegmentIndex = 4;
-            break;
-        case LCCPostCategoryQuestion:
             break;
     }
 }
@@ -876,7 +926,8 @@ static const NSInteger LIMIT = 25;
         NSString *downloadsWord = stats.numDownloads == 1 ? @"Download" : @"Downloads";
         NSString *commentsWord = stats.numComments == 1 ? @"Comment" : @"Comments";
         
-        if (self.post.category == LCCPostCategoryStatus)
+        if (   self.post.category == LCCPostCategoryStatus // checks category, because of shared posts.
+            || self.post.type == LCCPostTypeForum)
         {
             self.statsLabel.text = [NSString stringWithFormat:@"%d %@, %d %@",
                                     stats.numLikes, likesWord,

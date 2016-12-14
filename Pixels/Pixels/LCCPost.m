@@ -38,7 +38,13 @@
         case LCCPostCategoryDemo:
             return @"Demo";
         case LCCPostCategoryStatus:
-            return @"Status";
+            return @"Status Update";
+        case LCCPostCategoryForumProgramming:
+            return @"Programming";
+        case LCCPostCategoryForumCollaboration:
+            return @"Collaboration";
+        case LCCPostCategoryForumDiscussion:
+            return @"Discussion";
         default:
             return @"Unknown";
     }

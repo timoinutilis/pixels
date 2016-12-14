@@ -94,6 +94,8 @@ define("PostTypeStatus", 2);
 define("PostTypeShare", 3);
 define("PostTypeForum", 4);
 
+define("NormalPostTypes", "1,2,3");
+
 /* ============ Parameter Checks ============ */
 
 function checkMyUser($userId, Request $request) {
@@ -178,7 +180,7 @@ $app->delete('/posts/{id}', function (Request $request, Response $response) {
                             //TODO delete files
                             $access->data['success'] = TRUE;
 
-                            if ($post['type'] != 3) { // not if post is a "share"
+                            if ($post['type'] != PostTypeShare) {
                                 $stmt = $this->db->prepare("DELETE FROM postStats WHERE post = ?");
                                 $stmt->bindValue(1, $postId);
                                 $stmt->execute();
@@ -332,7 +334,7 @@ $app->get('/users/{id}/news', function (Request $request, Response $response) {
     if ($followedUserIds !== FALSE) {
         $followedUserIdsString = "'".implode("','", $followedUserIds)."'";
         $filter = $access->getPostsFilter($params, "AND");
-        $stmt = $access->prepareMainStatement("posts", $params, MIN_POST_FIELDS, "WHERE user IN ($followedUserIdsString) $filter ORDER BY createdAt DESC");
+        $stmt = $access->prepareMainStatement("posts", $params, MIN_POST_FIELDS, "WHERE user IN ($followedUserIdsString) AND type IN (".NormalPostTypes.") $filter ORDER BY createdAt DESC");
         $posts = $access->addObjects($stmt, "posts");
         if ($posts !== FALSE) {
             if ($access->addSubObjects($posts, "user", "users", MIN_USER_FIELDS)) {
@@ -356,7 +358,7 @@ $app->get('/users/{id}/discover', function (Request $request, Response $response
         $excludedUserIds[] = $userId;
         $excludedUserIdsString = "'".implode("','", $excludedUserIds)."'";
         $filter = $access->getPostsFilter($params, "AND");
-        $stmt = $access->prepareMainStatement("posts", $params, MIN_POST_FIELDS, "WHERE user NOT IN ($excludedUserIdsString) $filter ORDER BY createdAt DESC");
+        $stmt = $access->prepareMainStatement("posts", $params, MIN_POST_FIELDS, "WHERE user NOT IN ($excludedUserIdsString) AND type IN (".NormalPostTypes.") $filter ORDER BY createdAt DESC");
         $posts = $access->addObjects($stmt, "posts");
         if ($posts !== FALSE) {
             if ($access->addSubObjects($posts, "user", "users", MIN_USER_FIELDS)) {
@@ -468,7 +470,7 @@ $app->get('/users/{id}/posts', function (Request $request, Response $response) {
     $access = new DataBaseAccess($this->db);
 
     $filter = $access->getPostsFilter($params, "AND");
-    $stmt = $access->prepareMainStatement("posts", $params, MIN_POST_FIELDS, "WHERE user = ? $filter ORDER BY createdAt DESC");
+    $stmt = $access->prepareMainStatement("posts", $params, MIN_POST_FIELDS, "WHERE user = ? AND type IN (".NormalPostTypes.") $filter ORDER BY createdAt DESC");
     $stmt->bindValue(1, $userId);
     $posts = $access->addObjects($stmt, "posts");
     if ($posts !== FALSE) {
@@ -536,7 +538,7 @@ $app->get('/users/{id}', function (Request $request, Response $response) {
     $user = $access->addObject("users", "user", $userId, FULL_USER_FIELDS);
     if ($user !== FALSE) {
         $filter = $access->getPostsFilter($params, "AND");
-        $stmt = $access->prepareMainStatement("posts", $params, MIN_POST_FIELDS, "WHERE user = ? $filter ORDER BY createdAt DESC");
+        $stmt = $access->prepareMainStatement("posts", $params, MIN_POST_FIELDS, "WHERE user = ? AND type IN (".NormalPostTypes.") $filter ORDER BY createdAt DESC");
         $stmt->bindValue(1, $userId);
         $posts = $access->addObjects($stmt, "posts");
         if ($posts !== FALSE) {
@@ -581,7 +583,7 @@ $app->post('/resetPassword', function (Request $request, Response $response) {
     
     if (isset($body['userId'])) {
         $userId = $body['userId'];
-        $password = "new".mt_rand(0, 9999);
+        $password = "new".mt_rand(1000, 9999);
         $user['bcryptPassword'] = password_hash($password, PASSWORD_DEFAULT);
         $access->updateObject("users", $userId, $user);
         $access->data['password'] = $password;

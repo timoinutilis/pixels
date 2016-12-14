@@ -186,7 +186,7 @@
     }
     else if (self.selectedCategory == LCCPostCategoryUndefined)
     {
-        [self showAlertWithTitle:@"Please selecte a category!" message:nil block:nil];
+        [self showAlertWithTitle:@"Please select a category!" message:nil block:nil];
     }
     else if (self.titleCell.textField.text.length == 0 || self.descriptionCell.textView.text.length == 0)
     {
