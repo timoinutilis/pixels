@@ -68,6 +68,11 @@
 
 - (void)updateDataForceReload:(BOOL)forceReload
 {
+    if (forceReload)
+    {
+        [[CommunityModel sharedInstance] clearCache];
+    }
+    
     NSString *route;
     if (self.mode == CommUsersModeFollowers)
     {

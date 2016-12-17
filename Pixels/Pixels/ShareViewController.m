@@ -275,7 +275,7 @@
                         [post updateWithDictionary:responseObject[@"post"]];
                         [post resetDirty];
                         
-//                        [PFQuery clearAllCachedResults];
+                        [[CommunityModel sharedInstance] clearCache];
                         
                         self.project.postId = post.objectId;
                         [self.presentingViewController dismissViewControllerAnimated:YES completion:^{

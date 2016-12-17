@@ -44,6 +44,8 @@ typedef void (^LCCUploadResultBlock)(NSURL *url, NSError *error);
 
 + (CommunityModel *)sharedInstance;
 
+- (void)clearCache;
+
 - (void)signUpWithUser:(LCCUser *)user completion:(LCCResultBlock)completion;
 - (void)logInWithUsername:(NSString *)username password:(NSString *)password completion:(LCCResultBlock)completion;
 - (void)logOut;

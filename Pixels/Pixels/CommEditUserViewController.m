@@ -127,7 +127,7 @@
     [[CommunityModel sharedInstance].sessionManager PUT:route parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
 
         [self.user resetDirty];
-//        [PFQuery clearAllCachedResults];
+        [[CommunityModel sharedInstance] clearCache];
         
         // save name for log-in view
         NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];

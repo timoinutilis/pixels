@@ -46,6 +46,8 @@
 		926086321A5E8560006C5523 /* Runnable.m in Sources */ = {isa = PBXBuildFile; fileRef = 926086311A5E8560006C5523 /* Runnable.m */; };
 		92612CE41BD7A5F600370C82 /* IndexSideBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 92612CE31BD7A5F600370C82 /* IndexSideBar.m */; };
 		92612CE51BD7A5F600370C82 /* IndexSideBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 92612CE31BD7A5F600370C82 /* IndexSideBar.m */; };
+		926541A11E058840003DCFA3 /* APIURLCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 926541A01E058840003DCFA3 /* APIURLCache.m */; };
+		926541A21E058840003DCFA3 /* APIURLCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 926541A01E058840003DCFA3 /* APIURLCache.m */; };
 		9265C9131BDEB1F40011759E /* RadialGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9265C9121BDEB1F40011759E /* RadialGradientView.m */; };
 		9265C9141BDEB1F40011759E /* RadialGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9265C9121BDEB1F40011759E /* RadialGradientView.m */; };
 		926864211AA5E50900F305B9 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 926864201AA5E50900F305B9 /* StoreKit.framework */; };
@@ -327,6 +329,8 @@
 		926086311A5E8560006C5523 /* Runnable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Runnable.m; sourceTree = "<group>"; };
 		92612CE21BD7A5F600370C82 /* IndexSideBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IndexSideBar.h; sourceTree = "<group>"; };
 		92612CE31BD7A5F600370C82 /* IndexSideBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IndexSideBar.m; sourceTree = "<group>"; };
+		9265419F1E058840003DCFA3 /* APIURLCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIURLCache.h; sourceTree = "<group>"; };
+		926541A01E058840003DCFA3 /* APIURLCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APIURLCache.m; sourceTree = "<group>"; };
 		9265C9111BDEB1F40011759E /* RadialGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RadialGradientView.h; sourceTree = "<group>"; };
 		9265C9121BDEB1F40011759E /* RadialGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RadialGradientView.m; sourceTree = "<group>"; };
 		926864201AA5E50900F305B9 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
@@ -933,6 +937,8 @@
 			children = (
 				92C0811A1B0DDCDB0006331B /* CommunityModel.h */,
 				92C0811B1B0DDCDB0006331B /* CommunityModel.m */,
+				9265419F1E058840003DCFA3 /* APIURLCache.h */,
+				926541A01E058840003DCFA3 /* APIURLCache.m */,
 				928987A01DD74FA3002B84B7 /* APIObject.h */,
 				928987A11DD74FA3002B84B7 /* APIObject.m */,
 				92C081131B0DCD5F0006331B /* LCCUser.h */,
@@ -1182,6 +1188,7 @@
 				92E53DF51A5B3A1D00FE9F91 /* GORScrollViewDelegate.m in Sources */,
 				9215D7791B37361100A65E55 /* StandardTableViewCell.m in Sources */,
 				92884F1C1B0F25B30032623D /* SDWebImageCompat.m in Sources */,
+				926541A11E058840003DCFA3 /* APIURLCache.m in Sources */,
 				92C081541B0DF1900006331B /* LCCPost.m in Sources */,
 				92884F2B1B0F307F0032623D /* CommSourceCodeViewController.m in Sources */,
 				92FD58561DEB079600970C3A /* ActivityView.m in Sources */,
@@ -1306,6 +1313,7 @@
 				929BCF301BB14A1B005F1DBD /* UIImage+GIF.m in Sources */,
 				929BCF321BB14A1B005F1DBD /* SDWebImageDecoder.m in Sources */,
 				9230D0621CC4F71100EF6E52 /* UIImage+Utils.m in Sources */,
+				926541A21E058840003DCFA3 /* APIURLCache.m in Sources */,
 				929BCF331BB14A1B005F1DBD /* GORScrollViewDelegate.m in Sources */,
 				92694C691C9704EE00837C2B /* OpenGLRendererView.m in Sources */,
 				92FD58571DEB079600970C3A /* ActivityView.m in Sources */,

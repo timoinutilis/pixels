@@ -10,6 +10,7 @@
 #import "AppController.h"
 #import "UIViewController+LowResCoder.h"
 #import "CommLogInViewController.h"
+#import "APIURLCache.h"
 
 NSString *const CurrentUserChangeNotification = @"CurrentUserChangeNotification";
 NSString *const FollowsLoadNotification = @"FollowsLoadNotification";
@@ -57,7 +58,11 @@ NSString *const APIErrorTypeKey = @"APIErrorType";
         NSString *clientVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
         NSAssert(clientVersion, @"CFBundleVersion not defined in info.plist");
         
-        _sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:url]];
+        NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
+        sessionConfig.URLCache = [[APIURLCache alloc] initWithMemoryCapacity:2 * 1024 * 1024 diskCapacity:0 diskPath:nil];
+        sessionConfig.requestCachePolicy = NSURLRequestReturnCacheDataElseLoad;
+        
+        _sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:url] sessionConfiguration:sessionConfig];
         self.sessionManager.requestSerializer = [[AFJSONRequestSerializer alloc] init];
         [self.sessionManager.requestSerializer setValue:clientID forHTTPHeaderField:HTTPHeaderClientIDKey];
         [self.sessionManager.requestSerializer setValue:clientVersion forHTTPHeaderField:HTTPHeaderClientVersionKey];
@@ -78,6 +83,11 @@ NSString *const APIErrorTypeKey = @"APIErrorType";
 
     }
     return self;
+}
+
+- (void)clearCache
+{
+    [self.sessionManager.session.configuration.URLCache removeAllCachedResponses];
 }
 
 - (void)signUpWithUser:(LCCUser *)user completion:(LCCResultBlock)completion
@@ -236,7 +246,7 @@ NSString *const APIErrorTypeKey = @"APIErrorType";
     NSDictionary *params = @{@"user":self.currentUser.objectId};
     [self.sessionManager POST:route parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         
-//        [PFQuery clearAllCachedResults];
+        [[CommunityModel sharedInstance] clearCache];
         [self.follows insertObject:user atIndex:0];
         [[NSNotificationCenter defaultCenter] postNotificationName:FollowsChangeNotification object:self];
         
@@ -255,7 +265,7 @@ NSString *const APIErrorTypeKey = @"APIErrorType";
         NSString *route = [NSString stringWithFormat:@"/users/%@/followers/%@", user.objectId, self.currentUser.objectId];
         [self.sessionManager DELETE:route parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
 
-//            [PFQuery clearAllCachedResults];
+            [[CommunityModel sharedInstance] clearCache];
             [self.follows removeObject:user];
             [[NSNotificationCenter defaultCenter] postNotificationName:FollowsChangeNotification object:self];
             

@@ -12,6 +12,7 @@
 #import "NSMutableDictionary+Utils.h"
 #import "HelpContent.h"
 #import "TabBarController.h"
+#import "CommunityModel.h"
 
 NSString *const FullVersionProductID = @"fullversion";
 
@@ -243,7 +244,7 @@ NSString *const ImportProjectNotification = @"ImportProjectNotification";
     NSDictionary *aps = userInfo[@"aps"];
     NSString *alertText = aps[@"alert"];
     
-//    [PFQuery clearAllCachedResults];
+    [[CommunityModel sharedInstance] clearCache];
     
     if (inForeground)
     {

@@ -187,6 +187,11 @@ typedef NS_ENUM(NSInteger, Section) {
     self.tableView.tableFooterView = self.activityView;
     self.title = self.post.title ? [self.post.title stringWithMaxWords:4] : @"Loading...";
     
+    if (forceReload)
+    {
+        [[CommunityModel sharedInstance] clearCache];
+    }
+    
     LCCUser *currentUser = [CommunityModel sharedInstance].currentUser;
     
     NSString *route = [NSString stringWithFormat:@"posts/%@", self.post.objectId];
@@ -296,7 +301,7 @@ typedef NS_ENUM(NSInteger, Section) {
     [[CommunityModel sharedInstance].sessionManager POST:route parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         
         [BlockerView dismiss];
-//        [PFQuery clearAllCachedResults];
+        [[CommunityModel sharedInstance] clearCache];
         [self showAlertWithTitle:@"Shared successfully" message:nil block:nil];
         
     } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
@@ -359,7 +364,7 @@ typedef NS_ENUM(NSInteger, Section) {
             
             [[AppController sharedController] registerForNotifications];
             
-//            [PFQuery clearAllCachedResults];
+            [[CommunityModel sharedInstance] clearCache];
             
             button.enabled = YES;
 
@@ -381,7 +386,7 @@ typedef NS_ENUM(NSInteger, Section) {
     [[CommunityModel sharedInstance].sessionManager DELETE:route parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
 
         [BlockerView dismiss];
-//        [PFQuery clearAllCachedResults];
+        [[CommunityModel sharedInstance] clearCache];
         [[NSNotificationCenter defaultCenter] postNotificationName:PostDeleteNotification object:self userInfo:@{@"postId": self.post.objectId}];
 
     } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {

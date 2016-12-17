@@ -167,7 +167,7 @@
         
         LCCPostStats *stats = [[LCCPostStats alloc] initWithDictionary:responseObject[@"postStats"]];
         
-//        [PFQuery clearAllCachedResults];
+        [[CommunityModel sharedInstance] clearCache];
         
         if (self.block)
         {

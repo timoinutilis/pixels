@@ -277,6 +277,11 @@ static const NSInteger LIMIT = 25;
     self.tableView.tableFooterView = self.activityView;
     self.activityView.state = ActivityStateBusy;
     
+    if (forceReload)
+    {
+        [[CommunityModel sharedInstance] clearCache];
+    }
+    
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"offset"] = @(self.currentOffset);
     params[@"limit"] = @(LIMIT);
@@ -284,7 +289,7 @@ static const NSInteger LIMIT = 25;
     {
         params[@"category"] = @(self.filterCategory);
     }
-
+    
     [[CommunityModel sharedInstance].sessionManager GET:self.currentRoute parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         
         id userDict = responseObject[@"user"];
@@ -452,7 +457,7 @@ static const NSInteger LIMIT = 25;
         [BlockerView dismiss];
         [self.posts removeObject:post];
         [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-//        [PFQuery clearAllCachedResults];
+        [[CommunityModel sharedInstance] clearCache];
         
     } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
         
