@@ -96,7 +96,7 @@
 - (void)setSelectedCategory:(LCCPostCategory)selectedCategory
 {
     _selectedCategory = selectedCategory;
-    self.categoryHowToCell.accessoryType = (selectedCategory == LCCPostCategoryForumProgramming) ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+    self.categoryHowToCell.accessoryType = (selectedCategory == LCCPostCategoryForumHowTo) ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
     self.categoryCollabCell.accessoryType = (selectedCategory == LCCPostCategoryForumCollaboration) ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
     self.categoryDiscussCell.accessoryType = (selectedCategory == LCCPostCategoryForumDiscussion) ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
 }
@@ -130,7 +130,7 @@
     
     if (cell == self.categoryHowToCell)
     {
-        self.selectedCategory = LCCPostCategoryForumProgramming;
+        self.selectedCategory = LCCPostCategoryForumHowTo;
     }
     else if (cell == self.categoryCollabCell)
     {

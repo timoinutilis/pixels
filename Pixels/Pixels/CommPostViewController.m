@@ -282,7 +282,7 @@ typedef NS_ENUM(NSInteger, Section) {
 - (void)share
 {
     LCCPost *post = [[LCCPost alloc] init];
-    post.type = LCCPostTypeShare;
+    post.type = LCCPostTypeShare; //TODO change to original type
     post.category = self.post.category;
     post.image = self.post.image;
     post.title = self.post.title;

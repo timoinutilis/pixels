@@ -32,9 +32,11 @@ typedef NS_ENUM(NSInteger, CellTag) {
     CellTagWriteStatus
 };
 
-static NSString *const SectionInfo = @"Info";
-static NSString *const SectionPostStatus = @"PostStatus";
-static NSString *const SectionPosts = @"Posts";
+typedef NS_ENUM(NSInteger, Section) {
+    SectionInfo,
+    SectionPosts,
+    Section_count
+};
 
 static const NSInteger LIMIT = 25;
 
@@ -47,7 +49,6 @@ static const NSInteger LIMIT = 25;
 @property NSMutableDictionary *usersById;
 @property NSMutableDictionary *statsById;
 
-@property NSArray *sections;
 @property CommProfileCell *profileCell;
 @property ActivityView *activityView;
 @property BOOL userNeedsUpdate;
@@ -227,7 +228,6 @@ static const NSInteger LIMIT = 25;
     {
         case CommListModeNews: {
             self.title = @"News";
-            self.sections = @[SectionInfo, SectionPosts];
             self.currentOffset = 0;
             self.currentRoute = [NSString stringWithFormat:@"users/%@/news", (self.user ? self.user.objectId : @"guest")];
             [self loadCurrentQueryForceReload:forceReload];
@@ -235,7 +235,6 @@ static const NSInteger LIMIT = 25;
         }
         case CommListModeForum: {
             self.title = @"Forum";
-            self.sections = @[SectionInfo, SectionPostStatus, SectionPosts];
             self.currentOffset = 0;
             self.currentRoute = @"forum";
             [self loadCurrentQueryForceReload:forceReload];
@@ -243,7 +242,6 @@ static const NSInteger LIMIT = 25;
         }
         case CommListModeDiscover: {
             self.title = @"Discover";
-            self.sections = @[SectionInfo, SectionPosts];
             self.currentOffset = 0;
             self.currentRoute = [NSString stringWithFormat:@"users/%@/discover", self.user.objectId];
             [self loadCurrentQueryForceReload:forceReload];
@@ -251,7 +249,6 @@ static const NSInteger LIMIT = 25;
         }
         case CommListModeProfile: {
             self.title = self.user.username;
-            self.sections = [self.user isMe] ? @[SectionInfo, SectionPostStatus, SectionPosts] : @[SectionInfo, SectionPosts];
             self.currentOffset = 0;
             self.currentRoute = [NSString stringWithFormat:@"users/%@", self.user.objectId];
             [self loadCurrentQueryForceReload:forceReload];
@@ -328,7 +325,7 @@ static const NSInteger LIMIT = 25;
         if (forceReload && !add)
         {
             [self updateVisiblePosts];
-            [self.tableView reloadDataAnimatedWithOldArray:oldPosts newArray:self.posts inSection:self.sections.count - 1 offset:1];
+            [self.tableView reloadDataAnimatedWithOldArray:oldPosts newArray:self.posts inSection:SectionPosts offset:1];
         }
         else
         {
@@ -427,7 +424,7 @@ static const NSInteger LIMIT = 25;
         switch (sender.selectedSegmentIndex)
         {
             case 0: self.filterCategory = LCCPostCategoryUndefined; break;
-            case 1: self.filterCategory = LCCPostCategoryForumProgramming; break;
+            case 1: self.filterCategory = LCCPostCategoryForumHowTo; break;
             case 2: self.filterCategory = LCCPostCategoryForumCollaboration; break;
             case 3: self.filterCategory = LCCPostCategoryForumDiscussion; break;
         }
@@ -469,12 +466,11 @@ static const NSInteger LIMIT = 25;
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *sectionId = self.sections[indexPath.section];
-    if (sectionId == SectionInfo && indexPath.row == 0)
+    if (indexPath.section == SectionInfo && indexPath.row == 0)
     {
-        return 122;
+        return (self.mode == CommListModeProfile) ? 122 : 60;
     }
-    else if (sectionId == SectionPosts)
+    else if (indexPath.section == SectionPosts)
     {
         return 84;
     }
@@ -483,28 +479,27 @@ static const NSInteger LIMIT = 25;
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return (self.posts != nil ? self.sections.count : 0);
+    return Section_count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSString *sectionId = self.sections[section];
-    if (sectionId == SectionInfo)
+    if (section == SectionInfo)
     {
         if (self.mode == CommListModeProfile)
         {
-            return 3;
+            return [self.user isMe] ? 4 : 3;
+        }
+        else if (self.mode == CommListModeForum)
+        {
+            return 2;
         }
         else
         {
             return 1;
         }
     }
-    else if (sectionId == SectionPostStatus)
-    {
-        return 1;
-    }
-    else if (sectionId == SectionPosts)
+    else if (section == SectionPosts)
     {
         return self.posts.count + 1; // posts + filter
     }
@@ -513,12 +508,7 @@ static const NSInteger LIMIT = 25;
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    NSString *sectionId = self.sections[section];
-    if (sectionId == SectionInfo)
-    {
-        return (self.mode == CommListModeProfile) ? @"User" : @"Info";
-    }
-    else if (sectionId == SectionPosts)
+    if (section == SectionPosts)
     {
         return @"Posts";
     }
@@ -527,8 +517,7 @@ static const NSInteger LIMIT = 25;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *sectionId = self.sections[indexPath.section];
-    if (sectionId == SectionInfo)
+    if (indexPath.section == SectionInfo)
     {
         if (self.mode == CommListModeProfile)
         {
@@ -541,19 +530,25 @@ static const NSInteger LIMIT = 25;
                 }
                 return self.profileCell;
             }
-            else
+            else if (indexPath.row == 1)
             {
                 UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DetailMenuCell" forIndexPath:indexPath];
-                if (indexPath.row == 1)
-                {
-                    cell.textLabel.text = @"Followers";
-                    cell.tag = CellTagFollowers;
-                }
-                else if (indexPath.row == 2)
-                {
-                    cell.textLabel.text = @"Following";
-                    cell.tag = CellTagFollowing;
-                }
+                cell.textLabel.text = @"Followers";
+                cell.tag = CellTagFollowers;
+                return cell;
+            }
+            else if (indexPath.row == 2)
+            {
+                UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DetailMenuCell" forIndexPath:indexPath];
+                cell.textLabel.text = @"Following";
+                cell.tag = CellTagFollowing;
+                return cell;
+            }
+            else if (indexPath.row == 3)
+            {
+                UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ActionCell" forIndexPath:indexPath];
+                cell.textLabel.text = @"Write Status Update";
+                cell.tag = CellTagWriteStatus;
                 return cell;
             }
         }
@@ -578,26 +573,23 @@ static const NSInteger LIMIT = 25;
         }
         else if (self.mode == CommListModeForum)
         {
-            CommInfoCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommInfoCell" forIndexPath:indexPath];
-            cell.infoTextLabel.text = @"Do you need help or have an idea? Post it here in the Forum, where anyone can see it.";
-            return cell;
+            if (indexPath.row == 0)
+            {
+                CommInfoCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommInfoCell" forIndexPath:indexPath];
+                cell.infoTextLabel.text = @"Do you need help or have an idea? Post it here in the Forum, where anyone can see it.";
+                return cell;
+            }
+            else if (indexPath.row == 1)
+            {
+                UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ActionCell" forIndexPath:indexPath];
+                cell.textLabel.text = @"Start New Topic";
+                cell.tag = CellTagWriteStatus;
+                return cell;
+            }
+
         }
     }
-    else if (sectionId == SectionPostStatus)
-    {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ActionCell" forIndexPath:indexPath];
-        if (self.mode == CommListModeForum)
-        {
-            cell.textLabel.text = @"Start New Topic";
-        }
-        else
-        {
-            cell.textLabel.text = @"Write Status Update";
-        }
-        cell.tag = CellTagWriteStatus;
-        return cell;
-    }
-    else if (sectionId == SectionPosts)
+    else if (indexPath.section == SectionPosts)
     {
         if (indexPath.row == 0)
         {
@@ -611,7 +603,7 @@ static const NSInteger LIMIT = 25;
             LCCPost *post = self.posts[indexPath.row - 1];
             LCCUser *user = self.usersById[post.user];
             LCCPostStats *stats = self.statsById[post.stats];
-            NSString *cellType = (post.type == LCCPostTypeStatus || post.image == nil) ? @"StatusCell" : @"ProgramCell";
+            NSString *cellType = (post.type == LCCPostTypeStatus || post.image == nil) ? @"StatusCell" : @"ProgramCell"; //TODO should check type only
             CommPostCell *cell = [tableView dequeueReusableCellWithIdentifier:cellType forIndexPath:indexPath];
             [cell setPost:post user:user showName:(self.mode == CommListModeNews || self.mode == CommListModeDiscover || self.mode == CommListModeForum)];
             [cell setStats:stats];
@@ -643,7 +635,7 @@ static const NSInteger LIMIT = 25;
         case CellTagPost: {
             CommPostViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"CommPostView"];
             LCCPost *post = self.posts[indexPath.row - 1];
-            if (post.type == LCCPostTypeShare)
+            if (post.isShared)
             {
                 LCCPost *sharedPost = [[LCCPost alloc] initWithObjectId:post.sharedPost];
                 [vc setPost:sharedPost mode:CommPostModePost];
@@ -656,24 +648,32 @@ static const NSInteger LIMIT = 25;
             break;
         }
         case CellTagWriteStatus: {
-            LCCPostType postType = (self.mode == CommListModeForum) ? LCCPostTypeForum : LCCPostTypeStatus;
-            UIViewController *vc = [CommStatusUpdateViewController createWithStoryboard:self.storyboard postType:postType completion:^(LCCPost *post, LCCPostStats *stats) {
-                self.statsById[stats.objectId] = stats;
-                LCCUser *currentUser = [CommunityModel sharedInstance].currentUser;
-                self.usersById[currentUser.objectId] = currentUser;
-                if (self.filterCategory == LCCPostCategoryUndefined || post.category == self.filterCategory)
-                {
-                    [self.posts insertObject:post atIndex:0];
-                    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:2];
-                    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-                }
-                else
-                {
-                    self.filterCategory = LCCPostCategoryUndefined;
-                }
-            }];
-            
-            [self presentViewController:vc animated:YES completion:nil];
+            if (![CommunityModel sharedInstance].currentUser)
+            {
+                CommLogInViewController *vc = [CommLogInViewController create];
+                [self presentInNavigationViewController:vc];
+            }
+            else
+            {
+                LCCPostType postType = (self.mode == CommListModeForum) ? LCCPostTypeForum : LCCPostTypeStatus;
+                UIViewController *vc = [CommStatusUpdateViewController createWithStoryboard:self.storyboard postType:postType completion:^(LCCPost *post, LCCPostStats *stats) {
+                    self.statsById[stats.objectId] = stats;
+                    LCCUser *currentUser = [CommunityModel sharedInstance].currentUser;
+                    self.usersById[currentUser.objectId] = currentUser;
+                    if (self.filterCategory == LCCPostCategoryUndefined || post.category == self.filterCategory)
+                    {
+                        [self.posts insertObject:post atIndex:0];
+                        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:SectionPosts];
+                        [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                    }
+                    else
+                    {
+                        self.filterCategory = LCCPostCategoryUndefined;
+                    }
+                }];
+                
+                [self presentViewController:vc animated:YES completion:nil];
+            }
             [tableView deselectRowAtIndexPath:indexPath animated:YES];
         }
     }
@@ -681,13 +681,12 @@ static const NSInteger LIMIT = 25;
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *sectionId = self.sections[indexPath.section];
-    if (sectionId == SectionPosts && indexPath.row > 0)
+    if (indexPath.section == SectionPosts && indexPath.row > 0)
     {
         LCCUser *user = [CommunityModel sharedInstance].currentUser;
         LCCPost *post = self.posts[indexPath.row - 1];
         
-        if ([user isNewsUser] && post.type == LCCPostTypeShare && [post.user isEqualToString:user.objectId])
+        if ([user isNewsUser] && post.isShared && [post.user isEqualToString:user.objectId])
         {
             return UITableViewCellEditingStyleDelete;
         }
@@ -697,8 +696,7 @@ static const NSInteger LIMIT = 25;
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *sectionId = self.sections[indexPath.section];
-    if (sectionId == SectionPosts && indexPath.row > 0)
+    if (indexPath.section == SectionPosts && indexPath.row > 0)
     {
         LCCPost *post = self.posts[indexPath.row - 1];
         [self deletePost:post indexPath:indexPath];
@@ -846,7 +844,7 @@ static const NSInteger LIMIT = 25;
             self.segmentedControl.selectedSegmentIndex = 0;
             break;
         case LCCPostCategoryGame:
-        case LCCPostCategoryForumProgramming:
+        case LCCPostCategoryForumHowTo:
             self.segmentedControl.selectedSegmentIndex = 1;
             break;
         case LCCPostCategoryTool:
@@ -905,7 +903,7 @@ static const NSInteger LIMIT = 25;
     }
     if (showName)
     {
-        NSString *name = (post.type == LCCPostTypeShare) ? [NSString stringWithFormat:@"Shared by %@", user.username] : user.username;
+        NSString *name = (post.isShared) ? [NSString stringWithFormat:@"Shared by %@", user.username] : user.username;
         [infos addObject:name];
     }
     NSString *date = [NSDateFormatter localizedStringFromDate:post.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterNoStyle];
@@ -926,7 +924,7 @@ static const NSInteger LIMIT = 25;
         NSString *downloadsWord = stats.numDownloads == 1 ? @"Download" : @"Downloads";
         NSString *commentsWord = stats.numComments == 1 ? @"Comment" : @"Comments";
         
-        if (   self.post.category == LCCPostCategoryStatus // checks category, because of shared posts.
+        if (   self.post.category == LCCPostCategoryStatus // checks category, because of shared posts. //TODO change to type when isShared works
             || self.post.type == LCCPostTypeForum)
         {
             self.statsLabel.text = [NSString stringWithFormat:@"%d %@, %d %@",

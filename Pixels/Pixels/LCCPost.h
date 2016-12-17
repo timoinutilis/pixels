@@ -12,7 +12,7 @@ typedef NS_ENUM(int, LCCPostType) {
     LCCPostTypeUndefined,
     LCCPostTypeProgram,
     LCCPostTypeStatus,
-    LCCPostTypeShare,
+    LCCPostTypeShare, //TODO make this obsolete
     LCCPostTypeForum
 };
 
@@ -28,7 +28,7 @@ typedef NS_ENUM(int, LCCPostCategory) {
     LCCPostCategoryDemo,
     
     // Forum
-    LCCPostCategoryForumProgramming = 10,
+    LCCPostCategoryForumHowTo = 10,
     LCCPostCategoryForumCollaboration,
     LCCPostCategoryForumDiscussion
 };
@@ -48,6 +48,7 @@ typedef void (^LCCPostLoadSourceCodeBlock)(NSString *sourceCode, NSError *error)
 @property (retain) NSString *stats;
 
 @property (nonatomic) BOOL isSourceCodeLoaded;
+@property (nonatomic) BOOL isShared;
 
 - (NSString *)categoryString;
 - (void)loadSourceCodeWithCompletion:(LCCPostLoadSourceCodeBlock)block;

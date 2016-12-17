@@ -39,8 +39,8 @@
             return @"Demo";
         case LCCPostCategoryStatus:
             return @"Status Update";
-        case LCCPostCategoryForumProgramming:
-            return @"Programming";
+        case LCCPostCategoryForumHowTo:
+            return @"How To";
         case LCCPostCategoryForumCollaboration:
             return @"Collaboration";
         case LCCPostCategoryForumDiscussion:
@@ -53,6 +53,11 @@
 - (BOOL)isSourceCodeLoaded
 {
     return self.sourceCode != nil;
+}
+
+- (BOOL)isShared
+{
+    return self.sharedPost != nil;
 }
 
 - (void)loadSourceCodeWithCompletion:(LCCPostLoadSourceCodeBlock)block
