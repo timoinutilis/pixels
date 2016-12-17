@@ -38,6 +38,7 @@
     // Backgrounds
     [BackgroundView appearance].backgroundColor = [AppStyle brightColor];
     [UIWebView appearance].backgroundColor = [AppStyle brightColor];
+    [UITableView appearance].backgroundColor = [AppStyle brightColor];
     [UITableViewCell appearance].backgroundColor = [AppStyle brightColor];
     [UICollectionView appearance].backgroundColor = [AppStyle brightColor];
     [UITextView appearanceWhenContainedIn:[UITableViewCell class], nil].backgroundColor = [AppStyle brightColor];

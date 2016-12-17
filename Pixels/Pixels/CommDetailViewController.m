@@ -484,7 +484,7 @@ static const NSInteger LIMIT = 25;
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return Section_count;
+    return (self.posts != nil ? Section_count : 0);
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
