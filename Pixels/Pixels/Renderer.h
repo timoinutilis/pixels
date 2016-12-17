@@ -51,6 +51,13 @@ typedef struct Block {
     uint8_t *pixelBuffer;
 } Block;
 
+typedef struct Font {
+    uint8_t *data;
+    int *x;
+    int *width;
+    int height;
+} Font;
+
 extern int const RendererMaxLayerSize;
 extern int const RendererNumColors;
 extern int const RendererNumLayers;
@@ -70,6 +77,7 @@ extern int const RendererNumBlocks;
 @property (nonatomic, readonly) Layer *currentLayer;
 
 - (Layer *)layerAtIndex:(int)index;
+- (Font *)fontForLayer:(Layer *)layer;
 - (void)openLayer:(int)index width:(int)width height:(int)height renderMode:(int)renderMode;
 - (void)closeLayer:(int)index;
 - (void)initPalette;

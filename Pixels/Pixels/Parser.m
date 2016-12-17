@@ -205,6 +205,9 @@
         case TTypeSymInput:
             node = [self acceptInput];
             break;
+        case TTypeSymLocate:
+            node = [self acceptLocate];
+            break;
         case TTypeSymFor:
             node = [self acceptForNext];
             break;
@@ -470,6 +473,7 @@
         case TTypeSymReturn:
         case TTypeSymPrint:
         case TTypeSymInput:
+        case TTypeSymLocate:
         case TTypeSymFor:
         case TTypeSymLet:
         case TTypeSymDim:
@@ -571,6 +575,16 @@
         [self accept:TTypeSymSemicolon];
     }
     node.variable = [self acceptVariable];
+    return node;
+}
+
+- (Node *)acceptLocate
+{
+    LocateNode *node = [[LocateNode alloc] init];
+    [self accept:TTypeSymLocate];
+    node.columnExpression = [self acceptOptionalExpression];
+    [self accept:TTypeSymComma];
+    node.rowExpression = [self acceptOptionalExpression];
     return node;
 }
 

@@ -52,6 +52,7 @@
         case TTypeSymKeyboard: return @"KEYBOARD";
         case TTypeSymPrint: return @"PRINT";
         case TTypeSymInput: return @"INPUT";
+        case TTypeSymLocate: return @"LOCATE";
         case TTypeSymData: return @"DATA";
         case TTypeSymRead: return @"READ";
         case TTypeSymRestore: return @"RESTORE";

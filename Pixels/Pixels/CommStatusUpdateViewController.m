@@ -52,6 +52,8 @@
 {
     [super viewDidLoad];
     
+    self.title = (self.postType == LCCPostTypeForum) ? @"New Topic" : @"Status Update";
+    
     self.tableView.backgroundView = nil;
     self.tableView.backgroundColor = [AppStyle tableBackgroundColor];
     

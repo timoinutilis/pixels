@@ -22,13 +22,6 @@ int const RendererFlagTransparent = 0x01;
 
 uint32_t const ColorPalette[16] = {0x000000, 0xffffff, 0xaaaaaa, 0x555555, 0xff0000, 0x550000, 0xaa5500, 0xffaa00, 0xffff00, 0x00aa00, 0x005500, 0x00aaff, 0x0000ff, 0x0000aa, 0xff00ff, 0xaa00aa};
 
-typedef struct Font {
-    uint8_t *data;
-    int *x;
-    int *width;
-    int height;
-} Font;
-
 @implementation Renderer {
     Layer _layers[RendererNumLayers];
     uint32_t _palettes[RendererNumLayers][RendererNumColors];
@@ -120,6 +113,11 @@ typedef struct Font {
 - (Layer *)layerAtIndex:(int)index
 {
     return &_layers[index];
+}
+
+- (Font *)fontForLayer:(Layer *)layer
+{
+    return &_fonts[layer->fontIndex];
 }
 
 - (void)openLayer:(int)index width:(int)width height:(int)height renderMode:(int)renderMode

@@ -214,6 +214,17 @@ PRINT "HELLO "+N$+"!"
 PRINT "IN ONE YEAR YOU ARE "+(AGE+1)
 </pre>
 
+<h3 id="_LOCATE" name="LOCATE">LOCATE</h3>
+<pre>LOCATE [column],[line]</pre>
+<p>Positions the text cursor at the given <i>column</i> and <i>line</i> for the next <a href="#_PRINT">PRINT</a> or <a href="#_INPUT">INPUT</a> call. The position must be inside of the screen bounds. Any parameter can be omitted to keep the current value.</p>
+<p>Note: This works best with fonts with a fixed character width (see <a href="#_FONT">FONT</a>).</p>
+<pre class="exm">
+LOCATE 5,9
+PRINT "BOTTOM"
+LOCATE 7,0
+PRINT "TOP"
+</pre>
+
 <h3 id="_WAIT" name="WAIT,TAP">WAIT</h3>
 <pre>WAIT seconds [TAP]</pre>
 <p>WAIT pauses the execution of the program for the time set by the <i>seconds</i> parameter. The shortes wait time is 0.04 seconds. If you add the TAP keyword, the waiting will be interrupted by any tap on a gamepad button (including the direction-pad). This is useful if you have a slow loop, but you want immediate reactions to user inputs.</p>
@@ -420,7 +431,7 @@ WEND
 
 <h3 id="_FONT" name="FONT">FONT</h3>
 <pre>FONT n</pre>
-<p>LowRes Coder includes 4 different fonts. FONT sets the current font for <a href="#_TEXT">TEXT</a>, <a href="#_TEXTWIDTH">TEXT WIDTH</a> and <a href="#_PRINT">PRINT</a>. <i>n</i> must be a value from the following table:</p>
+<p>LowRes Coder includes 4 different fonts. FONT sets the current font for <a href="#_TEXT">TEXT</a>, <a href="#_TEXTWIDTH">TEXT WIDTH</a>, <a href="#_PRINT">PRINT</a> and <a href="#_INPUT">INPUT</a>. <i>n</i> must be a value from the following table:</p>
 <table>
     <tr><td>0</td><td>6p proportional (default)</td></tr>
     <tr><td>1</td><td>6p fixed-width (4x6)</td></tr>
@@ -1405,6 +1416,7 @@ LEFT$,
 LEN,
 LET,
 LINE,
+LOCATE,
 LOG,
 LOOP,
 MAX,
