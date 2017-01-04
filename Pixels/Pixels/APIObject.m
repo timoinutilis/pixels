@@ -13,7 +13,8 @@ typedef NS_ENUM(NSInteger, APIObjectPropertyType) {
     APIObjectPropertyTypeString,
     APIObjectPropertyTypeDate,
     APIObjectPropertyTypeURL,
-    APIObjectPropertyTypeInteger
+    APIObjectPropertyTypeInteger,
+    APIObjectPropertyTypeBool
 };
 
 static NSMutableDictionary *_dynamicProperties;
@@ -71,6 +72,20 @@ int integerGetterMethodIMP(APIObject *self, SEL _cmd)
 }
 
 void integerSetterMethodIMP(APIObject *self, SEL _cmd, int value)
+{
+    APIObjectProperty *property = _dynamicProperties[NSStringFromClass([self class])][NSStringFromSelector(_cmd)];
+    self.values[property.name] = @(value);
+    [self.dirty addObject:property.name];
+}
+
+BOOL boolGetterMethodIMP(APIObject *self, SEL _cmd)
+{
+    APIObjectProperty *property = _dynamicProperties[NSStringFromClass([self class])][NSStringFromSelector(_cmd)];
+    id value = self.values[property.name];
+    return [value boolValue];
+}
+
+void boolSetterMethodIMP(APIObject *self, SEL _cmd, BOOL value)
 {
     APIObjectProperty *property = _dynamicProperties[NSStringFromClass([self class])][NSStringFromSelector(_cmd)];
     self.values[property.name] = @(value);
@@ -138,7 +153,11 @@ void integerSetterMethodIMP(APIObject *self, SEL _cmd, int value)
                 case 's':
                     type = APIObjectPropertyTypeInteger;
                     break;
-                    
+
+                case 'B':
+                    type = APIObjectPropertyTypeBool;
+                    break;
+
                 default:
                     NSAssert(NO, @"Data type not implemented: %c", typeChar);
             }
@@ -271,6 +290,10 @@ void integerSetterMethodIMP(APIObject *self, SEL _cmd, int value)
                         case APIObjectPropertyTypeInteger:
                             self.values[property.name] = @([value intValue]);
                             break;
+                            
+                        case APIObjectPropertyTypeBool:
+                            self.values[property.name] = @([value boolValue]);
+                            break;
                     }
                     [self.dirty removeObject:property.name];
                 }
@@ -292,6 +315,7 @@ void integerSetterMethodIMP(APIObject *self, SEL _cmd, int value)
         {
             case APIObjectPropertyTypeString:
             case APIObjectPropertyTypeInteger:
+            case APIObjectPropertyTypeBool:
                 dictionary[key] = value;
                 break;
                 
@@ -350,6 +374,10 @@ void integerSetterMethodIMP(APIObject *self, SEL _cmd, int value)
                 case APIObjectPropertyTypeInteger:
                     class_addMethod([self class], aSEL, (IMP)integerSetterMethodIMP, "v@:i");
                     break;
+                    
+                case APIObjectPropertyTypeBool:
+                    class_addMethod([self class], aSEL, (IMP)boolSetterMethodIMP, "v@:B");
+                    break;
             }
         }
         else
@@ -364,6 +392,10 @@ void integerSetterMethodIMP(APIObject *self, SEL _cmd, int value)
                     
                 case APIObjectPropertyTypeInteger:
                     class_addMethod([self class], aSEL, (IMP)integerGetterMethodIMP, "i@:");
+                    break;
+                    
+                case APIObjectPropertyTypeBool:
+                    class_addMethod([self class], aSEL, (IMP)boolGetterMethodIMP, "B@:");
                     break;
             }
         }

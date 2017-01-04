@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost:8889
--- Tiempo de generación: 04-11-2016 a las 22:36:18
+-- Tiempo de generación: 04-01-2017 a las 23:12:57
 -- Versión del servidor: 5.5.38
 -- Versión de PHP: 5.6.2
 
@@ -27,12 +27,12 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `comments` (
-  `objectId` varchar(10) NOT NULL,
+  `objectId` varchar(10) COLLATE utf8mb4_bin NOT NULL,
   `updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `createdAt` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `post` varchar(10) NOT NULL,
-  `user` varchar(10) DEFAULT NULL,
-  `text` text NOT NULL
+  `post` varchar(10) COLLATE utf8mb4_bin NOT NULL,
+  `user` varchar(10) COLLATE utf8mb4_bin DEFAULT NULL,
+  `text` text COLLATE utf8mb4_bin NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- --------------------------------------------------------
@@ -42,11 +42,11 @@ CREATE TABLE `comments` (
 --
 
 CREATE TABLE `follows` (
-  `objectId` varchar(10) NOT NULL,
+  `objectId` varchar(10) COLLATE utf8mb4_bin NOT NULL,
   `updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `createdAt` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `user` varchar(10) NOT NULL,
-  `followsUser` varchar(10) NOT NULL
+  `user` varchar(10) COLLATE utf8mb4_bin NOT NULL,
+  `followsUser` varchar(10) COLLATE utf8mb4_bin NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- --------------------------------------------------------
@@ -56,11 +56,11 @@ CREATE TABLE `follows` (
 --
 
 CREATE TABLE `likes` (
-  `objectId` varchar(10) NOT NULL,
+  `objectId` varchar(10) COLLATE utf8mb4_bin NOT NULL,
   `updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `createdAt` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `post` varchar(10) NOT NULL,
-  `user` varchar(10) NOT NULL
+  `post` varchar(10) COLLATE utf8mb4_bin NOT NULL,
+  `user` varchar(10) COLLATE utf8mb4_bin NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- --------------------------------------------------------
@@ -70,12 +70,12 @@ CREATE TABLE `likes` (
 --
 
 CREATE TABLE `notifications` (
-  `objectId` varchar(10) NOT NULL,
+  `objectId` varchar(10) COLLATE utf8mb4_bin NOT NULL,
   `updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `createdAt` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `sender` varchar(10) NOT NULL,
-  `recipient` varchar(10) NOT NULL,
-  `post` varchar(10) DEFAULT NULL,
+  `sender` varchar(10) COLLATE utf8mb4_bin NOT NULL,
+  `recipient` varchar(10) COLLATE utf8mb4_bin NOT NULL,
+  `post` varchar(10) COLLATE utf8mb4_bin DEFAULT NULL,
   `type` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
@@ -86,18 +86,20 @@ CREATE TABLE `notifications` (
 --
 
 CREATE TABLE `posts` (
-  `objectId` varchar(10) NOT NULL,
+  `objectId` varchar(10) COLLATE utf8mb4_bin NOT NULL,
   `updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `createdAt` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `type` int(11) NOT NULL,
   `category` int(11) NOT NULL,
-  `user` varchar(10) NOT NULL,
-  `title` text NOT NULL,
-  `detail` text,
-  `image` text,
-  `program` text,
-  `sharedPost` varchar(10) DEFAULT NULL,
-  `stats` varchar(10) DEFAULT NULL
+  `user` varchar(10) COLLATE utf8mb4_bin NOT NULL,
+  `title` text COLLATE utf8mb4_bin NOT NULL,
+  `detail` text COLLATE utf8mb4_bin,
+  `image` text COLLATE utf8mb4_bin,
+  `program` text COLLATE utf8mb4_bin,
+  `sharedPost` varchar(10) COLLATE utf8mb4_bin DEFAULT NULL,
+  `stats` varchar(10) COLLATE utf8mb4_bin DEFAULT NULL,
+  `featured` tinyint(1) NOT NULL DEFAULT '0',
+  `highlighted` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- --------------------------------------------------------
@@ -107,10 +109,10 @@ CREATE TABLE `posts` (
 --
 
 CREATE TABLE `postStats` (
-  `objectId` varchar(10) NOT NULL,
+  `objectId` varchar(10) COLLATE utf8mb4_bin NOT NULL,
   `updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `createdAt` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `post` varchar(10) NOT NULL,
+  `post` varchar(10) COLLATE utf8mb4_bin NOT NULL,
   `numDownloads` int(11) NOT NULL,
   `numComments` int(11) NOT NULL,
   `numLikes` int(11) NOT NULL
@@ -123,15 +125,15 @@ CREATE TABLE `postStats` (
 --
 
 CREATE TABLE `users` (
-  `objectId` varchar(10) NOT NULL,
+  `objectId` varchar(10) COLLATE utf8mb4_bin NOT NULL,
   `updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `createdAt` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `username` varchar(60) NOT NULL,
-  `bcryptPassword` varchar(255) NOT NULL,
-  `sessionToken` varchar(25) DEFAULT NULL,
+  `username` varchar(60) COLLATE utf8mb4_bin NOT NULL,
+  `bcryptPassword` varchar(255) COLLATE utf8mb4_bin NOT NULL,
+  `sessionToken` varchar(25) COLLATE utf8mb4_bin DEFAULT NULL,
   `lastPostDate` timestamp NULL DEFAULT NULL,
   `notificationsOpenedDate` timestamp NULL DEFAULT NULL,
-  `about` text
+  `about` text COLLATE utf8mb4_bin
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 --

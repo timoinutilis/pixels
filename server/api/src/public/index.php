@@ -78,7 +78,7 @@ $container['notAllowedHandler'] = function ($c) {
 /* ============ Defines ============ */
 
 // Fields defaults
-define("MIN_POST_FIELDS", "type, category, user, title, image, sharedPost, stats");
+define("MIN_POST_FIELDS", "type, category, user, title, image, sharedPost, stats, featured, highlighted");
 define("MIN_USER_FIELDS", "username");
 define("FULL_USER_FIELDS", "username, lastPostDate, notificationsOpenedDate, about");
 
@@ -334,7 +334,7 @@ $app->get('/users/{id}/news', function (Request $request, Response $response) {
     if ($followedUserIds !== FALSE) {
         $followedUserIdsString = "'".implode("','", $followedUserIds)."'";
         $filter = $access->getPostsFilter($params, "AND");
-        $stmt = $access->prepareMainStatement("posts", $params, MIN_POST_FIELDS, "WHERE user IN ($followedUserIdsString) AND type IN (".NormalPostTypes.") $filter ORDER BY createdAt DESC");
+        $stmt = $access->prepareMainStatement("posts", $params, MIN_POST_FIELDS, "WHERE user IN ($followedUserIdsString) AND type IN (".NormalPostTypes.") AND featured = FALSE $filter ORDER BY createdAt DESC");
         $posts = $access->addObjects($stmt, "posts");
         if ($posts !== FALSE) {
             if ($access->addSubObjects($posts, "user", "users", MIN_USER_FIELDS)) {
@@ -358,7 +358,7 @@ $app->get('/users/{id}/discover', function (Request $request, Response $response
         $excludedUserIds[] = $userId;
         $excludedUserIdsString = "'".implode("','", $excludedUserIds)."'";
         $filter = $access->getPostsFilter($params, "AND");
-        $stmt = $access->prepareMainStatement("posts", $params, MIN_POST_FIELDS, "WHERE user NOT IN ($excludedUserIdsString) AND type IN (".NormalPostTypes.") $filter ORDER BY createdAt DESC");
+        $stmt = $access->prepareMainStatement("posts", $params, MIN_POST_FIELDS, "WHERE user NOT IN ($excludedUserIdsString) AND type IN (".NormalPostTypes.") AND featured = FALSE $filter ORDER BY createdAt DESC");
         $posts = $access->addObjects($stmt, "posts");
         if ($posts !== FALSE) {
             if ($access->addSubObjects($posts, "user", "users", MIN_USER_FIELDS)) {

@@ -315,11 +315,6 @@ static const NSInteger LIMIT = 25;
             self.statsById = statsById.mutableCopy;
         }
         
-        if (self.mode == CommListModeNews)
-        {
-            self.posts = [self filteredNewsWithPosts:self.posts];
-        }
-        
         self.hasMorePosts = (posts.count == LIMIT);
         self.currentOffset += LIMIT; // for next load
         if (self.mode == CommListModeProfile)
@@ -367,26 +362,6 @@ static const NSInteger LIMIT = 25;
             }
         }
     }
-}
-
-- (NSMutableArray *)filteredNewsWithPosts:(NSArray *)objects
-{
-    NSMutableSet *sharedPosts = [NSMutableSet setWithCapacity:objects.count];
-    NSMutableArray *filteredPosts = [NSMutableArray arrayWithCapacity:objects.count];
-    
-    for (LCCPost *post in objects)
-    {
-        if (post.sharedPost)
-        {
-            [sharedPosts addObject:post.sharedPost];
-        }
-        if (![sharedPosts containsObject:post.objectId])
-        {
-            [filteredPosts addObject:post];
-        }
-    }
-    
-    return filteredPosts;
 }
 
 - (IBAction)onActionTapped:(id)sender
@@ -897,7 +872,7 @@ static const NSInteger LIMIT = 25;
     _post = post;
     _user = user;
     
-    self.starImageView.hidden = ![user isNewsUser];
+    self.starImageView.hidden = ![user isNewsUser] && !post.featured;
     
     self.titleLabel.text = post.title;
 

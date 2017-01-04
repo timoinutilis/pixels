@@ -26,6 +26,8 @@
 @dynamic program;
 @dynamic sharedPost;
 @dynamic stats;
+@dynamic featured;
+@dynamic highlighted;
 
 - (NSString *)categoryString
 {

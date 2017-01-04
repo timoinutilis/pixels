@@ -582,6 +582,7 @@ typedef NS_ENUM(NSInteger, Section) {
 @property (weak, nonatomic) IBOutlet UITextView *detailTextView;
 @property (weak, nonatomic) IBOutlet UILabel *likeCountLabel;
 @property (weak, nonatomic) IBOutlet UILabel *downloadCountLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *starImageView;
 @end
 
 @implementation ProgramTitleCell
@@ -618,6 +619,7 @@ typedef NS_ENUM(NSInteger, Section) {
     }
     self.titleTextView.text = post.title;
     self.detailTextView.text = [post.detail stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    self.starImageView.hidden = !post.featured;
     
     self.dateLabel.text = [NSDateFormatter localizedStringFromDate:post.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
     

@@ -599,10 +599,15 @@
                                                 <constraint firstAttribute="width" constant="128" id="oZ6-fS-T3U"/>
                                             </constraints>
                                         </imageView>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="753" verticalHuggingPriority="753" horizontalCompressionResistancePriority="752" verticalCompressionResistancePriority="752" image="star" translatesAutoresizingMaskIntoConstraints="NO" id="bNm-vY-F1R">
+                                            <rect key="frame" x="277" y="11" width="28" height="28"/>
+                                        </imageView>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstItem="bNm-vY-F1R" firstAttribute="trailing" secondItem="xPQ-5C-B44" secondAttribute="trailingMargin" id="0aJ-0o-jeJ"/>
                                         <constraint firstItem="QZ4-NA-GcW" firstAttribute="top" secondItem="v5V-7R-srr" secondAttribute="bottom" constant="24" id="30l-cW-Mer"/>
                                         <constraint firstItem="v5V-7R-srr" firstAttribute="leading" secondItem="xPQ-5C-B44" secondAttribute="leadingMargin" id="4Aj-ep-5ml"/>
+                                        <constraint firstItem="bNm-vY-F1R" firstAttribute="top" secondItem="xPQ-5C-B44" secondAttribute="topMargin" id="5cS-vX-gWH"/>
                                         <constraint firstItem="v5V-7R-srr" firstAttribute="top" secondItem="xPQ-5C-B44" secondAttribute="topMargin" id="6qQ-dR-2mg"/>
                                         <constraint firstItem="DfN-KT-w2b" firstAttribute="baseline" secondItem="saM-rf-vcT" secondAttribute="baseline" id="801-8J-ym0"/>
                                         <constraint firstItem="DfN-KT-w2b" firstAttribute="leading" secondItem="saM-rf-vcT" secondAttribute="trailing" constant="8" id="84W-tb-FcT"/>
@@ -634,6 +639,7 @@
                                     <outlet property="likeCountLabel" destination="DfN-KT-w2b" id="yTM-M2-WL9"/>
                                     <outlet property="programImage" destination="v5V-7R-srr" id="DH5-CN-GEt"/>
                                     <outlet property="shareButton" destination="lcG-mw-mbJ" id="6jS-Fv-rUg"/>
+                                    <outlet property="starImageView" destination="bNm-vY-F1R" id="ETs-Xq-ySp"/>
                                     <outlet property="titleTextView" destination="zLX-kS-gtf" id="3bV-c5-1gK"/>
                                 </connections>
                             </tableViewCell>
@@ -1254,6 +1260,7 @@
     </scenes>
     <resources>
         <image name="navbar_shadow" width="1" height="4"/>
+        <image name="star" width="28" height="28"/>
         <image name="star_small" width="14" height="14"/>
         <image name="toolbar_shadow" width="1" height="3"/>
     </resources>
