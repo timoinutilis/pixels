@@ -72,11 +72,6 @@
 @property (nonatomic) VariableNode *variable;
 @end
 
-@interface LocateNode : Node
-@property (nonatomic) Node *columnExpression;
-@property (nonatomic) Node *rowExpression;
-@end
-
 @interface ForNextNode : Node
 @property (nonatomic) VariableNode *variable;
 @property (nonatomic) VariableNode *matchingVariable;

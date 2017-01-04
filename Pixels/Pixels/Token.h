@@ -48,7 +48,6 @@ typedef NS_ENUM(NSInteger, TType) {
     TTypeSymKeyboard,
     TTypeSymPrint,
     TTypeSymInput,
-    TTypeSymLocate,
     TTypeSymData,
     TTypeSymRead,
     TTypeSymRestore,

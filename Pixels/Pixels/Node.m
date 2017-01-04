@@ -419,51 +419,6 @@ NSString *const TRANSFER = @"TRANSFER";
 
 
 
-@implementation LocateNode
-
-- (void)prepareWithRunnable:(Runnable *)runnable pass:(PrePass)pass
-{
-    [self.columnExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
-    [self.rowExpression prepareWithRunnable:runnable pass:pass canBeString:NO];
-}
-
-- (id)evaluateWithRunner:(Runner *)runner
-{
-    Layer *layer = runner.renderer.currentLayer;
-    if (layer)
-    {
-        Font *font = [runner.renderer fontForLayer:layer];
-        if (self.columnExpression)
-        {
-            int fontWidth = font->width[16]; // 0 character
-            Number *column = [self.columnExpression evaluateNumberWithRunner:runner min:0 max:(layer->width / fontWidth - 1)];
-            if (column)
-            {
-                layer->cursorX = column.intValue * fontWidth;
-            }
-        }
-        if (self.rowExpression)
-        {
-            Number *row = [self.rowExpression evaluateNumberWithRunner:runner min:0 max:(layer->height / font->height - 1)];
-            if (row)
-            {
-                layer->cursorY = row.intValue * font->height;
-            }
-        }
-        if (runner.error)
-        {
-            return nil;
-        }
-    }
-    
-    [runner next];
-    return nil;
-}
-
-@end
-
-
-
 @interface ForNextNode ()
 @property float limit;
 @property float increment;
