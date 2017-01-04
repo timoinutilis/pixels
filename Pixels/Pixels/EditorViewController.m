@@ -109,9 +109,6 @@ typedef void(^InfoBlock)(void);
     self.searchToolbar.searchDelegate = self;
     
     self.infoView.backgroundColor = [AppStyle warningColor];
-    self.infoView.layer.shadowRadius = 1.0;
-    self.infoView.layer.shadowOpacity = 1.0;
-    self.infoView.layer.shadowOffset = CGSizeMake(0.0, 1.0);
     self.infoLabel.textColor = [AppStyle brightColor];
     
     self.indexSideBar.textView = self.sourceCodeTextView;

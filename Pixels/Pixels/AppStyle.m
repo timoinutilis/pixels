@@ -25,6 +25,8 @@
     [UINavigationBar appearance].tintColor = [AppStyle tintColor];
     [UINavigationBar appearance].translucent = NO;
     [UINavigationBar appearance].titleTextAttributes = @{NSForegroundColorAttributeName: [AppStyle darkColor]};
+    [[UINavigationBar appearance] setBackgroundImage:[[UIImage alloc] init] forBarMetrics:UIBarMetricsDefault];
+    [UINavigationBar appearance].shadowImage = [[UIImage alloc] init];
     [UIToolbar appearanceWhenContainedIn:[UINavigationController class], nil].barTintColor = [AppStyle barColor];
     [UIToolbar appearanceWhenContainedIn:[UINavigationController class], nil].tintColor = [AppStyle tintColor];
     [UIToolbar appearanceWhenContainedIn:[UINavigationController class], nil].translucent = NO;

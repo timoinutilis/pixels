@@ -212,7 +212,10 @@ typedef NS_ENUM(NSInteger, Section) {
         
         self.title = [self.post.title stringWithMaxWords:4];
         
-        self.titleCell = [self.tableView dequeueReusableCellWithIdentifier:(self.post.type == LCCPostTypeProgram ? @"ProgramTitleCell" : @"StatusTitleCell")];
+        if (!self.titleCell)
+        {
+            self.titleCell = [self.tableView dequeueReusableCellWithIdentifier:(self.post.type == LCCPostTypeProgram ? @"ProgramTitleCell" : @"StatusTitleCell")];
+        }
         [self.titleCell setPost:self.post user:self.user];
         [self.titleCell setStats:self.stats];
         
@@ -235,7 +238,6 @@ typedef NS_ENUM(NSInteger, Section) {
         
         if (forceReload)
         {
-            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:SectionTitle]] withRowAnimation:UITableViewRowAnimationFade];
             [self.tableView reloadDataAnimatedWithOldArray:oldComments newArray:self.comments inSection:SectionComments offset:0];
         }
         else
