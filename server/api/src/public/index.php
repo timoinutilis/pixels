@@ -180,8 +180,13 @@ $app->delete('/posts/{id}', function (Request $request, Response $response) {
                         if ($stmt->execute()) {
                             //TODO delete files
                             $access->data['success'] = TRUE;
-
-                            if ($post['type'] != PostTypeShare) {
+                            
+                            if ($post['type'] == PostTypeShare) {
+                                // remove featured mark from original post
+                                $stmt = $this->db->prepare("UPDATE postStats SET featured = FALSE WHERE post = ?");
+                                $stmt->bindValue(1, $post['sharedPost']);
+                                $stmt->execute();
+                            } else {
                                 $stmt = $this->db->prepare("DELETE FROM postStats WHERE post = ?");
                                 $stmt->bindValue(1, $postId);
                                 $stmt->execute();
@@ -500,11 +505,20 @@ $app->post('/users/{id}/posts', function (Request $request, Response $response) 
         
         $access->updateLastPostDate($userId);
         
+        // sharing
         if ($body['type'] == PostTypeShare) {
-            $sharedPost = $access->getObject("posts", $body['sharedPost'], "user");
+            $sharedPostId = $body['sharedPost'];
+            
+            // notification to original user
+            $sharedPost = $access->getObject("posts", $sharedPostId, "user");
             if ($sharedPost) {
                 $access->createNotification($userId, array($sharedPost['user']), $postId, NotificationTypeShare);
             }
+
+            // mark original post as featured
+            $stmt = $this->db->prepare("UPDATE postStats SET featured = TRUE WHERE post = ?");
+            $stmt->bindValue(1, $sharedPostId);
+            $stmt->execute();
         }
         
         if (empty($body['stats'])) {
