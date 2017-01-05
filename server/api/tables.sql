@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost:8889
--- Tiempo de generación: 04-01-2017 a las 23:12:57
+-- Tiempo de generación: 05-01-2017 a las 22:49:17
 -- Versión del servidor: 5.5.38
 -- Versión de PHP: 5.6.2
 
@@ -97,9 +97,7 @@ CREATE TABLE `posts` (
   `image` text COLLATE utf8mb4_bin,
   `program` text COLLATE utf8mb4_bin,
   `sharedPost` varchar(10) COLLATE utf8mb4_bin DEFAULT NULL,
-  `stats` varchar(10) COLLATE utf8mb4_bin DEFAULT NULL,
-  `featured` tinyint(1) NOT NULL DEFAULT '0',
-  `highlighted` tinyint(1) NOT NULL DEFAULT '0'
+  `stats` varchar(10) COLLATE utf8mb4_bin DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- --------------------------------------------------------
@@ -115,7 +113,9 @@ CREATE TABLE `postStats` (
   `post` varchar(10) COLLATE utf8mb4_bin NOT NULL,
   `numDownloads` int(11) NOT NULL,
   `numComments` int(11) NOT NULL,
-  `numLikes` int(11) NOT NULL
+  `numLikes` int(11) NOT NULL,
+  `featured` tinyint(1) NOT NULL DEFAULT '0',
+  `highlighted` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- --------------------------------------------------------

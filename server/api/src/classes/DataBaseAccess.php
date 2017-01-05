@@ -8,17 +8,18 @@ class DataBaseAccess {
         $this->data = array();
     }
 
-	function getPostsFilter($queryParams, $word) {
+	function getPostsFilter($queryParams, $word, $tableAlias = "") {
 		$filter = "";
 	    if (!empty($queryParams['category'])) {
 	        $category = intval($queryParams['category']);
-	        $filter = " category = $category";
+	        $filter = " {$tableAlias}category = $category";
 	    }
 	    if (!empty($queryParams['onlyprograms'])) {
+	    	$subFilter = " {$tableAlias}image IS NOT NULL";
 	    	if ($filter != "") {
-	    		$filter = $filter." AND image IS NOT NULL";
+	    		$filter = $filter." AND".$subFilter;
 	    	} else {
-	    		$filter = " image IS NOT NULL";
+	    		$filter = $subFilter;
 	    	}
 	    }
 	    if ($filter != "") {
@@ -60,16 +61,9 @@ class DataBaseAccess {
 	    return FALSE;
 	}
 
-	function prepareMainStatement($tableName, $queryParams, $fields ="*", $options = NULL) {
+	function prepareMainStatement($sqlText, $queryParams) {
 	    $limit = !empty($queryParams['limit']) ? intval($queryParams['limit']) : 0;
 	    $offset = !empty($queryParams['offset']) ? intval($queryParams['offset']) : 0;
-	    if ($fields != "*") {
-	    	$fields = "objectId, updatedAt, createdAt, ".$fields;
-	    }
-	    $sqlText = "SELECT $fields FROM $tableName";
-	    if (!empty($options)) {
-	    	$sqlText .= " $options";
-	    }
 	    if ($limit > 0) {
 	        $sqlText .= " LIMIT $offset, $limit";
 	    }

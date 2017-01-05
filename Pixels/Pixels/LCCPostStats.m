@@ -14,5 +14,7 @@
 @dynamic numLikes;
 @dynamic numDownloads;
 @dynamic numComments;
+@dynamic featured;
+@dynamic highlighted;
 
 @end

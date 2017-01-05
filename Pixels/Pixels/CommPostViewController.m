@@ -216,8 +216,7 @@ typedef NS_ENUM(NSInteger, Section) {
         {
             self.titleCell = [self.tableView dequeueReusableCellWithIdentifier:(self.post.type == LCCPostTypeProgram ? @"ProgramTitleCell" : @"StatusTitleCell")];
         }
-        [self.titleCell setPost:self.post user:self.user];
-        [self.titleCell setStats:self.stats];
+        [self.titleCell setPost:self.post stats:self.stats user:self.user];
         
         if (currentUser)
         {
@@ -611,7 +610,7 @@ typedef NS_ENUM(NSInteger, Section) {
     self.shareButton.hidden = ![currentUser isNewsUser];
 }
 
-- (void)setPost:(LCCPost *)post user:(LCCUser *)user
+- (void)setPost:(LCCPost *)post stats:(LCCPostStats *)stats user:(LCCUser *)user
 {
     if (post.image)
     {
@@ -619,11 +618,13 @@ typedef NS_ENUM(NSInteger, Section) {
     }
     self.titleTextView.text = post.title;
     self.detailTextView.text = [post.detail stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    self.starImageView.hidden = !post.featured;
+    self.starImageView.hidden = !stats.featured;
     
     self.dateLabel.text = [NSDateFormatter localizedStringFromDate:post.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
     
     self.shareButton.enabled = ![user isMe];
+    
+    [self setStats:stats];
 }
 
 - (void)setStats:(LCCPostStats *)stats

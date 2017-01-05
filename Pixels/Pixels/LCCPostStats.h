@@ -14,5 +14,7 @@
 @property int numLikes;
 @property int numDownloads;
 @property int numComments;
+@property BOOL featured;
+@property BOOL highlighted;
 
 @end

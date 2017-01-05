@@ -1,11 +1,8 @@
-UPDATE posts
+UPDATE postStats
 SET featured=TRUE
-WHERE objectId IN
+WHERE post IN
 (
-    SELECT sharedPost FROM
-    (
-    	SELECT sharedPost
-        FROM posts
-        WHERE sharedPost IS NOT NULL
-    ) AS temp
+   	SELECT sharedPost
+    FROM posts
+	WHERE sharedPost IS NOT NULL
 );

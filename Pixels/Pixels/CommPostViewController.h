@@ -26,7 +26,7 @@ typedef NS_ENUM(NSInteger, CommPostMode) {
 @property (weak, nonatomic) IBOutlet UIButton *getProgramButton;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 @property (weak, nonatomic) IBOutlet UIButton *shareButton;
-- (void)setPost:(LCCPost *)post user:(LCCUser *)user;
+- (void)setPost:(LCCPost *)post stats:(LCCPostStats *)stats user:(LCCUser *)user;
 - (void)setStats:(LCCPostStats *)stats;
 - (void)likeIt;
 @end

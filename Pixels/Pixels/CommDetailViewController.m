@@ -313,6 +313,11 @@ static const NSInteger LIMIT = 25;
             self.posts = posts.mutableCopy;
             self.usersById = usersById.mutableCopy;
             self.statsById = statsById.mutableCopy;
+            
+            if (self.user)
+            {
+                self.usersById[self.user.objectId] = self.user;
+            }
         }
         
         self.hasMorePosts = (posts.count == LIMIT);
@@ -585,8 +590,7 @@ static const NSInteger LIMIT = 25;
             LCCPostStats *stats = self.statsById[post.stats];
             NSString *cellType = (post.type == LCCPostTypeStatus || post.image == nil) ? @"StatusCell" : @"ProgramCell"; //TODO should check type only
             CommPostCell *cell = [tableView dequeueReusableCellWithIdentifier:cellType forIndexPath:indexPath];
-            [cell setPost:post user:user showName:(self.mode == CommListModeNews || self.mode == CommListModeDiscover || self.mode == CommListModeForum)];
-            [cell setStats:stats];
+            [cell setPost:post stats:stats user:user showName:(self.mode == CommListModeNews || self.mode == CommListModeDiscover || self.mode == CommListModeForum)];
             cell.tag = CellTagPost;
             return cell;
         }
@@ -867,12 +871,12 @@ static const NSInteger LIMIT = 25;
     layer.borderColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.25].CGColor;
 }
 
-- (void)setPost:(LCCPost *)post user:(LCCUser *)user showName:(BOOL)showName
+- (void)setPost:(LCCPost *)post stats:(LCCPostStats *)stats user:(LCCUser *)user showName:(BOOL)showName
 {
     _post = post;
     _user = user;
     
-    self.starImageView.hidden = ![user isNewsUser] && !post.featured;
+    self.starImageView.hidden = !([user isNewsUser] || stats.featured);
     
     self.titleLabel.text = post.title;
 
@@ -894,6 +898,8 @@ static const NSInteger LIMIT = 25;
     {
         [self.iconImageView sd_setImageWithURL:post.image];
     }
+    
+    [self setStats:stats];
 }
 
 - (void)setStats:(LCCPostStats *)stats

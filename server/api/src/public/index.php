@@ -78,7 +78,8 @@ $container['notAllowedHandler'] = function ($c) {
 /* ============ Defines ============ */
 
 // Fields defaults
-define("MIN_POST_FIELDS", "type, category, user, title, image, sharedPost, stats, featured, highlighted");
+define("MIN_POST_FIELDS", "objectId, updatedAt, createdAt, type, category, user, title, image, sharedPost, stats");
+define("MIN_POST_JOIN_FIELDS", "p.objectId, p.updatedAt, p.createdAt, p.type, p.category, p.user, p.title, p.image, p.sharedPost, p.stats");
 define("MIN_USER_FIELDS", "username");
 define("FULL_USER_FIELDS", "username, lastPostDate, notificationsOpenedDate, about");
 
@@ -140,7 +141,7 @@ $app->get('/posts/{id}', function (Request $request, Response $response) {
             $access->data['liked'] = $access->userLikesPost($params['likedUserId'], $postId);
         }
 
-        $stmt = $access->prepareMainStatement("comments", $params, "*", "WHERE post = ? ORDER BY createdAt ASC");
+        $stmt = $access->prepareMainStatement("SELECT * FROM comments WHERE post = ? ORDER BY createdAt ASC", $params);
         $stmt->bindValue(1, $postId);
         $comments = $access->addObjects($stmt, "comments");
         if ($comments !== FALSE) {
@@ -293,7 +294,7 @@ $app->get('/posts', function (Request $request, Response $response) {
     $access = new DataBaseAccess($this->db);
 
     $filter = $access->getPostsFilter($params, "WHERE");
-    $stmt = $access->prepareMainStatement("posts", $params, MIN_POST_FIELDS, "$filter ORDER BY createdAt DESC");
+    $stmt = $access->prepareMainStatement("SELECT ".MIN_POST_FIELDS." FROM posts $filter ORDER BY createdAt DESC", $params);
     $posts = $access->addObjects($stmt, "posts");
     if ($posts !== FALSE) {
         if ($access->addSubObjects($posts, "user", "users", MIN_USER_FIELDS)) {
@@ -311,7 +312,7 @@ $app->get('/forum', function (Request $request, Response $response) {
     $access = new DataBaseAccess($this->db);
 
     $filter = $access->getPostsFilter($params, "AND");
-    $stmt = $access->prepareMainStatement("posts", $params, MIN_POST_FIELDS, "WHERE type = ".PostTypeForum." $filter ORDER BY createdAt DESC");
+    $stmt = $access->prepareMainStatement("SELECT ".MIN_POST_FIELDS." FROM posts WHERE type = ".PostTypeForum." $filter ORDER BY createdAt DESC", $params);
     $posts = $access->addObjects($stmt, "posts");
     if ($posts !== FALSE) {
         if ($access->addSubObjects($posts, "user", "users", MIN_USER_FIELDS)) {
@@ -333,8 +334,8 @@ $app->get('/users/{id}/news', function (Request $request, Response $response) {
     $followedUserIds = ($userId == GUEST_USER_ID) ? array($settings['admin']) : $access->getFollowedUserIds($userId);
     if ($followedUserIds !== FALSE) {
         $followedUserIdsString = "'".implode("','", $followedUserIds)."'";
-        $filter = $access->getPostsFilter($params, "AND");
-        $stmt = $access->prepareMainStatement("posts", $params, MIN_POST_FIELDS, "WHERE user IN ($followedUserIdsString) AND type IN (".NormalPostTypes.") AND featured = FALSE $filter ORDER BY createdAt DESC");
+        $filter = $access->getPostsFilter($params, "AND", "p.");
+        $stmt = $access->prepareMainStatement("SELECT ".MIN_POST_JOIN_FIELDS." FROM posts p INNER JOIN postStats s ON p.stats = s.objectId WHERE p.user IN ($followedUserIdsString) AND p.type IN (".NormalPostTypes.") AND (s.featured = FALSE OR p.sharedPost IS NOT NULL) $filter ORDER BY p.createdAt DESC", $params);
         $posts = $access->addObjects($stmt, "posts");
         if ($posts !== FALSE) {
             if ($access->addSubObjects($posts, "user", "users", MIN_USER_FIELDS)) {
@@ -357,8 +358,8 @@ $app->get('/users/{id}/discover', function (Request $request, Response $response
     if ($excludedUserIds !== FALSE) {
         $excludedUserIds[] = $userId;
         $excludedUserIdsString = "'".implode("','", $excludedUserIds)."'";
-        $filter = $access->getPostsFilter($params, "AND");
-        $stmt = $access->prepareMainStatement("posts", $params, MIN_POST_FIELDS, "WHERE user NOT IN ($excludedUserIdsString) AND type IN (".NormalPostTypes.") AND featured = FALSE $filter ORDER BY createdAt DESC");
+        $filter = $access->getPostsFilter($params, "AND", "p.");
+        $stmt = $access->prepareMainStatement("SELECT ".MIN_POST_JOIN_FIELDS." FROM posts p INNER JOIN postStats s ON p.stats = s.objectId WHERE p.user NOT IN ($excludedUserIdsString) AND p.type IN (".NormalPostTypes.") AND s.featured = FALSE $filter ORDER BY p.createdAt DESC", $params);
         $posts = $access->addObjects($stmt, "posts");
         if ($posts !== FALSE) {
             if ($access->addSubObjects($posts, "user", "users", MIN_USER_FIELDS)) {
@@ -377,13 +378,12 @@ $app->get('/users/{id}/notifications', function (Request $request, Response $res
     $userId = $request->getAttribute('id');
     $access = new DataBaseAccess($this->db);
     
-    $options = "WHERE recipient = ? ";
+    $options = "recipient = ?";
     if (!empty($params['after'])) {
-        $options .= "AND createdAt > ? ";
+        $options .= " AND createdAt > ?";
     }
-    $options .= "ORDER BY createdAt DESC";
 
-    $stmt = $access->prepareMainStatement("notifications", $params, "*", $options);
+    $stmt = $access->prepareMainStatement("SELECT * FROM notifications WHERE $options ORDER BY createdAt DESC", $params);
     $stmt->bindValue(1, $userId);
     if (!empty($params['after'])) {
         $stmt->bindValue(2, $params['after']);
@@ -470,7 +470,7 @@ $app->get('/users/{id}/posts', function (Request $request, Response $response) {
     $access = new DataBaseAccess($this->db);
 
     $filter = $access->getPostsFilter($params, "AND");
-    $stmt = $access->prepareMainStatement("posts", $params, MIN_POST_FIELDS, "WHERE user = ? AND type IN (".NormalPostTypes.") $filter ORDER BY createdAt DESC");
+    $stmt = $access->prepareMainStatement("SELECT ".MIN_POST_FIELDS." FROM posts WHERE user = ? AND type IN (".NormalPostTypes.") $filter ORDER BY createdAt DESC", $params);
     $stmt->bindValue(1, $userId);
     $posts = $access->addObjects($stmt, "posts");
     if ($posts !== FALSE) {
@@ -538,7 +538,7 @@ $app->get('/users/{id}', function (Request $request, Response $response) {
     $user = $access->addObject("users", "user", $userId, FULL_USER_FIELDS);
     if ($user !== FALSE) {
         $filter = $access->getPostsFilter($params, "AND");
-        $stmt = $access->prepareMainStatement("posts", $params, MIN_POST_FIELDS, "WHERE user = ? AND type IN (".NormalPostTypes.") $filter ORDER BY createdAt DESC");
+        $stmt = $access->prepareMainStatement("SELECT ".MIN_POST_FIELDS." FROM posts WHERE user = ? AND type IN (".NormalPostTypes.") $filter ORDER BY createdAt DESC", $params);
         $stmt->bindValue(1, $userId);
         $posts = $access->addObjects($stmt, "posts");
         if ($posts !== FALSE) {
