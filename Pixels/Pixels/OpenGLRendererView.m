@@ -63,9 +63,13 @@ const GLushort Indices[] = {
 
 - (void)dealloc
 {
+    if ([EAGLContext currentContext] == self.context)
+    {
+        [EAGLContext setCurrentContext:nil];
+    }
+    
     if (_initialized)
     {
-        [EAGLContext setCurrentContext:self.context];
         glDeleteBuffers(1, &_vertexBuffer);
         glDeleteBuffers(1, &_indexBuffer);
         glDeleteTextures(1, &_texName);
