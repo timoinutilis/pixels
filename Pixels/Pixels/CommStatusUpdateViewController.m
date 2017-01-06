@@ -192,6 +192,7 @@
 - (void)isBusy:(BOOL)isBusy
 {
     self.cancelItem.enabled = !isBusy;
+    self.view.userInteractionEnabled = !isBusy;
     if (isBusy)
     {
         UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];

@@ -336,11 +336,23 @@ $app->get('/users/{id}/news', function (Request $request, Response $response) {
     $settings = $this->get('settings')['lowres'];
     $access = new DataBaseAccess($this->db);
 
-    $followedUserIds = ($userId == GUEST_USER_ID) ? array($settings['admin']) : $access->getFollowedUserIds($userId);
+    $adminId = $settings['admin'];
+    $followedUserIds = ($userId == GUEST_USER_ID) ? array($adminId) : $access->getFollowedUserIds($userId);
     if ($followedUserIds !== FALSE) {
         $followedUserIdsString = "'".implode("','", $followedUserIds)."'";
-        $filter = $access->getPostsFilter($params, "AND", "p.");
-        $stmt = $access->prepareMainStatement("SELECT ".MIN_POST_JOIN_FIELDS." FROM posts p INNER JOIN postStats s ON p.stats = s.objectId WHERE p.user IN ($followedUserIdsString) AND p.type IN (".NormalPostTypes.") AND (s.featured = FALSE OR p.sharedPost IS NOT NULL) $filter ORDER BY p.createdAt DESC", $params);
+        $sql = "SELECT ".MIN_POST_JOIN_FIELDS." FROM posts p";
+        $sql .= " INNER JOIN postStats s ON p.stats = s.objectId";
+        $sql .= " LEFT OUTER JOIN posts sh ON p.sharedPost = sh.objectId";
+        $sql .= " WHERE p.user IN ($followedUserIdsString)";
+        $sql .= " AND p.type IN (".NormalPostTypes.")";
+        $sql .= " AND (p.sharedPost IS NULL OR sh.user NOT IN ($followedUserIdsString))"; // show shared posts only if not following their original users
+        $filter = $access->getPostsFilter($params, " AND", "p.");
+        if ($filter != "") {
+            $sql .= $filter;
+        }
+        $sql .= " ORDER BY p.createdAt DESC";
+
+        $stmt = $access->prepareMainStatement($sql, $params);
         $posts = $access->addObjects($stmt, "posts");
         if ($posts !== FALSE) {
             if ($access->addSubObjects($posts, "user", "users", MIN_USER_FIELDS)) {
@@ -363,8 +375,19 @@ $app->get('/users/{id}/discover', function (Request $request, Response $response
     if ($excludedUserIds !== FALSE) {
         $excludedUserIds[] = $userId;
         $excludedUserIdsString = "'".implode("','", $excludedUserIds)."'";
-        $filter = $access->getPostsFilter($params, "AND", "p.");
-        $stmt = $access->prepareMainStatement("SELECT ".MIN_POST_JOIN_FIELDS." FROM posts p INNER JOIN postStats s ON p.stats = s.objectId WHERE p.user NOT IN ($excludedUserIdsString) AND p.type IN (".NormalPostTypes.") AND s.featured = FALSE $filter ORDER BY p.createdAt DESC", $params);
+
+        $sql = "SELECT ".MIN_POST_JOIN_FIELDS." FROM posts p";
+        $sql .= " INNER JOIN postStats s ON p.stats = s.objectId";
+        $sql .= " WHERE p.user NOT IN ($excludedUserIdsString)";
+        $sql .= " AND p.type IN (".NormalPostTypes.")";
+        $sql .= " AND s.featured = FALSE";
+        $filter = $access->getPostsFilter($params, " AND", "p.");
+        if ($filter != "") {
+            $sql .= $filter;
+        }
+        $sql .= " ORDER BY p.createdAt DESC";
+
+        $stmt = $access->prepareMainStatement($sql, $params);
         $posts = $access->addObjects($stmt, "posts");
         if ($posts !== FALSE) {
             if ($access->addSubObjects($posts, "user", "users", MIN_USER_FIELDS)) {

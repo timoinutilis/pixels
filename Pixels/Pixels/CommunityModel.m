@@ -246,7 +246,7 @@ NSString *const APIErrorTypeKey = @"APIErrorType";
     NSDictionary *params = @{@"user":self.currentUser.objectId};
     [self.sessionManager POST:route parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         
-        [[CommunityModel sharedInstance] clearCache];
+        [self clearCache];
         [self.follows insertObject:user atIndex:0];
         [[NSNotificationCenter defaultCenter] postNotificationName:FollowsChangeNotification object:self];
         
@@ -265,7 +265,7 @@ NSString *const APIErrorTypeKey = @"APIErrorType";
         NSString *route = [NSString stringWithFormat:@"/users/%@/followers/%@", user.objectId, self.currentUser.objectId];
         [self.sessionManager DELETE:route parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
 
-            [[CommunityModel sharedInstance] clearCache];
+            [self clearCache];
             [self.follows removeObject:user];
             [[NSNotificationCenter defaultCenter] postNotificationName:FollowsChangeNotification object:self];
             

@@ -172,7 +172,7 @@
             break;
             
         case LCCNotificationTypeShare:
-            text = [NSString stringWithFormat:@"%@ shared '%@'", name, notification.postObject.title];
+            text = [NSString stringWithFormat:@"%@ featured '%@'", name, notification.postObject.title];
             break;
             
         case LCCNotificationTypeFollow:
