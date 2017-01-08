@@ -85,6 +85,8 @@ define("FULL_USER_FIELDS", "username, lastPostDate, notificationsOpenedDate, abo
 
 define("GUEST_USER_ID", "guest");
 
+define("DISCOVER_EXCLUDED_POSTS", "'GdoDgxb4tF'");
+
 define("NotificationTypeComment", 0);
 define("NotificationTypeLike", 1);
 define("NotificationTypeShare", 2);
@@ -381,6 +383,7 @@ $app->get('/users/{id}/discover', function (Request $request, Response $response
         $sql .= " WHERE p.user NOT IN ($excludedUserIdsString)";
         $sql .= " AND p.type IN (".NormalPostTypes.")";
         $sql .= " AND s.featured = FALSE";
+        $sql .= " AND p.objectId NOT IN (".DISCOVER_EXCLUDED_POSTS.")";
         $filter = $access->getPostsFilter($params, " AND", "p.");
         if ($filter != "") {
             $sql .= $filter;
