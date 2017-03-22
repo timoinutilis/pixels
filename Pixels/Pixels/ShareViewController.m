@@ -278,9 +278,7 @@
                         [[CommunityModel sharedInstance] clearCache];
                         
                         self.project.postId = post.objectId;
-                        [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
-                            [[AppController sharedController] registerForNotifications];
-                        }];
+                        [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
                         
                     } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
                         

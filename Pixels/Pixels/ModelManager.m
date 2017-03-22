@@ -72,7 +72,6 @@ NSString *const ModelManagerDidMoveProjectNotification = @"ModelManagerDidMovePr
     if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error])
     {
         NSLog(@"Core Data error: %@", error);
-        [[AppController sharedController] storeError:error message:@"Core Data persistentStoreCoordinator"];
     }
     
     return _persistentStoreCoordinator;
@@ -107,7 +106,6 @@ NSString *const ModelManagerDidMoveProjectNotification = @"ModelManagerDidMovePr
         if (error)
         {
             NSLog(@"Core Data temporaryContext error: %@", error);
-            [[AppController sharedController] storeError:error message:@"Core Data temporaryContext"];
         }
         else
         {
@@ -124,14 +122,7 @@ NSString *const ModelManagerDidMoveProjectNotification = @"ModelManagerDidMovePr
 {
     [self.managedObjectContext performBlockAndWait:^{
         
-        self.debugSaveCount = 0;
         [[NSNotificationCenter defaultCenter] postNotificationName:ModelManagerWillSaveDataNotification object:self];
-        
-        if (self.debugSaveCount > 1)
-        {
-            [[AppController sharedController] storeError:[NSError errorWithDomain:@"LowResCoder" code:1 userInfo:nil]
-                                                 message:[NSString stringWithFormat:@"DebugSaveCount = %ld", (long)self.debugSaveCount]];
-        }
         
         NSError *error = nil;
         if ([self.managedObjectContext hasChanges])
@@ -143,7 +134,6 @@ NSString *const ModelManagerDidMoveProjectNotification = @"ModelManagerDidMovePr
             else
             {
                 NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-                [[AppController sharedController] storeError:error message:@"Core Data save"];
             }
         }
         

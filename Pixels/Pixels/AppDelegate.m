@@ -27,14 +27,6 @@
     
     [AppStyle setAppearance];
     
-    if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey])
-    {
-        NSDictionary *userInfo = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
-        [[AppController sharedController] handlePush:userInfo inForeground:NO];
-    }
-    
-    [application registerForRemoteNotifications];
-    
     return YES;
 }
 
@@ -60,13 +52,6 @@
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     
-/*    PFInstallation *installation = [PFInstallation currentInstallation];
-    if (installation.badge > 0)
-    {
-        installation.badge = 0;
-        [installation saveInBackground];
-    }*/
-    
     [[CommunityModel sharedInstance] loadNotifications];
 }
 
@@ -74,30 +59,6 @@
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     [[ModelManager sharedManager] saveContext];
-}
-
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
-{
-    // Store the deviceToken in the current installation and save it to Parse.
-/*    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
-    [currentInstallation setDeviceTokenFromData:deviceToken];
-    currentInstallation[@"user"] = [PFUser currentUser] ? [PFUser currentUser] : [NSNull null];
-    [currentInstallation saveInBackground];*/
-}
-
-- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
-{
-    NSLog(@"%@", error.description);
-}
-
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
-{
-    BOOL inForeground = (application.applicationState == UIApplicationStateActive);
-    [[AppController sharedController] handlePush:userInfo inForeground:inForeground];
-    if (inForeground)
-    {
-        [[CommunityModel sharedInstance] loadNotifications];
-    }
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation

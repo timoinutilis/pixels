@@ -124,13 +124,6 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
             [coachMark show];
         }
     }
-    
-    // Show stored error
-    NSString *lastError = [[AppController sharedController] popStoredError];
-    if (lastError)
-    {
-        [self showAlertWithTitle:@"Sorry, there was an error" message:lastError block:nil];
-    }
 }
 
 - (void)loadProjects

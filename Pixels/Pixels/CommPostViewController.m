@@ -363,8 +363,6 @@ typedef NS_ENUM(NSInteger, Section) {
                 [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
             }
             
-            [[AppController sharedController] registerForNotifications];
-            
             [[CommunityModel sharedInstance] clearCache];
             
             button.enabled = YES;

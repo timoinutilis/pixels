@@ -57,12 +57,6 @@ extern NSString *const ImportProjectNotification;
 
 - (void)onProgramOpened;
 
-- (void)registerForNotifications;
-
-- (void)storeError:(NSError *)error message:(NSString *)message;
-- (NSString *)popStoredError;
-
-- (void)handlePush:(NSDictionary *)userInfo inForeground:(BOOL)inForeground;
 - (BOOL)handleOpenURL:(NSURL *)url;
 ;
 @end

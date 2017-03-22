@@ -23,8 +23,6 @@ extern NSString *const ModelManagerDidMoveProjectNotification;
 @property (nonatomic, readonly) Project *rootFolder;
 @property (nonatomic, readonly) Project *currentDownloadFolder;
 
-@property NSInteger debugSaveCount;
-
 + (ModelManager *)sharedManager;
 
 - (void)saveContext;

@@ -228,9 +228,7 @@
     NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
     [storage setObject:username forKey:UserDefaultsLogInKey];
     
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
-        [[AppController sharedController] registerForNotifications];
-    }];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

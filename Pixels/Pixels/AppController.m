@@ -17,7 +17,6 @@
 NSString *const FullVersionProductID = @"fullversion";
 
 NSString *const NumProgramsOpenedKey = @"NumProgramsOpened";
-NSString *const ErrorKey = @"Error";
 
 NSString *const PurchaseStateNotification = @"PurchaseStateNotification";
 NSString *const ShowPostNotification = @"ShowPostNotification";
@@ -210,62 +209,6 @@ NSString *const ImportProjectNotification = @"ImportProjectNotification";
 {
     NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
     [storage setInteger:([storage integerForKey:NumProgramsOpenedKey] + 1) forKey:NumProgramsOpenedKey];
-}
-
-- (void)registerForNotifications
-{/*
-    UIApplication *application = [UIApplication sharedApplication];
-    UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
-    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes categories:nil];
-    [application registerUserNotificationSettings:settings];*/
-}
-
-- (void)storeError:(NSError *)error message:(NSString *)message
-{
-    NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
-    [storage setObject:[NSString stringWithFormat:@"%@: %@", message, error.description] forKey:ErrorKey];
-    [storage synchronize];
-}
-
-- (NSString *)popStoredError
-{
-    NSUserDefaults *storage = [NSUserDefaults standardUserDefaults];
-    NSString *error = [storage objectForKey:ErrorKey];
-    if (error)
-    {
-        [storage removeObjectForKey:ErrorKey];
-    }
-    return error;
-}
-
-- (void)handlePush:(NSDictionary *)userInfo inForeground:(BOOL)inForeground
-{
-    NSString *postId = userInfo[@"lrcPostId"];
-    NSDictionary *aps = userInfo[@"aps"];
-    NSString *alertText = aps[@"alert"];
-    
-    [[CommunityModel sharedInstance] clearCache];
-    
-    if (inForeground)
-    {
-        if (postId)
-        {
-            __weak AppController *weakSelf = self;
-            [NotificationView showMessage:alertText block:^{
-                weakSelf.shouldShowPostId = postId;
-                [[NSNotificationCenter defaultCenter] postNotificationName:ShowPostNotification object:weakSelf];
-            }];
-        }
-        else
-        {
-            [NotificationView showMessage:alertText block:nil];
-        }
-    }
-    else if (postId)
-    {
-        self.shouldShowPostId = postId;
-        [[NSNotificationCenter defaultCenter] postNotificationName:ShowPostNotification object:self];
-    }
 }
 
 - (BOOL)handleOpenURL:(NSURL *)url

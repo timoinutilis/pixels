@@ -258,7 +258,6 @@ typedef void(^InfoBlock)(void);
         && ([AppController sharedController].isFullVersion || self.sourceCodeTextView.text.countLines <= EditorDemoMaxLines)
         && ![self.sourceCodeTextView.text isEqualToString:self.project.sourceCode])
     {
-        [ModelManager sharedManager].debugSaveCount++;
         self.project.sourceCode = self.sourceCodeTextView.text.uppercaseString;
     }
 }
