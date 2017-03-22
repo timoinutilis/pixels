@@ -128,7 +128,6 @@ uint32_t const ColorPalette[16] = {0x000000, 0xffffff, 0xaaaaaa, 0x555555, 0xff0
         free(layer->pixelBuffer);
         layer->pixelBuffer = NULL;
     }
-    layer->visible = YES;
     layer->width = width;
     layer->height = height;
     layer->displayX = 0;
@@ -147,6 +146,7 @@ uint32_t const ColorPalette[16] = {0x000000, 0xffffff, 0xaaaaaa, 0x555555, 0xff0
     layer->cursorVisible = NO;
     
     layer->pixelBuffer = calloc(width * height, sizeof(uint8_t));
+    layer->visible = YES;
     
     _layerIndex = index;
     _currentMaxLayerIndex = MAX(_currentMaxLayerIndex, index);
@@ -987,7 +987,7 @@ uint8_t getSpritePixel(SpriteDef *def, int x, int y)
     for (int i = _currentMaxLayerIndex; i >= 0 ; i--)
     {
         Layer *layer = &_layers[i];
-        if (layer->visible)
+        if (layer->visible && layer->pixelBuffer)
         {
             int localX = x - layer->displayX;
             int localY = y - layer->displayY;
