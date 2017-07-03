@@ -143,6 +143,7 @@ void boolSetterMethodIMP(APIObject *self, SEL _cmd, BOOL value)
                     }
                     else
                     {
+                        type = APIObjectPropertyTypeString;
                         NSAssert(NO, @"Class type not implemented: %@", className);
                     }
                     break;
@@ -155,10 +156,12 @@ void boolSetterMethodIMP(APIObject *self, SEL _cmd, BOOL value)
                     break;
 
                 case 'B':
+                case 'c':
                     type = APIObjectPropertyTypeBool;
                     break;
 
                 default:
+                    type = APIObjectPropertyTypeString;
                     NSAssert(NO, @"Data type not implemented: %c", typeChar);
             }
             

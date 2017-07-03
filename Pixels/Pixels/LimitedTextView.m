@@ -29,13 +29,13 @@
 - (void)setLimitEnabled:(BOOL)limitEnabled
 {
     _limitEnabled = limitEnabled;
-    [self setNeedsLayout];
+    [self invalidateIntrinsicContentSize];
 }
 
 - (void)setHeightLimit:(CGFloat)heightLimit
 {
     _heightLimit = heightLimit;
-    [self setNeedsLayout];
+    [self invalidateIntrinsicContentSize];
 }
 
 - (CGSize)intrinsicContentSize
