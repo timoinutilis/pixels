@@ -141,6 +141,7 @@ uint32_t const ColorPalette[16] = {0x000000, 0xffffff, 0xaaaaaa, 0x555555, 0xff0
     layer->bgColorIndex = 0;
     layer->borderColorIndex = 3;
     layer->fontIndex = 0;
+    layer->textClear = NO;
     layer->cursorX = 0;
     layer->cursorY = 0;
     layer->cursorVisible = NO;
@@ -727,7 +728,7 @@ uint32_t const ColorPalette[16] = {0x000000, 0xffffff, 0xaaaaaa, 0x555555, 0xff0
             }
         }
     }
-    [self drawText:text layer:layer color:layer->colorIndex x:x y:y start:0 wrap:NO bg:NO outX:nil];
+    [self drawText:text layer:layer color:layer->colorIndex x:x y:y start:0 wrap:NO bg:layer->textClear outX:nil];
 }
 
 - (int)drawText:(NSString *)text layer:(Layer *)layer color:(int)colorIndex x:(int)x y:(int)y start:(int)start wrap:(BOOL)wrap bg:(BOOL)bg outX:(int *)outX

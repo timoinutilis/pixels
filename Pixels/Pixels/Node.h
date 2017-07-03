@@ -235,6 +235,10 @@
 @property (nonatomic) Node *outlineExpression;
 @end
 
+@interface TextClearNode : Node
+@property (nonatomic) BOOL enable;
+@end
+
 @interface FontNode : Node
 @property (nonatomic) Node *fontExpression;
 @end

@@ -1369,6 +1369,12 @@ NSString *const TRANSFER = @"TRANSFER";
     {
         return nil;
     }
+
+    if (outline.intValue > 0 && runner.renderer.currentLayer->textClear)
+    {
+        runner.error = [NSError programErrorWithCode:LRCErrorCodeRuntime reason:@"Outline not possible with TEXT CLEAR ON" token:self.token];
+        return nil;
+    }
     
     int alignInt = align.intValue;
     int xPos = x.intValue;
@@ -1386,6 +1392,19 @@ NSString *const TRANSFER = @"TRANSFER";
         }
     }
     [runner.renderer drawText:text x:xPos y:y.intValue outline:outline.intValue];
+    [runner next];
+    return nil;
+}
+
+@end
+
+
+
+@implementation TextClearNode
+
+- (id)evaluateWithRunner:(Runner *)runner
+{
+    runner.renderer.currentLayer->textClear = self.enable;
     [runner next];
     return nil;
 }

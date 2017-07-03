@@ -313,9 +313,18 @@
         case TTypeSymScroll:
             node = [self acceptScroll];
             break;
-        case TTypeSymText:
-            node = [self acceptText];
+        case TTypeSymText: {
+            Token *next = [self nextToken];
+            if (next.type == TTypeSymClear)
+            {
+                node = [self acceptTextClear];
+            }
+            else
+            {
+                node = [self acceptText];
+            }
             break;
+        }
         case TTypeSymFont:
             node = [self acceptFont];
             break;
@@ -1064,6 +1073,28 @@
         {
             node.outlineExpression = [self acceptExpression];
         }
+    }
+    return node;
+}
+
+- (Node *)acceptTextClear
+{
+    TextClearNode *node = [[TextClearNode alloc] init];
+    [self accept:TTypeSymText and:TTypeSymClear];
+    if (self.token.type == TTypeSymOn)
+    {
+        [self accept:TTypeSymOn];
+        node.enable = YES;
+    }
+    else if (self.token.type == TTypeSymOff)
+    {
+        [self accept:TTypeSymOff];
+        node.enable = NO;
+    }
+    else
+    {
+        self.error = [NSError unexpectedTokenErrorWithToken:self.token];
+        return nil;
     }
     return node;
 }

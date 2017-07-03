@@ -39,6 +39,7 @@ typedef struct Layer {
     int colorIndex;
     int bgColorIndex;
     int borderColorIndex;
+    BOOL textClear;
     int fontIndex;
     int cursorX;
     int cursorY;
