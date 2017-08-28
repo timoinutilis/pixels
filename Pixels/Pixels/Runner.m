@@ -163,6 +163,11 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
     if (isGosub)
     {
         // remember current position
+        if (self.gosubStack.count > 128)
+        {
+            self.error = [NSError programErrorWithCode:LRCErrorCodeRuntime reason:@"Out of GOSUB stack space" token:token];
+            return;
+        }
         SequenceTreeSnapshot *snapshot = [[SequenceTreeSnapshot alloc] initWithSequencesStack:self.sequencesStack];
         [self.gosubStack addObject:snapshot];
     }

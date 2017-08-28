@@ -1297,13 +1297,16 @@ NSString *const TRANSFER = @"TRANSFER";
         return nil;
     }
     
-    if (self.fill)
+    if (radiusX.floatValue < RendererMaxLayerSize)
     {
-        [runner.renderer fillCircleX:x.intValue Y:y.intValue radius:radiusX.intValue];
-    }
-    else
-    {
-        [runner.renderer drawCircleX:x.intValue Y:y.intValue radius:radiusX.intValue];
+        if (self.fill)
+        {
+            [runner.renderer fillCircleX:x.intValue Y:y.intValue radius:radiusX.intValue];
+        }
+        else
+        {
+            [runner.renderer drawCircleX:x.intValue Y:y.intValue radius:radiusX.intValue];
+        }
     }
     [runner next];
     return nil;
