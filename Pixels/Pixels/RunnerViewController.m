@@ -69,6 +69,9 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
 {
     [super viewDidLoad];
     
+    self.inputAssistantItem.leadingBarButtonGroups = @[];
+    self.inputAssistantItem.trailingBarButtonGroups = @[];
+    
     self.audioVolume = 1.0;
     
     [self setGamepadModeWithPlayers:0];
@@ -209,7 +212,7 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
 - (void)keyboardWillShow:(NSNotification *)notification
 {
     CGRect kbRect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    self.constraintKeyboard.constant = kbRect.size.height;
+    self.constraintKeyboard.constant = self.view.bounds.size.height - kbRect.origin.y;
     [UIView animateWithDuration:0.3 animations:^{
         [self.view layoutIfNeeded];
     }];
