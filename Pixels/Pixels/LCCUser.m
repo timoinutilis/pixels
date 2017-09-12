@@ -19,6 +19,7 @@ NSString *const LowResNewsUserIDKey = @"LowResNewsUserID";
 @dynamic about;
 @dynamic lastPostDate;
 @dynamic notificationsOpenedDate;
+@dynamic role;
 
 - (BOOL)isMe
 {
@@ -30,6 +31,16 @@ NSString *const LowResNewsUserIDKey = @"LowResNewsUserID";
 {
     NSString *newsUserID = [[NSBundle mainBundle] objectForInfoDictionaryKey:LowResNewsUserIDKey];
     return ([self.objectId isEqualToString:newsUserID]);
+}
+
+- (BOOL)canDeleteAnyComment
+{
+    return self.role >= LCCUserRoleModerator;
+}
+
+- (BOOL)canDeleteAnyPost
+{
+    return self.role >= LCCUserRoleModerator;
 }
 
 @end

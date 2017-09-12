@@ -97,6 +97,10 @@ define("PostTypeStatus", 2);
 define("PostTypeShare", 3);
 define("PostTypeForum", 4);
 
+define("UserRoleUser", 0);
+define("UserRoleModerator", 1);
+define("UserRoleAdmin", 2);
+
 define("NormalPostTypes", "1,2,3");
 
 /* ============ Parameter Checks ============ */
@@ -123,6 +127,27 @@ function checkNewUsername($username) {
 function checkRequired($body, $key) {
     if (empty($body[$key])) {
         throw new APIException("Missing parameter '$key'.", 400, "MissingParameter");
+    }
+}
+
+function checkUserPermission($allowedUserIds, $masterUserRole, Request $request, DataBaseAccess $access) {
+    $currentUserId = $request->getAttribute('currentUser');
+
+    if (empty($currentUserId)) {
+        throw new APIException("You don't have the permission for this.", 403, "Forbidden");
+    }
+
+    if (array_search($currentUserId, $allowedUserIds) !== FALSE) {
+        return;
+    }
+
+    $currentUser = $access->getObject("users", $currentUserId);
+    if ($currentUser) {
+        if ($currentUser['role'] < $masterUserRole) {
+            throw new APIException("You don't have the permission for this.", 403, "Forbidden");
+        }
+    } else {
+        throw new APIException("The object '$currentUserId' could not be found.", 404, "NotFound");
     }
 }
 
@@ -163,7 +188,7 @@ $app->delete('/posts/{id}', function (Request $request, Response $response) {
 
     $post = $access->getObject("posts", $postId);
     if ($post) {
-        checkMyUser($post['user'], $request);
+        checkUserPermission(array($post['user']), UserRoleModerator, $request, $access);
 
         $stmt = $this->db->prepare("DELETE FROM posts WHERE sharedPost = ?");
         $stmt->bindValue(1, $postId);
@@ -294,6 +319,39 @@ $app->post('/posts/{id}/downloads', function (Request $request, Response $respon
     $response = $response->withJson($access->data);
     return $response;
 });
+
+// delete comment
+$app->delete('/comments/{id}', function (Request $request, Response $response) {
+    $body = $request->getParsedBody();
+    $commentId = $request->getAttribute('id');
+    $access = new DataBaseAccess($this->db);
+
+    $comment = $access->getObject("comments", $commentId);
+    if ($comment) {
+        $postId = $comment['post'];
+        $commentUserId = $comment['user'];
+
+        $post = $access->getObject("posts", $postId);
+        if ($post) {
+            $postUserId = $post['user'];
+            checkUserPermission(array($postUserId, $commentUserId), UserRoleModerator, $request, $access);
+
+            $stmt = $this->db->prepare("DELETE FROM comments WHERE objectId = ?");
+            $stmt->bindValue(1, $commentId);
+            if ($stmt->execute()) {
+                $access->increasePostStats($postId, 0, -1, 0);
+                $access->data['success'] = TRUE;
+            }
+        } else {
+            throw new APIException("The object '$postId' could not be found.", 404, "NotFound");
+        }
+    } else {
+        throw new APIException("The object '$commentId' could not be found.", 404, "NotFound");
+    }
+
+    $response = $response->withJson($access->data);
+    return $response;
+})->add(new AuthMiddleware());
 
 // get all posts
 $app->get('/posts', function (Request $request, Response $response) {

@@ -203,7 +203,20 @@ class DataBaseAccess {
 	}
 
 	function increasePostStats($postId, $numDownloads, $numComments, $numLikes) {
-		$stmt = $this->db->prepare("UPDATE postStats SET numDownloads = numDownloads+$numDownloads, numComments = numComments+$numComments, numLikes = numLikes+$numLikes WHERE post = ?");
+		$setters = array();
+		if ($numDownloads > 0) {
+			$setters[] = "numDownloads = numDownloads+$numDownloads";
+		}
+		if ($numComments > 0) {
+			$setters[] = "numComments = numComments+$numComments";
+		} else if ($numComments < 0) {
+			$setters[] = "numComments = numComments".$numComments;
+		}
+		if ($numLikes > 0) {
+			$setters[] = "numLikes = numLikes+$numLikes";
+		}
+		$settersString = implode(", ", $setters);
+		$stmt = $this->db->prepare("UPDATE postStats SET $settersString WHERE post = ?");
 		$stmt->bindValue(1, $postId);
 		if ($stmt->execute()) {
 			if ($stmt->rowCount() > 0) {

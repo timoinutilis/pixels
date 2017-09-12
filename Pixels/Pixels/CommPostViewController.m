@@ -403,6 +403,29 @@ typedef NS_ENUM(NSInteger, Section) {
     [self.navigationController pushViewController:vc animated:YES];
 }
 
+- (void)deleteComment:(LCCComment *)comment indexPath:(NSIndexPath *)indexPath
+{
+    [BlockerView show];
+    
+    NSString *route = [NSString stringWithFormat:@"/comments/%@", comment.objectId];
+    [[CommunityModel sharedInstance].sessionManager DELETE:route parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+        
+        [BlockerView dismiss];
+        [self.comments removeObject:comment];
+        [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [[CommunityModel sharedInstance] clearCache];
+        
+        LCCPostStats *stats = [[LCCPostStats alloc] initWithDictionary:responseObject[@"postStats"]];
+        [[NSNotificationCenter defaultCenter] postNotificationName:PostStatsChangeNotification object:self userInfo:@{@"stats":stats}];
+        
+    } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+        
+        [BlockerView dismiss];
+        [[CommunityModel sharedInstance] handleAPIError:error title:@"Could not delete comment" viewController:self];
+        
+    }];
+}
+
 #pragma mark - Table view
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -433,8 +456,9 @@ typedef NS_ENUM(NSInteger, Section) {
     // Return the number of rows in the section.
     if (section == SectionTitle)
     {
+        LCCUser *currentUser = [CommunityModel sharedInstance].currentUser;
         NSInteger num = (self.post.type == LCCPostTypeProgram ? 3 : 2);
-        if ([self.user isMe])
+        if ([self.user isMe] || [currentUser canDeleteAnyPost])
         {
             num++; // "delete" cell
         }
@@ -568,6 +592,30 @@ typedef NS_ENUM(NSInteger, Section) {
         }
         default:
             break;
+    }
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == SectionComments)
+    {
+        LCCComment *comment = self.comments[indexPath.row];
+        LCCUser *currentUser = [CommunityModel sharedInstance].currentUser;
+        
+        if ([comment.user isEqualToString:currentUser.objectId] || [self.post.user isEqualToString:currentUser.objectId] || [currentUser canDeleteAnyComment])
+        {
+            return UITableViewCellEditingStyleDelete;
+        }
+    }
+    return UITableViewCellEditingStyleNone;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == SectionComments)
+    {
+        LCCComment *comment = self.comments[indexPath.row];
+        [self deleteComment:comment indexPath:indexPath];
     }
 }
 

@@ -10,6 +10,12 @@
 
 extern NSString *const LowResNewsUserIDKey;
 
+typedef NS_ENUM(int, LCCUserRole) {
+    LCCUserRoleUser,
+    LCCUserRoleModerator,
+    LCCUserRoleAdmin
+};
+
 @interface LCCUser : APIObject
 
 @property (retain) NSString *username;
@@ -18,8 +24,12 @@ extern NSString *const LowResNewsUserIDKey;
 @property (retain) NSString *about;
 @property (retain) NSDate *lastPostDate;
 @property (retain) NSDate *notificationsOpenedDate;
+@property LCCUserRole role;
 
 - (BOOL)isMe;
 - (BOOL)isNewsUser;
+
+- (BOOL)canDeleteAnyComment;
+- (BOOL)canDeleteAnyPost;
 
 @end

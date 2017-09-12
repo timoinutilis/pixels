@@ -111,6 +111,7 @@ NSString *const APIErrorTypeKey = @"APIErrorType";
 {
     NSDictionary *params = @{@"username":username, @"password":password};
     
+    [self clearCache];
     [self.sessionManager POST:@"login" parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         
         [self onLoggedInWithUser:[[LCCUser alloc] initWithDictionary:responseObject[@"user"]]];
@@ -189,6 +190,7 @@ NSString *const APIErrorTypeKey = @"APIErrorType";
     _currentUser = nil;
     [self storeCurrentUser];
     
+    [self clearCache];
     [self.sessionManager.requestSerializer setValue:nil forHTTPHeaderField:HTTPHeaderSessionTokenKey];
     [self.follows removeAllObjects];
     _notifications = nil;
