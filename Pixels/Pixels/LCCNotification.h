@@ -14,7 +14,8 @@ typedef NS_ENUM(int, LCCNotificationType) {
     LCCNotificationTypeComment,
     LCCNotificationTypeLike,
     LCCNotificationTypeShare,
-    LCCNotificationTypeFollow
+    LCCNotificationTypeFollow,
+    LCCNotificationTypeReportComment
 };
 
 @interface LCCNotification : APIObject
@@ -23,6 +24,7 @@ typedef NS_ENUM(int, LCCNotificationType) {
 @property (nonatomic, retain) NSString *sender;
 @property (nonatomic, retain) NSString *recipient;
 @property (nonatomic, retain) NSString *post;
+@property (nonatomic, retain) NSString *comment;
 
 @property (nonatomic) LCCUser *senderObject;
 @property (nonatomic) LCCPost *postObject;

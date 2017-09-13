@@ -43,6 +43,7 @@ typedef NS_ENUM(NSInteger, Section) {
 @property LCCPostStats *stats;
 @property NSMutableArray *comments;
 @property NSMutableDictionary *commentUsersById;
+@property NSString *highlightedCommentId;
 
 @property CommPostMode mode;
 @property ProgramTitleCell *titleCell;
@@ -121,8 +122,14 @@ typedef NS_ENUM(NSInteger, Section) {
 
 - (void)setPost:(LCCPost *)post mode:(CommPostMode)mode
 {
+    [self setPost:post mode:mode commentId:nil];
+}
+
+- (void)setPost:(LCCPost *)post mode:(CommPostMode)mode commentId:(NSString *)commentId
+{
     self.post = post;
     self.mode = mode;
+    self.highlightedCommentId = commentId;
 }
 
 - (IBAction)onRefreshPulled:(id)sender
@@ -403,6 +410,12 @@ typedef NS_ENUM(NSInteger, Section) {
     [self.navigationController pushViewController:vc animated:YES];
 }
 
+- (BOOL)canDeleteComment:(LCCComment *)comment
+{
+    LCCUser *currentUser = [CommunityModel sharedInstance].currentUser;
+    return ([comment.user isEqualToString:currentUser.objectId] || [self.post.user isEqualToString:currentUser.objectId] || [currentUser canDeleteAnyComment]);
+}
+
 - (void)deleteComment:(LCCComment *)comment indexPath:(NSIndexPath *)indexPath
 {
     [BlockerView show];
@@ -422,6 +435,25 @@ typedef NS_ENUM(NSInteger, Section) {
         
         [BlockerView dismiss];
         [[CommunityModel sharedInstance] handleAPIError:error title:@"Could not delete comment" viewController:self];
+        
+    }];
+}
+
+- (void)reportComment:(LCCComment *)comment
+{
+    [BlockerView show];
+    
+    NSString *route = [NSString stringWithFormat:@"/comments/%@/report", comment.objectId];
+    [[CommunityModel sharedInstance].sessionManager POST:route parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+        
+        [BlockerView dismiss];
+        [self.tableView setEditing:NO animated:YES];
+        [self showAlertWithTitle:@"The comment was reported" message:@"A moderator will check this comment and remove it, if it's inappropriate." block:nil];
+        
+    } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+        
+        [BlockerView dismiss];
+        [[CommunityModel sharedInstance] handleAPIError:error title:@"Could not report comment" viewController:self];
         
     }];
 }
@@ -533,7 +565,8 @@ typedef NS_ENUM(NSInteger, Section) {
         CommentCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommentCell" forIndexPath:indexPath];
         cell.delegate = self;
         LCCComment *comment = self.comments[indexPath.row];
-        [cell setComment:comment user:self.commentUsersById[comment.user]];
+        BOOL isHighlighted = self.highlightedCommentId != nil && [comment.objectId isEqualToString:self.highlightedCommentId];
+        [cell setComment:comment user:self.commentUsersById[comment.user] isHighlighted:isHighlighted];
         return cell;
     }
     else if (indexPath.section == SectionWriteComment)
@@ -599,15 +632,19 @@ typedef NS_ENUM(NSInteger, Section) {
 {
     if (indexPath.section == SectionComments)
     {
-        LCCComment *comment = self.comments[indexPath.row];
-        LCCUser *currentUser = [CommunityModel sharedInstance].currentUser;
-        
-        if ([comment.user isEqualToString:currentUser.objectId] || [self.post.user isEqualToString:currentUser.objectId] || [currentUser canDeleteAnyComment])
-        {
-            return UITableViewCellEditingStyleDelete;
-        }
+        return UITableViewCellEditingStyleDelete;
     }
     return UITableViewCellEditingStyleNone;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    LCCComment *comment = self.comments[indexPath.row];
+    if ([self canDeleteComment:comment])
+    {
+        return @"Delete";
+    }
+    return @"Report";
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -615,7 +652,14 @@ typedef NS_ENUM(NSInteger, Section) {
     if (indexPath.section == SectionComments)
     {
         LCCComment *comment = self.comments[indexPath.row];
-        [self deleteComment:comment indexPath:indexPath];
+        if ([self canDeleteComment:comment])
+        {
+            [self deleteComment:comment indexPath:indexPath];
+        }
+        else
+        {
+            [self reportComment:comment];
+        }
     }
 }
 
@@ -705,7 +749,7 @@ typedef NS_ENUM(NSInteger, Section) {
     self.tag = CellTagNoAction;
 }
 
-- (void)setComment:(LCCComment *)comment user:(LCCUser *)user
+- (void)setComment:(LCCComment *)comment user:(LCCUser *)user isHighlighted:(BOOL)isHighlighted
 {
     _user = user;
     if (user)
@@ -720,6 +764,15 @@ typedef NS_ENUM(NSInteger, Section) {
     }
     self.dateLabel.text = [NSDateFormatter localizedStringFromDate:comment.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
     self.textView.text = comment.text;
+    
+    if (isHighlighted)
+    {
+        self.textView.font = [UIFont boldSystemFontOfSize:16];
+    }
+    else
+    {
+        self.textView.font = [UIFont systemFontOfSize:16];
+    }
 }
 
 - (IBAction)onNameTapped:(id)sender

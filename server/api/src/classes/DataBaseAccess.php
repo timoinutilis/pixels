@@ -132,6 +132,18 @@ class DataBaseAccess {
 	    return FALSE;
 	}
 
+	function getRoleUserIds($minRole) {
+	    $stmt = $this->db->prepare("SELECT objectId FROM users WHERE role >= $minRole");
+	    if ($stmt->execute()) {
+	        $ids = array();
+	        while ($object = $stmt->fetch()) {
+	            $ids[] = $object['objectId'];
+	        }
+	        return $ids;
+	    }
+	    return FALSE;
+	}
+
 	function createObject($tableName, $body, $dataName) {
 		$id = $this->unique_id(10);
 		$columns = array("objectId", "createdAt");
@@ -252,15 +264,16 @@ class DataBaseAccess {
 		return FALSE;
 	}
 
-	function createNotification($senderId, $recipientIds, $postId, $type) {
-		$stmt = $this->db->prepare("INSERT INTO notifications (objectId, createdAt, sender, recipient, post, type) VALUES (?,NOW(),?,?,?,?)");
+	function createNotification($senderId, $recipientIds, $postId, $commentId, $type) {
+		$stmt = $this->db->prepare("INSERT INTO notifications (objectId, createdAt, sender, recipient, post, comment, type) VALUES (?,NOW(),?,?,?,?,?)");
 		foreach ($recipientIds as $recipientId) {
 			$id = $this->unique_id(10);
 		    $stmt->bindValue(1, $id);
 		    $stmt->bindValue(2, $senderId);
 		    $stmt->bindValue(3, $recipientId);
 		    $stmt->bindValue(4, $postId);
-		    $stmt->bindValue(5, $type);
+		    $stmt->bindValue(5, $commentId);
+		    $stmt->bindValue(6, $type);
 		    $stmt->execute();
 		}
 	}

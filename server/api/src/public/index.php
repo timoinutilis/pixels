@@ -91,6 +91,7 @@ define("NotificationTypeComment", 0);
 define("NotificationTypeLike", 1);
 define("NotificationTypeShare", 2);
 define("NotificationTypeFollow", 3);
+define("NotificationTypeReportComment", 4);
 
 define("PostTypeProgram", 1);
 define("PostTypeStatus", 2);
@@ -104,6 +105,14 @@ define("UserRoleAdmin", 2);
 define("NormalPostTypes", "1,2,3");
 
 /* ============ Parameter Checks ============ */
+
+function getMyUser(Request $request) {
+    $currentUser = $request->getAttribute('currentUser');
+    if (empty($currentUser)) {
+        throw new APIException("You don't have the permission for this.", 403, "Forbidden");
+    }
+    return $currentUser;
+}
 
 function checkMyUser($userId, Request $request) {
     $currentUser = $request->getAttribute('currentUser');
@@ -242,7 +251,8 @@ $app->post('/posts/{id}/comments', function (Request $request, Response $respons
     checkRequired($body, 'text');
 
     $body['post'] = $postId;
-    if ($access->createObject("comments", $body, "comment") !== FALSE) {
+    $commentId = $access->createObject("comments", $body, "comment");
+    if ($commentId !== FALSE) {
         $access->data['comment']['post'] = $postId;
         $response = $response->withStatus(201);
         $access->increasePostStats($postId, 0, 1, 0);
@@ -271,7 +281,7 @@ $app->post('/posts/{id}/comments', function (Request $request, Response $respons
                 }
             }
 
-            $access->createNotification($myUserId, $recipientIds, $postId, NotificationTypeComment);
+            $access->createNotification($myUserId, $recipientIds, $postId, $commentId, NotificationTypeComment);
         }
     }
 
@@ -299,7 +309,7 @@ $app->post('/posts/{id}/likes', function (Request $request, Response $response) 
 
             $post = $access->getObject("posts", $postId, "user");
             if ($post) {
-                $access->createNotification($userId, array($post['user']), $postId, NotificationTypeLike);
+                $access->createNotification($userId, array($post['user']), $postId, NULL, NotificationTypeLike);
             }
         }
     }
@@ -336,14 +346,43 @@ $app->delete('/comments/{id}', function (Request $request, Response $response) {
             $postUserId = $post['user'];
             checkUserPermission(array($postUserId, $commentUserId), UserRoleModerator, $request, $access);
 
-            $stmt = $this->db->prepare("DELETE FROM comments WHERE objectId = ?");
+            $stmt = $this->db->prepare("DELETE FROM notifications WHERE comment = ?");
             $stmt->bindValue(1, $commentId);
             if ($stmt->execute()) {
-                $access->increasePostStats($postId, 0, -1, 0);
-                $access->data['success'] = TRUE;
+                $stmt = $this->db->prepare("DELETE FROM comments WHERE objectId = ?");
+                $stmt->bindValue(1, $commentId);
+                if ($stmt->execute()) {
+                    $access->increasePostStats($postId, 0, -1, 0);
+                    $access->data['success'] = TRUE;
+                }
             }
         } else {
             throw new APIException("The object '$postId' could not be found.", 404, "NotFound");
+        }
+    } else {
+        throw new APIException("The object '$commentId' could not be found.", 404, "NotFound");
+    }
+
+    $response = $response->withJson($access->data);
+    return $response;
+})->add(new AuthMiddleware());
+
+// report comment
+$app->post('/comments/{id}/report', function (Request $request, Response $response) {
+    $body = $request->getParsedBody();
+    $commentId = $request->getAttribute('id');
+    $access = new DataBaseAccess($this->db);
+
+    $senderUserId = getMyUser($request);
+
+    $comment = $access->getObject("comments", $commentId, "post");
+    if ($comment) {
+        $postId = $comment['post'];
+        $moderatorUserIds = $access->getRoleUserIds(UserRoleModerator);
+        if ($moderatorUserIds !== FALSE) {
+            $access->createNotification($senderUserId, $moderatorUserIds, $postId, $commentId, NotificationTypeReportComment);
+        } else {
+            throw new APIException("Could not get moderators.", 500, "InternalServerError");
         }
     } else {
         throw new APIException("The object '$commentId' could not be found.", 404, "NotFound");
@@ -524,7 +563,7 @@ $app->post('/users/{id}/followers', function (Request $request, Response $respon
     $followId = $access->createObject("follows", $followsObject, "follow");
     if ($followId !== FALSE) {
         $access->data['follow']['followsUser'] = $userId;
-        $access->createNotification($myUserId, array($userId), NULL, NotificationTypeFollow);
+        $access->createNotification($myUserId, array($userId), NULL, NULL, NotificationTypeFollow);
         $response = $response->withStatus(201);
     }
 
@@ -596,7 +635,7 @@ $app->post('/users/{id}/posts', function (Request $request, Response $response) 
             // notification to original user
             $sharedPost = $access->getObject("posts", $sharedPostId, "user");
             if ($sharedPost) {
-                $access->createNotification($userId, array($sharedPost['user']), $postId, NotificationTypeShare);
+                $access->createNotification($userId, array($sharedPost['user']), $postId, NULL, NotificationTypeShare);
             }
 
             // mark original post as featured

@@ -18,6 +18,7 @@ typedef NS_ENUM(NSInteger, CommPostMode) {
 @interface CommPostViewController : UITableViewController
 
 - (void)setPost:(LCCPost *)post mode:(CommPostMode)mode;
+- (void)setPost:(LCCPost *)post mode:(CommPostMode)mode commentId:(NSString *)commentId;
 
 @end
 
@@ -33,7 +34,7 @@ typedef NS_ENUM(NSInteger, CommPostMode) {
 
 @interface CommentCell : UITableViewCell
 @property (weak) CommPostViewController *delegate;
-- (void)setComment:(LCCComment *)comment user:(LCCUser *)user;
+- (void)setComment:(LCCComment *)comment user:(LCCUser *)user isHighlighted:(BOOL)isHighlighted;
 @end
 
 @interface WriteCommentCell : UITableViewCell

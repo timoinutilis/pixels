@@ -116,9 +116,10 @@
     
     switch (notification.type)
     {
-        case LCCNotificationTypeComment: {
+        case LCCNotificationTypeComment:
+        case LCCNotificationTypeReportComment: {
             CommPostViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"CommPostView"];
-            [vc setPost:notification.postObject mode:CommPostModePost];
+            [vc setPost:notification.postObject mode:CommPostModePost commentId:notification.comment];
             [self.navigationController pushViewController:vc animated:YES];
             break;
         }
@@ -177,6 +178,10 @@
             
         case LCCNotificationTypeFollow:
             text = [NSString stringWithFormat:@"%@ follows you", name];
+            break;
+            
+        case LCCNotificationTypeReportComment:
+            text = [NSString stringWithFormat:@"%@ reported an inappropriate comment on '%@'", name, notification.postObject.title];
             break;
             
         default:

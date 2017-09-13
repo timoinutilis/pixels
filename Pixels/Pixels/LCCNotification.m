@@ -14,6 +14,7 @@
 @dynamic sender;
 @dynamic recipient;
 @dynamic post;
+@dynamic comment;
 
 @synthesize senderObject = _senderObject;
 @synthesize postObject = _postObject;
