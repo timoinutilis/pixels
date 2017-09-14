@@ -60,10 +60,6 @@
     
     int section = 0;
     
-    self.guidelinesCell = [self.tableView dequeueReusableCellWithIdentifier:@"GuidelinesCell"];
-    [self addCell:self.guidelinesCell];
-    
-    section++;
     [self setHeaderTitle:@"Title" section:section];
     
     self.titleCell = [self.tableView dequeueReusableCellWithIdentifier:@"ShareTextFieldCell"];
@@ -98,6 +94,9 @@
     
     self.descriptionCell = [self.tableView dequeueReusableCellWithIdentifier:@"ShareTextViewCell"];
     [self addCell:self.descriptionCell];
+    
+    self.guidelinesCell = [self.tableView dequeueReusableCellWithIdentifier:@"GuidelinesCell"];
+    [self addCell:self.guidelinesCell];
     
     self.cycleManager = [[GORCycleManager alloc] initWithFields:@[self.titleCell.textField, self.descriptionCell.textView]];
 }

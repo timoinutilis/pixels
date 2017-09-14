@@ -64,9 +64,6 @@
     self.headerCell.iconImageView.image = (self.project.iconData) ? [UIImage imageWithData:self.project.iconData] : [UIImage imageNamed:@"icon_project"];
     [self addCell:self.headerCell];
     
-    self.guidelinesCell = [self.tableView dequeueReusableCellWithIdentifier:@"GuidelinesCell"];
-    [self addCell:self.guidelinesCell];
-    
     self.loginCell = [self.tableView dequeueReusableCellWithIdentifier:@"ShareActionCell"];
     [self addCell:self.loginCell];
     
@@ -99,6 +96,9 @@
         self.descriptionCell.textView.text = self.project.programDescription;
     }
     [self addCell:self.descriptionCell];
+    
+    self.guidelinesCell = [self.tableView dequeueReusableCellWithIdentifier:@"GuidelinesCell"];
+    [self addCell:self.guidelinesCell];
     
     [self updateLogin:nil];
     
