@@ -27,6 +27,7 @@
 @property TextFieldTableViewCell *titleCell;
 @property TextViewTableViewCell *descriptionCell;
 @property ActionTableViewCell *loginCell;
+@property UITableViewCell *guidelinesCell;
 @property UITableViewCell *categoryGameCell;
 @property UITableViewCell *categoryToolCell;
 @property UITableViewCell *categoryDemoCell;
@@ -63,9 +64,12 @@
     self.headerCell.iconImageView.image = (self.project.iconData) ? [UIImage imageWithData:self.project.iconData] : [UIImage imageNamed:@"icon_project"];
     [self addCell:self.headerCell];
     
+    self.guidelinesCell = [self.tableView dequeueReusableCellWithIdentifier:@"GuidelinesCell"];
+    [self addCell:self.guidelinesCell];
+    
     self.loginCell = [self.tableView dequeueReusableCellWithIdentifier:@"ShareActionCell"];
     [self addCell:self.loginCell];
-
+    
     [self setHeaderTitle:@"Program Title" section:1];
     
     self.titleCell = [self.tableView dequeueReusableCellWithIdentifier:@"ShareTextFieldCell"];
@@ -136,6 +140,8 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    [self.view endEditing:YES];
+    
     if (   self.descriptionCell.textView.text.length > 0
         && (!self.project.programDescription || ![self.descriptionCell.textView.text isEqualToString:self.project.programDescription]) )
     {
@@ -226,6 +232,10 @@
     {
         self.selectedCategory = LCCPostCategoryDemo;
     }
+    else if (cell == self.guidelinesCell)
+    {
+        [self showGuidelines];
+    }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
@@ -308,6 +318,13 @@
     [[CommunityModel sharedInstance] handleAPIError:error title:@"Could not send program" viewController:self];
 }
 
+- (void)showGuidelines
+{
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Community" bundle:nil];
+    UIViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"CommGuidelinesView"];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
 - (void)isBusy:(BOOL)isBusy
 {
     self.cancelItem.enabled = !isBusy;
@@ -333,15 +350,9 @@
 {
     [super awakeFromNib];
     
-    NSString *text1 = @"Post this program to your community profile! If we like it, we will feature it in the LowRes Coder news!\n";
-    NSString *text2 = @"Feel free to copy programs from other users and change or improve them, but please don't remove the names of the authors if indicated. Thanks!";
-    NSMutableAttributedString *attrText = [[NSMutableAttributedString alloc] initWithString:text1 attributes:@{NSFontAttributeName: [UIFont boldSystemFontOfSize:16]}];
-    NSAttributedString *attrText2 = [[NSAttributedString alloc] initWithString:text2 attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:16]}];
-    [attrText appendAttributedString:attrText2];
-    
     self.textView.textContainer.lineFragmentPadding = 0;
     self.textView.textContainerInset = UIEdgeInsetsZero;
-    self.textView.attributedText = attrText;
+    self.textView.text = @"Post this program to your community profile! If we like it, we will feature it in the LowRes Coder news.";
     CALayer *layer = self.iconImageView.layer;
     layer.masksToBounds = YES;
     layer.cornerRadius = 3;

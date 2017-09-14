@@ -57,6 +57,10 @@
 		92694C691C9704EE00837C2B /* OpenGLRendererView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92694C671C9704EE00837C2B /* OpenGLRendererView.m */; };
 		926A6A181B1C929D00A85412 /* UIViewController+LowResCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 926A6A171B1C929D00A85412 /* UIViewController+LowResCoder.m */; };
 		926C72C71A2B579E00448EAB /* RunnerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 926C72C61A2B579E00448EAB /* RunnerViewController.m */; };
+		926FF7471F6AF10A00CA4C8E /* CommGuidelinesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 926FF7461F6AF10A00CA4C8E /* CommGuidelinesViewController.m */; };
+		926FF7481F6AF10A00CA4C8E /* CommGuidelinesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 926FF7461F6AF10A00CA4C8E /* CommGuidelinesViewController.m */; };
+		926FF74A1F6AF18400CA4C8E /* guidelines.html in Resources */ = {isa = PBXBuildFile; fileRef = 926FF7491F6AF18400CA4C8E /* guidelines.html */; };
+		926FF74B1F6AF18400CA4C8E /* guidelines.html in Resources */ = {isa = PBXBuildFile; fileRef = 926FF7491F6AF18400CA4C8E /* guidelines.html */; };
 		9272C1491A1DE2D000E97957 /* Token.m in Sources */ = {isa = PBXBuildFile; fileRef = 9272C1481A1DE2D000E97957 /* Token.m */; };
 		927334981A2A456900C89AF0 /* Help.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 927334971A2A456900C89AF0 /* Help.storyboard */; };
 		9273349D1A2A478700C89AF0 /* HelpTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9273349C1A2A478700C89AF0 /* HelpTableViewController.m */; };
@@ -345,6 +349,9 @@
 		926C72C51A2B579E00448EAB /* RunnerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RunnerViewController.h; sourceTree = "<group>"; };
 		926C72C61A2B579E00448EAB /* RunnerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RunnerViewController.m; sourceTree = "<group>"; };
 		926C72C81A2B5C9100448EAB /* RunnerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RunnerDelegate.h; sourceTree = "<group>"; };
+		926FF7451F6AF10A00CA4C8E /* CommGuidelinesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommGuidelinesViewController.h; sourceTree = "<group>"; };
+		926FF7461F6AF10A00CA4C8E /* CommGuidelinesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommGuidelinesViewController.m; sourceTree = "<group>"; };
+		926FF7491F6AF18400CA4C8E /* guidelines.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = guidelines.html; sourceTree = "<group>"; };
 		9272C1471A1DE2D000E97957 /* Token.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Token.h; sourceTree = "<group>"; };
 		9272C1481A1DE2D000E97957 /* Token.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Token.m; sourceTree = "<group>"; };
 		927334971A2A456900C89AF0 /* Help.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Help.storyboard; sourceTree = "<group>"; };
@@ -580,6 +587,7 @@
 				9276F3991A1D289C0060E909 /* Images.xcassets */,
 				9276F39B1A1D289C0060E909 /* LaunchScreen.xib */,
 				9204EF691A4C430300B8C29C /* manual.html */,
+				926FF7491F6AF18400CA4C8E /* guidelines.html */,
 			);
 			name = Assets;
 			sourceTree = "<group>";
@@ -676,6 +684,8 @@
 				92C081181B0DD9490006331B /* CommLogInViewController.m */,
 				9234A64B1DE9E5F400337FF3 /* CommStatusUpdateViewController.h */,
 				9234A64C1DE9E5F400337FF3 /* CommStatusUpdateViewController.m */,
+				926FF7451F6AF10A00CA4C8E /* CommGuidelinesViewController.h */,
+				926FF7461F6AF10A00CA4C8E /* CommGuidelinesViewController.m */,
 			);
 			name = Community;
 			sourceTree = "<group>";
@@ -1127,6 +1137,7 @@
 				9276F39D1A1D289C0060E909 /* LaunchScreen.xib in Resources */,
 				92FD58591DEB502200970C3A /* BlockerView.xib in Resources */,
 				9248A6B01A7A641D00FD5656 /* Default Projects in Resources */,
+				926FF74A1F6AF18400CA4C8E /* guidelines.html in Resources */,
 				9276F39A1A1D289C0060E909 /* Images.xcassets in Resources */,
 				927334981A2A456900C89AF0 /* Help.storyboard in Resources */,
 			);
@@ -1143,6 +1154,7 @@
 				929BCF8A1BB14A1B005F1DBD /* LaunchScreen.xib in Resources */,
 				92FD585A1DEB502200970C3A /* BlockerView.xib in Resources */,
 				929BCF8C1BB14A1B005F1DBD /* Default Projects in Resources */,
+				926FF74B1F6AF18400CA4C8E /* guidelines.html in Resources */,
 				929BCF8D1BB14A1B005F1DBD /* Images.xcassets in Resources */,
 				929BCF8E1BB14A1B005F1DBD /* Help.storyboard in Resources */,
 			);
@@ -1212,6 +1224,7 @@
 				925A01A91A1E67F900A321E6 /* Parser.m in Sources */,
 				92C6C9151C2DC4BC0030D8AA /* LCCNotification.m in Sources */,
 				92F0C36D1B3EBF6D00000646 /* Compiler.m in Sources */,
+				926FF7471F6AF10A00CA4C8E /* CommGuidelinesViewController.m in Sources */,
 				924F832C1B0B5B6E00B96C91 /* CommMasterViewController.m in Sources */,
 				920E68221AB74CDA0038994A /* SplashViewController.m in Sources */,
 				924F83331B0B610D00B96C91 /* CommSplitViewController.m in Sources */,
@@ -1337,6 +1350,7 @@
 				929BCF431BB14A1B005F1DBD /* AppStyle.m in Sources */,
 				929BCF441BB14A1B005F1DBD /* Parser.m in Sources */,
 				929BCF451BB14A1B005F1DBD /* Compiler.m in Sources */,
+				926FF7481F6AF10A00CA4C8E /* CommGuidelinesViewController.m in Sources */,
 				929BCF471BB14A1B005F1DBD /* CommMasterViewController.m in Sources */,
 				929BCF481BB14A1B005F1DBD /* SplashViewController.m in Sources */,
 				929BCF491BB14A1B005F1DBD /* CommSplitViewController.m in Sources */,

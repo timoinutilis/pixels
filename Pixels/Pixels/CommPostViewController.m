@@ -502,7 +502,7 @@ typedef NS_ENUM(NSInteger, Section) {
     }
     else if (section == SectionWriteComment)
     {
-        return 1;
+        return 2;
     }
     return 0;
 }
@@ -571,17 +571,25 @@ typedef NS_ENUM(NSInteger, Section) {
     }
     else if (indexPath.section == SectionWriteComment)
     {
-        if ([CommunityModel sharedInstance].currentUser)
+        if (indexPath.row == 0)
         {
-            return self.writeCommentCell;
+            if ([CommunityModel sharedInstance].currentUser)
+            {
+                return self.writeCommentCell;
+            }
+            else
+            {
+                UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"LoginCell" forIndexPath:indexPath];
+                cell.textLabel.text = @"Log In / Register";
+                cell.tag = CellTagLogin;
+                return cell;
+
+            }
         }
         else
         {
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"LoginCell" forIndexPath:indexPath];
-            cell.textLabel.text = @"Log In / Register";
-            cell.tag = CellTagLogin;
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"GuidelinesCell" forIndexPath:indexPath];
             return cell;
-
         }
     }
     return nil;

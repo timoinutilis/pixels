@@ -20,6 +20,7 @@
 @property (nonatomic) IBOutlet UIBarButtonItem *sendItem;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *cancelItem;
 
+@property UITableViewCell *guidelinesCell;
 @property TextFieldTableViewCell *titleCell;
 @property UITableViewCell *categoryHowToCell;
 @property UITableViewCell *categoryCollabCell;
@@ -59,6 +60,10 @@
     
     int section = 0;
     
+    self.guidelinesCell = [self.tableView dequeueReusableCellWithIdentifier:@"GuidelinesCell"];
+    [self addCell:self.guidelinesCell];
+    
+    section++;
     [self setHeaderTitle:@"Title" section:section];
     
     self.titleCell = [self.tableView dequeueReusableCellWithIdentifier:@"ShareTextFieldCell"];
@@ -67,6 +72,8 @@
     
     if (self.postType == LCCPostTypeForum)
     {
+        [self setFooterTitle:@"Please choose a descriptive title better than \"I need help\". Before you ask something, check if there are already answers available." section:section];
+        
         section++;
         [self setHeaderTitle:@"Category" section:section];
         
@@ -93,6 +100,12 @@
     [self addCell:self.descriptionCell];
     
     self.cycleManager = [[GORCycleManager alloc] initWithFields:@[self.titleCell.textField, self.descriptionCell.textView]];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self.view endEditing:YES];
 }
 
 - (void)setSelectedCategory:(LCCPostCategory)selectedCategory
