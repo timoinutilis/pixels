@@ -31,5 +31,6 @@ typedef NS_ENUM(int, LCCUserRole) {
 
 - (BOOL)canDeleteAnyComment;
 - (BOOL)canDeleteAnyPost;
+- (BOOL)canResetAnyPassword;
 
 @end

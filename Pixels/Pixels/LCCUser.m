@@ -43,4 +43,9 @@ NSString *const LowResNewsUserIDKey = @"LowResNewsUserID";
     return self.role >= LCCUserRoleModerator;
 }
 
+- (BOOL)canResetAnyPassword
+{
+    return self.role >= LCCUserRoleModerator;
+}
+
 @end

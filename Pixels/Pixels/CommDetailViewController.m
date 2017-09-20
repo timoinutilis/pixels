@@ -29,7 +29,8 @@ typedef NS_ENUM(NSInteger, CellTag) {
     CellTagPost,
     CellTagFollowers,
     CellTagFollowing,
-    CellTagWriteStatus
+    CellTagWriteStatus,
+    CellTagAdminResetPassword
 };
 
 typedef NS_ENUM(NSInteger, Section) {
@@ -447,6 +448,32 @@ static const NSInteger LIMIT = 25;
     }];
 }
 
+- (void)resetPassword
+{
+    [self showConfirmAlertWithTitle:@"Do you really want to reset this user's password?" message:nil block: ^{
+        NSDictionary *params = @{@"userId": self.user.objectId};
+        [[CommunityModel sharedInstance].sessionManager POST:@"/resetPassword" parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+            
+            [BlockerView dismiss];
+            NSString *password = responseObject[@"password"];
+            
+            // copy password to clipboard
+            UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+            pasteboard.string = password;
+            
+            // show message
+            NSString *message = [NSString stringWithFormat:@"New password '%@' copied to clipboard.", password];
+            [self showAlertWithTitle:@"Password successfully reset" message:message block:nil];
+            
+        } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+            
+            [BlockerView dismiss];
+            [[CommunityModel sharedInstance] handleAPIError:error title:@"Could not reset password" viewController:self];
+            
+        }];
+    }];
+}
+
 #pragma mark - Table view
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -473,7 +500,12 @@ static const NSInteger LIMIT = 25;
     {
         if (self.mode == CommListModeProfile)
         {
-            return [self.user isMe] ? 4 : 3;
+            if ([self.user isMe] || [[CommunityModel sharedInstance].currentUser canResetAnyPassword])
+            {
+                // status update / admin reset password
+                return 4;
+            }
+            return 3;
         }
         else if (self.mode == CommListModeForum)
         {
@@ -532,8 +564,16 @@ static const NSInteger LIMIT = 25;
             else if (indexPath.row == 3)
             {
                 UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ActionCell" forIndexPath:indexPath];
-                cell.textLabel.text = @"Write Status Update";
-                cell.tag = CellTagWriteStatus;
+                if ([self.user isMe])
+                {
+                    cell.textLabel.text = @"Write Status Update";
+                    cell.tag = CellTagWriteStatus;
+                }
+                else
+                {
+                    cell.textLabel.text = @"Reset Password";
+                    cell.tag = CellTagAdminResetPassword;
+                }
                 return cell;
             }
         }
@@ -659,6 +699,12 @@ static const NSInteger LIMIT = 25;
                 [self presentViewController:vc animated:YES completion:nil];
             }
             [tableView deselectRowAtIndexPath:indexPath animated:YES];
+            break;
+        }
+        case CellTagAdminResetPassword: {
+            [tableView deselectRowAtIndexPath:indexPath animated:YES];
+            [self resetPassword];
+            break;
         }
     }
 }
