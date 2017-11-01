@@ -53,7 +53,7 @@
 - (void)writeDataValue:(id)value disableNewLine:(BOOL)disableNewLine;
 - (NSString *)transferResult;
 
-- (void)wait:(NSTimeInterval)time stopBlock:(BOOL(^)())block;
+- (void)wait:(NSTimeInterval)time stopBlock:(BOOL(^)(void))block;
 
 @end
 

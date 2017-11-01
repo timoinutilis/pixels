@@ -79,16 +79,6 @@ static const NSInteger LIMIT = 25;
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     
-    if (!SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"9.0"))
-    {
-        // simple workaround for Split View bug, Table View doesn't adjust for Keyboard on iPhone
-        if (   self.mode == CommListModeProfile && [self.user isMe] // only me has text input
-            && [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
-        {
-            self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 252, 0);
-        }
-    }
-    
     self.profileCell = [self.tableView dequeueReusableCellWithIdentifier:@"CommProfileCell"];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onFollowsChanged:) name:FollowsChangeNotification object:nil];

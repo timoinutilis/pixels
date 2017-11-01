@@ -17,7 +17,7 @@
 @property UILabel *label;
 @property UIImageView *pointerImageView;
 
-@property (strong) void (^block)();
+@property (strong) void (^block)(void);
 @property (weak) UINavigationBar *targetNavBar;
 @property (weak) UITabBar *targetTabBar;
 @property int targetItemIndex;
@@ -27,7 +27,7 @@
 
 @implementation CoachMarkView
 
-- (instancetype)initWithText:(NSString *)text complete:(void (^)())block
+- (instancetype)initWithText:(NSString *)text complete:(void (^)(void))block
 {
     if (self = [super initWithFrame:CGRectMake(0, 0, 320, 320)])
     {

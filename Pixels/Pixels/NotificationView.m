@@ -11,19 +11,19 @@
 
 @interface NotificationView()
 @property UILabel *label;
-@property (strong) void (^block)();
+@property (strong) void (^block)(void);
 @property BOOL isHiding;
 @end
 
 @implementation NotificationView
 
-+ (void)showMessage:(NSString *)message block:(void (^)())block
++ (void)showMessage:(NSString *)message block:(void (^)(void))block
 {
     NotificationView *view = [[NotificationView alloc] initWithMessage:message block:block];
     [view show];
 }
 
-- (instancetype)initWithMessage:(NSString *)message block:(void (^)())block
+- (instancetype)initWithMessage:(NSString *)message block:(void (^)(void))block
 {
     CGFloat statusBarHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
     

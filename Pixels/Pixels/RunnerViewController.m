@@ -122,7 +122,20 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
 
 - (BOOL)prefersStatusBarHidden
 {
+    if (@available(iOS 11.0, *))
+    {
+        UIWindow *window = [UIApplication sharedApplication].delegate.window;
+        if (window.safeAreaInsets.top != 0)
+        {
+            return NO;
+        }
+    }
     return YES;
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -175,8 +188,9 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
     }
 }
 
-- (void)viewWillLayoutSubviews
+- (void)viewDidLayoutSubviews
 {
+    [super viewDidLayoutSubviews];
     [self updateDynamicConstraints];
 }
 
@@ -290,8 +304,7 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
 
 - (void)updateDynamicConstraints
 {
-    UIWindow *window = [UIApplication sharedApplication].keyWindow;
-    CGSize windowSize = window.bounds.size;
+    CGSize windowSize = self.containerView.bounds.size;
     BOOL isPanorama = windowSize.width > windowSize.height;
     
     // renderer

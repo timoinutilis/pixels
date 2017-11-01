@@ -10,7 +10,7 @@
 
 @interface CoachMarkView : UIView
 
-- (instancetype)initWithText:(NSString *)text complete:(void (^)())block;
+- (instancetype)initWithText:(NSString *)text complete:(void (^)(void))block;
 
 - (void)setTargetNavBar:(UINavigationBar *)navBar itemIndex:(int)index;
 - (void)setTargetTabBar:(UITabBar *)tabBar itemIndex:(int)index;

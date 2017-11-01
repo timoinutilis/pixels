@@ -339,7 +339,7 @@ NSTimeInterval const RunnerOnEndTimeOut = 2;
     return nil;
 }
 
-- (void)wait:(NSTimeInterval)time stopBlock:(BOOL(^)())block
+- (void)wait:(NSTimeInterval)time stopBlock:(BOOL(^)(void))block
 {
     NSTimeInterval endTime = CFAbsoluteTimeGetCurrent() + time;
     NSTimeInterval maxSleep = block ? 0.02 : 0.2;

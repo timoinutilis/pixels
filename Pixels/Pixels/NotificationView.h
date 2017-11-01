@@ -10,6 +10,6 @@
 
 @interface NotificationView : UIView
 
-+ (void)showMessage:(NSString *)message block:(void (^)())block;
++ (void)showMessage:(NSString *)message block:(void (^)(void))block;
 
 @end

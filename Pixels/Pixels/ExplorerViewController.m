@@ -51,6 +51,11 @@ NSString *const CoachMarkIDAdd = @"CoachMarkIDAdd";
     layout.minimumLineSpacing = 10;
     layout.sectionInset = UIEdgeInsetsMake(20, 20, 20, 20);
     
+    if (@available(iOS 11.0, *))
+    {
+        layout.sectionInsetReference = UICollectionViewFlowLayoutSectionInsetFromSafeArea;
+    }
+    
     if (self.folder)
     {
         self.title = self.folder.name;
