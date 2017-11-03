@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="p4g-d5-suo">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="p4g-d5-suo">
     <device id="retina5_9" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -26,7 +26,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Chapter" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="cNT-C3-SxA">
-                                            <rect key="frame" x="16" y="0.0" width="344" height="43.666666666666664"/>
+                                            <rect key="frame" x="16" y="0.0" width="343" height="43.666666666666664"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                             <nil key="highlightedColor"/>
@@ -42,7 +42,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subchapter" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="xCb-EZ-bHA">
-                                            <rect key="frame" x="16" y="0.0" width="344" height="43.666666666666664"/>
+                                            <rect key="frame" x="16" y="0.0" width="343" height="43.666666666666664"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
                                             <nil key="highlightedColor"/>
@@ -58,7 +58,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Command" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="TER-03-QaQ">
-                                            <rect key="frame" x="16" y="0.0" width="344" height="43.666666666666664"/>
+                                            <rect key="frame" x="16" y="0.0" width="343" height="43.666666666666664"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <nil key="highlightedColor"/>
@@ -72,7 +72,6 @@
                             <outlet property="delegate" destination="VCq-ww-h8L" id="0XA-SN-inR"/>
                         </connections>
                     </tableView>
-                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Contents" id="fxm-u0-rG6"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MY5-DQ-QDS" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -92,16 +91,15 @@
                                 <color key="backgroundColor" red="0.96470588235294119" green="0.96470588235294119" blue="0.96470588235294119" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </webView>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.96470588235294119" green="0.96470588235294119" blue="0.96470588235294119" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="HIl-A8-TZc" firstAttribute="trailing" secondItem="Tiq-Xz-jxb" secondAttribute="trailing" id="JED-4N-vyz"/>
+                            <constraint firstItem="HIl-A8-TZc" firstAttribute="leading" secondItem="Tiq-Xz-jxb" secondAttribute="leading" id="OZo-aY-ZBs"/>
                             <constraint firstItem="HIl-A8-TZc" firstAttribute="top" secondItem="Rwb-0W-2jo" secondAttribute="top" id="eZs-SU-Kbo"/>
-                            <constraint firstAttribute="trailing" secondItem="HIl-A8-TZc" secondAttribute="trailing" id="kt8-mP-wvO"/>
-                            <constraint firstItem="HIl-A8-TZc" firstAttribute="leading" secondItem="Rwb-0W-2jo" secondAttribute="leading" id="na2-tb-rr3"/>
                             <constraint firstAttribute="bottom" secondItem="HIl-A8-TZc" secondAttribute="bottom" id="yLP-PZ-QQv"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Tiq-Xz-jxb"/>
                     </view>
-                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Help" id="f6y-xG-fkW"/>
                     <connections>
                         <outlet property="webView" destination="HIl-A8-TZc" id="jzd-g0-myt"/>
@@ -114,7 +112,7 @@
         <!--Help Split View Controller-->
         <scene sceneID="ETx-sR-4BR">
             <objects>
-                <splitViewController id="p4g-d5-suo" customClass="HelpSplitViewController" sceneMemberID="viewController">
+                <splitViewController extendedLayoutIncludesOpaqueBars="YES" id="p4g-d5-suo" customClass="HelpSplitViewController" sceneMemberID="viewController">
                     <connections>
                         <segue destination="a40-4h-tm3" kind="relationship" relationship="masterViewController" id="DY6-vd-ItK"/>
                         <segue destination="ZzF-vd-cgo" kind="relationship" relationship="detailViewController" id="hdU-ze-ObY"/>
