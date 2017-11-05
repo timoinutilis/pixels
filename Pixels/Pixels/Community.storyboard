@@ -987,7 +987,7 @@
         <!--Navigation Controller-->
         <scene sceneID="Kpt-pi-4fJ">
             <objects>
-                <navigationController storyboardIdentifier="CommListViewNav" automaticallyAdjustsScrollViewInsets="NO" id="26N-Em-MEX" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="CommListViewNav" extendedLayoutIncludesOpaqueBars="YES" automaticallyAdjustsScrollViewInsets="NO" id="26N-Em-MEX" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="SzU-a0-BJi">
                         <rect key="frame" x="0.0" y="44" width="375" height="44"/>

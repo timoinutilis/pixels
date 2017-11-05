@@ -125,7 +125,7 @@
         <!--Navigation Controller-->
         <scene sceneID="Z0i-bd-2n2">
             <objects>
-                <navigationController id="ZzF-vd-cgo" sceneMemberID="viewController">
+                <navigationController extendedLayoutIncludesOpaqueBars="YES" id="ZzF-vd-cgo" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="yBO-ew-DN8">
                         <rect key="frame" x="0.0" y="44" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
