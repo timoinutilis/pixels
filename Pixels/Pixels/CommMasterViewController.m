@@ -20,6 +20,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
     CellTagNews,
     CellTagDiscover,
     CellTagForum,
+    CellTagEssentials,
     CellTagAccount,
     CellTagNotifications,
     CellTagLogIn,
@@ -138,7 +139,7 @@ typedef NS_ENUM(NSInteger, CellTag) {
 {
     if (section == 0)
     {
-        return [CommunityModel sharedInstance].currentUser ? 4 : 2;
+        return [CommunityModel sharedInstance].currentUser ? 5 : 3;
     }
     else if (section == 1)
     {
@@ -173,10 +174,16 @@ typedef NS_ENUM(NSInteger, CellTag) {
         else if (indexPath.row == 2)
         {
             cell = [tableView dequeueReusableCellWithIdentifier:@"MenuCell" forIndexPath:indexPath];
+            cell.textLabel.text = @"Essentials";
+            cell.tag = CellTagEssentials;
+        }
+        else if (indexPath.row == 3)
+        {
+            cell = [tableView dequeueReusableCellWithIdentifier:@"MenuCell" forIndexPath:indexPath];
             cell.textLabel.text = @"Discover";
             cell.tag = CellTagDiscover;
         }
-        else if (indexPath.row == 3)
+        else if (indexPath.row == 4)
         {
             cell = [tableView dequeueReusableCellWithIdentifier:@"NotificationsCell" forIndexPath:indexPath];
             NSInteger num = [CommunityModel sharedInstance].numNewNotifications;
@@ -282,6 +289,11 @@ typedef NS_ENUM(NSInteger, CellTag) {
             case CellTagDiscover: {
                 LCCUser *user = [CommunityModel sharedInstance].currentUser;
                 [vc setUser:user mode:CommListModeDiscover];
+                break;
+            }
+            case CellTagEssentials: {
+                LCCUser *user = [CommunityModel sharedInstance].currentUser;
+                [vc setUser:user mode:CommListModeEssentials];
                 break;
             }
             case CellTagAccount: {

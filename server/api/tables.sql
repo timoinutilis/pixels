@@ -1,20 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 4.2.10
+-- version 4.4.10
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost:8889
--- Tiempo de generación: 05-01-2017 a las 22:49:17
--- Versión del servidor: 5.5.38
--- Versión de PHP: 5.6.2
+-- Tiempo de generación: 05-11-2017 a las 19:51:39
+-- Versión del servidor: 5.5.42
+-- Versión de PHP: 5.6.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
 
 --
 -- Base de datos: `lowres`
@@ -33,7 +27,7 @@ CREATE TABLE `comments` (
   `post` varchar(10) COLLATE utf8mb4_bin NOT NULL,
   `user` varchar(10) COLLATE utf8mb4_bin DEFAULT NULL,
   `text` text COLLATE utf8mb4_bin NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- --------------------------------------------------------
 
@@ -47,7 +41,7 @@ CREATE TABLE `follows` (
   `createdAt` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `user` varchar(10) COLLATE utf8mb4_bin NOT NULL,
   `followsUser` varchar(10) COLLATE utf8mb4_bin NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- --------------------------------------------------------
 
@@ -61,7 +55,7 @@ CREATE TABLE `likes` (
   `createdAt` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `post` varchar(10) COLLATE utf8mb4_bin NOT NULL,
   `user` varchar(10) COLLATE utf8mb4_bin NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- --------------------------------------------------------
 
@@ -76,8 +70,9 @@ CREATE TABLE `notifications` (
   `sender` varchar(10) COLLATE utf8mb4_bin NOT NULL,
   `recipient` varchar(10) COLLATE utf8mb4_bin NOT NULL,
   `post` varchar(10) COLLATE utf8mb4_bin DEFAULT NULL,
+  `comment` varchar(10) COLLATE utf8mb4_bin DEFAULT NULL,
   `type` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- --------------------------------------------------------
 
@@ -98,7 +93,7 @@ CREATE TABLE `posts` (
   `program` text COLLATE utf8mb4_bin,
   `sharedPost` varchar(10) COLLATE utf8mb4_bin DEFAULT NULL,
   `stats` varchar(10) COLLATE utf8mb4_bin DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- --------------------------------------------------------
 
@@ -115,8 +110,8 @@ CREATE TABLE `postStats` (
   `numComments` int(11) NOT NULL,
   `numLikes` int(11) NOT NULL,
   `featured` tinyint(1) NOT NULL DEFAULT '0',
-  `highlighted` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+  `essential` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- --------------------------------------------------------
 
@@ -133,8 +128,9 @@ CREATE TABLE `users` (
   `sessionToken` varchar(25) COLLATE utf8mb4_bin DEFAULT NULL,
   `lastPostDate` timestamp NULL DEFAULT NULL,
   `notificationsOpenedDate` timestamp NULL DEFAULT NULL,
-  `about` text COLLATE utf8mb4_bin
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+  `about` text COLLATE utf8mb4_bin,
+  `role` int(11) NOT NULL DEFAULT '0'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 --
 -- Índices para tablas volcadas
@@ -144,44 +140,45 @@ CREATE TABLE `users` (
 -- Indices de la tabla `comments`
 --
 ALTER TABLE `comments`
- ADD PRIMARY KEY (`objectId`);
+  ADD PRIMARY KEY (`objectId`);
 
 --
 -- Indices de la tabla `follows`
 --
 ALTER TABLE `follows`
- ADD PRIMARY KEY (`objectId`), ADD UNIQUE KEY `userPair` (`user`,`followsUser`);
+  ADD PRIMARY KEY (`objectId`),
+  ADD UNIQUE KEY `userPair` (`user`,`followsUser`);
 
 --
 -- Indices de la tabla `likes`
 --
 ALTER TABLE `likes`
- ADD PRIMARY KEY (`objectId`), ADD UNIQUE KEY `userPostPair` (`user`,`post`);
+  ADD PRIMARY KEY (`objectId`),
+  ADD UNIQUE KEY `userPostPair` (`user`,`post`);
 
 --
 -- Indices de la tabla `notifications`
 --
 ALTER TABLE `notifications`
- ADD PRIMARY KEY (`objectId`);
+  ADD PRIMARY KEY (`objectId`);
 
 --
 -- Indices de la tabla `posts`
 --
 ALTER TABLE `posts`
- ADD PRIMARY KEY (`objectId`);
+  ADD PRIMARY KEY (`objectId`);
 
 --
 -- Indices de la tabla `postStats`
 --
 ALTER TABLE `postStats`
- ADD PRIMARY KEY (`objectId`), ADD UNIQUE KEY `post` (`post`);
+  ADD PRIMARY KEY (`objectId`),
+  ADD UNIQUE KEY `post` (`post`);
 
 --
 -- Indices de la tabla `users`
 --
 ALTER TABLE `users`
- ADD PRIMARY KEY (`objectId`), ADD UNIQUE KEY `username` (`username`), ADD UNIQUE KEY `sessionToken` (`sessionToken`);
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+  ADD PRIMARY KEY (`objectId`),
+  ADD UNIQUE KEY `username` (`username`),
+  ADD UNIQUE KEY `sessionToken` (`sessionToken`);

@@ -238,6 +238,13 @@ static const NSInteger LIMIT = 25;
             [self loadCurrentQueryForceReload:forceReload];
             break;
         }
+        case CommListModeEssentials: {
+            self.title = @"Essentials";
+            self.currentOffset = 0;
+            self.currentRoute = [NSString stringWithFormat:@"essentials"];
+            [self loadCurrentQueryForceReload:forceReload];
+            break;
+        }
         case CommListModeProfile: {
             self.title = self.user.username;
             self.currentOffset = 0;
@@ -603,6 +610,12 @@ static const NSInteger LIMIT = 25;
             }
 
         }
+        else if (self.mode == CommListModeEssentials)
+        {
+            CommInfoCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommInfoCell" forIndexPath:indexPath];
+            cell.infoTextLabel.text = @"The best LowRes Coder programs of all times.";
+            return cell;
+        }
     }
     else if (indexPath.section == SectionPosts)
     {
@@ -620,7 +633,10 @@ static const NSInteger LIMIT = 25;
             LCCPostStats *stats = self.statsById[post.stats];
             NSString *cellType = (post.type == LCCPostTypeStatus || post.image == nil) ? @"StatusCell" : @"ProgramCell"; //TODO should check type only
             CommPostCell *cell = [tableView dequeueReusableCellWithIdentifier:cellType forIndexPath:indexPath];
-            [cell setPost:post stats:stats user:user showName:(self.mode == CommListModeNews || self.mode == CommListModeDiscover || self.mode == CommListModeForum)];
+            [cell setPost:post
+                    stats:stats
+                     user:user
+                 showName:(self.mode == CommListModeNews || self.mode == CommListModeDiscover || self.mode == CommListModeEssentials || self.mode == CommListModeForum)];
             cell.tag = CellTagPost;
             return cell;
         }
@@ -851,7 +867,10 @@ static const NSInteger LIMIT = 25;
             [self.segmentedControl insertSegmentWithTitle:@"Games" atIndex:1 animated:NO];
             [self.segmentedControl insertSegmentWithTitle:@"Tools" atIndex:2 animated:NO];
             [self.segmentedControl insertSegmentWithTitle:@"Demos" atIndex:3 animated:NO];
-            [self.segmentedControl insertSegmentWithTitle:@"Status" atIndex:4 animated:NO];
+            if (mode != CommListModeEssentials)
+            {
+                [self.segmentedControl insertSegmentWithTitle:@"Status" atIndex:4 animated:NO];
+            }
             break;
     }
 }

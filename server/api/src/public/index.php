@@ -428,6 +428,34 @@ $app->get('/forum', function (Request $request, Response $response) {
     return $response;
 });
 
+// get essential posts
+$app->get('/essentials', function (Request $request, Response $response) {
+    $params = $request->getQueryParams();
+    $access = new DataBaseAccess($this->db);
+
+    $sql = "SELECT ".MIN_POST_JOIN_FIELDS." FROM posts p";
+    $sql .= " INNER JOIN postStats s ON p.stats = s.objectId";
+    $sql .= " WHERE p.type IN (".NormalPostTypes.")";
+    $sql .= " AND s.essential = 1";
+    $sql .= " AND p.sharedPost IS NULL";
+    $filter = $access->getPostsFilter($params, " AND", "p.");
+    if ($filter != "") {
+        $sql .= $filter;
+    }
+    $sql .= " ORDER BY p.createdAt DESC";
+
+    $stmt = $access->prepareMainStatement($sql, $params);
+    $posts = $access->addObjects($stmt, "posts");
+    if ($posts !== FALSE) {
+        if ($access->addSubObjects($posts, "user", "users", MIN_USER_FIELDS)) {
+            $access->addSubObjects($posts, "stats", "postStats");
+        }
+    }
+
+    $response = $response->withJson($access->data);
+    return $response;
+});
+
 // get user news
 $app->get('/users/{id}/news', function (Request $request, Response $response) {
     $params = $request->getQueryParams();
