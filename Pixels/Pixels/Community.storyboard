@@ -166,7 +166,7 @@
         <!--Navigation Controller-->
         <scene sceneID="gPl-c2-6Oz">
             <objects>
-                <navigationController id="BGU-iL-MdY" sceneMemberID="viewController">
+                <navigationController extendedLayoutIncludesOpaqueBars="YES" id="BGU-iL-MdY" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="5mg-AQ-M1p">
                         <rect key="frame" x="0.0" y="44" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>

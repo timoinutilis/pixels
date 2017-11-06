@@ -590,7 +590,7 @@ static const NSInteger LIMIT = 25;
         else if (self.mode == CommListModeDiscover)
         {
             CommInfoCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommInfoCell" forIndexPath:indexPath];
-            cell.infoTextLabel.text = @"Discover new programmers! Here you see all the posts of users you don't follow yet.";
+            cell.infoTextLabel.text = @"Discover new programmers! Here you see posts of users you don't follow yet.";
             return cell;
         }
         else if (self.mode == CommListModeForum)
@@ -613,7 +613,7 @@ static const NSInteger LIMIT = 25;
         else if (self.mode == CommListModeEssentials)
         {
             CommInfoCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommInfoCell" forIndexPath:indexPath];
-            cell.infoTextLabel.text = @"The best LowRes Coder programs of all times.";
+            cell.infoTextLabel.text = @"A selection of the best LowRes Coder programs.";
             return cell;
         }
     }

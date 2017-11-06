@@ -556,6 +556,9 @@ The upgrade is valid for all your devices and without time limit.</string>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="077-Dd-baa">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="724"/>
                                 <color key="backgroundColor" red="0.96470588239999999" green="0.96470588239999999" blue="0.96470588239999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="375" id="Ofu-2a-Fs1"/>
+                                </constraints>
                                 <view key="tableHeaderView" contentMode="scaleToFill" id="LVT-MC-nf7">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="200"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -625,14 +628,25 @@ Inutilis Software, 2015-2017</string>
                                     </tableViewCell>
                                 </prototypes>
                                 <sections/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="Ofu-2a-Fs1"/>
+                                    </mask>
+                                </variation>
+                                <variation key="widthClass=regular">
+                                    <mask key="constraints">
+                                        <include reference="Ofu-2a-Fs1"/>
+                                    </mask>
+                                </variation>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" red="0.96470588239999999" green="0.96470588239999999" blue="0.96470588239999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="077-Dd-baa" firstAttribute="top" secondItem="xLK-aE-cNd" secondAttribute="top" id="5J6-Xn-fYB"/>
-                            <constraint firstAttribute="trailing" secondItem="077-Dd-baa" secondAttribute="trailing" id="Dd7-WV-RDe"/>
+                            <constraint firstAttribute="trailing" secondItem="077-Dd-baa" secondAttribute="trailing" priority="750" id="Dd7-WV-RDe"/>
                             <constraint firstAttribute="bottom" secondItem="077-Dd-baa" secondAttribute="bottom" id="PMI-mm-cSX"/>
-                            <constraint firstItem="077-Dd-baa" firstAttribute="leading" secondItem="l0P-6s-lyZ" secondAttribute="leading" id="mdf-xv-BRX"/>
+                            <constraint firstItem="077-Dd-baa" firstAttribute="leading" secondItem="l0P-6s-lyZ" secondAttribute="leading" priority="750" id="mdf-xv-BRX"/>
+                            <constraint firstItem="077-Dd-baa" firstAttribute="centerX" secondItem="l0P-6s-lyZ" secondAttribute="centerX" id="x7m-Gb-KHM"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="xLK-aE-cNd"/>
                     </view>
