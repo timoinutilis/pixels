@@ -836,7 +836,7 @@ uint32_t const ColorPalette[16] = {0x000000, 0xffffff, 0xaaaaaa, 0x555555, 0xff0
             layer->cursorX = 0;
         }
     }
-    while (index > 0);
+    while (index >= 0);
     
     if (layer->cursorVisible)
     {

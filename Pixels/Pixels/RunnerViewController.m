@@ -59,6 +59,7 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
 @property BOOL dismissWhenFinished;
 @property double audioVolume;
 @property BOOL isKeyboardActive;
+@property BOOL isKeyboardDelaying;
 @property CFAbsoluteTime pauseStartTime;
 
 @end
@@ -683,7 +684,18 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
 {
     self.isKeyboardActive = active;
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (active)
+        if (!self.isKeyboardDelaying)
+        {
+            [self updateKeyboardState];
+        }
+    });
+}
+
+- (void)updateKeyboardState
+{
+    if (self.isFirstResponder != self.isKeyboardActive)
+    {
+        if (self.isKeyboardActive)
         {
             [self becomeFirstResponder];
         }
@@ -691,7 +703,13 @@ NSString *const UserDefaultsPersistentKey = @"persistent";
         {
             [self resignFirstResponder];
         }
-    });
+        
+        self.isKeyboardDelaying = YES;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            self.isKeyboardDelaying = NO;
+            [self updateKeyboardState];
+        });
+    }
 }
 
 - (BOOL)canBecomeFirstResponder
