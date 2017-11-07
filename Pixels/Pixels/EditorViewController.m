@@ -400,6 +400,7 @@ typedef void(^InfoBlock)(void);
         self.searchToolbar.hidden = NO;
         self.searchToolbarConstraint.constant = 0.0;
     }
+    
     [UIView animateWithDuration:0.3 animations:^{
         [self.view layoutIfNeeded];
     } completion:^(BOOL finished) {
