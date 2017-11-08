@@ -883,6 +883,7 @@ NSString *const TRANSFER = @"TRANSFER";
 - (id)evaluateWithRunner:(Runner *)runner
 {
     [runner.delegate setKeyboardActive:self.active];
+    [runner wait:0.5 stopBlock:nil];
     [runner next];
     return nil;
 }
