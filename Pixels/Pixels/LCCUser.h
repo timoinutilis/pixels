@@ -25,6 +25,7 @@ typedef NS_ENUM(int, LCCUserRole) {
 @property (retain) NSDate *lastPostDate;
 @property (retain) NSDate *notificationsOpenedDate;
 @property LCCUserRole role;
+@property BOOL premium;
 
 - (BOOL)isMe;
 - (BOOL)isNewsUser;

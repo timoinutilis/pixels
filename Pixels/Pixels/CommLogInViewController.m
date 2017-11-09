@@ -170,6 +170,7 @@
     LCCUser *user = [[LCCUser alloc] init];
     user.username = username;
     user.password = password;
+    user.premium = [AppController sharedController].isFullVersion;
     
     [self setBusy:YES];
     [self.registerButtonCell setDisabled:YES wheel:YES];

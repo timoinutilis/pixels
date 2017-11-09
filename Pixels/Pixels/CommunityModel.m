@@ -181,6 +181,7 @@ NSString *const APIErrorTypeKey = @"APIErrorType";
     
     [self.sessionManager.requestSerializer setValue:self.currentUser.sessionToken forHTTPHeaderField:HTTPHeaderSessionTokenKey];
     [[NSNotificationCenter defaultCenter] postNotificationName:CurrentUserChangeNotification object:self];
+    [self checkSavePremium];
     [self updateCurrentUser];
     [self loadNotifications];
 }
@@ -452,8 +453,28 @@ NSString *const APIErrorTypeKey = @"APIErrorType";
         }
         
     }] resume];
-                                                                                                                       
 }
+
+- (void)checkSavePremium
+{
+    LCCUser *user = self.currentUser;
+    if (user && !user.premium && [AppController sharedController].isFullVersion)
+    {
+        NSString *route = [NSString stringWithFormat:@"/users/%@", user.objectId];
+        NSDictionary *params = @{@"premium": @YES};
+        
+        [self.sessionManager PUT:route parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+            
+            user.premium = YES;
+            [user resetDirty];
+            [self storeCurrentUser];
+            
+        } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+            
+        }];
+    }
+}
+
 @end
 
 
