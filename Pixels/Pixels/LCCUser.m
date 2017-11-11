@@ -20,7 +20,6 @@ NSString *const LowResNewsUserIDKey = @"LowResNewsUserID";
 @dynamic lastPostDate;
 @dynamic notificationsOpenedDate;
 @dynamic role;
-@dynamic premium;
 
 - (BOOL)isMe
 {
