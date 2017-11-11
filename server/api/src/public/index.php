@@ -80,8 +80,8 @@ $container['notAllowedHandler'] = function ($c) {
 // Fields defaults
 define("MIN_POST_FIELDS", "objectId, updatedAt, createdAt, type, category, user, title, image, sharedPost, stats");
 define("MIN_POST_JOIN_FIELDS", "p.objectId, p.updatedAt, p.createdAt, p.type, p.category, p.user, p.title, p.image, p.sharedPost, p.stats");
-define("MIN_USER_FIELDS", "username");
-define("FULL_USER_FIELDS", "username, lastPostDate, notificationsOpenedDate, about");
+define("MIN_USER_FIELDS", "username, role");
+define("FULL_USER_FIELDS", "username, lastPostDate, notificationsOpenedDate, about, role");
 
 define("GUEST_USER_ID", "guest");
 

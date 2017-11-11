@@ -780,6 +780,9 @@
                                                 <action selector="onNameTapped:" destination="gXP-zJ-Qos" eventType="touchUpInside" id="fmr-aq-nil"/>
                                             </connections>
                                         </button>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="753" verticalHuggingPriority="753" horizontalCompressionResistancePriority="752" verticalCompressionResistancePriority="752" image="star_small" translatesAutoresizingMaskIntoConstraints="NO" id="Cxu-zh-rKf">
+                                            <rect key="frame" x="61" y="11.666666666666664" width="14" height="14"/>
+                                        </imageView>
                                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" text="Text" translatesAutoresizingMaskIntoConstraints="NO" id="g1w-gs-Ym7">
                                             <rect key="frame" x="16" y="33" width="288" height="45"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -796,12 +799,15 @@
                                         <constraint firstItem="ULI-cw-dES" firstAttribute="top" secondItem="PwZ-dw-rh7" secondAttribute="top" constant="4" id="eKh-kI-mX9"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="g1w-gs-Ym7" secondAttribute="bottom" constant="2" id="l2P-Fu-OIy"/>
                                         <constraint firstItem="g1w-gs-Ym7" firstAttribute="trailing" secondItem="PwZ-dw-rh7" secondAttribute="trailingMargin" id="or7-pA-YwW"/>
+                                        <constraint firstItem="Cxu-zh-rKf" firstAttribute="centerY" secondItem="ULI-cw-dES" secondAttribute="centerY" id="wUX-zR-NSh"/>
                                         <constraint firstItem="ULI-cw-dES" firstAttribute="leading" secondItem="PwZ-dw-rh7" secondAttribute="leadingMargin" id="yRo-l9-qV5"/>
+                                        <constraint firstItem="Cxu-zh-rKf" firstAttribute="leading" secondItem="ULI-cw-dES" secondAttribute="trailing" constant="7" id="yb8-5O-Dej"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="dateLabel" destination="ar0-tt-yim" id="8Du-HL-x7E"/>
                                     <outlet property="nameButton" destination="ULI-cw-dES" id="fiZ-Uh-hKY"/>
+                                    <outlet property="starImageView" destination="Cxu-zh-rKf" id="9Re-mG-qLd"/>
                                     <outlet property="textView" destination="g1w-gs-Ym7" id="pd6-xw-Wtl"/>
                                 </connections>
                             </tableViewCell>
@@ -1349,7 +1355,7 @@
         <image name="toolbar_shadow" width="1" height="3"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="oqs-6h-vly"/>
+        <segue reference="xoO-k4-zgw"/>
         <segue reference="FIy-dX-loi"/>
     </inferredMetricsTieBreakers>
 </document>

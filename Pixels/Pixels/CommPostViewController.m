@@ -733,6 +733,7 @@ typedef NS_ENUM(NSInteger, Section) {
 
 @interface CommentCell()
 @property (weak, nonatomic) IBOutlet UIButton *nameButton;
+@property (weak, nonatomic) IBOutlet UIImageView *starImageView;
 @property (weak, nonatomic) IBOutlet UITextView *textView;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 @property (nonatomic) LCCUser *user;
@@ -755,11 +756,13 @@ typedef NS_ENUM(NSInteger, Section) {
     {
         [self.nameButton setTitle:user.username forState:UIControlStateNormal];
         self.nameButton.enabled = YES;
+        self.starImageView.hidden = (user.role == LCCUserRoleUser);
     }
     else
     {
         [self.nameButton setTitle:@"Guest" forState:UIControlStateNormal];
         self.nameButton.enabled = NO;
+        self.starImageView.hidden = YES;
     }
     self.dateLabel.text = [NSDateFormatter localizedStringFromDate:comment.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
     self.textView.text = comment.text;
