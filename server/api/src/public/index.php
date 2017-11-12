@@ -127,6 +127,12 @@ function checkNewPassword($password) {
     }
 }
 
+function checkNewEmail($email) {
+    if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        throw new APIException("The e-mail address is not valid.", 403, "BadUsername");
+    }
+}
+
 function checkNewUsername($username) {
     if (empty($username) || strlen($username) < 4) {
         throw new APIException("Choose a username with 4 or more characters.", 403, "BadUsername");
@@ -738,13 +744,27 @@ $app->put('/users/{id}', function (Request $request, Response $response) {
     if (isset($body['username'])) {
         checkNewUsername($body['username']);
     }
+    if (isset($body['email'])) {
+        checkNewEmail($body['email']);
+        if (empty($body['email'])) {
+            $body['email'] = NULL;
+        }
+    }
     if (isset($body['password'])) {
         checkNewPassword($body['password']);
         $body['bcryptPassword'] = password_hash($body['password'], PASSWORD_DEFAULT);
         unset($body['password']);
     }
 
-    $access->updateObject("users", $userId, $body);
+    try {
+        $access->updateObject("users", $userId, $body);
+    } catch (PDOException $e) {
+        if ($e->getCode() == "23000") {
+            throw new APIException("The username or e-mail address is already used.", 403, "ExistingUsername");
+        } else {
+            throw $e;
+        }
+    }
 
     $response = $response->withJson($access->data);
     return $response;
@@ -797,11 +817,13 @@ $app->post('/files/{name}', function (Request $request, Response $response) {
 $app->post('/users', function (Request $request, Response $response) {
     $body = $request->getParsedBody();
     $username = $body['username'];
+    $email = $body['email'];
     $password = $body['password'];
     $settings = $this->get('settings')['lowres'];
     $access = new DataBaseAccess($this->db);
 
     checkNewUsername($username);
+    checkNewEmail($email);
     checkNewPassword($password);
 
     $sessionToken = $access->unique_id(25);
@@ -814,7 +836,7 @@ $app->post('/users', function (Request $request, Response $response) {
         $userId = $access->createObject("users", $body, "user");
     } catch (PDOException $e) {
         if ($e->getCode() == "23000") {
-            throw new APIException("The username is already used.", 403, "ExistingUsername");
+            throw new APIException("The username or e-mail address is already used.", 403, "ExistingUsername");
         } else {
             throw $e;
         }
@@ -846,8 +868,9 @@ $app->post('/login', function (Request $request, Response $response) {
     checkRequired($body, 'username');
     checkRequired($body, 'password');
 
-    $stmt = $this->db->prepare("SELECT * FROM users WHERE username = ?");
+    $stmt = $this->db->prepare("SELECT * FROM users WHERE username = ? OR (LENGTH(email) > 0 AND email = ?)");
     $stmt->bindParam(1, $username);
+    $stmt->bindParam(2, $username);
     if ($stmt->execute()) {
         $user = $stmt->fetch();
         if ($user == NULL) {
