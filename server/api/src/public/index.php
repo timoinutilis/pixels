@@ -131,6 +131,15 @@ function checkNewUsername($username) {
     if (empty($username) || strlen($username) < 4) {
         throw new APIException("Choose a username with 4 or more characters.", 403, "BadUsername");
     }
+    if (trim($username) != $username) {
+    	throw new APIException("The username cannot begin or end with spaces.", 403, "BadUsername");
+    }
+    if (strpos($username, "  ") !== FALSE) {
+        throw new APIException("The username cannot contain consecutive spaces.", 403, "BadUsername");
+    }
+    if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
+        throw new APIException("The username cannot be an e-mail address.", 403, "BadUsername");
+    }
 }
 
 function checkRequired($body, $key) {
