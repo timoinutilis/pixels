@@ -823,8 +823,14 @@ $app->post('/users', function (Request $request, Response $response) {
     $access = new DataBaseAccess($this->db);
 
     checkNewUsername($username);
-    checkNewEmail($email);
     checkNewPassword($password);
+
+    if (isset($body['email'])) {
+        checkNewEmail($body['email']);
+        if (empty($body['email'])) {
+            $body['email'] = NULL;
+        }
+    }
 
     $sessionToken = $access->unique_id(25);
     $body['bcryptPassword'] = password_hash($password, PASSWORD_DEFAULT);
