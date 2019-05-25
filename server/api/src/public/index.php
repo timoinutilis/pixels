@@ -822,6 +822,8 @@ $app->post('/users', function (Request $request, Response $response) {
     $settings = $this->get('settings')['lowres'];
     $access = new DataBaseAccess($this->db);
 
+    throw new APIException("Sorry, user registration is not possible anymore. This is a closed community.", 403, "ClosedCommunity");
+
     checkNewUsername($username);
     checkNewPassword($password);
 
